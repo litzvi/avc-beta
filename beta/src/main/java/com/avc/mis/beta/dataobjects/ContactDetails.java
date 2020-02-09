@@ -61,7 +61,7 @@ public class ContactDetails {
 
 		PaymentAccount[] paymentAccounts = contactDetails.getPaymentAccounts();
 		if(paymentAccounts !=null) {
-			PaymentAccount.insertPaymentAccounts(jdbcTemplateObject, contactDetails.getPaymentAccounts());
+			PaymentAccount.insertPaymentAccounts(jdbcTemplateObject, contactId, paymentAccounts);
 		}
 		
 				

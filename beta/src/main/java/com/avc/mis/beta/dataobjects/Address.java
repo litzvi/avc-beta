@@ -29,7 +29,7 @@ public class Address {
 	 */
 	public static void insertAddresses(JdbcTemplate jdbcTemplateObject, int contactId, Address[] addresses) {
 
-		String sql = "insert into faxes (contactId, streetAddress, cityId) values (?, ?, ?)";
+		String sql = "insert into addresses (contactId, streetAddress, cityId) values (?, ?, ?)";
 		jdbcTemplateObject.batchUpdate(sql, 
 				new BatchPreparedStatementSetter() {
 		            
