@@ -41,9 +41,9 @@ public class Suppliers {
 	 */
 	public String getSuppliersList() {
 		
-		String sql ="select JSON_OBJECT('id', CO.id, 'name', CO.name, 'phones', P.phones, 'emails', E.emails, 'categories', C.categories) as supplier\r\n" + 
+		String sql ="select JSON_ARRAYAGG(JSON_OBJECT('id', CO.id, 'name', CO.name, 'phones', P.phones, 'emails', E.emails, 'categories', C.categories)) as suppliers\r\n" + 
 				"from SUPPLIERS as S\r\n" + 
-				"left join COMPANIES as CO -- only if active\r\n" + 
+				"left join COMPANIES as CO \r\n" + 
 				"	on S.companyId=CO.id\r\n" + 
 				"left join CONTACT_DETAILS as CD\r\n" + 
 				"	on CD.companyId=CO.id\r\n" + 
@@ -55,9 +55,8 @@ public class Suppliers {
 				"	as C on CD.id = C.companyId\r\n" + 
 				"group by CO.id\r\n";
 		
-		List<String> suppliers = jdbcTemplateObject.queryForList(sql, String.class);
 
-		return (new Gson()).toJson(suppliers); 
+		return jdbcTemplateObject.queryForObject(sql, String.class); 
 	}
 	
 	/**
