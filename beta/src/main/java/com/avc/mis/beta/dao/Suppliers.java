@@ -39,7 +39,7 @@ public class Suppliers {
 	 * 
 	 * @return
 	 */
-	public List<Gson> getSuppliersList() {
+	public String getSuppliersList() {
 		
 		String sql ="select JSON_OBJECT('id', CO.id, 'name', CO.name, 'phones', P.phones, 'emails', E.emails, 'categories', C.categories) as supplier\r\n" + 
 				"from SUPPLIERS as S\r\n" + 
@@ -55,7 +55,9 @@ public class Suppliers {
 				"	as C on CD.id = C.companyId\r\n" + 
 				"group by CO.id\r\n";
 		
-		return jdbcTemplateObject.queryForList(sql, Gson.class);
+		List<String> suppliers = jdbcTemplateObject.queryForList(sql, String.class);
+
+		return (new Gson()).toJson(suppliers); 
 	}
 	
 	/**

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avc.mis.beta.dao.Suppliers;
+import com.google.gson.Gson;
 
 /**
  * @author Zvi
@@ -27,7 +28,7 @@ public class Controller {
 	}
 	
 	@RequestMapping("/suppliers")
-	public List<String> suppliers() {
+	public String suppliers() {
 		return suppliersDao.getSuppliersList();
 	}
 
