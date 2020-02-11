@@ -32,9 +32,10 @@ public class Supplier extends Company {
 	 * @param companyContacts
 	 */
 	public Supplier(Integer id, String name, String localName, String englishName, String license, String taxCode,
-			String registrationLocation, ContactDetails contactDetails, CompanyContact[] companyContacts) {
+			String registrationLocation, ContactDetails contactDetails, CompanyContact[] companyContacts, 
+			SupplyCategory[] supplyCategories) {
 		super(id, name, localName, englishName, license, taxCode, registrationLocation, contactDetails, companyContacts);
-		// TODO Auto-generated constructor stub
+		this.supplyCategories = supplyCategories;
 	}
 	
 	/**
@@ -48,21 +49,23 @@ public class Supplier extends Company {
 				
 		String sql = "insert into suppliers (companyID) values (?)";
 		jdbcTemplateObject.update(sql, new Object[] {supplier.getId()});
-				
-		sql = "insert into category_suppliers (companyId, categoryId) values (?, ?)";
-		jdbcTemplateObject.batchUpdate(sql, 
-				new BatchPreparedStatementSetter() {
-					SupplyCategory[] categories = supplier.getSupplyCategories();
-		            
-					public void setValues(PreparedStatement ps, int i) throws SQLException {
-		                ps.setInt(1, supplier.getId());
-		                ps.setInt(2, categories[i].getId());
-		            }
 		
-		            public int getBatchSize() {
-		                return categories.length;
-		            }
-        		});
+		if(supplier.getSupplyCategories() != null) {
+			sql = "insert into category_suppliers (companyId, categoryId) values (?, ?)";
+			jdbcTemplateObject.batchUpdate(sql, 
+					new BatchPreparedStatementSetter() {
+						SupplyCategory[] categories = supplier.getSupplyCategories();
+			            
+						public void setValues(PreparedStatement ps, int i) throws SQLException {
+			                ps.setInt(1, supplier.getId());
+			                ps.setInt(2, categories[i].getId());
+			            }
+			
+			            public int getBatchSize() {
+			                return categories.length;
+			            }
+	        		});
+		}
 		
 	}
 

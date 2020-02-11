@@ -20,8 +20,8 @@ class BetaApplicationTests {
 	
 	@Test
 	void insertEmptySupplierIsSuccessful() {
-		System.out.println(suppliers.getSupplierDetails());
-		//Supplier supplier = new Supplier(null, "supplier11", null, null, null, null, null, null, null);
+		Supplier supplier = new Supplier(null, "supplier11", null, null, null, null, null, null, null, null);
+		suppliers.addSupplier(supplier);
 	}
 
 }
