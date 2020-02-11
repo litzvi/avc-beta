@@ -47,13 +47,12 @@ public class Suppliers {
 				"	on S.companyId=CO.id\r\n" + 
 				"left join CONTACT_DETAILS as CD\r\n" + 
 				"	on CD.companyId=CO.id\r\n" + 
-				"join (select contactId, JSON_ARRAYAGG(phone) as phones from PHONES group by contactId) as P \r\n" + 
+				"left join (select contactId, JSON_ARRAYAGG(phone) as phones from PHONES group by contactId) as P \r\n" + 
 				"	on CD.id = P.contactId\r\n" + 
-				"join (select contactId, JSON_ARRAYAGG(email) as emails from EMAILS group by contactId) \r\n" + 
+				"left join (select contactId, JSON_ARRAYAGG(email) as emails from EMAILS group by contactId) \r\n" + 
 				"	as E on CD.id = E.contactId\r\n" + 
-				"join (select companyId, JSON_ARRAYAGG(name) as categories from category_suppliers join supply_categories on categoryId = id group by companyId) \r\n" + 
-				"	as C on CD.id = C.companyId\r\n" + 
-				"group by CO.id\r\n";
+				"left join (select companyId, JSON_ARRAYAGG(name) as categories from category_suppliers join supply_categories on categoryId = id group by companyId) \r\n" + 
+				"	as C on CD.id = C.companyId\r\n";
 		
 
 		return jdbcTemplateObject.queryForObject(sql, String.class); 
