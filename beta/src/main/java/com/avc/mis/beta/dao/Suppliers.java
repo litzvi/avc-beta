@@ -20,6 +20,7 @@ import lombok.Data;
 
 import com.avc.mis.beta.dataobjects.Supplier;
 import com.avc.mis.beta.dataobjects.SupplyCategory;
+import com.google.gson.Gson;
 import com.avc.mis.beta.dao.services.PreparedStatementCreatorImpl;
 import com.avc.mis.beta.dataobjects.Company;
 
@@ -38,7 +39,7 @@ public class Suppliers {
 	 * 
 	 * @return
 	 */
-	public List<String> getSuppliersList() {
+	public List<Gson> getSuppliersList() {
 		
 		String sql ="select JSON_OBJECT('id', CO.id, 'name', CO.name, 'phones', P.phones, 'emails', E.emails, 'categories', C.categories) as supplier\r\n" + 
 				"from SUPPLIERS as S\r\n" + 
@@ -54,7 +55,7 @@ public class Suppliers {
 				"	as C on CD.id = C.companyId\r\n" + 
 				"group by CO.id\r\n";
 		
-		return jdbcTemplateObject.queryForList(sql, String.class);
+		return jdbcTemplateObject.queryForList(sql, Gson.class);
 	}
 	
 	/**

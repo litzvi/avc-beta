@@ -21,6 +21,23 @@ public class Supplier extends Company {
 	private SupplyCategory[] supplyCategories;
 	
 	/**
+	 * @param id
+	 * @param name
+	 * @param localName
+	 * @param englishName
+	 * @param license
+	 * @param taxCode
+	 * @param registrationLocation
+	 * @param contactDetails
+	 * @param companyContacts
+	 */
+	public Supplier(Integer id, String name, String localName, String englishName, String license, String taxCode,
+			String registrationLocation, ContactDetails contactDetails, CompanyContact[] companyContacts) {
+		super(id, name, localName, englishName, license, taxCode, registrationLocation, contactDetails, companyContacts);
+		// TODO Auto-generated constructor stub
+	}
+	
+	/**
 	 * 
 	 * @param supplier
 	 * @return
@@ -48,5 +65,7 @@ public class Supplier extends Company {
         		});
 		
 	}
+
+	
 	
 }

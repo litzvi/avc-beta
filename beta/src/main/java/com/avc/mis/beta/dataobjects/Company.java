@@ -18,7 +18,7 @@ import lombok.Data;
 @Data
 public class Company {
 
-	private int id;
+	private Integer id;
 	private String name;
 	private String localName;
 	private String englishName;
@@ -29,6 +29,33 @@ public class Company {
 	private ContactDetails contactDetails;
 	private CompanyContact[] companyContacts;
 	
+
+
+
+	/**
+	 * @param id
+	 * @param name
+	 * @param localName
+	 * @param englishName
+	 * @param license
+	 * @param taxCode
+	 * @param registrationLocation
+	 * @param contactDetails
+	 * @param companyContacts
+	 */
+	public Company(Integer id, String name, String localName, String englishName, String license, String taxCode,
+			String registrationLocation, ContactDetails contactDetails, CompanyContact[] companyContacts) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.localName = localName;
+		this.englishName = englishName;
+		this.license = license;
+		this.taxCode = taxCode;
+		this.registrationLocation = registrationLocation;
+		this.contactDetails = contactDetails;
+		this.companyContacts = companyContacts;
+	}
 	
 	/**
 	 * 
@@ -59,6 +86,7 @@ public class Company {
 			for(CompanyContact cc: companyContacts) {
 				cc.setCompanyId(companyId);
 				//insert the contact details
+				CompanyContact.insertCompanyContact(jdbcTemplateObject, cc);
 			}
 		}
 		

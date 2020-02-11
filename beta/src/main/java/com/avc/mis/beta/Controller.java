@@ -28,13 +28,11 @@ public class Controller {
 	
 	@RequestMapping("/suppliers")
 	public List<String> suppliers() {
-		System.out.println(suppliersDao.getSuppliersList());
 		return suppliersDao.getSuppliersList();
 	}
 
 	@RequestMapping("/supplier-details")
 	public String supplierDetails() {
-		System.out.println(suppliersDao.getSupplierDetails());
 		return suppliersDao.getSupplierDetails();
 	}
 	
