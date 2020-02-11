@@ -62,7 +62,7 @@ public class Suppliers {
 	 * 
 	 * @return
 	 */
-	public String getSupplierDetails() {
+	public String getSupplierDetails(int supplierId) {
 		
 		String sql = "select JSON_OBJECT(\r\n" + 
 				"	'id', CO.id, 'name', CO.name, 'legal vietnamese name', CO.localName, \r\n" + 
@@ -111,7 +111,7 @@ public class Suppliers {
 				"    on CO.id=CC.companyId\r\n" + 
 				"where CO.id=1\r\n";
 		
-		return jdbcTemplateObject.queryForObject(sql, String.class);
+		return jdbcTemplateObject.queryForObject(sql, new Object[] {supplierId}, String.class);
 	}
 
 	/**
