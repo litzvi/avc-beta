@@ -65,7 +65,7 @@ public class Suppliers {
 	public String getSupplierDetails(int supplierId) {
 		
 		String sql = "select JSON_OBJECT(\r\n" + 
-				"	'id', CO.id, 'name', CO.name, 'legal vietnamese name', CO.localName, \r\n" + 
+				"	'name', CO.name, 'legal vietnamese name', CO.localName, \r\n" + 
 				"    'legal english name', CO.englishName, 'license number', CO.license, \r\n" + 
 				"    'tax code', CO.taxCode, 'registration location', CO.registrationLocation, 'supply categories', C.categories, 'company contacts', CC.contacts,\r\n" + 
 				"	'contact details', JSON_OBJECT('id', CD.id, \r\n" + 
@@ -109,7 +109,7 @@ public class Suppliers {
 				"    group by companyId\r\n" + 
 				"    ) as CC\r\n" + 
 				"    on CO.id=CC.companyId\r\n" + 
-				"where CO.id=1\r\n";
+				"where CO.id=?\r\n";
 		
 		return jdbcTemplateObject.queryForObject(sql, new Object[] {supplierId}, String.class);
 	}
