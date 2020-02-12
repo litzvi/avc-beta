@@ -76,6 +76,7 @@ public class Controller {
 		String Positionholder = refeDao.getCompanyPositions();
 		result.add(Positionholder);  
 		return result;
+
 	}
 	
 }
