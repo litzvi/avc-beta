@@ -88,6 +88,13 @@ public class Supplier extends Company {
 		
 	}
 
+	/**
+	 * @param jdbcTemplateObject
+	 */
+	public void editSupplier(JdbcTemplate jdbcTemplateObject) {
+		
+	}
+
 	
 	
 }

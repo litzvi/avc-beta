@@ -124,6 +124,10 @@ public class Suppliers {
 		Supplier.insertSupplier(getJdbcTemplateObject(), supplier);
 		
 	}
+	
+	public void editSupplier(Supplier supplier) {
+		supplier.editSupplier(getJdbcTemplateObject());
+	}
 
 	/**
 	 * @return the jdbcTemplateObject
