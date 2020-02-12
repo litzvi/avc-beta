@@ -29,7 +29,7 @@ public class Phone {
 	 */
 	public static void insertPhones(JdbcTemplate jdbcTemplateObject, int contactId, Phone[] phones) {
 
-		String sql = "insert into category_suppliers (contactId, phone) values (?, ?)";
+		String sql = "insert into phones (contactId, phone) values (?, ?)";
 		jdbcTemplateObject.batchUpdate(sql, 
 				new BatchPreparedStatementSetter() {
 		            

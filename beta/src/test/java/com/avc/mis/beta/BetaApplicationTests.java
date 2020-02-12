@@ -21,8 +21,8 @@ class BetaApplicationTests {
 	void insertEmptySupplierIsSuccessfulTest() {
 		SupplyCategory[] supplyCategories = new SupplyCategory[2];
 		supplyCategories[0] = new SupplyCategory(1, null);
-		supplyCategories[0].setId(1);
-		supplyCategories[1].setId(2);
+		supplyCategories[1] = new SupplyCategory(2, null);
+		
 		Supplier supplier = new Supplier("supplier12", null, null, null, null, null, null, null, supplyCategories);
 		suppliers.addSupplier(supplier);
 	}
