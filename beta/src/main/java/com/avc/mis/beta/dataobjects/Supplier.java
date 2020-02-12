@@ -39,6 +39,23 @@ public class Supplier extends Company {
 	}
 	
 	/**
+	 * @param name
+	 * @param localName
+	 * @param englishName
+	 * @param license
+	 * @param taxCode
+	 * @param registrationLocation
+	 * @param contactDetails
+	 * @param companyContacts
+	 */
+	public Supplier(String name, String localName, String englishName, String license, String taxCode,
+			String registrationLocation, ContactDetails contactDetails, CompanyContact[] companyContacts, 
+			SupplyCategory[] supplyCategories) {
+		super(name, localName, englishName, license, taxCode, registrationLocation, contactDetails, companyContacts);
+		this.supplyCategories = supplyCategories;
+	}
+	
+	/**
 	 * 
 	 * @param supplier
 	 * @return

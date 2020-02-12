@@ -58,6 +58,29 @@ public class Company {
 	}
 	
 	/**
+	 * @param name
+	 * @param localName
+	 * @param englishName
+	 * @param license
+	 * @param taxCode
+	 * @param registrationLocation
+	 * @param contactDetails
+	 * @param companyContacts
+	 */
+	public Company(String name, String localName, String englishName, String license, String taxCode,
+			String registrationLocation, ContactDetails contactDetails, CompanyContact[] companyContacts) {
+		super();
+		this.name = name;
+		this.localName = localName;
+		this.englishName = englishName;
+		this.license = license;
+		this.taxCode = taxCode;
+		this.registrationLocation = registrationLocation;
+		this.contactDetails = contactDetails;
+		this.companyContacts = companyContacts;
+	}
+	
+	/**
 	 * 
 	 * @param company
 	 */
