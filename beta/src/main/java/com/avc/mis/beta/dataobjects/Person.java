@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.sql.Date;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,5 +15,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Person {
-
+	private int id;
+	private String name;
+	private Date dob;
+	private IdCard idCard;
+	private ContactDetails contactDetails;
 }
