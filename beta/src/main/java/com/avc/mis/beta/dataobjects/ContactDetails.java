@@ -9,12 +9,14 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import com.avc.mis.beta.dao.services.PreparedStatementCreatorImpl;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Zvi
  *
  */
 @Data
+@NoArgsConstructor
 public class ContactDetails {
 
 	private int id;

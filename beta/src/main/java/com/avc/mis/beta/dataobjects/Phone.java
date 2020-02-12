@@ -10,12 +10,14 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Zvi
  *
  */
 @Data
+@NoArgsConstructor
 public class Phone {
 	
 	private int id;
@@ -29,7 +31,7 @@ public class Phone {
 	 */
 	public static void insertPhones(JdbcTemplate jdbcTemplateObject, int contactId, Phone[] phones) {
 
-		String sql = "insert into phones (contactId, phone) values (?, ?)";
+		String sql = "insert into category_suppliers (contactId, phone) values (?, ?)";
 		jdbcTemplateObject.batchUpdate(sql, 
 				new BatchPreparedStatementSetter() {
 		            

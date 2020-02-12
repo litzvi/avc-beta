@@ -10,12 +10,14 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Zvi
  *
  */
 @Data
+@NoArgsConstructor
 public class Address {
 
 	private int id;

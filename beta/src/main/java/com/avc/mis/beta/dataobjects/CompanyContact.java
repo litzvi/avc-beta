@@ -6,12 +6,14 @@ package com.avc.mis.beta.dataobjects;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Zvi
  *
  */
 @Data
+@NoArgsConstructor
 public class CompanyContact {
 	
 	private int companyId;

@@ -3,26 +3,21 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * @author Zvi
  *
  */
 @Data
+@NoArgsConstructor
 public class SupplyCategory {
 	
 	private int id;
-	private String name;
-	/**
-	 * @param id
-	 * @param name
-	 */
-	public SupplyCategory(int id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
+	@NonNull private String name;
 	
 	
 	
