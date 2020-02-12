@@ -20,7 +20,7 @@ public class Fax {
 	
 	private int id;
 	private int contactId;
-	private String fax;
+	private String name;
 	/**
 	 * @param jdbcTemplateObject
 	 * @param contactId 
@@ -34,7 +34,7 @@ public class Fax {
 		            
 					public void setValues(PreparedStatement ps, int i) throws SQLException {
 		                ps.setInt(1, contactId);
-		                ps.setString(2, faxes[i].getFax());
+		                ps.setString(2, faxes[i].getName());
 		            }
 		
 		            public int getBatchSize() {

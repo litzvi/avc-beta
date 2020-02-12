@@ -20,7 +20,7 @@ public class Phone {
 	
 	private int id;
 	private int contactId;
-	private String phone;
+	private String name;
 	
 	/**
 	 * @param jdbcTemplateObject
@@ -35,7 +35,7 @@ public class Phone {
 		            
 					public void setValues(PreparedStatement ps, int i) throws SQLException {
 		                ps.setInt(1, contactId);
-		                ps.setString(2, phones[i].getPhone());
+		                ps.setString(2, phones[i].getName());
 		            }
 		
 		            public int getBatchSize() {
