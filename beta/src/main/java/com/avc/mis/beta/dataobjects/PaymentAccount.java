@@ -37,14 +37,14 @@ public class PaymentAccount {
 
 		BankAccount bankAccount;
 		int paymentAccountId;
-		for(PaymentAccount paymentAccount: paymentAccounts) {
-			
-			jdbcTemplateObject.update(psc, keyHolder);
-			paymentAccountId = keyHolder.getKey().intValue();
-			paymentAccount.setId(paymentAccountId);
+		for(PaymentAccount paymentAccount: paymentAccounts) {			
 			
 			bankAccount = paymentAccount.getBankAccount();			
-			if(bankAccount != null) {
+			if(bankAccount != null && bankAccount.getAccountNo() != null &&
+					bankAccount.getOwnerName() != null && bankAccount.getBranchId() != null) {
+				jdbcTemplateObject.update(psc, keyHolder);
+				paymentAccountId = keyHolder.getKey().intValue();
+				paymentAccount.setId(paymentAccountId);
 				bankAccount.insertBankAccount(jdbcTemplateObject, paymentAccountId, bankAccount);
 			}
 		}

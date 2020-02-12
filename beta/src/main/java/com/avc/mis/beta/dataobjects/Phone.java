@@ -5,6 +5,9 @@ package com.avc.mis.beta.dataobjects;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,19 +34,16 @@ public class Phone {
 	 */
 	public static void insertPhones(JdbcTemplate jdbcTemplateObject, int contactId, Phone[] phones) {
 
+		List<Object[]> batchArgs = new ArrayList<Object[]>();
+		for(Phone phone: phones) {
+			if(phone.getName() != null) {
+				batchArgs.add(new Object[] {contactId, phone.getName()});
+			}
+		}
 		String sql = "insert into phones (contactId, phone) values (?, ?)";
-		jdbcTemplateObject.batchUpdate(sql, 
-				new BatchPreparedStatementSetter() {
-		            
-					public void setValues(PreparedStatement ps, int i) throws SQLException {
-		                ps.setInt(1, contactId);
-		                ps.setString(2, phones[i].getName());
-		            }
+		jdbcTemplateObject.batchUpdate(sql, batchArgs, new int[]{Types.INTEGER, Types.VARCHAR});
 		
-		            public int getBatchSize() {
-		                return phones.length;
-		            }
-        		});
+		
 	}
 
 	

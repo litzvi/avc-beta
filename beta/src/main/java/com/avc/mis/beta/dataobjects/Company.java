@@ -89,6 +89,10 @@ public class Company {
 	 */
 	public static void insertCompany(JdbcTemplate jdbcTemplateObject, Company company) {
 		
+		if(company.getName() == null) {
+			throw new IllegalArgumentException("Company name can't be null");
+		}
+		
 		String sql = "INSERT INTO COMPANIES\r\n" + 
 				"  (name, localName, englishName, license, taxCode, registrationLocation) \r\n" + 
 				"VALUES \r\n" + 
@@ -102,10 +106,11 @@ public class Company {
 		company.setId(companyId);		
 		
 		ContactDetails cd = company.getContactDetails();
-		if(cd != null) {
-			cd.setCompanyId(companyId);
-			ContactDetails.insertContactDetails(jdbcTemplateObject, cd);
-		}	
+		if(cd == null) {
+			cd = new ContactDetails();
+		}
+		cd.setCompanyId(companyId);
+		ContactDetails.insertContactDetails(jdbcTemplateObject, cd);
 		
 		CompanyContact[] companyContacts = company.getCompanyContacts();
 		if(companyContacts != null) {

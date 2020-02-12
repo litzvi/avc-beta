@@ -16,7 +16,7 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class SupplyCategory {
 	
-	private int id;
+	private Integer id;
 	@NonNull private String name;
 	
 	

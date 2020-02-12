@@ -19,10 +19,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BankAccount {
 	
-	private int id;
+	private Integer id;
 	private String accountNo;
 	private String ownerName;
-	private int branchId;
+	private Integer branchId;
 	
 	/**
 	 * @param jdbcTemplateObject
@@ -30,6 +30,10 @@ public class BankAccount {
 	 * @param bankAccount
 	 */
 	public void insertBankAccount(JdbcTemplate jdbcTemplateObject, int paymentId, BankAccount bankAccount) {
+		if(bankAccount == null || bankAccount.getAccountNo() == null ||
+				bankAccount.getOwnerName() == null || bankAccount.getBranchId() == null) {
+			throw new IllegalArgumentException("Ileagel bank account details");
+		}
 
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 		String sql = "insert into BANK_ACCOUNTS (accountNo, branchId, ownerName)  values (?, ?, ?)";

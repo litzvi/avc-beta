@@ -5,6 +5,9 @@ package com.avc.mis.beta.dataobjects;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -66,24 +69,20 @@ public class Supplier extends Company {
 		
 		Company.insertCompany(jdbcTemplateObject, supplier);
 				
-		String sql = "insert into suppliers (companyID) values (?)";
+		String sql = "insert into suppliers (companyId) values (?)";
 		jdbcTemplateObject.update(sql, new Object[] {supplier.getId()});
 		
 		SupplyCategory[] categories = supplier.getSupplyCategories();
 		if(categories != null) {
+			List<Object[]> batchArgs = new ArrayList<Object[]>();
+			for(SupplyCategory category: categories) {
+				if(category.getId() != null) {
+					batchArgs.add(new Object[] {supplier.getId(), category.getId()});
+				}
+			}			
 			sql = "insert into category_suppliers (companyId, categoryId) values (?, ?)";
-			jdbcTemplateObject.batchUpdate(sql, 
-					new BatchPreparedStatementSetter() {
-			            
-						public void setValues(PreparedStatement ps, int i) throws SQLException {
-			                ps.setInt(1, supplier.getId());
-			                ps.setInt(2, categories[i].getId());
-			            }
+			jdbcTemplateObject.batchUpdate(sql, batchArgs, new int[]{Types.INTEGER, Types.INTEGER});
 			
-			            public int getBatchSize() {
-			                return categories.length;
-			            }
-	        		});
 		}
 		
 	}
