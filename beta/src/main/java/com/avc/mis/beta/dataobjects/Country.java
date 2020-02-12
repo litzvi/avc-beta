@@ -3,10 +3,8 @@
  */
 package com.avc.mis.beta.dataobjects;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -14,11 +12,7 @@ import lombok.NonNull;
  */
 @Data
 @NoArgsConstructor
-public class SupplyCategory {
-	
-	private Integer id;
-	private String name;
-	
-	
-	
+public class Country {
+	private int id;
+	private String Name;
 }
