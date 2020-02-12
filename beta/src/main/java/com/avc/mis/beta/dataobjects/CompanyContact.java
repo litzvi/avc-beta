@@ -15,7 +15,7 @@ import lombok.Data;
 public class CompanyContact {
 	
 	private int companyId;
-	private int positionId;
+	private Position positionId;
 	
 	private Person person;
 	

@@ -67,11 +67,11 @@ public class Supplier extends Company {
 		String sql = "insert into suppliers (companyID) values (?)";
 		jdbcTemplateObject.update(sql, new Object[] {supplier.getId()});
 		
-		if(supplier.getSupplyCategories() != null) {
+		SupplyCategory[] categories = supplier.getSupplyCategories();
+		if(categories != null) {
 			sql = "insert into category_suppliers (companyId, categoryId) values (?, ?)";
 			jdbcTemplateObject.batchUpdate(sql, 
 					new BatchPreparedStatementSetter() {
-						SupplyCategory[] categories = supplier.getSupplyCategories();
 			            
 						public void setValues(PreparedStatement ps, int i) throws SQLException {
 			                ps.setInt(1, supplier.getId());
