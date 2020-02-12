@@ -14,10 +14,9 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class Person {
-	private int id;
-	private String name;
-	private Date dob;
-	private IdCard idCard;
-	private ContactDetails contactDetails;
+public class IdCard {
+	private String idNumber;
+	private Date dateOfIssue;
+	private String placeOfIssue;
+	private Country nationality;
 }

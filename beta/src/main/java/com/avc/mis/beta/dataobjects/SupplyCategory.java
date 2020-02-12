@@ -17,7 +17,7 @@ import lombok.NonNull;
 public class SupplyCategory {
 	
 	private Integer id;
-	@NonNull private String name;
+	private String name;
 	
 	
 	

@@ -65,15 +65,14 @@ public class Suppliers {
 	public String getSupplierDetails(int supplierId) {
 		
 		String sql = "select JSON_OBJECT(\r\n" + 
-				"	'name', CO.name, 'legal vietnamese name', CO.localName, \r\n" + 
-				"    'legal english name', CO.englishName, 'license number', CO.license, \r\n" + 
-				"    'tax code', CO.taxCode, 'registration location', CO.registrationLocation, 'supply categories', C.categories, 'company contacts', CC.contacts,\r\n" + 
-				"	'contact details', JSON_OBJECT('id', CD.id, \r\n" + 
+				"	'id', CO.id, 'name', CO.name, 'localName', CO.localName, 'englishName' , CO.englishName, 'license', CO.license, \r\n" + 
+				"    'taxCode', CO.taxCode, 'registrationLocation', CO.registrationLocation, 'supplyCategories', C.supplyCategories, 'companyContacts', CC.companyContacts,\r\n" + 
+				"	'contactDetails', JSON_OBJECT('id', CD.id, \r\n" + 
 				"		'phones', phones, \r\n" + 
 				"        'faxes', faxes, \r\n" + 
 				"        'emails', emails, \r\n" + 
 				"        'addresses', addresses, \r\n" + 
-				"        'payment accounts', paymentAccounts\r\n" + 
+				"        'paymentAccounts', paymentAccounts\r\n" + 
 				"        )) as supplier\r\n" + 
 				"from SUPPLIERS as S\r\n" + 
 				"join COMPANIES as CO\r\n" + 
@@ -81,7 +80,7 @@ public class Suppliers {
 				"left join CONTACT_DETAILS_VIEW as CD\r\n" + 
 				"	on CO.id = CD.companyId\r\n" + 
 				"left join (\r\n" + 
-				"	select companyId, JSON_ARRAYAGG(JSON_OBJECT('id', id, 'name', name)) as categories \r\n" + 
+				"	select companyId, JSON_ARRAYAGG(JSON_OBJECT('id', id, 'name', name)) as supplyCategories \r\n" + 
 				"    from SUPPLIERS_CATEGORIES_VIEW\r\n" + 
 				"    group by companyId\r\n" + 
 				"    ) as C \r\n" + 
@@ -89,27 +88,17 @@ public class Suppliers {
 				"left join (\r\n" + 
 				"	select companyId, \r\n" + 
 				"		JSON_ARRAYAGG(JSON_OBJECT(\r\n" + 
-				"			'id', personId, \r\n" + 
-				"            'name', personName, \r\n" + 
-				"            'position', JSON_OBJECT('id', positionId, 'name', positionName), \r\n" + 
-				"            'date of birth', dob, \r\n" + 
-				"            'id information', JSON_OBJECT(\r\n" + 
-				"				'id number', IdNumber, 'date of issue', dateOfIssue, 'place of issue', placeOfIssue,\r\n" + 
-				"                'country', JSON_OBJECT('id', countryId, 'name', countryName)),\r\n" + 
-				"			'contact details', JSON_OBJECT(\r\n" + 
-				"				'id', contactId,\r\n" + 
-				"				'phones', phones, \r\n" + 
-				"				'faxes', faxes, \r\n" + 
-				"				'emails', emails, \r\n" + 
-				"				'addresses', addresses, \r\n" + 
-				"				'payment accounts', paymentAccounts\r\n" + 
-				"				)\r\n" + 
-				"			)) as contacts\r\n" + 
+				"			'person', JSON_OBJECT('id', personId, 'name', personName, 'date of birth', dob, \r\n" + 
+				"                'idCard', JSON_OBJECT('idNumber', IdNumber, 'dateOfIssue', dateOfIssue, 'placeOfIssue', placeOfIssue,\r\n" + 
+				"					'nationality', JSON_OBJECT('id', countryId, 'name', countryName)), \r\n" + 
+				"				'contactDetails', JSON_OBJECT('contactId', contactId, 'phones', phones, 'faxes', faxes, \r\n" + 
+				"					'emails', emails, 'addresses', addresses, 'paymentAccounts', paymentAccounts)), \r\n" + 
+				"            'position', JSON_OBJECT('id', positionId, 'name', positionName))) as companyContacts\r\n" + 
 				"    from COMPANY_CONTACTS_VIEW\r\n" + 
 				"    group by companyId\r\n" + 
 				"    ) as CC\r\n" + 
 				"    on CO.id=CC.companyId\r\n" + 
-				"where CO.id=?\r\n";
+				"where CO.id= ? \r\n";
 		
 		return jdbcTemplateObject.queryForObject(sql, new Object[] {supplierId}, String.class);
 	}

@@ -21,6 +21,7 @@ public class ContactDetails {
 
 	private int id;
 	private int companyId;
+	private int contactId;
 	private Phone[] phones;
 	private Fax[] faxes;
 	private Email[] emails;

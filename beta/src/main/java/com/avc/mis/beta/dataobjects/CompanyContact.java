@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class CompanyContact {
 	
 	private int companyId;
-	private Position positionId;
+	private Position position;
 	
 	private Person person;
 	
