@@ -45,7 +45,8 @@ public class Person {
 			}
 			
 			if(person.getIdCard() != null) {
-				IdCard.insertIdCard(jdbcTemplateObject, personId, person.getIdCard());
+				person.getIdCard().setId(personId);
+				IdCard.insertIdCard(jdbcTemplateObject, person.getIdCard());
 			}
 			
 			ContactDetails cd = person.getContactDetails();
