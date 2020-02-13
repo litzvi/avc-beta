@@ -56,12 +56,12 @@ public class Controller {
 	}
 	
 	@PostMapping(value="/setSupplier", consumes = "application/json")
-	public Response setSupplier(@RequestBody String supplierJson) {
+	public int setSupplier(@RequestBody String supplierJson) {
 		System.out.println(supplierJson);
 		Supplier supplier = new Gson().fromJson(supplierJson, Supplier.class);
 		//System.out.println(supplierJson);
 		suppliersDao.addSupplier(supplier);
-		return Response.status(201).build();//supplier.getId();
+		return supplier.getId();
 	}
 	
 	@RequestMapping("/setup")
