@@ -12,11 +12,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class SupplyCategory {
-	
+public class Bank {
 	private Integer id;
 	private String name;
-	
-	
-	
 }

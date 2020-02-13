@@ -4,14 +4,12 @@
 package com.avc.mis.beta.dataobjects;
 
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import com.avc.mis.beta.dao.services.PreparedStatementCreatorImpl;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -116,7 +114,6 @@ public class Company {
 		if(companyContacts != null) {
 			for(CompanyContact cc: companyContacts) {
 				cc.setCompanyId(companyId);
-				//insert the contact details
 				CompanyContact.insertCompanyContact(jdbcTemplateObject, cc);
 			}
 		}

@@ -22,7 +22,7 @@ public class BankAccount {
 	private Integer id;
 	private String accountNo;
 	private String ownerName;
-	private Integer branchId;
+	private BankBranch branch;
 	
 	/**
 	 * @param jdbcTemplateObject
@@ -30,8 +30,9 @@ public class BankAccount {
 	 * @param bankAccount
 	 */
 	public void insertBankAccount(JdbcTemplate jdbcTemplateObject, int paymentId, BankAccount bankAccount) {
-		if(bankAccount == null || bankAccount.getAccountNo() == null ||
-				bankAccount.getOwnerName() == null || bankAccount.getBranchId() == null) {
+		if(bankAccount == null || 
+				bankAccount.getAccountNo() == null || bankAccount.getOwnerName() == null || 
+				bankAccount.getBranch() != null || bankAccount.getBranch().getId() == null) {
 			throw new IllegalArgumentException("Ileagel bank account details");
 		}
 
@@ -39,7 +40,7 @@ public class BankAccount {
 		String sql = "insert into BANK_ACCOUNTS (accountNo, branchId, ownerName)  values (?, ?, ?)";
 		jdbcTemplateObject.update(
 				new PreparedStatementCreatorImpl(sql, 
-						new Object[] {bankAccount.getAccountNo(), bankAccount.getBranchId(),
+						new Object[] {bankAccount.getAccountNo(), bankAccount.getBranch().getId(),
 								bankAccount.getOwnerName()}, new String[] {"id"}), keyHolder);			
 		int accountNo = keyHolder.getKey().intValue();
 		bankAccount.setId(accountNo);

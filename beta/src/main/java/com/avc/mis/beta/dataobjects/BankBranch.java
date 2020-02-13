@@ -12,11 +12,8 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class SupplyCategory {
-	
+public class BankBranch {
 	private Integer id;
 	private String name;
-	
-	
-	
+	private Bank bank;
 }
