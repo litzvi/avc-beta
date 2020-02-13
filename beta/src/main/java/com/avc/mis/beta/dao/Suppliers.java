@@ -3,26 +3,10 @@
  */
 package com.avc.mis.beta.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.AccessLevel;
-import lombok.Data;
-
 import com.avc.mis.beta.dataobjects.Supplier;
-import com.avc.mis.beta.dataobjects.SupplyCategory;
-import com.google.gson.Gson;
-import com.avc.mis.beta.dao.services.PreparedStatementCreatorImpl;
-import com.avc.mis.beta.dataobjects.Company;
 
 /**
  * @author Zvi
@@ -30,10 +14,8 @@ import com.avc.mis.beta.dataobjects.Company;
  */
 @Repository
 @Transactional
-public class Suppliers {
+public class Suppliers extends DAO {
 	
-	@Autowired
-	private JdbcTemplate jdbcTemplateObject;
 	
 	/**
 	 * 
@@ -55,7 +37,7 @@ public class Suppliers {
 				"	as C on CD.id = C.companyId\r\n";
 		
 
-		return jdbcTemplateObject.queryForObject(sql, String.class); 
+		return getJdbcTemplateObject().queryForObject(sql, String.class); 
 	}
 	
 	/**
@@ -100,7 +82,7 @@ public class Suppliers {
 				"    on CO.id=CC.companyId\r\n" + 
 				"where CO.id= ? \r\n";
 		
-		return jdbcTemplateObject.queryForObject(sql, new Object[] {supplierId}, String.class);
+		return getJdbcTemplateObject().queryForObject(sql, new Object[] {supplierId}, String.class);
 	}
 
 	/**
@@ -118,12 +100,6 @@ public class Suppliers {
 		supplier.editSupplier(getJdbcTemplateObject());
 	}
 
-	/**
-	 * @return the jdbcTemplateObject
-	 */
-	private JdbcTemplate getJdbcTemplateObject() {
-		return jdbcTemplateObject;
-	}
-	
+		
 	
 }

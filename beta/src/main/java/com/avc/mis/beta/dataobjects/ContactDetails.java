@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 public class ContactDetails {
 
 	private int id;
-	private int companyId;
-	private int contactId;
+	private Integer companyId;
+	private Integer personId;
 	private Phone[] phones;
 	private Fax[] faxes;
 	private Email[] emails;
@@ -33,14 +33,30 @@ public class ContactDetails {
 	 */
 	public static void insertContactDetails(JdbcTemplate jdbcTemplateObject, ContactDetails contactDetails) {
 		
-		//insert record for CONTACT_DETAILS table and get back the record id
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-		String sql = "insert into CONTACT_DETAILS (companyID) values (?)";
-		jdbcTemplateObject.update(
-				new PreparedStatementCreatorImpl(sql, 
-						new Object[] {contactDetails.getCompanyId()}, new String[] {"id"}), keyHolder);			
-		int contactId = keyHolder.getKey().intValue();
-		contactDetails.setId(contactId);
+		String sql;
+		int contactId;
+		if(contactDetails.getCompanyId() != null) {
+			sql = "insert into CONTACT_DETAILS (companyId) values (?)";
+			jdbcTemplateObject.update(
+					new PreparedStatementCreatorImpl(sql, 
+							new Object[] {contactDetails.getCompanyId()}, new String[] {"id"}), keyHolder);			
+			contactId = keyHolder.getKey().intValue();
+			contactDetails.setId(contactId);
+		}
+		else if(contactDetails.getPersonId() != null) {
+			sql = "insert into CONTACT_DETAILS (personId) values (?)";
+			jdbcTemplateObject.update(
+					new PreparedStatementCreatorImpl(sql, 
+							new Object[] {contactDetails.getPersonId()}, new String[] {"id"}), keyHolder);			
+			contactId = keyHolder.getKey().intValue();
+			contactDetails.setId(contactId);
+		}
+		else {
+			throw new IllegalArgumentException("Contact Details has to be conected to a subject (person orcompany).");
+		}
+		
+		
 
 		Phone[] phones = contactDetails.getPhones();
 		if(phones != null) {

@@ -41,7 +41,8 @@ public class PaymentAccount {
 			
 			bankAccount = paymentAccount.getBankAccount();			
 			if(bankAccount != null && bankAccount.getAccountNo() != null &&
-					bankAccount.getOwnerName() != null && bankAccount.getBranchId() != null) {
+					bankAccount.getOwnerName() != null && bankAccount.getBranch() != null && 
+					bankAccount.getBranch().getId() != null) {
 				jdbcTemplateObject.update(psc, keyHolder);
 				paymentAccountId = keyHolder.getKey().intValue();
 				paymentAccount.setId(paymentAccountId);
