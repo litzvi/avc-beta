@@ -119,4 +119,28 @@ public class Company {
 		}
 		
 	}
+
+	/**
+	 * @param jdbcTemplateObject
+	 */
+	public void editCompany(JdbcTemplate jdbcTemplateObject) {
+		if(getId() == null) {
+			throw new IllegalArgumentException("Company id can't be null");
+		}
+		if(name != null || localName != null || englishName != null || 
+				license != null || taxCode != null || registrationLocation != null) {
+			// TODO update the corresponding row in companies table
+		}
+		if(contactDetails != null) {
+			contactDetails.editContactDetails(jdbcTemplateObject);
+		}
+		if(companyContacts != null) {
+			for(CompanyContact cc: companyContacts) {
+				//search for contacts without an id - to be added
+				//search for phones without a name - to be removed
+				//update the given phones that have id's and names
+				cc.editCompanyContact(jdbcTemplateObject);
+			}
+		}
+	}
 }

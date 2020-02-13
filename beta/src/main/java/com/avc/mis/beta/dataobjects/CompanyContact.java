@@ -37,5 +37,23 @@ public class CompanyContact {
 		}
 		
 	}
+
+	/**
+	 * @param jdbcTemplateObject
+	 */
+	public void editCompanyContact(JdbcTemplate jdbcTemplateObject) {
+		if(getCompanyId() == null) {
+			throw new IllegalArgumentException("Company id can't be null");
+		}
+		if(getPerson() == null && getPerson().getId() == null) {
+			throw new IllegalArgumentException("Contact person id can't be null");
+		}
+		// TODO if removed change to isActive=false
+		//if position changed, delete current position and add new one
+		//if person changed call edit on person.
+		// perhaps should add a personId, in case the person isn't changed
+		
+		
+	}
 	
 }

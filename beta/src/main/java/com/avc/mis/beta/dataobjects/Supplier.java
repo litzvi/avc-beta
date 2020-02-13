@@ -90,7 +90,13 @@ public class Supplier extends Company {
 	 * @param jdbcTemplateObject
 	 */
 	public void editSupplier(JdbcTemplate jdbcTemplateObject) {
-		
+		if(getId() == null) {
+			throw new IllegalArgumentException("Supplier id can't be null");
+		}
+		if(getSupplyCategories() != null) {
+			// TODO delete all records for supplier and add the new list.
+		}
+		super.editCompany(jdbcTemplateObject);
 	}
 
 	

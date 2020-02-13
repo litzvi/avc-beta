@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ContactDetails {
 
-	private int id;
+	private Integer id;
 	private Integer companyId;
 	private Integer personId;
 	private Phone[] phones;
@@ -84,6 +84,38 @@ public class ContactDetails {
 		}
 		
 				
+	}
+
+	/**
+	 * @param jdbcTemplateObject
+	 */
+	public void editContactDetails(JdbcTemplate jdbcTemplateObject) {
+
+		if(getId() == null) {
+			throw new IllegalArgumentException("Contact id can't be null");
+		}
+		if(getCompanyId() == null && getPersonId() == null) {
+			throw new IllegalArgumentException("Subject id can't be null");
+		}
+		if(phones != null) {
+			//search for phones without an id - to be added
+			//search for phones without a name - to be removed
+			//update the given phones that have id's and names
+		}
+		if(faxes != null) {
+			//update the given phones
+		}
+		if(emails != null) {
+			//update the given phones
+		}
+		if(addresses != null) {
+			//update the given phones
+		}
+		if(paymentAccounts != null) {
+			//update the given phones
+		}
+		
+		
 	}
 	
 	
