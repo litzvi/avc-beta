@@ -5,6 +5,14 @@ package com.avc.mis.beta.dataobjects;
 
 import java.sql.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import lombok.Data;
@@ -16,11 +24,22 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@Entity
+@Table(name="ID_INFORMATION")
 public class IdCard {
+	@Id
 	private Integer id;
+	
+	@OneToOne @JoinColumn(name = "personId")
+	@MapsId
+	private Person person;
+	
 	private String idNumber;
+	private Date dob;
 	private Date dateOfIssue;
 	private String placeOfIssue;
+	
+	@ManyToOne @JoinColumn(name = "nationality")
 	private Country nationality;
 	/**
 	 * @param jdbcTemplateObject
@@ -33,10 +52,10 @@ public class IdCard {
 		}
 		if(idCard.getIdNumber() != null) {
 			int nationalityId = idCard.getNationality() != null ? idCard.getNationality().getId(): null;
-			String sql = "INSERT INTO ID_INFORMATION (personId, nationality, IdNumber, dateOfIssue, placeOfIssue) "
-					+ "VALUES (?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO ID_INFORMATION (personId, nationality, IdNumber, dateOfIssue, placeOfIssue, dob) "
+					+ "VALUES (?, ?, ?, ?, ?, ?)";
 			jdbcTemplateObject.update(sql, new Object[] {personId, nationalityId, 
-					idCard.getIdNumber(), idCard.getDateOfIssue(), idCard.getPlaceOfIssue()});
+					idCard.getIdNumber(), idCard.getDateOfIssue(), idCard.getPlaceOfIssue(), idCard.getDob()});
 		}
 	}
 }

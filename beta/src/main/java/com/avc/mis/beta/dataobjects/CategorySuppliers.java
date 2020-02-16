@@ -15,10 +15,12 @@ import lombok.Data;
  *
  */
 @Data
-@Entity
-@Table(name="CATEGORY_SUPPLIERS")
-public class CategorySuppliers {
-
+/*
+ * Maybe Class should be removed
+ * @Entity 
+ * @Table(name="CATEGORY_SUPPLIERS")
+ */public class CategorySuppliers {
+	
 	private int companyId;
 	private int categoryId;
 	

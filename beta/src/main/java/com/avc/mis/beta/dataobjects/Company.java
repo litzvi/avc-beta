@@ -3,10 +3,18 @@
  */
 package com.avc.mis.beta.dataobjects;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
+import java.util.Set;
 
-import com.avc.mis.beta.dao.services.PreparedStatementCreatorImpl;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,9 +25,15 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@Entity
+@Table(name="COMPANIES")
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Company {
 
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	@Column(unique = true, nullable = false)
 	private String name;
 	private String localName;
 	private String englishName;
@@ -27,120 +41,58 @@ public class Company {
 	private String taxCode;
 	private String registrationLocation;
 	
+	@OneToOne(mappedBy = "company")
 	private ContactDetails contactDetails;
-	private CompanyContact[] companyContacts;
 	
-
-
-
-	/**
-	 * @param id
-	 * @param name
-	 * @param localName
-	 * @param englishName
-	 * @param license
-	 * @param taxCode
-	 * @param registrationLocation
-	 * @param contactDetails
-	 * @param companyContacts
-	 */
-	public Company(Integer id, String name, String localName, String englishName, String license, String taxCode,
-			String registrationLocation, ContactDetails contactDetails, CompanyContact[] companyContacts) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.localName = localName;
-		this.englishName = englishName;
-		this.license = license;
-		this.taxCode = taxCode;
-		this.registrationLocation = registrationLocation;
-		this.contactDetails = contactDetails;
-		this.companyContacts = companyContacts;
-	}
-	
-	/**
-	 * @param name
-	 * @param localName
-	 * @param englishName
-	 * @param license
-	 * @param taxCode
-	 * @param registrationLocation
-	 * @param contactDetails
-	 * @param companyContacts
-	 */
-	public Company(String name, String localName, String englishName, String license, String taxCode,
-			String registrationLocation, ContactDetails contactDetails, CompanyContact[] companyContacts) {
-		super();
-		this.name = name;
-		this.localName = localName;
-		this.englishName = englishName;
-		this.license = license;
-		this.taxCode = taxCode;
-		this.registrationLocation = registrationLocation;
-		this.contactDetails = contactDetails;
-		this.companyContacts = companyContacts;
-	}
+	@OneToMany(mappedBy = "company")
+	private Set<CompanyContact> companyContacts;
 	
 	/**
 	 * 
 	 * @param company
 	 */
-	public static void insertCompany(JdbcTemplate jdbcTemplateObject, Company company) {
-		
-		if(company.getName() == null) {
-			throw new IllegalArgumentException("Company name can't be null");
-		}
-		
-		String sql = "INSERT INTO COMPANIES\r\n" + 
-				"  (name, localName, englishName, license, taxCode, registrationLocation) \r\n" + 
-				"VALUES \r\n" + 
-				"  (?, ?, ?, ?, ?, ?);";		
-		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-		Object[] parameters = new Object[] {company.getName(), company.getLocalName(), company.getEnglishName(),
-				company.getLicense(), company.getTaxCode(), company.getRegistrationLocation()};
-		jdbcTemplateObject.update(
-				new PreparedStatementCreatorImpl(sql, parameters, new String[] {"id"}), keyHolder);	
-		int companyId = keyHolder.getKey().intValue();
-		company.setId(companyId);		
-		
-		ContactDetails cd = company.getContactDetails();
-		if(cd == null) {
-			cd = new ContactDetails();
-		}
-		cd.setCompanyId(companyId);
-		ContactDetails.insertContactDetails(jdbcTemplateObject, cd);
-		
-		CompanyContact[] companyContacts = company.getCompanyContacts();
-		if(companyContacts != null) {
-			for(CompanyContact cc: companyContacts) {
-				cc.setCompanyId(companyId);
-				CompanyContact.insertCompanyContact(jdbcTemplateObject, cc);
-			}
-		}
-		
-	}
+	/*
+	 * public static void insertCompany(JdbcTemplate jdbcTemplateObject, Company
+	 * company) {
+	 * 
+	 * if(company.getName() == null) { throw new
+	 * IllegalArgumentException("Company name can't be null"); }
+	 * 
+	 * String sql = "INSERT INTO COMPANIES\r\n" +
+	 * "  (name, localName, englishName, license, taxCode, registrationLocation) \r\n"
+	 * + "VALUES \r\n" + "  (?, ?, ?, ?, ?, ?);"; GeneratedKeyHolder keyHolder = new
+	 * GeneratedKeyHolder(); Object[] parameters = new Object[] {company.getName(),
+	 * company.getLocalName(), company.getEnglishName(), company.getLicense(),
+	 * company.getTaxCode(), company.getRegistrationLocation()};
+	 * jdbcTemplateObject.update( new PreparedStatementCreatorImpl(sql, parameters,
+	 * new String[] {"id"}), keyHolder); int companyId =
+	 * keyHolder.getKey().intValue(); company.setId(companyId);
+	 * 
+	 * ContactDetails cd = company.getContactDetails(); if(cd == null) { cd = new
+	 * ContactDetails(); } cd.setCompanyId(companyId);
+	 * ContactDetails.insertContactDetails(jdbcTemplateObject, cd);
+	 * 
+	 * CompanyContact[] companyContacts = company.getCompanyContacts();
+	 * if(companyContacts != null) { for(CompanyContact cc: companyContacts) {
+	 * cc.setCompanyId(companyId);
+	 * CompanyContact.insertCompanyContact(jdbcTemplateObject, cc); } }
+	 * 
+	 * }
+	 */
 
 	/**
 	 * @param jdbcTemplateObject
 	 */
-	public void editCompany(JdbcTemplate jdbcTemplateObject) {
-		if(getId() == null) {
-			throw new IllegalArgumentException("Company id can't be null");
-		}
-		if(name != null || localName != null || englishName != null || 
-				license != null || taxCode != null || registrationLocation != null) {
-			// TODO update the corresponding row in companies table
-		}
-		if(contactDetails != null) {
-			contactDetails.editContactDetails(jdbcTemplateObject);
-		}
-		if(companyContacts != null) {
-			for(CompanyContact cc: companyContacts) {
-				//search for contacts without an id - to be added
-				//search for phones without a name - to be removed
-				//update the given phones that have id's and names
-				cc.editCompanyContact(jdbcTemplateObject);
-			}
-		}
-	}
+	/*
+	 * public void editCompany(JdbcTemplate jdbcTemplateObject) { if(getId() ==
+	 * null) { throw new IllegalArgumentException("Company id can't be null"); }
+	 * if(name != null || localName != null || englishName != null || license !=
+	 * null || taxCode != null || registrationLocation != null) { // TODO update the
+	 * corresponding row in companies table } if(contactDetails != null) {
+	 * contactDetails.editContactDetails(jdbcTemplateObject); } if(companyContacts2
+	 * != null) { for(CompanyContact cc: companyContacts2) { //search for contacts
+	 * without an id - to be added //search for phones without a name - to be
+	 * removed //update the given phones that have id's and names
+	 * cc.editCompanyContact(jdbcTemplateObject); } } }
+	 */
 }

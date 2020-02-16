@@ -3,7 +3,15 @@
  */
 package com.avc.mis.beta.dataobjects;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,10 +22,18 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@Entity
+@Table(name="SUPPLY_CATEGORIES")
 public class SupplyCategory {
 	
-	private Integer id;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
+	@Column(unique = true, nullable = false)
 	private String name;
+	
+	@ManyToMany(mappedBy = "supplyCategories")
+	private Set<Supplier> suppliers;
 	
 		
 }
