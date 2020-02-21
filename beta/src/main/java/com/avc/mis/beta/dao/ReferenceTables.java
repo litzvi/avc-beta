@@ -10,6 +10,9 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dataobjects.City;
+import com.avc.mis.beta.dataobjects.CompanyPosition;
+import com.avc.mis.beta.dataobjects.Country;
 import com.avc.mis.beta.dataobjects.SupplyCategory;
 
 /**
@@ -71,7 +74,28 @@ public class ReferenceTables extends DAO {
 				"SupplyCategory.findAll", SupplyCategory.class);
 		return query.getResultList();
 	}
+	
+	public List<City> getAllCities() {
+		
+		TypedQuery<City> query = getEntityManager().createNamedQuery(
+				"City.findAll", City.class);
+		return query.getResultList();
+	}
+	
+	public List<Country> getAllCountries() {
+		
+		TypedQuery<Country> query = getEntityManager().createNamedQuery(
+				"Country.findAll", Country.class);
+		return query.getResultList();
+	}
 
+	public List<CompanyPosition> getAllCompanyPositions() {
+		
+		TypedQuery<CompanyPosition> query = getEntityManager().createNamedQuery(
+				"CompanyPosition.findAll", CompanyPosition.class);
+		return query.getResultList();
+	}
+	
 	/**
 	 * @param category 
 	 * 
