@@ -23,7 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dataobjects.City;
+import com.avc.mis.beta.dataobjects.CompanyPosition;
+import com.avc.mis.beta.dataobjects.Country;
 import com.avc.mis.beta.dataobjects.Supplier;
+import com.avc.mis.beta.dataobjects.SupplyCategory;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 /**
@@ -50,31 +57,38 @@ public class Controller {
 	}
 
 	@RequestMapping("/supplier-details/{id}")
-	public String supplierDetails(@PathVariable("id") int id) {
+	public Supplier supplierDetails(@PathVariable("id") int id) {
 		System.out.println(id);
-		return suppliersDao.getSupplierDetails(id);
+		return suppliersDao.getSupplier(id);
 	}
 	
-	@PostMapping(value="/setSupplier", consumes = "application/json")
-	public int setSupplier(@RequestBody String supplierJson) {
-		System.out.println(supplierJson);
-		Supplier supplier = new Gson().fromJson(supplierJson, Supplier.class);
-		//System.out.println(supplierJson);
+	@PostMapping(value="/setSupplier")
+	public Supplier setSupplier(@RequestBody Supplier supplier) throws JsonMappingException, JsonProcessingException {
+//		System.out.println(supplier);
+//		ObjectMapper mapper = new ObjectMapper();
+//		Supplier supplier = mapper.readValue(supplierJson, Supplier.class);
+//		Supplier supplier = new Gson().fromJson(supplierJson, Supplier.class);
+//		System.out.println(supplier);
 		suppliersDao.addSupplier(supplier);
-		return supplier.getId();
+		return supplier;
 	}
 	
 	@RequestMapping("/setup")
-	public List<String> getSetup() {
-		List<String> result = new ArrayList<String>();
-		String cityholder = refeDao.getCities();
+	public List<List> getSetup() {
+		List<List> result = new ArrayList<>();
+		List<City> cityholder = refeDao.getAllCities();
 		result.add(cityholder);
-		String countryholder = refeDao.getCountries();
+		List<Country> countryholder = refeDao.getAllCountries();
 		result.add(countryholder);
-		String Supplyholder = refeDao.getSupplyCategories();
+		List<SupplyCategory> Supplyholder = refeDao.getAllSupplyCategories();
 		result.add(Supplyholder);
-		String Positionholder = refeDao.getCompanyPositions();
-		result.add(Positionholder);  
+		List<CompanyPosition> Positionholder = refeDao.getAllCompanyPositions();
+		result.add(Positionholder); 
+//		SupplyCategory supplyCategory = new SupplyCategory();
+//		supplyCategory.setName("Bags");
+//		refeDao.insertSupplyCategory(supplyCategory);
+//		supplyCategory.setName("Cashew");
+//		refeDao.insertSupplyCategory(supplyCategory);
 		return result; 
 	}
 	
