@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +20,9 @@ import javax.persistence.Table;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -28,41 +31,41 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="PHONES")
+@Table(name = "PHONES")
 public class Phone {
-	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+
+	@Id
+	@GeneratedValue
 	private int id;
-	
-	@Column(name="contactId", nullable = false)
-	private int contactId;
-	
-	@ManyToOne @JoinColumn(name = "contactId", updatable=false, insertable=false)
+
+//	@Column(name="contactId", insertable = false, updatable = false)
+//	private Integer contactId;
+
+	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "contactId", updatable = false)
 	private ContactDetails contactDetails;
-	
+
 	@Column(name = "phone", nullable = false)
 	private String name;
-	
+
 	/**
 	 * @param jdbcTemplateObject
-	 * @param contactId 
+	 * @param contactId
 	 * @param phones
-	 */
-	public static void insertPhones(JdbcTemplate jdbcTemplateObject, int contactId, Phone[] phones) {
+	 *//*
+		 * public static void insertPhones(JdbcTemplate jdbcTemplateObject, int
+		 * contactId, Phone[] phones) {
+		 * 
+		 * List<Object[]> batchArgs = new ArrayList<Object[]>(); for(Phone phone:
+		 * phones) { if(phone.getName() != null) { batchArgs.add(new Object[]
+		 * {contactId, phone.getName()}); } } String sql =
+		 * "insert into phones (contactId, phone) values (?, ?)";
+		 * jdbcTemplateObject.batchUpdate(sql, batchArgs, new int[]{Types.INTEGER,
+		 * Types.VARCHAR});
+		 * 
+		 * 
+		 * }
+		 */
 
-		List<Object[]> batchArgs = new ArrayList<Object[]>();
-		for(Phone phone: phones) {
-			if(phone.getName() != null) {
-				batchArgs.add(new Object[] {contactId, phone.getName()});
-			}
-		}
-		String sql = "insert into phones (contactId, phone) values (?, ?)";
-		jdbcTemplateObject.batchUpdate(sql, batchArgs, new int[]{Types.INTEGER, Types.VARCHAR});
-		
-		
-	}
-
-	
-	
-	
 }

@@ -5,10 +5,11 @@ package com.avc.mis.beta.dataobjects;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -30,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Company {
 
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue
 	private Integer id;
 	
 	@Column(unique = true, nullable = false)
@@ -41,11 +42,25 @@ public class Company {
 	private String taxCode;
 	private String registrationLocation;
 	
-	@OneToOne(mappedBy = "company")
+	@OneToOne(mappedBy = "company", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
 	
 	@OneToMany(mappedBy = "company")
 	private Set<CompanyContact> companyContacts;
+	
+	/**
+	 * @param contactDetails
+	 */	
+	public void setContactDetails(ContactDetails contactDetails) {		
+		this.contactDetails = contactDetails; 
+		if(contactDetails != null) {
+			contactDetails.setCompany(this);
+		}
+	
+	}
+	
+	
+	
 	
 	/**
 	 * 

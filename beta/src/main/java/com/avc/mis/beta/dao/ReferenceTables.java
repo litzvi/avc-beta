@@ -3,8 +3,14 @@
  */
 package com.avc.mis.beta.dao;
 
+import java.util.List;
+
+import javax.persistence.TypedQuery;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.avc.mis.beta.dataobjects.SupplyCategory;
 
 /**
  * @author Zvi
@@ -53,6 +59,27 @@ public class ReferenceTables extends DAO {
 		String sql = "select JSON_ARRAYAGG(JSON_OBJECT('id', id, 'name', name)) as 'supply categories'\r\n" + 
 				"	from supply_categories";
 		return getJdbcTemplateObject().queryForObject(sql, String.class);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<SupplyCategory> getAllSupplyCategories() {
+		
+		TypedQuery<SupplyCategory> query = getEntityManager().createNamedQuery(
+				"SupplyCategory.findAll", SupplyCategory.class);
+		return query.getResultList();
+	}
+
+	/**
+	 * @param category 
+	 * 
+	 */
+	public void insertSupplyCategory(SupplyCategory category) {
+		getEntityManager().persist(category);
+		getEntityManager().flush();
+		
 	}
 	
 }

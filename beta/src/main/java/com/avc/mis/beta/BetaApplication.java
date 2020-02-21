@@ -2,14 +2,25 @@ package com.avc.mis.beta;
 
 import java.util.Arrays;
 
+import javax.persistence.EntityManager;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dataobjects.Supplier;
 
 @SpringBootApplication
 public class BetaApplication {
+	
+	
+	@Autowired
+	Suppliers suppliers;
 
 	public static void main(String[] args) {
 		SpringApplication.run(BetaApplication.class, args);
@@ -19,13 +30,10 @@ public class BetaApplication {
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
 
-//			System.out.println("Let's inspect the beans provided by Spring Boot:");
-//
-//			String[] beanNames = ctx.getBeanDefinitionNames();
-//			Arrays.sort(beanNames);
-//			for (String beanName : beanNames) {
-//				System.out.println(beanName);
-//			}
+			/*
+			 * Supplier supplier = new Supplier(); supplier.setName("medium supplier1");
+			 * suppliers.addSupplier(supplier);
+			 */
 
 		};
 	}

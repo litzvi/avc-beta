@@ -92,12 +92,19 @@ public class Suppliers extends DAO {
 	 */
 	public void addSupplier(Supplier supplier) {
 
-		Supplier.insertSupplier(getJdbcTemplateObject(), supplier);
+		getEntityManager().persist(supplier);
+		getEntityManager().flush();
 		
 	}
 	
-	public void editSupplier(Supplier supplier) {
-		supplier.editSupplier(getJdbcTemplateObject());
+	public Supplier getSupplier(int id) {
+		return getEntityManager().find(Supplier.class, id);
+	}
+	
+	public void editSupplierInformation(Supplier supplier) {
+//		getEntityManager().find(Supplier.class, supplier.getId()).setName("findName");
+		getEntityManager().merge(supplier);
+		getEntityManager().flush();
 	}
 
 		
