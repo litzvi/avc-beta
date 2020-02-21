@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Table(name="BANK_ACCOUNTS", uniqueConstraints = {@UniqueConstraint(columnNames = {"accountNo", "branchId"})})
 public class BankAccount {
 	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id @GeneratedValue
 	private Integer id;
 	
 	@Column(nullable = false)
@@ -39,7 +39,7 @@ public class BankAccount {
 	
 	@Column(nullable = false)
 	private String ownerName;
-	
+		
 	@ManyToOne @JoinColumn(name="branchId", nullable = false)
 	private BankBranch branch;
 	

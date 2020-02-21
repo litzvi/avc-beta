@@ -9,8 +9,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -18,8 +18,12 @@ import javax.persistence.Table;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -31,16 +35,19 @@ import lombok.NoArgsConstructor;
 @Table(name="EMAILS")
 public class Email {
 
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id @GeneratedValue
 	private int id;
 	
-	@Column(name="contactId", nullable = false)
-	private int contactId;
+//	@Column(name="contactId", nullable = false)
+//	private int contactId;
 	
-	@ManyToOne @JoinColumn(name = "contactId", updatable=false, insertable=false)
+	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@JsonBackReference(value = "contactDetails_emails")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "contactId", updatable = false)
 	private ContactDetails contactDetails;
-	
-	@Column(name = "email", nullable = false)
+
+	@Column(name = "phone", nullable = false)
 	private String name;
 	
 	/**

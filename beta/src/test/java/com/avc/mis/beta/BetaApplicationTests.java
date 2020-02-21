@@ -39,7 +39,7 @@ class BetaApplicationTests {
 		supplier.setName("tets supplier " + SERIAL_NO);
 //		supplier.setSupplyCategories(supplyCategories);
 		ContactDetails contactDetails = new ContactDetails();
-		contactDetails.setPhones(new String[]{"99999", "8888", "222222"});
+//		contactDetails.setPhones(new String[]{"99999", "8888", "222222"});
 		System.out.println("hello");
 		supplier.setContactDetails(contactDetails);
 		suppliers.addSupplier(supplier);

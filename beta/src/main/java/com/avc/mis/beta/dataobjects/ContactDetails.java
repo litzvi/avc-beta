@@ -25,6 +25,9 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -51,6 +54,7 @@ public class ContactDetails {
 
 	
 	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@JsonBackReference(value = "company_contactDetails")
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "companyId", updatable = false)
 	private Company company;
@@ -63,51 +67,64 @@ public class ContactDetails {
 	private Person person;
 
 //	@LazyCollection(LazyCollectionOption.TRUE)
+	@JsonManagedReference(value = "contactDetails_phones")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	private Set<Phone> phones;
 
-	@OneToMany(mappedBy = "contactDetails")
+	@JsonManagedReference(value = "contactDetails_faxes")
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	private Set<Fax> faxes;
 
-	@OneToMany(mappedBy = "contactDetails")
+	@JsonManagedReference(value = "contactDetails_emails")
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	private Set<Email> emails;
 
-	@OneToMany(mappedBy = "contactDetails")
+	@JsonManagedReference(value = "contactDetails_addresses")
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	private Set<Address> addresses;
 
-	@OneToMany(mappedBy = "contactDetails")
+	@JsonManagedReference(value = "contactDetails_paymentAccount")
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	private Set<PaymentAccount> paymentAccounts;
-	
-	
-	public void setPhones(Set<Phone> phones) {
-		for(Phone phone: phones) {
-			phone.setContactDetails(this);
-		}
-		this.phones = phones;
-	}
-	
-	public void setPhones(String[] phoneNumbers) {
-		this.phones = new HashSet<Phone>(phoneNumbers.length);
-		Phone phone;
-		for(String phoneNo: phoneNumbers) {
-			phone = new Phone();
-			phone.setName(phoneNo);
-			phone.setContactDetails(this);
-			this.phones.add(phone);
-		}
-	}
 	
 	@PrePersist
 	public void prePersistContactDetails() {
 		for(Phone phone: phones) {
 			phone.setContactDetails(this);
 		}
+		
+		for(Fax fax: faxes) {
+			fax.setContactDetails(this);
+		}
+		
+		for(Email email: emails) {
+			email.setContactDetails(this);
+		}
+		
+		for(Address address: addresses) {
+			address.setContactDetails(this);
+		}
 	}
 	
+//	public void setPhones(Set<Phone> phones) {
+//		for(Phone phone: phones) {
+//			phone.setContactDetails(this);
+//		}
+//		this.phones = phones;
+//	}
+//	
+//	public void setPhones(String[] phoneNumbers) {
+//		this.phones = new HashSet<Phone>(phoneNumbers.length);
+//		Phone phone;
+//		for(String phoneNo: phoneNumbers) {
+//			phone = new Phone();
+//			phone.setName(phoneNo);
+//			phone.setContactDetails(this);
+//			this.phones.add(phone);
+//		}
+//	}
 	
-
-
-	
+		
 	/*
 	 * public static void insertContactDetails(JdbcTemplate jdbcTemplateObject,
 	 * ContactDetails contactDetails) {

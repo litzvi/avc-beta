@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -37,6 +38,7 @@ public class Supplier extends Company {
 	@ManyToMany
 	private Set<SupplyCategory> supplyCategories;
 
+	@ToString.Exclude
 	@Column(columnDefinition = "boolean default true", nullable = false)
 	private boolean isActive = true;
 

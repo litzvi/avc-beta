@@ -37,7 +37,8 @@ public class Country {
 	@Column(unique = true, nullable = false)
 	private String Name;
 	
-	@ToString.Exclude @EqualsAndHashCode.Exclude
+//	@EqualsAndHashCode.Exclude
+	@ToString.Exclude 
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
 	private transient Set<City> cities;
 }

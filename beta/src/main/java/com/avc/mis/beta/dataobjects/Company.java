@@ -18,6 +18,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -43,6 +45,7 @@ public class Company {
 	private String taxCode;
 	private String registrationLocation;
 	
+	@JsonManagedReference(value = "company_contactDetails")
 	@OneToOne(mappedBy = "company", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
 	

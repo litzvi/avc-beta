@@ -3,21 +3,16 @@
  */
 package com.avc.mis.beta.dataobjects;
 
-import java.sql.Types;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,14 +29,14 @@ import lombok.ToString;
 @Table(name = "PHONES")
 public class Phone {
 
-	@Id
-	@GeneratedValue
+	@Id @GeneratedValue
 	private int id;
 
 //	@Column(name="contactId", insertable = false, updatable = false)
 //	private Integer contactId;
 
 	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@JsonBackReference(value = "contactDetails_phones")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contactId", updatable = false)
 	private ContactDetails contactDetails;

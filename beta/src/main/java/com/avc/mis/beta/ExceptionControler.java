@@ -24,7 +24,10 @@ public class ExceptionControler {
         return error(HttpStatus.BAD_REQUEST, e);
     }
 	
-	
+	@ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<String> handleIllegalArgumentException(Exception e){
+        return error(HttpStatus.BAD_REQUEST, e);
+    }
 	
     private ResponseEntity<String> error(HttpStatus status, Exception e) {
         log.error("Exception : ", e);

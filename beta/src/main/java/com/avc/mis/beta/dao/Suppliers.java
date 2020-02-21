@@ -95,6 +95,10 @@ public class Suppliers extends DAO {
 	}
 	
 	public Supplier getSupplier(int id) {
+		Supplier supplier = getEntityManager().find(Supplier.class, id);
+		if(supplier == null) {
+			throw new IllegalArgumentException("No supplier with given ID");
+		}
 		return getEntityManager().find(Supplier.class, id);
 	}
 	
