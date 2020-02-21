@@ -102,7 +102,7 @@ public class ReferenceTables extends DAO {
 	 */
 	public void insertSupplyCategory(SupplyCategory category) {
 		getEntityManager().persist(category);
-		getEntityManager().flush();
+//		getEntityManager().flush();
 		
 	}
 	

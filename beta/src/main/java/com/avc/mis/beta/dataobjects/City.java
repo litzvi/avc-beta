@@ -5,6 +5,7 @@ package com.avc.mis.beta.dataobjects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -34,6 +35,7 @@ public class City {
 	@Column(nullable = false)
 	private String name;
 	
-	@ManyToOne @JoinColumn(name = "countryId", nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "countryId", nullable = false)
 	private Country country;
 }

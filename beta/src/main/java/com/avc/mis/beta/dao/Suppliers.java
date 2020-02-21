@@ -91,10 +91,7 @@ public class Suppliers extends DAO {
 	 * @return
 	 */
 	public void addSupplier(Supplier supplier) {
-
-		getEntityManager().persist(supplier);
-		getEntityManager().flush();
-		
+		getEntityManager().persist(supplier);	
 	}
 	
 	public Supplier getSupplier(int id) {

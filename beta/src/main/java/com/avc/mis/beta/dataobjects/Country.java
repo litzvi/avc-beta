@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -34,6 +37,7 @@ public class Country {
 	@Column(unique = true, nullable = false)
 	private String Name;
 	
-	@OneToMany(mappedBy = "country")
-	private Set<City> cities;
+	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+	private transient Set<City> cities;
 }

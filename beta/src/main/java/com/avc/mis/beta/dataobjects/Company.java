@@ -15,6 +15,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -59,6 +60,12 @@ public class Company {
 	
 	}
 	
+	@PrePersist
+	public void prePersistCompany() {
+		if(contactDetails != null) {
+			contactDetails.setCompany(this);
+		}
+	}
 	
 	
 	

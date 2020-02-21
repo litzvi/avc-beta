@@ -16,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -78,12 +79,12 @@ public class ContactDetails {
 	private Set<PaymentAccount> paymentAccounts;
 	
 	
-//	public void setPhones(Set<Phone> phones) {
-//		for(Phone phone: phones) {
-//			phone.setContactDetails(this);
-//		}
-//		this.phones = phones;
-//	}
+	public void setPhones(Set<Phone> phones) {
+		for(Phone phone: phones) {
+			phone.setContactDetails(this);
+		}
+		this.phones = phones;
+	}
 	
 	public void setPhones(String[] phoneNumbers) {
 		this.phones = new HashSet<Phone>(phoneNumbers.length);
@@ -95,6 +96,14 @@ public class ContactDetails {
 			this.phones.add(phone);
 		}
 	}
+	
+	@PrePersist
+	public void prePersistContactDetails() {
+		for(Phone phone: phones) {
+			phone.setContactDetails(this);
+		}
+	}
+	
 	
 
 
