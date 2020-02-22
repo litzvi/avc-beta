@@ -44,7 +44,6 @@ public class Phone {
 	private ContactDetails contactDetails;
 
 	@Column(name = "phone", nullable = false)
-	@NonNull
 	private String name;
 
 	/**

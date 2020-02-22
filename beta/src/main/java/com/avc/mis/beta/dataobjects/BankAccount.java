@@ -36,16 +36,13 @@ public class BankAccount {
 	private Integer id;
 	
 	@Column(nullable = false)
-	@NonNull
 	private String accountNo;
 	
 	@Column(nullable = false)
-	@NonNull
 	private String ownerName;
 		
 	@JoinColumn(name="branchId", nullable = false)
 	@ManyToOne(optional = false)
-	@NonNull
 	private BankBranch branch;
 	
 	/**

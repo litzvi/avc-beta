@@ -33,12 +33,10 @@ public class BankBranch {
 	private Integer id;
 	
 	@Column(nullable = false)
-	@NonNull
 	private String name;
 	
 //	@JsonManagedReference(value = "branch_bank")
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "bankId", nullable = false)
-	@NonNull
 	private Bank bank;
 }

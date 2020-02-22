@@ -21,6 +21,8 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.Check;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonFormat.Feature;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -76,6 +78,7 @@ public class ContactDetails {
 
 	@JsonManagedReference(value = "contactDetails_addresses")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@JsonFormat(with = Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	private List<Address> addresses = new ArrayList<>();
 
 	@JsonManagedReference(value = "contactDetails_paymentAccount")

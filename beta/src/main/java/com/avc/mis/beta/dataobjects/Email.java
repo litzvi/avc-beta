@@ -50,7 +50,6 @@ public class Email {
 	private ContactDetails contactDetails;
 
 	@Column(name = "email", nullable = false)
-	@NonNull
 	private String name;
 	
 

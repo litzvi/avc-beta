@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -11,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MapKey;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -40,5 +42,6 @@ public class Country {
 //	@EqualsAndHashCode.Exclude
 	@ToString.Exclude 
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-	private transient Set<City> cities;
+	@MapKey(name = "country")
+	private transient Map<Country, City> cities;
 }

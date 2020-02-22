@@ -50,7 +50,6 @@ public class Fax {
 	private ContactDetails contactDetails;
 	
 	@Column(name = "fax", nullable = false)
-	@NonNull
 	private String name;
 	
 	/**

@@ -24,7 +24,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -50,7 +49,6 @@ public class Address {
 	private ContactDetails contactDetails;
 	
 	@Column(nullable = false)
-	@NonNull
 	private String streetAddress;
 	
 	@ManyToOne @JoinColumn(name="cityId")
