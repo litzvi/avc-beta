@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -36,7 +37,7 @@ import lombok.ToString;
 public class Email {
 
 	@Id @GeneratedValue
-	private int id;
+	private Integer id;
 	
 //	@Column(name="contactId", nullable = false)
 //	private int contactId;
@@ -48,6 +49,7 @@ public class Email {
 	private ContactDetails contactDetails;
 
 	@Column(name = "email", nullable = false)
+	@NonNull
 	private String name;
 	
 	/**
@@ -66,6 +68,13 @@ public class Email {
 		String sql = "insert into emails (contactId, email) values (?, ?)";
 		jdbcTemplateObject.batchUpdate(sql, batchArgs, new int[]{Types.INTEGER, Types.VARCHAR});
 		
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isLegal() {
+		return getName() != null;
 	}
 	
 }

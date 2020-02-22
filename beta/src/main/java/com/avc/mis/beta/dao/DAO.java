@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
  *
  */
 @Repository
-public class DAO {
+public abstract class DAO {
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplateObject;

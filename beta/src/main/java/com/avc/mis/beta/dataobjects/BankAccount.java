@@ -6,7 +6,6 @@ package com.avc.mis.beta.dataobjects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -45,6 +44,7 @@ public class BankAccount {
 		
 	@JoinColumn(name="branchId", nullable = false)
 	@ManyToOne(optional = false)
+	@NonNull
 	private BankBranch branch;
 	
 	/**
@@ -71,6 +71,13 @@ public class BankAccount {
 		sql = "INSERT INTO BANK_PAYEES (paymentId, accountId) VALUES (?, ?)";
 		jdbcTemplateObject.update(sql, new Object[] {paymentId, accountNo});
 		
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isLegal() {
+		return getAccountNo() != null && getOwnerName() != null && getBranch() != null;
 	}
 
 }

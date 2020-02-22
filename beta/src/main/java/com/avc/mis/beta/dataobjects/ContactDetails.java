@@ -4,16 +4,12 @@
 package com.avc.mis.beta.dataobjects;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -23,9 +19,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Check;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -91,20 +84,30 @@ public class ContactDetails {
 	
 	@PrePersist
 	public void prePersistContactDetails() {
+		phones.removeIf(phone -> (phone.isLegal()));
 		for(Phone phone: phones) {
 			phone.setContactDetails(this);
 		}
 		
+		faxes.removeIf(fax -> (fax.isLegal()));
 		for(Fax fax: faxes) {
 			fax.setContactDetails(this);
 		}
 		
+		emails.removeIf(email -> (email.isLegal()));
 		for(Email email: emails) {
 			email.setContactDetails(this);
 		}
 		
+		addresses.removeIf(address -> (address.isLegal()));
 		for(Address address: addresses) {
 			address.setContactDetails(this);
+		}
+		
+		
+		paymentAccounts.removeIf(account -> (account.isLegal()));
+		for(PaymentAccount account: paymentAccounts) {
+			account.setContactDetails(this);
 		}
 	}
 	

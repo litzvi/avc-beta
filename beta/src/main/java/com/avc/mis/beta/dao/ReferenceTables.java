@@ -10,6 +10,8 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dataobjects.Bank;
+import com.avc.mis.beta.dataobjects.BankBranch;
 import com.avc.mis.beta.dataobjects.City;
 import com.avc.mis.beta.dataobjects.CompanyPosition;
 import com.avc.mis.beta.dataobjects.Country;
@@ -22,7 +24,63 @@ import com.avc.mis.beta.dataobjects.SupplyCategory;
 @Repository
 @Transactional
 public class ReferenceTables extends DAO {
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public List<SupplyCategory> getAllSupplyCategories() {
+		
+		TypedQuery<SupplyCategory> query = getEntityManager().createNamedQuery(
+				"SupplyCategory.findAll", SupplyCategory.class);
+		return query.getResultList();
+	}
+	
+	public List<City> getAllCities() {
+		
+		TypedQuery<City> query = getEntityManager().createNamedQuery(
+				"City.findAll", City.class);
+		return query.getResultList();
+	}
+	
+	public List<Country> getAllCountries() {
+		
+		TypedQuery<Country> query = getEntityManager().createNamedQuery(
+				"Country.findAll", Country.class);
+		return query.getResultList();
+	}
 
+	public List<CompanyPosition> getAllCompanyPositions() {
+		
+		TypedQuery<CompanyPosition> query = getEntityManager().createNamedQuery(
+				"CompanyPosition.findAll", CompanyPosition.class);
+		return query.getResultList();
+	}
+	
+	public List<Bank> getAllBanks() {
+		
+		TypedQuery<Bank> query = getEntityManager().createNamedQuery(
+				"Bank.findAll", Bank.class);
+		return query.getResultList();
+	}
+	
+	public List<BankBranch> getAllBankBranches() {
+		
+		TypedQuery<BankBranch> query = getEntityManager().createNamedQuery(
+				"BankBranch.findAll", BankBranch.class);
+		return query.getResultList();
+	}
+	
+	
+	/**
+	 * @param category 
+	 * 
+	 */
+	public void insertSupplyCategory(SupplyCategory category) {
+		getEntityManager().persist(category);
+//		getEntityManager().flush();
+		
+	}
 	
 	/**
 	 * 
@@ -62,48 +120,6 @@ public class ReferenceTables extends DAO {
 		String sql = "select JSON_ARRAYAGG(JSON_OBJECT('id', id, 'name', name)) as 'supply categories'\r\n" + 
 				"	from supply_categories";
 		return getJdbcTemplateObject().queryForObject(sql, String.class);
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public List<SupplyCategory> getAllSupplyCategories() {
-		
-		TypedQuery<SupplyCategory> query = getEntityManager().createNamedQuery(
-				"SupplyCategory.findAll", SupplyCategory.class);
-		return query.getResultList();
-	}
-	
-	public List<City> getAllCities() {
-		
-		TypedQuery<City> query = getEntityManager().createNamedQuery(
-				"City.findAll", City.class);
-		return query.getResultList();
-	}
-	
-	public List<Country> getAllCountries() {
-		
-		TypedQuery<Country> query = getEntityManager().createNamedQuery(
-				"Country.findAll", Country.class);
-		return query.getResultList();
-	}
-
-	public List<CompanyPosition> getAllCompanyPositions() {
-		
-		TypedQuery<CompanyPosition> query = getEntityManager().createNamedQuery(
-				"CompanyPosition.findAll", CompanyPosition.class);
-		return query.getResultList();
-	}
-	
-	/**
-	 * @param category 
-	 * 
-	 */
-	public void insertSupplyCategory(SupplyCategory category) {
-		getEntityManager().persist(category);
-//		getEntityManager().flush();
-		
 	}
 	
 }

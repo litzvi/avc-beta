@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -36,7 +37,7 @@ import lombok.ToString;
 public class Fax {
 	
 	@Id @GeneratedValue
-	private int id;
+	private Integer id;
 	
 //	@Column(name="contactId", nullable = false)
 //	private int contactId;
@@ -48,6 +49,7 @@ public class Fax {
 	private ContactDetails contactDetails;
 	
 	@Column(name = "fax", nullable = false)
+	@NonNull
 	private String name;
 	
 	/**
@@ -65,6 +67,13 @@ public class Fax {
 		}
 		String sql = "insert into faxes (contactId, fax) values (?, ?)";
 		jdbcTemplateObject.batchUpdate(sql, batchArgs, new int[]{Types.INTEGER, Types.VARCHAR});
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isLegal() {
+		return getName() != null;
 	}
 	
 }

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -38,6 +39,7 @@ public class Company {
 	private Integer id;
 	
 	@Column(unique = true, nullable = false)
+	@NonNull
 	private String name;
 	private String localName;
 	private String englishName;
@@ -52,17 +54,7 @@ public class Company {
 	@OneToMany(mappedBy = "company")
 	private Set<CompanyContact> companyContacts;
 	
-	/**
-	 * @param contactDetails
-	 */	
-	public void setContactDetails(ContactDetails contactDetails) {		
-		this.contactDetails = contactDetails; 
-		if(contactDetails != null) {
-			contactDetails.setCompany(this);
-		}
-	
-	}
-	
+		
 	@PrePersist
 	public void prePersistCompany() {
 		if(contactDetails != null) {

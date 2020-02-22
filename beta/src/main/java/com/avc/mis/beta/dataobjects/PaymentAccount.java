@@ -4,16 +4,13 @@
 package com.avc.mis.beta.dataobjects;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -38,7 +35,7 @@ import lombok.ToString;
 public class PaymentAccount {
 	
 	@Id @GeneratedValue
-	private int id;
+	private Integer id;
 	
 //	@Column(name="contactId", nullable = false)
 //	private int contactId;
@@ -56,6 +53,13 @@ public class PaymentAccount {
 	private BankAccount bankAccount;
 	
 	
+	/**
+	 * @return
+	 */
+	public boolean isLegal() {
+		return getBankAccount() != null && getBankAccount().isLegal();
+	}
+
 	
 	/**
 	 * @param jdbcTemplateObject
@@ -85,5 +89,9 @@ public class PaymentAccount {
 		}
 
 		
-	}	
+	}
+
+
+
+	
 }

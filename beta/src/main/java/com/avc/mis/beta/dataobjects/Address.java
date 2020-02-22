@@ -11,7 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -24,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -37,7 +37,7 @@ import lombok.ToString;
 public class Address {
 
 	@Id @GeneratedValue
-	private int id;
+	private Integer id;
 	
 //	@Column(name="contactId", nullable = false)
 //	private int contactId;
@@ -49,9 +49,10 @@ public class Address {
 	private ContactDetails contactDetails;
 	
 	@Column(nullable = false)
+	@NonNull
 	private String streetAddress;
 	
-	@ManyToOne @JoinColumn(name="cityId", nullable = false)
+	@ManyToOne @JoinColumn(name="cityId")
 	private City city;
 	
 	/**
@@ -71,6 +72,13 @@ public class Address {
 		jdbcTemplateObject.batchUpdate(sql, batchArgs, new int[]{Types.INTEGER, Types.VARCHAR, Types.VARCHAR});
 		
 	
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isLegal() {
+		return getStreetAddress() != null;
 	}
 	
 }

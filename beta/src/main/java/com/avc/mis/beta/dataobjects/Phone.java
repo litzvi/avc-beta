@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -30,7 +31,7 @@ import lombok.ToString;
 public class Phone {
 
 	@Id @GeneratedValue
-	private int id;
+	private Integer id;
 
 //	@Column(name="contactId", insertable = false, updatable = false)
 //	private Integer contactId;
@@ -42,7 +43,15 @@ public class Phone {
 	private ContactDetails contactDetails;
 
 	@Column(name = "phone", nullable = false)
+	@NonNull
 	private String name;
+
+	/**
+	 * @return
+	 */
+	public boolean isLegal() {
+		return getName() != null;
+	}
 
 	/**
 	 * @param jdbcTemplateObject
