@@ -84,28 +84,28 @@ public class ContactDetails {
 	
 	@PrePersist
 	public void prePersistContactDetails() {
-		phones.removeIf(phone -> (phone.isLegal()));
+		phones.removeIf(phone -> (!phone.isLegal()));
 		for(Phone phone: phones) {
 			phone.setContactDetails(this);
 		}
 		
-		faxes.removeIf(fax -> (fax.isLegal()));
+		faxes.removeIf(fax -> (!fax.isLegal()));
 		for(Fax fax: faxes) {
 			fax.setContactDetails(this);
 		}
 		
-		emails.removeIf(email -> (email.isLegal()));
+		emails.removeIf(email -> (!email.isLegal()));
 		for(Email email: emails) {
 			email.setContactDetails(this);
 		}
 		
-		addresses.removeIf(address -> (address.isLegal()));
+		addresses.removeIf(address -> (!address.isLegal()));
 		for(Address address: addresses) {
 			address.setContactDetails(this);
 		}
 		
 		
-		paymentAccounts.removeIf(account -> (account.isLegal()));
+		paymentAccounts.removeIf(account -> (!account.isLegal()));
 		for(PaymentAccount account: paymentAccounts) {
 			account.setContactDetails(this);
 		}

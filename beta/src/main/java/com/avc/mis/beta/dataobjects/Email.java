@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -52,6 +53,15 @@ public class Email {
 	@NonNull
 	private String name;
 	
+
+	/**
+	 * @return
+	 */
+	@JsonIgnore
+	public boolean isLegal() {
+		return getName() != null;
+	}
+	
 	/**
 	 * @param jdbcTemplateObject
 	 * @param contactId 
@@ -70,11 +80,5 @@ public class Email {
 		
 	}
 
-	/**
-	 * @return
-	 */
-	public boolean isLegal() {
-		return getName() != null;
-	}
 	
 }

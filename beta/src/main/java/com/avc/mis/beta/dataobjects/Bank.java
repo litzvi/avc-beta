@@ -40,8 +40,9 @@ public class Bank {
 	@NonNull
 	private String name;
 	
-	@ToString.Exclude @EqualsAndHashCode.Exclude
-	@JsonBackReference(value = "branch_bank")
+//	@JsonBackReference(value = "branch_bank")
+//	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	@OneToMany(mappedBy = "bank")
-	private Set<BankBranch> branches;
+	private transient Set<BankBranch> branches;
 }

@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import com.avc.mis.beta.dao.services.PreparedStatementCreatorImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -76,6 +77,7 @@ public class BankAccount {
 	/**
 	 * @return
 	 */
+	@JsonIgnore
 	public boolean isLegal() {
 		return getAccountNo() != null && getOwnerName() != null && getBranch() != null;
 	}

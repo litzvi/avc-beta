@@ -18,6 +18,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import com.avc.mis.beta.dao.services.PreparedStatementCreatorImpl;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -56,6 +57,7 @@ public class PaymentAccount {
 	/**
 	 * @return
 	 */
+	@JsonIgnore
 	public boolean isLegal() {
 		return getBankAccount() != null && getBankAccount().isLegal();
 	}
