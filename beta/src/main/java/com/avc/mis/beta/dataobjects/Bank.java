@@ -13,8 +13,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -32,6 +36,8 @@ public class Bank {
 	@Column(nullable = false, unique = true)
 	private String name;
 	
+	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@JsonBackReference(value = "branch_bank")
 	@OneToMany(mappedBy = "bank")
 	private Set<BankBranch> branches;
 }

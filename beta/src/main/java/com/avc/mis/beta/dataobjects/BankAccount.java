@@ -20,6 +20,7 @@ import com.avc.mis.beta.dao.services.PreparedStatementCreatorImpl;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -35,12 +36,15 @@ public class BankAccount {
 	private Integer id;
 	
 	@Column(nullable = false)
+	@NonNull
 	private String accountNo;
 	
 	@Column(nullable = false)
+	@NonNull
 	private String ownerName;
 		
-	@ManyToOne @JoinColumn(name="branchId", nullable = false)
+	@JoinColumn(name="branchId", nullable = false)
+	@ManyToOne(optional = false)
 	private BankBranch branch;
 	
 	/**

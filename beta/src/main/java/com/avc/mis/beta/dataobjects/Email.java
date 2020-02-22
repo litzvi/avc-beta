@@ -47,7 +47,7 @@ public class Email {
 	@JoinColumn(name = "contactId", updatable = false)
 	private ContactDetails contactDetails;
 
-	@Column(name = "phone", nullable = false)
+	@Column(name = "email", nullable = false)
 	private String name;
 	
 	/**

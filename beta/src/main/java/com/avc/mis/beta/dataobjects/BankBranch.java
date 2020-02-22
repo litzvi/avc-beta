@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,12 +27,14 @@ import lombok.NoArgsConstructor;
 @Table(name="BANK_BRANCHES")
 public class BankBranch {
 	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue
 	private Integer id;
 	
 	@Column(nullable = false)
 	private String name;
 	
-	@ManyToOne @JoinColumn(name = "bankId", nullable = false)
+	@JsonManagedReference(value = "branch_bank")
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "bankId", nullable = false)
 	private Bank bank;
 }

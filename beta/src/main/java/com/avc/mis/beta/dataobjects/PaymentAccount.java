@@ -52,17 +52,10 @@ public class PaymentAccount {
 	@JoinTable(name = "BANK_PAYEES", 
 			joinColumns = @JoinColumn(name="paymentId", referencedColumnName="id", nullable = false),
 			inverseJoinColumns = @JoinColumn(name = "accountId",referencedColumnName = "id", nullable = false))
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
 	private BankAccount bankAccount;
 	
-//	@PrePersist
-//	public void prePersist() {
-//		if(getBankAccount() != null) {
-//			if(getBankAccount().getId() != null) {
-//				getBankAccount()
-//			}
-//		}
-//	}
+	
 	
 	/**
 	 * @param jdbcTemplateObject

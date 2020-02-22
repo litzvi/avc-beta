@@ -3,7 +3,9 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -69,23 +71,23 @@ public class ContactDetails {
 //	@LazyCollection(LazyCollectionOption.TRUE)
 	@JsonManagedReference(value = "contactDetails_phones")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-	private Set<Phone> phones;
+	private List<Phone> phones = new ArrayList<Phone>();
 
 	@JsonManagedReference(value = "contactDetails_faxes")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-	private Set<Fax> faxes;
+	private List<Fax> faxes = new ArrayList<>();
 
 	@JsonManagedReference(value = "contactDetails_emails")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-	private Set<Email> emails;
+	private List<Email> emails = new ArrayList<>();
 
 	@JsonManagedReference(value = "contactDetails_addresses")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-	private Set<Address> addresses;
+	private List<Address> addresses = new ArrayList<>();
 
 	@JsonManagedReference(value = "contactDetails_paymentAccount")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-	private Set<PaymentAccount> paymentAccounts;
+	private List<PaymentAccount> paymentAccounts = new ArrayList<>();
 	
 	@PrePersist
 	public void prePersistContactDetails() {
