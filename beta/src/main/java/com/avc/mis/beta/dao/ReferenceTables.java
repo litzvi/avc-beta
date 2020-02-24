@@ -4,6 +4,8 @@
 package com.avc.mis.beta.dao;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.TypedQuery;
 
@@ -48,6 +50,11 @@ public class ReferenceTables extends DAO {
 		TypedQuery<Country> query = getEntityManager().createNamedQuery(
 				"Country.findAll", Country.class);
 		return query.getResultList();
+	}
+	
+	public Map<Country, List<City>> getCitiesByCountry() {
+		
+		return getAllCities().stream().collect(Collectors.groupingBy(City::getCountry));
 	}
 
 	public List<CompanyPosition> getAllCompanyPositions() {

@@ -17,6 +17,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -39,9 +41,9 @@ public class Country {
 	@Column(unique = true, nullable = false)
 	private String Name;
 	
+//	@JsonBackReference(value = "city_country")
 //	@EqualsAndHashCode.Exclude
 	@ToString.Exclude 
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-	@MapKey(name = "country")
-	private transient Map<Country, City> cities;
+	private transient Set<City> cities;
 }

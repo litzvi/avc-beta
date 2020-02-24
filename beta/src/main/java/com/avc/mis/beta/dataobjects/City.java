@@ -14,6 +14,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -34,6 +37,8 @@ public class City {
 	@Column(nullable = false)
 	private String name;
 	
+//	@JsonManagedReference(value = "city_country")
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "countryId", nullable = false)
 	private Country country;
