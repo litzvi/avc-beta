@@ -21,6 +21,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -74,7 +75,7 @@ public class Fax {
 	 */
 	@JsonIgnore
 	public boolean isLegal() {
-		return getName() != null;
+		return StringUtils.isNotBlank(getName());
 	}
 	
 }

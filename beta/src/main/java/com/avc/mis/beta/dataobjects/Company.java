@@ -20,6 +20,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -55,24 +57,42 @@ public class Company {
 	private ContactDetails contactDetails;
 	
 	@JsonManagedReference(value = "company_companyContacts")
-	@OneToMany(mappedBy = "company", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
-	private Set<CompanyContact> companyContacts = new HashSet<>();;
+	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+	private Set<CompanyContact> companyContacts = new HashSet<>();
 	
 
 	@ToString.Exclude
 	@Column(columnDefinition = "boolean default true", nullable = false)
 	private boolean isActive = true;
 	
-		
-	@PrePersist
-	public void prePersistCompany() {
+	public void setContactDetails(ContactDetails contactDetails) {
+		this.contactDetails = contactDetails;
 		if(contactDetails != null) {
-			contactDetails.setCompany(this);
-		}
-		for(CompanyContact contact: companyContacts) {
-			contact.setCompany(this);
+			this.contactDetails.setCompany(this);
 		}
 	}
+	
+			
+	@PrePersist
+	public void prePersistCompany() {
+		if(contactDetails == null) {
+			contactDetails = new ContactDetails();
+			contactDetails.setCompany(this);
+		}
+				
+		for(CompanyContact contact: companyContacts) { 
+			contact.setCompany(this); 
+		}
+		
+	}
+	
+	/**
+	 * @return
+	 */
+	public boolean isLegal() {
+		return StringUtils.isNotBlank(name);
+	}
+
 	
 	
 	

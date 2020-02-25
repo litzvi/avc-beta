@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -36,7 +37,7 @@ public class CompanyContact {
 
 //	@Id
 //	@Column(name = "companyId")
-//	private Integer companyId;
+//	private Integer id;
 
 	@Id
 	@ToString.Exclude @EqualsAndHashCode.Exclude
@@ -46,7 +47,7 @@ public class CompanyContact {
 	private Company company;
 
 	@Id
-	@ManyToOne(cascade = {CascadeType.PERSIST})
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "personId", updatable = false)
 	private Person person;
 
@@ -55,8 +56,9 @@ public class CompanyContact {
 	private CompanyPosition position;
 
 	@Column(columnDefinition = "boolean default true", nullable = false)
-	private boolean isActive;
-
+	private boolean isActive = true;
+	
+	
 	/**
 	 * @param jdbcTemplateObject
 	 * @param cc

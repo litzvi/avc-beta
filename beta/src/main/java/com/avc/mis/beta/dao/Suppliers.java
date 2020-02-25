@@ -3,9 +3,17 @@
  */
 package com.avc.mis.beta.dao;
 
+import java.util.List;
+
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dataobjects.BankBranch;
+import com.avc.mis.beta.dataobjects.CompanyContact;
+import com.avc.mis.beta.dataobjects.Person;
 import com.avc.mis.beta.dataobjects.Supplier;
 
 /**
@@ -91,7 +99,19 @@ public class Suppliers extends DAO {
 	 * @return
 	 */
 	public void addSupplier(Supplier supplier) {
-		getEntityManager().persist(supplier);	
+		if(!supplier.isLegal()) {
+			throw new IllegalArgumentException("Supplier missing required details");
+		}
+		getEntityManager().persist(supplier);
+		for(CompanyContact contact: supplier.getCompanyContacts()) {
+			Person person = contact.getPerson();
+			if(person != null && person.isLegal()) {
+				getEntityManager().persist(person);
+				getEntityManager().persist(contact);
+			}
+			
+		}
+//		getEntityManager().flush();
 	}
 	
 	public Supplier getSupplier(int id) {
@@ -101,6 +121,15 @@ public class Suppliers extends DAO {
 		}
 		return getEntityManager().find(Supplier.class, id);
 	}
+	
+	/*
+	 * public List getSuppliersBasic() {
+	 * 
+	 * Query query = getEntityManager().createNativeQuery( "Supplier.findAllBasic");
+	 * return query.getResultList();
+	 * 
+	 * }
+	 */
 	
 	public void editSupplierInformation(Supplier supplier) {
 //		getEntityManager().find(Supplier.class, supplier.getId()).setName("findName");

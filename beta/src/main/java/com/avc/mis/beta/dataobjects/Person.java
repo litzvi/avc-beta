@@ -11,10 +11,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -43,6 +45,25 @@ public class Person {
 	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
 
+	@PrePersist
+	public void prePersistPerson() {
+		if(contactDetails == null) {
+			contactDetails = new ContactDetails();
+		}
+		contactDetails.setPerson(this);
+		
+		if(idCard != null) {
+			idCard.setPerson(this);
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isLegal() {
+		return StringUtils.isNotBlank(name);
+	}
+	
 	/**
 	 * @param jdbcTemplateObject
 	 * @param person

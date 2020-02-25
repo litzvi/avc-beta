@@ -13,6 +13,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.ManyToAny;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
@@ -51,6 +53,7 @@ public class PaymentAccount {
 			joinColumns = @JoinColumn(name="paymentId", referencedColumnName="id", nullable = false),
 			inverseJoinColumns = @JoinColumn(name = "accountId",referencedColumnName = "id", nullable = false))
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private BankAccount bankAccount;
 	
 	

@@ -6,11 +6,15 @@ package com.avc.mis.beta.dataobjects;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,9 +35,12 @@ import lombok.ToString;
 @Entity
 @Table(name = "SUPPLIERS")
 @PrimaryKeyJoinColumn(name = "companyId")
+//@NamedNativeQuery(name = "Supplier.findAllBasic", 
+//	query = "select s.id as id, s.name as name from Company s", resultSetMapping = "BasicSupplier")
+//@SqlResultSetMapping(name = "BasicSupplier", columns = {@ColumnResult(name = "id"), @ColumnResult(name = "name")})
 public class Supplier extends Company {
 	
-	@JoinTable(name = "SUPPLIERS_CATEGORIES", 
+	@JoinTable(name = "SUPPLIERS_CATEGORIES",
 			joinColumns = @JoinColumn(name = "companyId", referencedColumnName = "companyId"), 
 			inverseJoinColumns = @JoinColumn(name = "categoryId", referencedColumnName = "id"))
 	@ManyToMany
@@ -81,6 +88,7 @@ public class Supplier extends Company {
 		 */
 		}
 
+	
 	
 			
 		

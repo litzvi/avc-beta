@@ -18,6 +18,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import com.avc.mis.beta.dao.services.PreparedStatementCreatorImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -76,7 +77,8 @@ public class BankAccount {
 	 */
 	@JsonIgnore
 	public boolean isLegal() {
-		return getAccountNo() != null && getOwnerName() != null && getBranch() != null;
+		return StringUtils.isNotBlank(getAccountNo()) && 
+				StringUtils.isNotBlank(getOwnerName()) && getBranch() != null;
 	}
 
 }

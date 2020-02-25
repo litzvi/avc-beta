@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -51,7 +52,7 @@ public class Phone {
 	 */	
 	@JsonIgnore
 	public boolean isLegal() {
-		return getName() != null;
+		return StringUtils.isNotBlank(getName());
 	}
 
 	/**

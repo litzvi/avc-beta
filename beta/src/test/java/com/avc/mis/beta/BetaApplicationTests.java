@@ -1,6 +1,7 @@
 package com.avc.mis.beta;
 
 import java.util.HashSet;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dataobjects.CompanyContact;
 import com.avc.mis.beta.dataobjects.ContactDetails;
+import com.avc.mis.beta.dataobjects.Person;
+import com.avc.mis.beta.dataobjects.Phone;
 import com.avc.mis.beta.dataobjects.Supplier;
 import com.avc.mis.beta.dataobjects.SupplyCategory;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 
 @SpringBootTest
 class BetaApplicationTests {
@@ -21,7 +26,7 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1053;
+	private static Integer SERIAL_NO = 1064;
 
 	@Test
 	void editSupplierSuccesfulTest() {
@@ -44,18 +49,38 @@ class BetaApplicationTests {
 		//non existing city to address
 		//inserting 2 accounts with the same info
 		//never crash the program
+		//check if can add existing bank account
+		//check if can add existing person to company contact
+		//check inserting 0/1/many company contacts
 				
 		
 //		HashSet<SupplyCategory> supplyCategories = new HashSet<>();
 //		supplyCategories.addAll(referenceTables.getAllSupplyCategories());
-
+//		List<Object[]> suppliersList = suppliers.getSuppliersBasic();
+//		for(Object[] objectArray: suppliersList) {
+//			System.out.println(objectArray);
+//		}
+		
 		Supplier supplier = new Supplier();
 		supplier.setName("tets supplier " + SERIAL_NO);
 //		supplier.setSupplyCategories(supplyCategories);
 		ContactDetails contactDetails = new ContactDetails();
-//		contactDetails.setPhones(new String[]{"99999", "8888", "222222"});
-		System.out.println("hello");
+		for(int i=0; i<5; i++) {
+			Phone phone = new Phone();
+			phone.setName("phone" + i);
+			contactDetails.getPhones().add(phone);
+		}
 		supplier.setContactDetails(contactDetails);
+
+		CompanyContact companyContact;
+		Person person;
+		for(int i=0; i<5; i++) {
+			companyContact = new CompanyContact();
+			person = new Person();
+			person.setName("person" + i);
+			companyContact.setPerson(person);
+			supplier.getCompanyContacts().add(companyContact);
+		}
 		suppliers.addSupplier(supplier);
 		
 		//EDIT
