@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -54,7 +56,7 @@ public class Company {
 	
 	@JsonManagedReference(value = "company_companyContacts")
 	@OneToMany(mappedBy = "company", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
-	private Set<CompanyContact> companyContacts;
+	private Set<CompanyContact> companyContacts = new HashSet<>();;
 	
 
 	@ToString.Exclude
@@ -66,6 +68,9 @@ public class Company {
 	public void prePersistCompany() {
 		if(contactDetails != null) {
 			contactDetails.setCompany(this);
+		}
+		for(CompanyContact contact: companyContacts) {
+			contact.setCompany(this);
 		}
 	}
 	
