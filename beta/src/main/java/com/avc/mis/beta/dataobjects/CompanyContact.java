@@ -3,8 +3,10 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
@@ -13,8 +15,13 @@ import javax.persistence.Table;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -27,17 +34,20 @@ import lombok.NoArgsConstructor;
 @Table(name = "COMPANY_CONTACTS")
 public class CompanyContact {
 
-	@Id
-	@Column(name = "companyId")
-	private Integer companyId;
+//	@Id
+//	@Column(name = "companyId")
+//	private Integer companyId;
 
-	@ManyToOne
-	@JoinColumn(name = "companyId", updatable = false, insertable = false)
+	@Id
+	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@JsonBackReference(value = "company_companyContacts")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "companyId", updatable = false)
 	private Company company;
 
 	@Id
-	@ManyToOne
-	@JoinColumn(name = "personId")
+	@ManyToOne(cascade = {CascadeType.PERSIST})
+	@JoinColumn(name = "personId", updatable = false)
 	private Person person;
 
 	@ManyToOne
@@ -66,18 +76,17 @@ public class CompanyContact {
 	/**
 	 * @param jdbcTemplateObject
 	 */
-	public void editCompanyContact(JdbcTemplate jdbcTemplateObject) {
-		if (getCompanyId() == null) {
-			throw new IllegalArgumentException("Company id can't be null");
-		}
-		if (getPerson() == null && getPerson().getId() == null) {
-			throw new IllegalArgumentException("Contact person id can't be null");
-		}
-		// TODO if removed change to isActive=false
-		// if position changed, delete current position and add new one
-		// if person changed call edit on person.
-		// perhaps should add a personId, in case the person isn't changed
-
-	}
+	/*
+	 * public void editCompanyContact(JdbcTemplate jdbcTemplateObject) { if
+	 * (getCompanyId() == null) { throw new
+	 * IllegalArgumentException("Company id can't be null"); } if (getPerson() ==
+	 * null && getPerson().getId() == null) { throw new
+	 * IllegalArgumentException("Contact person id can't be null"); } // TODO if
+	 * removed change to isActive=false // if position changed, delete current
+	 * position and add new one // if person changed call edit on person. // perhaps
+	 * should add a personId, in case the person isn't changed
+	 * 
+	 * }
+	 */
 
 }

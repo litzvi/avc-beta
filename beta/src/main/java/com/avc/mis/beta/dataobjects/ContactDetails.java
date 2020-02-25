@@ -59,8 +59,10 @@ public class ContactDetails {
 //	@Column(name = "personId")
 //	private transient Integer personId;
 
-	@OneToOne
-	@JoinColumn(name = "personId")
+	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@JsonBackReference(value = "person_contactDetails")
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "personId", updatable = false)
 	private Person person;
 
 //	@LazyCollection(LazyCollectionOption.TRUE)

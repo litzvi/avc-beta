@@ -39,9 +39,6 @@ public class Supplier extends Company {
 	@ManyToMany
 	private Set<SupplyCategory> supplyCategories;
 
-	@ToString.Exclude
-	@Column(columnDefinition = "boolean default true", nullable = false)
-	private boolean isActive = true;
 
 	/*
 		*//**

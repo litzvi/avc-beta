@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -51,8 +52,14 @@ public class Company {
 	@OneToOne(mappedBy = "company", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
 	
-	@OneToMany(mappedBy = "company")
+	@JsonManagedReference(value = "company_companyContacts")
+	@OneToMany(mappedBy = "company", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
 	private Set<CompanyContact> companyContacts;
+	
+
+	@ToString.Exclude
+	@Column(columnDefinition = "boolean default true", nullable = false)
+	private boolean isActive = true;
 	
 		
 	@PrePersist

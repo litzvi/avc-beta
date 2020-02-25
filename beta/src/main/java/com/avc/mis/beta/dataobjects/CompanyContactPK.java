@@ -15,5 +15,5 @@ import lombok.Data;
 public class CompanyContactPK implements Serializable {
 	
 	private Person person;
-	private Integer companyId;
+	private Company company;
 }

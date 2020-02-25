@@ -3,13 +3,17 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,16 +29,18 @@ import lombok.NoArgsConstructor;
 public class Person {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	private Integer id;
 
 	@Column(nullable = false)
 	private String name;
 
-	@OneToOne(mappedBy = "person")
+	@JsonManagedReference(value = "person_idCard")
+	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	private IdCard idCard;
 
-	@OneToOne(mappedBy = "person")
+	@JsonManagedReference(value = "person_contactDetails")
+	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
 
 	/**

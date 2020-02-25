@@ -6,6 +6,7 @@ package com.avc.mis.beta.dataobjects;
 import java.sql.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,8 +16,12 @@ import javax.persistence.Table;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -27,10 +32,14 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="ID_INFORMATION")
 public class IdCard {
+	
 	@Id
 	private Integer id;
 	
-	@OneToOne @JoinColumn(name = "personId")
+	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@JsonBackReference(value = "person_idCard")
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "personId")
 	@MapsId
 	private Person person;
 	
@@ -39,8 +48,10 @@ public class IdCard {
 	private Date dateOfIssue;
 	private String placeOfIssue;
 	
-	@ManyToOne @JoinColumn(name = "nationality")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "nationality")
 	private Country nationality;
+	
 	/**
 	 * @param jdbcTemplateObject
 	 * @param idCard

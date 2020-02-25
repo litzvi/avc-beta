@@ -30,6 +30,20 @@ class BetaApplicationTests {
 	
 	@Test
 	void insertSupplierIsSuccessfulTest() {	
+		
+		//supplier with name only, creates a record for contact details for company
+		//supplier with duplicate name
+		//not adding an empty phone/email/fax/address
+		//address without a city
+		//adding non existing city
+		//adding 0/1/multiple categories
+		//default supplier is active
+		//adding 0/1/multiple company contacts
+		//adding 0/1/multiple phones/emails/faxes/addresses
+		//rolling back failed insert
+		//non existing city to address
+		//inserting 2 accounts with the same info
+		//never crash the program
 				
 		
 //		HashSet<SupplyCategory> supplyCategories = new HashSet<>();
