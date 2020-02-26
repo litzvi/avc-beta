@@ -35,7 +35,7 @@ import lombok.ToString;
 @NamedQuery(name = "Country.findAll", query = "select c from Country c")
 public class Country {
 	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id @GeneratedValue
 	private int id;
 	
 	@Column(unique = true, nullable = false)

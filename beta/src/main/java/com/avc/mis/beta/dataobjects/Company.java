@@ -44,7 +44,6 @@ public class Company {
 	private Integer id;
 	
 	@Column(unique = true, nullable = false)
-	@NonNull
 	private String name;
 	private String localName;
 	private String englishName;
@@ -75,6 +74,8 @@ public class Company {
 			
 	@PrePersist
 	public void prePersistCompany() {
+		name.trim();
+		
 		if(contactDetails == null) {
 			contactDetails = new ContactDetails();
 			contactDetails.setCompany(this);

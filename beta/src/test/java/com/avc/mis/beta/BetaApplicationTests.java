@@ -96,9 +96,9 @@ class BetaApplicationTests {
 	@Test
 	void insertSupplyCategoriesTest() {
 		
-		SupplyCategory category = new SupplyCategory();
-		category.setName("Bags " + SERIAL_NO);
-		referenceTables.insertSupplyCategory(category);
+//		SupplyCategory category = new SupplyCategory();
+//		category.setName("Bags " + SERIAL_NO);
+//		referenceTables.insertSupplyCategory(category);
 		
 	}
 

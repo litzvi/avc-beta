@@ -50,10 +50,10 @@ public class PaymentAccount {
 	private ContactDetails contactDetails;
 	
 	@JoinTable(name = "BANK_PAYEES", 
-			joinColumns = @JoinColumn(name="paymentId", referencedColumnName="id", nullable = false),
-			inverseJoinColumns = @JoinColumn(name = "accountId",referencedColumnName = "id", nullable = false))
+			joinColumns = @JoinColumn(name="paymentId", referencedColumnName="id"),
+			inverseJoinColumns = @JoinColumn(name = "accountId",referencedColumnName = "id"))
 	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
-	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+//	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private BankAccount bankAccount;
 	
 	

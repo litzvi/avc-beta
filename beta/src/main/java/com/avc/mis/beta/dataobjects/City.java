@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @NamedQuery(name = "City.findAll", query = "select c from City c")
 public class City {
 	
-	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Id @GeneratedValue
 	private int id;
 	
 	@Column(nullable = false)

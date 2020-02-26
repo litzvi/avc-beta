@@ -33,16 +33,15 @@ import lombok.ToString;
 @NamedQuery(name = "Bank.findAll", query = "select b from Bank b")
 public class Bank {
 	
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue
 	private Integer id;
 	
 	@Column(nullable = false, unique = true)
-	@NonNull
 	private String name;
 	
-//	@JsonBackReference(value = "branch_bank")
-//	@EqualsAndHashCode.Exclude
+	@JsonBackReference(value = "branch_bank")
+	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@OneToMany(mappedBy = "bank")
-	private transient Set<BankBranch> branches;
+	private Set<BankBranch> branches;
 }

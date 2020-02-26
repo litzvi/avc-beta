@@ -24,7 +24,7 @@ import com.avc.mis.beta.dataobjects.SupplyCategory;
  *
  */
 @Repository
-@Transactional
+@Transactional(readOnly = true)
 public class ReferenceTables extends DAO {
 	
 	/**
@@ -83,11 +83,12 @@ public class ReferenceTables extends DAO {
 	 * @param category 
 	 * 
 	 */
-	public void insertSupplyCategory(SupplyCategory category) {
-		getEntityManager().persist(category);
-//		getEntityManager().flush();
-		
-	}
+	/*
+	 * public void insertSupplyCategory(SupplyCategory category) {
+	 * getEntityManager().persist(category); // getEntityManager().flush();
+	 * 
+	 * }
+	 */
 	
 	/**
 	 * 

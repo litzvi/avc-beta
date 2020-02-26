@@ -11,6 +11,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -35,6 +36,8 @@ import lombok.ToString;
 @Entity
 @Table(name = "SUPPLIERS")
 @PrimaryKeyJoinColumn(name = "companyId")
+@NamedQuery(name = "Supplier.findAll", query = "select c from Supplier c")
+@NamedEntityGraph(name = "graph.supplier.all", includeAllAttributes = true)
 //@NamedNativeQuery(name = "Supplier.findAllBasic", 
 //	query = "select s.id as id, s.name as name from Company s", resultSetMapping = "BasicSupplier")
 //@SqlResultSetMapping(name = "BasicSupplier", columns = {@ColumnResult(name = "id"), @ColumnResult(name = "name")})
