@@ -44,8 +44,9 @@ public class Suppliers extends DAO {
 				"left join (select companyId, JSON_ARRAYAGG(name) as categories from category_suppliers join supply_categories on categoryId = id group by companyId) \r\n" + 
 				"	as C on CD.id = C.companyId\r\n";
 		
+		return (String)getEntityManager().createNativeQuery(sql).getSingleResult();
 
-		return getJdbcTemplateObject().queryForObject(sql, String.class); 
+//		return getJdbcTemplateObject().queryForObject(sql, String.class); 
 	}
 	
 	/**

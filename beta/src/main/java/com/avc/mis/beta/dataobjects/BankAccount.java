@@ -30,7 +30,10 @@ import lombok.NonNull;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="BANK_ACCOUNTS", uniqueConstraints = {@UniqueConstraint(columnNames = {"accountNo", "branchId"})})
+@Table(name = "BANK_ACCOUNTS"/*
+								 * , uniqueConstraints = {@UniqueConstraint(columnNames = {"accountNo",
+								 * "branchId"})}
+								 */)
 public class BankAccount {
 	
 	@Id @GeneratedValue
