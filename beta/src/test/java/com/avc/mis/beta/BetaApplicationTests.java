@@ -9,12 +9,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dataobjects.BankAccount;
+import com.avc.mis.beta.dataobjects.BankBranch;
 import com.avc.mis.beta.dataobjects.CompanyContact;
 import com.avc.mis.beta.dataobjects.ContactDetails;
+import com.avc.mis.beta.dataobjects.PaymentAccount;
 import com.avc.mis.beta.dataobjects.Person;
 import com.avc.mis.beta.dataobjects.Phone;
 import com.avc.mis.beta.dataobjects.Supplier;
 import com.avc.mis.beta.dataobjects.SupplyCategory;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 
 @SpringBootTest
@@ -26,11 +31,15 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1064;
+	private static Integer SERIAL_NO = 1071;
 
 	@Test
-	void editSupplierSuccesfulTest() {
+	void getSupplierSuccesfulTest() throws JsonProcessingException {
+//		ObjectMapper onjMapper = new ObjectMapper(); 
+//		String supplierJson = onjMapper.writeValueAsString(suppliers.getSupplier(196)); 
+//		System.out.println(supplierJson);
 		
+//		System.out.println(suppliers.getSupplier(196));
 	}
 	
 	@Test
@@ -52,6 +61,7 @@ class BetaApplicationTests {
 		//check if can add existing bank account
 		//check if can add existing person to company contact
 		//check inserting 0/1/many company contacts
+		//check if all fileds are fetched when using jakson toJson
 				
 		
 //		HashSet<SupplyCategory> supplyCategories = new HashSet<>();
@@ -70,6 +80,16 @@ class BetaApplicationTests {
 			phone.setName("phone" + i);
 			contactDetails.getPhones().add(phone);
 		}
+		PaymentAccount paymentAccount = new PaymentAccount();
+		
+		BankAccount bankAccount = new BankAccount();
+		bankAccount.setOwnerName("ownerName" + SERIAL_NO);
+		bankAccount.setAccountNo("accountNo" + SERIAL_NO);
+		BankBranch bankBranch = new BankBranch();
+		bankBranch.setId(1);
+		bankAccount.setBranch(bankBranch);
+		paymentAccount.setBankAccount(bankAccount);
+		contactDetails.getPaymentAccounts().add(paymentAccount);
 		supplier.setContactDetails(contactDetails);
 
 		CompanyContact companyContact;
@@ -93,6 +113,7 @@ class BetaApplicationTests {
 		
 	}
 	
+
 	@Test
 	void insertSupplyCategoriesTest() {
 		

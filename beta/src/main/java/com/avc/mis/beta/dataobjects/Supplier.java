@@ -3,17 +3,22 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.ColumnResult;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
@@ -36,8 +41,33 @@ import lombok.ToString;
 @Entity
 @Table(name = "SUPPLIERS")
 @PrimaryKeyJoinColumn(name = "companyId")
-@NamedQuery(name = "Supplier.findAll", query = "select c from Supplier c")
-@NamedEntityGraph(name = "graph.supplier.all", includeAllAttributes = true)
+@NamedQuery(name = "Supplier.findAll", query = "select s from Supplier s")
+@NamedQuery(name = "Supplier.details", 
+	query = "select s from Supplier s "
+			+ "left join fetch s.contactDetails cd "
+				+ "left join cd.phones pn "
+				+ "left join cd.faxes f "
+				+ "left join cd.emails e "
+				+ "left join cd.addresses a "
+					+ "left join a.city "
+				+ "left join cd.paymentAccounts pa "
+					+ "left join pa.bankAccount ba "
+						+ "left join ba.branch bb "
+							+ "left join bb.bank b "
+			+ "left join s.companyContacts cc "
+				+ "left join cc.person p "
+					+ "left join p.idCard id "
+						+ "left join id.nationality "
+					+ "left join p.contactDetails pcd "
+						+ "left join pcd.phones ppn "
+						+ "left join pcd.faxes pf "
+						+ "left join pcd.emails pe "
+						+ "left join pcd.addresses pa "
+							+ "left join pa.city "
+				+ "left join cc.position pos "
+			+ "left join s.supplyCategories sc "
+			+ "where s.id = :sid ")
+
 //@NamedNativeQuery(name = "Supplier.findAllBasic", 
 //	query = "select s.id as id, s.name as name from Company s", resultSetMapping = "BasicSupplier")
 //@SqlResultSetMapping(name = "BasicSupplier", columns = {@ColumnResult(name = "id"), @ColumnResult(name = "name")})
@@ -46,8 +76,8 @@ public class Supplier extends Company {
 	@JoinTable(name = "SUPPLIERS_CATEGORIES",
 			joinColumns = @JoinColumn(name = "companyId", referencedColumnName = "companyId"), 
 			inverseJoinColumns = @JoinColumn(name = "categoryId", referencedColumnName = "id"))
-	@ManyToMany
-	private Set<SupplyCategory> supplyCategories;
+	@ManyToMany(fetch = FetchType.LAZY)
+	private Set<SupplyCategory> supplyCategories = new HashSet<>();
 
 
 	/*

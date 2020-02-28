@@ -47,7 +47,7 @@ public class BankAccount {
 	private String ownerName;
 		
 	@JoinColumn(name="branchId", nullable = false)
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@ManyToOne(optional = false)
 	private BankBranch branch;
 	
 	/**

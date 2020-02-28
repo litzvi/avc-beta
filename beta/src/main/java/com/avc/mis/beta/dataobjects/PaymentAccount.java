@@ -52,7 +52,7 @@ public class PaymentAccount {
 	@JoinTable(name = "BANK_PAYEES", 
 			joinColumns = @JoinColumn(name="paymentId", referencedColumnName="id"),
 			inverseJoinColumns = @JoinColumn(name = "accountId",referencedColumnName = "id"))
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 //	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
 	private BankAccount bankAccount;
 	

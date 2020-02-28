@@ -4,7 +4,9 @@
 package com.avc.mis.beta.dataobjects;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -12,6 +14,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -68,24 +71,24 @@ public class ContactDetails {
 //	@LazyCollection(LazyCollectionOption.TRUE)
 	@JsonManagedReference(value = "contactDetails_phones")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-	private List<Phone> phones = new ArrayList<Phone>();
+	private Set<Phone> phones = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_faxes")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-	private List<Fax> faxes = new ArrayList<>();
+	private Set<Fax> faxes = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_emails")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-	private List<Email> emails = new ArrayList<>();
+	private Set<Email> emails = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_addresses")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JsonFormat(with = Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-	private List<Address> addresses = new ArrayList<>();
+	private Set<Address> addresses = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_paymentAccount")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
-	private List<PaymentAccount> paymentAccounts = new ArrayList<>();
+	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	
 	@PrePersist
 	public void prePersistContactDetails() {
