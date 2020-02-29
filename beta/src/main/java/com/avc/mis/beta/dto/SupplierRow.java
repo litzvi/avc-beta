@@ -25,16 +25,16 @@ public class SupplierRow implements Serializable {
 	
 	private Integer id;
 	private String name;
-	private Set<Phone> phones = new HashSet<>();
-	private Set<Email> emails = new HashSet<>();
-	private Set<SupplyCategory> supplyCategories = new HashSet<>();
+	private Object[] phones;
+	private Object[] emails;
+	private Object[] supplyCategories;
 	
 	public SupplierRow(Supplier supplier) {
 		this.id = supplier.getId();
 		this.name = supplier.getName();
-		this.phones.addAll(supplier.getContactDetails().getPhones());
-		this.emails.addAll(supplier.getContactDetails().getEmails());
-		this.supplyCategories.addAll(supplier.getSupplyCategories());
-		
+		phones = supplier.getContactDetails().getPhones().stream().map(Phone::getName).toArray();
+		emails = supplier.getContactDetails().getEmails().stream().map(Email::getName).toArray();
+		supplyCategories = supplier.getSupplyCategories().stream().map(SupplyCategory::getName).toArray();
+
 	}
 }
