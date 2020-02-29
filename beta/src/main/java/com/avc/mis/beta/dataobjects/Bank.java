@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -14,7 +15,11 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
+import com.avc.mis.beta.dao.DAO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,9 +44,11 @@ public class Bank {
 	@Column(nullable = false, unique = true)
 	private String name;
 	
-	@JsonBackReference(value = "branch_bank")
+//	@JsonBackReference(value = "branch_bank")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@OneToMany(mappedBy = "bank")
-	private Set<BankBranch> branches;
+	@BatchSize(size = DAO.BATCH_SIZE)
+	@JsonIgnore
+	private Set<BankBranch> branches = new HashSet<>();
 }

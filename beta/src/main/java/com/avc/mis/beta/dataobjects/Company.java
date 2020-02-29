@@ -24,7 +24,10 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.BatchSize;
+import org.springframework.beans.factory.annotation.Value;
 
+import com.avc.mis.beta.dao.DAO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -43,7 +46,8 @@ import lombok.ToString;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Company {
 
-	@Id @GeneratedValue
+
+	@Id @GeneratedValue	
 	private Integer id;
 	
 	@Column(unique = true, nullable = false)
@@ -60,6 +64,7 @@ public class Company {
 	
 	@JsonManagedReference(value = "company_companyContacts")
 	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<CompanyContact> companyContacts = new HashSet<>();
 	
 

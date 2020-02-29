@@ -23,7 +23,10 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.avc.mis.beta.dao.DAO;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,6 +46,17 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "companyId")
 @NamedQuery(name = "Supplier.findAll", query = "select s from Supplier s")
 @NamedQuery(name = "Supplier.details", 
+	query = "select s from Supplier s "
+			+ "left join fetch s.contactDetails cd "
+			+ "where s.id = :sid ")
+@NamedQuery(name = "CompanyContact.details.findAll", 
+	query = "select cc from CompanyContact cc "
+			+ "left join fetch cc.person p "
+				+ "left join fetch p.idCard id "
+				+ "left join fetch p.contactDetails cd "
+			+ "left join fetch cc.position "
+			+ "where cc.company.id = :cid ")
+@NamedQuery(name = "Supplier.details.old", 
 	query = "select s from Supplier s "
 			+ "left join fetch s.contactDetails cd "
 				+ "left join cd.phones pn "
@@ -77,6 +91,7 @@ public class Supplier extends Company {
 			joinColumns = @JoinColumn(name = "companyId", referencedColumnName = "companyId"), 
 			inverseJoinColumns = @JoinColumn(name = "categoryId", referencedColumnName = "id"))
 	@ManyToMany(fetch = FetchType.LAZY)
+	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<SupplyCategory> supplyCategories = new HashSet<>();
 
 

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dataobjects.BankAccount;
@@ -31,7 +32,7 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1071;
+	private static Integer SERIAL_NO = 1073;
 
 	@Test
 	void getSupplierSuccesfulTest() throws JsonProcessingException {
@@ -39,7 +40,7 @@ class BetaApplicationTests {
 //		String supplierJson = onjMapper.writeValueAsString(suppliers.getSupplier(196)); 
 //		System.out.println(supplierJson);
 		
-//		System.out.println(suppliers.getSupplier(196));
+		System.out.println(suppliers.getSupplier(196));
 	}
 	
 	@Test

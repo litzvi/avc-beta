@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.avc.mis.beta.dataobjects.Company;
+import com.avc.mis.beta.dataobjects.CompanyContact;
+import com.avc.mis.beta.dataobjects.ContactDetails;
 import com.avc.mis.beta.dataobjects.Supplier;
 
 import lombok.Data;
@@ -40,9 +42,16 @@ public class CompanyDTO implements Serializable {
 		this.englishName = company.getEnglishName();
 		this.license = company.getLicense();
 		this.taxCode = company.getTaxCode();
-		this.contactDetails = new ContactDetailsDTO(company.getContactDetails());
-		company.getCompanyContacts().forEach((contact) -> this.companyContacts.add(new CompanyContactDTO(contact)));
+//		this.contactDetails = new ContactDetailsDTO(company.getContactDetails());
+//		company.getCompanyContacts().forEach((contact) -> this.companyContacts.add(new CompanyContactDTO(contact)));
 	}
 	
+	public void addCompanyContact(CompanyContact contact) {
+		this.companyContacts.add(new CompanyContactDTO(contact));
+	}
+	
+	public void setContactDetails(ContactDetails contactDetails) {
+		new ContactDetailsDTO(contactDetails);
+	}
 
 }

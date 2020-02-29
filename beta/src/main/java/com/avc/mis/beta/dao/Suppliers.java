@@ -5,12 +5,16 @@ package com.avc.mis.beta.dao;
 
 import java.util.List;
 
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dataobjects.CompanyContact;
 import com.avc.mis.beta.dataobjects.Person;
 import com.avc.mis.beta.dataobjects.Supplier;
+import com.avc.mis.beta.dto.CompanyContactDTO;
 import com.avc.mis.beta.dto.SupplierDTO;
 
 /**
@@ -123,13 +127,14 @@ public class Suppliers extends DAO {
 	}
 	
 	public SupplierDTO getSupplier(int id) {
-		
+		/*
 		Supplier supplier = getEntityManager().find(Supplier.class, id);
 		if(supplier == null) {
 			throw new IllegalArgumentException("No supplier with given ID");
 		}
 		
 		return new SupplierDTO(supplier);
+		*/
 		
 //		Hibernate.initialize(supplier.getContactDetails().getPhones());
 //		Hibernate.initialize(supplier.getContactDetails().getFaxes());
@@ -141,16 +146,26 @@ public class Suppliers extends DAO {
 		
 //		return supplier;
 
-//		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.details", Supplier.class);
-//		query.setParameter("sid", id);
-//		Supplier supplier, supplierCopy = null;
-//		try {
-//			supplier = query.getSingleResult();
-//		}
-//		catch(NoResultException e) {
-//			throw new IllegalArgumentException("No supplier with given ID");
-//		}
-//		return supplier;
+		TypedQuery<Supplier> querySupplyer = getEntityManager().createNamedQuery("Supplier.details", Supplier.class);
+		querySupplyer.setParameter("sid", id);
+		Supplier supplier;
+		try {
+			supplier = querySupplyer.getSingleResult();
+		}
+		catch(NoResultException e) {
+			throw new IllegalArgumentException("No supplier with given ID");
+		}
+		SupplierDTO supplierDTO = new SupplierDTO(supplier);
+		supplierDTO.setContactDetails(supplier.getContactDetails());
+		
+		TypedQuery<CompanyContact> queryContacts = 
+				getEntityManager().createNamedQuery("CompanyContact.details.findAll", CompanyContact.class);
+		queryContacts.setParameter("cid", id);
+		List<CompanyContact> supplierContacts;
+		supplierContacts = queryContacts.getResultList();
+		supplierContacts.forEach((contact) -> supplierDTO.addCompanyContact(contact));
+		
+		return supplierDTO;
 		
 //		Gson gson = new Gson();
 //	    supplierCopy = gson.fromJson(gson.toJson(supplier), Supplier.class);

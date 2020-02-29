@@ -36,7 +36,7 @@ public class BankBranch {
 	@Column(nullable = false)
 	private String name;
 	
-	@JsonManagedReference(value = "branch_bank")
+//	@JsonManagedReference(value = "branch_bank")
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "bankId", nullable = false)
 	private Bank bank;
