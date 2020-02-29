@@ -44,17 +44,18 @@ import lombok.ToString;
 @Entity
 @Table(name = "SUPPLIERS")
 @PrimaryKeyJoinColumn(name = "companyId")
-@NamedQuery(name = "Supplier.findAll", query = "select s from Supplier s")
+@NamedQuery(name = "Supplier.findAll",query = "select s from Supplier s "
+		+ "left join fetch s.contactDetails cd ")
 @NamedQuery(name = "Supplier.details", 
 	query = "select s from Supplier s "
 			+ "left join fetch s.contactDetails cd "
 			+ "where s.id = :sid ")
 @NamedQuery(name = "CompanyContact.details.findAll", 
 	query = "select cc from CompanyContact cc "
+			+ "left join fetch cc.position "
 			+ "left join fetch cc.person p "
 				+ "left join fetch p.idCard id "
 				+ "left join fetch p.contactDetails cd "
-			+ "left join fetch cc.position "
 			+ "where cc.company.id = :cid ")
 @NamedQuery(name = "Supplier.details.old", 
 	query = "select s from Supplier s "

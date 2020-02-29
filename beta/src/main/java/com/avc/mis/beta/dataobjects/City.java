@@ -39,7 +39,6 @@ public class City {
 	private String name;
 	
 //	@JsonManagedReference(value = "city_country")
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "countryId", nullable = false)
 	private Country country;

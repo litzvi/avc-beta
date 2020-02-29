@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
@@ -16,6 +17,7 @@ import com.avc.mis.beta.dataobjects.Person;
 import com.avc.mis.beta.dataobjects.Supplier;
 import com.avc.mis.beta.dto.CompanyContactDTO;
 import com.avc.mis.beta.dto.SupplierDTO;
+import com.avc.mis.beta.dto.SupplierRow;
 
 /**
  * @author Zvi
@@ -56,11 +58,13 @@ public class Suppliers extends DAO {
 //		return getJdbcTemplateObject().queryForObject(sql, String.class); 
 	}
 	
-	public List<Supplier> getSuppliers() {
+	public List<SupplierRow> getSuppliers() {
 		
-		
-		//TODO
-		return null;
+		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findAll", Supplier.class);
+		List<Supplier> suppliers = query.getResultList();
+		List<SupplierRow> supplierRows = new ArrayList<>();
+		suppliers.forEach((supplier) -> supplierRows.add(new SupplierRow(supplier)));
+		return supplierRows;
 		
 	}
 	
@@ -156,13 +160,11 @@ public class Suppliers extends DAO {
 			throw new IllegalArgumentException("No supplier with given ID");
 		}
 		SupplierDTO supplierDTO = new SupplierDTO(supplier);
-		supplierDTO.setContactDetails(supplier.getContactDetails());
 		
 		TypedQuery<CompanyContact> queryContacts = 
 				getEntityManager().createNamedQuery("CompanyContact.details.findAll", CompanyContact.class);
 		queryContacts.setParameter("cid", id);
-		List<CompanyContact> supplierContacts;
-		supplierContacts = queryContacts.getResultList();
+		List<CompanyContact> supplierContacts = queryContacts.getResultList();
 		supplierContacts.forEach((contact) -> supplierDTO.addCompanyContact(contact));
 		
 		return supplierDTO;

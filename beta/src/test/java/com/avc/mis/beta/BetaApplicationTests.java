@@ -3,6 +3,7 @@ package com.avc.mis.beta;
 import java.util.HashSet;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -34,6 +35,7 @@ class BetaApplicationTests {
 	
 	private static Integer SERIAL_NO = 1074;
 
+	@Disabled
 	@Test
 	void getSupplierSuccesfulTest() throws JsonProcessingException {
 //		ObjectMapper onjMapper = new ObjectMapper(); 
@@ -43,6 +45,12 @@ class BetaApplicationTests {
 		System.out.println(suppliers.getSupplier(196));
 	}
 	
+	@Test
+	void getSuppliersTableTest() {
+		suppliers.getSuppliers().forEach(supplier -> System.out.println(supplier));
+	}
+	
+	@Disabled
 	@Test
 	void insertSupplierIsSuccessfulTest() {	
 		

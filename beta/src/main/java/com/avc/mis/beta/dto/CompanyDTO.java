@@ -29,6 +29,7 @@ public class CompanyDTO implements Serializable {
 	private String englishName;
 	private String license;
 	private String taxCode;
+	private String registrationLocation;
 	private ContactDetailsDTO contactDetails;
 	private Set<CompanyContactDTO> companyContacts = new HashSet<>();
 	
@@ -42,7 +43,8 @@ public class CompanyDTO implements Serializable {
 		this.englishName = company.getEnglishName();
 		this.license = company.getLicense();
 		this.taxCode = company.getTaxCode();
-//		this.contactDetails = new ContactDetailsDTO(company.getContactDetails());
+		this.registrationLocation = company.getRegistrationLocation();
+		this.contactDetails = new ContactDetailsDTO(company.getContactDetails());
 //		company.getCompanyContacts().forEach((contact) -> this.companyContacts.add(new CompanyContactDTO(contact)));
 	}
 	
@@ -50,8 +52,4 @@ public class CompanyDTO implements Serializable {
 		this.companyContacts.add(new CompanyContactDTO(contact));
 	}
 	
-	public void setContactDetails(ContactDetails contactDetails) {
-		this.contactDetails = new ContactDetailsDTO(contactDetails);
-	}
-
 }
