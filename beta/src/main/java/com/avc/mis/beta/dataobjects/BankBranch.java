@@ -37,7 +37,7 @@ public class BankBranch {
 	private String name;
 	
 //	@JsonManagedReference(value = "branch_bank")
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "bankId", nullable = false)
 	private Bank bank;
 }

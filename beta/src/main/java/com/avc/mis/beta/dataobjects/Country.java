@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,8 +44,9 @@ public class Country {
 	private String Name;
 	
 //	@JsonBackReference(value = "city_country")
-//	@EqualsAndHashCode.Exclude
+	@JsonIgnore
+	@EqualsAndHashCode.Exclude
 	@ToString.Exclude 
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-	private transient Set<City> cities;
+	private Set<City> cities = new HashSet<>();
 }

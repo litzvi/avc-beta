@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,7 +48,7 @@ public class Bank {
 //	@JsonBackReference(value = "branch_bank")
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
-	@OneToMany(mappedBy = "bank")
+	@OneToMany(mappedBy = "bank", fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	@JsonIgnore
 	private Set<BankBranch> branches = new HashSet<>();

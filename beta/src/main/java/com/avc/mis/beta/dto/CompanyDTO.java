@@ -51,7 +51,7 @@ public class CompanyDTO implements Serializable {
 	}
 	
 	public void setContactDetails(ContactDetails contactDetails) {
-		new ContactDetailsDTO(contactDetails);
+		this.contactDetails = new ContactDetailsDTO(contactDetails);
 	}
 
 }

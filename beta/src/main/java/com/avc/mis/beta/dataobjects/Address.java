@@ -52,7 +52,8 @@ public class Address {
 	@Column(nullable = false)
 	private String streetAddress;
 	
-	@ManyToOne @JoinColumn(name="cityId")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="cityId")
 	private City city;
 	
 	/**

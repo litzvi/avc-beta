@@ -32,7 +32,7 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1073;
+	private static Integer SERIAL_NO = 1074;
 
 	@Test
 	void getSupplierSuccesfulTest() throws JsonProcessingException {
