@@ -59,18 +59,18 @@ public class Company {
 	private String registrationLocation;
 	
 	@JsonManagedReference(value = "company_contactDetails")
-	@OneToOne(mappedBy = "company", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "company", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
 	
 	@JsonManagedReference(value = "company_companyContacts")
-	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "company",cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<CompanyContact> companyContacts = new HashSet<>();
 	
 
-	@ToString.Exclude
-	@Column(columnDefinition = "boolean default true", nullable = false)
-	private boolean isActive = true;
+//	@ToString.Exclude
+//	@Column(columnDefinition = "boolean default true", nullable = false)
+//	private boolean isActive = true;
 	
 	public void setContactDetails(ContactDetails contactDetails) {
 		this.contactDetails = contactDetails;
@@ -88,7 +88,7 @@ public class Company {
 			contactDetails = new ContactDetails();
 			contactDetails.setCompany(this);
 		}
-				
+		
 		for(CompanyContact contact: companyContacts) { 
 			contact.setCompany(this); 
 		}

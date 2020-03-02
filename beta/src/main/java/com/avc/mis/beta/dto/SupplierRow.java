@@ -4,8 +4,8 @@
 package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dataobjects.Email;
 import com.avc.mis.beta.dataobjects.Phone;
@@ -25,16 +25,19 @@ public class SupplierRow implements Serializable {
 	
 	private Integer id;
 	private String name;
-	private Object[] phones;
-	private Object[] emails;
-	private Object[] supplyCategories;
+	private List<String> phones;
+	private List<String> emails;
+	private List<String> supplyCategories;
 	
 	public SupplierRow(Supplier supplier) {
 		this.id = supplier.getId();
 		this.name = supplier.getName();
-		phones = supplier.getContactDetails().getPhones().stream().map(Phone::getName).toArray();
-		emails = supplier.getContactDetails().getEmails().stream().map(Email::getName).toArray();
-		supplyCategories = supplier.getSupplyCategories().stream().map(SupplyCategory::getName).toArray();
+		phones = supplier.getContactDetails().getPhones().stream()
+				.map(Phone::getName).collect(Collectors.toList());
+		emails = supplier.getContactDetails().getEmails().stream()
+				.map(Email::getName).collect(Collectors.toList());
+		supplyCategories = supplier.getSupplyCategories().stream()
+				.map(SupplyCategory::getName).collect(Collectors.toList());
 
 	}
 }

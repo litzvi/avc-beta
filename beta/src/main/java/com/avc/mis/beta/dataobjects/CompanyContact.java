@@ -55,9 +55,17 @@ public class CompanyContact {
 	@JoinColumn(name = "positionId")
 	private CompanyPosition position;
 
-	@Column(columnDefinition = "boolean default true", nullable = false)
-	private boolean isActive = true;
-	
+	/**
+	 * @return
+	 */
+	public boolean isLegal() {
+		// TODO Auto-generated method stub
+		return person != null && person.isLegal();
+	}
+
+//	@Column(columnDefinition = "boolean default true", nullable = false)
+//	private boolean isActive = true;
+//	
 	
 	/**
 	 * @param jdbcTemplateObject

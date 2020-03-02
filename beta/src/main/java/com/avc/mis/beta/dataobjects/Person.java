@@ -38,11 +38,11 @@ public class Person {
 	private String name;
 
 	@JsonManagedReference(value = "person_idCard")
-	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
 	private IdCard idCard;
 
 	@JsonManagedReference(value = "person_contactDetails")
-	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
 
 	@PrePersist

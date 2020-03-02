@@ -18,6 +18,7 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -72,33 +73,43 @@ public class ContactDetails {
 
 //	@LazyCollection(LazyCollectionOption.TRUE)
 	@JsonManagedReference(value = "contactDetails_phones")
-	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Phone> phones = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_faxes")
-	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Fax> faxes = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_emails")
-	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Email> emails = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_addresses")
-	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JsonFormat(with = Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Address> addresses = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_paymentAccount")
-	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	
 	@PrePersist
 	public void prePersistContactDetails() {
+				
+		preUpdateContactDetails();
+		paymentAccounts.removeIf(account -> (!account.isLegal()));
+		for(PaymentAccount account: paymentAccounts) {
+			account.setContactDetails(this);
+		}
+	}
+	
+	@PreUpdate
+	public void preUpdateContactDetails() {
 		phones.removeIf(phone -> (!phone.isLegal()));
 		for(Phone phone: phones) {
 			phone.setContactDetails(this);
@@ -119,12 +130,8 @@ public class ContactDetails {
 			address.setContactDetails(this);
 		}
 		
-		
-		paymentAccounts.removeIf(account -> (!account.isLegal()));
-		for(PaymentAccount account: paymentAccounts) {
-			account.setContactDetails(this);
-		}
 	}
+	
 	
 //	public void setPhones(Set<Phone> phones) {
 //		for(Phone phone: phones) {

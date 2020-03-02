@@ -13,8 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.ManyToAny;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 
@@ -40,9 +38,6 @@ public class PaymentAccount {
 	@Id @GeneratedValue
 	private Integer id;
 	
-//	@Column(name="contactId", nullable = false)
-//	private int contactId;
-	
 	@ToString.Exclude @EqualsAndHashCode.Exclude
 	@JsonBackReference(value = "contactDetails_paymentAccount")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -52,10 +47,12 @@ public class PaymentAccount {
 	@JoinTable(name = "BANK_PAYEES", 
 			joinColumns = @JoinColumn(name="paymentId", referencedColumnName="id"),
 			inverseJoinColumns = @JoinColumn(name = "accountId",referencedColumnName = "id"))
-	@ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
-//	@Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
 	private BankAccount bankAccount;
 	
+//	@ToString.Exclude
+//	@Column(nullable = false)
+//	private RecordStatus status = RecordStatus.ACTIVE;
 	
 	/**
 	 * @return

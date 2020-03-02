@@ -57,35 +57,6 @@ import lombok.ToString;
 				+ "left join fetch p.idCard id "
 				+ "left join fetch p.contactDetails cd "
 			+ "where cc.company.id = :cid ")
-@NamedQuery(name = "Supplier.details.old", 
-	query = "select s from Supplier s "
-			+ "left join fetch s.contactDetails cd "
-				+ "left join cd.phones pn "
-				+ "left join cd.faxes f "
-				+ "left join cd.emails e "
-				+ "left join cd.addresses a "
-					+ "left join a.city "
-				+ "left join cd.paymentAccounts pa "
-					+ "left join pa.bankAccount ba "
-						+ "left join ba.branch bb "
-							+ "left join bb.bank b "
-			+ "left join s.companyContacts cc "
-				+ "left join cc.person p "
-					+ "left join p.idCard id "
-						+ "left join id.nationality "
-					+ "left join p.contactDetails pcd "
-						+ "left join pcd.phones ppn "
-						+ "left join pcd.faxes pf "
-						+ "left join pcd.emails pe "
-						+ "left join pcd.addresses pa "
-							+ "left join pa.city "
-				+ "left join cc.position pos "
-			+ "left join s.supplyCategories sc "
-			+ "where s.id = :sid ")
-
-//@NamedNativeQuery(name = "Supplier.findAllBasic", 
-//	query = "select s.id as id, s.name as name from Company s", resultSetMapping = "BasicSupplier")
-//@SqlResultSetMapping(name = "BasicSupplier", columns = {@ColumnResult(name = "id"), @ColumnResult(name = "name")})
 public class Supplier extends Company {
 	
 	@JoinTable(name = "SUPPLIERS_CATEGORIES",
