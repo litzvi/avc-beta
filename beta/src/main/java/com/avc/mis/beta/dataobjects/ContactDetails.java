@@ -73,7 +73,7 @@ public class ContactDetails {
 
 //	@LazyCollection(LazyCollectionOption.TRUE)
 	@JsonManagedReference(value = "contactDetails_phones")
-	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, /*orphanRemoval = true,*/ fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Phone> phones = new HashSet<>();
 

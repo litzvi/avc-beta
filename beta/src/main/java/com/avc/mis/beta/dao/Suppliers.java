@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dataobjects.CompanyContact;
+import com.avc.mis.beta.dataobjects.CompanyContactPK;
 import com.avc.mis.beta.dataobjects.ContactDetails;
 import com.avc.mis.beta.dataobjects.PaymentAccount;
 import com.avc.mis.beta.dataobjects.Person;
@@ -95,19 +96,26 @@ public class Suppliers extends DAO {
 	 * }
 	 */
 	
-	public void editSupplierInformation(Supplier supplier) {
-//		getEntityManager().find(Supplier.class, supplier.getId()).setName("findName");
-		getEntityManager().merge(supplier);
-		getEntityManager().flush();
-	}
+//	public void editSupplierInformation(Supplier supplier) {
+////		getEntityManager().find(Supplier.class, supplier.getId()).setName("findName");
+//		getEntityManager().merge(supplier);
+//		getEntityManager().flush();
+//	}
 	
 	
 	
-	public void editSupplier() {
-		
-	}
+//	public void editSupplier() {
+//		
+//	}
 	
-	public void removeSupplier(Supplier supplier) {
+	/**
+	 * Soft deletes company.
+	 * Dosen't remove stand alone entities created with the company.
+	 * Specifically, dosen't remove persons and bank accounts.
+	 * @param supplierId
+	 */
+	public void removeSupplier(int supplierId) {
+		Supplier supplier = getEntityManager().getReference(Supplier.class, supplierId);
 		getEntityManager().remove(supplier);
 	}
 	
@@ -123,7 +131,8 @@ public class Suppliers extends DAO {
 		getEntityManager().merge(account);
 	}
 	
-	public void removeAccount(PaymentAccount account) {
+	public void removeAccount(int accountId) {
+		PaymentAccount account = getEntityManager().getReference(PaymentAccount.class, accountId);
 		getEntityManager().remove(account);
 	}
 	
@@ -152,6 +161,8 @@ public class Suppliers extends DAO {
 	}
 
 	public void removeContactPerson(CompanyContact contact) {
+		contact = getEntityManager()
+				.getReference(CompanyContact.class, new CompanyContactPK(contact.getPerson(), contact.getCompany()));
 		getEntityManager().remove(contact);
 	}	
 	

@@ -1,12 +1,16 @@
 package com.avc.mis.beta;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.HashSet;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.dao.ReferenceTables;
@@ -15,11 +19,15 @@ import com.avc.mis.beta.dataobjects.BankAccount;
 import com.avc.mis.beta.dataobjects.BankBranch;
 import com.avc.mis.beta.dataobjects.CompanyContact;
 import com.avc.mis.beta.dataobjects.ContactDetails;
+import com.avc.mis.beta.dataobjects.Email;
+import com.avc.mis.beta.dataobjects.Fax;
+import com.avc.mis.beta.dataobjects.IdCard;
 import com.avc.mis.beta.dataobjects.PaymentAccount;
 import com.avc.mis.beta.dataobjects.Person;
 import com.avc.mis.beta.dataobjects.Phone;
 import com.avc.mis.beta.dataobjects.Supplier;
 import com.avc.mis.beta.dataobjects.SupplyCategory;
+import com.avc.mis.beta.dto.SupplierDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
@@ -33,7 +41,7 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1074;
+	private static Integer SERIAL_NO = 1085;
 
 	@Disabled
 	@Test
@@ -45,12 +53,87 @@ class BetaApplicationTests {
 		System.out.println(suppliers.getSupplier(196));
 	}
 	
+	@Disabled
 	@Test
 	void getSuppliersTableTest() {
 		suppliers.getSuppliers().forEach(supplier -> System.out.println(supplier));
 	}
 	
-	@Disabled
+	private Supplier buildSupplier(String name) {
+		Supplier supplier = new Supplier();
+		supplier.setName(name);
+		
+		List<SupplyCategory> supplyCategories = referenceTables.getAllSupplyCategories();
+		supplyCategories.forEach(category -> supplier.getSupplyCategories().add(category));
+		
+		ContactDetails contactDetails = new ContactDetails();
+		supplier.setContactDetails(contactDetails);
+		for(int i=0; i<2; i++) {
+			Phone phone = new Phone();
+			Fax fax = new Fax();
+			Email email = new Email();
+			phone.setName("phone" + i);
+			fax.setName("fax" + i);
+			email.setName("email" + i);
+			contactDetails.getPhones().add(phone);
+			contactDetails.getFaxes().add(fax);
+			contactDetails.getEmails().add(email);
+			
+		}
+		PaymentAccount paymentAccount = new PaymentAccount();		
+		BankAccount bankAccount = new BankAccount();
+		bankAccount.setOwnerName("ownerName" + name);
+		bankAccount.setAccountNo("accountNo" + name);
+		BankBranch bankBranch = new BankBranch();
+		bankBranch.setId(1);
+		bankAccount.setBranch(bankBranch);
+		paymentAccount.setBankAccount(bankAccount);
+		contactDetails.getPaymentAccounts().add(paymentAccount);		
+
+		CompanyContact companyContact;
+		Person person;
+		for(int i=0; i<2; i++) {
+			companyContact = new CompanyContact();
+			person = new Person();
+			person.setName("person" + i);
+			IdCard idCard = new IdCard();
+			idCard.setIdNumber("id card" + i);
+			person.setIdCard(idCard);
+			companyContact.setPerson(person);
+			supplier.getCompanyContacts().add(companyContact);
+		}
+		
+		
+		return supplier;
+		
+	}
+	
+	@Test
+	void editSupplierIsSuccessfulTest() {
+		Supplier supplier = buildSupplier("remove test" + SERIAL_NO);
+		supplier.getSupplyCategories().addAll(referenceTables.getAllSupplyCategories());
+		suppliers.addSupplier(supplier);
+		Integer id = supplier.getId();
+		SupplierDTO addedSupplier = suppliers.getSupplier(id);
+		supplier.setEnglishName("englishName" + SERIAL_NO);
+		supplier.setName("edit name test" + SERIAL_NO);
+		suppliers.editSupplierMainInfo(supplier);
+		SupplierDTO editedSupplier = suppliers.getSupplier(id);
+		ContactDetails contactDetails = supplier.getContactDetails();
+		Phone phoneToRemove = contactDetails.getPhones().iterator().next();
+		contactDetails.getPhones().remove(phoneToRemove);
+		supplier.getSupplyCategories().removeAll(referenceTables.getAllSupplyCategories());
+		System.out.println(contactDetails);
+		suppliers.editContactInfo(contactDetails);
+		System.out.println(addedSupplier);
+		System.out.println(editedSupplier);
+		System.out.println(suppliers.getSupplier(id));
+//		suppliers.removeSupplier(id);
+//		Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> suppliers.getSupplier(id));
+		
+		
+	}
+	
 	@Test
 	void insertSupplierIsSuccessfulTest() {	
 		
@@ -79,39 +162,6 @@ class BetaApplicationTests {
 //		for(Object[] objectArray: suppliersList) {
 //			System.out.println(objectArray);
 //		}
-		
-		Supplier supplier = new Supplier();
-		supplier.setName("tets supplier " + SERIAL_NO);
-//		supplier.setSupplyCategories(supplyCategories);
-		ContactDetails contactDetails = new ContactDetails();
-		for(int i=0; i<5; i++) {
-			Phone phone = new Phone();
-			phone.setName("phone" + i);
-			contactDetails.getPhones().add(phone);
-		}
-		PaymentAccount paymentAccount = new PaymentAccount();
-		
-		BankAccount bankAccount = new BankAccount();
-		bankAccount.setOwnerName("ownerName" + SERIAL_NO);
-		bankAccount.setAccountNo("accountNo" + SERIAL_NO);
-		BankBranch bankBranch = new BankBranch();
-		bankBranch.setId(1);
-		bankAccount.setBranch(bankBranch);
-		paymentAccount.setBankAccount(bankAccount);
-		contactDetails.getPaymentAccounts().add(paymentAccount);
-		supplier.setContactDetails(contactDetails);
-
-		CompanyContact companyContact;
-		Person person;
-		for(int i=0; i<5; i++) {
-			companyContact = new CompanyContact();
-			person = new Person();
-			person.setName("person" + i);
-			companyContact.setPerson(person);
-			supplier.getCompanyContacts().add(companyContact);
-		}
-		suppliers.addSupplier(supplier);
-		
 		//EDIT
 //		supplyCategories = new HashSet<>();
 //		supplier.setSupplyCategories(supplyCategories);

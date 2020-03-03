@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dataobjects.Supplier;
+import com.avc.mis.beta.dto.SupplierDTO;
+import com.avc.mis.beta.dto.SupplierRow;
 import com.google.gson.Gson;
 
 /**
@@ -37,14 +39,14 @@ public class Controller {
 	}
 	
 	@RequestMapping("/suppliers")
-	public String suppliers() {
-		return suppliersDao.getSuppliersList();
+	public List<SupplierRow> suppliers() {
+		return suppliersDao.getSuppliers();
 	}
 
 	@RequestMapping("/supplier-details/{id}")
-	public String supplierDetails(@PathVariable("id") int id) {
+	public SupplierDTO supplierDetails(@PathVariable("id") int id) {
 		System.out.println(id);
-		return suppliersDao.getSupplierDetails(id);
+		return suppliersDao.getSupplier(id);
 	}
 	
 	@PostMapping(value="/setSupplier", consumes = "application/json")
