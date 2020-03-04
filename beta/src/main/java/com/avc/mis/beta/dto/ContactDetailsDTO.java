@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,7 +34,7 @@ import lombok.NoArgsConstructor;
 public class ContactDetailsDTO implements Serializable {
 
 	private Integer id;
-	private Set<Phone> phones = new HashSet<>();
+	private Phone[] phones;
 	private Set<Fax> faxes = new HashSet<>();
 	private Set<Email> emails = new HashSet<>();
 	private Set<Address> addresses = new HashSet<>();
@@ -44,7 +45,7 @@ public class ContactDetailsDTO implements Serializable {
 	 */
 	public ContactDetailsDTO(ContactDetails contactDetails) {
 		this.id = contactDetails.getId();
-		this.phones.addAll(contactDetails.getPhones());
+		this.phones = contactDetails.getPhones();
 		this.faxes.addAll(contactDetails.getFaxes());
 		this.emails.addAll(contactDetails.getEmails());
 		this.addresses.addAll(contactDetails.getAddresses());

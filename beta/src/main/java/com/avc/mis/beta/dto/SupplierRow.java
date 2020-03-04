@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class SupplierRow implements Serializable {
 	public SupplierRow(Supplier supplier) {
 		this.id = supplier.getId();
 		this.name = supplier.getName();
-		phones = supplier.getContactDetails().getPhones().stream()
+		phones = Arrays.asList(supplier.getContactDetails().getPhones()).stream()
 				.map(Phone::getName).collect(Collectors.toList());
 		emails = supplier.getContactDetails().getEmails().stream()
 				.map(Email::getName).collect(Collectors.toList());

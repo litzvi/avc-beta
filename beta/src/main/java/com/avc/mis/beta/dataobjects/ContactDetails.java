@@ -4,9 +4,13 @@
 package com.avc.mis.beta.dataobjects;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -29,7 +33,10 @@ import com.avc.mis.beta.dao.DAO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonMerge;
+import com.fasterxml.jackson.annotation.OptBoolean;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -73,7 +80,7 @@ public class ContactDetails {
 
 //	@LazyCollection(LazyCollectionOption.TRUE)
 	@JsonManagedReference(value = "contactDetails_phones")
-	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, /*orphanRemoval = true,*/ fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Phone> phones = new HashSet<>();
 
@@ -98,10 +105,22 @@ public class ContactDetails {
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	
+	public void setPhones(Phone[] phones) {
+		this.phones = Arrays.asList(phones).stream()
+			.filter(phone -> phone.isLegal())
+			.map(phone -> {phone.setContactDetails(this); return phone;})
+			.collect(Collectors.toSet());
+	}
+	
+	public Phone[] getPhones() {
+		return (Phone[])this.phones.toArray(new Phone[this.phones.size()]);
+	}
+	
 	@PrePersist
 	public void prePersistContactDetails() {
 				
 		preUpdateContactDetails();
+		
 		paymentAccounts.removeIf(account -> (!account.isLegal()));
 		for(PaymentAccount account: paymentAccounts) {
 			account.setContactDetails(this);
@@ -110,10 +129,10 @@ public class ContactDetails {
 	
 	@PreUpdate
 	public void preUpdateContactDetails() {
-		phones.removeIf(phone -> (!phone.isLegal()));
-		for(Phone phone: phones) {
-			phone.setContactDetails(this);
-		}
+//		phones.removeIf(phone -> (!phone.isLegal()));
+//		for(Phone phone: phones) {
+//			phone.setContactDetails(this);
+//		}
 		
 		faxes.removeIf(fax -> (!fax.isLegal()));
 		for(Fax fax: faxes) {

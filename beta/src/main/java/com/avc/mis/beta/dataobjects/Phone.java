@@ -44,8 +44,20 @@ public class Phone {
 	@JoinColumn(name = "contactId", updatable = false)
 	private ContactDetails contactDetails;
 
+	@EqualsAndHashCode.Exclude
 	@Column(name = "phone", nullable = false)
 	private String name;
+	
+	protected boolean canEqual(Object o) {
+		if(o instanceof Phone) { 
+			Phone other = (Phone) o;
+			return !(this.getId() == null && other.getId() == null);
+					/* ? (this.getName() != null ? this.getName().equals(other.getName()):
+					 * other.getName() == null) : true
+					 */
+		}
+		return false;
+	}
 
 	/**
 	 * @return

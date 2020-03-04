@@ -1,8 +1,11 @@
 package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
@@ -41,7 +44,7 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1085;
+	private static Integer SERIAL_NO = 1133;
 
 	@Disabled
 	@Test
@@ -68,18 +71,23 @@ class BetaApplicationTests {
 		
 		ContactDetails contactDetails = new ContactDetails();
 		supplier.setContactDetails(contactDetails);
+		List<Phone> phones = new ArrayList<>();
 		for(int i=0; i<2; i++) {
 			Phone phone = new Phone();
+			Phone duplicate = new Phone();
 			Fax fax = new Fax();
 			Email email = new Email();
 			phone.setName("phone" + i);
+			duplicate.setName("phone" + i);
 			fax.setName("fax" + i);
 			email.setName("email" + i);
-			contactDetails.getPhones().add(phone);
+			phones.add(phone);
+			phones.add(duplicate);
 			contactDetails.getFaxes().add(fax);
 			contactDetails.getEmails().add(email);
 			
 		}
+		contactDetails.setPhones(phones.toArray(new Phone[phones.size()]));
 		PaymentAccount paymentAccount = new PaymentAccount();		
 		BankAccount bankAccount = new BankAccount();
 		bankAccount.setOwnerName("ownerName" + name);
@@ -111,23 +119,36 @@ class BetaApplicationTests {
 	@Test
 	void editSupplierIsSuccessfulTest() {
 		Supplier supplier = buildSupplier("remove test" + SERIAL_NO);
-		supplier.getSupplyCategories().addAll(referenceTables.getAllSupplyCategories());
 		suppliers.addSupplier(supplier);
 		Integer id = supplier.getId();
-		SupplierDTO addedSupplier = suppliers.getSupplier(id);
+		String addedSupplier = suppliers.getSupplier(id).toString();
 		supplier.setEnglishName("englishName" + SERIAL_NO);
 		supplier.setName("edit name test" + SERIAL_NO);
+		List<SupplyCategory> categoriesToRemove = referenceTables.getAllSupplyCategories();
+		categoriesToRemove.remove(0); categoriesToRemove.remove(0);
+		supplier.getSupplyCategories().removeAll(categoriesToRemove);
 		suppliers.editSupplierMainInfo(supplier);
-		SupplierDTO editedSupplier = suppliers.getSupplier(id);
+		String editedSupplier = suppliers.getSupplier(id).toString();
 		ContactDetails contactDetails = supplier.getContactDetails();
-		Phone phoneToRemove = contactDetails.getPhones().iterator().next();
-		contactDetails.getPhones().remove(phoneToRemove);
-		supplier.getSupplyCategories().removeAll(referenceTables.getAllSupplyCategories());
+		System.out.println(contactDetails);
+		Phone removed = contactDetails.getPhones()[0];
+		Phone added = new Phone();
+		added.setName(removed.getName());
+//		contactDetails.getPhones().clear();
+		removed.setName("changed phone 0" + SERIAL_NO);
+		contactDetails.setPhones(new Phone[] {removed, added});
+//		contactDetails.getPhones().add(removed);
+//		contactDetails.getPhones().add(added);
+//		iterator.next();
+//		iterator.remove();
+//		iterator = contactDetails.getPhones().iterator();
+//		iterator.next().setName("changed phone 0" + SERIAL_NO);	
 		System.out.println(contactDetails);
 		suppliers.editContactInfo(contactDetails);
+		String changedContactDetails = suppliers.getSupplier(id).toString();
 		System.out.println(addedSupplier);
 		System.out.println(editedSupplier);
-		System.out.println(suppliers.getSupplier(id));
+		System.out.println(changedContactDetails);
 //		suppliers.removeSupplier(id);
 //		Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> suppliers.getSupplier(id));
 		

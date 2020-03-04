@@ -131,6 +131,12 @@ public class Suppliers extends DAO {
 		getEntityManager().merge(account);
 	}
 	
+	public void addAccount(PaymentAccount account, int contactId) {
+		ContactDetails contactDetails = getEntityManager().getReference(ContactDetails.class, contactId);
+		account.setContactDetails(contactDetails);
+		getEntityManager().persist(account);
+	}
+	
 	public void removeAccount(int accountId) {
 		PaymentAccount account = getEntityManager().getReference(PaymentAccount.class, accountId);
 		getEntityManager().remove(account);
