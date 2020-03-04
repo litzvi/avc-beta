@@ -106,7 +106,7 @@ public class ContactDetails {
 	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	
 	public void setPhones(Phone[] phones) {
-		this.phones = Arrays.asList(phones).stream()
+		this.phones = Arrays.stream(phones)
 			.filter(phone -> phone.isLegal())
 			.map(phone -> {phone.setContactDetails(this); return phone;})
 			.collect(Collectors.toSet());

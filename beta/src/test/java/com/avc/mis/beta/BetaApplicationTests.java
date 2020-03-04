@@ -122,11 +122,11 @@ class BetaApplicationTests {
 		suppliers.addSupplier(supplier);
 		Integer id = supplier.getId();
 		String addedSupplier = suppliers.getSupplier(id).toString();
-		supplier.setEnglishName("englishName" + SERIAL_NO);
-		supplier.setName("edit name test" + SERIAL_NO);
+		supplier.setEnglishName("englishName" + SERIAL_NO); // edit supplier basic info
+		supplier.setName("edit name test" + SERIAL_NO); // edit supplier name
 		List<SupplyCategory> categoriesToRemove = referenceTables.getAllSupplyCategories();
 		categoriesToRemove.remove(0); categoriesToRemove.remove(0);
-		supplier.getSupplyCategories().removeAll(categoriesToRemove);
+		supplier.getSupplyCategories().removeAll(categoriesToRemove);// remove categories besides for 2
 		suppliers.editSupplierMainInfo(supplier);
 		String editedSupplier = suppliers.getSupplier(id).toString();
 		ContactDetails contactDetails = supplier.getContactDetails();
