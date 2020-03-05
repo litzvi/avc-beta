@@ -14,9 +14,8 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,13 +31,13 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="ID_INFORMATION")
-public class IdCard implements Insertable {
+public class IdCard implements Insertable, KeyIdentifiable {
 	
 	@EqualsAndHashCode.Include
 	@Id
 	private Integer id;
 	
-	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	@JsonBackReference(value = "person_idCard")
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "personId")
@@ -50,11 +49,15 @@ public class IdCard implements Insertable {
 	private Date dateOfIssue;
 	private String placeOfIssue;
 	
-	@EqualsAndHashCode.Include
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "nationality")
 	private Country nationality;
 	
+	protected boolean canEqual(Object o) {
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
+	}
+	
+	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return this.id != null;

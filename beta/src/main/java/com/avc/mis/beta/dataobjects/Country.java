@@ -34,7 +34,7 @@ import lombok.ToString;
 @Entity
 @Table(name="COUNTRIES")
 @NamedQuery(name = "Country.findAll", query = "select c from Country c")
-public class Country implements legible, KeyIdentifiable {
+public class Country implements Legible, KeyIdentifiable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,6 +57,7 @@ public class Country implements legible, KeyIdentifiable {
 		return KeyIdentifiable.canEqualCheckNullId(this, o);
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue());

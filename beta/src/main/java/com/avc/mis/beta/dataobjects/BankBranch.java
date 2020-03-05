@@ -7,17 +7,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -25,12 +27,14 @@ import lombok.NonNull;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="BANK_BRANCHES")
 @NamedQuery(name = "BankBranch.findAll", query = "select bb from BankBranch bb")
-public class BankBranch {
+public class BankBranch implements Legible, KeyIdentifiable{
 	
-	@Id @GeneratedValue
+	@EqualsAndHashCode.Include
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	@Column(name = "name", nullable = false)
@@ -40,4 +44,18 @@ public class BankBranch {
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "bankId", nullable = false)
 	private Bank bank;
+	
+	public void setValue(String value) {
+		this.value = value.trim();
+	}
+	
+	protected boolean canEqual(Object o) {
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
+	}
+	
+	@JsonIgnore
+	@Override
+	public boolean isLegal() {
+		return StringUtils.isNotBlank(getValue());
+	}
 }

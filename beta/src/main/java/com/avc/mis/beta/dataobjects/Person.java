@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -46,6 +47,10 @@ public class Person implements Insertable, KeyIdentifiable {
 	@JsonManagedReference(value = "person_contactDetails")
 	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
+	
+	public void setName(String name) {
+		this.name = name.trim();
+	}
 
 	public void setIdCard(IdCard idCard) {
 		if(idCard != null) {
@@ -75,6 +80,8 @@ public class Person implements Insertable, KeyIdentifiable {
 	/**
 	 * @return
 	 */
+	@JsonIgnore
+	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(name);
 	}

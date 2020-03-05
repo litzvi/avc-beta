@@ -42,7 +42,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "CONTACT_DETAILS", uniqueConstraints = 
-	{ @UniqueConstraint(name = "Unique subject contact details", columnNames = { "companyId", "personId" }) })
+	{ @UniqueConstraint(columnNames = { "companyId", "personId" }) })
 @Check(constraints = "(companyId is null) xor (personId is null)")
 public class ContactDetails implements Insertable, KeyIdentifiable {
 
@@ -135,12 +135,12 @@ public class ContactDetails implements Insertable, KeyIdentifiable {
 		return KeyIdentifiable.canEqualCheckNullId(this, o);
 	}
 	
+	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return (this.company == null ^ this.person == null);
 	}
 	
-	@JsonIgnore
 	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof Company) {

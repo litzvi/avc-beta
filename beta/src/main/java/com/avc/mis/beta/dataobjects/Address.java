@@ -53,6 +53,10 @@ public class Address implements Insertable, KeyIdentifiable {
 	@JoinColumn(name="cityId")
 	private City city;
 	
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress.trim();
+	}
+	
 	protected boolean canEqual(Object o) {
 		return KeyIdentifiable.canEqualCheckNullId(this, o);
 	}
@@ -61,6 +65,7 @@ public class Address implements Insertable, KeyIdentifiable {
 	 * @return
 	 */
 	@JsonIgnore
+	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getStreetAddress());
 	}

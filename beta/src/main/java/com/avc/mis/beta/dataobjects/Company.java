@@ -18,12 +18,12 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -38,8 +38,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name="COMPANIES", 
-	uniqueConstraints = @UniqueConstraint(name = "existing compony name", columnNames = {"name"}))
+@Table(name="COMPANIES" /*, 
+	uniqueConstraints = @UniqueConstraint(name = "existing compony name", columnNames = {"name"})*/)
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Company implements Insertable, KeyIdentifiable {
 	
@@ -47,7 +47,7 @@ public class Company implements Insertable, KeyIdentifiable {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(nullable = false)
+	@Column(unique = true, nullable = false)
 	private String name;
 	private String localName;
 	private String englishName;
@@ -104,6 +104,8 @@ public class Company implements Insertable, KeyIdentifiable {
 	/**
 	 * @return
 	 */
+	@JsonIgnore
+	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(name);
 	}

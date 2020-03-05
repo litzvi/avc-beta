@@ -50,15 +50,10 @@ public class Phone implements Insertable, KeyIdentifiable {
 		return KeyIdentifiable.canEqualCheckNullId(this, o);
 	}
 	
-	/*
-	protected boolean canEqual(Object o) {
-		if(o instanceof Phone) { 
-			Phone other = (Phone) o;
-			return !(this.getId() == null && other.getId() == null);
-		}
-		return false;
-	}*/
-
+	public void setValue(String value) {
+		this.value = value.trim();
+	}
+	
 	/**
 	 * @return
 	 */	

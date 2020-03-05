@@ -46,6 +46,10 @@ public class Fax implements Insertable, KeyIdentifiable {
 	@Column(name = "fax", nullable = false)
 	private String value;
 	
+	public void setValue(String value) {
+		this.value = value.trim();
+	}
+	
 	protected boolean canEqual(Object o) {
 		return KeyIdentifiable.canEqualCheckNullId(this, o);
 	}
@@ -54,6 +58,7 @@ public class Fax implements Insertable, KeyIdentifiable {
 	 * @return
 	 */
 	@JsonIgnore
+	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue());
 	}

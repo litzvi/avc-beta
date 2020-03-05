@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,7 +49,7 @@ import lombok.ToString;
 				+ "left join fetch p.idCard id "
 				+ "left join fetch p.contactDetails cd "
 			+ "where cc.company.id = :cid ")
-public class Supplier extends Company {
+public class Supplier extends Company implements KeyIdentifiable{
 	
 	@JoinTable(name = "SUPPLIERS_CATEGORIES",
 			joinColumns = @JoinColumn(name = "companyId", referencedColumnName = "companyId"), 
@@ -57,7 +58,10 @@ public class Supplier extends Company {
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<SupplyCategory> supplyCategories = new HashSet<>();
 
-	
-		
+	@JsonIgnore
+	@Override
+	protected boolean canEqual(Object o) {
+		return KeyIdentifiable.canEqualCheckNullId(this, this.getClass().getSuperclass(), o);
+	}	
 		
 }

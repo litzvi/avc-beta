@@ -61,6 +61,7 @@ public class PaymentAccount implements Insertable, KeyIdentifiable {
 	 * @return
 	 */
 	@JsonIgnore
+	@Override
 	public boolean isLegal() {
 		return getBankAccount() != null && getBankAccount().isLegal();
 	}

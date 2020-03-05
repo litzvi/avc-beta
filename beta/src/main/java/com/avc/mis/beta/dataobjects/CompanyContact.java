@@ -12,6 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,10 +30,6 @@ import lombok.ToString;
 @Table(name = "COMPANY_CONTACTS")
 public class CompanyContact implements Insertable {
 
-//	@Id
-//	@Column(name = "companyId")
-//	private Integer id;
-
 	@Id
 	@ToString.Exclude @EqualsAndHashCode.Exclude
 	@JsonBackReference(value = "company_companyContacts")
@@ -45,13 +42,16 @@ public class CompanyContact implements Insertable {
 	@JoinColumn(name = "personId", updatable = false, nullable = false)
 	private Person person;
 
-	@ManyToOne
+	@EqualsAndHashCode.Exclude
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "positionId")
 	private CompanyPosition position;
 	
 	/**
 	 * @return
 	 */
+	@JsonIgnore
+	@Override
 	public boolean isLegal() {
 		return person != null && person.isLegal();
 	}

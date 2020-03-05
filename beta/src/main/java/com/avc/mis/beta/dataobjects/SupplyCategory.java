@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,7 +26,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name="SUPPLY_CATEGORIES")
 @NamedQuery(name = "SupplyCategory.findAll", query = "select sc from SupplyCategory sc")
-public class SupplyCategory implements legible, KeyIdentifiable {
+public class SupplyCategory implements Legible, KeyIdentifiable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +43,7 @@ public class SupplyCategory implements legible, KeyIdentifiable {
 		return KeyIdentifiable.canEqualCheckNullId(this, o);
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue());

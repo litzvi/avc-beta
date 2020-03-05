@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  * @author Zvi
  *
  */
-public interface Insertable extends legible{
+public interface Insertable extends Legible{
 	
 	
 	public void setReference(Object referenced);

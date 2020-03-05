@@ -15,6 +15,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="CITIES", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "countryId"})})
 @NamedQuery(name = "City.findAll", query = "select c from City c")
-public class City implements legible, KeyIdentifiable {
+public class City implements Legible, KeyIdentifiable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +55,7 @@ public class City implements legible, KeyIdentifiable {
 		return KeyIdentifiable.canEqualCheckNullId(this, o);
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue());

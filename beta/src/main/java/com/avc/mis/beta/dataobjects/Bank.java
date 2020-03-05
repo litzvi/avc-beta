@@ -19,13 +19,12 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -34,22 +33,38 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="BANKS")
 @NamedQuery(name = "Bank.findAll", query = "select b from Bank b")
-public class Bank {
+public class Bank implements Legible, KeyIdentifiable{
 	
-	@Id @GeneratedValue
+	@EqualsAndHashCode.Include
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	@Column(name = "name", nullable = false, unique = true)
 	private String value;
 	
 //	@JsonBackReference(value = "branch_bank")
-	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	@OneToMany(mappedBy = "bank", fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	@JsonIgnore
 	private Set<BankBranch> branches = new HashSet<>();
+	
+	public void setValue(String value) {
+		this.value = value.trim();
+	}
+	
+	protected boolean canEqual(Object o) {
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
+	}
+	
+	@JsonIgnore
+	@Override
+	public boolean isLegal() {
+		return StringUtils.isNotBlank(getValue());
+	}
+	
 }
