@@ -32,6 +32,7 @@ import com.avc.mis.beta.dao.DAO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
@@ -42,13 +43,14 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="COMPANIES", 
 	uniqueConstraints = @UniqueConstraint(name = "existing compony name", columnNames = {"name"}))
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Company {
-
-
+public class Company implements Insertable, KeyIdentifiable {
+	
+	@EqualsAndHashCode.Include
 	@Id @GeneratedValue	
 	private Integer id;
 	
@@ -74,29 +76,38 @@ public class Company {
 //	@Column(columnDefinition = "boolean default true", nullable = false)
 //	private boolean isActive = true;
 	
-	public void setContactDetails(ContactDetails contactDetails) {
-		this.contactDetails = contactDetails;
+	public void setCompanyContacts(CompanyContact[] companyContacts) {
+		this.companyContacts = Insertable.filterAndSetReference(companyContacts, 
+				(t) -> {t.setReference(this);	return t;});
+	}
+	
+	public CompanyContact[] getCompanyContacts() {
+		return (CompanyContact[])this.companyContacts.toArray(new CompanyContact[this.companyContacts.size()]);
+	}
+	
+	public void setContactDetails(ContactDetails contactDetails) {		
 		if(contactDetails != null) {
-			this.contactDetails.setCompany(this);
+			contactDetails.setReference(this);
+			this.contactDetails = contactDetails;			
 		}
 	}
 	
-			
-	@PrePersist
-	public void prePersistCompany() {
-		name.trim();
-		
-		if(contactDetails == null) {
-			contactDetails = new ContactDetails();
-			contactDetails.setCompany(this);
+	public ContactDetails getContactDetails() {
+		if(this.contactDetails == null) {
+			setContactDetails(new ContactDetails());
 		}
-		
-		for(CompanyContact contact: companyContacts) { 
-			contact.setCompany(this); 
-		}
-		
+		return this.contactDetails;
 	}
 	
+	public void setName(String name) {
+		this.name = name.trim();
+	}
+	
+	protected boolean canEqual(Object o) {
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
+	}
+
+		
 	/**
 	 * @return
 	 */
@@ -104,55 +115,11 @@ public class Company {
 		return StringUtils.isNotBlank(name);
 	}
 
-	
-	
-	
 	/**
-	 * 
-	 * @param company
+	 * Empty implementation
 	 */
-	/*
-	 * public static void insertCompany(JdbcTemplate jdbcTemplateObject, Company
-	 * company) {
-	 * 
-	 * if(company.getName() == null) { throw new
-	 * IllegalArgumentException("Company name can't be null"); }
-	 * 
-	 * String sql = "INSERT INTO COMPANIES\r\n" +
-	 * "  (name, localName, englishName, license, taxCode, registrationLocation) \r\n"
-	 * + "VALUES \r\n" + "  (?, ?, ?, ?, ?, ?);"; GeneratedKeyHolder keyHolder = new
-	 * GeneratedKeyHolder(); Object[] parameters = new Object[] {company.getName(),
-	 * company.getLocalName(), company.getEnglishName(), company.getLicense(),
-	 * company.getTaxCode(), company.getRegistrationLocation()};
-	 * jdbcTemplateObject.update( new PreparedStatementCreatorImpl(sql, parameters,
-	 * new String[] {"id"}), keyHolder); int companyId =
-	 * keyHolder.getKey().intValue(); company.setId(companyId);
-	 * 
-	 * ContactDetails cd = company.getContactDetails(); if(cd == null) { cd = new
-	 * ContactDetails(); } cd.setCompanyId(companyId);
-	 * ContactDetails.insertContactDetails(jdbcTemplateObject, cd);
-	 * 
-	 * CompanyContact[] companyContacts = company.getCompanyContacts();
-	 * if(companyContacts != null) { for(CompanyContact cc: companyContacts) {
-	 * cc.setCompanyId(companyId);
-	 * CompanyContact.insertCompanyContact(jdbcTemplateObject, cc); } }
-	 * 
-	 * }
-	 */
+	@Override
+	public void setReference(Object referenced) {}
 
-	/**
-	 * @param jdbcTemplateObject
-	 */
-	/*
-	 * public void editCompany(JdbcTemplate jdbcTemplateObject) { if(getId() ==
-	 * null) { throw new IllegalArgumentException("Company id can't be null"); }
-	 * if(name != null || localName != null || englishName != null || license !=
-	 * null || taxCode != null || registrationLocation != null) { // TODO update the
-	 * corresponding row in companies table } if(contactDetails != null) {
-	 * contactDetails.editContactDetails(jdbcTemplateObject); } if(companyContacts2
-	 * != null) { for(CompanyContact cc: companyContacts2) { //search for contacts
-	 * without an id - to be added //search for phones without a name - to be
-	 * removed //update the given phones that have id's and names
-	 * cc.editCompanyContact(jdbcTemplateObject); } } }
-	 */
+
 }

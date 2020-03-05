@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -26,12 +27,14 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "PERSONS")
-public class Person {
-
+public class Person implements Insertable, KeyIdentifiable {
+	
+	@EqualsAndHashCode.Include
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
 	@Column(nullable = false)
@@ -45,46 +48,43 @@ public class Person {
 	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
 
-	@PrePersist
-	public void prePersistPerson() {
-		if(contactDetails == null) {
-			contactDetails = new ContactDetails();
-		}
-		contactDetails.setPerson(this);
-		
+	public void setIdCard(IdCard idCard) {
 		if(idCard != null) {
-			idCard.setPerson(this);
+			idCard.setReference(this);
+			this.idCard = idCard;			
 		}
 	}
-
+		
+	public void setContactDetails(ContactDetails contactDetails) {		
+		if(contactDetails != null) {
+			contactDetails.setReference(this);
+			this.contactDetails = contactDetails;			
+		}
+	}
+	
+	public ContactDetails getContactDetails() {
+		if(this.contactDetails == null) {
+			setContactDetails(new ContactDetails());
+		}
+		return this.contactDetails;
+	}
+	
+	protected boolean canEqual(Object o) {
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
+	}
+	
 	/**
 	 * @return
 	 */
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(name);
 	}
-	
+
 	/**
-	 * @param jdbcTemplateObject
-	 * @param person
-	 *//*
-		 * public static void insertPerson(JdbcTemplate jdbcTemplateObject, Person
-		 * person) { if(person.getName() != null) { GeneratedKeyHolder keyHolder = new
-		 * GeneratedKeyHolder(); String sql = "insert into PERSONS (name) values (?)";
-		 * jdbcTemplateObject.update( new PreparedStatementCreatorImpl(sql, new Object[]
-		 * {person.getName()}, new String[] {"id"}), keyHolder); int personId =
-		 * keyHolder.getKey().intValue(); person.setId(personId);
-		 * 
-		 * 
-		 * if(person.getIdCard() != null) { person.getIdCard().setId(personId);
-		 * IdCard.insertIdCard(jdbcTemplateObject, person.getIdCard()); }
-		 * 
-		 * ContactDetails cd = person.getContactDetails(); if(cd == null) { cd = new
-		 * ContactDetails(); } cd.setPersonId(personId);
-		 * ContactDetails.insertContactDetails(jdbcTemplateObject, cd);
-		 * 
-		 * 
-		 * 
-		 * } }
-		 */
+	 * Empty implementation
+	 */
+	@Override
+	public void setReference(Object referenced) {}
+	
+	
 }

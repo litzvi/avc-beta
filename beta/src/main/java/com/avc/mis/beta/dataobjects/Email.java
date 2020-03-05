@@ -31,7 +31,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="EMAILS")
-public class Email implements Insertable{
+public class Email implements Insertable, KeyIdentifiable {
 
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +47,7 @@ public class Email implements Insertable{
 	private String value;
 	
 	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
 	}
 	
 	/**

@@ -29,10 +29,12 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="ID_INFORMATION")
-public class IdCard {
+public class IdCard implements Insertable {
 	
+	@EqualsAndHashCode.Include
 	@Id
 	private Integer id;
 	
@@ -48,25 +50,18 @@ public class IdCard {
 	private Date dateOfIssue;
 	private String placeOfIssue;
 	
+	@EqualsAndHashCode.Include
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "nationality")
 	private Country nationality;
 	
-	/**
-	 * @param jdbcTemplateObject
-	 * @param idCard
-	 */
-	public static void insertIdCard(JdbcTemplate jdbcTemplateObject, IdCard idCard) {
-		Integer personId = idCard.getId();
-		if(personId == null) {
-			throw new IllegalArgumentException("Inserted id card has to have an id(person id)");
-		}
-		if(idCard.getIdNumber() != null) {
-			int nationalityId = idCard.getNationality() != null ? idCard.getNationality().getId(): null;
-			String sql = "INSERT INTO ID_INFORMATION (personId, nationality, IdNumber, dateOfIssue, placeOfIssue, dob) "
-					+ "VALUES (?, ?, ?, ?, ?, ?)";
-			jdbcTemplateObject.update(sql, new Object[] {personId, nationalityId, 
-					idCard.getIdNumber(), idCard.getDateOfIssue(), idCard.getPlaceOfIssue(), idCard.getDob()});
-		}
+	@Override
+	public boolean isLegal() {
+		return this.id != null;
+	}
+
+	@Override
+	public void setReference(Object referenced) {
+		this.setPerson((Person) referenced);
 	}
 }

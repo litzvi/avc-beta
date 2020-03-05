@@ -11,7 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -20,13 +22,29 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="COMPANY_POSITIONS")
 @NamedQuery(name = "CompanyPosition.findAll", query = "select cp from CompanyPosition cp")
-public class CompanyPosition {
+public class CompanyPosition implements legible, KeyIdentifiable {
+	
+	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Integer id;
 	
 	@Column(name = "name", unique = true, nullable = false)
 	private String value;
+
+	public void setValue(String value) {
+		this.value = value.trim();
+	}
+	
+	protected boolean canEqual(Object o) {
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
+	}
+
+	@Override
+	public boolean isLegal() {
+		return StringUtils.isNotBlank(getValue());
+	}
 }

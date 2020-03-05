@@ -44,7 +44,7 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1136;
+	private static Integer SERIAL_NO = 1138;
 
 	@Disabled
 	@Test
@@ -112,7 +112,7 @@ class BetaApplicationTests {
 			idCard.setIdNumber("id card" + i);
 			person.setIdCard(idCard);
 			companyContact.setPerson(person);
-			supplier.getCompanyContacts().add(companyContact);
+			supplier.setCompanyContacts(new CompanyContact[] {companyContact});
 		}
 		
 		

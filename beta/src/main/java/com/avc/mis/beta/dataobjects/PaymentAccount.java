@@ -31,7 +31,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="PAYMENT_ACCOUNTS")
-public class PaymentAccount implements Insertable {
+public class PaymentAccount implements Insertable, KeyIdentifiable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +50,7 @@ public class PaymentAccount implements Insertable {
 	private BankAccount bankAccount;
 	
 	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
 	}
 	
 //	@ToString.Exclude

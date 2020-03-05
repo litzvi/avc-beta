@@ -31,7 +31,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="ADDRESSES")
-public class Address implements Insertable {
+public class Address implements Insertable, KeyIdentifiable {
 
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +54,7 @@ public class Address implements Insertable {
 	private City city;
 	
 	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
 	}
 	
 	/**

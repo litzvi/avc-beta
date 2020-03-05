@@ -31,7 +31,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "PHONES")
-public class Phone implements Insertable {
+public class Phone implements Insertable, KeyIdentifiable {
 
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +47,7 @@ public class Phone implements Insertable {
 	private String value;
 	
 	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
 	}
 	
 	/*
@@ -63,6 +63,7 @@ public class Phone implements Insertable {
 	 * @return
 	 */	
 	@JsonIgnore
+	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue());
 	}

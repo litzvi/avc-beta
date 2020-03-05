@@ -37,7 +37,7 @@ public class ContactDetailsDTO implements Serializable {
 	private Phone[] phones;
 	private Fax[] faxes;
 	private Email[] emails;
-	private Address address;
+	private Address addresses;
 	private PaymentAccount[] paymentAccounts;
 	
 	/**
@@ -48,7 +48,7 @@ public class ContactDetailsDTO implements Serializable {
 		this.phones = contactDetails.getPhones();
 		this.faxes = contactDetails.getFaxes();
 		this.emails = contactDetails.getEmails();
-		this.address = (contactDetails.getAddresses() != null &&  contactDetails.getAddresses().length > 0) ? 
+		this.addresses = (contactDetails.getAddresses() != null &&  contactDetails.getAddresses().length > 0) ? 
 				contactDetails.getAddresses()[0] : null;
 		this.paymentAccounts = contactDetails.getPaymentAccounts();
 	}

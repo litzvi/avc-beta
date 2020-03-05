@@ -15,10 +15,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -27,13 +26,15 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="CITIES", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "countryId"})})
 @NamedQuery(name = "City.findAll", query = "select c from City c")
-public class City {
+public class City implements legible, KeyIdentifiable {
 	
-	@Id @GeneratedValue
-	private int id;
+	@EqualsAndHashCode.Include
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 	
 	@Column(name = "name", nullable = false)
 	private String value;
@@ -42,4 +43,18 @@ public class City {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "countryId", nullable = false)
 	private Country country;
+	
+
+	public void setValue(String value) {
+		this.value = value.trim();
+	}
+	
+	protected boolean canEqual(Object o) {
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
+	}
+
+	@Override
+	public boolean isLegal() {
+		return StringUtils.isNotBlank(getValue());
+	}
 }

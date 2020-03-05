@@ -42,7 +42,7 @@ import lombok.ToString;
 @Table(name = "CONTACT_DETAILS", uniqueConstraints = 
 	{ @UniqueConstraint(name = "Unique subject contact details", columnNames = { "companyId", "personId" }) })
 @Check(constraints = "(companyId is null) xor (personId is null)")
-public class ContactDetails {
+public class ContactDetails implements Insertable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -126,6 +126,23 @@ public class ContactDetails {
 	
 	public PaymentAccount[] getPaymentAccounts() {
 		return (PaymentAccount[])this.paymentAccounts.toArray(new PaymentAccount[this.paymentAccounts.size()]);
+	}
+
+	@Override
+	public boolean isLegal() {
+		return (this.company == null ^ this.person == null);
+	}
+	
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof Company) {
+			this.setCompany((Company)referenced);
+		}
+		else if(referenced instanceof Person) {
+			this.setPerson((Person)referenced);
+		}
+		throw new ClassCastException("Referenced object dosen't match ContactDetails references");
+		
 	}
 		
 }
