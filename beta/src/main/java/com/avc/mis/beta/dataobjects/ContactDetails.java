@@ -25,6 +25,7 @@ import com.avc.mis.beta.dao.DAO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -38,23 +39,25 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "CONTACT_DETAILS", uniqueConstraints = 
 	{ @UniqueConstraint(name = "Unique subject contact details", columnNames = { "companyId", "personId" }) })
 @Check(constraints = "(companyId is null) xor (personId is null)")
-public class ContactDetails implements Insertable {
+public class ContactDetails implements Insertable, KeyIdentifiable {
 
+	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	@JsonBackReference(value = "company_contactDetails")
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "companyId", updatable = false)
 	private Company company;
 
-	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	@JsonBackReference(value = "person_contactDetails")
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "personId", updatable = false)
@@ -128,11 +131,16 @@ public class ContactDetails implements Insertable {
 		return (PaymentAccount[])this.paymentAccounts.toArray(new PaymentAccount[this.paymentAccounts.size()]);
 	}
 
+	protected boolean canEqual(Object o) {
+		return KeyIdentifiable.canEqualCheckNullId(this, o);
+	}
+	
 	@Override
 	public boolean isLegal() {
 		return (this.company == null ^ this.person == null);
 	}
 	
+	@JsonIgnore
 	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof Company) {
@@ -141,7 +149,9 @@ public class ContactDetails implements Insertable {
 		else if(referenced instanceof Person) {
 			this.setPerson((Person)referenced);
 		}
-		throw new ClassCastException("Referenced object dosen't match ContactDetails references");
+		else {
+			throw new ClassCastException("Referenced object dosen't match ContactDetails references");
+		}
 		
 	}
 		

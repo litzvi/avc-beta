@@ -18,7 +18,6 @@ import com.avc.mis.beta.dataobjects.ContactDetails;
 import com.avc.mis.beta.dataobjects.PaymentAccount;
 import com.avc.mis.beta.dataobjects.Person;
 import com.avc.mis.beta.dataobjects.Supplier;
-import com.avc.mis.beta.dto.CompanyContactDTO;
 import com.avc.mis.beta.dto.SupplierDTO;
 import com.avc.mis.beta.dto.SupplierRow;
 

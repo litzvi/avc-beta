@@ -1,21 +1,13 @@
 package com.avc.mis.beta;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 
-import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dataobjects.BankAccount;
@@ -30,10 +22,7 @@ import com.avc.mis.beta.dataobjects.Person;
 import com.avc.mis.beta.dataobjects.Phone;
 import com.avc.mis.beta.dataobjects.Supplier;
 import com.avc.mis.beta.dataobjects.SupplyCategory;
-import com.avc.mis.beta.dto.SupplierDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 
 @SpringBootTest
 class BetaApplicationTests {
@@ -70,6 +59,7 @@ class BetaApplicationTests {
 		supplyCategories.forEach(category -> supplier.getSupplyCategories().add(category));
 		
 		ContactDetails contactDetails = new ContactDetails();
+		System.out.println(contactDetails);
 		supplier.setContactDetails(contactDetails);
 		List<Phone> phones = new ArrayList<>();
 		List<Fax> faxes = new ArrayList<>();

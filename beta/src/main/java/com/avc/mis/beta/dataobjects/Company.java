@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dataobjects;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,21 +11,17 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.avc.mis.beta.dao.DAO;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -34,8 +29,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.ToString;
 
 /**
  * @author Zvi
@@ -51,7 +44,7 @@ import lombok.ToString;
 public class Company implements Insertable, KeyIdentifiable {
 	
 	@EqualsAndHashCode.Include
-	@Id @GeneratedValue	
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	@Column(nullable = false)
