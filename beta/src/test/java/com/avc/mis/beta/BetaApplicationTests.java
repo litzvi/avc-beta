@@ -72,6 +72,8 @@ class BetaApplicationTests {
 		ContactDetails contactDetails = new ContactDetails();
 		supplier.setContactDetails(contactDetails);
 		List<Phone> phones = new ArrayList<>();
+		List<Fax> faxes = new ArrayList<>();
+		List<Email> emails = new ArrayList<>();
 		for(int i=0; i<2; i++) {
 			Phone phone = new Phone();
 			Phone duplicate = new Phone();
@@ -83,11 +85,13 @@ class BetaApplicationTests {
 			email.setValue("email" + i);
 			phones.add(phone);
 			phones.add(duplicate);
-			contactDetails.getFaxes().add(fax);
-			contactDetails.getEmails().add(email);
+			faxes.add(fax);
+			emails.add(email);
 			
 		}
 		contactDetails.setPhones(phones.toArray(new Phone[phones.size()]));
+		contactDetails.setFaxes(faxes.toArray(new Fax[faxes.size()]));
+		contactDetails.setEmails(emails.toArray(new Email[emails.size()]));
 		PaymentAccount paymentAccount = new PaymentAccount();		
 		BankAccount bankAccount = new BankAccount();
 		bankAccount.setOwnerName("ownerName" + name);
@@ -96,7 +100,7 @@ class BetaApplicationTests {
 		bankBranch.setId(1);
 		bankAccount.setBranch(bankBranch);
 		paymentAccount.setBankAccount(bankAccount);
-		contactDetails.getPaymentAccounts().add(paymentAccount);		
+		contactDetails.setPaymentAccounts(new PaymentAccount[] {paymentAccount});		
 
 		CompanyContact companyContact;
 		Person person;

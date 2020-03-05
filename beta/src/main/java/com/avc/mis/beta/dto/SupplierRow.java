@@ -35,7 +35,7 @@ public class SupplierRow implements Serializable {
 		this.name = supplier.getName();
 		phones = Arrays.stream(supplier.getContactDetails().getPhones())
 				.map(Phone::getValue).collect(Collectors.toList());
-		emails = supplier.getContactDetails().getEmails().stream()
+		emails = Arrays.stream(supplier.getContactDetails().getEmails())
 				.map(Email::getValue).collect(Collectors.toList());
 		supplyCategories = supplier.getSupplyCategories().stream()
 				.map(SupplyCategory::getValue).collect(Collectors.toList());

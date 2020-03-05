@@ -5,9 +5,6 @@ package com.avc.mis.beta.dataobjects;
 
 import java.util.Arrays;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
@@ -19,6 +16,9 @@ public interface Insertable {
 	
 	public boolean isLegal();	
 	public Integer getId();
+	
+	public void setReference(Object referenced);
+
 //	public String getValue();
 	
 	static <T extends Insertable> boolean canEqualCheckNullId(T t, Object o) {
@@ -36,9 +36,5 @@ public interface Insertable {
 			.map(t -> p.apply(t))
 			.collect(Collectors.toSet());
 	}
-	/**
-	 * @param contactDetails
-	 */
-	public void setReference(Object referenced);
-
+	
 }

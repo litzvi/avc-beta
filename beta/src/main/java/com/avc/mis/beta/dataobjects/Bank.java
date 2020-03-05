@@ -42,8 +42,8 @@ public class Bank {
 	@Id @GeneratedValue
 	private Integer id;
 	
-	@Column(nullable = false, unique = true)
-	private String name;
+	@Column(name = "name", nullable = false, unique = true)
+	private String value;
 	
 //	@JsonBackReference(value = "branch_bank")
 	@EqualsAndHashCode.Exclude

@@ -3,10 +3,8 @@
  */
 package com.avc.mis.beta.dataobjects;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -17,8 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -99,120 +95,37 @@ public class ContactDetails {
 		return (Phone[])this.phones.toArray(new Phone[this.phones.size()]);
 	}
 	
-	@PrePersist
-	public void prePersistContactDetails() {
-				
-		preUpdateContactDetails();
-		
-		paymentAccounts.removeIf(account -> (!account.isLegal()));
-		for(PaymentAccount account: paymentAccounts) {
-			account.setContactDetails(this);
-		}
+	public void setFaxes(Fax[] faxes) {
+		this.faxes = Insertable.filterAndSetReference(faxes, (t) -> {t.setReference(this);	return t;});
 	}
 	
-	@PreUpdate
-	public void preUpdateContactDetails() {
-//		phones.removeIf(phone -> (!phone.isLegal()));
-//		for(Phone phone: phones) {
-//			phone.setContactDetails(this);
-//		}
-		
-		faxes.removeIf(fax -> (!fax.isLegal()));
-		for(Fax fax: faxes) {
-			fax.setContactDetails(this);
-		}
-		
-		emails.removeIf(email -> (!email.isLegal()));
-		for(Email email: emails) {
-			email.setContactDetails(this);
-		}
-		
-		addresses.removeIf(address -> (!address.isLegal()));
-		for(Address address: addresses) {
-			address.setContactDetails(this);
-		}
-		
+	public Fax[] getFaxes() {
+		return (Fax[])this.faxes.toArray(new Fax[this.faxes.size()]);
 	}
 	
+	public void setEmails(Email[] emails) {
+		this.emails = Insertable.filterAndSetReference(emails, (t) -> {t.setReference(this);	return t;});
+	}
 	
-//	public void setPhones(Set<Phone> phones) {
-//		for(Phone phone: phones) {
-//			phone.setContactDetails(this);
-//		}
-//		this.phones = phones;
-//	}
-//	
-//	public void setPhones(String[] phoneNumbers) {
-//		this.phones = new HashSet<Phone>(phoneNumbers.length);
-//		Phone phone;
-//		for(String phoneNo: phoneNumbers) {
-//			phone = new Phone();
-//			phone.setName(phoneNo);
-//			phone.setContactDetails(this);
-//			this.phones.add(phone);
-//		}
-//	}
+	public Email[] getEmails() {
+		return (Email[])this.emails.toArray(new Email[this.emails.size()]);
+	}
 	
+	public void setAddresses(Address[] addresses) {
+		this.addresses = Insertable.filterAndSetReference(addresses, (t) -> {t.setReference(this);	return t;});
+	}
+	
+	public Address[] getAddresses() {
+		return (Address[])this.addresses.toArray(new Address[this.addresses.size()]);
+	}
+	
+	public void setPaymentAccounts(PaymentAccount[] paymentAccounts) {
+		this.paymentAccounts = Insertable.filterAndSetReference(paymentAccounts, 
+				(t) -> {t.setReference(this);	return t;});
+	}
+	
+	public PaymentAccount[] getPaymentAccounts() {
+		return (PaymentAccount[])this.paymentAccounts.toArray(new PaymentAccount[this.paymentAccounts.size()]);
+	}
 		
-	/*
-	 * public static void insertContactDetails(JdbcTemplate jdbcTemplateObject,
-	 * ContactDetails contactDetails) {
-	 * 
-	 * GeneratedKeyHolder keyHolder = new GeneratedKeyHolder(); String sql; int
-	 * contactId; if(contactDetails.getCompanyId() != null) { sql =
-	 * "insert into CONTACT_DETAILS (companyId) values (?)";
-	 * jdbcTemplateObject.update( new PreparedStatementCreatorImpl(sql, new Object[]
-	 * {contactDetails.getCompanyId()}, new String[] {"id"}), keyHolder); contactId
-	 * = keyHolder.getKey().intValue(); contactDetails.setId(contactId); } else
-	 * if(contactDetails.getPersonId() != null) { sql =
-	 * "insert into CONTACT_DETAILS (personId) values (?)";
-	 * jdbcTemplateObject.update( new PreparedStatementCreatorImpl(sql, new Object[]
-	 * {contactDetails.getPersonId()}, new String[] {"id"}), keyHolder); contactId =
-	 * keyHolder.getKey().intValue(); contactDetails.setId(contactId); } else {
-	 * throw new
-	 * IllegalArgumentException("Contact Details has to be conected to a subject (person orcompany)."
-	 * ); }
-	 * 
-	 * 
-	 * 
-	 * Phone[] phones = contactDetails.getPhones(); if(phones != null) {
-	 * Phone.insertPhones(jdbcTemplateObject, contactId, phones); }
-	 * 
-	 * Fax[] faxes = contactDetails.getFaxes(); if(faxes != null) {
-	 * Fax.insertFaxes(jdbcTemplateObject, contactId, faxes); }
-	 * 
-	 * Email[] emails = contactDetails.getEmails(); if(emails != null) {
-	 * Email.insertEmails(jdbcTemplateObject, contactId, emails); }
-	 * 
-	 * Address[] addresses = contactDetails.getAddresses(); if(addresses != null) {
-	 * Address.insertAddresses(jdbcTemplateObject, contactId, addresses); }
-	 * 
-	 * PaymentAccount[] paymentAccounts = contactDetails.getPaymentAccounts();
-	 * if(paymentAccounts !=null) {
-	 * PaymentAccount.insertPaymentAccounts(jdbcTemplateObject, contactId,
-	 * paymentAccounts); }
-	 * 
-	 * 
-	 * }
-	 */
-
-	/**
-	 * @param jdbcTemplateObject
-	 *//*
-		 * public void editContactDetails(JdbcTemplate jdbcTemplateObject) {
-		 * 
-		 * if(getId() == null) { throw new
-		 * IllegalArgumentException("Contact id can't be null"); } if(getCompanyId() ==
-		 * null && getPersonId() == null) { throw new
-		 * IllegalArgumentException("Subject id can't be null"); } if(phones != null) {
-		 * //search for phones without an id - to be added //search for phones without a
-		 * name - to be removed //update the given phones that have id's and names }
-		 * if(faxes != null) { //update the given phones } if(emails != null) { //update
-		 * the given phones } if(addresses != null) { //update the given phones }
-		 * if(paymentAccounts != null) { //update the given phones }
-		 * 
-		 * 
-		 * }
-		 */
-
 }

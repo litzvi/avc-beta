@@ -35,10 +35,10 @@ public class ContactDetailsDTO implements Serializable {
 
 	private Integer id;
 	private Phone[] phones;
-	private Set<Fax> faxes = new HashSet<>();
-	private Set<Email> emails = new HashSet<>();
+	private Fax[] faxes;
+	private Email[] emails;
 	private Address address;
-	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
+	private PaymentAccount[] paymentAccounts;
 	
 	/**
 	 * @param contactDetails
@@ -46,11 +46,11 @@ public class ContactDetailsDTO implements Serializable {
 	public ContactDetailsDTO(ContactDetails contactDetails) {
 		this.id = contactDetails.getId();
 		this.phones = contactDetails.getPhones();
-		this.faxes.addAll(contactDetails.getFaxes());
-		this.emails.addAll(contactDetails.getEmails());
-		this.address = contactDetails.getAddresses().isEmpty() ? 
-				null : contactDetails.getAddresses().iterator().next();
-		this.paymentAccounts.addAll(contactDetails.getPaymentAccounts());
+		this.faxes = contactDetails.getFaxes();
+		this.emails = contactDetails.getEmails();
+		this.address = (contactDetails.getAddresses() != null &&  contactDetails.getAddresses().length > 0) ? 
+				contactDetails.getAddresses()[0] : null;
+		this.paymentAccounts = contactDetails.getPaymentAccounts();
 	}
 
 }

@@ -33,8 +33,8 @@ public class BankBranch {
 	@Id @GeneratedValue
 	private Integer id;
 	
-	@Column(nullable = false)
-	private String name;
+	@Column(name = "name", nullable = false)
+	private String value;
 	
 //	@JsonManagedReference(value = "branch_bank")
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
