@@ -92,10 +92,7 @@ public class ContactDetails {
 	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	
 	public void setPhones(Phone[] phones) {
-		this.phones = Arrays.stream(phones)
-			.filter(phone -> phone.isLegal())
-			.map(phone -> {phone.setContactDetails(this); return phone;})
-			.collect(Collectors.toSet());
+		this.phones = Insertable.filterAndSetReference(phones, (t) -> {t.setReference(this);	return t;});
 	}
 	
 	public Phone[] getPhones() {

@@ -65,4 +65,9 @@ public class PaymentAccount implements Insertable {
 		return getBankAccount() != null && getBankAccount().isLegal();
 	}
 	
+	@Override
+	public void setReference(Object referenced) {
+		this.setContactDetails((ContactDetails)referenced);
+		
+	}
 }

@@ -3,6 +3,14 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
+
 /**
  * @author Zvi
  *
@@ -21,5 +29,16 @@ public interface Insertable {
 		return false;
 		
 	}
+	
+	static <S, T extends Insertable> Set<T> filterAndSetReference(T[] tArray, UnaryOperator<T> p) {
+		return Arrays.stream(tArray)
+			.filter(t -> t.isLegal())
+			.map(t -> p.apply(t))
+			.collect(Collectors.toSet());
+	}
+	/**
+	 * @param contactDetails
+	 */
+	public void setReference(Object referenced);
 
 }

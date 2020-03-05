@@ -65,4 +65,10 @@ public class Address implements Insertable {
 		return StringUtils.isNotBlank(getStreetAddress());
 	}
 	
+	@Override
+	public void setReference(Object referenced) {
+		this.setContactDetails((ContactDetails)referenced);
+		
+	}
+	
 }

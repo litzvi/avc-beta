@@ -44,7 +44,7 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1135;
+	private static Integer SERIAL_NO = 1136;
 
 	@Disabled
 	@Test
@@ -77,10 +77,10 @@ class BetaApplicationTests {
 			Phone duplicate = new Phone();
 			Fax fax = new Fax();
 			Email email = new Email();
-			phone.setName("phone" + i);
-			duplicate.setName("phone" + i);
-			fax.setName("fax" + i);
-			email.setName("email" + i);
+			phone.setValue("phone" + i);
+			duplicate.setValue("phone" + i);
+			fax.setValue("fax" + i);
+			email.setValue("email" + i);
 			phones.add(phone);
 			phones.add(duplicate);
 			contactDetails.getFaxes().add(fax);
@@ -133,9 +133,9 @@ class BetaApplicationTests {
 		System.out.println(contactDetails);
 		Phone removed = contactDetails.getPhones()[0];
 		Phone added = new Phone();
-		added.setName(removed.getName());
+		added.setValue(removed.getValue());
 //		contactDetails.getPhones().clear();
-		removed.setName("changed phone 0" + SERIAL_NO);
+		removed.setValue("changed phone 0" + SERIAL_NO);
 		contactDetails.setPhones(new Phone[] {removed, added});
 //		contactDetails.getPhones().add(removed);
 //		contactDetails.getPhones().add(added);

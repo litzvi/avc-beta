@@ -57,5 +57,11 @@ public class Email implements Insertable{
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue());
 	}
+	
+	@Override
+	public void setReference(Object referenced) {
+		this.setContactDetails((ContactDetails)referenced);
+		
+	}
 		
 }
