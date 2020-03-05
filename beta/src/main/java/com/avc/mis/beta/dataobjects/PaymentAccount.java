@@ -7,16 +7,13 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-
-import com.avc.mis.beta.dao.services.PreparedStatementCreatorImpl;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,14 +28,16 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="PAYMENT_ACCOUNTS")
-public class PaymentAccount {
+public class PaymentAccount implements Insertable {
 	
-	@Id @GeneratedValue
+	@EqualsAndHashCode.Include
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	@JsonBackReference(value = "contactDetails_paymentAccount")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contactId", updatable = false)
@@ -49,6 +48,10 @@ public class PaymentAccount {
 			inverseJoinColumns = @JoinColumn(name = "accountId",referencedColumnName = "id"))
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
 	private BankAccount bankAccount;
+	
+	protected boolean canEqual(Object o) {
+		return Insertable.canEqualCheckNullId(this, o);
+	}
 	
 //	@ToString.Exclude
 //	@Column(nullable = false)
@@ -61,39 +64,5 @@ public class PaymentAccount {
 	public boolean isLegal() {
 		return getBankAccount() != null && getBankAccount().isLegal();
 	}
-
-	
-	/**
-	 * @param jdbcTemplateObject
-	 * @param paymentAccounts
-	 */
-	public static void insertPaymentAccounts(JdbcTemplate jdbcTemplateObject, 
-			int contactId, PaymentAccount[] paymentAccounts) {
-		
-		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-		String sql = "insert into PAYMENT_ACCOUNTS (contactId) values (?)";
-		PreparedStatementCreatorImpl psc = new PreparedStatementCreatorImpl(
-				sql, new Object[] {contactId}, new String[] {"id"});
-
-		BankAccount bankAccount;
-		int paymentAccountId;
-		for(PaymentAccount paymentAccount: paymentAccounts) {			
-			
-			bankAccount = paymentAccount.getBankAccount();			
-			if(bankAccount != null && bankAccount.getAccountNo() != null &&
-					bankAccount.getOwnerName() != null && bankAccount.getBranch() != null && 
-					bankAccount.getBranch().getId() != null) {
-				jdbcTemplateObject.update(psc, keyHolder);
-				paymentAccountId = keyHolder.getKey().intValue();
-				paymentAccount.setId(paymentAccountId);
-				bankAccount.insertBankAccount(jdbcTemplateObject, paymentAccountId, bankAccount);
-			}
-		}
-
-		
-	}
-
-
-
 	
 }

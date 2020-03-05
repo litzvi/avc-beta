@@ -34,11 +34,11 @@ public class SupplierRow implements Serializable {
 		this.id = supplier.getId();
 		this.name = supplier.getName();
 		phones = Arrays.stream(supplier.getContactDetails().getPhones())
-				.map(Phone::getName).collect(Collectors.toList());
+				.map(Phone::getValue).collect(Collectors.toList());
 		emails = supplier.getContactDetails().getEmails().stream()
-				.map(Email::getName).collect(Collectors.toList());
+				.map(Email::getValue).collect(Collectors.toList());
 		supplyCategories = supplier.getSupplyCategories().stream()
-				.map(SupplyCategory::getName).collect(Collectors.toList());
+				.map(SupplyCategory::getValue).collect(Collectors.toList());
 
 	}
 }

@@ -3,12 +3,8 @@
  */
 package com.avc.mis.beta.dataobjects;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,9 +12,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -33,10 +29,7 @@ import com.avc.mis.beta.dao.DAO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonMerge;
-import com.fasterxml.jackson.annotation.OptBoolean;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -50,18 +43,14 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "CONTACT_DETAILS", uniqueConstraints = { @UniqueConstraint(columnNames = { "companyId", "personId" }) })
+@Table(name = "CONTACT_DETAILS", uniqueConstraints = 
+	{ @UniqueConstraint(name = "Unique subject contact details", columnNames = { "companyId", "personId" }) })
 @Check(constraints = "(companyId is null) xor (personId is null)")
 public class ContactDetails {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-
-//	@OneToOne(targetEntity = Company.class)
-//	@Column(name="companyId", insertable = false, updatable = false)
-//	private Integer companyId;
-
 	
 	@ToString.Exclude @EqualsAndHashCode.Exclude
 	@JsonBackReference(value = "company_contactDetails")
@@ -69,39 +58,36 @@ public class ContactDetails {
 	@JoinColumn(name = "companyId", updatable = false)
 	private Company company;
 
-//	@Column(name = "personId")
-//	private transient Integer personId;
-
 	@ToString.Exclude @EqualsAndHashCode.Exclude
 	@JsonBackReference(value = "person_contactDetails")
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "personId", updatable = false)
 	private Person person;
 
-//	@LazyCollection(LazyCollectionOption.TRUE)
 	@JsonManagedReference(value = "contactDetails_phones")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Phone> phones = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_faxes")
-	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Fax> faxes = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_emails")
-	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Email> emails = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_addresses")
-	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JsonFormat(with = Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Address> addresses = new HashSet<>();
 
 	@JsonManagedReference(value = "contactDetails_paymentAccount")
-	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
+		orphanRemoval = true, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	

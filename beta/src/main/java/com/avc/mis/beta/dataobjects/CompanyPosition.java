@@ -27,6 +27,6 @@ public class CompanyPosition {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(unique = true, nullable = false)
-	private String name;
+	@Column(name = "name", unique = true, nullable = false)
+	private String value;
 }

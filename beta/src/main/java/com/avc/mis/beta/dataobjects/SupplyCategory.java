@@ -31,8 +31,8 @@ public class SupplyCategory {
 	@Id @GeneratedValue
 	private int id;
 	
-	@Column(unique = true, nullable = false)
-	private String name;
+	@Column(name = "name", unique = true, nullable = false)
+	private String value;
 	
 	/*
 	 * @ManyToMany(mappedBy = "supplyCategories") private Set<Supplier> suppliers;

@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,7 +20,6 @@ import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -28,62 +28,43 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "PHONES")
-public class Phone {
+public class Phone implements Insertable {
 
-	@Id @GeneratedValue
+	@EqualsAndHashCode.Include
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-//	@Column(name="contactId", insertable = false, updatable = false)
-//	private Integer contactId;
-
-	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@ToString.Exclude
 	@JsonBackReference(value = "contactDetails_phones")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contactId", updatable = false)
 	private ContactDetails contactDetails;
 
-	@EqualsAndHashCode.Exclude
 	@Column(name = "phone", nullable = false)
-	private String name;
+	private String value;
 	
+	protected boolean canEqual(Object o) {
+		return Insertable.canEqualCheckNullId(this, o);
+	}
+	
+	/*
 	protected boolean canEqual(Object o) {
 		if(o instanceof Phone) { 
 			Phone other = (Phone) o;
 			return !(this.getId() == null && other.getId() == null);
-					/* ? (this.getName() != null ? this.getName().equals(other.getName()):
-					 * other.getName() == null) : true
-					 */
 		}
 		return false;
-	}
+	}*/
 
 	/**
 	 * @return
 	 */	
 	@JsonIgnore
 	public boolean isLegal() {
-		return StringUtils.isNotBlank(getName());
+		return StringUtils.isNotBlank(getValue());
 	}
-
-	/**
-	 * @param jdbcTemplateObject
-	 * @param contactId
-	 * @param phones
-	 *//*
-		 * public static void insertPhones(JdbcTemplate jdbcTemplateObject, int
-		 * contactId, Phone[] phones) {
-		 * 
-		 * List<Object[]> batchArgs = new ArrayList<Object[]>(); for(Phone phone:
-		 * phones) { if(phone.getName() != null) { batchArgs.add(new Object[]
-		 * {contactId, phone.getName()}); } } String sql =
-		 * "insert into phones (contactId, phone) values (?, ?)";
-		 * jdbcTemplateObject.batchUpdate(sql, batchArgs, new int[]{Types.INTEGER,
-		 * Types.VARCHAR});
-		 * 
-		 * 
-		 * }
-		 */
 
 }

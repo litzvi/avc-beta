@@ -22,6 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
@@ -42,7 +43,8 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="COMPANIES")
+@Table(name="COMPANIES", 
+	uniqueConstraints = @UniqueConstraint(name = "existing compony name", columnNames = {"name"}))
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Company {
 
@@ -50,7 +52,7 @@ public class Company {
 	@Id @GeneratedValue	
 	private Integer id;
 	
-	@Column(unique = true, nullable = false)
+	@Column(nullable = false)
 	private String name;
 	private String localName;
 	private String englishName;

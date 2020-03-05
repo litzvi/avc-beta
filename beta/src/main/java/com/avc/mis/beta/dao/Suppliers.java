@@ -120,6 +120,9 @@ public class Suppliers extends DAO {
 	}
 	
 	public void editSupplierMainInfo(Supplier supplier) {
+		if(supplier == null || !supplier.isLegal()) {
+			throw new IllegalArgumentException("Edited supplier missing required details");
+		}
 		getEntityManager().merge(supplier);
 	}
 	
@@ -128,10 +131,16 @@ public class Suppliers extends DAO {
 	}
 	
 	public void editAccount(PaymentAccount account) {
+		if(account == null || !account.isLegal()) {
+			throw new IllegalArgumentException("Edited account missing required details");
+		}
 		getEntityManager().merge(account);
 	}
 	
 	public void addAccount(PaymentAccount account, int contactId) {
+		if(account == null || !account.isLegal()) {
+			throw new IllegalArgumentException("Account missing required details");
+		}
 		ContactDetails contactDetails = getEntityManager().getReference(ContactDetails.class, contactId);
 		account.setContactDetails(contactDetails);
 		getEntityManager().persist(account);

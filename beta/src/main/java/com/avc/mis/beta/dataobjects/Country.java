@@ -40,8 +40,8 @@ public class Country {
 	@Id @GeneratedValue
 	private int id;
 	
-	@Column(unique = true, nullable = false)
-	private String Name;
+	@Column(name = "name", unique = true, nullable = false)
+	private String value;
 	
 //	@JsonBackReference(value = "city_country")
 	@JsonIgnore

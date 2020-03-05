@@ -37,7 +37,7 @@ public class ContactDetailsDTO implements Serializable {
 	private Phone[] phones;
 	private Set<Fax> faxes = new HashSet<>();
 	private Set<Email> emails = new HashSet<>();
-	private Set<Address> addresses = new HashSet<>();
+	private Address address;
 	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	
 	/**
@@ -48,7 +48,8 @@ public class ContactDetailsDTO implements Serializable {
 		this.phones = contactDetails.getPhones();
 		this.faxes.addAll(contactDetails.getFaxes());
 		this.emails.addAll(contactDetails.getEmails());
-		this.addresses.addAll(contactDetails.getAddresses());
+		this.address = contactDetails.getAddresses().isEmpty() ? 
+				null : contactDetails.getAddresses().iterator().next();
 		this.paymentAccounts.addAll(contactDetails.getPaymentAccounts());
 	}
 

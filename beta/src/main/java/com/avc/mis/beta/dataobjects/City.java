@@ -35,8 +35,8 @@ public class City {
 	@Id @GeneratedValue
 	private int id;
 	
-	@Column(nullable = false)
-	private String name;
+	@Column(name = "name", nullable = false)
+	private String value;
 	
 //	@JsonManagedReference(value = "city_country")
 	@ManyToOne(fetch = FetchType.EAGER)
