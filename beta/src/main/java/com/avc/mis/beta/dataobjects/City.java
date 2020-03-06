@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -63,5 +65,12 @@ public class City implements Legible, KeyIdentifiable {
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue());
+	}
+	
+	@PrePersist @PreUpdate
+	@Override
+	public void preUpdate() {
+		if(!isLegal())
+			throw new IllegalArgumentException("City name can't be blank");
 	}
 }

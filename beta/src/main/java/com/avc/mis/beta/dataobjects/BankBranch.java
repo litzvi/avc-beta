@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
@@ -58,6 +60,13 @@ public class BankBranch implements Legible, KeyIdentifiable{
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return StringUtils.isNotBlank(getValue());
+		return StringUtils.isNotBlank(getValue()) && getBank() != null;
+	}
+	
+	@PrePersist @PreUpdate
+	@Override
+	public void preUpdate() {
+		if(!isLegal())
+			throw new IllegalArgumentException("Branch name can't be blank and branch has to belong to a bank");
 	}
 }

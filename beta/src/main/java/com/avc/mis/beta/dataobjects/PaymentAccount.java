@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.dataobjects.interfaces.Insertable;
@@ -66,6 +68,14 @@ public class PaymentAccount implements Insertable, KeyIdentifiable {
 	@Override
 	public boolean isLegal() {
 		return getBankAccount() != null && getBankAccount().isLegal();
+	}
+	
+	@PrePersist @PreUpdate
+	@Override
+	public void preUpdate() {
+		if(!isLegal())
+			throw new IllegalArgumentException("Payment info not legal\n "
+					+ "Account has to have a legal bank account");
 	}
 	
 	@Override

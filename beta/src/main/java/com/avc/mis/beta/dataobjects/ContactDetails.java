@@ -15,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -141,6 +143,14 @@ public class ContactDetails implements Insertable, KeyIdentifiable {
 	@Override
 	public boolean isLegal() {
 		return (this.company == null ^ this.person == null);
+	}
+	
+	@PrePersist @PreUpdate
+	@Override
+	public void preUpdate() {
+		if(!isLegal())
+			throw new IllegalArgumentException("Contact details not legal\n "
+					+ "has to reference a compony and person");
 	}
 	
 	@Override

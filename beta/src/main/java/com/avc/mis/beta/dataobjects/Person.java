@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.dataobjects.interfaces.Insertable;
@@ -88,6 +90,13 @@ public class Person implements Insertable, KeyIdentifiable {
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(name);
+	}
+	
+	@PrePersist @PreUpdate
+	@Override
+	public void preUpdate() {
+		if(!isLegal())
+			throw new IllegalArgumentException("Person name can't be blank");
 	}
 
 	/**

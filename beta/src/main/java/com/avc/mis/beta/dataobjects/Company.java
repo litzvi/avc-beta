@@ -18,6 +18,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
@@ -111,6 +113,13 @@ public class Company implements Insertable, KeyIdentifiable {
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(name);
+	}
+	
+	@PrePersist @PreUpdate
+	@Override
+	public void preUpdate() {
+		if(!isLegal())
+			throw new IllegalArgumentException("Company name can't be blank");
 	}
 
 	/**

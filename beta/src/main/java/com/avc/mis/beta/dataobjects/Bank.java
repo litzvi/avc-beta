@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
@@ -57,7 +59,7 @@ public class Bank implements Legible, KeyIdentifiable{
 	private Set<BankBranch> branches = new HashSet<>();
 	
 	public void setValue(String value) {
-		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
+		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);		
 	}
 	
 	protected boolean canEqual(Object o) {
@@ -68,6 +70,13 @@ public class Bank implements Legible, KeyIdentifiable{
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue());
+	}
+	
+	@PrePersist @PreUpdate
+	@Override
+	public void preUpdate() {
+		if(!isLegal())
+			throw new IllegalArgumentException("Bank name can't be blank");
 	}
 	
 }

@@ -9,6 +9,7 @@ package com.avc.mis.beta.dataobjects.interfaces;
  */
 public interface Legible {
 	
-	public boolean isLegal();	
+	public boolean isLegal();
+	public void preUpdate();
 
 }

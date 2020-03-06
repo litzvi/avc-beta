@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
@@ -53,5 +55,12 @@ public class CompanyPosition implements Legible, KeyIdentifiable {
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue());
+	}
+	
+	@PrePersist @PreUpdate
+	@Override
+	public void preUpdate() {
+		if(!isLegal())
+			throw new IllegalArgumentException("Position name can't be blank");
 	}
 }
