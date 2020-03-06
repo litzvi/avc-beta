@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dataobjects;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,6 +17,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
+import com.avc.mis.beta.dataobjects.interfaces.Legible;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -50,7 +53,7 @@ public class Country implements Legible, KeyIdentifiable {
 	private Set<City> cities = new HashSet<>();
 	
 	public void setValue(String value) {
-		this.value = value.trim();
+		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}
 	
 	protected boolean canEqual(Object o) {

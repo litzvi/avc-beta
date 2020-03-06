@@ -15,6 +15,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
+import com.avc.mis.beta.dataobjects.interfaces.Legible;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;

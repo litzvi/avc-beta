@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dataobjects;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -23,6 +24,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -93,7 +96,7 @@ public class Company implements Insertable, KeyIdentifiable {
 	}
 	
 	public void setName(String name) {
-		this.name = name.trim();
+		this.name = Optional.ofNullable(name).map(s -> s.trim()).orElse(null);
 	}
 	
 	protected boolean canEqual(Object o) {

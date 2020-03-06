@@ -22,6 +22,8 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Check;
 
 import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;

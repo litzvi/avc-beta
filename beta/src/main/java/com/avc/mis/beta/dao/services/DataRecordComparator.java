@@ -5,7 +5,7 @@ package com.avc.mis.beta.dao.services;
 
 import java.util.Comparator;
 
-import com.avc.mis.beta.dataobjects.KeyIdentifiable;
+import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 
 /**
  * @author Zvi

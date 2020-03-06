@@ -48,8 +48,8 @@ public class ContactDetailsDTO implements Serializable {
 		this.phones = contactDetails.getPhones();
 		this.faxes = contactDetails.getFaxes();
 		this.emails = contactDetails.getEmails();
-		this.addresses = (contactDetails.getAddresses() != null &&  contactDetails.getAddresses().length > 0) ? 
-				contactDetails.getAddresses()[0] : null;
+		Address[] contactAddresses = contactDetails.getAddresses();
+		this.addresses = (contactAddresses.length > 0) ? contactDetails.getAddresses()[0] : null;
 		this.paymentAccounts = contactDetails.getPaymentAccounts();
 	}
 

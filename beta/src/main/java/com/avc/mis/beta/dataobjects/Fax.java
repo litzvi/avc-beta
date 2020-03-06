@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -47,7 +51,7 @@ public class Fax implements Insertable, KeyIdentifiable {
 	private String value;
 	
 	public void setValue(String value) {
-		this.value = value.trim();
+		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);;
 	}
 	
 	protected boolean canEqual(Object o) {

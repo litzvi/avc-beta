@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dataobjects;
+package com.avc.mis.beta.dataobjects.interfaces;
 
 import java.util.Arrays;
 import java.util.Set;

@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.util.Optional;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -49,7 +53,7 @@ public class Person implements Insertable, KeyIdentifiable {
 	private ContactDetails contactDetails;
 	
 	public void setName(String name) {
-		this.name = name.trim();
+		this.name = Optional.ofNullable(name).map(s -> s.trim()).orElse(null);;
 	}
 
 	public void setIdCard(IdCard idCard) {
