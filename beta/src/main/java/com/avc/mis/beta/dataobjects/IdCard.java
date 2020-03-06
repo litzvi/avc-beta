@@ -64,7 +64,7 @@ public class IdCard implements Insertable, KeyIdentifiable {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return this.id != null;
+		return this.id != null || this.person != null;
 	}
 	
 	@PrePersist @PreUpdate
