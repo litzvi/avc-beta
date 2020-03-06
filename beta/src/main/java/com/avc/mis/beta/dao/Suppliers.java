@@ -31,8 +31,7 @@ public class Suppliers extends DAO {
 	
 //	@Autowired
 //	private SupplierReposetory supplierReposetory;
-	
-		
+			
 	public List<SupplierRow> getSuppliers() {
 		
 		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findAll", Supplier.class);
@@ -49,17 +48,11 @@ public class Suppliers extends DAO {
 	 * @return
 	 */
 	public void addSupplier(Supplier supplier) {
-		if(supplier == null || !supplier.isLegal()) {
-			throw new IllegalArgumentException("Supplier missing required details");
-		}
 		getEntityManager().persist(supplier);
 		for(CompanyContact contact: supplier.getCompanyContacts()) {
 			Person person = contact.getPerson();
-			if(person != null && person.isLegal()) {
-				getEntityManager().persist(person);
-				getEntityManager().persist(contact);
-			}
-			
+			getEntityManager().persist(person);
+			getEntityManager().persist(contact);			
 		}
 //		getEntityManager().flush();
 	}
@@ -86,23 +79,6 @@ public class Suppliers extends DAO {
 		return supplierDTO;
 	}
 	
-	/*
-	 * public List getSuppliersBasic() {
-	 * 
-	 * Query query = getEntityManager().createNativeQuery( "Supplier.findAllBasic");
-	 * return query.getResultList();
-	 * 
-	 * }
-	 */
-	
-//	public void editSupplierInformation(Supplier supplier) {
-////		getEntityManager().find(Supplier.class, supplier.getId()).setName("findName");
-//		getEntityManager().merge(supplier);
-//		getEntityManager().flush();
-//	}
-	
-	
-	
 //	public void editSupplier() {
 //		
 //	}
@@ -119,9 +95,6 @@ public class Suppliers extends DAO {
 	}
 	
 	public void editSupplierMainInfo(Supplier supplier) {
-		if(supplier == null || !supplier.isLegal()) {
-			throw new IllegalArgumentException("Edited supplier missing required details");
-		}
 		getEntityManager().merge(supplier);
 	}
 	
@@ -130,16 +103,10 @@ public class Suppliers extends DAO {
 	}
 	
 	public void editAccount(PaymentAccount account) {
-		if(account == null || !account.isLegal()) {
-			throw new IllegalArgumentException("Edited account missing required details");
-		}
 		getEntityManager().merge(account);
 	}
 	
 	public void addAccount(PaymentAccount account, int contactId) {
-		if(account == null || !account.isLegal()) {
-			throw new IllegalArgumentException("Account missing required details");
-		}
 		ContactDetails contactDetails = getEntityManager().getReference(ContactDetails.class, contactId);
 		account.setContactDetails(contactDetails);
 		getEntityManager().persist(account);

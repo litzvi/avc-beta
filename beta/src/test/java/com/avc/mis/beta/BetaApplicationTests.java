@@ -33,7 +33,7 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1147;
+	private static Integer SERIAL_NO = 1148;
 
 	@Disabled
 	@Test

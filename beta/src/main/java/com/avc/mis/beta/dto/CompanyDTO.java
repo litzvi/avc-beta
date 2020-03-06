@@ -9,8 +9,6 @@ import java.util.Set;
 
 import com.avc.mis.beta.dataobjects.Company;
 import com.avc.mis.beta.dataobjects.CompanyContact;
-import com.avc.mis.beta.dataobjects.ContactDetails;
-import com.avc.mis.beta.dataobjects.Supplier;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

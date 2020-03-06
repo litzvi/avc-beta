@@ -59,7 +59,7 @@ public class BankAccount implements Legible, KeyIdentifiable{
 	}
 	
 	public void setAccountNo(String accountNo) {
-		this.accountNo = Optional.ofNullable(ownerName).map(s -> s.trim()).orElse(null);
+		this.accountNo = Optional.ofNullable(accountNo).map(s -> s.trim()).orElse(null);
 	}
 	
 	
