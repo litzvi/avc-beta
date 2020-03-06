@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -56,7 +58,7 @@ public class Address implements Insertable, KeyIdentifiable {
 	private City city;
 	
 	public void setStreetAddress(String streetAddress) {
-		this.streetAddress = streetAddress.trim();
+		this.streetAddress = Optional.ofNullable(streetAddress).map(s -> s.trim()).orElse(null);
 	}
 	
 	protected boolean canEqual(Object o) {

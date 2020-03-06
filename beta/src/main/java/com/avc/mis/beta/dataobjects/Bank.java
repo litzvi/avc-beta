@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dataobjects;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -56,7 +57,7 @@ public class Bank implements Legible, KeyIdentifiable{
 	private Set<BankBranch> branches = new HashSet<>();
 	
 	public void setValue(String value) {
-		this.value = value.trim();
+		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}
 	
 	protected boolean canEqual(Object o) {

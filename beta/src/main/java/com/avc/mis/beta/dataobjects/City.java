@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -50,7 +52,7 @@ public class City implements Legible, KeyIdentifiable {
 	
 
 	public void setValue(String value) {
-		this.value = value.trim();
+		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}
 	
 	protected boolean canEqual(Object o) {

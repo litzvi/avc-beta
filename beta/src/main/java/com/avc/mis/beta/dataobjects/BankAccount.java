@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dataobjects;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -51,11 +53,11 @@ public class BankAccount implements Legible, KeyIdentifiable{
 	private BankBranch branch;
 	
 	public void setOwnerName(String ownerName) {
-		this.ownerName = ownerName.trim();
+		this.ownerName = Optional.ofNullable(ownerName).map(s -> s.trim()).orElse(null);
 	}
 	
 	public void setAccountNo(String accountNo) {
-		this.accountNo = accountNo.trim();
+		this.accountNo = Optional.ofNullable(ownerName).map(s -> s.trim()).orElse(null);
 	}
 	
 	
