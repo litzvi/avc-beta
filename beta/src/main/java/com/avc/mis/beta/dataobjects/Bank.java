@@ -22,8 +22,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
-import com.avc.mis.beta.dataobjects.interfaces.Legible;
+import com.avc.mis.beta.dataobjects.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -42,7 +41,7 @@ import lombok.ToString;
 @Entity
 @Table(name="BANKS")
 @NamedQuery(name = "Bank.findAll", query = "select b from Bank b")
-public class Bank implements Legible, KeyIdentifiable{
+public class Bank implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,7 +62,7 @@ public class Bank implements Legible, KeyIdentifiable{
 	}
 	
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
 	@JsonIgnore
@@ -74,7 +73,7 @@ public class Bank implements Legible, KeyIdentifiable{
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Bank name can't be blank");
 	}

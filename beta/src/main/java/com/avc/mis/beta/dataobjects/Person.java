@@ -18,7 +18,6 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.dataobjects.interfaces.Insertable;
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -36,7 +35,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "PERSONS")
-public class Person implements Insertable, KeyIdentifiable {
+public class Person implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id
@@ -47,7 +46,7 @@ public class Person implements Insertable, KeyIdentifiable {
 	private String name;
 
 	@JsonManagedReference(value = "person_idCard")
-	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST}, orphanRemoval = true, fetch = FetchType.LAZY)
 	private IdCard idCard;
 
 	@JsonManagedReference(value = "person_contactDetails")
@@ -80,7 +79,7 @@ public class Person implements Insertable, KeyIdentifiable {
 	}
 	
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
 	/**
@@ -94,16 +93,10 @@ public class Person implements Insertable, KeyIdentifiable {
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Person name can't be blank");
 	}
 
-	/**
-	 * Empty implementation
-	 */
-	@Override
-	public void setReference(Object referenced) {}
-	
 	
 }

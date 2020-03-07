@@ -15,8 +15,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
-import com.avc.mis.beta.dataobjects.interfaces.Legible;
+import com.avc.mis.beta.dataobjects.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -34,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="COMPANY_POSITIONS")
 @NamedQuery(name = "CompanyPosition.findAll", query = "select cp from CompanyPosition cp")
-public class CompanyPosition implements Legible, KeyIdentifiable {
+public class CompanyPosition implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,7 +47,7 @@ public class CompanyPosition implements Legible, KeyIdentifiable {
 	}
 	
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 
 	@JsonIgnore
@@ -59,7 +58,7 @@ public class CompanyPosition implements Legible, KeyIdentifiable {
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Position name can't be blank");
 	}

@@ -25,7 +25,6 @@ import org.hibernate.annotations.Check;
 
 import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.dataobjects.interfaces.Insertable;
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;
@@ -48,7 +47,7 @@ import lombok.ToString;
 @Table(name = "CONTACT_DETAILS", uniqueConstraints = 
 	{ @UniqueConstraint(columnNames = { "companyId", "personId" }) })
 @Check(constraints = "(companyId is null) xor (personId is null)")
-public class ContactDetails implements Insertable, KeyIdentifiable {
+public class ContactDetails implements Insertable {
 
 	@EqualsAndHashCode.Include
 	@Id
@@ -136,7 +135,7 @@ public class ContactDetails implements Insertable, KeyIdentifiable {
 	}
 
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
 	@JsonIgnore
@@ -147,7 +146,7 @@ public class ContactDetails implements Insertable, KeyIdentifiable {
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Contact details not legal\n "
 					+ "has to reference a compony and person");
@@ -163,8 +162,7 @@ public class ContactDetails implements Insertable, KeyIdentifiable {
 		}
 		else {
 			throw new ClassCastException("Referenced object dosen't match ContactDetails references");
-		}
-		
+		}		
 	}
 		
 }

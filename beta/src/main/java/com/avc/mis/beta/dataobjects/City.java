@@ -19,8 +19,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
-import com.avc.mis.beta.dataobjects.interfaces.Legible;
+import com.avc.mis.beta.dataobjects.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -38,7 +37,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="CITIES", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "countryId"})})
 @NamedQuery(name = "City.findAll", query = "select c from City c")
-public class City implements Legible, KeyIdentifiable {
+public class City implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,7 +57,7 @@ public class City implements Legible, KeyIdentifiable {
 	}
 	
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 
 	@JsonIgnore
@@ -69,7 +68,7 @@ public class City implements Legible, KeyIdentifiable {
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("City name can't be blank");
 	}

@@ -5,8 +5,9 @@ package com.avc.mis.beta.dataobjects;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
@@ -28,24 +29,26 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
-@IdClass(CompanyContactPK.class)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "COMPANY_CONTACTS")
 public class CompanyContact implements Insertable {
-
+	
+	@EqualsAndHashCode.Include
 	@Id
-	@ToString.Exclude @EqualsAndHashCode.Exclude
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+
+	@ToString.Exclude
 	@JsonBackReference(value = "company_companyContacts")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "companyId", updatable = false, nullable = false)
 	private Company company;
 
-	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "personId", updatable = false, nullable = false)
 	private Person person;
 
-	@EqualsAndHashCode.Exclude
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "positionId")
 	private CompanyPosition position;
@@ -61,7 +64,7 @@ public class CompanyContact implements Insertable {
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Compony contact has to reference legal person (person name not blank");
 	}

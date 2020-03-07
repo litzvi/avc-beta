@@ -18,7 +18,6 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.dataobjects.interfaces.Insertable;
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,7 +36,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="ADDRESSES")
-public class Address implements Insertable, KeyIdentifiable {
+public class Address implements Insertable {
 
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,7 +63,7 @@ public class Address implements Insertable, KeyIdentifiable {
 	}
 	
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
 	/**
@@ -85,7 +84,7 @@ public class Address implements Insertable, KeyIdentifiable {
 
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Street address can't be blank");
 	}

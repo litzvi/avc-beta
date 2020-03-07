@@ -12,12 +12,14 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dataobjects.BankAccount;
 import com.avc.mis.beta.dataobjects.CompanyContact;
 import com.avc.mis.beta.dataobjects.CompanyContactPK;
 import com.avc.mis.beta.dataobjects.ContactDetails;
 import com.avc.mis.beta.dataobjects.PaymentAccount;
 import com.avc.mis.beta.dataobjects.Person;
 import com.avc.mis.beta.dataobjects.Supplier;
+import com.avc.mis.beta.dataobjects.interfaces.Insertable;
 import com.avc.mis.beta.dto.SupplierDTO;
 import com.avc.mis.beta.dto.SupplierRow;
 
@@ -54,7 +56,6 @@ public class Suppliers extends DAO {
 			getEntityManager().persist(person);
 			getEntityManager().persist(contact);			
 		}
-//		getEntityManager().flush();
 	}
 	
 	public SupplierDTO getSupplier(int id) {
@@ -78,11 +79,11 @@ public class Suppliers extends DAO {
 		
 		return supplierDTO;
 	}
-	
-//	public void editSupplier() {
-//		
-//	}
-	
+	/*
+	public void editSupplier() {
+		
+	}
+	*/
 	/**
 	 * Soft deletes company.
 	 * Dosen't remove stand alone entities created with the company.
@@ -91,6 +92,23 @@ public class Suppliers extends DAO {
 	 */
 	public void removeSupplier(int supplierId) {
 		Supplier supplier = getEntityManager().getReference(Supplier.class, supplierId);
+		getEntityManager().remove(supplier);
+	}
+	
+	/**
+	 * For testing only
+	 * @param supplierId
+	 */
+	public void permenentlyRemoveSupplier(int supplierId) {
+		Supplier supplier = getEntityManager().getReference(Supplier.class, supplierId);
+		for(PaymentAccount paymentAccount: supplier.getContactDetails().getPaymentAccounts())  {
+			BankAccount bankAccount = paymentAccount.getBankAccount();
+			getEntityManager().remove(bankAccount);
+		}
+		for(CompanyContact companyContact: supplier.getCompanyContacts())  {
+			Person person = companyContact.getPerson();
+			getEntityManager().remove(person);
+		}
 		getEntityManager().remove(supplier);
 	}
 	
@@ -104,7 +122,7 @@ public class Suppliers extends DAO {
 	
 	public void editAccount(PaymentAccount account) {
 		getEntityManager().merge(account);
-	}
+	}	
 	
 	public void addAccount(PaymentAccount account, int contactId) {
 		ContactDetails contactDetails = getEntityManager().getReference(ContactDetails.class, contactId);
@@ -115,6 +133,18 @@ public class Suppliers extends DAO {
 	public void removeAccount(int accountId) {
 		PaymentAccount account = getEntityManager().getReference(PaymentAccount.class, accountId);
 		getEntityManager().remove(account);
+	}
+	
+	public void editContactPerson(CompanyContact contact) {
+		getEntityManager().merge(contact);
+		Person person = contact.getPerson();
+		if(person != null && person.isLegal()) {
+			getEntityManager().merge(person);
+			getEntityManager().merge(person.getContactDetails());
+		}
+		else {
+			throw new IllegalArgumentException("Company contact not edited, missing or illegal information");
+		}
 	}
 	
 	public void addContactPerson(CompanyContact contact, int supplierId) {
@@ -130,21 +160,24 @@ public class Suppliers extends DAO {
 		}
 	}
 	
-	public void editContactPerson(CompanyContact contact) {
-		Person person = contact.getPerson();
-		if(person != null && person.isLegal()) {
-			getEntityManager().merge(person);
-			getEntityManager().merge(person.getContactDetails());
-		}
-		else {
-			throw new IllegalArgumentException("Company contact not edited, missing or illegal information");
-		}
-	}
-
 	public void removeContactPerson(CompanyContact contact) {
 		contact = getEntityManager()
 				.getReference(CompanyContact.class, new CompanyContactPK(contact.getPerson(), contact.getCompany()));
 		getEntityManager().remove(contact);
-	}	
+	}
 	
+	private void addEntity(Insertable entity, Insertable reference) {
+		reference = getEntityManager().getReference(reference.getClass(), reference);
+		entity.setReference(reference);
+		getEntityManager().persist(entity);
+	}
+	
+	private void removeEntity(Insertable entity) {
+		entity = getEntityManager().getReference(entity.getClass(), entity.getId());
+		getEntityManager().remove(entity); 
+	}
+	
+	private void editEntity(Insertable entity) {
+		getEntityManager().merge(entity);
+	}	
 }

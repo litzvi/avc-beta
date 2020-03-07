@@ -17,7 +17,6 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.dataobjects.interfaces.Insertable;
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,7 +34,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="ID_INFORMATION")
-public class IdCard implements Insertable, KeyIdentifiable {
+public class IdCard implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id
@@ -58,7 +57,7 @@ public class IdCard implements Insertable, KeyIdentifiable {
 	private Country nationality;
 	
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
 	@JsonIgnore
@@ -69,7 +68,7 @@ public class IdCard implements Insertable, KeyIdentifiable {
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Internal failure: trying to add Id card without person");
 	}

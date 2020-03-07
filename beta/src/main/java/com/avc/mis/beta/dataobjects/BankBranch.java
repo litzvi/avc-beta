@@ -16,8 +16,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
-import com.avc.mis.beta.dataobjects.interfaces.Legible;
+import com.avc.mis.beta.dataobjects.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -35,7 +34,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="BANK_BRANCHES")
 @NamedQuery(name = "BankBranch.findAll", query = "select bb from BankBranch bb")
-public class BankBranch implements Legible, KeyIdentifiable{
+public class BankBranch implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +53,7 @@ public class BankBranch implements Legible, KeyIdentifiable{
 	}
 	
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
 	@JsonIgnore
@@ -65,7 +64,7 @@ public class BankBranch implements Legible, KeyIdentifiable{
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Branch name can't be blank and branch has to belong to a bank");
 	}

@@ -17,7 +17,6 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.dataobjects.interfaces.Insertable;
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,7 +34,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="PAYMENT_ACCOUNTS")
-public class PaymentAccount implements Insertable, KeyIdentifiable {
+public class PaymentAccount implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +53,7 @@ public class PaymentAccount implements Insertable, KeyIdentifiable {
 	private BankAccount bankAccount;
 	
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
 //	@ToString.Exclude
@@ -72,7 +71,7 @@ public class PaymentAccount implements Insertable, KeyIdentifiable {
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Payment info not legal\n "
 					+ "Account has to have a legal bank account");

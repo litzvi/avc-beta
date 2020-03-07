@@ -27,7 +27,6 @@ import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.dataobjects.interfaces.Insertable;
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -46,7 +45,7 @@ import lombok.NoArgsConstructor;
 @Table(name="COMPANIES" /*, 
 	uniqueConstraints = @UniqueConstraint(name = "existing compony name", columnNames = {"name"})*/)
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Company implements Insertable, KeyIdentifiable {
+public class Company implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -102,7 +101,7 @@ public class Company implements Insertable, KeyIdentifiable {
 	}
 	
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 
 		
@@ -117,16 +116,10 @@ public class Company implements Insertable, KeyIdentifiable {
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Company name can't be blank");
 	}
-
-	/**
-	 * Empty implementation
-	 */
-	@Override
-	public void setReference(Object referenced) {}
 
 
 }

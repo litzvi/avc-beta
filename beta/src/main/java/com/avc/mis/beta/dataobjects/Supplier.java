@@ -18,7 +18,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -50,7 +49,7 @@ import lombok.ToString;
 				+ "left join fetch p.idCard id "
 				+ "left join fetch p.contactDetails cd "
 			+ "where cc.company.id = :cid ")
-public class Supplier extends Company implements KeyIdentifiable{
+public class Supplier extends Company {
 	
 	@JoinTable(name = "SUPPLIERS_CATEGORIES",
 			joinColumns = @JoinColumn(name = "companyId", referencedColumnName = "companyId"), 
@@ -62,7 +61,7 @@ public class Supplier extends Company implements KeyIdentifiable{
 	@JsonIgnore
 	@Override
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, this.getClass().getSuperclass(), o);
+		return super.canEqual(o);
 	}	
 		
 }

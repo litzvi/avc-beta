@@ -17,8 +17,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
-import com.avc.mis.beta.dataobjects.interfaces.Legible;
+import com.avc.mis.beta.dataobjects.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -38,7 +37,7 @@ import lombok.NoArgsConstructor;
 								 * , uniqueConstraints = {@UniqueConstraint(columnNames = {"accountNo",
 								 * "branchId"})}
 								 */)
-public class BankAccount implements Legible, KeyIdentifiable{
+public class BankAccount implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,7 +63,7 @@ public class BankAccount implements Legible, KeyIdentifiable{
 	
 	
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
 
@@ -80,7 +79,7 @@ public class BankAccount implements Legible, KeyIdentifiable{
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Bank Account info not legal\n "
 					+ "account has to belong to bank branch,\n"

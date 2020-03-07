@@ -15,8 +15,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.dataobjects.interfaces.KeyIdentifiable;
-import com.avc.mis.beta.dataobjects.interfaces.Legible;
+import com.avc.mis.beta.dataobjects.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -32,7 +31,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name="SUPPLY_CATEGORIES")
 @NamedQuery(name = "SupplyCategory.findAll", query = "select sc from SupplyCategory sc")
-public class SupplyCategory implements Legible, KeyIdentifiable {
+public class SupplyCategory implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +45,7 @@ public class SupplyCategory implements Legible, KeyIdentifiable {
 	}
 	
 	protected boolean canEqual(Object o) {
-		return KeyIdentifiable.canEqualCheckNullId(this, o);
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 
 	@JsonIgnore
@@ -57,7 +56,7 @@ public class SupplyCategory implements Legible, KeyIdentifiable {
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void preUpdate() {
+	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Category name can't be blank");
 	}
