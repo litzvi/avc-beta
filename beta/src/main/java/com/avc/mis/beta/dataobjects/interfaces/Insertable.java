@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dataobjects.interfaces;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.function.UnaryOperator;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  * @author Zvi
  *
  */
-public interface Insertable {
+public interface Insertable extends Serializable{
 	
 	public Integer getId();
 	public boolean isLegal();

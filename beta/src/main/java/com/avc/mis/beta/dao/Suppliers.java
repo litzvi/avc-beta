@@ -113,15 +113,15 @@ public class Suppliers extends DAO {
 	}
 	
 	public void editSupplierMainInfo(Supplier supplier) {
-		getEntityManager().merge(supplier);
+		editEntity(supplier);
 	}
 	
 	public void editContactInfo(ContactDetails contactDetails) {
-		getEntityManager().merge(contactDetails);
+		editEntity(contactDetails);
 	}
 	
 	public void editAccount(PaymentAccount account) {
-		getEntityManager().merge(account);
+		editEntity(account);
 	}	
 	
 	public void addAccount(PaymentAccount account, int contactId) {
@@ -136,11 +136,11 @@ public class Suppliers extends DAO {
 	}
 	
 	public void editContactPerson(CompanyContact contact) {
-		getEntityManager().merge(contact);
+		editEntity(contact);
 		Person person = contact.getPerson();
 		if(person != null && person.isLegal()) {
-			getEntityManager().merge(person);
-			getEntityManager().merge(person.getContactDetails());
+			editEntity(person);
+			editEntity(person.getContactDetails());
 		}
 		else {
 			throw new IllegalArgumentException("Company contact not edited, missing or illegal information");
@@ -166,18 +166,21 @@ public class Suppliers extends DAO {
 		getEntityManager().remove(contact);
 	}
 	
-	private void addEntity(Insertable entity, Insertable reference) {
-		reference = getEntityManager().getReference(reference.getClass(), reference);
+	public void addEntity(Insertable entity, Insertable reference) {
+		reference = getEntityManager().getReference(reference.getClass(), reference.getId());
 		entity.setReference(reference);
 		getEntityManager().persist(entity);
 	}
 	
-	private void removeEntity(Insertable entity) {
+	public void removeEntity(Insertable entity) {
 		entity = getEntityManager().getReference(entity.getClass(), entity.getId());
 		getEntityManager().remove(entity); 
 	}
 	
-	private void editEntity(Insertable entity) {
+	public void editEntity(Insertable entity) {
+		if(entity.getId() == null) {
+			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
+		}
 		getEntityManager().merge(entity);
 	}	
 }

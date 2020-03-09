@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.FetchType;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -32,25 +34,25 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ContactDetailsDTO implements Serializable {
-
+	@EqualsAndHashCode.Exclude
 	private Integer id;
-	private Phone[] phones;
-	private Fax[] faxes;
-	private Email[] emails;
-	private Address addresses;
-	private PaymentAccount[] paymentAccounts;
+	private Set<PhoneDTO> phones;
+	private Set<FaxDTO> faxes;
+	private Set<EmailDTO> emails;
+	private AddressDTO addresses;
+	private Set<PaymentAccountDTO> paymentAccounts;
 	
 	/**
 	 * @param contactDetails
 	 */
 	public ContactDetailsDTO(ContactDetails contactDetails) {
 		this.id = contactDetails.getId();
-		this.phones = contactDetails.getPhones();
-		this.faxes = contactDetails.getFaxes();
-		this.emails = contactDetails.getEmails();
+		this.phones = Arrays.stream(contactDetails.getPhones()).map(p->{return new PhoneDTO(p);}).collect(Collectors.toSet());
+		this.faxes = Arrays.stream(contactDetails.getFaxes()).map(f->{return new FaxDTO(f);}).collect(Collectors.toSet());
+		this.emails = Arrays.stream(contactDetails.getEmails()).map(e->{return new EmailDTO(e);}).collect(Collectors.toSet());
 		Address[] contactAddresses = contactDetails.getAddresses();
-		this.addresses = (contactAddresses.length > 0) ? contactDetails.getAddresses()[0] : null;
-		this.paymentAccounts = contactDetails.getPaymentAccounts();
+		this.addresses = (contactAddresses.length > 0) ? new AddressDTO(contactAddresses[0]) : null;
+		this.paymentAccounts = Arrays.stream(contactDetails.getPaymentAccounts()).map(p->{return new PaymentAccountDTO(p);}).collect(Collectors.toSet());
 	}
 
 }

@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.core.NestedRuntimeException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,19 +22,19 @@ import lombok.extern.slf4j.Slf4j;
 public class ExceptionControler {
 
 	@ExceptionHandler({DataIntegrityViolationException.class})
-    public ResponseEntity<String> handleDataIntegrityViolationException(Exception e){
-        return error(HttpStatus.BAD_REQUEST, e);
+    public ResponseEntity<String> handleDataIntegrityViolationException(NestedRuntimeException e){
+        return error(HttpStatus.BAD_REQUEST, e.getRootCause());
     }
 	
-	@ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<String> handleIllegalArgumentException(Exception e){
-        return error(HttpStatus.BAD_REQUEST, e);
+	@ExceptionHandler({InvalidDataAccessApiUsageException.class})
+    public ResponseEntity<String> handleIllegalArgumentException(NestedRuntimeException e){
+        return error(HttpStatus.BAD_REQUEST, e.getRootCause());
     }
 	
 	
 	
-    private ResponseEntity<String> error(HttpStatus status, Exception e) {
+    private ResponseEntity<String> error(HttpStatus status, Throwable e) {
         log.error("Exception : ", e);
-        return ResponseEntity.status(status).body(e.getMessage());
+        return ResponseEntity.status(status).body(e.getLocalizedMessage());
     }
 }

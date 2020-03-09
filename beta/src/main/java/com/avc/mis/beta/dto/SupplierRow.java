@@ -14,6 +14,7 @@ import com.avc.mis.beta.dataobjects.Supplier;
 import com.avc.mis.beta.dataobjects.SupplyCategory;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -21,9 +22,10 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 public class SupplierRow implements Serializable {
-	
+	@EqualsAndHashCode.Include
 	private Integer id;
 	private String name;
 	private List<String> phones;

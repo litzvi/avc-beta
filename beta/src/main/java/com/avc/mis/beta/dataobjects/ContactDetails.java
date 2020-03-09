@@ -149,7 +149,7 @@ public class ContactDetails implements Insertable {
 	public void prePersistOrUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Contact details not legal\n "
-					+ "has to reference a compony and person");
+					+ "has to reference a compony or person");
 	}
 	
 	@Override

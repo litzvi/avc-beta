@@ -1,12 +1,22 @@
 package com.avc.mis.beta;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
@@ -22,10 +32,19 @@ import com.avc.mis.beta.dataobjects.Person;
 import com.avc.mis.beta.dataobjects.Phone;
 import com.avc.mis.beta.dataobjects.Supplier;
 import com.avc.mis.beta.dataobjects.SupplyCategory;
+import com.avc.mis.beta.dto.FaxDTO;
+import com.avc.mis.beta.dto.PhoneDTO;
+import com.avc.mis.beta.dto.SupplierDTO;
+import com.avc.mis.beta.dto.SupplierRow;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
+//@Transactional
 class BetaApplicationTests {
+	
+	private final int NUM_ITEMS = 3;
+
 	
 	@Autowired
 	Suppliers suppliers;
@@ -33,7 +52,182 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1149;
+	private static Integer SERIAL_NO = 1157;
+	private ObjectMapper objMapper = new ObjectMapper(); 
+	
+	private Supplier basicSupplier() {
+		Supplier supplier = new Supplier();
+		supplier.setName(" \t test supplier 33	 \t");
+		supplier.setLocalName(" localName\t");
+		supplier.setEnglishName("\t  englishName ");
+		supplier.setLicense("\t  license \t");
+		supplier.setTaxCode("  \ttaxCode\t ");
+		supplier.setRegistrationLocation("\t   registrationLocation - any text  \t");
+		return supplier;
+	}
+	
+	private Supplier fullSupplier() {
+		Supplier supplier = basicSupplier();
+		//add supply categories
+		List<SupplyCategory> supplyCategories = referenceTables.getAllSupplyCategories();
+		supplyCategories.remove(0);
+		supplyCategories.forEach(category -> supplier.getSupplyCategories().add(category));
+		//add phones
+		Phone[] phones = new Phone[NUM_ITEMS];
+		for(int i=0; i<phones.length; i++) {
+			phones[i] = new Phone();
+			phones[i].setValue(" value " + i) ;
+		}
+		supplier.getContactDetails().setPhones(phones);
+		//add faxes
+		Fax[] faxes = new Fax[NUM_ITEMS];
+		for(int i=0; i<faxes.length; i++) {
+			faxes[i] = new Fax();
+			faxes[i].setValue(" value " + i) ;
+		}
+		supplier.getContactDetails().setFaxes(faxes);
+		//add emails
+		Email[] emails = new Email[NUM_ITEMS];
+		for(int i=0; i<emails.length; i++) {
+			emails[i] = new Email();
+			emails[i].setValue(" value " + i + "	  	") ;
+		}
+		supplier.getContactDetails().setEmails(emails);
+		//add addresses
+		//add company contacts
+		CompanyContact[] contacts = new CompanyContact[NUM_ITEMS];
+		for(int i=0; i<contacts.length; i++) {
+			contacts[i] = new CompanyContact();
+			Person person = new Person();
+			person.setName("person " + i);
+			contacts[i].setPerson(person);
+			Fax fax = new Fax();
+			fax.setValue("fax for person " + i);
+			Phone phone = new Phone();
+			phone.setValue("phone for person " + i);
+			Email email = new Email();
+			email.setValue("email for person " + i);
+			person.getContactDetails().setPhones(new Phone[] {phone});
+			person.getContactDetails().setFaxes(new Fax[] {fax});
+			person.getContactDetails().setEmails(new Email[] {email});
+			
+		}
+		supplier.setCompanyContacts(contacts);
+		
+		return supplier;
+	}
+	
+	@Test
+	void suppliersTest() throws JsonProcessingException {
+		//supplier with null name
+		Supplier supplier = basicSupplier();
+		supplier.setName(null);
+		try {
+			suppliers.addSupplier(supplier);
+			fail("should trow exception for supplier with null name");
+		} catch (InvalidDataAccessApiUsageException e) {
+			System.out.println(e.getMessage());
+		}
+		//supplier with name of white spaces
+		supplier.setName(" 	");
+		try {
+			suppliers.addSupplier(supplier);
+			fail("should trow exception for supplier with blank name");
+		} catch (InvalidDataAccessApiUsageException e) {
+			System.out.println(e.getMessage());
+		}
+		//adding supplier
+		supplier = basicSupplier();
+		SupplierDTO expected = new SupplierDTO(supplier);
+		expected.setName(supplier.getName().trim());
+		suppliers.addSupplier(supplier);
+		SupplierDTO actual = suppliers.getSupplier(supplier.getId());
+		assertEquals(expected, actual, "Failed test adding supplier with white spaces added to all info fields");
+		//try adding supplier with duplicate name
+		Supplier dupSupplier = basicSupplier();
+		try {
+			suppliers.addSupplier(dupSupplier);
+			fail("should throw exception for duplicate supplier name");
+		}catch(DataIntegrityViolationException e) {
+			System.out.println(e.getMessage());
+		}
+		//edit main supplier info
+		supplier.setLocalName("new localName\t");
+		supplier.setEnglishName("\tnew  englishName ");
+		supplier.setLicense("\tnew  license \t");
+		supplier.setTaxCode("new  \ttaxCode\t ");
+		supplier.setRegistrationLocation("\tnew   registrationLocation - any text  \t");
+		expected = new SupplierDTO(supplier);
+		suppliers.editSupplierMainInfo(supplier);
+		actual = suppliers.getSupplier(supplier.getId());
+		assertEquals(expected, actual, "Failed test adding supplier with white spaces added to all info fields");
+		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		
+		//add, remove supply categories
+		supplier = fullSupplier();
+		expected = new SupplierDTO(supplier);
+		suppliers.addSupplier(supplier);
+		Set<SupplyCategory> categories = supplier.getSupplyCategories();
+		SupplyCategory removedCategory = categories.iterator().next();
+		SupplyCategory addedCategory = categories.iterator().next();
+		categories.remove(removedCategory);
+		categories.remove(addedCategory);
+		suppliers.editSupplierMainInfo(supplier);
+		categories = supplier.getSupplyCategories();
+		categories.add(addedCategory);
+		expected.getSupplyCategories().remove(removedCategory);
+		suppliers.editSupplierMainInfo(supplier);
+		actual = suppliers.getSupplier(supplier.getId());
+		assertEquals(expected, actual, "Failed test adding and removing supply categories");
+		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		
+		//add supplier with full details
+		supplier = fullSupplier();
+		expected = new SupplierDTO(supplier);
+		expected.getContactDetails().getPhones().forEach(phone -> phone.getValue().trim());
+		expected.getContactDetails().getEmails().forEach(email -> email.getValue().trim());		
+		suppliers.addSupplier(supplier);
+		actual = suppliers.getSupplier(supplier.getId());
+		assertEquals(expected, actual, "Failed test adding supplier contact details");
+		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		
+		//add supplier with full details add, remove and update a phone, fax and email
+		supplier = fullSupplier();
+		expected = new SupplierDTO(supplier);
+		suppliers.addSupplier(supplier);
+		Phone[] phones = supplier.getContactDetails().getPhones();
+		Fax[] faxes = supplier.getContactDetails().getFaxes();
+		Phone removedPhone = phones[0];
+		Fax removedFax = faxes[0];
+		Phone updatedPhone = phones[1];
+		Fax updatedFax = faxes[1];
+		expected.getContactDetails().getPhones().remove(new PhoneDTO(updatedPhone));
+		expected.getContactDetails().getFaxes().remove(new FaxDTO(updatedFax));
+		updatedPhone.setValue("updated value");
+		updatedFax.setValue("updated value");
+		Phone addedPhone = new Phone();
+		Fax addedFax = new Fax();
+		addedPhone.setValue("added phone 1");
+		addedFax.setValue("added fax 1");
+		suppliers.addEntity(addedPhone, supplier.getContactDetails());
+		suppliers.addEntity(addedFax, supplier.getContactDetails());
+		expected.getContactDetails().getPhones().add(new PhoneDTO(addedPhone));
+		expected.getContactDetails().getFaxes().add(new FaxDTO(addedFax));
+		suppliers.removeEntity(removedPhone);
+		suppliers.removeEntity(removedFax);
+		expected.getContactDetails().getPhones().remove(new PhoneDTO(removedPhone));
+		expected.getContactDetails().getFaxes().remove(new FaxDTO(removedFax));
+		suppliers.editEntity(updatedPhone);
+		suppliers.editEntity(updatedFax);
+		expected.getContactDetails().getPhones().add(new PhoneDTO(updatedPhone));
+		expected.getContactDetails().getFaxes().add(new FaxDTO(updatedFax));
+		actual = suppliers.getSupplier(supplier.getId());
+		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
+	
+		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		
+		
+	}
 
 	@Disabled
 	@Test
@@ -110,6 +304,7 @@ class BetaApplicationTests {
 		
 	}
 	
+	@Disabled
 	@Test
 	void editSupplierIsSuccessfulTest() {
 		Supplier supplier = buildSupplier("remove test" + SERIAL_NO);
@@ -149,6 +344,7 @@ class BetaApplicationTests {
 		
 	}
 	
+	@Disabled
 	@Test
 	void insertSupplierIsSuccessfulTest() {	
 		
@@ -187,7 +383,7 @@ class BetaApplicationTests {
 		
 	}
 	
-
+	@Disabled
 	@Test
 	void insertSupplyCategoriesTest() {
 		

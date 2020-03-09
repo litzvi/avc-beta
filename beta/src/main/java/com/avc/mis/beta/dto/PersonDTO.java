@@ -17,6 +17,7 @@ import com.avc.mis.beta.dataobjects.Person;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -26,10 +27,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PersonDTO implements Serializable {
-
+	@EqualsAndHashCode.Exclude
 	private Integer id;
 	private String name;
-	private IdCard idCard;
+	private IdCardDTO idCard;
 	private ContactDetailsDTO contactDetails;
 
 	/**
@@ -38,7 +39,7 @@ public class PersonDTO implements Serializable {
 	public PersonDTO(Person person) {
 		this.id = person.getId();
 		this.name = person.getName();
-		this.idCard = person.getIdCard();
+		this.idCard = new IdCardDTO(person.getIdCard());
 		this.contactDetails = new ContactDetailsDTO(person.getContactDetails());
 	}
 

@@ -11,6 +11,7 @@ import com.avc.mis.beta.dataobjects.Company;
 import com.avc.mis.beta.dataobjects.CompanyContact;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CompanyDTO implements Serializable {
-
+	@EqualsAndHashCode.Exclude
 	private Integer id;
 	private String name;
 	private String localName;
