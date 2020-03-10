@@ -13,6 +13,7 @@ import com.avc.mis.beta.dataobjects.SupplyCategory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -30,7 +31,7 @@ public class SupplierDTO extends CompanyDTO implements Serializable {
 	/**
 	 * @param supplier
 	 */
-	public SupplierDTO(Supplier supplier) {
+	public SupplierDTO(@NonNull Supplier supplier) {
 		super(supplier);
 		this.supplyCategories.addAll(supplier.getSupplyCategories());
 	}

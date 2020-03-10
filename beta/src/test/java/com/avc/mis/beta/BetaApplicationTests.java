@@ -52,12 +52,12 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1157;
+	private static Integer SERIAL_NO = 1173;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	private Supplier basicSupplier() {
 		Supplier supplier = new Supplier();
-		supplier.setName(" \t test supplier 33	 \t");
+		supplier.setName(" \t test supplier	 \t" + SERIAL_NO);
 		supplier.setLocalName(" localName\t");
 		supplier.setEnglishName("\t  englishName ");
 		supplier.setLicense("\t  license \t");

@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import com.avc.mis.beta.dataobjects.CompanyContact;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -35,7 +37,7 @@ public class CompanyDTO implements Serializable {
 	/**
 	 * @param company
 	 */
-	public CompanyDTO(Company company) {
+	public CompanyDTO(@NonNull Company company) {
 		this.id = company.getId();
 		this.name = company.getName();
 		this.localName = company.getLocalName();
@@ -43,11 +45,14 @@ public class CompanyDTO implements Serializable {
 		this.license = company.getLicense();
 		this.taxCode = company.getTaxCode();
 		this.registrationLocation = company.getRegistrationLocation();
-		this.contactDetails = new ContactDetailsDTO(company.getContactDetails());
-//		company.getCompanyContacts().forEach((contact) -> this.companyContacts.add(new CompanyContactDTO(contact)));
+		if(company.getContactDetails() != null)
+			this.contactDetails = new ContactDetailsDTO(company.getContactDetails());
+		if(company.getCompanyContacts() != null)
+			Arrays.stream(company.getCompanyContacts())
+				.forEach((contact) -> this.companyContacts.add(new CompanyContactDTO(contact)));
 	}
 	
-	public void addCompanyContact(CompanyContact contact) {
+	public void addCompanyContact(@NonNull CompanyContact contact) {
 		this.companyContacts.add(new CompanyContactDTO(contact));
 	}
 	

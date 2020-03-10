@@ -107,6 +107,7 @@ public class Suppliers extends DAO {
 		}
 		for(CompanyContact companyContact: supplier.getCompanyContacts())  {
 			Person person = companyContact.getPerson();
+			getEntityManager().remove(companyContact);
 			getEntityManager().remove(person);
 		}
 		getEntityManager().remove(supplier);

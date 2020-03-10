@@ -15,6 +15,7 @@ import com.avc.mis.beta.dataobjects.Person;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -30,7 +31,9 @@ public class CompanyContactDTO implements Serializable {
 	/**
 	 * @param contact
 	 */
-	public CompanyContactDTO(CompanyContact contact) {
+	public CompanyContactDTO(@NonNull CompanyContact contact) {
+		if(contact.getPerson() == null)
+			throw new NullPointerException("Company contact has to reference a person");
 		this.person = new PersonDTO(contact.getPerson());
 		this.position = contact.getPosition();
 	}

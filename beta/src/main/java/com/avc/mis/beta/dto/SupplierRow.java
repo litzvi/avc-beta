@@ -16,6 +16,7 @@ import com.avc.mis.beta.dataobjects.SupplyCategory;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -32,7 +33,7 @@ public class SupplierRow implements Serializable {
 	private List<String> emails;
 	private List<String> supplyCategories;
 	
-	public SupplierRow(Supplier supplier) {
+	public SupplierRow(@NonNull Supplier supplier) {
 		this.id = supplier.getId();
 		this.name = supplier.getName();
 		phones = Arrays.stream(supplier.getContactDetails().getPhones())

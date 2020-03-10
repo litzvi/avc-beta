@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonFormat.Feature;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -45,7 +46,7 @@ public class ContactDetailsDTO implements Serializable {
 	/**
 	 * @param contactDetails
 	 */
-	public ContactDetailsDTO(ContactDetails contactDetails) {
+	public ContactDetailsDTO(@NonNull ContactDetails contactDetails) {
 		this.id = contactDetails.getId();
 		this.phones = Arrays.stream(contactDetails.getPhones()).map(p->{return new PhoneDTO(p);}).collect(Collectors.toSet());
 		this.faxes = Arrays.stream(contactDetails.getFaxes()).map(f->{return new FaxDTO(f);}).collect(Collectors.toSet());

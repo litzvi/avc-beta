@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -36,11 +37,13 @@ public class PersonDTO implements Serializable {
 	/**
 	 * @param person
 	 */
-	public PersonDTO(Person person) {
+	public PersonDTO(@NonNull Person person) {
 		this.id = person.getId();
 		this.name = person.getName();
-		this.idCard = new IdCardDTO(person.getIdCard());
-		this.contactDetails = new ContactDetailsDTO(person.getContactDetails());
+		if(person.getIdCard() != null)
+			this.idCard = new IdCardDTO(person.getIdCard());
+		if(person.getContactDetails() != null)
+			this.contactDetails = new ContactDetailsDTO(person.getContactDetails());
 	}
 
 }
