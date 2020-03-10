@@ -33,7 +33,8 @@ public class Suppliers extends DAO {
 	
 //	@Autowired
 //	private SupplierReposetory supplierReposetory;
-			
+		
+	@Transactional(readOnly = true)
 	public List<SupplierRow> getSuppliers() {
 		
 		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findAll", Supplier.class);
@@ -58,6 +59,7 @@ public class Suppliers extends DAO {
 		}
 	}
 	
+	@Transactional(readOnly = true)
 	public SupplierDTO getSupplier(int id) {
 		
 		TypedQuery<Supplier> querySupplyer = getEntityManager().createNamedQuery("Supplier.details", Supplier.class);
@@ -79,11 +81,7 @@ public class Suppliers extends DAO {
 		
 		return supplierDTO;
 	}
-	/*
-	public void editSupplier() {
-		
-	}
-	*/
+	
 	/**
 	 * Soft deletes company.
 	 * Dosen't remove stand alone entities created with the company.

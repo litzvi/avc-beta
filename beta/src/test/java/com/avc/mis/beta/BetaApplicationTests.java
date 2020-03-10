@@ -1,27 +1,25 @@
 package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dataobjects.Address;
 import com.avc.mis.beta.dataobjects.BankAccount;
 import com.avc.mis.beta.dataobjects.BankBranch;
+import com.avc.mis.beta.dataobjects.City;
 import com.avc.mis.beta.dataobjects.CompanyContact;
 import com.avc.mis.beta.dataobjects.ContactDetails;
 import com.avc.mis.beta.dataobjects.Email;
@@ -35,7 +33,6 @@ import com.avc.mis.beta.dataobjects.SupplyCategory;
 import com.avc.mis.beta.dto.FaxDTO;
 import com.avc.mis.beta.dto.PhoneDTO;
 import com.avc.mis.beta.dto.SupplierDTO;
-import com.avc.mis.beta.dto.SupplierRow;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -52,7 +49,7 @@ class BetaApplicationTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1173;
+	private static Integer SERIAL_NO = 1178;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	private Supplier basicSupplier() {
@@ -93,7 +90,26 @@ class BetaApplicationTests {
 			emails[i].setValue(" value " + i + "	  	") ;
 		}
 		supplier.getContactDetails().setEmails(emails);
-		//add addresses
+		//add address
+		Address address = new Address();
+		City city = new City();
+		city.setId(1);
+		address.setCity(city);
+		address.setStreetAddress("streetAddress for full supplier");
+		supplier.getContactDetails().setAddresses(new Address[] {address});
+		//add payment accounts
+		PaymentAccount[] paymentAccounts = new PaymentAccount[NUM_ITEMS];
+		for(int i=0; i<paymentAccounts.length; i++) {
+			paymentAccounts[i] = new PaymentAccount();
+			BankAccount bankAccount = new BankAccount();
+			bankAccount.setAccountNo("account number for full supplier " + i);
+			bankAccount.setOwnerName("owner name for full supplier " + i);
+			BankBranch branch = new BankBranch();
+			branch.setId(1);
+			bankAccount.setBranch(branch);
+			paymentAccounts[i].setBankAccount(bankAccount);
+		}
+		supplier.getContactDetails().setPaymentAccounts(paymentAccounts);
 		//add company contacts
 		CompanyContact[] contacts = new CompanyContact[NUM_ITEMS];
 		for(int i=0; i<contacts.length; i++) {
@@ -113,12 +129,13 @@ class BetaApplicationTests {
 			
 		}
 		supplier.setCompanyContacts(contacts);
+		System.out.println(supplier);
 		
 		return supplier;
 	}
 	
 	@Test
-	void suppliersTest() throws JsonProcessingException {
+	void suppliersTest() {
 		//supplier with null name
 		Supplier supplier = basicSupplier();
 		supplier.setName(null);
@@ -229,21 +246,6 @@ class BetaApplicationTests {
 		
 	}
 
-	@Disabled
-	@Test
-	void getSupplierSuccesfulTest() throws JsonProcessingException {
-//		ObjectMapper onjMapper = new ObjectMapper(); 
-//		String supplierJson = onjMapper.writeValueAsString(suppliers.getSupplier(196)); 
-//		System.out.println(supplierJson);
-		
-		System.out.println(suppliers.getSupplier(196));
-	}
-	
-	@Disabled
-	@Test
-	void getSuppliersTableTest() {
-		suppliers.getSuppliers().forEach(supplier -> System.out.println(supplier));
-	}
 	
 	private Supplier buildSupplier(String name) {
 		Supplier supplier = new Supplier();
@@ -303,94 +305,21 @@ class BetaApplicationTests {
 		return supplier;
 		
 	}
-	
-	@Disabled
-	@Test
-	void editSupplierIsSuccessfulTest() {
-		Supplier supplier = buildSupplier("remove test" + SERIAL_NO);
-		suppliers.addSupplier(supplier);
-		Integer id = supplier.getId();
-		String addedSupplier = suppliers.getSupplier(id).toString();
-		supplier.setEnglishName("englishName" + SERIAL_NO); // edit supplier basic info
-		supplier.setName("edit name test" + SERIAL_NO); // edit supplier name
-		List<SupplyCategory> categoriesToRemove = referenceTables.getAllSupplyCategories();
-		categoriesToRemove.remove(0); categoriesToRemove.remove(0);
-		supplier.getSupplyCategories().removeAll(categoriesToRemove);// remove categories besides for 2
-		suppliers.editSupplierMainInfo(supplier);
-		String editedSupplier = suppliers.getSupplier(id).toString();
-		ContactDetails contactDetails = supplier.getContactDetails();
-		System.out.println(contactDetails);
-		Phone removed = contactDetails.getPhones()[0];
-		Phone added = new Phone();
-		added.setValue(removed.getValue());
-//		contactDetails.getPhones().clear();
-		removed.setValue("changed phone 0" + SERIAL_NO);
-		contactDetails.setPhones(new Phone[] {removed, added});
-//		contactDetails.getPhones().add(removed);
-//		contactDetails.getPhones().add(added);
-//		iterator.next();
-//		iterator.remove();
-//		iterator = contactDetails.getPhones().iterator();
-//		iterator.next().setName("changed phone 0" + SERIAL_NO);	
-		System.out.println(contactDetails);
-		suppliers.editContactInfo(contactDetails);
-		String changedContactDetails = suppliers.getSupplier(id).toString();
-		System.out.println(addedSupplier);
-		System.out.println(editedSupplier);
-		System.out.println(changedContactDetails);
-//		suppliers.removeSupplier(id);
-//		Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> suppliers.getSupplier(id));
-		
-		
-	}
+			
 	
 	@Disabled
 	@Test
 	void insertSupplierIsSuccessfulTest() {	
 		
-		//supplier with name only, creates a record for contact details for company
-		//supplier with duplicate name
 		//not adding an empty phone/email/fax/address
 		//address without a city
 		//adding non existing city
-		//adding 0/1/multiple categories
-		//default supplier is active
-		//adding 0/1/multiple company contacts
-		//adding 0/1/multiple phones/emails/faxes/addresses
-		//rolling back failed insert
-		//non existing city to address
 		//inserting 2 accounts with the same info
 		//never crash the program
 		//check if can add existing bank account
 		//check if can add existing person to company contact
-		//check inserting 0/1/many company contacts
-		//check if all fileds are fetched when using jakson toJson
-				
-		
-//		HashSet<SupplyCategory> supplyCategories = new HashSet<>();
-//		supplyCategories.addAll(referenceTables.getAllSupplyCategories());
-//		List<Object[]> suppliersList = suppliers.getSuppliersBasic();
-//		for(Object[] objectArray: suppliersList) {
-//			System.out.println(objectArray);
-//		}
-		//EDIT
-//		supplyCategories = new HashSet<>();
-//		supplier.setSupplyCategories(supplyCategories);
-//		supplier.setLicense("license " + SERIAL_NO);
-////		System.out.println(supplier.getContactDetails());
-////		supplier.setContactDetails(new ContactDetails());
-//		suppliers.editSupplierInformation(supplier);
 		
 	}
 	
-	@Disabled
-	@Test
-	void insertSupplyCategoriesTest() {
-		
-//		SupplyCategory category = new SupplyCategory();
-//		category.setName("Bags " + SERIAL_NO);
-//		referenceTables.insertSupplyCategory(category);
-		
-	}
 
 }
