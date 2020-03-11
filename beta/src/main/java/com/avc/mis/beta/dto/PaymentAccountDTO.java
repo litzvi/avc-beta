@@ -5,9 +5,9 @@ package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
 
-import com.avc.mis.beta.dataobjects.BankAccount;
-import com.avc.mis.beta.dataobjects.PaymentAccount;
-import com.avc.mis.beta.dataobjects.Phone;
+import com.avc.mis.beta.entities.data.BankAccount;
+import com.avc.mis.beta.entities.data.PaymentAccount;
+import com.avc.mis.beta.entities.data.Phone;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

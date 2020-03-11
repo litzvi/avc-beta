@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dataobjects;
+package com.avc.mis.beta.entities.data;
 
 import java.util.Optional;
 
@@ -15,7 +15,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.entities.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;

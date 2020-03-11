@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dataobjects;
+package com.avc.mis.beta.entities.data;
 
 import java.util.HashSet;
 import java.util.Set;

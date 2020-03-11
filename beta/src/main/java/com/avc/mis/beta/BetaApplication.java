@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.Suppliers;
-import com.avc.mis.beta.dataobjects.Supplier;
+import com.avc.mis.beta.entities.data.Supplier;
 
 @SpringBootApplication
 public class BetaApplication {

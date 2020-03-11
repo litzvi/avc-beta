@@ -5,8 +5,8 @@ package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
 
-import com.avc.mis.beta.dataobjects.Fax;
-import com.avc.mis.beta.dataobjects.Phone;
+import com.avc.mis.beta.entities.data.Fax;
+import com.avc.mis.beta.entities.data.Phone;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

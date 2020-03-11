@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.avc.mis.beta.dataobjects.Supplier;
+import com.avc.mis.beta.entities.data.Supplier;
 
 /**
  * @author Zvi

@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
-import com.avc.mis.beta.dataobjects.Supplier;
 import com.avc.mis.beta.dto.SupplierDTO;
 import com.avc.mis.beta.dto.SupplierRow;
+import com.avc.mis.beta.entities.data.Supplier;
 import com.google.gson.Gson;
 
 /**
@@ -61,14 +61,14 @@ public class Controller {
 	@RequestMapping("/setup")
 	public List<String> getSetup() {
 		List<String> result = new ArrayList<String>();
-		String cityholder = refeDao.getCities();
-		result.add(cityholder);
-		String countryholder = refeDao.getCountries();
-		result.add(countryholder);
-		String Supplyholder = refeDao.getSupplyCategories();
-		result.add(Supplyholder);
-		String Positionholder = refeDao.getCompanyPositions();
-		result.add(Positionholder);  
+//		String cityholder = refeDao.getCities();
+//		result.add(cityholder);
+//		String countryholder = refeDao.getCountries();
+//		result.add(countryholder);
+//		String Supplyholder = refeDao.getSupplyCategories();
+//		result.add(Supplyholder);
+//		String Positionholder = refeDao.getCompanyPositions();
+//		result.add(Positionholder);  
 		return result; 
 	}
 	

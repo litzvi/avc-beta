@@ -5,23 +5,11 @@ package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-
-import com.avc.mis.beta.dataobjects.Address;
-import com.avc.mis.beta.dataobjects.ContactDetails;
-import com.avc.mis.beta.dataobjects.Email;
-import com.avc.mis.beta.dataobjects.Fax;
-import com.avc.mis.beta.dataobjects.PaymentAccount;
-import com.avc.mis.beta.dataobjects.Phone;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonFormat.Feature;
+import com.avc.mis.beta.entities.data.Address;
+import com.avc.mis.beta.entities.data.ContactDetails;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

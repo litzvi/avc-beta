@@ -1,11 +1,9 @@
 /**
  * 
  */
-package com.avc.mis.beta.dataobjects;
+package com.avc.mis.beta.entities.data;
 
-import java.util.HashSet;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,20 +11,21 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
-import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.entities.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * @author Zvi
@@ -36,23 +35,23 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name="COUNTRIES")
-@NamedQuery(name = "Country.findAll", query = "select c from Country c")
-public class Country implements Insertable {
+@Table(name="CITIES", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "countryId"})})
+@NamedQuery(name = "City.findAll", query = "select c from City c")
+public class City implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "name", unique = true, nullable = false)
+	@Column(name = "name", nullable = false)
 	private String value;
 	
-//	@JsonBackReference(value = "city_country")
-	@JsonIgnore
-	@ToString.Exclude 
-	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
-	private Set<City> cities = new HashSet<>();
+//	@JsonManagedReference(value = "city_country")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "countryId", nullable = false)
+	private Country country;
 	
+
 	public void setValue(String value) {
 		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}
@@ -71,6 +70,6 @@ public class Country implements Insertable {
 	@Override
 	public void prePersistOrUpdate() {
 		if(!isLegal())
-			throw new IllegalArgumentException("Country name can't be blank");
+			throw new IllegalArgumentException("City name can't be blank");
 	}
 }

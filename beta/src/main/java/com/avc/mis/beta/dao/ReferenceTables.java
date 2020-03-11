@@ -12,12 +12,12 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dataobjects.Bank;
-import com.avc.mis.beta.dataobjects.BankBranch;
-import com.avc.mis.beta.dataobjects.City;
-import com.avc.mis.beta.dataobjects.CompanyPosition;
-import com.avc.mis.beta.dataobjects.Country;
-import com.avc.mis.beta.dataobjects.SupplyCategory;
+import com.avc.mis.beta.entities.data.Bank;
+import com.avc.mis.beta.entities.data.BankBranch;
+import com.avc.mis.beta.entities.data.City;
+import com.avc.mis.beta.entities.data.CompanyPosition;
+import com.avc.mis.beta.entities.data.Country;
+import com.avc.mis.beta.entities.data.SupplyCategory;
 
 /**
  * @author Zvi

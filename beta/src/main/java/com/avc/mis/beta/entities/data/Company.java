@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dataobjects;
+package com.avc.mis.beta.entities.data;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -26,7 +26,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.entities.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 

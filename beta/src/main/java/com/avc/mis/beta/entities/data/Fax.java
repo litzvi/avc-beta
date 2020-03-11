@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dataobjects;
+package com.avc.mis.beta.entities.data;
 
 import java.util.Optional;
 
@@ -17,7 +17,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.entities.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,24 +35,24 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name="EMAILS")
-public class Email implements Insertable {
-
+@Table(name="FAXES")
+public class Fax implements Insertable {
+	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	@ToString.Exclude
-	@JsonBackReference(value = "contactDetails_emails")
+	@JsonBackReference(value = "contactDetails_faxes")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "contactId", updatable = false)
+	@JoinColumn(name = "contactId", updatable=false)
 	private ContactDetails contactDetails;
-
-	@Column(name = "email", nullable = false)
+	
+	@Column(name = "fax", nullable = false)
 	private String value;
 	
 	public void setValue(String value) {
-		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
+		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);;
 	}
 	
 	protected boolean canEqual(Object o) {
@@ -72,7 +72,7 @@ public class Email implements Insertable {
 	@Override
 	public void prePersistOrUpdate() {
 		if(!isLegal())
-			throw new IllegalArgumentException("Email can't be blank");
+			throw new IllegalArgumentException("Fax number can't be blank");
 	}
 	
 	@Override
@@ -80,5 +80,5 @@ public class Email implements Insertable {
 		this.setContactDetails((ContactDetails)referenced);
 		
 	}
-		
+	
 }

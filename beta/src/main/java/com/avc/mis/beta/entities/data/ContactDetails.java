@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dataobjects;
+package com.avc.mis.beta.entities.data;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +24,7 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Check;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.entities.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;

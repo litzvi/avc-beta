@@ -4,11 +4,9 @@
 package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
-import java.util.Comparator;
 
-import com.avc.mis.beta.dataobjects.Address;
-import com.avc.mis.beta.dataobjects.City;
-import com.avc.mis.beta.dataobjects.Phone;
+import com.avc.mis.beta.entities.data.Address;
+import com.avc.mis.beta.entities.data.City;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

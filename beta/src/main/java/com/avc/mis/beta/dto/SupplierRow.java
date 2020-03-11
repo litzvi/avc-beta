@@ -8,10 +8,10 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dataobjects.Email;
-import com.avc.mis.beta.dataobjects.Phone;
-import com.avc.mis.beta.dataobjects.Supplier;
-import com.avc.mis.beta.dataobjects.SupplyCategory;
+import com.avc.mis.beta.entities.data.Email;
+import com.avc.mis.beta.entities.data.Phone;
+import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.data.SupplyCategory;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

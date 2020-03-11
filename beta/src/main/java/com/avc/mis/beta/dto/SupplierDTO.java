@@ -7,8 +7,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.avc.mis.beta.dataobjects.Supplier;
-import com.avc.mis.beta.dataobjects.SupplyCategory;
+import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.data.SupplyCategory;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

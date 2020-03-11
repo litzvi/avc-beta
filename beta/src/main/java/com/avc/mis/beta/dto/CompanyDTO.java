@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.avc.mis.beta.dataobjects.Company;
-import com.avc.mis.beta.dataobjects.CompanyContact;
+import com.avc.mis.beta.entities.data.Company;
+import com.avc.mis.beta.entities.data.CompanyContact;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

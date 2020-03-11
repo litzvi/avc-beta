@@ -12,16 +12,16 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dataobjects.BankAccount;
-import com.avc.mis.beta.dataobjects.CompanyContact;
-import com.avc.mis.beta.dataobjects.CompanyContactPK;
-import com.avc.mis.beta.dataobjects.ContactDetails;
-import com.avc.mis.beta.dataobjects.PaymentAccount;
-import com.avc.mis.beta.dataobjects.Person;
-import com.avc.mis.beta.dataobjects.Supplier;
-import com.avc.mis.beta.dataobjects.interfaces.Insertable;
 import com.avc.mis.beta.dto.SupplierDTO;
 import com.avc.mis.beta.dto.SupplierRow;
+import com.avc.mis.beta.entities.data.BankAccount;
+import com.avc.mis.beta.entities.data.CompanyContact;
+import com.avc.mis.beta.entities.data.CompanyContactPK;
+import com.avc.mis.beta.entities.data.ContactDetails;
+import com.avc.mis.beta.entities.data.PaymentAccount;
+import com.avc.mis.beta.entities.data.Person;
+import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.interfaces.Insertable;
 
 /**
  * @author Zvi

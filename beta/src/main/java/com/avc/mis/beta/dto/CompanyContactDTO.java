@@ -9,9 +9,9 @@ import java.util.Set;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.avc.mis.beta.dataobjects.CompanyContact;
-import com.avc.mis.beta.dataobjects.CompanyPosition;
-import com.avc.mis.beta.dataobjects.Person;
+import com.avc.mis.beta.entities.data.CompanyContact;
+import com.avc.mis.beta.entities.data.CompanyPosition;
+import com.avc.mis.beta.entities.data.Person;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

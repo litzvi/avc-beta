@@ -1,25 +1,27 @@
 /**
  * 
  */
-package com.avc.mis.beta.dataobjects;
+package com.avc.mis.beta.entities.data;
 
-import javax.persistence.CascadeType;
+import java.util.Optional;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.entities.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -33,32 +35,36 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name="PAYMENT_ACCOUNTS")
-public class PaymentAccount implements Insertable {
-	
+@Table(name="ADDRESSES")
+public class Address implements Insertable {
+
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
+//	@Column(name="contactId", nullable = false)
+//	private int contactId;
+	
 	@ToString.Exclude
-	@JsonBackReference(value = "contactDetails_paymentAccount")
+	@JsonBackReference(value = "contactDetails_addresses")
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "contactId", updatable = false)
+	@JoinColumn(name = "contactId", updatable=false)
 	private ContactDetails contactDetails;
 	
-	@JoinTable(name = "BANK_PAYEES", 
-			joinColumns = @JoinColumn(name="paymentId", referencedColumnName="id"),
-			inverseJoinColumns = @JoinColumn(name = "accountId",referencedColumnName = "id"))
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-	private BankAccount bankAccount;
+	@Column(nullable = false)
+	private String streetAddress;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="cityId")
+	private City city;
+	
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = Optional.ofNullable(streetAddress).map(s -> s.trim()).orElse(null);
+	}
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
-	
-//	@ToString.Exclude
-//	@Column(nullable = false)
-//	private RecordStatus status = RecordStatus.ACTIVE;
 	
 	/**
 	 * @return
@@ -66,15 +72,7 @@ public class PaymentAccount implements Insertable {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return getBankAccount() != null && getBankAccount().isLegal();
-	}
-	
-	@PrePersist @PreUpdate
-	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal())
-			throw new IllegalArgumentException("Payment info not legal\n "
-					+ "Account has to have a legal bank account");
+		return StringUtils.isNotBlank(getStreetAddress());
 	}
 	
 	@Override
@@ -82,4 +80,13 @@ public class PaymentAccount implements Insertable {
 		this.setContactDetails((ContactDetails)referenced);
 		
 	}
+	
+
+	@PrePersist @PreUpdate
+	@Override
+	public void prePersistOrUpdate() {
+		if(!isLegal())
+			throw new IllegalArgumentException("Street address can't be blank");
+	}
+	
 }

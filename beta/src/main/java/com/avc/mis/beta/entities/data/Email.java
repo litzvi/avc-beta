@@ -1,7 +1,9 @@
 /**
  * 
  */
-package com.avc.mis.beta.dataobjects;
+package com.avc.mis.beta.entities.data;
+
+import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,18 +13,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.entities.interfaces.Insertable;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -32,40 +35,50 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name="BANK_BRANCHES")
-@NamedQuery(name = "BankBranch.findAll", query = "select bb from BankBranch bb")
-public class BankBranch implements Insertable {
-	
+@Table(name="EMAILS")
+public class Email implements Insertable {
+
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "name", nullable = false)
+	@ToString.Exclude
+	@JsonBackReference(value = "contactDetails_emails")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "contactId", updatable = false)
+	private ContactDetails contactDetails;
+
+	@Column(name = "email", nullable = false)
 	private String value;
 	
-//	@JsonManagedReference(value = "branch_bank")
-	@ManyToOne(optional = false, fetch = FetchType.EAGER)
-	@JoinColumn(name = "bankId", nullable = false)
-	private Bank bank;
-	
 	public void setValue(String value) {
-		this.value = value.trim();
+		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
+	/**
+	 * @return
+	 */
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return StringUtils.isNotBlank(getValue()) && getBank() != null;
+		return StringUtils.isNotBlank(getValue());
 	}
 	
 	@PrePersist @PreUpdate
 	@Override
 	public void prePersistOrUpdate() {
 		if(!isLegal())
-			throw new IllegalArgumentException("Branch name can't be blank and branch has to belong to a bank");
+			throw new IllegalArgumentException("Email can't be blank");
 	}
+	
+	@Override
+	public void setReference(Object referenced) {
+		this.setContactDetails((ContactDetails)referenced);
+		
+	}
+		
 }

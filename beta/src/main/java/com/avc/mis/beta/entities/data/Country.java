@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dataobjects;
+package com.avc.mis.beta.entities.data;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -19,10 +19,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.BatchSize;
-
-import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.dataobjects.interfaces.Insertable;
+import com.avc.mis.beta.entities.interfaces.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -39,32 +36,31 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name="BANKS")
-@NamedQuery(name = "Bank.findAll", query = "select b from Bank b")
-public class Bank implements Insertable {
+@Table(name="COUNTRIES")
+@NamedQuery(name = "Country.findAll", query = "select c from Country c")
+public class Country implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "name", nullable = false, unique = true)
+	@Column(name = "name", unique = true, nullable = false)
 	private String value;
 	
-//	@JsonBackReference(value = "branch_bank")
-	@ToString.Exclude
-	@OneToMany(mappedBy = "bank", fetch = FetchType.LAZY)
-	@BatchSize(size = DAO.BATCH_SIZE)
+//	@JsonBackReference(value = "city_country")
 	@JsonIgnore
-	private Set<BankBranch> branches = new HashSet<>();
+	@ToString.Exclude 
+	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+	private Set<City> cities = new HashSet<>();
 	
 	public void setValue(String value) {
-		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);		
+		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
-	
+
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
@@ -75,7 +71,6 @@ public class Bank implements Insertable {
 	@Override
 	public void prePersistOrUpdate() {
 		if(!isLegal())
-			throw new IllegalArgumentException("Bank name can't be blank");
+			throw new IllegalArgumentException("Country name can't be blank");
 	}
-	
 }

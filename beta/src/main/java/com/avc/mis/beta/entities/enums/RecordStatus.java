@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dataobjects.enums;
+package com.avc.mis.beta.entities.enums;
 
 /**
  * @author Zvi

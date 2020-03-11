@@ -16,29 +16,28 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
-import com.avc.mis.beta.dataobjects.Address;
-import com.avc.mis.beta.dataobjects.BankAccount;
-import com.avc.mis.beta.dataobjects.BankBranch;
-import com.avc.mis.beta.dataobjects.City;
-import com.avc.mis.beta.dataobjects.CompanyContact;
-import com.avc.mis.beta.dataobjects.ContactDetails;
-import com.avc.mis.beta.dataobjects.Email;
-import com.avc.mis.beta.dataobjects.Fax;
-import com.avc.mis.beta.dataobjects.IdCard;
-import com.avc.mis.beta.dataobjects.PaymentAccount;
-import com.avc.mis.beta.dataobjects.Person;
-import com.avc.mis.beta.dataobjects.Phone;
-import com.avc.mis.beta.dataobjects.Supplier;
-import com.avc.mis.beta.dataobjects.SupplyCategory;
 import com.avc.mis.beta.dto.FaxDTO;
 import com.avc.mis.beta.dto.PhoneDTO;
 import com.avc.mis.beta.dto.SupplierDTO;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.avc.mis.beta.entities.data.Address;
+import com.avc.mis.beta.entities.data.BankAccount;
+import com.avc.mis.beta.entities.data.BankBranch;
+import com.avc.mis.beta.entities.data.City;
+import com.avc.mis.beta.entities.data.CompanyContact;
+import com.avc.mis.beta.entities.data.ContactDetails;
+import com.avc.mis.beta.entities.data.Email;
+import com.avc.mis.beta.entities.data.Fax;
+import com.avc.mis.beta.entities.data.IdCard;
+import com.avc.mis.beta.entities.data.PaymentAccount;
+import com.avc.mis.beta.entities.data.Person;
+import com.avc.mis.beta.entities.data.Phone;
+import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.data.SupplyCategory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 //@Transactional
-class BetaApplicationTests {
+class SuppliersTests {
 	
 	private final int NUM_ITEMS = 3;
 
@@ -133,7 +132,7 @@ class BetaApplicationTests {
 		
 		return supplier;
 	}
-	
+	@Disabled
 	@Test
 	void suppliersTest() {
 		//supplier with null name

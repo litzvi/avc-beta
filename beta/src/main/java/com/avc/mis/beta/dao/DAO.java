@@ -11,6 +11,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.entities.interfaces.Insertable;
+
 /**
  * @author Zvi
  *
@@ -41,4 +43,22 @@ public abstract class DAO {
 	EntityManager getEntityManager() {
 		return entityManager;
 	}
+	
+	protected void addEntity(Insertable entity, Insertable reference) {
+		reference = getEntityManager().getReference(reference.getClass(), reference.getId());
+		entity.setReference(reference);
+		getEntityManager().persist(entity);
+	}
+	
+	protected void removeEntity(Insertable entity) {
+		entity = getEntityManager().getReference(entity.getClass(), entity.getId());
+		getEntityManager().remove(entity); 
+	}
+	
+	protected void editEntity(Insertable entity) {
+		if(entity.getId() == null) {
+			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
+		}
+		getEntityManager().merge(entity);
+	}	
 }
