@@ -12,6 +12,7 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.SupplierBasic;
 import com.avc.mis.beta.dto.SupplierDTO;
 import com.avc.mis.beta.dto.SupplierRow;
 import com.avc.mis.beta.entities.data.BankAccount;
@@ -33,14 +34,26 @@ public class Suppliers extends DAO {
 	
 //	@Autowired
 //	private SupplierReposetory supplierReposetory;
+	
+	private List<Supplier> findSuppliers() {
+		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findAll", Supplier.class);
+		List<Supplier> suppliers = query.getResultList();
+		return suppliers;
+	}
+	
+	@Transactional(readOnly = true)
+	public List<SupplierBasic> getSuppliersBasic() {
+		List<SupplierBasic> supplierRows = new ArrayList<>();
+		findSuppliers().forEach((supplier) -> supplierRows.add(new SupplierBasic(supplier)));
+		return supplierRows;
+		
+	}
 		
 	@Transactional(readOnly = true)
 	public List<SupplierRow> getSuppliers() {
 		
-		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findAll", Supplier.class);
-		List<Supplier> suppliers = query.getResultList();
 		List<SupplierRow> supplierRows = new ArrayList<>();
-		suppliers.forEach((supplier) -> supplierRows.add(new SupplierRow(supplier)));
+		findSuppliers().forEach((supplier) -> supplierRows.add(new SupplierRow(supplier)));
 		return supplierRows;
 		
 	}

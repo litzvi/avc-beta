@@ -17,7 +17,9 @@ import com.avc.mis.beta.entities.data.BankBranch;
 import com.avc.mis.beta.entities.data.City;
 import com.avc.mis.beta.entities.data.CompanyPosition;
 import com.avc.mis.beta.entities.data.Country;
+import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.data.SupplyCategory;
+import com.avc.mis.beta.entities.process.ContractType;
 
 /**
  * @author Zvi
@@ -78,5 +80,18 @@ public class ReferenceTables extends DAO {
 		return query.getResultList();
 	}
 	
+	public List<Item> getAllItems() {
+		
+		TypedQuery<Item> query = getEntityManager().createNamedQuery(
+				"Item.findAll", Item.class);
+		return query.getResultList();
+	}
+	
+	public List<ContractType> getAllContractTypes() {
+		
+		TypedQuery<ContractType> query = getEntityManager().createNamedQuery(
+				"ContractType.findAll", ContractType.class);
+		return query.getResultList();
+	}
 	
 }

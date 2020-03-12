@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Currency;
@@ -15,13 +16,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.data.Person;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.interfaces.Insertable;
 
 import lombok.AccessLevel;
@@ -49,13 +54,17 @@ public class OrderItem implements Insertable {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "POid", updatable = false)
+	@JoinColumn(name = "POid", updatable = false, nullable = false)
 	private PO po;
 	
 	@ManyToOne
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
-	private int numberUnits;
+	
+	private BigDecimal numberUnits;
+	
+	@Transient
+	private MeasureUnit measureUnit;
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	private Currency currency;
@@ -76,6 +85,7 @@ public class OrderItem implements Insertable {
 		return this.currency.getCurrencyCode();
 	}
 	
+		
 //	public void setUnitPrice(String val) {
 //		this.unitPrice = new BigDecimal(val);
 //	}
@@ -90,14 +100,20 @@ public class OrderItem implements Insertable {
 
 	@Override
 	public boolean isLegal() {
-		// TODO Auto-generated method stub
-		return true;
+		return (this.po != null && item != null);
 	}
 
+	@PrePersist @PreUpdate
 	@Override
 	public void prePersistOrUpdate() {
-		// TODO Auto-generated method stub
-		
+		if(!isLegal()) {
+			throw new IllegalArgumentException("Order line not legal\n "
+					+ "has to reference a purchase order and an item");
+		}
+		if(this.measureUnit != null && this.measureUnit != this.item.getMeasureUnit()) {			
+			this.numberUnits = MeasureUnit.convert(
+					this.numberUnits, this.measureUnit, this.item.getMeasureUnit());
+		}
 	}
 	
 	@Override

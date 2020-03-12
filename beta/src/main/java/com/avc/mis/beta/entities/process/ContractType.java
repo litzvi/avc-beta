@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import lombok.Data;
@@ -23,15 +24,16 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name="CONTRACT_TYPES")
+@NamedQuery(name = "ContractType.findAll", query = "select t from ContractType t")
 public class ContractType {
 
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name = "name", unique = true, nullable = false)
-	private String value;
-	
 	@Column(unique = true, nullable = false)
-	private String code;
+	private String name;
+	
+	@Column(name = "code", unique = true, nullable = false)
+	private String value;
 }

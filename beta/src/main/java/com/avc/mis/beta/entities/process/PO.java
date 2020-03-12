@@ -122,7 +122,7 @@ public class PO implements Insertable {
 	@Override
 	public boolean isLegal() {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

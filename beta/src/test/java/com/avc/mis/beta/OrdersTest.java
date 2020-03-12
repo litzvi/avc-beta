@@ -40,7 +40,7 @@ public class OrdersTest {
 		contractType.setId(1);
 		po.setContractType(contractType);
 		Supplier supplier = new Supplier();
-		supplier.setId(45);
+		supplier.setId(1);
 		po.setSupplier(supplier);
 		//build process
 		ProductionProcess process = po.getOrderProcess();
@@ -55,7 +55,7 @@ public class OrdersTest {
 		for(int i=0; i<items.length; i++) {
 			items[i] = new OrderItem();
 			items[i].setItem(item);
-			items[i].setNumberUnits(i);
+			items[i].setNumberUnits(new BigDecimal(i));
 			items[i].setCurrency("USD");
 			items[i].setUnitPrice(new BigDecimal("1.16"));
 			items[i].setDeliveryDate(new GregorianCalendar(2020, Calendar.MARCH, 13));
