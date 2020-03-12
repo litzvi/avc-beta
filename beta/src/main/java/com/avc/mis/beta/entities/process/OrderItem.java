@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.process;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
 
@@ -18,11 +19,17 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.Item;
+import com.avc.mis.beta.entities.data.Person;
+import com.avc.mis.beta.entities.interfaces.Insertable;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -34,7 +41,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "PO_ITEMS")
-public class OrderItem {
+public class OrderItem implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,14 +53,61 @@ public class OrderItem {
 	private PO po;
 	
 	@ManyToOne
-	@JoinColumn(name = "itemId", updatable = false)
+	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	private int numberUnits;
+	
+	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	private Currency currency;
+	
+//	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	private BigDecimal unitPrice;
 	
 	@Temporal(TemporalType.DATE)
-	private Date deliveryDate;
+	private Calendar deliveryDate;
 	private String defects;//maybe change to enum that can get percentage
 	private String remarks;
+	
+	public void setCurrency(String currencyCode) {
+		this.currency = Currency.getInstance(currencyCode);
+	}
+	
+	public String getCurrency() {
+		return this.currency.getCurrencyCode();
+	}
+	
+//	public void setUnitPrice(String val) {
+//		this.unitPrice = new BigDecimal(val);
+//	}
+//	
+//	public String getUnitprice() {
+//		return this.unitPrice.toPlainString();
+//	}
+	
+	protected boolean canEqual(Object o) {
+		return Insertable.canEqualCheckNullId(this, o);
+	}
+
+	@Override
+	public boolean isLegal() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public void prePersistOrUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof PO) {
+			this.setPo((PO)referenced);
+		}
+		else {
+			throw new ClassCastException("Referenced object isn't a purchase order");
+		}		
+	}
+
 }

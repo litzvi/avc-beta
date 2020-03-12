@@ -19,9 +19,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.avc.mis.beta.entities.data.Staff;
+import com.avc.mis.beta.entities.interfaces.Insertable;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -31,7 +33,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "PROCESSES")
-public class ProductionProcess {
+public class ProductionProcess implements Insertable {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,11 +44,12 @@ public class ProductionProcess {
 	private final Date insertTime;
 	
 	@ManyToOne 
-	@JoinColumn(name = "staffId")
+	@JoinColumn(name = "staffId", updatable = false)
 	private Staff staffRecording;
 	
+	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY) 
-	@JoinColumn(name = "POid", updatable = false)
+	@JoinColumn(name = "POid")
 	private PO po;
 	
 	@ManyToOne 
@@ -57,11 +60,8 @@ public class ProductionProcess {
 	@JoinColumn(name = "productionLineId", updatable = false)
 	private ProductionLine productionLine;
 	
-	@Column(nullable = false)
-	@Temporal(TemporalType.DATE)
-	private Date date;
-	
-	@Temporal(TemporalType.TIME)
+	@Column(nullable = false, updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date time;
 	private Long duration;//milliseconds
 	private Integer numOfWorkers;
@@ -73,6 +73,32 @@ public class ProductionProcess {
 	
 	public ProductionProcess() {
 		this.insertTime = new Date(System.currentTimeMillis());
+	}
+
+	protected boolean canEqual(Object o) {
+		return Insertable.canEqualCheckNullId(this, o);
+	}
+	
+	@Override
+	public boolean isLegal() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void prePersistOrUpdate() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof PO) {
+			this.setPo((PO)referenced);
+		}
+		else {
+			throw new ClassCastException("Referenced object isn't a purchase order");
+		}		
 	}
 	
 }

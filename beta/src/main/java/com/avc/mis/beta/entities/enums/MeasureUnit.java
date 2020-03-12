@@ -8,5 +8,5 @@ package com.avc.mis.beta.entities.enums;
  *
  */
 public enum MeasureUnit {
-
+	KG
 }
