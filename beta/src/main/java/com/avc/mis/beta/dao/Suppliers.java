@@ -50,7 +50,7 @@ public class Suppliers extends DAO {
 	}
 		
 	@Transactional(readOnly = true)
-	public List<SupplierRow> getSuppliers() {
+	public List<SupplierRow> getSuppliersTable() {
 		
 		List<SupplierRow> supplierRows = new ArrayList<>();
 		findSuppliers().forEach((supplier) -> supplierRows.add(new SupplierRow(supplier)));

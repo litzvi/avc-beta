@@ -3,11 +3,9 @@
  */
 package com.avc.mis.beta.entities.process;
 
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Currency;
-import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,9 +21,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.Item;
-import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.interfaces.Insertable;
 
@@ -100,15 +96,15 @@ public class OrderItem implements Insertable {
 
 	@Override
 	public boolean isLegal() {
-		return (this.po != null && item != null);
+		return item != null;
 	}
 
 	@PrePersist @PreUpdate
 	@Override
 	public void prePersistOrUpdate() {
 		if(!isLegal()) {
-			throw new IllegalArgumentException("Order line not legal\n "
-					+ "has to reference a purchase order and an item");
+			throw new IllegalArgumentException(
+					"Order line is not legal has to reference an item");
 		}
 		if(this.measureUnit != null && this.measureUnit != this.item.getMeasureUnit()) {			
 			this.numberUnits = MeasureUnit.convert(

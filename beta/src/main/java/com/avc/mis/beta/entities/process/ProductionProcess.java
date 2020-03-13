@@ -14,6 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -81,13 +83,16 @@ public class ProductionProcess implements Insertable {
 	
 	@Override
 	public boolean isLegal() {
-		// TODO Auto-generated method stub
-		return false;
+		return this.insertTime != null && this.processType != null;
 	}
 
+	@PrePersist @PreUpdate
 	@Override
 	public void prePersistOrUpdate() {
-		// TODO Auto-generated method stub
+		if(!isLegal()) {
+			throw new IllegalStateException(
+					"Process does not have an insetr time or process type");
+		}
 		
 	}
 	

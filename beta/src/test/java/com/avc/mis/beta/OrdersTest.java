@@ -60,6 +60,10 @@ public class OrdersTest {
 			items[i].setUnitPrice(new BigDecimal("1.16"));
 			items[i].setDeliveryDate(new GregorianCalendar(2020, Calendar.MARCH, 13));
 		}
+		for(OrderItem item1: items) {
+			System.out.println(item1);
+		}
+		
 		po.setOrderItems(items);
 		
 				

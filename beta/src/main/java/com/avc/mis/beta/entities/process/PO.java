@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
@@ -121,13 +123,16 @@ public class PO implements Insertable {
 	
 	@Override
 	public boolean isLegal() {
-		// TODO Auto-generated method stub
-		return true;
+		return this.contractType != null && this.supplier != null && this.orderItems.size() > 0;
 	}
 
+	@PrePersist @PreUpdate
 	@Override
 	public void prePersistOrUpdate() {
-		// TODO Auto-generated method stub
+		if(!isLegal()) {
+			throw new IllegalArgumentException("Purchase Order is not legal, "
+					+ "has to have a supplier and at least one order line");
+		}
 		
 	}
 	

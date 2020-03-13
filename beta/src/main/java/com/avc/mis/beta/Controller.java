@@ -40,7 +40,7 @@ public class Controller {
 	
 	@RequestMapping("/suppliers")
 	public List<SupplierRow> suppliers() {
-		return suppliersDao.getSuppliers();
+		return suppliersDao.getSuppliersTable();
 	}
 
 	@RequestMapping("/supplier-details/{id}")

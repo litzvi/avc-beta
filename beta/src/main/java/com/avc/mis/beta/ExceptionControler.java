@@ -21,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ExceptionControler {
 
+	//illegalStateexception shouldn't be fatal
+	//illegalargumentexception should be sent as a neat message to the user
+	
 	@ExceptionHandler({DataIntegrityViolationException.class})
     public ResponseEntity<String> handleDataIntegrityViolationException(NestedRuntimeException e){
         return error(HttpStatus.BAD_REQUEST, e.getRootCause());
