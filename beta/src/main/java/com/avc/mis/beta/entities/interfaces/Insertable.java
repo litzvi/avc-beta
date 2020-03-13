@@ -16,6 +16,12 @@ import java.util.stream.Collectors;
 public interface Insertable extends Serializable{
 	
 	public Integer getId();
+	
+	/**
+	 * Checks if object has the required not null-able data.
+	 * Dosen't check if required references - foreign keys for database are set.
+	 * @return true if all required data is set, false otherwise.
+	 */
 	public boolean isLegal();
 	public void prePersistOrUpdate();
 
