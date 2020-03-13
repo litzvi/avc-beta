@@ -22,6 +22,7 @@ import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.data.SupplyCategory;
 import com.avc.mis.beta.entities.interfaces.Insertable;
 
 /**
@@ -54,6 +55,16 @@ public class Suppliers extends DAO {
 		
 		List<SupplierRow> supplierRows = new ArrayList<>();
 		findSuppliers().forEach((supplier) -> supplierRows.add(new SupplierRow(supplier)));
+		return supplierRows;
+		
+	}
+	
+	public List<SupplierBasic> getSuppliersBasic(Integer categoryId) {
+		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findByCategory", Supplier.class);
+		query.setParameter("categoryId", categoryId);
+		List<Supplier> suppliers = query.getResultList();
+		List<SupplierBasic> supplierRows = new ArrayList<>();
+		suppliers.forEach((supplier) -> supplierRows.add(new SupplierBasic(supplier)));
 		return supplierRows;
 		
 	}

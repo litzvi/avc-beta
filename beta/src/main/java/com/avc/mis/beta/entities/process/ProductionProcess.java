@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.entities.process;
 
-import java.sql.Time;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -21,6 +20,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.avc.mis.beta.entities.data.Staff;
+import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.interfaces.Insertable;
 
 import lombok.Data;
@@ -55,7 +55,7 @@ public class ProductionProcess implements Insertable {
 	private PO po;
 	
 	@ManyToOne 
-	@JoinColumn(name = "typeId", nullable = false, updatable = false)
+	@JoinColumn(name = "type", nullable = false, updatable = false)
 	private ProcessType processType;
 	
 	@ManyToOne

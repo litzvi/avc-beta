@@ -48,7 +48,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1179;
+	private static Integer SERIAL_NO = 1180;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	private Supplier basicSupplier() {
@@ -66,7 +66,7 @@ class SuppliersTests {
 		Supplier supplier = basicSupplier();
 		//add supply categories
 		List<SupplyCategory> supplyCategories = referenceTables.getAllSupplyCategories();
-		supplyCategories.remove(0);
+		supplyCategories.remove(1);
 		supplyCategories.forEach(category -> supplier.getSupplyCategories().add(category));
 		//add phones
 		Phone[] phones = new Phone[NUM_ITEMS];

@@ -7,18 +7,21 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.dao.Orders;
+import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dto.SupplierBasic;
 import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.process.ContractType;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.ProcessType;
+import com.avc.mis.beta.entities.process.ProcessTypeDepricated;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
 /**
@@ -33,6 +36,9 @@ public class OrdersTest {
 	@Autowired
 	Orders orders;
 	
+	@Autowired
+	Suppliers suppliers;
+	
 	private PO basicOrder() {
 		//build purchase order
 		PO po = new PO();
@@ -44,7 +50,7 @@ public class OrdersTest {
 		po.setSupplier(supplier);
 		//build process
 		ProductionProcess process = po.getOrderProcess();
-		ProcessType processType = new ProcessType();
+		ProcessTypeDepricated processType = new ProcessTypeDepricated();
 		processType.setId(1);
 		process.setProcessType(processType);
 		process.setTime(new Date(System.currentTimeMillis()));
@@ -75,11 +81,15 @@ public class OrdersTest {
 		//insert an order 
 		PO po = basicOrder();
 		try {
-			orders.addOrder(po);
+			orders.addCashewOrder(po);
 		}catch(Exception e) {
 			e.printStackTrace();
 			throw e;
 		}
+		
+		//get suppliers by supply category
+		List<SupplierBasic> suppliersByCategory = suppliers.getSuppliersBasic(3);
+		suppliersByCategory.forEach(supplier -> System.out.println(supplier));
 		
 	}
 	

@@ -8,7 +8,7 @@ import java.util.Date;
 
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.process.ProcessStatus;
-import com.avc.mis.beta.entities.process.ProcessType;
+import com.avc.mis.beta.entities.process.ProcessTypeDepricated;
 import com.avc.mis.beta.entities.process.ProductionLine;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
@@ -29,7 +29,7 @@ public class ProductionProcessDTO implements Serializable {
 	private Date insertTime;
 	private Staff staffRecording;
 	private Integer poId;
-	private ProcessType processType;
+	private ProcessTypeDepricated processType;
 	private ProductionLine productionLine;
 	private Date time;
 	private Long duration;

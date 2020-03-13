@@ -60,7 +60,8 @@ public class Company implements Insertable {
 	private String registrationLocation;
 	
 	@JsonManagedReference(value = "company_contactDetails")
-	@OneToOne(mappedBy = "company", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "company", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
+		optional = false, fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
 	
 	@JsonManagedReference(value = "company_companyContacts")

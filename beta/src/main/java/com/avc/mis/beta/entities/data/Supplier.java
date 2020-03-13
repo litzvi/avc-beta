@@ -49,6 +49,9 @@ import lombok.ToString;
 				+ "left join fetch p.idCard id "
 				+ "left join fetch p.contactDetails cd "
 			+ "where cc.company.id = :cid ")
+@NamedQuery(name = "Supplier.findByCategory", 
+query = "select s from Supplier s join s.supplyCategories c "
+		+ "where c.id = :categoryId ")
 public class Supplier extends Company {
 	
 	@JoinTable(name = "SUPPLIERS_CATEGORIES",
