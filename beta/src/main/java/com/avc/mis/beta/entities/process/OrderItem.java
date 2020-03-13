@@ -6,6 +6,7 @@ package com.avc.mis.beta.entities.process;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Currency;
+import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -74,11 +75,12 @@ public class OrderItem implements Insertable {
 	private String remarks;
 	
 	public void setCurrency(String currencyCode) {
-		this.currency = Currency.getInstance(currencyCode);
+		if(currencyCode != null)
+			this.currency = Currency.getInstance(currencyCode);
 	}
 	
 	public String getCurrency() {
-		return this.currency.getCurrencyCode();
+		return Optional.ofNullable(this.currency).map(c -> c.getCurrencyCode()).orElse(null);
 	}
 	
 		

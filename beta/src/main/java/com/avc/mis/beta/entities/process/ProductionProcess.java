@@ -54,8 +54,7 @@ public class ProductionProcess implements Insertable {
 	@JoinColumn(name = "POid")
 	private PO po;
 	
-	@ManyToOne 
-	@JoinColumn(name = "type", nullable = false, updatable = false)
+	@Column(name = "type", nullable = false, updatable = false)
 	private ProcessType processType;
 	
 	@ManyToOne

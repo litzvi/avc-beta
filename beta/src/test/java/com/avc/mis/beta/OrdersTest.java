@@ -18,6 +18,7 @@ import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dto.SupplierBasic;
 import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.process.ContractType;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
@@ -42,16 +43,16 @@ public class OrdersTest {
 	private PO basicOrder() {
 		//build purchase order
 		PO po = new PO();
+		po.setId(5000001);
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
 		po.setContractType(contractType);
 		Supplier supplier = new Supplier();
-		supplier.setId(1);
+		supplier.setId(10);
 		po.setSupplier(supplier);
 		//build process
 		ProductionProcess process = po.getOrderProcess();
-		ProcessTypeDepricated processType = new ProcessTypeDepricated();
-		processType.setId(1);
+		ProcessType processType = ProcessType.CASHEW_ORDER;
 		process.setProcessType(processType);
 		process.setTime(new Date(System.currentTimeMillis()));
 		//add order items
