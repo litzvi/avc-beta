@@ -43,7 +43,7 @@ public class OrdersTest {
 	private PO basicOrder() {
 		//build purchase order
 		PO po = new PO();
-		po.setId(5000001);
+//		po.setId(5000001);
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
 		po.setContractType(contractType);

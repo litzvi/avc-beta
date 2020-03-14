@@ -22,6 +22,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.GenericGenerator;
 
 import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.data.Company;
@@ -51,12 +52,14 @@ import lombok.ToString;
 public class PO implements Insertable {
 	
 	@EqualsAndHashCode.Include
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(insertable = true)
+	@Id
+	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.dao.services.UseExistingIdOtherwiseGenerateUsingIdentity")
+	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
+	@Column(unique = true, nullable = false, updatable = false)
 	private Integer id;
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "processId", updatable = false, nullable = false)
 	private ProductionProcess orderProcess;
 	
