@@ -9,7 +9,6 @@ import java.util.Date;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.process.ProcessStatus;
-import com.avc.mis.beta.entities.process.ProcessTypeDepricated;
 import com.avc.mis.beta.entities.process.ProductionLine;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 

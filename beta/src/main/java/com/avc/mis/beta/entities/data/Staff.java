@@ -10,9 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.BaseEntityNoId;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,9 +23,9 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-public class Staff {
+public class Staff extends BaseEntityNoId {
 	
 	@EqualsAndHashCode.Include
 	@Id
@@ -40,4 +39,15 @@ public class Staff {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "positionId")
 	private CompanyPosition position;
+
+	@Override
+	public boolean isLegal() {
+		return person != null;
+	}
+
+	@Override
+	public void prePersistOrUpdate() {
+		if(!isLegal())
+			throw new IllegalArgumentException("Staff has to reference a person");
+	}
 }

@@ -6,12 +6,10 @@ package com.avc.mis.beta.dao;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.entities.interfaces.Insertable;
+import com.avc.mis.beta.entities.Insertable;
 
 /**
  * @author Zvi

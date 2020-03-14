@@ -16,7 +16,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.interfaces.Insertable;
+import com.avc.mis.beta.entities.BaseEntityNoId;
+import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,10 +32,10 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="ID_INFORMATION")
-public class IdCard implements Insertable {
+public class IdCard extends BaseEntityNoId {
 	
 	@EqualsAndHashCode.Include
 	@Id

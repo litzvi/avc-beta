@@ -11,7 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -25,12 +24,9 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.entities.data.Company;
-import com.avc.mis.beta.entities.data.ContactDetails;
-import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.Phone;
+import com.avc.mis.beta.entities.BaseEntityNoId;
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.interfaces.Insertable;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -46,10 +42,10 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PURCHASE_ORDERS")
-public class PO implements Insertable {
+public class PO extends BaseEntityNoId {
 	
 	@EqualsAndHashCode.Include
 	@Id

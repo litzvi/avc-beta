@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dto.SupplierBasic;
 import com.avc.mis.beta.dto.SupplierDTO;
 import com.avc.mis.beta.dto.SupplierRow;
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.CompanyContactPK;
@@ -22,8 +23,6 @@ import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.data.SupplyCategory;
-import com.avc.mis.beta.entities.interfaces.Insertable;
 
 /**
  * @author Zvi

@@ -5,7 +5,7 @@ package com.avc.mis.beta.dao.services;
 
 import java.util.Comparator;
 
-import com.avc.mis.beta.entities.interfaces.Insertable;
+import com.avc.mis.beta.entities.Insertable;
 
 /**
  * @author Zvi

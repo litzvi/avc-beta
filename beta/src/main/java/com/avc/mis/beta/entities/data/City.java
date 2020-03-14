@@ -8,9 +8,6 @@ import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
@@ -19,7 +16,8 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.avc.mis.beta.entities.interfaces.Insertable;
+import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -33,15 +31,15 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="CITIES", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "countryId"})})
 @NamedQuery(name = "City.findAll", query = "select c from City c")
-public class City implements Insertable {
+public class City extends BaseEntity {
 	
-	@EqualsAndHashCode.Include
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+//	@EqualsAndHashCode.Include
+//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private Integer id;
 	
 	@Column(name = "name", nullable = false)
 	private String value;

@@ -19,7 +19,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.interfaces.Insertable;
+import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -34,15 +35,15 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="COUNTRIES")
 @NamedQuery(name = "Country.findAll", query = "select c from Country c")
-public class Country implements Insertable {
+public class Country extends BaseEntity {
 	
-	@EqualsAndHashCode.Include
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+//	@EqualsAndHashCode.Include
+//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private Integer id;
 	
 	@Column(name = "name", unique = true, nullable = false)
 	private String value;

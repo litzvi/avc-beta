@@ -11,9 +11,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
@@ -26,7 +23,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.entities.interfaces.Insertable;
+import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -40,16 +38,16 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="COMPANIES" /*, 
 	uniqueConstraints = @UniqueConstraint(name = "existing compony name", columnNames = {"name"})*/)
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Company implements Insertable {
+public class Company extends BaseEntity {
 	
-	@EqualsAndHashCode.Include
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+//	@EqualsAndHashCode.Include
+//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private Integer id;
 	
 	@Column(unique = true, nullable = false)
 	private String name;

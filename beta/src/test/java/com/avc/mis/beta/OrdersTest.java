@@ -22,7 +22,6 @@ import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.process.ContractType;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.ProcessTypeDepricated;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
 /**
@@ -43,12 +42,12 @@ public class OrdersTest {
 	private PO basicOrder() {
 		//build purchase order
 		PO po = new PO();
-//		po.setId(5000001);
+//		po.setId(5000003);
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
 		po.setContractType(contractType);
 		Supplier supplier = new Supplier();
-		supplier.setId(10);
+		supplier.setId(7);
 		po.setSupplier(supplier);
 		//build process
 		ProductionProcess process = po.getOrderProcess();

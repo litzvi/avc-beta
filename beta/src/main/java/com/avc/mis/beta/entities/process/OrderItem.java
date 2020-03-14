@@ -10,9 +10,6 @@ import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
@@ -22,9 +19,10 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.interfaces.Insertable;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -40,14 +38,14 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PO_ITEMS")
-public class OrderItem implements Insertable {
+public class OrderItem extends BaseEntity {
 	
-	@EqualsAndHashCode.Include
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+//	@EqualsAndHashCode.Include
+//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private Integer id;
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)

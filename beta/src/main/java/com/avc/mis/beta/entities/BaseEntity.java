@@ -1,14 +1,16 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.process;
+package com.avc.mis.beta.entities;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
+
+import com.avc.mis.beta.entities.data.ContactDetails;
+import com.avc.mis.beta.entities.data.Phone;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,15 +22,12 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name="PROCESS_TYPES")
-public class ProcessTypeDepricated {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@MappedSuperclass
+public abstract class BaseEntity extends BaseEntityNoId {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Integer id;	
 
-	@Column(name = "name", unique = true, nullable = false)
-	private String value;
 }

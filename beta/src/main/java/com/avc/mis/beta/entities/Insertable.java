@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.interfaces;
+package com.avc.mis.beta.entities;
 
 import java.io.Serializable;
 import java.util.Arrays;
