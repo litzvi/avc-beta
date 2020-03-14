@@ -32,6 +32,8 @@ import com.avc.mis.beta.entities.process.ProductionProcess;
 public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
+	
+	private final int PROCESS_NO = 5000011;
 
 	@Autowired
 	Orders orders;
@@ -42,7 +44,7 @@ public class OrdersTest {
 	private PO basicOrder() {
 		//build purchase order
 		PO po = new PO();
-//		po.setId(5000003);
+		po.setId(PROCESS_NO);
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
 		po.setContractType(contractType);
@@ -51,8 +53,6 @@ public class OrdersTest {
 		po.setSupplier(supplier);
 		//build process
 		ProductionProcess process = po.getOrderProcess();
-		ProcessType processType = ProcessType.CASHEW_ORDER;
-		process.setProcessType(processType);
 		process.setTime(new Date(System.currentTimeMillis()));
 		//add order items
 		OrderItem[] items = new OrderItem[NUM_ITEMS];
@@ -90,6 +90,8 @@ public class OrdersTest {
 		//get suppliers by supply category
 		List<SupplierBasic> suppliersByCategory = suppliers.getSuppliersBasic(3);
 		suppliersByCategory.forEach(supplier -> System.out.println(supplier));
+		
+		System.out.println(orders.getOrder(PROCESS_NO));
 		
 	}
 	

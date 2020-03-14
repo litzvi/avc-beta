@@ -132,7 +132,7 @@ class SuppliersTests {
 		
 		return supplier;
 	}
-//	@Disabled
+	@Disabled
 	@Test
 	void suppliersTest() {
 		//supplier with null name

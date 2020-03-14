@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -45,6 +46,10 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PURCHASE_ORDERS")
+@NamedQuery(name = "PO.details", 
+query = "select po from PO po "
+		+ "left join fetch po.orderProcess p "
+		+ "where po.id = :poid ")
 public class PO extends BaseEntityNoId {
 	
 	@EqualsAndHashCode.Include
@@ -55,7 +60,7 @@ public class PO extends BaseEntityNoId {
 	private Integer id;
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToOne(cascade = {CascadeType.PERSIST, CascadeType.ALL}, fetch = FetchType.LAZY)
+	@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "processId", updatable = false, nullable = false)
 	private ProductionProcess orderProcess;
 	
@@ -78,7 +83,7 @@ public class PO extends BaseEntityNoId {
 	private Set<ProductionProcess> processes = new HashSet<>();
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "po", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "po", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<OrderItem> orderItems = new HashSet<>();
 	
