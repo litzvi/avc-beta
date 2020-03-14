@@ -14,6 +14,7 @@ import com.avc.mis.beta.entities.data.CompanyPosition;
 import com.avc.mis.beta.entities.data.Person;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
@@ -25,6 +26,8 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class CompanyContactDTO implements Serializable {
 
+	@EqualsAndHashCode.Exclude
+	private Integer id;
 	private PersonDTO person;
 	private CompanyPosition position;
 	
@@ -32,6 +35,7 @@ public class CompanyContactDTO implements Serializable {
 	 * @param contact
 	 */
 	public CompanyContactDTO(@NonNull CompanyContact contact) {
+		this.id = contact.getId();
 		if(contact.getPerson() == null)
 			throw new NullPointerException("Company contact has to reference a person");
 		this.person = new PersonDTO(contact.getPerson());

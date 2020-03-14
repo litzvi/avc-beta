@@ -55,7 +55,7 @@ public class PO implements Insertable {
 	@Id
 	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.dao.services.UseExistingIdOtherwiseGenerateUsingIdentity")
 	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
-	@Column(unique = true, nullable = false, updatable = false)
+	@Column(nullable = false, updatable = false)
 	private Integer id;
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
