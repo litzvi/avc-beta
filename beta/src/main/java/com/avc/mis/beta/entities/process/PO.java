@@ -28,6 +28,7 @@ import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.BaseEntityNoId;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.OrderStatus;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -46,6 +47,11 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PURCHASE_ORDERS")
+@NamedQuery(name = "PO.findAll",query = "select po from PO po "
+		+ "left join fetch po.orderProcess p ")
+@NamedQuery(name = "PO.findByOrderType",query = "select po from PO po "
+		+ "left join fetch po.orderProcess p "
+		+ "where p.processType = :type ")
 @NamedQuery(name = "PO.details", 
 query = "select po from PO po "
 		+ "left join fetch po.orderProcess p "
@@ -72,8 +78,8 @@ public class PO extends BaseEntityNoId {
 	@JoinColumn(name = "supplierId", updatable = false, nullable = false)
 	private Supplier supplier; 
 	
-	@ManyToOne 
-	@JoinColumn(name = "statusId")
+	
+	@Column(nullable = false)
 	private OrderStatus status;
 	
 //	@JsonIgnore

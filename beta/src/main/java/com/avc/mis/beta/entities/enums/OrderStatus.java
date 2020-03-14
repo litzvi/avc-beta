@@ -7,7 +7,7 @@ package com.avc.mis.beta.entities.enums;
  * @author Zvi
  *
  */
-public enum ProcessType {
-	CASHEW_ORDER,
-	GENERAL_ORDER
+public enum OrderStatus {
+	OPEN_PENDING,
+	OPEN_APPROVED
 }

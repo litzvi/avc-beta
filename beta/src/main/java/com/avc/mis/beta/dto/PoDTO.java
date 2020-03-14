@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.ContractType;
-import com.avc.mis.beta.entities.process.OrderStatus;
 import com.avc.mis.beta.entities.process.PO;
 
 import lombok.Data;

@@ -54,9 +54,10 @@ public class ReferenceTables extends DAO {
 		return query.getResultList();
 	}
 	
-	public Map<Country, List<City>> getCitiesByCountry() {
+	public Map<String, List<City>> getCitiesByCountry() {
 		
-		return getAllCities().stream().collect(Collectors.groupingBy(City::getCountry));
+		return getAllCities().stream()
+				.collect(Collectors.groupingBy(city -> city.getCountry().getValue()));
 	}
 
 	public List<CompanyPosition> getAllCompanyPositions() {
