@@ -58,6 +58,7 @@ public class OrderItem extends BaseEntity {
 	
 	private BigDecimal numberUnits;
 	
+	
 	@Transient
 	private MeasureUnit measureUnit;
 	
@@ -79,6 +80,14 @@ public class OrderItem extends BaseEntity {
 	
 	public String getCurrency() {
 		return Optional.ofNullable(this.currency).map(c -> c.getCurrencyCode()).orElse(null);
+	}
+	
+	public void setMeasureUnit(String measureUnit) {
+		this.measureUnit = MeasureUnit.valueOf(measureUnit);
+	}
+	
+	public String getMeasureUnit() {
+		return Optional.ofNullable(this.item).map(i -> i.getMeasureUnit().toString()).orElse(null);
 	}
 	
 		

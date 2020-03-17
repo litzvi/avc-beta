@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dao;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
@@ -13,11 +14,11 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.PoDTO;
-import com.avc.mis.beta.dto.SupplierDTO;
-import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.dto.PoRow;
+import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessType;
+import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.ProductionProcess;
 
 /**
  * @author Zvi
@@ -34,21 +35,26 @@ public class Orders extends DAO {
 		return orders;
 	}
 	
-	private List<PO> findPurchaseOrders(ProcessType orderType) {
-		TypedQuery<PO> query = getEntityManager().createNamedQuery("PO.findByOrderType", PO.class);
+	private List<Object[]> findPurchaseOrders(ProcessType orderType, OrderStatus[] statuses) {
+		TypedQuery<Object[]> query = getEntityManager()
+				.createNamedQuery("PO&ITEM.findByOrderTypeAndStatus", Object[].class);
 		query.setParameter("type", orderType);
-		List<PO> orders = query.getResultList();
+		query.setParameter("statuses", statuses);
+		List<Object[]> orders = query.getResultList();
 		return orders;
 	}
 	
-//	public List<PoRow> findCashewOrders(OrderStatus status) {
-//		
-//	}
-//	
-//	public List<?> findGeneralOrders() {
-//		//TODO
-//		return null;
-//	}
+	public List<PoRow> findCashewOrders(OrderStatus[] statuses) {
+		List<Object[]> orders = findPurchaseOrders(ProcessType.CASHEW_ORDER, statuses);
+		return orders.stream().map(result -> {return new PoRow((PO)result[0], (OrderItem)result[1]);})
+			.collect(Collectors.toList());
+	}
+	
+	public List<PoRow> findGeneralOrders(OrderStatus[] statuses) {
+		List<Object[]> orders = findPurchaseOrders(ProcessType.GENERAL_ORDER, statuses);
+		return orders.stream().map(result -> {return new PoRow((PO)result[0], (OrderItem)result[1]);})
+			.collect(Collectors.toList());
+	}
 
 	public void addCashewOrder(PO po) {
 		po.getOrderProcess().setProcessType(ProcessType.CASHEW_ORDER);

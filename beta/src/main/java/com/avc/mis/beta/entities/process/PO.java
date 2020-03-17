@@ -9,6 +9,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -52,6 +54,11 @@ import lombok.ToString;
 @NamedQuery(name = "PO.findByOrderType",query = "select po from PO po "
 		+ "left join fetch po.orderProcess p "
 		+ "where p.processType = :type ")
+@NamedQuery(name = "PO&ITEM.findByOrderTypeAndStatus",
+	query = "select po, i from PO po "
+		+ "left join fetch po.orderProcess p "
+		+ "left join fetch po.orderItems i"
+		+ "where p.processType = :type and po.status in :statuses ")
 @NamedQuery(name = "PO.details", 
 query = "select po from PO po "
 		+ "left join fetch po.orderProcess p "
@@ -78,7 +85,7 @@ public class PO extends BaseEntityNoId {
 	@JoinColumn(name = "supplierId", updatable = false, nullable = false)
 	private Supplier supplier; 
 	
-	
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private OrderStatus status;
 	
