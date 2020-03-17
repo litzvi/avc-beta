@@ -93,7 +93,7 @@ public class PO extends BaseEntityNoId {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private OrderStatus status;
+	private OrderStatus status = OrderStatus.OPEN_PENDING;
 	
 //	@JsonIgnore
 	@ToString.Exclude

@@ -33,7 +33,7 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000011;
+	private final int PROCESS_NO = 5000012;
 
 	@Autowired
 	Orders orders;
@@ -44,7 +44,7 @@ public class OrdersTest {
 	private PO basicOrder() {
 		//build purchase order
 		PO po = new PO();
-//		po.setId(PROCESS_NO);
+		po.setId(PROCESS_NO);
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
 		po.setContractType(contractType);

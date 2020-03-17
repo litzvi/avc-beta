@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dao;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,7 @@ public class Orders extends DAO {
 		TypedQuery<Object[]> query = getEntityManager()
 				.createNamedQuery("PO&ITEM.findByOrderTypeAndStatus", Object[].class);
 		query.setParameter("type", orderType);
-		query.setParameter("statuses", statuses);
+		query.setParameter("statuses", Arrays.asList(statuses));
 		List<Object[]> orders = query.getResultList();
 		return orders;
 	}
@@ -61,7 +62,7 @@ public class Orders extends DAO {
 		TypedQuery<PO> query = getEntityManager()
 				.createNamedQuery("PO.findByOrderTypeAndStatus", PO.class);
 		query.setParameter("type", orderType);
-		query.setParameter("statuses", statuses);
+		query.setParameter("statuses", Arrays.asList(statuses));
 		List<PO> orders = query.getResultList();
 		return orders.stream().map(po -> {return new PoBasic(po);})
 				.collect(Collectors.toList());
