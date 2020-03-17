@@ -52,7 +52,7 @@ public class PoRow implements Serializable {
 		
 	}
 	
-	public String getCode() {
+	public String getValue() {
 		return this.contractTypeCode + this.id;
 	}
 }

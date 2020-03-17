@@ -26,7 +26,7 @@ import com.avc.mis.beta.entities.process.PO;
  *
  */
 @Repository
-@Transactional(rollbackFor = Throwable.class)
+@Transactional(readOnly = true)
 public class Orders extends DAO {
 	
 	
@@ -75,6 +75,7 @@ public class Orders extends DAO {
 		return findPurchaseOrdersBasic(ProcessType.GENERAL_ORDER, statuses);
 	}
 
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewOrder(PO po) {
 		po.getOrderProcess().setProcessType(ProcessType.CASHEW_ORDER);
 		
@@ -87,6 +88,7 @@ public class Orders extends DAO {
 //			getEntityManager().persist(po);
 	}
 	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addGeneralOrder(PO po) {
 		po.getOrderProcess().setProcessType(ProcessType.GENERAL_ORDER);
 		
@@ -108,10 +110,12 @@ public class Orders extends DAO {
 		return new PoDTO(order);
 	}
 	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editOrder(PO po) {
 		editEntity(po);
 	}
 	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void removeOrder(int orderId) {
 		PO order = getEntityManager().getReference(PO.class, orderId);
 		getEntityManager().remove(order);

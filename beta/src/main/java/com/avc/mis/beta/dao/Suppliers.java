@@ -58,6 +58,7 @@ public class Suppliers extends DAO {
 		
 	}
 	
+	@Transactional(readOnly = true)
 	public List<SupplierBasic> getSuppliersBasic(Integer categoryId) {
 		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findByCategory", Supplier.class);
 		query.setParameter("categoryId", categoryId);

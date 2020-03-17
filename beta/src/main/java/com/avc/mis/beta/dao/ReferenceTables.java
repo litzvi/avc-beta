@@ -12,6 +12,8 @@ import javax.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.BankBranchDTO;
+import com.avc.mis.beta.dto.CityDTO;
 import com.avc.mis.beta.entities.data.Bank;
 import com.avc.mis.beta.entities.data.BankBranch;
 import com.avc.mis.beta.entities.data.City;
@@ -40,11 +42,10 @@ public class ReferenceTables extends DAO {
 		return query.getResultList();
 	}
 	
-	public List<City> getAllCities() {
-		
+	public List<CityDTO> getAllCities() {		
 		TypedQuery<City> query = getEntityManager().createNamedQuery(
 				"City.findAll", City.class);
-		return query.getResultList();
+		return query.getResultList().stream().map(city -> new CityDTO(city)).collect(Collectors.toList());
 	}
 	
 	public List<Country> getAllCountries() {
@@ -54,14 +55,12 @@ public class ReferenceTables extends DAO {
 		return query.getResultList();
 	}
 	
-	public Map<String, List<City>> getCitiesByCountry() {
-		
+	public Map<String, List<CityDTO>> getCitiesByCountry() {		
 		return getAllCities().stream()
-				.collect(Collectors.groupingBy(city -> city.getCountry().getValue()));
+				.collect(Collectors.groupingBy(city -> city.getCountryName()));
 	}
 
-	public List<CompanyPosition> getAllCompanyPositions() {
-		
+	public List<CompanyPosition> getAllCompanyPositions() {		
 		TypedQuery<CompanyPosition> query = getEntityManager().createNamedQuery(
 				"CompanyPosition.findAll", CompanyPosition.class);
 		return query.getResultList();
@@ -74,11 +73,12 @@ public class ReferenceTables extends DAO {
 		return query.getResultList();
 	}
 	
-	public List<BankBranch> getAllBankBranches() {
+	public List<BankBranchDTO> getAllBankBranches() {
 		
 		TypedQuery<BankBranch> query = getEntityManager().createNamedQuery(
 				"BankBranch.findAll", BankBranch.class);
-		return query.getResultList();
+		return query.getResultList().stream().map(branch -> new BankBranchDTO(branch))
+				.collect(Collectors.toList());
 	}
 	
 	public List<Item> getAllItems() {

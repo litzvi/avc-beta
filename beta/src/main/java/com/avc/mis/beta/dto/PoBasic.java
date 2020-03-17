@@ -32,7 +32,7 @@ public class PoBasic implements Serializable {
 		this.orderStatus = po.getStatus().toString();
 	}
 	
-	public String getCode() {
+	public String getValue() {
 		return this.contractTypeCode + this.id;
 	}
 }
