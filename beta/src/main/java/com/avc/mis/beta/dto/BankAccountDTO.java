@@ -25,12 +25,12 @@ public class BankAccountDTO implements Serializable {
 	private Integer id;
 	private String accountNo;
 	private String ownerName;
-	private BankBranch branch;
+	private BankBranchDTO branch;
 	
 	public BankAccountDTO(@NonNull BankAccount account) {
 		this.id = account.getId();
 		this.accountNo = account.getAccountNo();
 		this.ownerName = account.getOwnerName();
-		this.branch = account.getBranch();
+		this.branch = new BankBranchDTO(account.getBranch());
 	}
 }

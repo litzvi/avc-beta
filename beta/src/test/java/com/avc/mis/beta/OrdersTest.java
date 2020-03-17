@@ -44,12 +44,12 @@ public class OrdersTest {
 	private PO basicOrder() {
 		//build purchase order
 		PO po = new PO();
-		po.setId(PROCESS_NO);
+//		po.setId(PROCESS_NO);
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
 		po.setContractType(contractType);
-		Supplier supplier = new Supplier();
-		supplier.setId(7);
+		Supplier supplier = SuppliersTests.basicSupplier();
+		suppliers.addSupplier(supplier);
 		po.setSupplier(supplier);
 		//build process
 		ProductionProcess process = po.getOrderProcess();
@@ -66,10 +66,7 @@ public class OrdersTest {
 			items[i].setUnitPrice(new BigDecimal("1.16"));
 			items[i].setDeliveryDate(new GregorianCalendar(2020, Calendar.MARCH, 13));
 		}
-		for(OrderItem item1: items) {
-			System.out.println(item1);
-		}
-		
+				
 		po.setOrderItems(items);
 		
 				

@@ -48,10 +48,10 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1185;
+	private static Integer SERIAL_NO = 1186;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
-	private Supplier basicSupplier() {
+	public static Supplier basicSupplier() {
 		Supplier supplier = new Supplier();
 		supplier.setName(" \t test supplier	 \t" + SERIAL_NO);
 		supplier.setLocalName(" localName\t");
@@ -62,7 +62,7 @@ class SuppliersTests {
 		return supplier;
 	}
 	
-	private Supplier fullSupplier() {
+	public Supplier fullSupplier() {
 		Supplier supplier = basicSupplier();
 		//add supply categories
 		List<SupplyCategory> supplyCategories = referenceTables.getAllSupplyCategories();

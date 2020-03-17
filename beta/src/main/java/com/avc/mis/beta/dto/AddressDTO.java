@@ -23,11 +23,11 @@ public class AddressDTO implements Serializable {
 	@EqualsAndHashCode.Exclude
 	private Integer id;
 	private String streetAddress;
-	private City city;
+	private CityDTO city;
 	
 	public AddressDTO(@NonNull Address address) {
 		this.id = address.getId();
 		this.streetAddress = address.getStreetAddress();
-		this.city = address.getCity();
+		this.city = new CityDTO(address.getCity());
 	}
 }
