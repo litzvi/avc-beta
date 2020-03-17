@@ -13,6 +13,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.PoBasic;
 import com.avc.mis.beta.dto.PoDTO;
 import com.avc.mis.beta.dto.PoRow;
 import com.avc.mis.beta.entities.enums.OrderStatus;
@@ -43,7 +44,7 @@ public class Orders extends DAO {
 		List<Object[]> orders = query.getResultList();
 		return orders;
 	}
-	
+		
 	public List<PoRow> findCashewOrders(OrderStatus[] statuses) {
 		List<Object[]> orders = findPurchaseOrders(ProcessType.CASHEW_ORDER, statuses);
 		return orders.stream().map(result -> {return new PoRow((PO)result[0], (OrderItem)result[1]);})
@@ -54,6 +55,24 @@ public class Orders extends DAO {
 		List<Object[]> orders = findPurchaseOrders(ProcessType.GENERAL_ORDER, statuses);
 		return orders.stream().map(result -> {return new PoRow((PO)result[0], (OrderItem)result[1]);})
 			.collect(Collectors.toList());
+	}
+
+	private List<PoBasic> findPurchaseOrdersBasic(ProcessType orderType, OrderStatus[] statuses) {
+		TypedQuery<PO> query = getEntityManager()
+				.createNamedQuery("PO.findByOrderTypeAndStatus", PO.class);
+		query.setParameter("type", orderType);
+		query.setParameter("statuses", statuses);
+		List<PO> orders = query.getResultList();
+		return orders.stream().map(po -> {return new PoBasic(po);})
+				.collect(Collectors.toList());
+	}
+	
+	public List<PoBasic> findCashewOrdersBasic(OrderStatus[] statuses) {
+		return findPurchaseOrdersBasic(ProcessType.CASHEW_ORDER, statuses);		
+	}
+	
+	public List<PoBasic> findGeneralOrdersBasic(OrderStatus[] statuses) {
+		return findPurchaseOrdersBasic(ProcessType.GENERAL_ORDER, statuses);
 	}
 
 	public void addCashewOrder(PO po) {

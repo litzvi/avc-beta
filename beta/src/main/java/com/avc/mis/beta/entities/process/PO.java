@@ -49,18 +49,24 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PURCHASE_ORDERS")
-@NamedQuery(name = "PO.findAll",query = "select po from PO po "
+@NamedQuery(name = "PO.findAll", 
+	query = "select po from PO po "
 		+ "left join fetch po.orderProcess p ")
-@NamedQuery(name = "PO.findByOrderType",query = "select po from PO po "
+@NamedQuery(name = "PO.findByOrderType", 
+	query = "select po from PO po "
 		+ "left join fetch po.orderProcess p "
 		+ "where p.processType = :type ")
+@NamedQuery(name = "PO.findByOrderTypeAndStatus", 
+	query = "select po from PO po "
+		+ "left join fetch po.orderProcess p "
+		+ "where p.processType = :type and po.status in :statuses ")
 @NamedQuery(name = "PO&ITEM.findByOrderTypeAndStatus",
 	query = "select po, i from PO po "
 		+ "left join fetch po.orderProcess p "
-		+ "left join fetch po.orderItems i"
+		+ "left join fetch po.orderItems i "
 		+ "where p.processType = :type and po.status in :statuses ")
 @NamedQuery(name = "PO.details", 
-query = "select po from PO po "
+	query = "select po from PO po "
 		+ "left join fetch po.orderProcess p "
 		+ "where po.id = :poid ")
 public class PO extends BaseEntityNoId {
