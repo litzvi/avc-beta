@@ -16,6 +16,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dto.CityDTO;
 import com.avc.mis.beta.dto.FaxDTO;
 import com.avc.mis.beta.dto.PhoneDTO;
 import com.avc.mis.beta.dto.SupplierDTO;
@@ -48,7 +49,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1189;
+	private static Integer SERIAL_NO = 1197;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -91,20 +92,19 @@ class SuppliersTests {
 		supplier.getContactDetails().setEmails(emails);
 		//add address
 		Address address = new Address();
-		City city = new City();
-		city.setId(1);
-		address.setCity(city);
+		List<City> cities = referenceTables.getAllCities();
+		address.setCity(cities.get(0));
 		address.setStreetAddress("streetAddress for full supplier");
 		supplier.getContactDetails().setAddresses(new Address[] {address});
 		//add payment accounts
 		PaymentAccount[] paymentAccounts = new PaymentAccount[NUM_ITEMS];
+		List<BankBranch> branches = referenceTables.getAllBankBranches();
+		BankBranch branch = branches.get(0);
 		for(int i=0; i<paymentAccounts.length; i++) {
 			paymentAccounts[i] = new PaymentAccount();
 			BankAccount bankAccount = new BankAccount();
 			bankAccount.setAccountNo("account number for full supplier " + i);
-			bankAccount.setOwnerName("owner name for full supplier " + i);
-			BankBranch branch = new BankBranch();
-			branch.setId(1);
+			bankAccount.setOwnerName("owner name for full supplier " + i);			
 			bankAccount.setBranch(branch);
 			paymentAccounts[i].setBankAccount(bankAccount);
 		}
@@ -181,7 +181,12 @@ class SuppliersTests {
 		
 		//add, remove supply categories
 		supplier = fullSupplier();
-		expected = new SupplierDTO(supplier);
+		try {
+			expected = new SupplierDTO(supplier);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 		suppliers.addSupplier(supplier);
 		Set<SupplyCategory> categories = supplier.getSupplyCategories();
 		SupplyCategory removedCategory = categories.iterator().next();

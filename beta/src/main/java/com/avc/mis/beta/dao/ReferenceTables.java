@@ -42,10 +42,16 @@ public class ReferenceTables extends DAO {
 		return query.getResultList();
 	}
 	
-	public List<CityDTO> getAllCities() {		
+	public List<CityDTO> getAllCitiesDTO() {		
 		TypedQuery<City> query = getEntityManager().createNamedQuery(
 				"City.findAll", City.class);
 		return query.getResultList().stream().map(city -> new CityDTO(city)).collect(Collectors.toList());
+	}
+	
+	public List<City> getAllCities() {		
+		TypedQuery<City> query = getEntityManager().createNamedQuery(
+				"City.findAll", City.class);
+		return query.getResultList();
 	}
 	
 	public List<Country> getAllCountries() {
@@ -56,7 +62,7 @@ public class ReferenceTables extends DAO {
 	}
 	
 	public Map<String, List<CityDTO>> getCitiesByCountry() {		
-		return getAllCities().stream()
+		return getAllCitiesDTO().stream()
 				.collect(Collectors.groupingBy(city -> city.getCountryName()));
 	}
 
@@ -73,12 +79,19 @@ public class ReferenceTables extends DAO {
 		return query.getResultList();
 	}
 	
-	public List<BankBranchDTO> getAllBankBranches() {
+	public List<BankBranchDTO> getAllBankBranchesDTO() {
 		
 		TypedQuery<BankBranch> query = getEntityManager().createNamedQuery(
 				"BankBranch.findAll", BankBranch.class);
 		return query.getResultList().stream().map(branch -> new BankBranchDTO(branch))
 				.collect(Collectors.toList());
+	}
+	
+	public List<BankBranch> getAllBankBranches() {
+		
+		TypedQuery<BankBranch> query = getEntityManager().createNamedQuery(
+				"BankBranch.findAll", BankBranch.class);
+		return query.getResultList();
 	}
 	
 	public List<Item> getAllItems() {

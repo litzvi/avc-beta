@@ -9,15 +9,18 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.dao.Orders;
 import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dto.PoRow;
 import com.avc.mis.beta.dto.SupplierBasic;
 import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.process.ContractType;
 import com.avc.mis.beta.entities.process.OrderItem;
@@ -33,7 +36,7 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000012;
+	private final int PROCESS_NO = 5000018;
 
 	@Autowired
 	Orders orders;
@@ -69,10 +72,11 @@ public class OrdersTest {
 				
 		po.setOrderItems(items);
 		
+		
 				
 		return po;
 	}
-	
+//	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 
@@ -84,11 +88,22 @@ public class OrdersTest {
 			throw e;
 		}
 		
+		Supplier supplier = po.getSupplier();
+		orders.removeOrder(po.getId());
+		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		
+		
+		
 		//get suppliers by supply category
 		List<SupplierBasic> suppliersByCategory = suppliers.getSuppliersBasic(3);
-		suppliersByCategory.forEach(supplier -> System.out.println(supplier));
+		suppliersByCategory.forEach(s -> System.out.println(s));
 		
-		System.out.println(orders.getOrder(PROCESS_NO));
+		//get list of cashew orders
+		List<PoRow> pos =  orders.findCashewOrders(new OrderStatus[] {OrderStatus.OPEN_PENDING});
+		for(PoRow row: pos)
+			System.out.println(row);
+		
+
 		
 	}
 	

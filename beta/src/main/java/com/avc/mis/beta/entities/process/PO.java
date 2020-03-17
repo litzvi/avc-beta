@@ -63,8 +63,8 @@ import lombok.ToString;
 @NamedQuery(name = "PO&ITEM.findByOrderTypeAndStatus",
 	query = "select po, i from PO po "
 		+ "left join fetch po.orderProcess p "
-		+ "left join fetch po.orderItems i "
-		+ "where p.processType = :type and po.status in :statuses ")
+		+ "left join po.orderItems i "
+		+ "where po.orderProcess.processType = :type and po.status in :statuses ")
 @NamedQuery(name = "PO.details", 
 	query = "select po from PO po "
 		+ "left join fetch po.orderProcess p "
@@ -102,7 +102,7 @@ public class PO extends BaseEntityNoId {
 	private Set<ProductionProcess> processes = new HashSet<>();
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "po", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "po", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<OrderItem> orderItems = new HashSet<>();
 	
