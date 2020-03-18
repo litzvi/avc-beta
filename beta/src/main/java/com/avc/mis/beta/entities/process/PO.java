@@ -49,26 +49,17 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PURCHASE_ORDERS")
-@NamedQuery(name = "PO.findAll", 
-	query = "select po from PO po "
-		+ "left join fetch po.orderProcess p ")
-@NamedQuery(name = "PO.findByOrderType", 
-	query = "select po from PO po "
-		+ "left join fetch po.orderProcess p "
-		+ "where p.processType = :type ")
-@NamedQuery(name = "PO.findByOrderTypeAndStatus", 
-	query = "select po from PO po "
-		+ "left join fetch po.orderProcess p "
-		+ "where p.processType = :type and po.status in :statuses ")
-@NamedQuery(name = "PO&ITEM.findByOrderTypeAndStatus",
-	query = "select po, i from PO po "
-		+ "left join fetch po.orderProcess p "
-		+ "left join po.orderItems i "
-		+ "where po.orderProcess.processType = :type and po.status in :statuses ")
-@NamedQuery(name = "PO.details", 
-	query = "select po from PO po "
-		+ "left join fetch po.orderProcess p "
-		+ "where po.id = :poid ")
+//@NamedQuery(name = "PO.findAll", 
+//	query = "select po from PO po "
+//		+ "left join fetch po.orderProcess p ")
+//@NamedQuery(name = "PO.findByOrderType", 
+//	query = "select po from PO po "
+//		+ "left join fetch po.orderProcess p "
+//		+ "where p.processType = :type ")
+//@NamedQuery(name = "PO.details", 
+//	query = "select po from PO po "
+//		+ "left join fetch po.orderProcess p "
+//		+ "where po.id = :poid ")
 public class PO extends BaseEntityNoId {
 	
 	@EqualsAndHashCode.Include
@@ -83,7 +74,7 @@ public class PO extends BaseEntityNoId {
 	@JoinColumn(name = "processId", updatable = false, nullable = false)
 	private ProductionProcess orderProcess;
 	
-	@ManyToOne 
+	@ManyToOne
 	@JoinColumn(name = "contractTypeId", updatable = false, nullable = false)
 	private ContractType contractType;
 	

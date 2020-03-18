@@ -4,35 +4,36 @@
 package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
-import java.util.Set;
 
 import com.avc.mis.beta.entities.data.Supplier;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.ToString;
+import lombok.Value;
 
 /**
  * @author Zvi
  *
  */
-@Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NoArgsConstructor
+@Value
 public class SupplierBasic implements Serializable {
-	@EqualsAndHashCode.Include
-	private Integer id;
+	
+	@EqualsAndHashCode.Exclude
+	Integer id;
 	
 	@JsonIgnore
-	private String name;
+	@ToString.Exclude
+	String name;
 	
+	@lombok.experimental.Tolerate
 	public SupplierBasic(@NonNull Supplier supplier) {
 		this.id = supplier.getId();
 		this.name = supplier.getName();
 	}
 	
+	@ToString.Include(name = "value")
 	public String getValue() {
 		return getName();
 	}

@@ -12,6 +12,7 @@ import com.avc.mis.beta.entities.process.ProcessStatus;
 import com.avc.mis.beta.entities.process.ProductionLine;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import lombok.NonNull;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProductionProcessDTO implements Serializable {
 	@EqualsAndHashCode.Exclude
 	private Integer id;

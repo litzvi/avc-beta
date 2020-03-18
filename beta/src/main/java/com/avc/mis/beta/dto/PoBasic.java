@@ -5,34 +5,40 @@ package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
 
+import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.PO;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
+import lombok.Value;
 
 /**
  * @author Zvi
  *
  */
-@Data
-@NoArgsConstructor
+@Value
 public class PoBasic implements Serializable {
 
 	@EqualsAndHashCode.Exclude
-	private Integer id;
-	private String contractTypeCode;
-	private String supplierName;
-	private String orderStatus;
+	Integer id;
+	String contractTypeCode;
+	String supplierName;
+	OrderStatus orderStatus;
 	
+	@lombok.experimental.Tolerate
 	public PoBasic(PO po) {
 		this.id = po.getId();
 		this.contractTypeCode = po.getContractType().getValue();
 		this.supplierName = po.getSupplier().getName();
-		this.orderStatus = po.getStatus().toString();
+		this.orderStatus = po.getStatus();
 	}
 	
+	@ToString.Include(name = "value")
 	public String getValue() {
 		return this.contractTypeCode + this.id;
+	}
+	
+	public String getOrderStatus() {
+		return this.orderStatus.toString();
 	}
 }

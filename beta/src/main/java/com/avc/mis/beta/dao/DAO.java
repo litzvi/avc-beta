@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.repositories.PORepository;
+import com.avc.mis.beta.repositories.SupplierRepository;
 
 /**
  * @author Zvi
@@ -21,18 +23,23 @@ public abstract class DAO {
 	public static final int BATCH_SIZE = 20;
 	
 	
-	@Autowired
-	private JdbcTemplate jdbcTemplateObject;
+	@Autowired private PORepository poRepository;
+	@Autowired private SupplierRepository supplierRepository;	
+	@Autowired private EntityManager entityManager;
 	
-	
-	@Autowired
-	private EntityManager entityManager;
 	
 	/**
-	 * @return the jdbcTemplateObject
+	 * @return the poRepository
 	 */
-	protected JdbcTemplate getJdbcTemplateObject() {
-		return jdbcTemplateObject;
+	PORepository getPoRepository() {
+		return poRepository;
+	}
+
+	/**
+	 * @return the supplierRepository
+	 */
+	SupplierRepository getSupplierRepository() {
+		return supplierRepository;
 	}
 
 	/**
@@ -42,18 +49,18 @@ public abstract class DAO {
 		return entityManager;
 	}
 	
-	protected void addEntity(Insertable entity, Insertable reference) {
+	void addEntity(Insertable entity, Insertable reference) {
 		reference = getEntityManager().getReference(reference.getClass(), reference.getId());
 		entity.setReference(reference);
 		getEntityManager().persist(entity);
 	}
 	
-	protected void removeEntity(Insertable entity) {
+	void removeEntity(Insertable entity) {
 		entity = getEntityManager().getReference(entity.getClass(), entity.getId());
 		getEntityManager().remove(entity); 
 	}
 	
-	protected void editEntity(Insertable entity) {
+	void editEntity(Insertable entity) {
 		if(entity.getId() == null) {
 			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
 		}

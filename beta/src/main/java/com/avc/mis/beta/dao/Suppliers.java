@@ -33,7 +33,7 @@ import com.avc.mis.beta.entities.data.Supplier;
 public class Suppliers extends DAO {
 	
 //	@Autowired
-//	private SupplierReposetory supplierReposetory;
+//	private PORepository supplierReposetory;
 	
 	private List<Supplier> findSuppliers() {
 		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findAll", Supplier.class);
@@ -60,12 +60,13 @@ public class Suppliers extends DAO {
 	
 	@Transactional(readOnly = true)
 	public List<SupplierBasic> getSuppliersBasic(Integer categoryId) {
-		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findByCategory", Supplier.class);
-		query.setParameter("categoryId", categoryId);
-		List<Supplier> suppliers = query.getResultList();
-		List<SupplierBasic> supplierRows = new ArrayList<>();
-		suppliers.forEach((supplier) -> supplierRows.add(new SupplierBasic(supplier)));
-		return supplierRows;
+		return getSupplierRepository().findSuppliersByCategoryBasic(categoryId);
+//		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findByCategory", Supplier.class);
+//		query.setParameter("categoryId", categoryId);
+//		List<Supplier> suppliers = query.getResultList();
+//		List<SupplierBasic> supplierRows = new ArrayList<>();
+//		suppliers.forEach((supplier) -> supplierRows.add(new SupplierBasic(supplier)));
+//		return supplierRows;
 		
 	}
 		

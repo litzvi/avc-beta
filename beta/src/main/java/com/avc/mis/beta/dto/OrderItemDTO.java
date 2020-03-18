@@ -6,11 +6,14 @@ package com.avc.mis.beta.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Currency;
+import java.util.Optional;
 
 import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.OrderItem;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -22,14 +25,14 @@ import lombok.NonNull;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderItemDTO implements Serializable {
 	@EqualsAndHashCode.Exclude
 	private Integer id;
 	private Integer poId;
 	private Item item;
 	private BigDecimal numberUnits;
-	private MeasureUnit measureUnit;
-	private String currency;
+	private Currency currency;
 	private BigDecimal unitPrice;
 	private Calendar deliveryDate;
 	private String defects;
@@ -45,5 +48,9 @@ public class OrderItemDTO implements Serializable {
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.defects = orderItem.getDefects();
 		this.remarks = orderItem.getRemarks();
+	}
+	
+	public String getCurrency() {
+		return Optional.ofNullable(this.currency).map(c -> c.getCurrencyCode()).orElse(null);
 	}
 }

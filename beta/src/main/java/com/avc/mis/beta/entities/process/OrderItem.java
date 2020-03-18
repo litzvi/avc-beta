@@ -62,7 +62,7 @@ public class OrderItem extends BaseEntity {
 	@Transient
 	private MeasureUnit measureUnit;
 	
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE)
 	private Currency currency;
 	
 //	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
@@ -78,17 +78,14 @@ public class OrderItem extends BaseEntity {
 			this.currency = Currency.getInstance(currencyCode);
 	}
 	
-	public String getCurrency() {
-		return Optional.ofNullable(this.currency).map(c -> c.getCurrencyCode()).orElse(null);
-	}
 	
 	public void setMeasureUnit(String measureUnit) {
 		this.measureUnit = MeasureUnit.valueOf(measureUnit);
 	}
 	
-	public String getMeasureUnit() {
-		return Optional.ofNullable(this.item).map(i -> i.getMeasureUnit().toString()).orElse(null);
-	}
+//	public String getMeasureUnit() {
+//		return Optional.ofNullable(this.item).map(i -> i.getMeasureUnit().toString()).orElse(null);
+//	}
 	
 		
 //	public void setUnitPrice(String val) {

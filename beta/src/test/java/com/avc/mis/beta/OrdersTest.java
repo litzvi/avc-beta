@@ -16,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.dao.Orders;
 import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dto.PoBasic;
+import com.avc.mis.beta.dto.PoDTO;
 import com.avc.mis.beta.dto.PoRow;
 import com.avc.mis.beta.dto.SupplierBasic;
 import com.avc.mis.beta.entities.data.Item;
@@ -36,7 +38,7 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000018;
+	private final int PROCESS_NO = 5000031;
 
 	@Autowired
 	Orders orders;
@@ -88,6 +90,9 @@ public class OrdersTest {
 			throw e;
 		}
 		
+		PoDTO poDTO = orders.getOrder(5000026);
+		System.out.println(poDTO);
+		
 		Supplier supplier = po.getSupplier();
 		orders.removeOrder(po.getId());
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
@@ -97,6 +102,11 @@ public class OrdersTest {
 		//get suppliers by supply category
 		List<SupplierBasic> suppliersByCategory = suppliers.getSuppliersBasic(3);
 		suppliersByCategory.forEach(s -> System.out.println(s));
+		
+		//get list of cashew orders
+		List<PoBasic> posBasic =  orders.findCashewOrdersBasic(new OrderStatus[] {OrderStatus.OPEN_PENDING});
+		for(PoBasic row: posBasic)
+			System.out.println(row);
 		
 		//get list of cashew orders
 		List<PoRow> pos =  orders.findCashewOrders(new OrderStatus[] {OrderStatus.OPEN_PENDING});
