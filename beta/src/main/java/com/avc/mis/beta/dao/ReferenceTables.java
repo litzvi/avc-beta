@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.persistence.TypedQuery;
-
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,17 +67,11 @@ public class ReferenceTables extends DAO {
 	}
 	
 	public List<Item> getAllItems() {
-		
-		TypedQuery<Item> query = getEntityManager().createNamedQuery(
-				"Item.findAll", Item.class);
-		return query.getResultList();
+		return getReferenceRepository().findAllItems();
 	}
 	
 	public List<ContractType> getAllContractTypes() {
-		
-		TypedQuery<ContractType> query = getEntityManager().createNamedQuery(
-				"ContractType.findAll", ContractType.class);
-		return query.getResultList();
+		return getReferenceRepository().findAllContractTypes();
 	}
 	
 }

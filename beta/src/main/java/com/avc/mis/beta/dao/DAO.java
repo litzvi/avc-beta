@@ -6,15 +6,10 @@ package com.avc.mis.beta.dao;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.avc.mis.beta.entities.BaseEntityNoId;
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.repositories.BaseRepository;
-import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.repositories.ReferenceTablesRepository;
-import com.avc.mis.beta.repositories.SupplierRepository;
 
 /**
  * @author Zvi
@@ -35,7 +30,7 @@ public abstract class DAO {
 	/**
 	 * @return the baseRepository
 	 */
-	protected ReferenceTablesRepository getReferenceRepository() {
+	ReferenceTablesRepository getReferenceRepository() {
 		return referenceRepository;
 	}
 

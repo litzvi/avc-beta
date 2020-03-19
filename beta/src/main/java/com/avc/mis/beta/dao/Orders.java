@@ -3,13 +3,8 @@
  */
 package com.avc.mis.beta.dao;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +87,6 @@ public class Orders extends DAO {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void removeOrder(int orderId) {
-//		getPoRepository().deleteById(orderId);
 		removeEntity(PO.class, orderId);
 	}
 	

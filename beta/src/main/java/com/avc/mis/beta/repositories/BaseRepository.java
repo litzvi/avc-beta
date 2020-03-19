@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.io.Serializable;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +17,9 @@ import com.avc.mis.beta.entities.data.BankBranch;
 import com.avc.mis.beta.entities.data.City;
 import com.avc.mis.beta.entities.data.CompanyPosition;
 import com.avc.mis.beta.entities.data.Country;
+import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.data.SupplyCategory;
+import com.avc.mis.beta.entities.process.ContractType;
 
 /**
  * @author Zvi
@@ -55,4 +56,12 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	
 	@Query("select sc from SupplyCategory sc")
 	List<SupplyCategory> findAllSupplyCategories();
+	
+	@Query("select i from Item i")
+	List<Item> findAllItems();
+	
+	@Query("select t from ContractType t")
+	List<ContractType> findAllContractTypes();
+
+
 }

@@ -6,13 +6,9 @@ package com.avc.mis.beta.repositories;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.PoDTO;
 import com.avc.mis.beta.dto.SupplierBasic;
-import com.avc.mis.beta.dto.SupplierDTO;
-import com.avc.mis.beta.dto.SupplierRow;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.Supplier;
 
