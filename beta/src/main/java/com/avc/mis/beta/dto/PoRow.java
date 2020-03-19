@@ -5,8 +5,8 @@ package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.OrderStatus;
@@ -31,8 +31,8 @@ public class PoRow implements Serializable {
 	String itemName;
 	BigDecimal amount;
 	MeasureUnit measureUnit;
-	Date contractDate;
-	Calendar deliveryDate;
+	LocalDateTime contractDate;
+	LocalDate deliveryDate;
 	OrderStatus orderStatus;
 	
 	/**

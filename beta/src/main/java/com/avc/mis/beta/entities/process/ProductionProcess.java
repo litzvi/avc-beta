@@ -3,6 +3,10 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -42,8 +46,7 @@ public class ProductionProcess extends BaseEntity {
 //	private Integer id;
 	
 	@Column(nullable = false, updatable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private final Date insertTime;
+	private final Instant insertTime;
 	
 	@ManyToOne 
 	@JoinColumn(name = "staffId", updatable = false)
@@ -63,9 +66,8 @@ public class ProductionProcess extends BaseEntity {
 	private ProductionLine productionLine;
 	
 	@Column(nullable = false, updatable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date time;
-	private Long duration;//milliseconds
+	private LocalDateTime time;
+	private Duration duration;//seconds
 	private Integer numOfWorkers;
 	
 	@ManyToOne 
@@ -74,7 +76,7 @@ public class ProductionProcess extends BaseEntity {
 	private String remarks;
 	
 	public ProductionProcess() {
-		this.insertTime = new Date(System.currentTimeMillis());
+		this.insertTime = Instant.now();
 	}
 
 	protected boolean canEqual(Object o) {

@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.data;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -49,8 +50,8 @@ public class IdCard extends BaseEntityNoId {
 	private Person person;
 	
 	private String idNumber;
-	private Date dob;
-	private Date dateOfIssue;
+	private LocalDate dob;
+	private LocalDate dateOfIssue;
 	private String placeOfIssue;
 	
 	@ManyToOne(fetch = FetchType.EAGER)

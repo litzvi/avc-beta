@@ -4,10 +4,11 @@
 package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.entities.data.Staff;
@@ -41,8 +42,8 @@ public class PoDTO implements Serializable {
 	
 	public PoDTO(Integer id, ContractType contractType, Integer supplierId, 
 			String supplierName, OrderStatus status, 
-			Integer processId, Date insertTime, Staff staffRecording, ProcessType processType,
-			ProductionLine productionLine, Date time, Long duration, Integer numOfWorkers, 
+			Integer processId, Instant insertTime, Staff staffRecording, ProcessType processType,
+			ProductionLine productionLine, LocalDateTime time, Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, String remarks) {
 		this.id = id;
 		this.orderProcess = new ProductionProcessDTO(processId, insertTime, staffRecording, id, 

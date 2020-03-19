@@ -4,15 +4,10 @@
 package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
-import java.sql.Date;
-
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import java.time.LocalDate;
 
 import com.avc.mis.beta.entities.data.Country;
 import com.avc.mis.beta.entities.data.IdCard;
-import com.avc.mis.beta.entities.data.Person;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,8 +24,8 @@ public class IdCardDTO implements Serializable {
 	@EqualsAndHashCode.Exclude
 	private Integer id;
 	private String idNumber;
-	private Date dob;
-	private Date dateOfIssue;
+	private LocalDate dob;
+	private LocalDate dateOfIssue;
 	private String placeOfIssue;
 	private Country nationality;
 	

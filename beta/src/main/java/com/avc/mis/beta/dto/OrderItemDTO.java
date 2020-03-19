@@ -5,12 +5,11 @@ package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDate;
 import java.util.Currency;
 import java.util.Optional;
 
 import com.avc.mis.beta.entities.data.Item;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.OrderItem;
 
 import lombok.AllArgsConstructor;
@@ -34,7 +33,7 @@ public class OrderItemDTO implements Serializable {
 	private BigDecimal numberUnits;
 	private Currency currency;
 	private BigDecimal unitPrice;
-	private Calendar deliveryDate;
+	private LocalDate deliveryDate;
 	private String defects;
 	private String remarks;
 	

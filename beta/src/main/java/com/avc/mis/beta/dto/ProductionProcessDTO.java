@@ -4,7 +4,9 @@
 package com.avc.mis.beta.dto;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDateTime;
 
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.ProcessType;
@@ -28,13 +30,13 @@ import lombok.NonNull;
 public class ProductionProcessDTO implements Serializable {
 	@EqualsAndHashCode.Exclude
 	private Integer id;
-	private Date insertTime;
+	private Instant insertTime;
 	private Staff staffRecording;
 	private Integer poId;
 	private ProcessType processType;
 	private ProductionLine productionLine;
-	private Date time;
-	private Long duration;
+	private LocalDateTime time;
+	private Duration duration;
 	private Integer numOfWorkers;
 	private ProcessStatus status;
 	private String remarks;

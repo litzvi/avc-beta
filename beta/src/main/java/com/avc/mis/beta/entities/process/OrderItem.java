@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.process;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Optional;
@@ -68,8 +69,7 @@ public class OrderItem extends BaseEntity {
 //	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	private BigDecimal unitPrice;
 	
-	@Temporal(TemporalType.DATE)
-	private Calendar deliveryDate;
+	private LocalDate deliveryDate;
 	private String defects;//maybe change to enum that can get percentage
 	private String remarks;
 	

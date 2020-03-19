@@ -5,6 +5,8 @@ package com.avc.mis.beta;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -58,7 +60,7 @@ public class OrdersTest {
 		po.setSupplier(supplier);
 		//build process
 		ProductionProcess process = po.getOrderProcess();
-		process.setTime(new Date(System.currentTimeMillis()));
+		process.setTime(LocalDateTime.now());
 		//add order items
 		OrderItem[] items = new OrderItem[NUM_ITEMS];
 		Item item = new Item();
@@ -69,7 +71,7 @@ public class OrdersTest {
 			items[i].setNumberUnits(new BigDecimal(i));
 			items[i].setCurrency("USD");
 			items[i].setUnitPrice(new BigDecimal("1.16"));
-			items[i].setDeliveryDate(new GregorianCalendar(2020, Calendar.MARCH, 13));
+			items[i].setDeliveryDate(LocalDate.of(1983, 11, 23));
 		}
 				
 		po.setOrderItems(items);
