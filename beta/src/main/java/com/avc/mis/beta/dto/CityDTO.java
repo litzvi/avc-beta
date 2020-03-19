@@ -12,18 +12,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Value;
 
 /**
  * @author Zvi
  *
  */
-@Data
-@NoArgsConstructor
+@Value
 public class CityDTO implements Serializable {
 	@EqualsAndHashCode.Exclude
-	private Integer id;
-	private String value;
-	private String countryName;
+	Integer id;
+	String value;
+	String countryName;
 	
 	public CityDTO(@NonNull City city) {
 		this.id = city.getId();

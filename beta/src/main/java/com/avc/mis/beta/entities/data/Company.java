@@ -41,8 +41,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @BatchSize(size = DAO.BATCH_SIZE)
-@Table(name="COMPANIES" /*, 
-	uniqueConstraints = @UniqueConstraint(name = "existing compony name", columnNames = {"name"})*/)
+@Table(name="COMPANIES")
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Company extends BaseEntity {
 	

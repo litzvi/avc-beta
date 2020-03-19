@@ -20,6 +20,7 @@ import com.avc.mis.beta.dto.CityDTO;
 import com.avc.mis.beta.dto.FaxDTO;
 import com.avc.mis.beta.dto.PhoneDTO;
 import com.avc.mis.beta.dto.SupplierDTO;
+import com.avc.mis.beta.dto.SupplierRow;
 import com.avc.mis.beta.entities.data.Address;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.BankBranch;
@@ -132,7 +133,7 @@ class SuppliersTests {
 		
 		return supplier;
 	}
-	@Disabled
+//	@Disabled
 	@Test
 	void suppliersTest() {
 		//supplier with null name
@@ -246,6 +247,10 @@ class SuppliersTests {
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
 	
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		
+		//print list of suppliers table
+		List<SupplierRow> list = suppliers.getSuppliersTable();
+		list.forEach(s -> System.out.println(s));
 		
 		
 	}

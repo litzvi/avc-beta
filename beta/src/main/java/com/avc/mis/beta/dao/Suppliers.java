@@ -5,10 +5,9 @@ package com.avc.mis.beta.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +17,11 @@ import com.avc.mis.beta.dto.SupplierRow;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.CompanyContact;
-import com.avc.mis.beta.entities.data.CompanyContactPK;
 import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.repositories.SupplierRepository;
 
 /**
  * @author Zvi
@@ -32,42 +31,31 @@ import com.avc.mis.beta.entities.data.Supplier;
 @Transactional(rollbackFor = Throwable.class)
 public class Suppliers extends DAO {
 	
-//	@Autowired
-//	private PORepository supplierReposetory;
-	
-	private List<Supplier> findSuppliers() {
-		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findAll", Supplier.class);
-		List<Supplier> suppliers = query.getResultList();
-		return suppliers;
+	@Autowired
+	private SupplierRepository supplierRepository;
+		
+	/**
+	 * @return the supplierRepository
+	 */
+	private SupplierRepository getSupplierRepository() {
+		return supplierRepository;
 	}
-	
+
 	@Transactional(readOnly = true)
 	public List<SupplierBasic> getSuppliersBasic() {
-		List<SupplierBasic> supplierRows = new ArrayList<>();
-		findSuppliers().forEach((supplier) -> supplierRows.add(new SupplierBasic(supplier)));
-		return supplierRows;
-		
+		return getSupplierRepository().findAllSuppliersBasic();
 	}
 		
 	@Transactional(readOnly = true)
 	public List<SupplierRow> getSuppliersTable() {
-		
 		List<SupplierRow> supplierRows = new ArrayList<>();
-		findSuppliers().forEach((supplier) -> supplierRows.add(new SupplierRow(supplier)));
-		return supplierRows;
-		
+		getSupplierRepository().findAll().forEach((s) -> supplierRows.add(new SupplierRow(s)));
+		return supplierRows;		
 	}
 	
 	@Transactional(readOnly = true)
 	public List<SupplierBasic> getSuppliersBasic(Integer categoryId) {
 		return getSupplierRepository().findSuppliersByCategoryBasic(categoryId);
-//		TypedQuery<Supplier> query = getEntityManager().createNamedQuery("Supplier.findByCategory", Supplier.class);
-//		query.setParameter("categoryId", categoryId);
-//		List<Supplier> suppliers = query.getResultList();
-//		List<SupplierBasic> supplierRows = new ArrayList<>();
-//		suppliers.forEach((supplier) -> supplierRows.add(new SupplierBasic(supplier)));
-//		return supplierRows;
-		
 	}
 		
 	/**
@@ -86,23 +74,14 @@ public class Suppliers extends DAO {
 	
 	@Transactional(readOnly = true)
 	public SupplierDTO getSupplier(int id) {
-		
-		TypedQuery<Supplier> querySupplyer = getEntityManager().createNamedQuery("Supplier.details", Supplier.class);
-		querySupplyer.setParameter("sid", id);
-		Supplier supplier;
-		try {
-			supplier = querySupplyer.getSingleResult();
-		}
-		catch(NoResultException e) {
-			throw new IllegalArgumentException("No supplier with given ID");
-		}
+		Optional<Supplier> optionalSupplier = getSupplierRepository().findById(id);
+		Supplier supplier = optionalSupplier.orElseThrow(() -> 
+			new IllegalArgumentException("No supplier with given ID"));
+
 		SupplierDTO supplierDTO = new SupplierDTO(supplier);
 		
-		TypedQuery<CompanyContact> queryContacts = 
-				getEntityManager().createNamedQuery("CompanyContact.details.findAll", CompanyContact.class);
-		queryContacts.setParameter("cid", id);
-		List<CompanyContact> supplierContacts = queryContacts.getResultList();
-		supplierContacts.forEach((contact) -> supplierDTO.addCompanyContact(contact));
+		getSupplierRepository().findCompanyContactsByCompnyId(id)
+			.forEach((cc) -> supplierDTO.addCompanyContact(cc));
 		
 		return supplierDTO;
 	}
@@ -114,8 +93,7 @@ public class Suppliers extends DAO {
 	 * @param supplierId
 	 */
 	public void removeSupplier(int supplierId) {
-		Supplier supplier = getEntityManager().getReference(Supplier.class, supplierId);
-		getEntityManager().remove(supplier);
+		removeEntity(Supplier.class, supplierId);	
 	}
 	
 	/**
@@ -155,8 +133,7 @@ public class Suppliers extends DAO {
 	}
 	
 	public void removeAccount(int accountId) {
-		PaymentAccount account = getEntityManager().getReference(PaymentAccount.class, accountId);
-		getEntityManager().remove(account);
+		removeEntity(PaymentAccount.class, accountId);	
 	}
 	
 	public void editContactPerson(CompanyContact contact) {
@@ -184,27 +161,22 @@ public class Suppliers extends DAO {
 		}
 	}
 	
-	public void removeContactPerson(CompanyContact contact) {
-		contact = getEntityManager()
-				.getReference(CompanyContact.class, new CompanyContactPK(contact.getPerson(), contact.getCompany()));
-		getEntityManager().remove(contact);
+	public void removeContactPerson(int contactId) {
+		removeEntity(CompanyContact.class, contactId);
 	}
 	
+	//for testing - should be removed
 	public void addEntity(Insertable entity, Insertable reference) {
-		reference = getEntityManager().getReference(reference.getClass(), reference.getId());
-		entity.setReference(reference);
-		getEntityManager().persist(entity);
+		super.addEntity(entity, reference);
 	}
 	
+	//for testing - should be removed
 	public void removeEntity(Insertable entity) {
-		entity = getEntityManager().getReference(entity.getClass(), entity.getId());
-		getEntityManager().remove(entity); 
+		super.removeEntity(entity);
 	}
 	
+	//for testing - should be removed
 	public void editEntity(Insertable entity) {
-		if(entity.getId() == null) {
-			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
-		}
-		getEntityManager().merge(entity);
+		super.editEntity(entity);
 	}	
 }

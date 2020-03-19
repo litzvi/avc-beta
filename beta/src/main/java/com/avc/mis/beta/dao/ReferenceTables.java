@@ -42,10 +42,11 @@ public class ReferenceTables extends DAO {
 		return query.getResultList();
 	}
 	
-	public List<CityDTO> getAllCitiesDTO() {		
-		TypedQuery<City> query = getEntityManager().createNamedQuery(
-				"City.findAll", City.class);
-		return query.getResultList().stream().map(city -> new CityDTO(city)).collect(Collectors.toList());
+	public List<CityDTO> getAllCitiesDTO() {	
+		return getBaseRepository().findAllCities();
+//		TypedQuery<City> query = getEntityManager().createNamedQuery(
+//				"City.findAll", City.class);
+//		return query.getResultList().stream().map(city -> new CityDTO(city)).collect(Collectors.toList());
 	}
 	
 	public List<City> getAllCities() {		

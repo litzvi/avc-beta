@@ -31,6 +31,15 @@ import com.avc.mis.beta.repositories.PORepository;
 @Repository
 @Transactional(readOnly = true)
 public class Orders extends DAO {
+	
+	private PORepository poRepository;
+	
+	/**
+	 * @return the poRepository
+	 */
+	PORepository getPoRepository() {
+		return poRepository;
+	}
 			
 	public List<PoRow> findCashewOrders(OrderStatus[] statuses) {
 		return getPoRepository().findByOrderTypeAndStatuses(ProcessType.CASHEW_ORDER, statuses);
@@ -67,24 +76,12 @@ public class Orders extends DAO {
 	}
 	
 	public PoDTO getOrder(int orderId) {
-//		TypedQuery<PO> queryPurchaseOrder = getEntityManager().createNamedQuery("PO.details", PO.class);
-//		queryPurchaseOrder.setParameter("poid", orderId);
-//		PO order;
-//		try {
-//			order = queryPurchaseOrder.getSingleResult();
-//		}
-//		catch(NoResultException e) {
-//			throw new IllegalArgumentException("No order with given PO code");
-//		}
 		Optional<PoDTO> order = getPoRepository().findOrderById(orderId);
 		PoDTO po = order.orElseThrow(
 				()->new IllegalArgumentException("No order with given PO code"));
 		po.setOrderItems(getPoRepository().findOrderItemsByPo(orderId));
 		
 		return po;
-
-//		return new PoDTO(order.orElseThrow(
-//				()->new IllegalArgumentException("No order with given PO code")));
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -94,12 +91,8 @@ public class Orders extends DAO {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void removeOrder(int orderId) {
-		getPoRepository().deleteById(orderId);
-//		PO order = getEntityManager().getReference(PO.class, orderId);
-//		getEntityManager().remove(order);
+//		getPoRepository().deleteById(orderId);
+		removeEntity(PO.class, orderId);
 	}
-	
-	
-	
 	
 }
