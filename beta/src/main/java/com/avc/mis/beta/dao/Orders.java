@@ -32,6 +32,7 @@ import com.avc.mis.beta.repositories.PORepository;
 @Transactional(readOnly = true)
 public class Orders extends DAO {
 	
+	@Autowired
 	private PORepository poRepository;
 	
 	/**

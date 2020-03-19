@@ -12,19 +12,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Value;
 
 /**
  * @author Zvi
  *
  */
-@Data
-@NoArgsConstructor
+@Value
 public class BankBranchDTO implements Serializable {
 	@EqualsAndHashCode.Exclude
-	private Integer id;
-	private String value;
-	private String bankName;
+	Integer id;
+	String value;
+	String bankName;
 	
+	@lombok.experimental.Tolerate
 	public BankBranchDTO(@NonNull BankBranch branch) {
 		this.id = branch.getId();
 		this.value = branch.getValue();

@@ -31,68 +31,41 @@ import com.avc.mis.beta.entities.process.ContractType;
 @Transactional(readOnly = true)
 public class ReferenceTables extends DAO {
 	
-	/**
-	 * 
-	 * @return
-	 */
 	public List<SupplyCategory> getAllSupplyCategories() {
-		
-		TypedQuery<SupplyCategory> query = getEntityManager().createNamedQuery(
-				"SupplyCategory.findAll", SupplyCategory.class);
-		return query.getResultList();
+		return getReferenceRepository().findAllSupplyCategories();
 	}
 	
-	public List<CityDTO> getAllCitiesDTO() {	
-		return getBaseRepository().findAllCities();
-//		TypedQuery<City> query = getEntityManager().createNamedQuery(
-//				"City.findAll", City.class);
-//		return query.getResultList().stream().map(city -> new CityDTO(city)).collect(Collectors.toList());
+	public List<CityDTO> getAllCitiesDTO() {
+		return getReferenceRepository().findAllCitiesDTO();
 	}
 	
-	public List<City> getAllCities() {		
-		TypedQuery<City> query = getEntityManager().createNamedQuery(
-				"City.findAll", City.class);
-		return query.getResultList();
+	public List<City> getAllCities() {
+		return getReferenceRepository().findAllCities();
 	}
 	
 	public List<Country> getAllCountries() {
-		
-		TypedQuery<Country> query = getEntityManager().createNamedQuery(
-				"Country.findAll", Country.class);
-		return query.getResultList();
+		return getReferenceRepository().findAllCountries();
 	}
 	
 	public Map<String, List<CityDTO>> getCitiesByCountry() {		
-		return getAllCitiesDTO().stream()
+		return getReferenceRepository().findAllCitiesDTO().stream()
 				.collect(Collectors.groupingBy(city -> city.getCountryName()));
 	}
 
-	public List<CompanyPosition> getAllCompanyPositions() {		
-		TypedQuery<CompanyPosition> query = getEntityManager().createNamedQuery(
-				"CompanyPosition.findAll", CompanyPosition.class);
-		return query.getResultList();
+	public List<CompanyPosition> getAllCompanyPositions() {	
+		return getReferenceRepository().findAllCompanyPositions();
 	}
 	
 	public List<Bank> getAllBanks() {
-		
-		TypedQuery<Bank> query = getEntityManager().createNamedQuery(
-				"Bank.findAll", Bank.class);
-		return query.getResultList();
+		return getReferenceRepository().findAllBanks();
 	}
 	
 	public List<BankBranchDTO> getAllBankBranchesDTO() {
-		
-		TypedQuery<BankBranch> query = getEntityManager().createNamedQuery(
-				"BankBranch.findAll", BankBranch.class);
-		return query.getResultList().stream().map(branch -> new BankBranchDTO(branch))
-				.collect(Collectors.toList());
+		return getReferenceRepository().findAllBankBranchesDTO();
 	}
 	
 	public List<BankBranch> getAllBankBranches() {
-		
-		TypedQuery<BankBranch> query = getEntityManager().createNamedQuery(
-				"BankBranch.findAll", BankBranch.class);
-		return query.getResultList();
+		return getReferenceRepository().findAllBankBranches();
 	}
 	
 	public List<Item> getAllItems() {

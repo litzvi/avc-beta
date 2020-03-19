@@ -25,6 +25,7 @@ public class CityDTO implements Serializable {
 	String value;
 	String countryName;
 	
+	@lombok.experimental.Tolerate
 	public CityDTO(@NonNull City city) {
 		this.id = city.getId();
 		this.value = city.getValue();

@@ -13,6 +13,7 @@ import com.avc.mis.beta.entities.BaseEntityNoId;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.repositories.BaseRepository;
 import com.avc.mis.beta.repositories.PORepository;
+import com.avc.mis.beta.repositories.ReferenceTablesRepository;
 import com.avc.mis.beta.repositories.SupplierRepository;
 
 /**
@@ -27,15 +28,15 @@ public abstract class DAO {
 	
 //	@Autowired private PORepository poRepository;
 //	@Autowired private SupplierRepository supplierRepository;	
-	@Autowired private BaseRepository<BaseEntityNoId> baseRepository;
+	@Autowired private ReferenceTablesRepository referenceRepository;
 	@Autowired private EntityManager entityManager;
 	
 
 	/**
 	 * @return the baseRepository
 	 */
-	protected BaseRepository<BaseEntityNoId> getBaseRepository() {
-		return baseRepository;
+	protected ReferenceTablesRepository getReferenceRepository() {
+		return referenceRepository;
 	}
 
 	/**
