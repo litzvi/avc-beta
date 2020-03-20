@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.values.BankBranchDTO;
@@ -25,7 +25,7 @@ import com.avc.mis.beta.entities.process.ContractType;
  * @author Zvi
  *
  */
-@Service
+@Repository
 @Transactional(readOnly = true)
 public class ReferenceTables extends DAO {
 	

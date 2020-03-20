@@ -49,7 +49,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1237;
+	private static Integer SERIAL_NO = 1241;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -132,7 +132,7 @@ class SuppliersTests {
 		
 		return supplier;
 	}
-	@Disabled
+//	@Disabled
 	@Test
 	void suppliersTest() {
 		//supplier with null name
@@ -181,12 +181,7 @@ class SuppliersTests {
 		
 		//add, remove supply categories
 		supplier = fullSupplier();
-		try {
-			expected = new SupplierDTO(supplier);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-		}
+		expected = new SupplierDTO(supplier);
 		suppliers.addSupplier(supplier);
 		Set<SupplyCategory> categories = supplier.getSupplyCategories();
 		SupplyCategory removedCategory = categories.iterator().next();

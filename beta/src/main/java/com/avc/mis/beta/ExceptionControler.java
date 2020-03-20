@@ -24,6 +24,11 @@ public class ExceptionControler {
 	//illegalStateexception shouldn't be fatal
 	//illegalargumentexception should be sent as a neat message to the user
 	
+	@ExceptionHandler({IllegalArgumentException.class})
+    public ResponseEntity<String> handleDataIntegrityViolationException(IllegalArgumentException e){
+        return error(HttpStatus.BAD_REQUEST, e);
+    }
+	
 	@ExceptionHandler({DataIntegrityViolationException.class})
     public ResponseEntity<String> handleDataIntegrityViolationException(NestedRuntimeException e){
         return error(HttpStatus.BAD_REQUEST, e.getRootCause());

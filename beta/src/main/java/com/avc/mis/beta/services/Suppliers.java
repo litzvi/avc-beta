@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.data.SupplierDTO;
@@ -27,7 +27,7 @@ import com.avc.mis.beta.repositories.SupplierRepository;
  * @author Zvi
  *
  */
-@Service
+@Repository
 @Transactional(rollbackFor = Throwable.class)
 public class Suppliers extends DAO {
 	

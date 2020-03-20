@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.data.PoDTO;
@@ -23,7 +23,7 @@ import com.avc.mis.beta.repositories.PORepository;
  * @author Zvi
  *
  */
-@Service
+@Repository
 @Transactional(readOnly = true)
 public class Orders extends DAO {
 	

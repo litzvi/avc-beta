@@ -6,7 +6,7 @@ package com.avc.mis.beta.services;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.repositories.ReferenceTablesRepository;
@@ -15,7 +15,7 @@ import com.avc.mis.beta.repositories.ReferenceTablesRepository;
  * @author Zvi
  *
  */
-@Service
+@Repository
 public abstract class DAO {
 	
 	public static final int BATCH_SIZE = 20;
