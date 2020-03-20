@@ -50,7 +50,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1224;
+	private static Integer SERIAL_NO = 1235;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -133,7 +133,7 @@ class SuppliersTests {
 		
 		return supplier;
 	}
-//	@Disabled
+	@Disabled
 	@Test
 	void suppliersTest() {
 		//supplier with null name
@@ -246,7 +246,7 @@ class SuppliersTests {
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
 	
-//		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//print list of suppliers table
 		List<SupplierRow> list = suppliers.getSuppliersTable();

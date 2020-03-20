@@ -46,12 +46,12 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	
 	@Query("select new com.avc.mis.beta.dto.BankBranchDTO(bb.id, bb.value, bank.value) "
 			+ "from BankBranch bb "
-			+ "join Bank bank ")
+			+ "join bb.bank bank ")
 	List<BankBranchDTO> findAllBankBranchesDTO();
 	
-	@Query("select new com.avc.mis.beta.dto.CityDTO(city.id, city.value, ctry.value) "
-			+ "from City city "
-			+ "join Country ctry ")
+	@Query("select new com.avc.mis.beta.dto.CityDTO(c.id, c.value, ctry.value) "
+			+ "from City c "
+			+ "join c.country ctry ")
 	List<CityDTO> findAllCitiesDTO();
 	
 	@Query("select sc from SupplyCategory sc")

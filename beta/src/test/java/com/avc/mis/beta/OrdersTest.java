@@ -17,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.dao.Orders;
+import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dto.BankBranchDTO;
+import com.avc.mis.beta.dto.CityDTO;
 import com.avc.mis.beta.dto.PoBasic;
 import com.avc.mis.beta.dto.PoDTO;
 import com.avc.mis.beta.dto.PoRow;
@@ -40,13 +43,16 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000036;
+	private final int PROCESS_NO = 5000047;
 
 	@Autowired
 	Orders orders;
 	
 	@Autowired
 	Suppliers suppliers;
+	
+	@Autowired
+	ReferenceTables referenceTables;
 	
 	private PO basicOrder() {
 		//build purchase order
@@ -91,7 +97,7 @@ public class OrdersTest {
 			e.printStackTrace();
 			throw e;
 		}
-		PoDTO poDTO = orders.getOrder(5000026);	
+		PoDTO poDTO = orders.getOrder(5000037);	
 		System.out.println(poDTO);
 		
 		Supplier supplier = po.getSupplier();
@@ -104,6 +110,15 @@ public class OrdersTest {
 		List<SupplierBasic> suppliersByCategory = suppliers.getSuppliersBasic(3);
 		suppliersByCategory.forEach(s -> System.out.println(s));
 		
+		//list of bank branches
+		List<BankBranchDTO> branchList = referenceTables.getAllBankBranchesDTO();
+		branchList.forEach((i)->System.out.println(i));
+		
+		//get list of cities
+		List<CityDTO> cityList =  referenceTables.getAllCitiesDTO();
+		for(CityDTO city: cityList)
+			System.out.println(city);
+		
 		//get list of cashew orders
 		List<PoBasic> posBasic =  orders.findCashewOrdersBasic(new OrderStatus[] {OrderStatus.OPEN_PENDING});
 		for(PoBasic row: posBasic)
@@ -111,8 +126,14 @@ public class OrdersTest {
 		
 		//get list of cashew orders
 		List<PoRow> pos =  orders.findCashewOrders(new OrderStatus[] {OrderStatus.OPEN_PENDING});
-		for(PoRow row: pos)
-			System.out.println(row);
+		for(PoRow row: pos) {
+			try {
+				System.out.println(row);
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+			
 		
 
 		

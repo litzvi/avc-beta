@@ -59,7 +59,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "left join po.contractType t "
 		+ "left join po.supplier s "
 		+ "left join po.orderProcess p "
-		+ "left join po.orderItems oi "
+		+ "join po.orderItems oi "
 			+ "left join oi.item i "
 		+ "where p.processType = :orderType and po.status in :statuses ")
 	List<PoRow> findByOrderTypeAndStatuses(ProcessType orderType, OrderStatus[] statuses);
