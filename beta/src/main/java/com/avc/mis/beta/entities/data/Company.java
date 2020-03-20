@@ -22,9 +22,9 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
-import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.services.DAO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 

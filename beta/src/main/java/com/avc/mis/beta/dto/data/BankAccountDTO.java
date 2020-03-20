@@ -1,13 +1,12 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto;
+package com.avc.mis.beta.dto.data;
 
 import java.io.Serializable;
 
+import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.entities.data.BankAccount;
-import com.avc.mis.beta.entities.data.BankBranch;
-import com.avc.mis.beta.entities.data.Phone;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

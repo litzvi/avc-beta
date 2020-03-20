@@ -1,14 +1,13 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto;
+package com.avc.mis.beta.dto.data;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Email;
 import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;

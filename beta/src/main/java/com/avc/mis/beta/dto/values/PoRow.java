@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto;
+package com.avc.mis.beta.dto.values;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

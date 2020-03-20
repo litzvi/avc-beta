@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto;
+package com.avc.mis.beta.dto.data;
 
 import java.io.Serializable;
 import java.time.Duration;
@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessType;

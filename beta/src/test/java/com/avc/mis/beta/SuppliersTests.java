@@ -14,13 +14,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
-import com.avc.mis.beta.dao.ReferenceTables;
-import com.avc.mis.beta.dao.Suppliers;
-import com.avc.mis.beta.dto.CityDTO;
-import com.avc.mis.beta.dto.FaxDTO;
-import com.avc.mis.beta.dto.PhoneDTO;
-import com.avc.mis.beta.dto.SupplierDTO;
-import com.avc.mis.beta.dto.SupplierRow;
+import com.avc.mis.beta.dto.data.FaxDTO;
+import com.avc.mis.beta.dto.data.PhoneDTO;
+import com.avc.mis.beta.dto.data.SupplierDTO;
+import com.avc.mis.beta.dto.data.SupplierRow;
 import com.avc.mis.beta.entities.data.Address;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.BankBranch;
@@ -35,6 +32,8 @@ import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.data.SupplyCategory;
+import com.avc.mis.beta.services.ReferenceTables;
+import com.avc.mis.beta.services.Suppliers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
@@ -50,7 +49,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1235;
+	private static Integer SERIAL_NO = 1237;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {

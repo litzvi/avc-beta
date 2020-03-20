@@ -17,7 +17,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
 
-import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.services.DAO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;

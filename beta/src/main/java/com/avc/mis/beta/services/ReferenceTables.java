@@ -1,17 +1,17 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao;
+package com.avc.mis.beta.services;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.BankBranchDTO;
-import com.avc.mis.beta.dto.CityDTO;
+import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.data.Bank;
 import com.avc.mis.beta.entities.data.BankBranch;
 import com.avc.mis.beta.entities.data.City;
@@ -25,7 +25,7 @@ import com.avc.mis.beta.entities.process.ContractType;
  * @author Zvi
  *
  */
-@Repository
+@Service
 @Transactional(readOnly = true)
 public class ReferenceTables extends DAO {
 	

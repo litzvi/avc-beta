@@ -1,12 +1,11 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto;
+package com.avc.mis.beta.dto.data;
 
 import java.io.Serializable;
 
 import com.avc.mis.beta.entities.data.Fax;
-import com.avc.mis.beta.entities.data.Phone;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

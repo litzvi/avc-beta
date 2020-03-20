@@ -8,10 +8,10 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.OrderItemDTO;
-import com.avc.mis.beta.dto.PoBasic;
-import com.avc.mis.beta.dto.PoDTO;
-import com.avc.mis.beta.dto.PoRow;
+import com.avc.mis.beta.dto.data.OrderItemDTO;
+import com.avc.mis.beta.dto.data.PoDTO;
+import com.avc.mis.beta.dto.values.PoBasic;
+import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.process.PO;
@@ -22,7 +22,7 @@ import com.avc.mis.beta.entities.process.PO;
  */
 public interface PORepository extends BaseRepository<PO> {
 	
-	@Query("select new com.avc.mis.beta.dto.PoDTO("
+	@Query("select new com.avc.mis.beta.dto.data.PoDTO("
 			+ "po.id, c_type, s.id, s.name, po.status, p.id, p.insertTime, "
 			+ "p_staff, p.processType, p_line, p.time, p.duration, "
 			+ "p.numOfWorkers, p_status, p.remarks) "
@@ -36,7 +36,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "where po.id = :id ")
 	Optional<PoDTO> findOrderById(Integer id);
 	
-	@Query("select new com.avc.mis.beta.dto.OrderItemDTO("
+	@Query("select new com.avc.mis.beta.dto.data.OrderItemDTO("
 			+ "i.id, po.id, item, i.numberUnits, i.currency, "
 			+ "i.unitPrice, i.deliveryDate, i.defects, i.remarks) "
 		+ "from OrderItem i "
@@ -45,7 +45,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "where po.id = :poid ")
 	List<OrderItemDTO> findOrderItemsByPo(Integer poid);
 	
-	@Query("select new com.avc.mis.beta.dto.PoBasic(po.id, t.value, s.name, po.status) "
+	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, t.value, s.name, po.status) "
 		+ "from PO po "
 		+ "left join po.contractType t "
 		+ "left join po.supplier s "
@@ -53,7 +53,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "where p.processType = :orderType and po.status in :statuses ")
 	List<PoBasic> findByOrderTypeAndStatusesBasic(ProcessType orderType, OrderStatus[] statuses);
 	
-	@Query("select new com.avc.mis.beta.dto.PoRow(po.id, t.value, s.name, i.value, "
+	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, t.value, s.name, i.value, "
 			+ "oi.numberUnits, i.measureUnit, p.time, oi.deliveryDate, po.status) "
 		+ "from PO po "
 		+ "left join po.contractType t "

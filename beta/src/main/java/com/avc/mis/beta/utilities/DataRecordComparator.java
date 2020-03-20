@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao.services;
+package com.avc.mis.beta.utilities;
 
 import java.util.Comparator;
 

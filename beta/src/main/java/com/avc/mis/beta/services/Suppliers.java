@@ -1,19 +1,19 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao;
+package com.avc.mis.beta.services;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.SupplierBasic;
-import com.avc.mis.beta.dto.SupplierDTO;
-import com.avc.mis.beta.dto.SupplierRow;
+import com.avc.mis.beta.dto.data.SupplierDTO;
+import com.avc.mis.beta.dto.data.SupplierRow;
+import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.CompanyContact;
@@ -27,7 +27,7 @@ import com.avc.mis.beta.repositories.SupplierRepository;
  * @author Zvi
  *
  */
-@Repository
+@Service
 @Transactional(rollbackFor = Throwable.class)
 public class Suppliers extends DAO {
 	

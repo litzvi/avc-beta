@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.rest.core.annotation.RestResource;
 
-import com.avc.mis.beta.dto.BankBranchDTO;
-import com.avc.mis.beta.dto.CityDTO;
+import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Bank;
 import com.avc.mis.beta.entities.data.BankBranch;
@@ -44,12 +44,12 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	@Query("select bb from BankBranch bb")
 	List<BankBranch> findAllBankBranches();
 	
-	@Query("select new com.avc.mis.beta.dto.BankBranchDTO(bb.id, bb.value, bank.value) "
+	@Query("select new com.avc.mis.beta.dto.values.BankBranchDTO(bb.id, bb.value, bank.value) "
 			+ "from BankBranch bb "
 			+ "join bb.bank bank ")
 	List<BankBranchDTO> findAllBankBranchesDTO();
 	
-	@Query("select new com.avc.mis.beta.dto.CityDTO(c.id, c.value, ctry.value) "
+	@Query("select new com.avc.mis.beta.dto.values.CityDTO(c.id, c.value, ctry.value) "
 			+ "from City c "
 			+ "join c.country ctry ")
 	List<CityDTO> findAllCitiesDTO();

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.SupplierBasic;
+import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.Supplier;
 
@@ -18,13 +18,13 @@ import com.avc.mis.beta.entities.data.Supplier;
  */
 public interface SupplierRepository extends BaseRepository<Supplier> {
 	
-	@Query("select new com.avc.mis.beta.dto.SupplierBasic(s.id, s.name) "
+	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.name) "
 			+ "from Supplier s "
 			+ "join s.supplyCategories c "
 			+ "where c.id = :categoryId ")
 	List<SupplierBasic> findSuppliersByCategoryBasic(Integer categoryId);
 	
-	@Query("select new com.avc.mis.beta.dto.SupplierBasic(s.id, s.name) "
+	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.name) "
 			+ "from Supplier s ")
 	List<SupplierBasic> findAllSuppliersBasic();
 	

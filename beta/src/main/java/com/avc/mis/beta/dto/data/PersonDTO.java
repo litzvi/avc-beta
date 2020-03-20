@@ -1,20 +1,11 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto;
+package com.avc.mis.beta.dto.data;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
-
-import com.avc.mis.beta.entities.data.CompanyPosition;
-import com.avc.mis.beta.entities.data.ContactDetails;
-import com.avc.mis.beta.entities.data.IdCard;
 import com.avc.mis.beta.entities.data.Person;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

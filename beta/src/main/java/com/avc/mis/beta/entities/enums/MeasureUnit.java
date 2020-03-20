@@ -5,9 +5,6 @@ package com.avc.mis.beta.entities.enums;
 
 import java.math.BigDecimal;
 
-import lombok.Data;
-import lombok.Value;
-
 /**
  * @author Zvi
  *

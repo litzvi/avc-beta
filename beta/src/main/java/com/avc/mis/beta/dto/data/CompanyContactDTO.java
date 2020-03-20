@@ -1,17 +1,12 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto;
+package com.avc.mis.beta.dto.data;
 
 import java.io.Serializable;
-import java.util.Set;
-
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.CompanyPosition;
-import com.avc.mis.beta.entities.data.Person;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

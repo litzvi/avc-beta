@@ -26,11 +26,11 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.BaseEntityNoId;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.OrderStatus;
+import com.avc.mis.beta.services.DAO;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -64,7 +64,7 @@ public class PO extends BaseEntityNoId {
 	
 	@EqualsAndHashCode.Include
 	@Id
-	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.dao.services.UseExistingIdOtherwiseGenerateUsingIdentity")
+	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
 	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
 	@Column(nullable = false, updatable = false)
 	private Integer id;

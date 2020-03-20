@@ -1,12 +1,12 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto;
+package com.avc.mis.beta.dto.data;
 
 import java.io.Serializable;
 
+import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.data.Address;
-import com.avc.mis.beta.entities.data.City;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +19,7 @@ import lombok.NonNull;
  */
 @Data
 @NoArgsConstructor
-public class AddressDTO implements Serializable {
+public class AddressDTO implements Serializable {	
 	@EqualsAndHashCode.Exclude
 	private Integer id;
 	private String streetAddress;

@@ -4,35 +4,30 @@
 package com.avc.mis.beta;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.avc.mis.beta.dao.Orders;
-import com.avc.mis.beta.dao.ReferenceTables;
-import com.avc.mis.beta.dao.Suppliers;
-import com.avc.mis.beta.dto.BankBranchDTO;
-import com.avc.mis.beta.dto.CityDTO;
-import com.avc.mis.beta.dto.PoBasic;
-import com.avc.mis.beta.dto.PoDTO;
-import com.avc.mis.beta.dto.PoRow;
-import com.avc.mis.beta.dto.SupplierBasic;
+import com.avc.mis.beta.dto.data.PoDTO;
+import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.dto.values.PoBasic;
+import com.avc.mis.beta.dto.values.PoRow;
+import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.OrderStatus;
-import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.process.ContractType;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.services.Orders;
+import com.avc.mis.beta.services.ReferenceTables;
+import com.avc.mis.beta.services.Suppliers;
 
 /**
  * @author Zvi
@@ -43,7 +38,7 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000047;
+	private final int PROCESS_NO = 5000049;
 
 	@Autowired
 	Orders orders;

@@ -1,19 +1,19 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao;
+package com.avc.mis.beta.services;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.PoBasic;
-import com.avc.mis.beta.dto.PoDTO;
-import com.avc.mis.beta.dto.PoRow;
+import com.avc.mis.beta.dto.data.PoDTO;
+import com.avc.mis.beta.dto.values.PoBasic;
+import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.process.PO;
@@ -23,7 +23,7 @@ import com.avc.mis.beta.repositories.PORepository;
  * @author Zvi
  *
  */
-@Repository
+@Service
 @Transactional(readOnly = true)
 public class Orders extends DAO {
 	
