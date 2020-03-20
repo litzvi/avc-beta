@@ -16,7 +16,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -26,7 +25,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.avc.mis.beta.entities.BaseEntityNoId;
+import com.avc.mis.beta.entities.BaseEntityNoIdWithVersion;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.OrderStatus;
@@ -60,7 +59,7 @@ import lombok.ToString;
 //	query = "select po from PO po "
 //		+ "left join fetch po.orderProcess p "
 //		+ "where po.id = :poid ")
-public class PO extends BaseEntityNoId {
+public class PO extends BaseEntityNoIdWithVersion {
 	
 	@EqualsAndHashCode.Include
 	@Id

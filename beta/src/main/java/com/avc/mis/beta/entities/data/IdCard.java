@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.entities.data;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 import javax.persistence.Entity;
@@ -17,7 +16,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.BaseEntityNoId;
+import com.avc.mis.beta.entities.BaseEntityNoIdWithVersion;
 import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,7 +35,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="ID_INFORMATION")
-public class IdCard extends BaseEntityNoId {
+public class IdCard extends BaseEntityNoIdWithVersion {
 	
 	@EqualsAndHashCode.Include
 	@Id

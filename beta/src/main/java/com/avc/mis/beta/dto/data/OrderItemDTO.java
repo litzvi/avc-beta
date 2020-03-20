@@ -3,16 +3,15 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
 import java.util.Optional;
 
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.process.OrderItem;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -23,11 +22,34 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-@AllArgsConstructor
-public class OrderItemDTO implements Serializable {
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+public class OrderItemDTO extends BaseDTOWithVersion {
+/**
+	 * @param poId
+	 * @param item
+	 * @param numberUnits
+	 * @param currency
+	 * @param unitPrice
+	 * @param deliveryDate
+	 * @param defects
+	 * @param remarks
+	 */
+	public OrderItemDTO(Integer id, Long version, Integer poId, Item item, BigDecimal numberUnits, Currency currency, BigDecimal unitPrice,
+			LocalDate deliveryDate, String defects, String remarks) {
+		super(id, version);
+		this.poId = poId;
+		this.item = item;
+		this.numberUnits = numberUnits;
+		this.currency = currency;
+		this.unitPrice = unitPrice;
+		this.deliveryDate = deliveryDate;
+		this.defects = defects;
+		this.remarks = remarks;
+	}
+
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private Integer poId;
 	private Item item;
 	private BigDecimal numberUnits;
@@ -38,7 +60,7 @@ public class OrderItemDTO implements Serializable {
 	private String remarks;
 	
 	public OrderItemDTO(@NonNull OrderItem orderItem) {
-		this.id = orderItem.getId();
+		super(orderItem.getId(), orderItem.getVersion());
 		this.poId = orderItem.getPo().getId();
 		this.item = orderItem.getItem();
 		this.numberUnits = orderItem.getNumberUnits();

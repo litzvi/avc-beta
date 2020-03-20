@@ -3,11 +3,11 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.Address;
 import com.avc.mis.beta.entities.data.ContactDetails;
 
@@ -21,10 +21,11 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class ContactDetailsDTO implements Serializable {
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+public class ContactDetailsDTO extends BaseDTOWithVersion {
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private Set<PhoneDTO> phones;
 	private Set<FaxDTO> faxes;
 	private Set<EmailDTO> emails;
@@ -35,7 +36,7 @@ public class ContactDetailsDTO implements Serializable {
 	 * @param contactDetails
 	 */
 	public ContactDetailsDTO(@NonNull ContactDetails contactDetails) {
-		this.id = contactDetails.getId();
+		super(contactDetails.getId(), contactDetails.getVersion());
 		this.phones = Arrays.stream(contactDetails.getPhones()).map(p->{return new PhoneDTO(p);}).collect(Collectors.toSet());
 		this.faxes = Arrays.stream(contactDetails.getFaxes()).map(f->{return new FaxDTO(f);}).collect(Collectors.toSet());
 		this.emails = Arrays.stream(contactDetails.getEmails()).map(e->{return new EmailDTO(e);}).collect(Collectors.toSet());

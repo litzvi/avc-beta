@@ -8,16 +8,13 @@ import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.BaseEntityWithVersion;
 import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -38,7 +35,7 @@ import lombok.NoArgsConstructor;
 								 * , uniqueConstraints = {@UniqueConstraint(columnNames = {"accountNo",
 								 * "branchId"})}
 								 */)
-public class BankAccount extends BaseEntity {
+public class BankAccount extends BaseEntityWithVersion {
 	
 //	@EqualsAndHashCode.Include
 //	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)

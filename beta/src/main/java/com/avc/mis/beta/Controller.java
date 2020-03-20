@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avc.mis.beta.dto.data.SupplierDTO;
-import com.avc.mis.beta.dto.data.SupplierRow;
+import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.services.ReferenceTables;
 import com.avc.mis.beta.services.Suppliers;

@@ -5,9 +5,7 @@ package com.avc.mis.beta.entities.process;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Currency;
-import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,11 +14,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.BaseEntityWithVersion;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -28,7 +24,6 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
@@ -42,7 +37,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PO_ITEMS")
-public class OrderItem extends BaseEntity {
+public class OrderItem extends BaseEntityWithVersion {
 	
 //	@EqualsAndHashCode.Include
 //	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.data.SupplierDTO;
-import com.avc.mis.beta.dto.data.SupplierRow;
 import com.avc.mis.beta.dto.values.SupplierBasic;
+import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.CompanyContact;
@@ -114,8 +114,8 @@ public class Suppliers extends DAO {
 		getEntityManager().remove(supplier);
 	}
 	
-	public void editSupplierMainInfo(Supplier supplier) {
-		editEntity(supplier);
+	public Supplier editSupplierMainInfo(Supplier supplier) {
+		return (Supplier)editEntity(supplier);
 	}
 	
 	public void editContactInfo(ContactDetails contactDetails) {
@@ -176,7 +176,7 @@ public class Suppliers extends DAO {
 	}
 	
 	//for testing - should be removed
-	public void editEntity(Insertable entity) {
-		super.editEntity(entity);
+	public Insertable editEntity(Insertable entity) {
+		return super.editEntity(entity);
 	}	
 }

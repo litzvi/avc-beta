@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -11,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.OrderStatus;
@@ -30,24 +30,25 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class PoDTO implements Serializable {
+public class PoDTO extends BaseDTOWithVersion {
 	
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private ContractType contractType;
 	private SupplierBasic supplier;
 	private OrderStatus status;
 	private ProductionProcessDTO orderProcess;
 	private List<OrderItemDTO> orderItems;
 	
-	public PoDTO(Integer id, ContractType contractType, Integer supplierId, 
+	public PoDTO(Integer id, Long version, ContractType contractType, Integer supplierId, 
 			String supplierName, OrderStatus status, 
-			Integer processId, Instant insertTime, Staff staffRecording, ProcessType processType,
+			Integer processId, Long processVersion, Instant insertTime, Staff staffRecording, ProcessType processType,
 			ProductionLine productionLine, LocalDateTime time, Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, String remarks) {
-		this.id = id;
-		this.orderProcess = new ProductionProcessDTO(processId, insertTime, staffRecording, id, 
+		super(id, version);
+		this.orderProcess = new ProductionProcessDTO(processId, processVersion, insertTime, staffRecording, id, 
 				processType, productionLine, time, duration, numOfWorkers, processStatus, remarks);
 		this.contractType = contractType;
 		this.supplier = new SupplierBasic(supplierId, supplierName);
@@ -57,7 +58,7 @@ public class PoDTO implements Serializable {
 	}
 	
 	public PoDTO(@NonNull PO po) {
-		this.id = po.getId();
+		super(po.getId(), po.getVersion());
 		this.orderProcess = new ProductionProcessDTO(po.getOrderProcess());
 		this.contractType = po.getContractType();
 		this.supplier = new SupplierBasic(po.getSupplier());

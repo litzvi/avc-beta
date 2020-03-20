@@ -44,9 +44,9 @@ import lombok.ToString;
 @NamedQuery(name = "Bank.findAll", query = "select b from Bank b")
 public class Bank extends BaseEntity {
 	
-	@EqualsAndHashCode.Include
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+//	@EqualsAndHashCode.Include
+//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private Integer id;
 	
 	@Column(name = "name", nullable = false, unique = true)
 	private String value;

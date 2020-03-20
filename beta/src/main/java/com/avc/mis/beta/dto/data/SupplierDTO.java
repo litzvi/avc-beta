@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +23,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class SupplierDTO extends CompanyDTO implements Serializable {
+public class SupplierDTO extends CompanyDTO {
 	
 	private Set<SupplyCategory> supplyCategories = new HashSet<>();
 	

@@ -23,7 +23,7 @@ import com.avc.mis.beta.entities.process.PO;
 public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.data.PoDTO("
-			+ "po.id, c_type, s.id, s.name, po.status, p.id, p.insertTime, "
+			+ "po.id, po.version, c_type, s.id, s.name, po.status, p.id, p.version, p.insertTime, "
 			+ "p_staff, p.processType, p_line, p.time, p.duration, "
 			+ "p.numOfWorkers, p_status, p.remarks) "
 		+ "from PO po "
@@ -37,7 +37,7 @@ public interface PORepository extends BaseRepository<PO> {
 	Optional<PoDTO> findOrderById(Integer id);
 	
 	@Query("select new com.avc.mis.beta.dto.data.OrderItemDTO("
-			+ "i.id, po.id, item, i.numberUnits, i.currency, "
+			+ "i.id, i.version, po.id, item, i.numberUnits, i.currency, "
 			+ "i.unitPrice, i.deliveryDate, i.defects, i.remarks) "
 		+ "from OrderItem i "
 		+ "left join i.item item "

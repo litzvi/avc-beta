@@ -13,7 +13,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.BaseEntityWithVersion;
 import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,7 +32,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="PAYMENT_ACCOUNTS")
-public class PaymentAccount extends BaseEntity {
+public class PaymentAccount extends BaseEntityWithVersion {
 	
 //	@EqualsAndHashCode.Include
 //	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)

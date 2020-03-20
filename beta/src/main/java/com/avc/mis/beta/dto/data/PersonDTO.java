@@ -3,8 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
-
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.Person;
 
 import lombok.Data;
@@ -17,10 +16,11 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class PersonDTO implements Serializable {
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+public class PersonDTO extends BaseDTOWithVersion {
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private String name;
 	private IdCardDTO idCard;
 	private ContactDetailsDTO contactDetails;
@@ -29,7 +29,7 @@ public class PersonDTO implements Serializable {
 	 * @param person
 	 */
 	public PersonDTO(@NonNull Person person) {
-		this.id = person.getId();
+		super(person.getId(), person.getVersion());
 		this.name = person.getName();
 		if(person.getIdCard() != null)
 			this.idCard = new IdCardDTO(person.getIdCard());

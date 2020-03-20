@@ -14,7 +14,11 @@ import lombok.NoArgsConstructor;
  * @author Zvi
  *
  */
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@NoArgsConstructor
 @MappedSuperclass
-public abstract class BaseEntityNoId implements Insertable {
-	
+public abstract class BaseEntityNoIdWithVersion extends BaseEntityNoId {
+	@Version
+	private Long version;
 }

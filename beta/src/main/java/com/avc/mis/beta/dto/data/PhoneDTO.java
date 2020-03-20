@@ -3,8 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
-
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.Phone;
 
 import lombok.Data;
@@ -17,14 +16,15 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class PhoneDTO implements Serializable {
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+public class PhoneDTO extends BaseDTOWithVersion {
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private String value;
 	
 	public PhoneDTO(@NonNull Phone phone) {
-		this.id = phone.getId();
+		super(phone.getId(), phone.getVersion());
 		this.value = phone.getValue();
 	}
 }

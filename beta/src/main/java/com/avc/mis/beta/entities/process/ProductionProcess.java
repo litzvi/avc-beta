@@ -6,8 +6,6 @@ package com.avc.mis.beta.entities.process;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,10 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.BaseEntityWithVersion;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.ProcessType;
@@ -39,7 +35,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PROCESSES")
-public class ProductionProcess extends BaseEntity {
+public class ProductionProcess extends BaseEntityWithVersion {
 	
 //	@EqualsAndHashCode.Include
 //	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)

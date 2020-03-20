@@ -3,8 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
-
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 
 import lombok.Data;
@@ -17,14 +16,15 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class PaymentAccountDTO implements Serializable {
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+public class PaymentAccountDTO extends BaseDTOWithVersion {
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private BankAccountDTO bankAccount;
 	
 	public PaymentAccountDTO(@NonNull PaymentAccount account) {
-		this.id = account.getId();
+		super(account.getId(), account.getVersion());
 		if(account.getBankAccount() != null)
 			this.bankAccount = new BankAccountDTO(account.getBankAccount());
 	}

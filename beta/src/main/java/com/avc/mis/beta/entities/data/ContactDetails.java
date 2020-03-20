@@ -20,7 +20,7 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Check;
 
-import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.BaseEntityWithVersion;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.services.DAO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -46,7 +46,7 @@ import lombok.ToString;
 @Table(name = "CONTACT_DETAILS", uniqueConstraints = 
 	{ @UniqueConstraint(columnNames = { "companyId", "personId" }) })
 @Check(constraints = "(companyId is null) xor (personId is null)")
-public class ContactDetails extends BaseEntity {
+public class ContactDetails extends BaseEntityWithVersion {
 
 //	@EqualsAndHashCode.Include
 //	@Id

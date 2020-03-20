@@ -3,8 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
-
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.CompanyPosition;
 
@@ -18,11 +17,12 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class CompanyContactDTO implements Serializable {
+public class CompanyContactDTO extends BaseDTOWithVersion {
 
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private PersonDTO person;
 	private CompanyPosition position;
 	
@@ -30,7 +30,7 @@ public class CompanyContactDTO implements Serializable {
 	 * @param contact
 	 */
 	public CompanyContactDTO(@NonNull CompanyContact contact) {
-		this.id = contact.getId();
+		super(contact.getId(), contact.getVersion());		
 		if(contact.getPerson() == null)
 			throw new NullPointerException("Company contact has to reference a person");
 		this.person = new PersonDTO(contact.getPerson());

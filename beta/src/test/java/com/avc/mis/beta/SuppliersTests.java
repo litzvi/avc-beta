@@ -1,9 +1,11 @@
 package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -17,7 +19,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import com.avc.mis.beta.dto.data.FaxDTO;
 import com.avc.mis.beta.dto.data.PhoneDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
-import com.avc.mis.beta.dto.data.SupplierRow;
+import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.data.Address;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.BankBranch;
@@ -49,7 +51,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1241;
+	private static Integer SERIAL_NO = 1261;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -177,6 +179,7 @@ class SuppliersTests {
 		suppliers.editSupplierMainInfo(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test adding supplier with white spaces added to all info fields");
+//		assertTrue(supplier.getVersion().equals(0));
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//add, remove supply categories
@@ -184,17 +187,21 @@ class SuppliersTests {
 		expected = new SupplierDTO(supplier);
 		suppliers.addSupplier(supplier);
 		Set<SupplyCategory> categories = supplier.getSupplyCategories();
-		SupplyCategory removedCategory = categories.iterator().next();
-		SupplyCategory addedCategory = categories.iterator().next();
+		Iterator<SupplyCategory> it = categories.iterator();
+		SupplyCategory removedCategory = it.next();
+		SupplyCategory addedCategory = it.next();
 		categories.remove(removedCategory);
 		categories.remove(addedCategory);
-		suppliers.editSupplierMainInfo(supplier);
+		supplier = suppliers.editSupplierMainInfo(supplier);
 		categories = supplier.getSupplyCategories();
 		categories.add(addedCategory);
 		expected.getSupplyCategories().remove(removedCategory);
 		suppliers.editSupplierMainInfo(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
+		System.out.println(removedCategory);
+		System.out.println(addedCategory);
 		assertEquals(expected, actual, "Failed test adding and removing supply categories");
+//		assertTrue(supplier.getVersion().equals(2L));
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//add supplier with full details

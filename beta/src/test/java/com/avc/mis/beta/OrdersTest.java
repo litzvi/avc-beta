@@ -38,7 +38,7 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000052;
+	private final int PROCESS_NO = 5000063;
 
 	@Autowired
 	Orders orders;
@@ -92,7 +92,7 @@ public class OrdersTest {
 			e.printStackTrace();
 			throw e;
 		}
-		PoDTO poDTO = orders.getOrder(5000037);	
+		PoDTO poDTO = orders.getOrder(PROCESS_NO);	
 		System.out.println(poDTO);
 		
 		Supplier supplier = po.getSupplier();

@@ -3,9 +3,9 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.Country;
 import com.avc.mis.beta.entities.data.IdCard;
 
@@ -19,10 +19,11 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class IdCardDTO implements Serializable {
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+public class IdCardDTO extends BaseDTOWithVersion {
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private String idNumber;
 	private LocalDate dob;
 	private LocalDate dateOfIssue;
@@ -30,7 +31,7 @@ public class IdCardDTO implements Serializable {
 	private Country nationality;
 	
 	public IdCardDTO(@NonNull IdCard idCard) {
-		this.id = idCard.getId();
+		super(idCard.getId(), idCard.getVersion());
 		this.idNumber = idCard.getIdNumber();
 		this.dob = idCard.getDob();
 		this.dateOfIssue = idCard.getDateOfIssue();

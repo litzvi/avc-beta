@@ -3,8 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
-
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.data.Address;
 
@@ -18,15 +17,16 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class AddressDTO implements Serializable {	
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+public class AddressDTO extends BaseDTOWithVersion {	
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private String streetAddress;
 	private CityDTO city;
 	
 	public AddressDTO(@NonNull Address address) {
-		this.id = address.getId();
+		super(address.getId(), address.getVersion());
 		this.streetAddress = address.getStreetAddress();
 		this.city = new CityDTO(address.getCity());
 	}

@@ -3,18 +3,17 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.process.ProcessStatus;
 import com.avc.mis.beta.entities.process.ProductionLine;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -25,11 +24,11 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-@AllArgsConstructor
-public class ProductionProcessDTO implements Serializable {
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+public class ProductionProcessDTO extends BaseDTOWithVersion {
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private Instant insertTime;
 	private Staff staffRecording;
 	private Integer poId;
@@ -41,8 +40,25 @@ public class ProductionProcessDTO implements Serializable {
 	private ProcessStatus status;
 	private String remarks;
 	
+	public ProductionProcessDTO(Integer id, Long version, Instant insertTime, 
+			Staff staffRecording, Integer poId, ProcessType processType, ProductionLine productionLine, 
+			LocalDateTime time, Duration duration, Integer numOfWorkers, ProcessStatus status, 
+			String remarks) {
+		super(id, version);
+		this.insertTime = insertTime;
+		this.staffRecording = staffRecording;
+		this.poId = poId;
+		this.processType = processType;
+		this.productionLine = productionLine;
+		this.time = time;
+		this.duration = duration;
+		this.numOfWorkers = numOfWorkers;
+		this.status = status;
+		this.remarks = remarks;
+	}
+	
 	public ProductionProcessDTO(@NonNull ProductionProcess process) {
-		this.id = process.getId();
+		super(process.getId(), process.getVersion());
 		this.insertTime = process.getInsertTime();
 		this.staffRecording = process.getStaffRecording();
 		this.poId = process.getPo().getId();

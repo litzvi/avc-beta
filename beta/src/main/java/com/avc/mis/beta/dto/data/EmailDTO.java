@@ -3,8 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
-
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.Email;
 
 import lombok.Data;
@@ -17,14 +16,15 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class EmailDTO implements Serializable {
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+public class EmailDTO extends BaseDTOWithVersion {
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private String value;
 	
 	public EmailDTO(@NonNull Email email) {
-		this.id = email.getId();
+		super(email.getId(), email.getVersion());
 		this.value = email.getValue();
 	}
 }

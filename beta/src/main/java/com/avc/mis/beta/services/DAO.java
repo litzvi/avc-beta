@@ -54,10 +54,10 @@ public abstract class DAO {
 		getEntityManager().remove(entity); 
 	}
 	
-	void editEntity(Insertable entity) {
+	Insertable editEntity(Insertable entity) {
 		if(entity.getId() == null) {
 			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
 		}
-		getEntityManager().merge(entity);
+		return getEntityManager().merge(entity);
 	}	
 }

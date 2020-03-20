@@ -3,11 +3,11 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
 
@@ -21,10 +21,11 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class CompanyDTO implements Serializable {
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+public class CompanyDTO extends BaseDTOWithVersion {
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private String name;
 	private String localName;
 	private String englishName;
@@ -38,7 +39,7 @@ public class CompanyDTO implements Serializable {
 	 * @param company
 	 */
 	public CompanyDTO(@NonNull Company company) {
-		this.id = company.getId();
+		super(company.getId(), company.getVersion());
 		this.name = company.getName();
 		this.localName = company.getLocalName();
 		this.englishName = company.getEnglishName();

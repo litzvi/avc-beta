@@ -3,8 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.io.Serializable;
-
+import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.entities.data.BankAccount;
 
@@ -18,16 +17,17 @@ import lombok.NonNull;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class BankAccountDTO implements Serializable {
-	@EqualsAndHashCode.Exclude
-	private Integer id;
+public class BankAccountDTO extends BaseDTOWithVersion {
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
 	private String accountNo;
 	private String ownerName;
 	private BankBranchDTO branch;
 	
 	public BankAccountDTO(@NonNull BankAccount account) {
-		this.id = account.getId();
+		super(account.getId(), account.getVersion());
 		this.accountNo = account.getAccountNo();
 		this.ownerName = account.getOwnerName();
 		this.branch = new BankBranchDTO(account.getBranch());

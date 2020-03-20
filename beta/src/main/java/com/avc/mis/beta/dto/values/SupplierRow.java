@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.data;
+package com.avc.mis.beta.dto.values;
 
 import java.io.Serializable;
 import java.util.Arrays;
