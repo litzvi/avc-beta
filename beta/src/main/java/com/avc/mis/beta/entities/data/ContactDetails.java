@@ -12,17 +12,15 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Check;
 
-import com.avc.mis.beta.entities.BaseEntityWithVersion;
+import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.entities.EntityWithVersionAndId;
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.services.DAO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;
@@ -46,13 +44,8 @@ import lombok.ToString;
 @Table(name = "CONTACT_DETAILS", uniqueConstraints = 
 	{ @UniqueConstraint(columnNames = { "companyId", "personId" }) })
 @Check(constraints = "(companyId is null) xor (personId is null)")
-public class ContactDetails extends BaseEntityWithVersion {
+public class ContactDetails extends EntityWithVersionAndId {
 
-//	@EqualsAndHashCode.Include
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
-	
 	@ToString.Exclude
 	@JsonBackReference(value = "company_contactDetails")
 	@OneToOne(fetch = FetchType.LAZY)
@@ -143,14 +136,6 @@ public class ContactDetails extends BaseEntityWithVersion {
 		return (this.company == null ^ this.person == null);
 	}
 	
-	@PrePersist @PreUpdate
-	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal())
-			throw new IllegalArgumentException("Contact details not legal\n "
-					+ "has to reference a compony or person");
-	}
-	
 	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof Company) {
@@ -162,6 +147,12 @@ public class ContactDetails extends BaseEntityWithVersion {
 		else {
 			throw new ClassCastException("Referenced object dosen't match ContactDetails references");
 		}		
+	}
+
+	@Override
+	public String getIllegalMessage() {
+		return "Contact details not legal\n "
+				+ "has to reference a compony or person";
 	}
 		
 }

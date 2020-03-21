@@ -8,26 +8,27 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.avc.mis.beta.dao.Orders;
+import com.avc.mis.beta.dao.ReferenceTables;
+import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dto.data.PoDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.dto.values.SupplierBasic;
-import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.OrderStatus;
-import com.avc.mis.beta.entities.process.ContractType;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.ProductionProcess;
-import com.avc.mis.beta.services.Orders;
-import com.avc.mis.beta.services.ReferenceTables;
-import com.avc.mis.beta.services.Suppliers;
+import com.avc.mis.beta.entities.values.ContractType;
+import com.avc.mis.beta.entities.values.Item;
 
 /**
  * @author Zvi

@@ -15,16 +15,14 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
-import com.avc.mis.beta.entities.BaseEntityWithVersion;
+import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.entities.EntityWithVersionAndId;
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.services.DAO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -43,11 +41,7 @@ import lombok.NoArgsConstructor;
 @BatchSize(size = DAO.BATCH_SIZE)
 @Table(name="COMPANIES")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Company extends BaseEntityWithVersion {
-	
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
+public class Company extends EntityWithVersionAndId {
 	
 	@Column(unique = true, nullable = false)
 	private String name;
@@ -66,11 +60,6 @@ public class Company extends BaseEntityWithVersion {
 	@OneToMany(mappedBy = "company",cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<CompanyContact> companyContacts = new HashSet<>();
-	
-
-//	@ToString.Exclude
-//	@Column(columnDefinition = "boolean default true", nullable = false)
-//	private boolean isActive = true;
 	
 	public void setCompanyContacts(CompanyContact[] companyContacts) {
 		this.companyContacts = Insertable.filterAndSetReference(companyContacts, 
@@ -113,11 +102,9 @@ public class Company extends BaseEntityWithVersion {
 		return StringUtils.isNotBlank(name);
 	}
 	
-	@PrePersist @PreUpdate
 	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal())
-			throw new IllegalArgumentException("Company name can't be blank");
+	public String getIllegalMessage() {
+		return "Company name can't be blank";
 	}
 
 

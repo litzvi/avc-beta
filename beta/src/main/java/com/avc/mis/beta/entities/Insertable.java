@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * @author Zvi
  *
  */
-public interface Insertable extends Serializable{
+public interface Insertable {
 	
 	public Integer getId();
 	
@@ -23,6 +23,7 @@ public interface Insertable extends Serializable{
 	 * @return true if all required data is set, false otherwise.
 	 */
 	public boolean isLegal();
+	public String getIllegalMessage();
 	public void prePersistOrUpdate();
 
 	/**

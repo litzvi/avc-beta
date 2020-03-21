@@ -10,9 +10,9 @@ import java.time.LocalDateTime;
 import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.ProcessType;
-import com.avc.mis.beta.entities.process.ProcessStatus;
-import com.avc.mis.beta.entities.process.ProductionLine;
 import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.values.ProcessStatus;
+import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

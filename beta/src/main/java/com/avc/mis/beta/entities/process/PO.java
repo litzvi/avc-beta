@@ -18,18 +18,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 
-import com.avc.mis.beta.entities.BaseEntityNoIdWithVersion;
+import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.entities.EntityWithVersion;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.OrderStatus;
-import com.avc.mis.beta.services.DAO;
+import com.avc.mis.beta.entities.values.ContractType;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -48,18 +47,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PURCHASE_ORDERS")
-//@NamedQuery(name = "PO.findAll", 
-//	query = "select po from PO po "
-//		+ "left join fetch po.orderProcess p ")
-//@NamedQuery(name = "PO.findByOrderType", 
-//	query = "select po from PO po "
-//		+ "left join fetch po.orderProcess p "
-//		+ "where p.processType = :type ")
-//@NamedQuery(name = "PO.details", 
-//	query = "select po from PO po "
-//		+ "left join fetch po.orderProcess p "
-//		+ "where po.id = :poid ")
-public class PO extends BaseEntityNoIdWithVersion {
+public class PO extends EntityWithVersion {
 	
 	@EqualsAndHashCode.Include
 	@Id
@@ -85,7 +73,6 @@ public class PO extends BaseEntityNoIdWithVersion {
 	@Column(nullable = false)
 	private OrderStatus status = OrderStatus.OPEN_PENDING;
 	
-//	@JsonIgnore
 	@ToString.Exclude
 	@OneToMany(mappedBy = "po", fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
@@ -141,14 +128,10 @@ public class PO extends BaseEntityNoIdWithVersion {
 		return this.contractType != null && this.supplier != null && this.orderItems.size() > 0;
 	}
 
-	@PrePersist @PreUpdate
 	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal()) {
-			throw new IllegalArgumentException("Purchase Order is not legal, "
-					+ "has to have a supplier and at least one order line");
-		}
-		
+	public String getIllegalMessage() {
+		return "Purchase Order is not legal, "
+				+ "has to have a supplier and at least one order line";
 	}
 	
 	

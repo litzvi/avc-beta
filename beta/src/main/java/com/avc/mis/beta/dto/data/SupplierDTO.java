@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.data.SupplyCategory;
+import com.avc.mis.beta.entities.values.SupplyCategory;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

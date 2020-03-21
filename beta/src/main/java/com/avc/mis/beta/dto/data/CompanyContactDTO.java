@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.dto.BaseDTOWithVersion;
 import com.avc.mis.beta.entities.data.CompanyContact;
-import com.avc.mis.beta.entities.data.CompanyPosition;
+import com.avc.mis.beta.entities.values.CompanyPosition;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

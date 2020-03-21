@@ -9,11 +9,9 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.BaseEntityWithVersion;
+import com.avc.mis.beta.entities.EntityWithVersionAndId;
 import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,11 +30,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="PAYMENT_ACCOUNTS")
-public class PaymentAccount extends BaseEntityWithVersion {
-	
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
+public class PaymentAccount extends EntityWithVersionAndId {
 	
 	@ToString.Exclude
 	@JsonBackReference(value = "contactDetails_paymentAccount")
@@ -54,10 +48,6 @@ public class PaymentAccount extends BaseEntityWithVersion {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
-//	@ToString.Exclude
-//	@Column(nullable = false)
-//	private RecordStatus status = RecordStatus.ACTIVE;
-	
 	/**
 	 * @return
 	 */
@@ -67,17 +57,15 @@ public class PaymentAccount extends BaseEntityWithVersion {
 		return getBankAccount() != null && getBankAccount().isLegal();
 	}
 	
-	@PrePersist @PreUpdate
-	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal())
-			throw new IllegalArgumentException("Payment info not legal\n "
-					+ "Account has to have a legal bank account");
-	}
-	
 	@Override
 	public void setReference(Object referenced) {
 		this.setContactDetails((ContactDetails)referenced);
 		
+	}
+
+	@Override
+	public String getIllegalMessage() {
+		return "Payment info not legal\n "
+				+ "Account has to have a legal bank account";
 	}
 }

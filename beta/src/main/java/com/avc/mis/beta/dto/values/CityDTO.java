@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.values;
 
 import java.io.Serializable;
 
-import com.avc.mis.beta.entities.data.City;
+import com.avc.mis.beta.entities.values.City;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.services;
+package com.avc.mis.beta.dao;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.services;
+package com.avc.mis.beta.dao;
 
 import javax.persistence.EntityManager;
 

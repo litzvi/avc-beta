@@ -10,11 +10,9 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.BaseEntityWithVersion;
+import com.avc.mis.beta.entities.EntityWithVersionAndId;
 import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -34,11 +32,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PHONES")
-public class Phone extends BaseEntityWithVersion {
-
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
+public class Phone extends EntityWithVersionAndId {
 
 	@ToString.Exclude
 	@JsonBackReference(value = "contactDetails_phones")
@@ -57,26 +51,21 @@ public class Phone extends BaseEntityWithVersion {
 		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}
 	
-	/**
-	 * @return
-	 */	
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue());
 	}
 	
-	@PrePersist @PreUpdate
-	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal())
-			throw new IllegalArgumentException("phone number can't be blank");
-	}
-
 	@Override
 	public void setReference(Object referenced) {
 		this.setContactDetails((ContactDetails)referenced);
 		
+	}
+
+	@Override
+	public String getIllegalMessage() {
+		return "phone number can't be blank";
 	}
 
 }

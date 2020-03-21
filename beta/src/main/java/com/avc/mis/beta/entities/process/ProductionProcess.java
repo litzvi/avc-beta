@@ -14,14 +14,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.BaseEntityWithVersion;
+import com.avc.mis.beta.entities.EntityWithVersionAndId;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.ProcessType;
+import com.avc.mis.beta.entities.values.ProcessStatus;
+import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,11 +35,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PROCESSES")
-public class ProductionProcess extends BaseEntityWithVersion {
-	
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
+public class ProductionProcess extends EntityWithVersionAndId {
 	
 	@Column(nullable = false, updatable = false)
 	private final Instant insertTime;
@@ -84,16 +80,6 @@ public class ProductionProcess extends BaseEntityWithVersion {
 		return this.insertTime != null && this.processType != null;
 	}
 
-	@PrePersist @PreUpdate
-	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal()) {
-			throw new IllegalStateException(
-					"Process does not have an insetr time or process type");
-		}
-		
-	}
-	
 	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof PO) {
@@ -102,6 +88,11 @@ public class ProductionProcess extends BaseEntityWithVersion {
 		else {
 			throw new ClassCastException("Referenced object isn't a purchase order");
 		}		
+	}
+
+	@Override
+	public String getIllegalMessage() {
+		return "Process does not have an inset time or process type";
 	}
 	
 }

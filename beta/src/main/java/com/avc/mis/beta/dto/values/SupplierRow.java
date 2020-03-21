@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.entities.data.Email;
 import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.data.SupplyCategory;
+import com.avc.mis.beta.entities.values.SupplyCategory;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

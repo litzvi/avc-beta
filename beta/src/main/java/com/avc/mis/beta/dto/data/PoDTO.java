@@ -15,10 +15,10 @@ import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessType;
-import com.avc.mis.beta.entities.process.ContractType;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.ProcessStatus;
-import com.avc.mis.beta.entities.process.ProductionLine;
+import com.avc.mis.beta.entities.values.ContractType;
+import com.avc.mis.beta.entities.values.ProcessStatus;
+import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

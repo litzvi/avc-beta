@@ -11,7 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
-import com.avc.mis.beta.entities.BaseEntityNoIdWithVersion;
+import com.avc.mis.beta.entities.EntityWithVersion;
+import com.avc.mis.beta.entities.values.CompanyPosition;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-public class Staff extends BaseEntityNoIdWithVersion {
+public class Staff extends EntityWithVersion {
 	
 	@EqualsAndHashCode.Include
 	@Id
@@ -46,8 +47,7 @@ public class Staff extends BaseEntityNoIdWithVersion {
 	}
 
 	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal())
-			throw new IllegalArgumentException("Staff has to reference a person");
+	public String getIllegalMessage() {
+		return "Staff has to reference a person";
 	}
 }

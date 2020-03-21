@@ -6,8 +6,8 @@ package com.avc.mis.beta.dto.data;
 import java.time.LocalDate;
 
 import com.avc.mis.beta.dto.BaseDTOWithVersion;
-import com.avc.mis.beta.entities.data.Country;
 import com.avc.mis.beta.entities.data.IdCard;
+import com.avc.mis.beta.entities.values.Country;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

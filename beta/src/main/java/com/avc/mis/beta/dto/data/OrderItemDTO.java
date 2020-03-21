@@ -9,8 +9,8 @@ import java.util.Currency;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.BaseDTOWithVersion;
-import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.process.OrderItem;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

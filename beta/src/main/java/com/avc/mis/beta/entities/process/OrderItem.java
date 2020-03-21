@@ -16,10 +16,10 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.avc.mis.beta.entities.BaseEntityWithVersion;
+import com.avc.mis.beta.entities.EntityWithVersionAndId;
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.data.Item;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -37,11 +37,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PO_ITEMS")
-public class OrderItem extends BaseEntityWithVersion {
-	
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
+public class OrderItem extends EntityWithVersionAndId {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -52,8 +48,7 @@ public class OrderItem extends BaseEntityWithVersion {
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	
-	private BigDecimal numberUnits;
-	
+	private BigDecimal numberUnits;	
 	
 	@Transient
 	private MeasureUnit measureUnit;
@@ -61,7 +56,6 @@ public class OrderItem extends BaseEntityWithVersion {
 	@Setter(value = AccessLevel.NONE)
 	private Currency currency;
 	
-//	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	private BigDecimal unitPrice;
 	
 	private LocalDate deliveryDate;
@@ -78,19 +72,6 @@ public class OrderItem extends BaseEntityWithVersion {
 		this.measureUnit = MeasureUnit.valueOf(measureUnit);
 	}
 	
-//	public String getMeasureUnit() {
-//		return Optional.ofNullable(this.item).map(i -> i.getMeasureUnit().toString()).orElse(null);
-//	}
-	
-		
-//	public void setUnitPrice(String val) {
-//		this.unitPrice = new BigDecimal(val);
-//	}
-//	
-//	public String getUnitprice() {
-//		return this.unitPrice.toPlainString();
-//	}
-	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
@@ -104,8 +85,7 @@ public class OrderItem extends BaseEntityWithVersion {
 	@Override
 	public void prePersistOrUpdate() {
 		if(!isLegal()) {
-			throw new IllegalArgumentException(
-					"Order line is not legal has to reference an item");
+			throw new IllegalArgumentException(this.getIllegalMessage());
 		}
 		if(this.measureUnit != null && this.measureUnit != this.item.getMeasureUnit()) {			
 			this.numberUnits = MeasureUnit.convert(
@@ -121,6 +101,11 @@ public class OrderItem extends BaseEntityWithVersion {
 		else {
 			throw new ClassCastException("Referenced object isn't a purchase order");
 		}		
+	}
+
+	@Override
+	public String getIllegalMessage() {
+		return "Order line is not legal has to reference an item";
 	}
 
 }

@@ -12,12 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.BaseEntityNoIdWithVersion;
+import com.avc.mis.beta.entities.EntityWithVersion;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.values.Country;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -35,7 +34,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="ID_INFORMATION")
-public class IdCard extends BaseEntityNoIdWithVersion {
+public class IdCard extends EntityWithVersion {
 	
 	@EqualsAndHashCode.Include
 	@Id
@@ -67,15 +66,13 @@ public class IdCard extends BaseEntityNoIdWithVersion {
 		return this.id != null || this.person != null;
 	}
 	
-	@PrePersist @PreUpdate
-	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal())
-			throw new IllegalArgumentException("Internal failure: trying to add Id card without person");
-	}
-
 	@Override
 	public void setReference(Object referenced) {
 		this.setPerson((Person) referenced);
+	}
+
+	@Override
+	public String getIllegalMessage() {
+		return "Internal failure: trying to add Id card without person";
 	}
 }

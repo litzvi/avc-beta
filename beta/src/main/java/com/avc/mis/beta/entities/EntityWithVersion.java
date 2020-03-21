@@ -15,22 +15,10 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @MappedSuperclass
-public abstract class BaseEntityWithVersion extends BaseEntity {
-	
+public abstract class EntityWithVersion extends BaseEntity {
 	@Version
 	private Long version;
-
-	/**
-	 * @param version
-	 */
-	public BaseEntityWithVersion(Integer id, Long version) {
-		super(id);
-		this.version = version;
-	}
-	
-	
-
 }

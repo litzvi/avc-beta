@@ -1,19 +1,16 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.data;
+package com.avc.mis.beta.entities.values;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.EntityWithId;
 import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,17 +28,11 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="BANK_BRANCHES")
-@NamedQuery(name = "BankBranch.findAll", query = "select bb from BankBranch bb")
-public class BankBranch extends BaseEntity {
-	
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
+public class BankBranch extends EntityWithId {
 	
 	@Column(name = "name", nullable = false)
 	private String value;
 	
-//	@JsonManagedReference(value = "branch_bank")
 	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	@JoinColumn(name = "bankId", nullable = false)
 	private Bank bank;
@@ -60,10 +51,8 @@ public class BankBranch extends BaseEntity {
 		return StringUtils.isNotBlank(getValue()) && getBank() != null;
 	}
 	
-	@PrePersist @PreUpdate
 	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal())
-			throw new IllegalArgumentException("Branch name can't be blank and branch has to belong to a bank");
+	public String getIllegalMessage() {
+		return "Branch name can't be blank and branch has to belong to a bank";
 	}
 }

@@ -10,12 +10,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.BaseEntityWithVersion;
+import com.avc.mis.beta.entities.EntityWithVersionAndId;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.values.BankBranch;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -31,15 +30,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true ,callSuper = true)
 @Entity
-@Table(name = "BANK_ACCOUNTS"/*
-								 * , uniqueConstraints = {@UniqueConstraint(columnNames = {"accountNo",
-								 * "branchId"})}
-								 */)
-public class BankAccount extends BaseEntityWithVersion {
-	
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
+@Table(name = "BANK_ACCOUNTS")
+public class BankAccount extends EntityWithVersionAndId {
 	
 	@Column(nullable = false)
 	private String accountNo;
@@ -75,13 +67,11 @@ public class BankAccount extends BaseEntityWithVersion {
 				StringUtils.isNotBlank(getOwnerName()) && getBranch() != null;
 	}
 	
-	@PrePersist @PreUpdate
 	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal())
-			throw new IllegalArgumentException("Bank Account info not legal\n "
-					+ "account has to belong to bank branch,\n"
-					+ "account number and Owner name can't be blank");
+	public String getIllegalMessage() {
+		return "Bank Account info not legal\n "
+				+ "account has to belong to bank branch,\n"
+				+ "account number and Owner name can't be blank";
 	}
 
 }

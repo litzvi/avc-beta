@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.services;
+package com.avc.mis.beta.dao;
 
 import java.util.List;
 import java.util.Map;
@@ -12,14 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
-import com.avc.mis.beta.entities.data.Bank;
-import com.avc.mis.beta.entities.data.BankBranch;
-import com.avc.mis.beta.entities.data.City;
-import com.avc.mis.beta.entities.data.CompanyPosition;
-import com.avc.mis.beta.entities.data.Country;
-import com.avc.mis.beta.entities.data.Item;
-import com.avc.mis.beta.entities.data.SupplyCategory;
-import com.avc.mis.beta.entities.process.ContractType;
+import com.avc.mis.beta.entities.values.Bank;
+import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.values.City;
+import com.avc.mis.beta.entities.values.CompanyPosition;
+import com.avc.mis.beta.entities.values.ContractType;
+import com.avc.mis.beta.entities.values.Country;
+import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.values.SupplyCategory;
 
 /**
  * @author Zvi

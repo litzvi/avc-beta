@@ -16,14 +16,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
+import com.avc.mis.beta.dao.ReferenceTables;
+import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dto.data.FaxDTO;
 import com.avc.mis.beta.dto.data.PhoneDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.data.Address;
 import com.avc.mis.beta.entities.data.BankAccount;
-import com.avc.mis.beta.entities.data.BankBranch;
-import com.avc.mis.beta.entities.data.City;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Email;
@@ -33,9 +33,9 @@ import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.data.SupplyCategory;
-import com.avc.mis.beta.services.ReferenceTables;
-import com.avc.mis.beta.services.Suppliers;
+import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.values.City;
+import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest

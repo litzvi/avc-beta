@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.avc.mis.beta.dao.ReferenceTables;
+import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.services.ReferenceTables;
-import com.avc.mis.beta.services.Suppliers;
 import com.google.gson.Gson;
 
 /**

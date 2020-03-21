@@ -7,12 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.BaseEntityWithVersion;
+import com.avc.mis.beta.entities.EntityWithVersionAndId;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,13 +29,8 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "COMPANY_CONTACTS")
-public class CompanyContact extends BaseEntityWithVersion {
+public class CompanyContact extends EntityWithVersionAndId {
 	
-//	@EqualsAndHashCode.Include
-//	@Id
-//	@GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
-
 	@ToString.Exclude
 	@JsonBackReference(value = "company_companyContacts")
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -55,22 +49,12 @@ public class CompanyContact extends BaseEntityWithVersion {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
-	/**
-	 * @return
-	 */
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return person != null && person.isLegal();
 	}
 	
-	@PrePersist @PreUpdate
-	@Override
-	public void prePersistOrUpdate() {
-		if(!isLegal())
-			throw new IllegalArgumentException("Compony contact has to reference legal person (person name not blank");
-	}
-
 	/**
 	 * Sets the company reference
 	 * @param company need to be instance of Company
@@ -80,10 +64,9 @@ public class CompanyContact extends BaseEntityWithVersion {
 		this.setCompany((Company)company);
 	}
 
-//	@Column(columnDefinition = "boolean default true", nullable = false)
-//	private boolean isActive = true;
-//	
-	
-
+	@Override
+	public String getIllegalMessage() {
+		return "Compony contact has to reference legal person (person name not blank";
+	}
 
 }
