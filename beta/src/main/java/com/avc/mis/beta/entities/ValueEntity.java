@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,20 +11,21 @@ import javax.persistence.MappedSuperclass;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 /**
  * @author Zvi
  *
  */
 @Data
-@NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @MappedSuperclass
-public abstract class EntityWithVersionAndId extends EntityWithVersion {
+public abstract class ValueEntity extends BaseEntity {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;	
+	private Integer id;
 	
+	@Column(columnDefinition = "boolean default false")
+	private Boolean deleted;
+
 }

@@ -12,8 +12,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.EntityWithId;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.ValueEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name="SUPPLY_CATEGORIES")
 @NamedQuery(name = "SupplyCategory.findAll", query = "select sc from SupplyCategory sc")
-public class SupplyCategory extends EntityWithId {
+public class SupplyCategory extends ValueEntity {
 	
 	@Column(name = "name", unique = true, nullable = false)
 	private String value;

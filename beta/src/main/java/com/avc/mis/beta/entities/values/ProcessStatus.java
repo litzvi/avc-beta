@@ -7,7 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.EntityWithId;
+import com.avc.mis.beta.entities.ValueEntity;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="PROCESS_STATUSES")
-public class ProcessStatus extends EntityWithId {
+public class ProcessStatus extends ValueEntity {
 
 	@Column(name = "name", unique = true, nullable = false)
 	private String value;

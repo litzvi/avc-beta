@@ -1,13 +1,13 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.data;
+package com.avc.mis.beta.dto.process;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 
-import com.avc.mis.beta.dto.BaseDTOWithVersion;
+import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.process.ProductionProcess;
@@ -24,12 +24,12 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class ProductionProcessDTO extends BaseDTOWithVersion {
+public class ProductionProcessDTO extends ProcessDTO {
 //	@EqualsAndHashCode.Exclude
 //	private Integer id;
-	private Instant insertTime;
+	private Instant createdDate;
 	private Staff staffRecording;
 	private Integer poId;
 	private ProcessType processType;
@@ -40,12 +40,12 @@ public class ProductionProcessDTO extends BaseDTOWithVersion {
 	private ProcessStatus status;
 	private String remarks;
 	
-	public ProductionProcessDTO(Integer id, Long version, Instant insertTime, 
+	public ProductionProcessDTO(Integer id, Long version, Instant createdDate, 
 			Staff staffRecording, Integer poId, ProcessType processType, ProductionLine productionLine, 
 			LocalDateTime time, Duration duration, Integer numOfWorkers, ProcessStatus status, 
 			String remarks) {
 		super(id, version);
-		this.insertTime = insertTime;
+		this.createdDate = createdDate;
 		this.staffRecording = staffRecording;
 		this.poId = poId;
 		this.processType = processType;
@@ -59,7 +59,7 @@ public class ProductionProcessDTO extends BaseDTOWithVersion {
 	
 	public ProductionProcessDTO(@NonNull ProductionProcess process) {
 		super(process.getId(), process.getVersion());
-		this.insertTime = process.getInsertTime();
+		this.createdDate = process.getCreatedDate();
 		this.staffRecording = process.getStaffRecording();
 		this.poId = process.getPo().getId();
 		this.processType = process.getProcessType();

@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -13,11 +12,11 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-@AllArgsConstructor
-public class BaseDTO {
-	
-	@EqualsAndHashCode.Include
-	private Integer id;
+public abstract class ProcessDTO extends VersionDTO {
 
+	public ProcessDTO(Integer id, Long version) {
+		super(id, version);
+	}
 }

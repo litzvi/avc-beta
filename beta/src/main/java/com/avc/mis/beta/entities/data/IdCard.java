@@ -14,7 +14,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.EntityWithVersion;
+import com.avc.mis.beta.entities.DataEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.values.Country;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -34,7 +34,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="ID_INFORMATION")
-public class IdCard extends EntityWithVersion {
+public class IdCard extends DataEntity {
 	
 	@EqualsAndHashCode.Include
 	@Id

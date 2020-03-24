@@ -13,11 +13,15 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
-public class BaseDTO {
+public abstract class VersionDTO extends BaseDTO {
 	
-	@EqualsAndHashCode.Include
-	private Integer id;
-
+	private Long version;
+	
+	public VersionDTO(Integer id, Long version) {
+		super(id);
+		this.version = version;
+	}
 }

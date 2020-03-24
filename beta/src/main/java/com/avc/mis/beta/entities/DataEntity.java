@@ -3,12 +3,11 @@
  */
 package com.avc.mis.beta.entities;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 /**
  * @author Zvi
@@ -16,9 +15,9 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
-@NoArgsConstructor
 @MappedSuperclass
-public abstract class EntityWithVersion extends BaseEntity {
-	@Version
-	private Long version;
+public abstract class DataEntity extends VersionEntity {
+
+	@Column(columnDefinition = "boolean default false")
+	private Boolean deleted;
 }

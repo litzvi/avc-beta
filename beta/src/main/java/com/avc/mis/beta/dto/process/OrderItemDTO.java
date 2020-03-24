@@ -1,14 +1,14 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.data;
+package com.avc.mis.beta.dto.process;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
 import java.util.Optional;
 
-import com.avc.mis.beta.dto.BaseDTOWithVersion;
+import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.values.Item;
 
@@ -22,9 +22,9 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class OrderItemDTO extends BaseDTOWithVersion {
+public class OrderItemDTO extends ProcessDTO {
 /**
 	 * @param poId
 	 * @param item

@@ -3,8 +3,7 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import java.io.Serializable;
-
+import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.values.City;
 
 import lombok.EqualsAndHashCode;
@@ -16,15 +15,20 @@ import lombok.Value;
  *
  */
 @Value
-public class CityDTO implements Serializable {
-	@EqualsAndHashCode.Exclude
-	Integer id;
+@EqualsAndHashCode(callSuper = true)
+public class CityDTO extends ValueDTO {
+	
 	String value;
 	String countryName;
+
+	public CityDTO(Integer id, String value, String countryName) {
+		super(id);
+		this.value = value;
+		this.countryName = countryName;
+	}
 	
-	@lombok.experimental.Tolerate
 	public CityDTO(@NonNull City city) {
-		this.id = city.getId();
+		super(city.getId());
 		this.value = city.getValue();
 		this.countryName = city.getCountry().getValue();
 	}

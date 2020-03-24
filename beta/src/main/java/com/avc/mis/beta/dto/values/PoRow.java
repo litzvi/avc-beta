@@ -3,17 +3,18 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
 
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
 
@@ -22,10 +23,9 @@ import lombok.Value;
  *
  */
 @Value
-public class PoRow implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+public class PoRow extends ValueDTO {
 	
-	@EqualsAndHashCode.Exclude
-	Integer id;
 	String contractTypeCode;
 	String supplierName;
 	String itemName;
@@ -36,13 +36,36 @@ public class PoRow implements Serializable {
 	OrderStatus orderStatus;
 	
 	/**
+	 * @param id
+	 * @param contractTypeCode
+	 * @param supplierName
+	 * @param itemName
+	 * @param amount
+	 * @param measureUnit
+	 * @param contractDate
+	 * @param deliveryDate
+	 * @param orderStatus
+	 */
+	public PoRow(@NonNull Integer id, String contractTypeCode, String supplierName, String itemName, BigDecimal amount,
+			MeasureUnit measureUnit, LocalDateTime contractDate, LocalDate deliveryDate, OrderStatus orderStatus) {
+		super(id);
+		this.contractTypeCode = contractTypeCode;
+		this.supplierName = supplierName;
+		this.itemName = itemName;
+		this.amount = amount;
+		this.measureUnit = measureUnit;
+		this.contractDate = contractDate;
+		this.deliveryDate = deliveryDate;
+		this.orderStatus = orderStatus;
+	}
+	
+	/**
 	 * @param po
 	 * @param orderItem
 	 */
-	@lombok.experimental.Tolerate
 	public PoRow(PO po, OrderItem orderItem) {
 
-		this.id = po.getId();
+		super(po.getId());
 		this.contractTypeCode = po.getContractType().getValue();
 		this.supplierName = po.getSupplier().getName();
 		this.itemName = orderItem.getItem().getValue();
@@ -56,7 +79,7 @@ public class PoRow implements Serializable {
 	
 	@ToString.Include(name = "value")
 	public String getValue() {
-		return this.contractTypeCode + this.id;
+		return this.contractTypeCode + this.getId();
 	}
 	
 	public String getMeasureUnit() {
@@ -66,4 +89,6 @@ public class PoRow implements Serializable {
 	public String getOrderStatus() {
 		return this.orderStatus.toString();
 	}
+
+	
 }

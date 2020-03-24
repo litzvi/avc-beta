@@ -21,15 +21,18 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.name) "
 			+ "from Supplier s "
 			+ "join s.supplyCategories c "
-			+ "where c.id = :categoryId ")
+			+ "where c.id = :categoryId "
+				+ "and s.deleted = false")
 	List<SupplierBasic> findSuppliersByCategoryBasic(Integer categoryId);
 	
 	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.name) "
-			+ "from Supplier s ")
+			+ "from Supplier s "
+			+ "where s.deleted = false")
 	List<SupplierBasic> findAllSuppliersBasic();
 	
 	@Query("select s from Supplier s "
-			+ "left join fetch s.contactDetails cd")
+			+ "left join fetch s.contactDetails cd "
+			+ "where s.deleted = false")
 	List<Supplier> findAll();
 	
 	@Query("select s from Supplier s "
@@ -42,7 +45,8 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "left join fetch cc.person p "
 				+ "left join fetch p.idCard id "
 				+ "left join fetch p.contactDetails cd "
-			+ "where cc.company.id = :id ")
+			+ "where cc.company.id = :id "
+				+ "and cc.deleted = false")
 	List<CompanyContact> findCompanyContactsByCompnyId(Integer id);
 	
 }

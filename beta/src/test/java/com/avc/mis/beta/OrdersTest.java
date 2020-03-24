@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.avc.mis.beta.dao.Orders;
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
-import com.avc.mis.beta.dto.data.PoDTO;
+import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
@@ -39,7 +38,7 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000063;
+	private final int PROCESS_NO = 5000074;
 
 	@Autowired
 	Orders orders;

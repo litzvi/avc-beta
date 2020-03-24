@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
-import com.avc.mis.beta.entities.EntityWithVersion;
+import com.avc.mis.beta.entities.DataEntity;
 import com.avc.mis.beta.entities.values.CompanyPosition;
 
 import lombok.Data;
@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-public class Staff extends EntityWithVersion {
+public class Staff extends DataEntity {
 	
 	@EqualsAndHashCode.Include
 	@Id

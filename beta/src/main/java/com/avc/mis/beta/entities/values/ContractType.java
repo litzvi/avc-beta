@@ -7,7 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.EntityWithId;
+import com.avc.mis.beta.entities.ValueEntity;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="CONTRACT_TYPES")
-public class ContractType extends EntityWithId {
+public class ContractType extends ValueEntity {
 
 	@Column(unique = true, nullable = false)
 	private String name;

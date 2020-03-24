@@ -4,7 +4,6 @@
 package com.avc.mis.beta.entities.process;
 
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -16,8 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.EntityWithVersionAndId;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.ProcessEntityWithId;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.values.ProcessStatus;
@@ -35,10 +34,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PROCESSES")
-public class ProductionProcess extends EntityWithVersionAndId {
-	
-	@Column(nullable = false, updatable = false)
-	private final Instant insertTime;
+public class ProductionProcess extends ProcessEntityWithId {
 	
 	@ManyToOne 
 	@JoinColumn(name = "staffId", updatable = false)
@@ -67,17 +63,13 @@ public class ProductionProcess extends EntityWithVersionAndId {
 	private ProcessStatus status;
 	private String remarks;
 	
-	public ProductionProcess() {
-		this.insertTime = Instant.now();
-	}
-
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
 	@Override
 	public boolean isLegal() {
-		return this.insertTime != null && this.processType != null;
+		return this.processType != null;
 	}
 
 	@Override

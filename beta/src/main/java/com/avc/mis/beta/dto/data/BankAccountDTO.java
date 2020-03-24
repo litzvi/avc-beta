@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import com.avc.mis.beta.dto.BaseDTOWithVersion;
+import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.entities.data.BankAccount;
 
@@ -17,11 +17,10 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class BankAccountDTO extends BaseDTOWithVersion {
-//	@EqualsAndHashCode.Exclude
-//	private Integer id;
+public class BankAccountDTO extends DataDTO {
+
 	private String accountNo;
 	private String ownerName;
 	private BankBranchDTO branch;

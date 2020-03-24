@@ -16,8 +16,8 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.avc.mis.beta.entities.EntityWithVersionAndId;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.ProcessEntityWithId;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
 
@@ -37,7 +37,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PO_ITEMS")
-public class OrderItem extends EntityWithVersionAndId {
+public class OrderItem extends ProcessEntityWithId {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -24,8 +24,8 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.entities.EntityWithVersion;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.ProcessEntity;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.values.ContractType;
@@ -47,7 +47,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PURCHASE_ORDERS")
-public class PO extends EntityWithVersion {
+public class PO extends ProcessEntity {
 	
 	@EqualsAndHashCode.Include
 	@Id

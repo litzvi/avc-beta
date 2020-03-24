@@ -3,11 +3,11 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.data.Email;
 import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;
@@ -23,18 +23,17 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
-public class SupplierRow implements Serializable {
-	@EqualsAndHashCode.Include
-	private Integer id;
+public class SupplierRow extends ValueDTO {
+	
 	private String name;
 	private Set<String> phones;
 	private Set<String> emails;
 	private Set<String> supplyCategories;
 		
 	public SupplierRow(@NonNull Supplier supplier) {
-		this.id = supplier.getId();
+		super(supplier.getId());
 		this.name = supplier.getName();
 		this.phones = Arrays.stream(supplier.getContactDetails().getPhones())
 				.map(Phone::getValue).collect(Collectors.toSet());

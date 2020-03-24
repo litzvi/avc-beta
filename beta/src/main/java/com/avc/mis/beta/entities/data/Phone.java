@@ -12,7 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.EntityWithVersionAndId;
+import com.avc.mis.beta.entities.DataEntityWithId;
 import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -32,7 +32,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PHONES")
-public class Phone extends EntityWithVersionAndId {
+public class Phone extends DataEntityWithId {
 
 	@ToString.Exclude
 	@JsonBackReference(value = "contactDetails_phones")

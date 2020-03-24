@@ -8,8 +8,8 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.data.OrderItemDTO;
-import com.avc.mis.beta.dto.data.PoDTO;
+import com.avc.mis.beta.dto.process.OrderItemDTO;
+import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.entities.enums.OrderStatus;
@@ -22,8 +22,8 @@ import com.avc.mis.beta.entities.process.PO;
  */
 public interface PORepository extends BaseRepository<PO> {
 	
-	@Query("select new com.avc.mis.beta.dto.data.PoDTO("
-			+ "po.id, po.version, c_type, s.id, s.name, po.status, p.id, p.version, p.insertTime, "
+	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
+			+ "po.id, po.version, c_type, s.id, s.name, po.status, p.id, p.version, p.createdDate, "
 			+ "p_staff, p.processType, p_line, p.time, p.duration, "
 			+ "p.numOfWorkers, p_status, p.remarks) "
 		+ "from PO po "
@@ -36,7 +36,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "where po.id = :id ")
 	Optional<PoDTO> findOrderById(Integer id);
 	
-	@Query("select new com.avc.mis.beta.dto.data.OrderItemDTO("
+	@Query("select new com.avc.mis.beta.dto.process.OrderItemDTO("
 			+ "i.id, i.version, po.id, item, i.numberUnits, i.currency, "
 			+ "i.unitPrice, i.deliveryDate, i.defects, i.remarks) "
 		+ "from OrderItem i "

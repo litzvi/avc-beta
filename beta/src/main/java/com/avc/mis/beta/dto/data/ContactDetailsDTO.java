@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.BaseDTOWithVersion;
+import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.entities.data.Address;
 import com.avc.mis.beta.entities.data.ContactDetails;
 
@@ -21,11 +21,10 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class ContactDetailsDTO extends BaseDTOWithVersion {
-//	@EqualsAndHashCode.Exclude
-//	private Integer id;
+public class ContactDetailsDTO extends DataDTO {
+
 	private Set<PhoneDTO> phones;
 	private Set<FaxDTO> faxes;
 	private Set<EmailDTO> emails;

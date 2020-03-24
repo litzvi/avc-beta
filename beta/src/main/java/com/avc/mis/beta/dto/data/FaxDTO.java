@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import com.avc.mis.beta.dto.BaseDTOWithVersion;
+import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.entities.data.Fax;
 
 import lombok.Data;
@@ -16,11 +16,10 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class FaxDTO extends BaseDTOWithVersion {
-//	@EqualsAndHashCode.Exclude
-//	private Integer id;
+public class FaxDTO extends DataDTO {
+
 	private String value;
 	
 	public FaxDTO(@NonNull Fax fax) {

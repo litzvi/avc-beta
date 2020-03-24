@@ -19,7 +19,7 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Check;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.entities.EntityWithVersionAndId;
+import com.avc.mis.beta.entities.DataEntityWithId;
 import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -44,7 +44,7 @@ import lombok.ToString;
 @Table(name = "CONTACT_DETAILS", uniqueConstraints = 
 	{ @UniqueConstraint(columnNames = { "companyId", "personId" }) })
 @Check(constraints = "(companyId is null) xor (personId is null)")
-public class ContactDetails extends EntityWithVersionAndId {
+public class ContactDetails extends DataEntityWithId {
 
 	@ToString.Exclude
 	@JsonBackReference(value = "company_contactDetails")

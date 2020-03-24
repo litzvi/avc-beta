@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.data;
+package com.avc.mis.beta.dto.process;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.BaseDTOWithVersion;
+import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.OrderStatus;
@@ -30,12 +30,10 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class PoDTO extends BaseDTOWithVersion {
+public class PoDTO extends ProcessDTO {
 	
-//	@EqualsAndHashCode.Exclude
-//	private Integer id;
 	private ContractType contractType;
 	private SupplierBasic supplier;
 	private OrderStatus status;
@@ -44,11 +42,11 @@ public class PoDTO extends BaseDTOWithVersion {
 	
 	public PoDTO(Integer id, Long version, ContractType contractType, Integer supplierId, 
 			String supplierName, OrderStatus status, 
-			Integer processId, Long processVersion, Instant insertTime, Staff staffRecording, ProcessType processType,
+			Integer processId, Long processVersion, Instant createdDate, Staff staffRecording, ProcessType processType,
 			ProductionLine productionLine, LocalDateTime time, Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, String remarks) {
 		super(id, version);
-		this.orderProcess = new ProductionProcessDTO(processId, processVersion, insertTime, staffRecording, id, 
+		this.orderProcess = new ProductionProcessDTO(processId, processVersion, createdDate, staffRecording, id, 
 				processType, productionLine, time, duration, numOfWorkers, processStatus, remarks);
 		this.contractType = contractType;
 		this.supplier = new SupplierBasic(supplierId, supplierName);

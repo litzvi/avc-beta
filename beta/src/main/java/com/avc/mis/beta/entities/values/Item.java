@@ -9,7 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.EntityWithId;
+import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "ITEMS")
-public class Item extends EntityWithId {
+public class Item extends ValueEntity {
 
 	@Column(name = "name", unique = true, nullable = false)
 	private String value;

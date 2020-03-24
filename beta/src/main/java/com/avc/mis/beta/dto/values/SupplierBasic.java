@@ -3,8 +3,7 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import java.io.Serializable;
-
+import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,18 +17,20 @@ import lombok.Value;
  *
  */
 @Value
-public class SupplierBasic implements Serializable {
-	
-	@EqualsAndHashCode.Exclude
-	Integer id;
+@EqualsAndHashCode(callSuper = true)
+public class SupplierBasic extends ValueDTO {
 	
 	@JsonIgnore
 	@ToString.Exclude
 	String name;
 	
-	@lombok.experimental.Tolerate
+	public SupplierBasic(Integer id, String name) {
+		super(id);
+		this.name = name;
+	}
+	
 	public SupplierBasic(@NonNull Supplier supplier) {
-		this.id = supplier.getId();
+		super(supplier.getId());
 		this.name = supplier.getName();
 	}
 	

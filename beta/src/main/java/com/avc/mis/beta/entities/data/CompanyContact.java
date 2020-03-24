@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.EntityWithVersionAndId;
+import com.avc.mis.beta.entities.DataEntityWithId;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -29,7 +29,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "COMPANY_CONTACTS")
-public class CompanyContact extends EntityWithVersionAndId {
+public class CompanyContact extends DataEntityWithId {
 	
 	@ToString.Exclude
 	@JsonBackReference(value = "company_companyContacts")
