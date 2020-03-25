@@ -18,6 +18,6 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public abstract class DataEntity extends VersionEntity {
 
-	@Column(columnDefinition = "boolean default false")
-	private Boolean deleted;
+	@Column(columnDefinition = "boolean default false",nullable = false)
+	private Boolean deleted = false;
 }

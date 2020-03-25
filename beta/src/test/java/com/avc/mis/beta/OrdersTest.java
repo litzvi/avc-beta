@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -38,7 +39,7 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000074;
+	private final int PROCESS_NO = 5000076;
 
 	@Autowired
 	Orders orders;
@@ -81,7 +82,7 @@ public class OrdersTest {
 				
 		return po;
 	}
-//	@Disabled
+	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 

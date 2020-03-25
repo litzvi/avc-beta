@@ -41,7 +41,7 @@ public class PoDTO extends ProcessDTO {
 	private List<OrderItemDTO> orderItems;
 	
 	public PoDTO(Integer id, Long version, ContractType contractType, Integer supplierId, 
-			String supplierName, OrderStatus status, 
+			Long supplierVersion, String supplierName, OrderStatus status, 
 			Integer processId, Long processVersion, Instant createdDate, Staff staffRecording, ProcessType processType,
 			ProductionLine productionLine, LocalDateTime time, Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, String remarks) {
@@ -49,7 +49,7 @@ public class PoDTO extends ProcessDTO {
 		this.orderProcess = new ProductionProcessDTO(processId, processVersion, createdDate, staffRecording, id, 
 				processType, productionLine, time, duration, numOfWorkers, processStatus, remarks);
 		this.contractType = contractType;
-		this.supplier = new SupplierBasic(supplierId, supplierName);
+		this.supplier = new SupplierBasic(supplierId, supplierVersion, supplierName);
 		this.status = status;
 //		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toSet());
 

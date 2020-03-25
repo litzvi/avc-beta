@@ -23,7 +23,7 @@ import com.avc.mis.beta.entities.process.PO;
 public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
-			+ "po.id, po.version, c_type, s.id, s.name, po.status, p.id, p.version, p.createdDate, "
+			+ "po.id, po.version, c_type, s.id, s.version, s.name, po.status, p.id, p.version, p.createdDate, "
 			+ "p_staff, p.processType, p_line, p.time, p.duration, "
 			+ "p.numOfWorkers, p_status, p.remarks) "
 		+ "from PO po "

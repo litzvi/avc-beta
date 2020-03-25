@@ -18,14 +18,14 @@ import com.avc.mis.beta.entities.data.Supplier;
  */
 public interface SupplierRepository extends BaseRepository<Supplier> {
 	
-	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.name) "
+	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "join s.supplyCategories c "
 			+ "where c.id = :categoryId "
 				+ "and s.deleted = false")
 	List<SupplierBasic> findSuppliersByCategoryBasic(Integer categoryId);
 	
-	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.name) "
+	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "where s.deleted = false")
 	List<SupplierBasic> findAllSuppliersBasic();

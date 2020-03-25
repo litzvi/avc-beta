@@ -42,7 +42,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 class SuppliersTests {
 	
 	private final int NUM_ITEMS = 3;
-
 	
 	@Autowired
 	Suppliers suppliers;
@@ -50,7 +49,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1274;
+	private static Integer SERIAL_NO = 1278;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -245,7 +244,7 @@ class SuppliersTests {
 		expected.getContactDetails().getFaxes().add(new FaxDTO(updatedFax));
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
-	
+		System.out.println(actual);
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//print list of suppliers table
