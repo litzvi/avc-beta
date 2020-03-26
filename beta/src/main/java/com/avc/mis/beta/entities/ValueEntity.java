@@ -19,13 +19,13 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @MappedSuperclass
-public abstract class ValueEntity extends BaseEntity {
+public abstract class ValueEntity extends BaseEntity implements SoftDeleted {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(columnDefinition = "boolean default false")
-	private Boolean deleted;
+	@Column(columnDefinition = "boolean default true")
+	private boolean active;
 
 }

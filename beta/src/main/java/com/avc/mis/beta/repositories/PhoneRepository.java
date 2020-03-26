@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.data.PhoneDTO;
 import com.avc.mis.beta.entities.data.Phone;
 
 /**
@@ -28,6 +27,6 @@ public interface PhoneRepository extends ContactEntityRepository<Phone> {
 //	List<PhoneDTO> findAllByContactDetailsId(int contactId);
 	
 	@Query("select p from Phone p "
-			+ "where p.deleted = false")
+			+ "where p.active = true")
 	List<Phone> findAll();
 }

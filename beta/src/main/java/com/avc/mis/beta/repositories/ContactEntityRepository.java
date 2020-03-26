@@ -17,7 +17,7 @@ import com.avc.mis.beta.entities.ContactEntity;
 @NoRepositoryBean
 public interface ContactEntityRepository<T extends ContactEntity> extends BaseRepository<T> {
 	
-	@Query("select e from #{#entityName} e where e.contactDetails.id = ?1 and e.deleted = false")
+	@Query("select e from #{#entityName} e where e.contactDetails.id = ?1 and e.active = true")
 	List<T> findAllByContactDetailsId(int contactId);
 
 }

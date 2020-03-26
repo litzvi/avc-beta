@@ -49,7 +49,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1305;
+	private static Integer SERIAL_NO = 1322;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -132,7 +132,7 @@ class SuppliersTests {
 		
 		return supplier;
 	}
-	@Disabled
+//	@Disabled
 	@Test
 	void suppliersTest() {
 		//supplier with null name
@@ -245,7 +245,12 @@ class SuppliersTests {
 		expected.getContactDetails().getFaxes().add(new FaxDTO(updatedFax));
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
-		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		try {
+//			suppliers.permenentlyRemoveSupplier(supplier.getId());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//print list of suppliers table
 		List<SupplierRow> list = suppliers.getSuppliersTable();
 //		list.forEach(s -> System.out.println(s));
@@ -254,18 +259,15 @@ class SuppliersTests {
 		
 	}
 	
+	@Disabled
 	@Test
 	void addAndGetSuppliertest() {
 		Supplier supplier = fullSupplier();
 		suppliers.addSupplier(supplier);
 		SupplierDTO actual = null;
 		System.out.println("getting supplier...");
-//		try {
 		System.out.println(suppliers.getSupplier(supplier.getId()));
-//		}catch(Exception e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println(actual);
+
 	}
 
 	

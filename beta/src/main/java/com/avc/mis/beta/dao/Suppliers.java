@@ -11,18 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.data.ContactDetailsDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.SoftDeleted;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.repositories.PhoneRepository;
 import com.avc.mis.beta.repositories.SupplierRepository;
 
 /**
@@ -31,7 +30,7 @@ import com.avc.mis.beta.repositories.SupplierRepository;
  */
 @Repository
 @Transactional(rollbackFor = Throwable.class)
-public class Suppliers extends DAO {
+public class Suppliers extends SoftDeletableDAO {
 	
 	@Autowired
 	private SupplierRepository supplierRepository;
@@ -100,7 +99,8 @@ public class Suppliers extends DAO {
 	 * @param supplierId
 	 */
 	public void removeSupplier(int supplierId) {
-		removeEntity(Supplier.class, supplierId);	
+		SoftDeleted entity = getEntityManager().getReference(Supplier.class, supplierId);
+		removeEntity(entity);	
 	}
 	
 	/**
@@ -140,7 +140,8 @@ public class Suppliers extends DAO {
 	}
 	
 	public void removeAccount(int accountId) {
-		removeEntity(PaymentAccount.class, accountId);	
+		SoftDeleted entity = getEntityManager().getReference(PaymentAccount.class, accountId);
+		removeEntity(entity);	
 	}
 	
 	public void editContactPerson(CompanyContact contact) {
@@ -169,7 +170,8 @@ public class Suppliers extends DAO {
 	}
 	
 	public void removeContactPerson(int contactId) {
-		removeEntity(CompanyContact.class, contactId);
+		SoftDeleted entity = getEntityManager().getReference(CompanyContact.class, contactId);
+		removeEntity(entity);
 	}
 	
 	//for testing - should be removed
@@ -178,12 +180,15 @@ public class Suppliers extends DAO {
 	}
 	
 	//for testing - should be removed
-	public void removeEntity(Insertable entity) {
-		super.removeEntity(entity);
+	public Insertable editEntity(Insertable entity) {
+		return super.editEntity(entity);
 	}
 	
 	//for testing - should be removed
-	public Insertable editEntity(Insertable entity) {
-		return super.editEntity(entity);
-	}	
+	@Override
+	public void removeEntity(SoftDeleted entity) {
+		super.removeEntity(entity);; 
+	}
+
+	
 }

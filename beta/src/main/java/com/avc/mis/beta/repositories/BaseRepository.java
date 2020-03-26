@@ -29,40 +29,40 @@ import com.avc.mis.beta.entities.values.SupplyCategory;
 @RestResource(exported = false)
 public interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 
-	@Query("select c from City c where c.deleted = false")
+	@Query("select c from City c where c.active = true")
 	List<City> findAllCities();
 	
-	@Query("select c from Country c where c.deleted = false")
+	@Query("select c from Country c where c.active = true")
 	List<Country> findAllCountries();
 	
-	@Query("select cp from CompanyPosition cp where cp.deleted = false")
+	@Query("select cp from CompanyPosition cp where cp.active = true")
 	List<CompanyPosition> findAllCompanyPositions();
 	
-	@Query("select b from Bank b where b.deleted = false")
+	@Query("select b from Bank b where b.active = true")
 	List<Bank> findAllBanks();
 	
-	@Query("select bb from BankBranch bb where bb.deleted = false")
+	@Query("select bb from BankBranch bb where bb.active = true")
 	List<BankBranch> findAllBankBranches();
 	
 	@Query("select new com.avc.mis.beta.dto.values.BankBranchDTO(bb.id, bb.value, bank.value) "
 			+ "from BankBranch bb "
 			+ "join bb.bank bank "
-			+ " where bb.deleted = false")
+			+ " where bb.active = true")
 	List<BankBranchDTO> findAllBankBranchesDTO();
 	
 	@Query("select new com.avc.mis.beta.dto.values.CityDTO(c.id, c.value, ctry.value) "
 			+ "from City c "
 			+ "join c.country ctry "
-			+ " where c.deleted = false")
+			+ " where c.active = true")
 	List<CityDTO> findAllCitiesDTO();
 	
-	@Query("select sc from SupplyCategory sc where sc.deleted = false")
+	@Query("select sc from SupplyCategory sc where sc.active = true")
 	List<SupplyCategory> findAllSupplyCategories();
 	
-	@Query("select i from Item i where i.deleted = false")
+	@Query("select i from Item i where i.active = true")
 	List<Item> findAllItems();
 	
-	@Query("select t from ContractType t where t.deleted = false")
+	@Query("select t from ContractType t where t.active = true")
 	List<ContractType> findAllContractTypes();
 
 

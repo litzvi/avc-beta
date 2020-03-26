@@ -25,7 +25,7 @@ import com.avc.mis.beta.repositories.PORepository;
  */
 @Repository
 @Transactional(readOnly = true)
-public class Orders extends DAO {
+public class Orders extends ProcessDAO {
 	
 	@Autowired
 	private PORepository poRepository;
@@ -85,6 +85,7 @@ public class Orders extends DAO {
 		editEntity(po);
 	}
 	
+	//public -- for testing only
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void removeOrder(int orderId) {
 		removeEntity(PO.class, orderId);

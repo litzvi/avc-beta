@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Where(clause = "deleted = false")
+//@Where(clause = "deleted = false")
 @Table(name="PAYMENT_ACCOUNTS")
 public class PaymentAccount extends ContactEntity {
 	

@@ -5,7 +5,6 @@ package com.avc.mis.beta.dto.data;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,12 +41,19 @@ public class ContactDetailsDTO extends DataDTO {
 	 */
 	public ContactDetailsDTO(@NonNull ContactDetails contactDetails) {
 		super(contactDetails.getId(), contactDetails.getVersion());
-		this.phones = Arrays.stream(contactDetails.getPhones()).map(p->{return new PhoneDTO(p);}).collect(Collectors.toSet());
-		this.faxes = Arrays.stream(contactDetails.getFaxes()).map(f->{return new FaxDTO(f);}).collect(Collectors.toSet());
-		this.emails = Arrays.stream(contactDetails.getEmails()).map(e->{return new EmailDTO(e);}).collect(Collectors.toSet());
+		this.phones = Arrays.stream(contactDetails.getPhones()).filter(t -> t.isActive())
+				.map(p->{return new PhoneDTO(p);}).collect(Collectors.toSet());
+		this.faxes = Arrays.stream(contactDetails.getFaxes()).filter(t -> t.isActive())
+				.map(f->{return new FaxDTO(f);}).collect(Collectors.toSet());
+		this.emails = Arrays.stream(contactDetails.getEmails()).filter(t -> t.isActive())
+				.map(e->{return new EmailDTO(e);}).collect(Collectors.toSet());
 		Address[] contactAddresses = contactDetails.getAddresses();
-		this.addresses = (contactAddresses.length > 0) ? new AddressDTO(contactAddresses[0]) : null;
-		this.paymentAccounts = Arrays.stream(contactDetails.getPaymentAccounts()).map(p->{return new PaymentAccountDTO(p);}).collect(Collectors.toSet());
+		for(int i=0; i< contactAddresses.length && this.addresses == null; i++) {
+			if(contactAddresses[i].isActive())
+				this.addresses = new AddressDTO(contactAddresses[i]);
+		}
+		this.paymentAccounts = Arrays.stream(contactDetails.getPaymentAccounts()).filter(t -> t.isActive())
+				.map(p->{return new PaymentAccountDTO(p);}).collect(Collectors.toSet());
 	}
 
 	/**

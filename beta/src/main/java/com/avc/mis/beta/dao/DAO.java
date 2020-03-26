@@ -6,6 +6,7 @@ package com.avc.mis.beta.dao;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.entities.Insertable;
@@ -15,7 +16,7 @@ import com.avc.mis.beta.repositories.ReferenceTablesRepository;
  * @author Zvi
  *
  */
-@Repository
+//@NoRepositoryBean
 public abstract class DAO {
 	
 	public static final int BATCH_SIZE = 20;
@@ -38,23 +39,22 @@ public abstract class DAO {
 		return entityManager;
 	}
 	
-	void addEntity(Insertable entity, Insertable reference) {
+	//public -- only for testing
+	public void addEntity(Insertable entity, Insertable reference) {
 		reference = getEntityManager().getReference(reference.getClass(), reference.getId());
 		entity.setReference(reference);
 		getEntityManager().persist(entity);
 	}
 	
-	void removeEntity(Insertable entity) {
-		entity = getEntityManager().getReference(entity.getClass(), entity.getId());
-		getEntityManager().remove(entity); 
-	}
+//	void removeEntity(Insertable entity) {
+//		entity = getEntityManager().getReference(entity.getClass(), entity.getId());
+//		getEntityManager().remove(entity); 
+//	}
+//	
+
 	
-	void removeEntity(Class<? extends Insertable> entityClass, Integer id) {
-		Insertable entity = getEntityManager().getReference(entityClass, id);
-		getEntityManager().remove(entity); 
-	}
-	
-	Insertable editEntity(Insertable entity) {
+	//public -- only for testing
+	public Insertable editEntity(Insertable entity) {
 		if(entity.getId() == null) {
 			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
 		}

@@ -8,8 +8,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-import org.hibernate.annotations.Where;
-
 import com.avc.mis.beta.entities.data.ContactDetails;
 
 import lombok.Data;

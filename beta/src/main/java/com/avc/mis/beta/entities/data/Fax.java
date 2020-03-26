@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Where(clause = "deleted = false")
+//@Where(clause = "deleted = false")
 @Table(name="FAXES")
 public class Fax extends ContactEntity {
 		

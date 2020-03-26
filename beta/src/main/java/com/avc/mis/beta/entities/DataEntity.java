@@ -16,8 +16,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @MappedSuperclass
-public abstract class DataEntity extends VersionEntity {
+public abstract class DataEntity extends VersionEntity implements SoftDeleted {
 
-	@Column(columnDefinition = "boolean default false",nullable = false)
-	private Boolean deleted = false;
+	@Column(columnDefinition = "boolean default true",nullable = false)
+	private boolean active = true;
 }

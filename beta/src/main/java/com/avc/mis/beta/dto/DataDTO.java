@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public abstract class DataDTO extends VersionDTO {
-
+	
 	public DataDTO(Integer id, Long version) {
 		super(id, version);
 	}
