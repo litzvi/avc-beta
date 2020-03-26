@@ -49,7 +49,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1303;
+	private static Integer SERIAL_NO = 1305;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -259,12 +259,13 @@ class SuppliersTests {
 		Supplier supplier = fullSupplier();
 		suppliers.addSupplier(supplier);
 		SupplierDTO actual = null;
-		try {
-		actual = suppliers.getSupplier(supplier.getId());
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println(actual);
+		System.out.println("getting supplier...");
+//		try {
+		System.out.println(suppliers.getSupplier(supplier.getId()));
+//		}catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//		System.out.println(actual);
 	}
 
 	

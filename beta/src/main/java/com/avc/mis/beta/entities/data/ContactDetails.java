@@ -58,28 +58,28 @@ public class ContactDetails extends DataEntityWithId {
 	@JoinColumn(name = "personId", updatable = false)
 	private Person person;
 
-	@JsonManagedReference(value = "contactDetails_phones")
+//	@JsonManagedReference(value = "contactDetails_phones")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Phone> phones = new HashSet<>();
 
-	@JsonManagedReference(value = "contactDetails_faxes")
+//	@JsonManagedReference(value = "contactDetails_faxes")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Fax> faxes = new HashSet<>();
 
-	@JsonManagedReference(value = "contactDetails_emails")
+//	@JsonManagedReference(value = "contactDetails_emails")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Email> emails = new HashSet<>();
 
-	@JsonManagedReference(value = "contactDetails_addresses")
+//	@JsonManagedReference(value = "contactDetails_addresses")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JsonFormat(with = Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Address> addresses = new HashSet<>();
 
-	@JsonManagedReference(value = "contactDetails_paymentAccount")
+//	@JsonManagedReference(value = "contactDetails_paymentAccount")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
 		orphanRemoval = true, fetch = FetchType.LAZY)
 	@BatchSize(size = DAO.BATCH_SIZE)
