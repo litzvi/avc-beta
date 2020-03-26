@@ -71,6 +71,7 @@ public class IdCard extends DataEntity {
 		this.setPerson((Person) referenced);
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Internal failure: trying to add Id card without person";

@@ -55,6 +55,7 @@ public class SupplyCategory extends ValueEntity {
 			throw new IllegalArgumentException("Category name can't be blank");
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Category name can't be blank";

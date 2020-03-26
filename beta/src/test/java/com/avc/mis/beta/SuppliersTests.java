@@ -49,7 +49,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1278;
+	private static Integer SERIAL_NO = 1303;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -74,6 +74,7 @@ class SuppliersTests {
 		for(int i=0; i<phones.length; i++) {
 			phones[i] = new Phone();
 			phones[i].setValue(" value " + i) ;
+//			phones[i].setDeleted(true);
 		}
 		supplier.getContactDetails().setPhones(phones);
 		//add faxes
@@ -128,11 +129,10 @@ class SuppliersTests {
 			
 		}
 		supplier.setCompanyContacts(contacts);
-		System.out.println(supplier);
 		
 		return supplier;
 	}
-//	@Disabled
+	@Disabled
 	@Test
 	void suppliersTest() {
 		//supplier with null name
@@ -157,7 +157,8 @@ class SuppliersTests {
 		SupplierDTO expected = new SupplierDTO(supplier);
 		expected.setName(supplier.getName().trim());
 		suppliers.addSupplier(supplier);
-		SupplierDTO actual = suppliers.getSupplier(supplier.getId());
+		SupplierDTO actual = null;
+		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test adding supplier with white spaces added to all info fields");
 		//try adding supplier with duplicate name
 		Supplier dupSupplier = basicSupplier();
@@ -210,8 +211,8 @@ class SuppliersTests {
 		suppliers.addSupplier(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test adding supplier contact details");
+		System.out.println(actual);
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
-		
 		//add supplier with full details add, remove and update a phone, fax and email
 		supplier = fullSupplier();
 		expected = new SupplierDTO(supplier);
@@ -244,14 +245,26 @@ class SuppliersTests {
 		expected.getContactDetails().getFaxes().add(new FaxDTO(updatedFax));
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
-		System.out.println(actual);
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
-		
 		//print list of suppliers table
 		List<SupplierRow> list = suppliers.getSuppliersTable();
-		list.forEach(s -> System.out.println(s));
+//		list.forEach(s -> System.out.println(s));
 		
 		
+		
+	}
+	
+	@Test
+	void addAndGetSuppliertest() {
+		Supplier supplier = fullSupplier();
+		suppliers.addSupplier(supplier);
+		SupplierDTO actual = null;
+		try {
+		actual = suppliers.getSupplier(supplier.getId());
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(actual);
 	}
 
 	

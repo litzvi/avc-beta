@@ -67,6 +67,7 @@ public class BankAccount extends DataEntityWithId {
 				StringUtils.isNotBlank(getOwnerName()) && getBranch() != null;
 	}
 	
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Bank Account info not legal\n "

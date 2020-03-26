@@ -26,4 +26,14 @@ public class PhoneDTO extends DataDTO {
 		super(phone.getId(), phone.getVersion());
 		this.value = phone.getValue();
 	}
+
+	/**
+	 * @param id
+	 * @param version
+	 * @param value
+	 */
+	public PhoneDTO(Integer id, Long version, String value) {
+		super(id, version);
+		this.value = value;
+	}
 }

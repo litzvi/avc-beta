@@ -29,6 +29,7 @@ import com.avc.mis.beta.entities.ProcessEntity;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.values.ContractType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -123,11 +124,13 @@ public class PO extends ProcessEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
+	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return this.contractType != null && this.supplier != null && this.orderItems.size() > 0;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Purchase Order is not legal, "

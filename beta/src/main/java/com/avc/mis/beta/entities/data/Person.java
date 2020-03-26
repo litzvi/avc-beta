@@ -79,6 +79,7 @@ public class Person extends DataEntityWithId {
 		return StringUtils.isNotBlank(name);
 	}
 	
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Person name can't be blank";

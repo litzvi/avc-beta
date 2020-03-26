@@ -60,6 +60,7 @@ public class Bank extends ValueEntity {
 		return StringUtils.isNotBlank(getValue());
 	}
 	
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Bank name can't be blank";

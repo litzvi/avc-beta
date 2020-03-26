@@ -55,6 +55,7 @@ public class City extends ValueEntity {
 		return StringUtils.isNotBlank(getValue());
 	}
 	
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "City name can't be blank";

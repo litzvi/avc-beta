@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 
 import com.avc.mis.beta.entities.DataEntity;
 import com.avc.mis.beta.entities.values.CompanyPosition;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -46,6 +47,7 @@ public class Staff extends DataEntity {
 		return person != null;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Staff has to reference a person";

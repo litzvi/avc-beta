@@ -51,6 +51,7 @@ public class BankBranch extends ValueEntity {
 		return StringUtils.isNotBlank(getValue()) && getBank() != null;
 	}
 	
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Branch name can't be blank and branch has to belong to a bank";

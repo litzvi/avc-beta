@@ -12,17 +12,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.DataEntityWithId;
+import org.hibernate.annotations.Where;
+
+import com.avc.mis.beta.entities.ContactEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.values.City;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * @author Zvi
@@ -32,15 +32,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
+@Where(clause = "deleted = false")
 @Table(name="ADDRESSES")
-public class Address extends DataEntityWithId {
+public class Address extends ContactEntity {
 
-	@ToString.Exclude
-	@JsonBackReference(value = "contactDetails_addresses")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "contactId", updatable=false)
-	private ContactDetails contactDetails;
-	
 	@Column(nullable = false)
 	private String streetAddress;
 	
@@ -68,6 +63,7 @@ public class Address extends DataEntityWithId {
 		
 	}
 	
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Street address can't be blank";

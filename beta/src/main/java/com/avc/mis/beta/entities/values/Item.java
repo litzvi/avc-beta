@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
@@ -35,11 +36,13 @@ public class Item extends ValueEntity {
 	@Column(updatable = false, nullable = false)
 	private MeasureUnit measureUnit;
 
+	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue()) && measureUnit != null; 
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Item can't be blank and has to have a measure unit";

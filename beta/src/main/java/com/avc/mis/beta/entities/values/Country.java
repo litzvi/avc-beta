@@ -56,6 +56,7 @@ public class Country extends ValueEntity {
 		return StringUtils.isNotBlank(getValue());
 	}
 	
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Country name can't be blank";

@@ -20,6 +20,7 @@ import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntityWithId;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -76,6 +77,7 @@ public class OrderItem extends ProcessEntityWithId {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 
+	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return item != null;
@@ -103,6 +105,7 @@ public class OrderItem extends ProcessEntityWithId {
 		}		
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Order line is not legal has to reference an item";

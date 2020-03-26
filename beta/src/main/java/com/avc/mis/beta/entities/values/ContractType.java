@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.ValueEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
@@ -31,11 +32,13 @@ public class ContractType extends ValueEntity {
 	@Column(name = "code", unique = true, nullable = false)
 	private String value;
 
+	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getName()) && StringUtils.isNotBlank(getValue());
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Contract type name and code can't be blank";

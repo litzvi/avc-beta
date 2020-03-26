@@ -46,6 +46,7 @@ public class CompanyPosition extends ValueEntity {
 		return StringUtils.isNotBlank(getValue());
 	}
 	
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Position name can't be blank";

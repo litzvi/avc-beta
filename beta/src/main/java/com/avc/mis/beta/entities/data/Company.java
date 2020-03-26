@@ -102,6 +102,7 @@ public class Company extends DataEntityWithId {
 		return StringUtils.isNotBlank(name);
 	}
 	
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Company name can't be blank";

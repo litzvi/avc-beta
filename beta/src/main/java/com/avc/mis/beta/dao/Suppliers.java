@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.data.ContactDetailsDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.dto.values.SupplierRow;
@@ -21,6 +22,7 @@ import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.repositories.PhoneRepository;
 import com.avc.mis.beta.repositories.SupplierRepository;
 
 /**
@@ -33,7 +35,7 @@ public class Suppliers extends DAO {
 	
 	@Autowired
 	private SupplierRepository supplierRepository;
-		
+	
 	/**
 	 * @return the supplierRepository
 	 */
@@ -69,16 +71,21 @@ public class Suppliers extends DAO {
 			Person person = contact.getPerson();
 			getEntityManager().persist(person);
 			getEntityManager().persist(contact);			
-		}
+		}		
 	}
 	
 	@Transactional(readOnly = true)
 	public SupplierDTO getSupplier(int id) {
+		
 		Optional<Supplier> optionalSupplier = getSupplierRepository().findById(id);
 		Supplier supplier = optionalSupplier.orElseThrow(() -> 
 			new IllegalArgumentException("No supplier with given ID"));
-
 		SupplierDTO supplierDTO = new SupplierDTO(supplier);
+		
+//		ContactDetails contactDetails = supplier.getContactDetails();		
+//		ContactDetailsDTO contactDetailsDTO = new ContactDetailsDTO(contactDetails);		
+//		contactDetailsDTO.setPhones(phoneRepository.findAllByContactDetailsId(contactDetails.getId()));		
+//		supplierDTO.setContactDetails(contactDetailsDTO);
 		
 		getSupplierRepository().findCompanyContactsByCompnyId(id)
 			.forEach((cc) -> supplierDTO.addCompanyContact(cc));

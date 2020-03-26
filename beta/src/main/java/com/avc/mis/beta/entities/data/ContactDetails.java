@@ -149,6 +149,7 @@ public class ContactDetails extends DataEntityWithId {
 		}		
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Contact details not legal\n "

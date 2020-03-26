@@ -64,6 +64,7 @@ public class CompanyContact extends DataEntityWithId {
 		this.setCompany((Company)company);
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Compony contact has to reference legal person (person name not blank";

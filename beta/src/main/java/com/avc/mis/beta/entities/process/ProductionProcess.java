@@ -21,6 +21,7 @@ import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProductionLine;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -67,6 +68,7 @@ public class ProductionProcess extends ProcessEntityWithId {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
+	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return this.processType != null;
@@ -82,6 +84,7 @@ public class ProductionProcess extends ProcessEntityWithId {
 		}		
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Process does not have an inset time or process type";

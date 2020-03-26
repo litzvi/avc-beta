@@ -11,15 +11,15 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.DataEntityWithId;
+import org.hibernate.annotations.Where;
+
+import com.avc.mis.beta.entities.ContactEntity;
 import com.avc.mis.beta.entities.Insertable;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * @author Zvi
@@ -29,14 +29,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
+@Where(clause = "deleted = false")
 @Table(name="PAYMENT_ACCOUNTS")
-public class PaymentAccount extends DataEntityWithId {
-	
-	@ToString.Exclude
-	@JsonBackReference(value = "contactDetails_paymentAccount")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "contactId", updatable = false)
-	private ContactDetails contactDetails;
+public class PaymentAccount extends ContactEntity {
 	
 	@JoinTable(name = "BANK_PAYEES", 
 			joinColumns = @JoinColumn(name="paymentId", referencedColumnName="id"),
@@ -63,6 +58,7 @@ public class PaymentAccount extends DataEntityWithId {
 		
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "Payment info not legal\n "
