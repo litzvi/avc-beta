@@ -31,7 +31,7 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
 @Table(name="ID_INFORMATION")
 public class IdCard extends DataEntity {

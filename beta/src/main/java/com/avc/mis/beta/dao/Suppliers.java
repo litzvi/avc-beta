@@ -100,7 +100,7 @@ public class Suppliers extends SoftDeletableDAO {
 	 */
 	public void removeSupplier(int supplierId) {
 		SoftDeleted entity = getEntityManager().getReference(Supplier.class, supplierId);
-		removeEntity(entity);	
+		softDeleteEntity(entity);	
 	}
 	
 	/**
@@ -140,7 +140,7 @@ public class Suppliers extends SoftDeletableDAO {
 	}
 	
 	public void removeAccount(int accountId) {
-		SoftDeleted entity = getEntityManager().getReference(PaymentAccount.class, accountId);
+		Insertable entity = getEntityManager().getReference(PaymentAccount.class, accountId);
 		removeEntity(entity);	
 	}
 	
@@ -171,7 +171,7 @@ public class Suppliers extends SoftDeletableDAO {
 	
 	public void removeContactPerson(int contactId) {
 		SoftDeleted entity = getEntityManager().getReference(CompanyContact.class, contactId);
-		removeEntity(entity);
+		softDeleteEntity(entity);
 	}
 	
 	//for testing - should be removed
@@ -184,9 +184,9 @@ public class Suppliers extends SoftDeletableDAO {
 		return super.editEntity(entity);
 	}
 	
-	//for testing - should be removed
+	//public - for testing only
 	@Override
-	public void removeEntity(SoftDeleted entity) {
+	public void removeEntity(Insertable entity) {
 		super.removeEntity(entity);; 
 	}
 

@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
-import com.avc.mis.beta.entities.DataEntity;
+import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-public class Staff extends DataEntity {
+public class Staff extends ObjectDataEntity {
 	
 	@EqualsAndHashCode.Include
 	@Id

@@ -25,7 +25,7 @@ import com.avc.mis.beta.repositories.PORepository;
  */
 @Repository
 @Transactional(readOnly = true)
-public class Orders extends ProcessDAO {
+public class Orders extends DAO {
 	
 	@Autowired
 	private PORepository poRepository;

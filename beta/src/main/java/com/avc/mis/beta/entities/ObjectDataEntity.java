@@ -3,8 +3,8 @@
  */
 package com.avc.mis.beta.entities;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Version;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +16,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @MappedSuperclass
-public abstract class DataEntity extends BaseEntity {
-	@Version
-	private Long version;
+public abstract class ObjectDataEntity extends DataEntity implements SoftDeleted {
+
+	@Column(columnDefinition = "boolean default true",nullable = false)
+	private boolean active = true;
 }

@@ -17,7 +17,7 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class AddressDTO extends DataDTO {	
 

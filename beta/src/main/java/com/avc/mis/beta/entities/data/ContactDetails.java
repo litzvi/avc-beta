@@ -19,8 +19,9 @@ import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Check;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.entities.DataEntityWithId;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.LinkEntity;
+import com.avc.mis.beta.entities.SubjectDataEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;
@@ -43,7 +44,7 @@ import lombok.ToString;
 @Table(name = "CONTACT_DETAILS", uniqueConstraints = 
 	{ @UniqueConstraint(columnNames = { "companyId", "personId" }) })
 @Check(constraints = "(companyId is null) xor (personId is null)")
-public class ContactDetails extends DataEntityWithId {
+public class ContactDetails extends LinkEntity {
 
 	@ToString.Exclude
 	@JsonBackReference(value = "company_contactDetails")
@@ -85,6 +86,7 @@ public class ContactDetails extends DataEntityWithId {
 	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	
 	public void setPhones(Phone[] phones) {
+		SubjectDataEntity.setOrdinals(phones);
 		this.phones = Insertable.filterAndSetReference(phones, (t) -> {t.setReference(this);	return t;});
 	}
 	
@@ -93,6 +95,7 @@ public class ContactDetails extends DataEntityWithId {
 	}
 	
 	public void setFaxes(Fax[] faxes) {
+		SubjectDataEntity.setOrdinals(faxes);
 		this.faxes = Insertable.filterAndSetReference(faxes, (t) -> {t.setReference(this);	return t;});
 	}
 	
@@ -101,6 +104,7 @@ public class ContactDetails extends DataEntityWithId {
 	}
 	
 	public void setEmails(Email[] emails) {
+		SubjectDataEntity.setOrdinals(emails);
 		this.emails = Insertable.filterAndSetReference(emails, (t) -> {t.setReference(this);	return t;});
 	}
 	
@@ -109,6 +113,7 @@ public class ContactDetails extends DataEntityWithId {
 	}
 	
 	public void setAddresses(Address[] addresses) {
+		SubjectDataEntity.setOrdinals(addresses);
 		this.addresses = Insertable.filterAndSetReference(addresses, (t) -> {t.setReference(this);	return t;});
 	}
 	
@@ -117,6 +122,7 @@ public class ContactDetails extends DataEntityWithId {
 	}
 	
 	public void setPaymentAccounts(PaymentAccount[] paymentAccounts) {
+		SubjectDataEntity.setOrdinals(paymentAccounts);
 		this.paymentAccounts = Insertable.filterAndSetReference(paymentAccounts, 
 				(t) -> {t.setReference(this);	return t;});
 	}

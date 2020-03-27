@@ -11,8 +11,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Where;
-
 import com.avc.mis.beta.entities.ContactEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;

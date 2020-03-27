@@ -19,7 +19,7 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class IdCardDTO extends DataDTO {
 

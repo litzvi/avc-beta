@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseDTO {

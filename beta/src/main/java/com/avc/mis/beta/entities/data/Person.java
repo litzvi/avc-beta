@@ -12,8 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.DataEntityWithId;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PERSONS")
-public class Person extends DataEntityWithId {
+public class Person extends ObjectEntityWithId {
 	
 	@Column(nullable = false)
 	private String name;

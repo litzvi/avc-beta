@@ -6,8 +6,6 @@ package com.avc.mis.beta.dao;
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.NoRepositoryBean;
-import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.repositories.ReferenceTablesRepository;
@@ -16,7 +14,6 @@ import com.avc.mis.beta.repositories.ReferenceTablesRepository;
  * @author Zvi
  *
  */
-//@NoRepositoryBean
 public abstract class DAO {
 	
 	public static final int BATCH_SIZE = 20;
@@ -46,12 +43,15 @@ public abstract class DAO {
 		getEntityManager().persist(entity);
 	}
 	
-//	void removeEntity(Insertable entity) {
-//		entity = getEntityManager().getReference(entity.getClass(), entity.getId());
-//		getEntityManager().remove(entity); 
-//	}
-//	
-
+	void removeEntity(Insertable entity) {
+		entity = getEntityManager().getReference(entity.getClass(), entity.getId());
+		getEntityManager().remove(entity); 
+	}
+	
+	void removeEntity(Class<? extends Insertable> entityClass, Integer id) {
+		Insertable entity = getEntityManager().getReference(entityClass, id);
+		getEntityManager().remove(entity); 
+	}
 	
 	//public -- only for testing
 	public Insertable editEntity(Insertable entity) {

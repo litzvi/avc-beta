@@ -21,8 +21,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.entities.DataEntityWithId;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -41,7 +41,7 @@ import lombok.NoArgsConstructor;
 @BatchSize(size = DAO.BATCH_SIZE)
 @Table(name="COMPANIES")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Company extends DataEntityWithId {
+public class Company extends ObjectEntityWithId {
 	
 	@Column(unique = true, nullable = false)
 	private String name;

@@ -4,17 +4,11 @@
 package com.avc.mis.beta.dto.data;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.DataDTO;
-import com.avc.mis.beta.entities.data.Address;
+import com.avc.mis.beta.dto.LinkDTO;
 import com.avc.mis.beta.entities.data.ContactDetails;
-import com.avc.mis.beta.entities.data.Email;
-import com.avc.mis.beta.entities.data.Fax;
-import com.avc.mis.beta.entities.data.PaymentAccount;
-import com.avc.mis.beta.entities.data.Phone;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,9 +20,9 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class ContactDetailsDTO extends DataDTO {
+public class ContactDetailsDTO extends LinkDTO {
 
 	private Set<PhoneDTO> phones;
 	private Set<FaxDTO> faxes;
@@ -40,61 +34,78 @@ public class ContactDetailsDTO extends DataDTO {
 	 * @param contactDetails
 	 */
 	public ContactDetailsDTO(@NonNull ContactDetails contactDetails) {
-		super(contactDetails.getId(), contactDetails.getVersion());
-		this.phones = Arrays.stream(contactDetails.getPhones()).filter(t -> t.isActive())
+		super(contactDetails.getId());
+		this.phones = Arrays.stream(contactDetails.getPhones())
 				.map(p->{return new PhoneDTO(p);}).collect(Collectors.toSet());
-		this.faxes = Arrays.stream(contactDetails.getFaxes()).filter(t -> t.isActive())
+		this.faxes = Arrays.stream(contactDetails.getFaxes())
 				.map(f->{return new FaxDTO(f);}).collect(Collectors.toSet());
-		this.emails = Arrays.stream(contactDetails.getEmails()).filter(t -> t.isActive())
+		this.emails = Arrays.stream(contactDetails.getEmails())
 				.map(e->{return new EmailDTO(e);}).collect(Collectors.toSet());
-		Address[] contactAddresses = contactDetails.getAddresses();
-		for(int i=0; i< contactAddresses.length && this.addresses == null; i++) {
-			if(contactAddresses[i].isActive())
-				this.addresses = new AddressDTO(contactAddresses[i]);
-		}
-		this.paymentAccounts = Arrays.stream(contactDetails.getPaymentAccounts()).filter(t -> t.isActive())
+		this.addresses = Arrays.stream(contactDetails.getAddresses())
+				.findFirst().map(e -> {return new AddressDTO(e);}).orElse(null);
+		this.paymentAccounts = Arrays.stream(contactDetails.getPaymentAccounts())
 				.map(p->{return new PaymentAccountDTO(p);}).collect(Collectors.toSet());
+		
+
+		
+		/* -- for returning subject data in order -- s
+		this.phones = Arrays.stream(contactDetails.getPhones()).sorted(SubjectDataEntity.ordinalComparator())
+				.map(p->{return new PhoneDTO(p);}).collect(Collectors.toList());
+		this.faxes = Arrays.stream(contactDetails.getFaxes()).sorted(SubjectDataEntity.ordinalComparator())
+				.map(f->{return new FaxDTO(f);}).collect(Collectors.toList());
+		this.emails = Arrays.stream(contactDetails.getEmails()).sorted(SubjectDataEntity.ordinalComparator())
+				.map(e->{return new EmailDTO(e);}).collect(Collectors.toList());
+		this.addresses = Arrays.stream(contactDetails.getAddresses()).sorted(SubjectDataEntity.ordinalComparator())
+				.findFirst().map(e -> {return new AddressDTO(e);}).orElse(null);
+		this.paymentAccounts = Arrays.stream(contactDetails.getPaymentAccounts()).sorted(SubjectDataEntity.ordinalComparator())
+				.map(p->{return new PaymentAccountDTO(p);}).collect(Collectors.toList());
+		*/
 	}
 
-	/**
-	 * @param phones the phones to set
-	 */
-	public void setPhones(Collection<Phone> phones) {
-		this.phones = phones.stream().map(p->{return new PhoneDTO(p);}).collect(Collectors.toSet());
-
-	}
-
-	/**
-	 * @param faxes the faxes to set
-	 */
-	public void setFaxes(Collection<Fax> faxes) {
-		this.faxes = faxes.stream().map(f->{return new FaxDTO(f);}).collect(Collectors.toSet());
-;
-	}
-
-	/**
-	 * @param emails the emails to set
-	 */
-	public void setEmails(Collection<Email> emails) {
-		this.emails = emails.stream().map(e->{return new EmailDTO(e);}).collect(Collectors.toSet());
-;
-	}
-
-	/**
-	 * @param addresses the addresses to set
-	 */
-	public void setAddresses(Collection<Address> addresses) {
-		this.addresses =  addresses.stream().findFirst().map(e -> {return new AddressDTO(e);}).orElse(null);
-	}
-
-	/**
-	 * @param paymentAccounts the paymentAccounts to set
-	 */
-	public void setPaymentAccounts(Collection<PaymentAccount> paymentAccounts) {
-		this.paymentAccounts = paymentAccounts.stream().map(p->{return new PaymentAccountDTO(p);}).collect(Collectors.toSet());
-;
-	}
-	
+//	/**
+//	 * @param phones the phones to set
+//	 */
+//	public void setPhones(Collection<Phone> phones) {
+//		this.phones = phones.stream().sorted(SubjectDataEntity.ordinalComparator())
+//				.map(p->{return new PhoneDTO(p);}).collect(Collectors.toList());
+//
+//	}
+//
+//	/**
+//	 * @param faxes the faxes to set
+//	 */
+//	public void setFaxes(Collection<Fax> faxes) {
+//		this.faxes = faxes.stream().sorted(SubjectDataEntity.ordinalComparator())
+//				.map(f->{return new FaxDTO(f);}).collect(Collectors.toList());
+//;
+//	}
+//
+//	/**
+//	 * @param emails the emails to set
+//	 */
+//	public void setEmails(Collection<Email> emails) {
+//		this.emails = emails.stream().sorted(SubjectDataEntity.ordinalComparator())
+//				.map(e->{return new EmailDTO(e);}).collect(Collectors.toList());
+//;
+//	}
+//
+//	/**
+//	 * @param addresses the addresses to set
+//	 */
+//	public void setAddresses(Collection<Address> addresses) {
+//		this.addresses =  addresses.stream().sorted(SubjectDataEntity.ordinalComparator())
+//				.findFirst().map(e -> {return new AddressDTO(e);}).orElse(null);
+//	}
+//
+//	/**
+//	 * @param paymentAccounts the paymentAccounts to set
+//	 */
+//	public void setPaymentAccounts(Collection<PaymentAccount> paymentAccounts) {
+//		this.paymentAccounts = paymentAccounts.stream().sorted(SubjectDataEntity.ordinalComparator())
+//				.map(p->{return new PaymentAccountDTO(p);}).collect(Collectors.toList());
+//
+//	}
+//	
 	
 
 }

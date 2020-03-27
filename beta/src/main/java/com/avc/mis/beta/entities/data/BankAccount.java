@@ -12,8 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.DataEntityWithId;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true ,callSuper = true)
 @Entity
 @Table(name = "BANK_ACCOUNTS")
-public class BankAccount extends DataEntityWithId {
+public class BankAccount extends ObjectEntityWithId {
 	
 	@Column(nullable = false)
 	private String accountNo;

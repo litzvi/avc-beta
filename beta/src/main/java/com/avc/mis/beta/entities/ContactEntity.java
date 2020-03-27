@@ -21,7 +21,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @MappedSuperclass
-public abstract class ContactEntity extends DataEntityWithId {
+public abstract class ContactEntity extends SubjectEntityWithId {
 
 	@ToString.Exclude
 //	@JsonBackReference(value = "contactDetails_phones")

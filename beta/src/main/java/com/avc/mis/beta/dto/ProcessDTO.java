@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public abstract class ProcessDTO extends VersionDTO {
+public abstract class ProcessDTO extends DataDTO {
 
 	public ProcessDTO(Integer id, Long version) {
 		super(id, version);

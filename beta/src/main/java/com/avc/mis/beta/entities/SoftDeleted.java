@@ -7,7 +7,7 @@ package com.avc.mis.beta.entities;
  * @author Zvi
  *
  */
-public interface SoftDeleted extends Insertable{
+public interface SoftDeleted extends Insertable {
 
 	/**
 	 * @param b

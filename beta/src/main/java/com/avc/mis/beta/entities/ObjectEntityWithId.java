@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @MappedSuperclass
-public abstract class DataEntityWithId extends DataEntity {
+public abstract class ObjectEntityWithId extends ObjectDataEntity {
 
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
