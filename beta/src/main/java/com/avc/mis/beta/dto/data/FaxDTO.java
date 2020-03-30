@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import com.avc.mis.beta.dto.DataDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.entities.data.Fax;
 
 import lombok.Data;
@@ -18,12 +18,12 @@ import lombok.NonNull;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class FaxDTO extends DataDTO {
+public class FaxDTO extends SubjectDataDTO {
 
 	private String value;
 	
 	public FaxDTO(@NonNull Fax fax) {
-		super(fax.getId(), fax.getVersion());
+		super(fax.getId(), fax.getVersion(), fax.getOrdinal());
 		this.value = fax.getValue();
 	}
 }

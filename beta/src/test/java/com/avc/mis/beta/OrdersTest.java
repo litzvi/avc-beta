@@ -38,7 +38,7 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000092;
+	private final int PROCESS_NO = 5000102;
 
 	@Autowired
 	Orders orders;

@@ -4,10 +4,12 @@
 package com.avc.mis.beta.dto.data;
 
 import java.util.Arrays;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.LinkDTO;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.data.ContactDetails;
 
 import lombok.Data;
@@ -24,32 +26,31 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class ContactDetailsDTO extends LinkDTO {
 
-	private Set<PhoneDTO> phones;
-	private Set<FaxDTO> faxes;
-	private Set<EmailDTO> emails;
+	private SortedSet<PhoneDTO> phones = new TreeSet<PhoneDTO>(Ordinal.ordinalComparator());
+	private SortedSet<FaxDTO> faxes = new TreeSet<FaxDTO>(Ordinal.ordinalComparator());
+	private SortedSet<EmailDTO> emails = new TreeSet<EmailDTO>(Ordinal.ordinalComparator());
 	private AddressDTO addresses;
-	private Set<PaymentAccountDTO> paymentAccounts;
+	private SortedSet<PaymentAccountDTO> paymentAccounts = new TreeSet<PaymentAccountDTO>(Ordinal.ordinalComparator());
 	
 	/**
 	 * @param contactDetails
 	 */
 	public ContactDetailsDTO(@NonNull ContactDetails contactDetails) {
 		super(contactDetails.getId());
-		this.phones = Arrays.stream(contactDetails.getPhones())
-				.map(p->{return new PhoneDTO(p);}).collect(Collectors.toSet());
-		this.faxes = Arrays.stream(contactDetails.getFaxes())
-				.map(f->{return new FaxDTO(f);}).collect(Collectors.toSet());
-		this.emails = Arrays.stream(contactDetails.getEmails())
-				.map(e->{return new EmailDTO(e);}).collect(Collectors.toSet());
-		this.addresses = Arrays.stream(contactDetails.getAddresses())
+		this.phones.addAll(Arrays.stream(contactDetails.getPhones())
+				.map(p->{return new PhoneDTO(p);}).collect(Collectors.toSet()));
+		this.faxes.addAll(Arrays.stream(contactDetails.getFaxes())
+				.map(f->{return new FaxDTO(f);}).collect(Collectors.toSet()));
+		this.emails.addAll(Arrays.stream(contactDetails.getEmails())
+				.map(e->{return new EmailDTO(e);}).collect(Collectors.toSet()));		
+		this.addresses = Arrays.stream(contactDetails.getAddresses()).sorted(Ordinal.ordinalComparator())
 				.findFirst().map(e -> {return new AddressDTO(e);}).orElse(null);
-		this.paymentAccounts = Arrays.stream(contactDetails.getPaymentAccounts())
-				.map(p->{return new PaymentAccountDTO(p);}).collect(Collectors.toSet());
+		this.paymentAccounts.addAll(Arrays.stream(contactDetails.getPaymentAccounts())
+				.map(p->{return new PaymentAccountDTO(p);}).collect(Collectors.toSet()));
 		
-
 		
 		/* -- for returning subject data in order -- s
-		this.phones = Arrays.stream(contactDetails.getPhones()).sorted(SubjectDataEntity.ordinalComparator())
+		this.phones = Arrays.stream(contactDetails.getPhones()).sorted()
 				.map(p->{return new PhoneDTO(p);}).collect(Collectors.toList());
 		this.faxes = Arrays.stream(contactDetails.getFaxes()).sorted(SubjectDataEntity.ordinalComparator())
 				.map(f->{return new FaxDTO(f);}).collect(Collectors.toList());

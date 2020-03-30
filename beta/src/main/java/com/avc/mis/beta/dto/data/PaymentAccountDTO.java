@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import com.avc.mis.beta.dto.DataDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 
 import lombok.Data;
@@ -18,12 +18,12 @@ import lombok.NonNull;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class PaymentAccountDTO extends DataDTO {
+public class PaymentAccountDTO extends SubjectDataDTO {
 
 	private BankAccountDTO bankAccount;
 	
 	public PaymentAccountDTO(@NonNull PaymentAccount account) {
-		super(account.getId(), account.getVersion());
+		super(account.getId(), account.getVersion(), account.getOrdinal());
 		if(account.getBankAccount() != null)
 			this.bankAccount = new BankAccountDTO(account.getBankAccount());
 	}

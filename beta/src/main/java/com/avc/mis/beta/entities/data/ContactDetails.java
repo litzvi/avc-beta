@@ -21,7 +21,7 @@ import org.hibernate.annotations.Check;
 import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.LinkEntity;
-import com.avc.mis.beta.entities.SubjectDataEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;
@@ -86,7 +86,7 @@ public class ContactDetails extends LinkEntity {
 	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	
 	public void setPhones(Phone[] phones) {
-		SubjectDataEntity.setOrdinals(phones);
+		Ordinal.setOrdinals(phones);
 		this.phones = Insertable.filterAndSetReference(phones, (t) -> {t.setReference(this);	return t;});
 	}
 	
@@ -95,7 +95,7 @@ public class ContactDetails extends LinkEntity {
 	}
 	
 	public void setFaxes(Fax[] faxes) {
-		SubjectDataEntity.setOrdinals(faxes);
+		Ordinal.setOrdinals(faxes);
 		this.faxes = Insertable.filterAndSetReference(faxes, (t) -> {t.setReference(this);	return t;});
 	}
 	
@@ -104,7 +104,7 @@ public class ContactDetails extends LinkEntity {
 	}
 	
 	public void setEmails(Email[] emails) {
-		SubjectDataEntity.setOrdinals(emails);
+		Ordinal.setOrdinals(emails);
 		this.emails = Insertable.filterAndSetReference(emails, (t) -> {t.setReference(this);	return t;});
 	}
 	
@@ -113,7 +113,7 @@ public class ContactDetails extends LinkEntity {
 	}
 	
 	public void setAddresses(Address[] addresses) {
-		SubjectDataEntity.setOrdinals(addresses);
+		Ordinal.setOrdinals(addresses);
 		this.addresses = Insertable.filterAndSetReference(addresses, (t) -> {t.setReference(this);	return t;});
 	}
 	
@@ -122,7 +122,7 @@ public class ContactDetails extends LinkEntity {
 	}
 	
 	public void setPaymentAccounts(PaymentAccount[] paymentAccounts) {
-		SubjectDataEntity.setOrdinals(paymentAccounts);
+		Ordinal.setOrdinals(paymentAccounts);
 		this.paymentAccounts = Insertable.filterAndSetReference(paymentAccounts, 
 				(t) -> {t.setReference(this);	return t;});
 	}
