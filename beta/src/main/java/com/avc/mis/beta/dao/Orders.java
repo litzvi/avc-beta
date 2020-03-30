@@ -56,26 +56,27 @@ public class Orders extends DAO {
 	private void addOrder(PO po) {
 		//using save rather than persist in case POid was assigned by user
 		Session session = getEntityManager().unwrap(Session.class);
+		session.save(po.getPoCode());
 		session.save(po);
 	}
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewOrder(PO po) {
-		po.getOrderProcess().setProcessType(ProcessType.CASHEW_ORDER);
+		po.setProcessType(ProcessType.CASHEW_ORDER);
 		addOrder(po);		
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addGeneralOrder(PO po) {
-		po.getOrderProcess().setProcessType(ProcessType.GENERAL_ORDER);
+		po.setProcessType(ProcessType.GENERAL_ORDER);
 		addOrder(po);	
 	}
 	
-	public PoDTO getOrder(int orderId) {
-		Optional<PoDTO> order = getPoRepository().findOrderById(orderId);
+	public PoDTO getOrder(int poCode) {
+		Optional<PoDTO> order = getPoRepository().findOrderById(poCode);
 		PoDTO po = order.orElseThrow(
 				()->new IllegalArgumentException("No order with given PO code"));
-		po.setOrderItems(getPoRepository().findOrderItemsByPo(orderId));
+		po.setOrderItems(getPoRepository().findOrderItemsByPo(po.getId()));
 		
 		return po;
 	}

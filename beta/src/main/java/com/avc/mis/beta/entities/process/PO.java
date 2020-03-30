@@ -48,23 +48,23 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PURCHASE_ORDERS")
-public class PO extends ProcessEntity {
+public class PO extends ProductionProcess {
 	
-	@EqualsAndHashCode.Include
-	@Id
-	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
-	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
-	@Column(nullable = false, updatable = false)
-	private Integer id;
+//	@EqualsAndHashCode.Include
+//	@Id
+//	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
+//	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
+//	@Column(nullable = false, updatable = false)
+//	private Integer id;
 	
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-	@JoinColumn(name = "processId", updatable = false, nullable = false)
-	private ProductionProcess orderProcess;
+//	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+//	@OneToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+//	@JoinColumn(name = "processId", updatable = false, nullable = false)
+//	private ProductionProcess orderProcess;
 	
-	@ManyToOne
-	@JoinColumn(name = "contractTypeId", updatable = false, nullable = false)
-	private ContractType contractType;
+//	@ManyToOne
+//	@JoinColumn(name = "contractTypeId", updatable = false, nullable = false)
+//	private ContractType contractType;
 	
 	@ManyToOne 
 	@JoinColumn(name = "supplierId", updatable = false, nullable = false)
@@ -72,12 +72,12 @@ public class PO extends ProcessEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private OrderStatus status = OrderStatus.OPEN_PENDING;
+	private OrderStatus orderStatus = OrderStatus.OPEN_PENDING;
 	
-	@ToString.Exclude
-	@OneToMany(mappedBy = "po", fetch = FetchType.LAZY)
-	@BatchSize(size = DAO.BATCH_SIZE)
-	private Set<ProductionProcess> processes = new HashSet<>();
+//	@ToString.Exclude
+//	@OneToMany(mappedBy = "po", fetch = FetchType.LAZY)
+//	@BatchSize(size = DAO.BATCH_SIZE)
+//	private Set<ProductionProcess> processes = new HashSet<>();
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "po", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
@@ -89,22 +89,22 @@ public class PO extends ProcessEntity {
 	/**
 	 * @return the orderProcess
 	 */
-	public ProductionProcess getOrderProcess() {
-		if(this.orderProcess == null) {
-			setOrderProcess(new ProductionProcess());
-		}
-		return this.orderProcess;
-	}
+//	public ProductionProcess getOrderProcess() {
+//		if(this.orderProcess == null) {
+//			setOrderProcess(new ProductionProcess());
+//		}
+//		return this.orderProcess;
+//	}
 
 	/**
 	 * @param orderProcess the orderProcess to set
 	 */
-	public void setOrderProcess(ProductionProcess orderProcess) {
-		if(orderProcess != null) {
-			orderProcess.setReference(this);
-			this.orderProcess = orderProcess;			
-		}
-	}
+//	public void setOrderProcess(ProductionProcess orderProcess) {
+//		if(orderProcess != null) {
+//			orderProcess.setReference(this);
+//			this.orderProcess = orderProcess;			
+//		}
+//	}
 
 	/**
 	 * @return the orderItems
@@ -127,7 +127,7 @@ public class PO extends ProcessEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return this.contractType != null && this.supplier != null && this.orderItems.size() > 0;
+		return super.isLegal() && this.supplier != null && this.orderItems.size() > 0;
 	}
 
 	@JsonIgnore

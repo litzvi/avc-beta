@@ -23,17 +23,19 @@ import com.avc.mis.beta.entities.process.PO;
 public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
-			+ "po.id, po.version, c_type, s.id, s.version, s.name, po.status, p.id, p.version, p.createdDate, "
-			+ "p_staff, p.processType, p_line, p.time, p.duration, "
-			+ "p.numOfWorkers, p_status, p.remarks) "
+			+ "po.id, po.version, po.createdDate, p_staff, "
+			+ "po_code.id, po.processType, p_line, "
+			+ "po.time, po.duration, po.numOfWorkers, "
+			+ "p_status, po.remarks, "
+			+ "s.id, s.version, s.name, "
+			+ "po_code.contractType, po.orderStatus) "
 		+ "from PO po "
-			+ "left join po.contractType c_type "
+			+ "left join po.poCode po_code "
 			+ "left join po.supplier s "
-			+ "left join po.orderProcess p "
-				+ "left join p.staffRecording p_staff "
-				+ "left join p.productionLine p_line "
-				+ "left join p.status p_status "
-		+ "where po.id = :id ")
+			+ "left join po.staffRecording p_staff "
+			+ "left join po.productionLine p_line "
+			+ "left join po.status p_status "
+		+ "where po_code.id = :id ")
 	Optional<PoDTO> findOrderById(Integer id);
 	
 	@Query("select new com.avc.mis.beta.dto.process.OrderItemDTO("
@@ -45,23 +47,23 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "where po.id = :poid ")
 	List<OrderItemDTO> findOrderItemsByPo(Integer poid);
 	
-	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, t.value, s.name, po.status) "
+	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po_code.id, t.value, s.name, po.orderStatus) "
 		+ "from PO po "
-		+ "left join po.contractType t "
+		+ "left join po.poCode po_code "
+		+ "left join po_code.contractType t "
 		+ "left join po.supplier s "
-		+ "left join po.orderProcess p "
-		+ "where p.processType = :orderType and po.status in :statuses ")
+		+ "where po.processType = :orderType and po.orderStatus in :statuses ")
 	List<PoBasic> findByOrderTypeAndStatusesBasic(ProcessType orderType, OrderStatus[] statuses);
 	
-	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, t.value, s.name, i.value, "
-			+ "oi.numberUnits, i.measureUnit, p.time, oi.deliveryDate, po.status) "
+	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code.id, t.value, s.name, i.value, "
+			+ "oi.numberUnits, i.measureUnit, po.time, oi.deliveryDate, po.orderStatus) "
 		+ "from PO po "
-		+ "left join po.contractType t "
+		+ "left join po.poCode po_code "
+		+ "left join po_code.contractType t "
 		+ "left join po.supplier s "
-		+ "left join po.orderProcess p "
 		+ "join po.orderItems oi "
 			+ "left join oi.item i "
-		+ "where p.processType = :orderType and po.status in :statuses ")
+		+ "where po.processType = :orderType and po.orderStatus in :statuses ")
 	List<PoRow> findByOrderTypeAndStatuses(ProcessType orderType, OrderStatus[] statuses);
 	
 }

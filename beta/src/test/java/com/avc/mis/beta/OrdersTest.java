@@ -25,6 +25,7 @@ import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
+import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
@@ -38,7 +39,7 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000102;
+	private final int PROCESS_NO = 5000118;
 
 	@Autowired
 	Orders orders;
@@ -52,16 +53,17 @@ public class OrdersTest {
 	private PO basicOrder() {
 		//build purchase order
 		PO po = new PO();
-		po.setId(PROCESS_NO);
+		PoCode poCode = new PoCode();
+		po.setPoCode(poCode);
+		poCode.setId(PROCESS_NO);
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
-		po.setContractType(contractType);
+		poCode.setContractType(contractType);
 		Supplier supplier = SuppliersTests.basicSupplier();
 		suppliers.addSupplier(supplier);
 		po.setSupplier(supplier);
 		//build process
-		ProductionProcess process = po.getOrderProcess();
-		process.setTime(LocalDateTime.now());
+		po.setTime(LocalDateTime.now());
 		//add order items
 		OrderItem[] items = new OrderItem[NUM_ITEMS];
 		Item item = new Item();

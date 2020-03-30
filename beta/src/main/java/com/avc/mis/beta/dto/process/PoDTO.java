@@ -32,35 +32,34 @@ import lombok.NonNull;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class PoDTO extends ProcessDTO {
+public class PoDTO extends ProductionProcessDTO {
 	
 	private ContractType contractType;
 	private SupplierBasic supplier;
-	private OrderStatus status;
-	private ProductionProcessDTO orderProcess;
+	private OrderStatus orderStatus;
 	private List<OrderItemDTO> orderItems;
 	
-	public PoDTO(Integer id, Long version, ContractType contractType, Integer supplierId, 
-			Long supplierVersion, String supplierName, OrderStatus status, 
-			Integer processId, Long processVersion, Instant createdDate, Staff staffRecording, ProcessType processType,
-			ProductionLine productionLine, LocalDateTime time, Duration duration, Integer numOfWorkers, 
-			ProcessStatus processStatus, String remarks) {
-		super(id, version);
-		this.orderProcess = new ProductionProcessDTO(processId, processVersion, createdDate, staffRecording, id, 
-				processType, productionLine, time, duration, numOfWorkers, processStatus, remarks);
-		this.contractType = contractType;
+	public PoDTO(Integer id, Long version, Instant createdDate, Staff staffRecording, 
+			Integer poId, ProcessType processType, ProductionLine productionLine, 
+			LocalDateTime time, Duration duration, Integer numOfWorkers, 
+			ProcessStatus processStatus, String remarks,
+			Integer supplierId, Long supplierVersion, String supplierName, 
+			ContractType contractType, OrderStatus orderStatus) {
+		super(id, version, createdDate, staffRecording, 
+				poId, processType, productionLine, 
+				time, duration, numOfWorkers, processStatus, remarks);
 		this.supplier = new SupplierBasic(supplierId, supplierVersion, supplierName);
-		this.status = status;
+		this.contractType = contractType;
+		this.orderStatus = orderStatus;
 //		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toSet());
 
 	}
 	
 	public PoDTO(@NonNull PO po) {
-		super(po.getId(), po.getVersion());
-		this.orderProcess = new ProductionProcessDTO(po.getOrderProcess());
-		this.contractType = po.getContractType();
+		super(po);
+		this.contractType = po.getPoCode().getContractType();
 		this.supplier = new SupplierBasic(po.getSupplier());
-		this.status = po.getStatus();
+		this.orderStatus = po.getOrderStatus();
 		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toList());
 
 	}

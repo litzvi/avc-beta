@@ -20,6 +20,7 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 public class PoBasic extends ValueDTO {
 
+	int poCodeId;
 	String contractTypeCode;
 	String supplierName;
 	OrderStatus orderStatus;
@@ -30,8 +31,9 @@ public class PoBasic extends ValueDTO {
 	 * @param supplierName
 	 * @param orderStatus
 	 */
-	public PoBasic(@NonNull Integer id, String contractTypeCode, String supplierName, OrderStatus orderStatus) {
+	public PoBasic(@NonNull Integer id, int poCodeId, String contractTypeCode, String supplierName, OrderStatus orderStatus) {
 		super(id);
+		this.poCodeId = poCodeId;
 		this.contractTypeCode = contractTypeCode;
 		this.supplierName = supplierName;
 		this.orderStatus = orderStatus;
@@ -39,9 +41,10 @@ public class PoBasic extends ValueDTO {
 	
 	public PoBasic(PO po) {
 		super(po.getId());
-		this.contractTypeCode = po.getContractType().getValue();
+		this.poCodeId = po.getPoCode().getId();
+		this.contractTypeCode = po.getPoCode().getContractType().getValue();
 		this.supplierName = po.getSupplier().getName();
-		this.orderStatus = po.getStatus();
+		this.orderStatus = po.getOrderStatus();
 	}
 	
 	@ToString.Include(name = "value")

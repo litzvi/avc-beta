@@ -23,15 +23,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
 public abstract class ProcessEntity extends DataEntity {
-
-	@Column(updatable = false, nullable = false)
-	@CreatedDate
-    private Instant createdDate;
- 
-    @LastModifiedDate
-    private Instant modifiedDate;
-	
 
 }

@@ -20,6 +20,8 @@ import lombok.extern.slf4j.Slf4j;
 @ControllerAdvice
 @Slf4j
 public class ExceptionControler {
+	// DataIntegrityViolationException because not nullable
+	// StaleObjectStateException edit without new version
 
 	//illegalStateexception shouldn't be fatal
 	//illegalargumentexception should be sent as a neat message to the user

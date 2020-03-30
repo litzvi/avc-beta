@@ -30,6 +30,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 //	@EqualsAndHashCode.Exclude
 //	private Integer id;
 	private Instant createdDate;
+//	private Instant modifiedDate;
 	private Staff staffRecording;
 	private Integer poId;
 	private ProcessType processType;
@@ -61,7 +62,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 		super(process.getId(), process.getVersion());
 		this.createdDate = process.getCreatedDate();
 		this.staffRecording = process.getStaffRecording();
-		this.poId = process.getPo().getId();
+		this.poId = process.getPoCode().getId();
 		this.processType = process.getProcessType();
 		this.productionLine = process.getProductionLine();
 		this.time = process.getTime();

@@ -26,6 +26,7 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 public class PoRow extends ValueDTO {
 	
+	int poCodeId;
 	String contractTypeCode;
 	String supplierName;
 	String itemName;
@@ -46,9 +47,10 @@ public class PoRow extends ValueDTO {
 	 * @param deliveryDate
 	 * @param orderStatus
 	 */
-	public PoRow(@NonNull Integer id, String contractTypeCode, String supplierName, String itemName, BigDecimal amount,
+	public PoRow(@NonNull Integer id, int poCodeId, String contractTypeCode, String supplierName, String itemName, BigDecimal amount,
 			MeasureUnit measureUnit, LocalDateTime contractDate, LocalDate deliveryDate, OrderStatus orderStatus) {
 		super(id);
+		this.poCodeId = poCodeId;
 		this.contractTypeCode = contractTypeCode;
 		this.supplierName = supplierName;
 		this.itemName = itemName;
@@ -66,14 +68,15 @@ public class PoRow extends ValueDTO {
 	public PoRow(PO po, OrderItem orderItem) {
 
 		super(po.getId());
-		this.contractTypeCode = po.getContractType().getValue();
+		this.poCodeId = po.getPoCode().getId();
+		this.contractTypeCode = po.getPoCode().getContractType().getValue();
 		this.supplierName = po.getSupplier().getName();
 		this.itemName = orderItem.getItem().getValue();
 		this.amount = orderItem.getNumberUnits();
 		this.measureUnit = orderItem.getMeasureUnit();
-		this.contractDate = po.getOrderProcess().getTime();
+		this.contractDate = po.getTime();
 		this.deliveryDate = orderItem.getDeliveryDate();
-		this.orderStatus = po.getStatus();
+		this.orderStatus = po.getOrderStatus();
 		
 	}
 	
