@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ProcessDTO;
@@ -37,7 +38,7 @@ public class PoDTO extends ProductionProcessDTO {
 	private ContractType contractType;
 	private SupplierBasic supplier;
 	private OrderStatus orderStatus;
-	private List<OrderItemDTO> orderItems;
+	private Set<OrderItemDTO> orderItems;
 	
 	public PoDTO(Integer id, Long version, Instant createdDate, Staff staffRecording, 
 			Integer poId, ProcessType processType, ProductionLine productionLine, 
@@ -60,7 +61,7 @@ public class PoDTO extends ProductionProcessDTO {
 		this.contractType = po.getPoCode().getContractType();
 		this.supplier = new SupplierBasic(po.getSupplier());
 		this.orderStatus = po.getOrderStatus();
-		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toList());
+		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toSet());
 
 	}
 }

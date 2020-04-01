@@ -73,7 +73,7 @@ public class Orders extends DAO {
 	}
 	
 	public PoDTO getOrder(int poCode) {
-		Optional<PoDTO> order = getPoRepository().findOrderById(poCode);
+		Optional<PoDTO> order = getPoRepository().findOrderByPoCodeId(poCode);
 		PoDTO po = order.orElseThrow(
 				()->new IllegalArgumentException("No order with given PO code"));
 		po.setOrderItems(getPoRepository().findOrderItemsByPo(po.getId()));
@@ -81,8 +81,18 @@ public class Orders extends DAO {
 		return po;
 	}
 	
+	public PoDTO getOrderByProcessId(int processId) {
+		Optional<PoDTO> order = getPoRepository().findOrderByProcessId(processId);
+		PoDTO po = order.orElseThrow(
+				()->new IllegalArgumentException("No order with given process id"));
+		po.setOrderItems(getPoRepository().findOrderItemsByPo(po.getId()));
+		
+		return po;
+	}
+	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editOrder(PO po) {
+		po.setModifiedDate(null);
 		editEntity(po);
 	}
 	

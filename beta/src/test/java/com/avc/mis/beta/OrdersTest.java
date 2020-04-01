@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,7 +41,7 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000118;
+	private final int PROCESS_NO = 5000122;
 
 	@Autowired
 	Orders orders;
@@ -55,7 +57,7 @@ public class OrdersTest {
 		PO po = new PO();
 		PoCode poCode = new PoCode();
 		po.setPoCode(poCode);
-		poCode.setId(PROCESS_NO);
+//		poCode.setId(PROCESS_NO);
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
 		poCode.setContractType(contractType);
@@ -65,43 +67,62 @@ public class OrdersTest {
 		//build process
 		po.setTime(LocalDateTime.now());
 		//add order items
-		OrderItem[] items = new OrderItem[NUM_ITEMS];
+		OrderItem[] items = orderItems(NUM_ITEMS);				
+		po.setOrderItems(items);
+		return po;
+	}
+	
+	private OrderItem[] orderItems(int numOfItems) {
+		OrderItem[] items = new OrderItem[numOfItems];
 		Item item = new Item();
 		item.setId(1);
 		for(int i=0; i<items.length; i++) {
 			items[i] = new OrderItem();
 			items[i].setItem(item);
-			items[i].setNumberUnits(new BigDecimal(i));
+			items[i].setNumberUnits(new BigDecimal(i).setScale(2));
 			items[i].setCurrency("USD");
 			items[i].setUnitPrice(new BigDecimal("1.16"));
 			items[i].setDeliveryDate(LocalDate.of(1983, 11, 23));
 		}
-				
-		po.setOrderItems(items);
-		
-		
-				
-		return po;
+		return items;
 	}
+	
 //	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 
 		PO po = basicOrder();
-		try {
-			orders.addCashewOrder(po);
-		}catch(Exception e) {
-			e.printStackTrace();
-			throw e;
-		}
-		PoDTO poDTO = orders.getOrder(PROCESS_NO);	
-		System.out.println(poDTO);
+		orders.addCashewOrder(po);
+		PoDTO expected = new PoDTO(po);
+		PoDTO actual = orders.getOrder(po.getPoCode().getId());	
+		assertEquals(expected, actual, "failed test adding po");
+		
+		//edit order status
+		po.setOrderStatus(OrderStatus.OPEN_APPROVED);
+		expected = new PoDTO(po);
+		orders.editOrder(po);
+		actual = orders.getOrder(po.getPoCode().getId());	
+		assertEquals(expected, actual, "failed test editing po order status");		
 		
 		Supplier supplier = po.getSupplier();
 		orders.removeOrder(po.getId());
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
+		//remove a line/item from order
+		po = basicOrder();
+		orders.addCashewOrder(po);
+		OrderItem[] items = new OrderItem[NUM_ITEMS-1];
+		items[0] = po.getOrderItems()[0];
+		items[1] = po.getOrderItems()[1];
+		po.setOrderItems(items);;
+		expected = new PoDTO(po);
+		orders.editOrder(po);
+		actual = orders.getOrderByProcessId(po.getId());	
+		assertEquals(expected, actual, "failed test editing po order status");
 		
+		supplier = po.getSupplier();
+		orders.removeOrder(po.getId());
+		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//get suppliers by supply category
 		List<SupplierBasic> suppliersByCategory = suppliers.getSuppliersBasic(3);

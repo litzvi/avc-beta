@@ -22,10 +22,23 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class OrderItemDTO extends ProcessDTO {
-/**
+
+//	@EqualsAndHashCode.Exclude
+//	private Integer id;
+	@EqualsAndHashCode.Exclude
+	private Integer poId;
+	private Item item;
+	private BigDecimal numberUnits;
+	private Currency currency;
+	private BigDecimal unitPrice;
+	private LocalDate deliveryDate;
+	private String defects;
+	private String remarks;
+	
+	/**
 	 * @param poId
 	 * @param item
 	 * @param numberUnits
@@ -47,17 +60,6 @@ public class OrderItemDTO extends ProcessDTO {
 		this.defects = defects;
 		this.remarks = remarks;
 	}
-
-//	@EqualsAndHashCode.Exclude
-//	private Integer id;
-	private Integer poId;
-	private Item item;
-	private BigDecimal numberUnits;
-	private Currency currency;
-	private BigDecimal unitPrice;
-	private LocalDate deliveryDate;
-	private String defects;
-	private String remarks;
 	
 	public OrderItemDTO(@NonNull OrderItem orderItem) {
 		super(orderItem.getId(), orderItem.getVersion());

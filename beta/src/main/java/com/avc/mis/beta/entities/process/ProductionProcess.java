@@ -62,8 +62,9 @@ public class ProductionProcess extends ProcessEntityWithId {
 	private Staff staffRecording;
 	
 //	@ToString.Exclude
+	//cascade remove for testing 
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-	@JoinColumn(name = "POid", updatable = false)
+	@JoinColumn(updatable = false)
 	private PoCode poCode;
 	
 	@Enumerated(EnumType.STRING)

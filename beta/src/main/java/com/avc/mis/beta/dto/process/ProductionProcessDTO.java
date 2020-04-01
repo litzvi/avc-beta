@@ -24,11 +24,10 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
 public class ProductionProcessDTO extends ProcessDTO {
-//	@EqualsAndHashCode.Exclude
-//	private Integer id;
+	@EqualsAndHashCode.Exclude
 	private Instant createdDate;
 //	private Instant modifiedDate;
 	private Staff staffRecording;
