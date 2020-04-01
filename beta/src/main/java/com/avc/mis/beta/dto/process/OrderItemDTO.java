@@ -9,6 +9,7 @@ import java.util.Currency;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.values.Item;
 
@@ -31,6 +32,7 @@ public class OrderItemDTO extends ProcessDTO {
 	@EqualsAndHashCode.Exclude
 	private Integer poId;
 	private Item item;
+	private MeasureUnit measureUnit;
 	private BigDecimal numberUnits;
 	private Currency currency;
 	private BigDecimal unitPrice;
@@ -48,11 +50,13 @@ public class OrderItemDTO extends ProcessDTO {
 	 * @param defects
 	 * @param remarks
 	 */
-	public OrderItemDTO(Integer id, Long version, Integer poId, Item item, BigDecimal numberUnits, Currency currency, BigDecimal unitPrice,
+	public OrderItemDTO(Integer id, Long version, Integer poId, Item item, 
+			MeasureUnit measureUnit, BigDecimal numberUnits, Currency currency, BigDecimal unitPrice,
 			LocalDate deliveryDate, String defects, String remarks) {
 		super(id, version);
 		this.poId = poId;
 		this.item = item;
+		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits;
 		this.currency = currency;
 		this.unitPrice = unitPrice;
@@ -65,6 +69,7 @@ public class OrderItemDTO extends ProcessDTO {
 		super(orderItem.getId(), orderItem.getVersion());
 		this.poId = orderItem.getPo().getId();
 		this.item = orderItem.getItem();
+		this.measureUnit = orderItem.getMeasureUnit();
 		this.numberUnits = orderItem.getNumberUnits();
 		this.currency = orderItem.getCurrency();
 		this.unitPrice = orderItem.getUnitPrice();

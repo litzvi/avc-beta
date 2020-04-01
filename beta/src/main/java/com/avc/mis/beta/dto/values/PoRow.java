@@ -12,10 +12,10 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
+import com.avc.mis.beta.entities.process.PoCode;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-import lombok.ToString;
 import lombok.Value;
 
 /**
@@ -26,8 +26,8 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 public class PoRow extends ValueDTO {
 	
-	int poCodeId;
-	String contractTypeCode;
+//	int poCodeId;
+	String value;
 	String supplierName;
 	String itemName;
 	BigDecimal amount;
@@ -47,11 +47,11 @@ public class PoRow extends ValueDTO {
 	 * @param deliveryDate
 	 * @param orderStatus
 	 */
-	public PoRow(@NonNull Integer id, int poCodeId, String contractTypeCode, String supplierName, String itemName, BigDecimal amount,
+	public PoRow(@NonNull Integer id, PoCode poCode, String supplierName, String itemName, BigDecimal amount,
 			MeasureUnit measureUnit, LocalDateTime contractDate, LocalDate deliveryDate, OrderStatus orderStatus) {
 		super(id);
-		this.poCodeId = poCodeId;
-		this.contractTypeCode = contractTypeCode;
+//		this.poCodeId = poCodeId;
+		this.value = poCode.getValue();
 		this.supplierName = supplierName;
 		this.itemName = itemName;
 		this.amount = amount;
@@ -68,8 +68,8 @@ public class PoRow extends ValueDTO {
 	public PoRow(PO po, OrderItem orderItem) {
 
 		super(po.getId());
-		this.poCodeId = po.getPoCode().getId();
-		this.contractTypeCode = po.getPoCode().getContractType().getValue();
+//		this.poCodeId = po.getPoCode().getId();
+		this.value = po.getPoCode().getValue();
 		this.supplierName = po.getSupplier().getName();
 		this.itemName = orderItem.getItem().getValue();
 		this.amount = orderItem.getNumberUnits();
@@ -78,11 +78,6 @@ public class PoRow extends ValueDTO {
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.orderStatus = po.getOrderStatus();
 		
-	}
-	
-	@ToString.Include(name = "value")
-	public String getValue() {
-		return this.contractTypeCode + this.getId();
 	}
 	
 	public String getMeasureUnit() {

@@ -6,10 +6,10 @@ package com.avc.mis.beta.dto.values;
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.PO;
+import com.avc.mis.beta.entities.process.PoCode;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-import lombok.ToString;
 import lombok.Value;
 
 /**
@@ -20,8 +20,7 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 public class PoBasic extends ValueDTO {
 
-	int poCodeId;
-	String contractTypeCode;
+	String value;
 	String supplierName;
 	OrderStatus orderStatus;
 	
@@ -31,27 +30,21 @@ public class PoBasic extends ValueDTO {
 	 * @param supplierName
 	 * @param orderStatus
 	 */
-	public PoBasic(@NonNull Integer id, int poCodeId, String contractTypeCode, String supplierName, OrderStatus orderStatus) {
+	public PoBasic(@NonNull Integer id, PoCode poCode, String supplierName, OrderStatus orderStatus) {
 		super(id);
-		this.poCodeId = poCodeId;
-		this.contractTypeCode = contractTypeCode;
+		this.value = poCode.getValue();
 		this.supplierName = supplierName;
 		this.orderStatus = orderStatus;
 	}
 	
 	public PoBasic(PO po) {
 		super(po.getId());
-		this.poCodeId = po.getPoCode().getId();
-		this.contractTypeCode = po.getPoCode().getContractType().getValue();
+		this.value = po.getPoCode().getValue();
 		this.supplierName = po.getSupplier().getName();
 		this.orderStatus = po.getOrderStatus();
 	}
 	
-	@ToString.Include(name = "value")
-	public String getValue() {
-		return this.contractTypeCode + this.getId();
-	}
-	
+		
 	public String getOrderStatus() {
 		return this.orderStatus.toString();
 	}
