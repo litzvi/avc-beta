@@ -7,17 +7,19 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.ProcessEntityWithId;
+import com.avc.mis.beta.entities.ProcessEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,7 +40,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PO_ITEMS")
-public class OrderItem extends ProcessEntityWithId {
+public class OrderItem extends ProcessEntity{
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -51,7 +53,8 @@ public class OrderItem extends ProcessEntityWithId {
 	
 	private BigDecimal numberUnits;	
 	
-	@Transient
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
 	private MeasureUnit measureUnit;
 	
 	@Setter(value = AccessLevel.NONE)
@@ -89,10 +92,13 @@ public class OrderItem extends ProcessEntityWithId {
 		if(!isLegal()) {
 			throw new IllegalArgumentException(this.getIllegalMessage());
 		}
-		if(this.measureUnit != null && this.measureUnit != this.item.getMeasureUnit()) {			
-			this.numberUnits = MeasureUnit.convert(
-					this.numberUnits, this.measureUnit, this.item.getMeasureUnit());
+		if(this.measureUnit == null) {
+			this.measureUnit = item.getMeasureUnit();
 		}
+//		if(this.measureUnit != null && this.measureUnit != this.item.getMeasureUnit()) {			
+//			this.numberUnits = MeasureUnit.convert(
+//					this.numberUnits, this.measureUnit, this.item.getMeasureUnit());
+//		}
 	}
 	
 	@Override

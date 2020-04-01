@@ -38,4 +38,8 @@ public class PoCode {
 	@ManyToOne
 	@JoinColumn(name = "contractTypeId", updatable = false, nullable = false)
 	private ContractType contractType;
+	
+	public String getValue() {
+		return String.format("%s%010d", this.contractType.getValue(), this.id);
+	}
 }

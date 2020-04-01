@@ -24,6 +24,7 @@ import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
@@ -65,7 +66,7 @@ public class OrdersTest {
 		suppliers.addSupplier(supplier);
 		po.setSupplier(supplier);
 		//build process
-		po.setTime(LocalDateTime.now());
+		po.setRecordedTime(LocalDateTime.now());
 		//add order items
 		OrderItem[] items = orderItems(NUM_ITEMS);				
 		po.setOrderItems(items);
@@ -81,6 +82,7 @@ public class OrdersTest {
 			items[i].setItem(item);
 			items[i].setNumberUnits(new BigDecimal(i).setScale(2));
 			items[i].setCurrency("USD");
+			items[i].setMeasureUnit("KG");
 			items[i].setUnitPrice(new BigDecimal("1.16"));
 			items[i].setDeliveryDate(LocalDate.of(1983, 11, 23));
 		}
@@ -151,10 +153,5 @@ public class OrdersTest {
 				e.printStackTrace();
 			}
 		}
-			
-		
-
-		
-	}
-	
+	}	
 }

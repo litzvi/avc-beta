@@ -74,7 +74,7 @@ public class PoRow extends ValueDTO {
 		this.itemName = orderItem.getItem().getValue();
 		this.amount = orderItem.getNumberUnits();
 		this.measureUnit = orderItem.getMeasureUnit();
-		this.contractDate = po.getTime();
+		this.contractDate = po.getRecordedTime();
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.orderStatus = po.getOrderStatus();
 		

@@ -25,11 +25,11 @@ public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
 			+ "po.id, po.version, po.createdDate, p_staff, "
-			+ "po_code.id, po.processType, p_line, "
-			+ "po.time, po.duration, po.numOfWorkers, "
+			+ "po_code, po.processType, p_line, "
+			+ "po.recordedTime, po.duration, po.numOfWorkers, "
 			+ "p_status, po.remarks, "
 			+ "s.id, s.version, s.name, "
-			+ "po_code.contractType, po.orderStatus) "
+			+ "po.orderStatus) "
 		+ "from PO po "
 			+ "left join po.poCode po_code "
 			+ "left join po.supplier s "
@@ -41,11 +41,11 @@ public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
 			+ "po.id, po.version, po.createdDate, p_staff, "
-			+ "po_code.id, po.processType, p_line, "
-			+ "po.time, po.duration, po.numOfWorkers, "
+			+ "po_code, po.processType, p_line, "
+			+ "po.recordedTime, po.duration, po.numOfWorkers, "
 			+ "p_status, po.remarks, "
 			+ "s.id, s.version, s.name, "
-			+ "po_code.contractType, po.orderStatus) "
+			+ "po.orderStatus) "
 		+ "from PO po "
 			+ "left join po.poCode po_code "
 			+ "left join po.supplier s "
@@ -73,7 +73,7 @@ public interface PORepository extends BaseRepository<PO> {
 	List<PoBasic> findByOrderTypeAndStatusesBasic(ProcessType orderType, OrderStatus[] statuses);
 	
 	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code.id, t.value, s.name, i.value, "
-			+ "oi.numberUnits, i.measureUnit, po.time, oi.deliveryDate, po.orderStatus) "
+			+ "oi.numberUnits, oi.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus) "
 		+ "from PO po "
 		+ "left join po.poCode po_code "
 		+ "left join po_code.contractType t "

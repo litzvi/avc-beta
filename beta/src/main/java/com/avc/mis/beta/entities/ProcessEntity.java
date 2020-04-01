@@ -7,6 +7,9 @@ import java.time.Instant;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import org.springframework.data.annotation.CreatedDate;
@@ -24,5 +27,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @MappedSuperclass
 public abstract class ProcessEntity extends DataEntity {
-
+	
+	@EqualsAndHashCode.Include
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;	
 }

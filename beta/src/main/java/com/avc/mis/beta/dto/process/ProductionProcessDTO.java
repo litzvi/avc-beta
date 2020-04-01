@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.ProcessType;
+import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProductionLine;
@@ -31,26 +32,27 @@ public class ProductionProcessDTO extends ProcessDTO {
 	private Instant createdDate;
 //	private Instant modifiedDate;
 	private Staff staffRecording;
-	private Integer poId;
+	private PoCode poCode;
+//	private Integer poId;
 	private ProcessType processType;
 	private ProductionLine productionLine;
-	private LocalDateTime time;
+	private LocalDateTime recordedTime;
 	private Duration duration;
 	private Integer numOfWorkers;
 	private ProcessStatus status;
 	private String remarks;
 	
 	public ProductionProcessDTO(Integer id, Long version, Instant createdDate, 
-			Staff staffRecording, Integer poId, ProcessType processType, ProductionLine productionLine, 
-			LocalDateTime time, Duration duration, Integer numOfWorkers, ProcessStatus status, 
+			Staff staffRecording, PoCode poCode, ProcessType processType, ProductionLine productionLine, 
+			LocalDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus status, 
 			String remarks) {
 		super(id, version);
 		this.createdDate = createdDate;
 		this.staffRecording = staffRecording;
-		this.poId = poId;
+		this.poCode = poCode;
 		this.processType = processType;
 		this.productionLine = productionLine;
-		this.time = time;
+		this.recordedTime = recordedTime;
 		this.duration = duration;
 		this.numOfWorkers = numOfWorkers;
 		this.status = status;
@@ -61,10 +63,10 @@ public class ProductionProcessDTO extends ProcessDTO {
 		super(process.getId(), process.getVersion());
 		this.createdDate = process.getCreatedDate();
 		this.staffRecording = process.getStaffRecording();
-		this.poId = process.getPoCode().getId();
+		this.poCode = process.getPoCode();
 		this.processType = process.getProcessType();
 		this.productionLine = process.getProductionLine();
-		this.time = process.getTime();
+		this.recordedTime = process.getRecordedTime();
 		this.duration = process.getDuration();
 		this.numOfWorkers = process.getNumOfWorkers();
 		this.status = process.getStatus();

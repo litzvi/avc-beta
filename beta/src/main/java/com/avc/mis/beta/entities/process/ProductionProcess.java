@@ -21,13 +21,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.ProcessEntityWithId;
+import com.avc.mis.beta.entities.ProcessEntity;
 import com.avc.mis.beta.entities.data.Staff;
 import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.values.ProcessStatus;
@@ -36,7 +35,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /**
  * @author Zvi
@@ -48,7 +46,7 @@ import lombok.ToString;
 @Table(name = "PROCESSES")
 @Inheritance(strategy=InheritanceType.JOINED)
 @EntityListeners(AuditingEntityListener.class)
-public class ProductionProcess extends ProcessEntityWithId {	
+public class ProductionProcess extends ProcessEntity {	
 
 	@Column(updatable = false, nullable = false)
 	@CreatedDate
@@ -63,7 +61,7 @@ public class ProductionProcess extends ProcessEntityWithId {
 	
 //	@ToString.Exclude
 	//cascade remove for testing 
-	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(updatable = false)
 	private PoCode poCode;
 	
@@ -76,7 +74,7 @@ public class ProductionProcess extends ProcessEntityWithId {
 	private ProductionLine productionLine;
 	
 	@Column(nullable = false, updatable = false)
-	private LocalDateTime time;
+	private LocalDateTime recordedTime;
 	private Duration duration;//seconds
 	private Integer numOfWorkers;
 	
@@ -108,7 +106,7 @@ public class ProductionProcess extends ProcessEntityWithId {
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "Process does not have an inset time or process type";
+		return "Process does not have an inset recordedTime or process type";
 	}
 	
 }
