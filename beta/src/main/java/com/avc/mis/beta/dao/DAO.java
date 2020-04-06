@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.repositories.ProcessRepository;
 import com.avc.mis.beta.repositories.ReferenceTablesRepository;
 
 /**
@@ -19,8 +20,16 @@ public abstract class DAO {
 	public static final int BATCH_SIZE = 20;
 	
 	@Autowired private ReferenceTablesRepository referenceRepository;
+	@Autowired private ProcessRepository processRepository;
 	@Autowired private EntityManager entityManager;
 	
+
+	/**
+	 * @return the processRepository
+	 */
+	ProcessRepository getProcessRepository() {
+		return processRepository;
+	}
 
 	/**
 	 * @return the baseRepository

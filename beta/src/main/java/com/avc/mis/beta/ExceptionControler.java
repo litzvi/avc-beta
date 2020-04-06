@@ -6,6 +6,7 @@ package com.avc.mis.beta;
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,13 +21,16 @@ import lombok.extern.slf4j.Slf4j;
 @ControllerAdvice
 @Slf4j
 public class ExceptionControler {
-	// DataIntegrityViolationException because not nullable
-	// StaleObjectStateException edit without new version
 
-	//illegalStateexception shouldn't be fatal
-	//illegalargumentexception should be sent as a neat message to the user
-	
-	// take care of ObjectOptimisticLockingFailureException 
+    private ResponseEntity<String> error(HttpStatus status, Throwable e) {
+        log.error("Exception : ", e);
+        return ResponseEntity.status(status).body(e.getLocalizedMessage());
+    }
+    
+    private ResponseEntity<String> internalError(HttpStatus status, Throwable e) {
+        log.error("Exception : ", e);
+        return ResponseEntity.status(status).body("Internal server error, please contact system manager");
+    }
 	
 	@ExceptionHandler({IllegalArgumentException.class})
     public ResponseEntity<String> handleDataIntegrityViolationException(IllegalArgumentException e){
@@ -37,16 +41,19 @@ public class ExceptionControler {
     public ResponseEntity<String> handleDataIntegrityViolationException(NestedRuntimeException e){
         return error(HttpStatus.BAD_REQUEST, e.getRootCause());
     }
-	
+		
 	@ExceptionHandler({InvalidDataAccessApiUsageException.class})
     public ResponseEntity<String> handleIllegalArgumentException(NestedRuntimeException e){
         return error(HttpStatus.BAD_REQUEST, e.getRootCause());
     }
 	
+	@ExceptionHandler({OptimisticLockingFailureException.class})
+    public ResponseEntity<String> handleOptemisticLockingException(OptimisticLockingFailureException e){
+        return error(HttpStatus.PRECONDITION_FAILED, e.getRootCause());
+    }
 	
-	
-    private ResponseEntity<String> error(HttpStatus status, Throwable e) {
-        log.error("Exception : ", e);
-        return ResponseEntity.status(status).body(e.getLocalizedMessage());
+	@ExceptionHandler({IllegalStateException.class})
+    public ResponseEntity<String> handleFatalException(RuntimeException e){
+        return internalError(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
 }

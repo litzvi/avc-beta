@@ -11,13 +11,12 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.values.SupplierBasic;
-import com.avc.mis.beta.entities.data.Staff;
+import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.OrderStatus;
-import com.avc.mis.beta.entities.enums.ProcessType;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
-import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.ProcessStatus;
+import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
@@ -39,7 +38,7 @@ public class PoDTO extends ProductionProcessDTO {
 	private OrderStatus orderStatus;
 	private Set<OrderItemDTO> orderItems;
 	
-	public PoDTO(Integer id, Long version, Instant createdDate, Staff staffRecording, 
+	public PoDTO(Integer id, Long version, Instant createdDate, UserEntity staffRecording, 
 			PoCode poCode, ProcessType processType, ProductionLine productionLine, 
 			LocalDateTime recordedTime, Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, String remarks,

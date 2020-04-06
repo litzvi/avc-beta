@@ -6,6 +6,8 @@ package com.avc.mis.beta.entities.process;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,6 +20,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -27,9 +30,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
-import com.avc.mis.beta.entities.data.Staff;
-import com.avc.mis.beta.entities.enums.ProcessType;
+import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.data.UserMessage;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.values.ProcessStatus;
+import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,28 +50,16 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "PROCESSES")
 @Inheritance(strategy=InheritanceType.JOINED)
-@EntityListeners(AuditingEntityListener.class)
 public class ProductionProcess extends ProcessEntity {	
 
-	@Column(updatable = false, nullable = false)
-	@CreatedDate
-    private Instant createdDate;
- 
-    @LastModifiedDate
-    private Instant modifiedDate;
-		
-	@ManyToOne 
-	@JoinColumn(name = "staffId", updatable = false)
-	private Staff staffRecording;
-	
 //	@ToString.Exclude
 	//cascade remove for testing 
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(updatable = false)
 	private PoCode poCode;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "type", nullable = false, updatable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "typeId", nullable = false, updatable = false)
 	private ProcessType processType;
 	
 	@ManyToOne
@@ -81,7 +74,12 @@ public class ProductionProcess extends ProcessEntity {
 	@ManyToOne 
 	@JoinColumn(name = "statusId"/*, nullable = false*/)
 	private ProcessStatus status;
-	private String remarks;
+	
+	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, orphanRemoval = true)
+	private Set<ProcessApproval> approvals = new HashSet<>();
+	
+	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, orphanRemoval = true)
+	private Set<UserMessage> messages = new HashSet<>();
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);

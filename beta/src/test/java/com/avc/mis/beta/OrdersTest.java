@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.dao.Orders;
+import com.avc.mis.beta.dao.ProcessDisplay;
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dto.process.PoDTO;
@@ -23,7 +24,9 @@ import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.dto.values.SupplierBasic;
+import com.avc.mis.beta.dto.values.UserMessageDTO;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.OrderItem;
@@ -42,7 +45,7 @@ public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000122;
+	private final int PROCESS_NO = 5000124;
 
 	@Autowired
 	Orders orders;
@@ -52,6 +55,9 @@ public class OrdersTest {
 	
 	@Autowired
 	ReferenceTables referenceTables;
+	
+	@Autowired
+	ProcessDisplay processDisplay;
 	
 	private PO basicOrder() {
 		//build purchase order
@@ -122,9 +128,9 @@ public class OrdersTest {
 		actual = orders.getOrderByProcessId(po.getId());	
 		assertEquals(expected, actual, "failed test editing po order status");
 		
-		supplier = po.getSupplier();
-		orders.removeOrder(po.getId());
-		suppliers.permenentlyRemoveSupplier(supplier.getId());
+//		supplier = po.getSupplier();
+//		orders.removeOrder(po.getId());
+//		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//get suppliers by supply category
 		List<SupplierBasic> suppliersByCategory = suppliers.getSuppliersBasic(3);
@@ -152,6 +158,16 @@ public class OrdersTest {
 			}catch(Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		//get list of message for user
+		List<UserMessageDTO> messages;
+		try {
+			messages = processDisplay.getAllMessages(1);
+			messages.forEach(m -> System.out.println(m));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}	
 }

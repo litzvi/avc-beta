@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.values.CompanyPosition;
@@ -27,7 +28,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-public class Staff extends ObjectDataEntity {
+@Table(name = "USERS")
+public class UserEntity extends ObjectDataEntity {
 	
 	@EqualsAndHashCode.Include
 	@Id
@@ -50,6 +52,6 @@ public class Staff extends ObjectDataEntity {
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "Staff has to reference a person";
+		return "UserEntity has to reference a person";
 	}
 }

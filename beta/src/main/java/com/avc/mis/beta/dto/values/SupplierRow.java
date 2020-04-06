@@ -17,20 +17,20 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Value;
 
 /**
  * @author Zvi
  *
  */
-@Data
+@Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-@NoArgsConstructor
 public class SupplierRow extends ValueDTO {
 	
-	private String name;
-	private Set<String> phones;
-	private Set<String> emails;
-	private Set<String> supplyCategories;
+	String name;
+	Set<String> phones;
+	Set<String> emails;
+	Set<String> supplyCategories;
 		
 	public SupplierRow(@NonNull Supplier supplier) {
 		super(supplier.getId());

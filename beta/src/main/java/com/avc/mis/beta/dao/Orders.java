@@ -15,7 +15,7 @@ import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.entities.enums.OrderStatus;
-import com.avc.mis.beta.entities.enums.ProcessType;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.repositories.PORepository;
 
@@ -25,7 +25,7 @@ import com.avc.mis.beta.repositories.PORepository;
  */
 @Repository
 @Transactional(readOnly = true)
-public class Orders extends DAO {
+public class Orders extends ProcessDAO {
 	
 	@Autowired
 	private PORepository poRepository;
@@ -38,37 +38,37 @@ public class Orders extends DAO {
 	}
 			
 	public List<PoRow> findCashewOrders(OrderStatus[] statuses) {
-		return getPoRepository().findByOrderTypeAndStatuses(ProcessType.CASHEW_ORDER, statuses);
+		return getPoRepository().findByOrderTypeAndStatuses(ProcessName.CASHEW_ORDER, statuses);
 	}
 	
 	public List<PoRow> findGeneralOrders(OrderStatus[] statuses) {
-		return getPoRepository().findByOrderTypeAndStatuses(ProcessType.GENERAL_ORDER, statuses);
+		return getPoRepository().findByOrderTypeAndStatuses(ProcessName.GENERAL_ORDER, statuses);
 	}
 	
 	public List<PoBasic> findCashewOrdersBasic(OrderStatus[] statuses) {
-		return getPoRepository().findByOrderTypeAndStatusesBasic(ProcessType.CASHEW_ORDER, statuses);		
+		return getPoRepository().findByOrderTypeAndStatusesBasic(ProcessName.CASHEW_ORDER, statuses);		
 	}
 	
 	public List<PoBasic> findGeneralOrdersBasic(OrderStatus[] statuses) {
-		return getPoRepository().findByOrderTypeAndStatusesBasic(ProcessType.GENERAL_ORDER, statuses);
+		return getPoRepository().findByOrderTypeAndStatusesBasic(ProcessName.GENERAL_ORDER, statuses);
 	}
 	
 	private void addOrder(PO po) {
 		//using save rather than persist in case POid was assigned by user
 		Session session = getEntityManager().unwrap(Session.class);
 		session.save(po.getPoCode());
-		session.save(po);
+		addProcessEntity(po);			
 	}
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewOrder(PO po) {
-		po.setProcessType(ProcessType.CASHEW_ORDER);
+		po.setProcessType(getPoRepository().findProcessTypeByValue(ProcessName.CASHEW_ORDER));
 		addOrder(po);		
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addGeneralOrder(PO po) {
-		po.setProcessType(ProcessType.GENERAL_ORDER);
+	public void addGeneralOrder(PO po) {		
+		po.setProcessType(getPoRepository().findProcessTypeByValue(ProcessName.GENERAL_ORDER));
 		addOrder(po);	
 	}
 	
@@ -92,8 +92,7 @@ public class Orders extends DAO {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editOrder(PO po) {
-		po.setModifiedDate(null);
-		editEntity(po);
+		editProcessEntity(po);
 	}
 	
 	//public -- for testing only
