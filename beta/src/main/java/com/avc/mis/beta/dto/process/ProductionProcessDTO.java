@@ -35,7 +35,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 	private UserEntity staffRecording;
 	private PoCode poCode;
 //	private Integer poId;
-	private ProcessType processType;
+	private String processType;
 	private ProductionLine productionLine;
 	private LocalDateTime recordedTime;
 	private Duration duration;
@@ -51,7 +51,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 		this.createdDate = createdDate;
 		this.staffRecording = staffRecording;
 		this.poCode = poCode;
-		this.processType = processType;
+		this.processType = processType.getValue();
 		this.productionLine = productionLine;
 		this.recordedTime = recordedTime;
 		this.duration = duration;
@@ -65,7 +65,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 		this.createdDate = process.getCreatedDate();
 		this.staffRecording = process.getUser();
 		this.poCode = process.getPoCode();
-		this.processType = process.getProcessType();
+		this.processType = process.getProcessType().getValue();
 		this.productionLine = process.getProductionLine();
 		this.recordedTime = process.getRecordedTime();
 		this.duration = process.getDuration();

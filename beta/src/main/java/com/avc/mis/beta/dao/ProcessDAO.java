@@ -29,7 +29,6 @@ public abstract class ProcessDAO extends DAO {
 		editEntity(process);
 		updateAlerts(process);
 	}
-
 	
 	void addAlerts(ProductionProcess process) {
 		
