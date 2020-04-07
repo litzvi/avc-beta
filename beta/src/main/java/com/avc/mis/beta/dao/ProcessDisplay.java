@@ -32,10 +32,14 @@ public class ProcessDisplay extends DAO {
 	}
 	
 	public List<ApprovalTaskDTO> getAllRequiredApprovals(Integer userId) {
-		return getProcessRepository().findAllRequiredApprovalsByUser(userId);
+		return getProcessRepository().findAllRequiredApprovalsByUser(userId, DecisionType.NOT_ATTENDED);
 	}
 	
-	public ProductionProcessDTO getProcess(Integer processId, String processTypeName) {
+	public List<ApprovalTaskDTO> getAllApprovals(Integer userId) {
+		return getProcessRepository().findAllApprovalsByUser(userId);
+	}
+	
+	public ProductionProcessDTO getProcess(int processId, String processTypeName) {
 		ProcessName processName = Enum.valueOf(ProcessName.class, processTypeName);
 		switch(processName) {
 		case CASHEW_ORDER:
@@ -51,15 +55,13 @@ public class ProcessDisplay extends DAO {
 		return null;
 	}
 	
-	public void approveProcess(ApprovalTask approval, String decisionType) {
-		if(approval != null && approval.getProcessVersion() != null) {
-			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
-			approval.setDecision(decision);
-			editEntity(approval);	
-		}
-		else {
-			throw new IllegalArgumentException("Approval needs to refer to a certain process version");
-		}
-			
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void approveProcess(int approvalId, long processVersion, String decisionType) {
+		ApprovalTask approval = getEntityManager().find(ApprovalTask.class, approvalId);
+		DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
+		approval.setDecision(decision);
+		approval.setProcessVersion(processVersion);
+		System.out.println(approval);
+		editEntity(approval);			
 	}
 }

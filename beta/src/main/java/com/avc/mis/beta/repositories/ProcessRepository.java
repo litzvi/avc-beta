@@ -11,6 +11,7 @@ import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.entities.data.ProcessTypeAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.values.ProcessType;
@@ -40,7 +41,16 @@ public interface ProcessRepository extends BaseRepository<ProductionProcess> {
 		+ "from ApprovalTask pa "
 		+ "join pa.process p "
 		+ "join pa.user u "
-		+ "where u.id = ?1 ")
-	List<ApprovalTaskDTO> findAllRequiredApprovalsByUser(Integer userId);
+		+ "where pa.decision = :decision "
+			+ "and u.id = :userId ")
+	List<ApprovalTaskDTO> findAllRequiredApprovalsByUser(Integer userId, DecisionType decision);
+
+	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
+			+ "pa.id, pa.version, pa.title, p.id, p.processType, pa.createdDate, pa.decision, pa.processVersion) "
+		+ "from ApprovalTask pa "
+		+ "join pa.process p "
+		+ "join pa.user u "
+		+ "where u.id = :userId ")
+	List<ApprovalTaskDTO> findAllApprovalsByUser(Integer userId);
 
 }

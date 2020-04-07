@@ -32,6 +32,7 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.OrderStatus;
+import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
@@ -177,12 +178,13 @@ public class OrdersTest {
 		List<ApprovalTaskDTO> tasks;
 		try {
 			tasks = processDisplay.getAllRequiredApprovals(1);
-			
+//			ApprovalTask task = new ApprovalTask();
 			tasks.forEach(t -> {
+//				task.setId(t.getId());
 				ProductionProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessType());
-				t.setDecisionType(DecisionType.APPROVED.name());
-				t.setProcessVersion(p.getVersion());
-				System.out.println(t);
+//				t.setDecisionType(DecisionType.APPROVED.name());
+//				task.setProcessVersion(p.getVersion());
+				processDisplay.approveProcess(t.getId(), p.getVersion(), DecisionType.APPROVED.name());
 			});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
