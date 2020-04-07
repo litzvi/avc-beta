@@ -9,8 +9,9 @@ import com.avc.mis.beta.entities.data.ProcessTypeAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.data.UserMessage;
 import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.ProcessApproval;
+import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
 /**
@@ -19,9 +20,9 @@ import com.avc.mis.beta.entities.process.ProductionProcess;
  */
 public abstract class ProcessDAO extends DAO {
 	
-	void addProcessEntity(PO po) {
-		getEntityManager().persist(po);
-		addAlerts(po);
+	void addProcessEntity(ProductionProcess process) {
+		getEntityManager().persist(process);
+		addAlerts(process);
 	}
 	
 	void editProcessEntity(ProductionProcess process) {
@@ -30,15 +31,16 @@ public abstract class ProcessDAO extends DAO {
 		updateAlerts(process);
 	}
 	
-	void addAlerts(ProductionProcess process) {
+	private void addAlerts(ProductionProcess process) {
 		
 		List<ProcessTypeAlert> alerts = getProcessRepository().findProcessTypeAlerts(process.getProcessType());
 		for(ProcessTypeAlert a: alerts) {
-			ProcessApproval processApproval = new ProcessApproval();
+			ApprovalTask processApproval = new ApprovalTask();
 			processApproval.setProcess(process);
 			switch(a.getApprovalType()) {
 			case REQUIRED_APPROVAL:
 				processApproval.setUser(a.getUser());
+				processApproval.setProcessVersion(process.getVersion());
 				processApproval.setTitle("Process added");
 				getEntityManager().persist(processApproval);
 			case REVIEW:
@@ -49,17 +51,15 @@ public abstract class ProcessDAO extends DAO {
 	}
 	
 	private void updateAlerts(ProductionProcess process) {
-		List<ProcessApproval> approvals = getProcessRepository().findProcessApprovals(process);
-		for(ProcessApproval a: approvals) {
-			if(a.getDecision() != DecisionType.NOT_ATTENDED) {
-				a.setDecision(DecisionType.NOT_ATTENDED);
-			}
-			a.setTitle("Process edited");
+		List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(process);
+		for(ApprovalTask approval: approvals) {
+			approval.setDecision(DecisionType.NOT_ATTENDED);
+			approval.setTitle("Process added and edited");
 		}
 		
 		List<ProcessTypeAlert> alerts = getProcessRepository().findProcessTypeAlerts(process.getProcessType());
-		for(ProcessTypeAlert a: alerts) {
-			addMessage(a.getUser(), process, "Old process edited");
+		for(ProcessTypeAlert alert: alerts) {
+			addMessage(alert.getUser(), process, "Old process edited");
 		}
 	}
 	
@@ -68,6 +68,7 @@ public abstract class ProcessDAO extends DAO {
 		userMessage.setProcess(process);
 		userMessage.setUser(user);
 		userMessage.setTitle(title);
+		userMessage.setLabel(MessageLabel.NEW);
 		getEntityManager().persist(userMessage);	
 	}
 }

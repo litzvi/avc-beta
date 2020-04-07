@@ -3,13 +3,17 @@
  */
 package com.avc.mis.beta.entities.data;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.ProcessDataEntity;
+import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -27,6 +31,14 @@ import lombok.NoArgsConstructor;
 @BatchSize(size = DAO.BATCH_SIZE)
 @Table(name = "USER_MESSAGES")
 public class UserMessage extends ProcessDataEntity {
+	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private MessageLabel label;
+	
+	public String getLabel() {
+		return this.label.name();
+	}
 			
 	@JsonIgnore
 	@Override

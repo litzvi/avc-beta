@@ -45,10 +45,13 @@ public abstract class DAO {
 		return entityManager;
 	}
 	
-	//public -- only for testing
-	public void addEntity(Insertable entity, Insertable reference) {
+	void addEntity(Insertable entity, Insertable reference) {
 		reference = getEntityManager().getReference(reference.getClass(), reference.getId());
 		entity.setReference(reference);
+		addEntity(entity);
+	}
+	
+	void addEntity(Insertable entity) {
 		getEntityManager().persist(entity);
 	}
 	
@@ -62,8 +65,7 @@ public abstract class DAO {
 		getEntityManager().remove(entity); 
 	}
 	
-	//public -- only for testing
-	public Insertable editEntity(Insertable entity) {
+	Insertable editEntity(Insertable entity) {
 		if(entity.getId() == null) {
 			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
 		}

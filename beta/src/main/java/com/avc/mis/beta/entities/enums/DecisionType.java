@@ -11,7 +11,6 @@ public enum DecisionType {
 	NOT_ATTENDED,
 	APPROVED,
 	DECLINED,
-	FINALIZED,
-	SUSPENDED
-	
+	FINALIZED, //perhaps can't change
+	SUSPENDED	
 }

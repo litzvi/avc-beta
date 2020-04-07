@@ -28,12 +28,18 @@ import lombok.EqualsAndHashCode;
 @Entity
 @BatchSize(size = DAO.BATCH_SIZE)
 @Table(name = "PROCESS_APPROVALS")
-public class ProcessApproval extends ProcessDataEntity {
+public class ApprovalTask extends ProcessDataEntity {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private DecisionType decision = DecisionType.NOT_ATTENDED;
 	
+	private Long processVersion;
+	
+	public String getDecision() {
+		return this.decision.name();
+	}
+		
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {

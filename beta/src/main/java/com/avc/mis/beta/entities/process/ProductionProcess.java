@@ -76,7 +76,7 @@ public class ProductionProcess extends ProcessEntity {
 	private ProcessStatus status;
 	
 	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, orphanRemoval = true)
-	private Set<ProcessApproval> approvals = new HashSet<>();
+	private Set<ApprovalTask> approvals = new HashSet<>();
 	
 	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<UserMessage> messages = new HashSet<>();

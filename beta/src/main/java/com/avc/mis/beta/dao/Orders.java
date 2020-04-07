@@ -95,7 +95,7 @@ public class Orders extends ProcessDAO {
 		editProcessEntity(po);
 	}
 	
-	//public -- for testing only
+	//for testing only
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void removeOrder(int orderId) {
 		removeEntity(PO.class, orderId);

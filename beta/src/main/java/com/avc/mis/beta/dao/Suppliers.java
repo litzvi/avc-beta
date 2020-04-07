@@ -59,11 +59,6 @@ public class Suppliers extends SoftDeletableDAO {
 		return getSupplierRepository().findSuppliersByCategoryBasic(categoryId);
 	}
 		
-	/**
-	 * 
-	 * @param supplier
-	 * @return
-	 */
 	public void addSupplier(Supplier supplier) {
 		getEntityManager().persist(supplier);
 		for(CompanyContact contact: supplier.getCompanyContacts()) {
