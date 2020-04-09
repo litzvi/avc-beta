@@ -8,8 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,6 +41,9 @@ import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Zvi
@@ -76,7 +81,7 @@ public class OrdersTest {
 		suppliers.addSupplier(supplier);
 		po.setSupplier(supplier);
 		//build process
-		po.setRecordedTime(LocalDateTime.now());
+		po.setRecordedTime(OffsetDateTime.now());
 		//add order items
 		OrderItem[] items = orderItems(NUM_ITEMS);				
 		po.setOrderItems(items);
@@ -99,7 +104,7 @@ public class OrdersTest {
 		return items;
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 
@@ -131,10 +136,10 @@ public class OrdersTest {
 		orders.editOrder(po);
 		actual = orders.getOrderByProcessId(po.getId());	
 		assertEquals(expected, actual, "failed test editing po order status");
-		
-		supplier = po.getSupplier();
-		orders.removeOrder(po.getId());
-		suppliers.permenentlyRemoveSupplier(supplier.getId());
+//		
+//		supplier = po.getSupplier();
+//		orders.removeOrder(po.getId());
+//		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//get suppliers by supply category
 		List<SupplierBasic> suppliersByCategory = suppliers.getSuppliersBasic(3);
@@ -176,15 +181,24 @@ public class OrdersTest {
 		
 		//get list approval tasks for user
 		List<ApprovalTaskDTO> tasks;
+		ObjectMapper objMapper = new ObjectMapper();
 		try {
 			tasks = processDisplay.getAllRequiredApprovals(1);
 //			ApprovalTask task = new ApprovalTask();
 			tasks.forEach(t -> {
 //				task.setId(t.getId());
 				ProductionProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessType());
+				String processSnapshot = null;
+				try {
+					processSnapshot = objMapper.writeValueAsString(p);
+				} catch (JsonProcessingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 //				t.setDecisionType(DecisionType.APPROVED.name());
 //				task.setProcessVersion(p.getVersion());
-				processDisplay.approveProcess(t.getId(), p.getVersion(), DecisionType.APPROVED.name());
+				processDisplay.setProcessDecision(t.getId(), 
+						DecisionType.APPROVED.name(), processSnapshot);
 			});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

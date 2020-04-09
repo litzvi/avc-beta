@@ -32,7 +32,8 @@ public class ProcessDisplay extends DAO {
 	}
 	
 	public List<ApprovalTaskDTO> getAllRequiredApprovals(Integer userId) {
-		return getProcessRepository().findAllRequiredApprovalsByUser(userId, DecisionType.NOT_ATTENDED);
+		return getProcessRepository().findAllRequiredApprovalsByUser(userId, 
+				new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED});
 	}
 	
 	public List<ApprovalTaskDTO> getAllApprovals(Integer userId) {
@@ -50,18 +51,25 @@ public class ProcessDisplay extends DAO {
 		return null;
 	}
 	
-	public ProductionProcessDTO getProcess(Integer processId, Long version, String processTypeName) {
-		//TODO
-		return null;
+//	public String getProcessApproved(int approvalId) {
+//		//TODO
+//		return null;
+//	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void approveProcess(ApprovalTask approval, String decisionType) {
+		DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
+		approval.setDecision(decision);
+//		approval.setProcessVersion(processVersion);
+		editEntity(approval);			
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void approveProcess(int approvalId, long processVersion, String decisionType) {
+	public void setProcessDecision(int approvalId, String decisionType, String processSnapshot) {
 		ApprovalTask approval = getEntityManager().find(ApprovalTask.class, approvalId);
 		DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
 		approval.setDecision(decision);
-		approval.setProcessVersion(processVersion);
-		System.out.println(approval);
+		approval.setProcessSnapshot(processSnapshot);
 		editEntity(approval);			
 	}
 }

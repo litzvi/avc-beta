@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
@@ -34,11 +35,14 @@ public class ApprovalTask extends ProcessDataEntity {
 	@Column(nullable = false)
 	private DecisionType decision = DecisionType.NOT_ATTENDED;
 	
-	private Long processVersion;
+//	private Long processVersion;
 	
-	public String getDecision() {
-		return this.decision.name();
-	}
+	@Lob
+	private String processSnapshot;
+	
+//	public String getDecision() {
+//		return this.decision.name();
+//	}
 		
 	@JsonIgnore
 	@Override

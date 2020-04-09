@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.process;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -37,7 +38,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 //	private Integer poId;
 	private String processType;
 	private ProductionLine productionLine;
-	private LocalDateTime recordedTime;
+	private OffsetDateTime recordedTime;
 	private Duration duration;
 	private Integer numOfWorkers;
 	private ProcessStatus status;
@@ -45,7 +46,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 	
 	public ProductionProcessDTO(Integer id, Long version, Instant createdDate, 
 			UserEntity staffRecording, PoCode poCode, ProcessType processType, ProductionLine productionLine, 
-			LocalDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus status, 
+			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus status, 
 			String remarks) {
 		super(id, version);
 		this.createdDate = createdDate;

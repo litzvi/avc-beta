@@ -37,16 +37,16 @@ public interface ProcessRepository extends BaseRepository<ProductionProcess> {
 	List<UserMessageDTO> findAllMessagesByUser(Integer userId);
 
 	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
-			+ "pa.id, pa.version, pa.title, p.id, p.processType, pa.createdDate, pa.decision, pa.processVersion) "
+			+ "pa.id, pa.version, pa.title, p.id, p.processType, pa.createdDate, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 		+ "join pa.process p "
 		+ "join pa.user u "
-		+ "where pa.decision = :decision "
+		+ "where pa.decision in :decisions "
 			+ "and u.id = :userId ")
-	List<ApprovalTaskDTO> findAllRequiredApprovalsByUser(Integer userId, DecisionType decision);
+	List<ApprovalTaskDTO> findAllRequiredApprovalsByUser(Integer userId, DecisionType[] decisions);
 
 	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
-			+ "pa.id, pa.version, pa.title, p.id, p.processType, pa.createdDate, pa.decision, pa.processVersion) "
+			+ "pa.id, pa.version, pa.title, p.id, p.processType, pa.createdDate, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 		+ "join pa.process p "
 		+ "join pa.user u "

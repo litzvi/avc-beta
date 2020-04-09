@@ -9,6 +9,7 @@ package com.avc.mis.beta.entities.enums;
  */
 public enum DecisionType {
 	NOT_ATTENDED,
+	EDIT_NOT_ATTENDED,
 	APPROVED,
 	DECLINED,
 	FINALIZED, //perhaps can't change

@@ -6,6 +6,7 @@ package com.avc.mis.beta.entities.process;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,7 +68,7 @@ public class ProductionProcess extends ProcessEntity {
 	private ProductionLine productionLine;
 	
 	@Column(nullable = false, updatable = false)
-	private LocalDateTime recordedTime;
+	private OffsetDateTime recordedTime;
 	private Duration duration;//seconds
 	private Integer numOfWorkers;
 	

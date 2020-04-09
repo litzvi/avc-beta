@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.process;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -40,7 +41,7 @@ public class PoDTO extends ProductionProcessDTO {
 	
 	public PoDTO(Integer id, Long version, Instant createdDate, UserEntity staffRecording, 
 			PoCode poCode, ProcessType processType, ProductionLine productionLine, 
-			LocalDateTime recordedTime, Duration duration, Integer numOfWorkers, 
+			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, String remarks,
 			Integer supplierId, Long supplierVersion, String supplierName, 
 			OrderStatus orderStatus) {

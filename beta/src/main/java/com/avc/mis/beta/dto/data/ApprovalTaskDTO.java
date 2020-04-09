@@ -33,17 +33,19 @@ public class ApprovalTaskDTO extends ProcessDTO {
 	private String processType;
 	private LocalDateTime createdDate;
 	private String decisionType;
-	private Long processVersion;
+//	private Long processVersion;
+	//might be wrong to initialise before fetching
+	private String processSnapshot;
 	
 	public ApprovalTaskDTO(Integer id, Long version, String title, Integer processId, ProcessType processType, 
-			Instant createdDate, DecisionType decision, Long processVersion) {
+			Instant createdDate, DecisionType decision, String processSnapshot) {
 		super(id, version);
 		this.title = title;
 		this.processId = processId;
 		this.processType = processType.getValue();
 		this.createdDate = LocalDateTime.ofInstant(createdDate, ZoneOffset.UTC);
 		this.decisionType = decision.name();
-		this.processVersion = processVersion;
+		this.processSnapshot = processSnapshot;
 	}
 	
 	public ApprovalTaskDTO(@NonNull ApprovalTask approval) {
@@ -52,7 +54,7 @@ public class ApprovalTaskDTO extends ProcessDTO {
 		this.processId = approval.getProcess().getId();
 		this.processType = approval.getProcess().getProcessType().getValue();
 		this.createdDate = LocalDateTime.ofInstant(approval.getCreatedDate(), ZoneOffset.UTC);
-		this.decisionType = approval.getDecision();
-		this.processVersion = approval.getProcessVersion();
+		this.decisionType = approval.getDecision().name();
+		this.processSnapshot = approval.getProcessSnapshot();
 	}
 }

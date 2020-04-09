@@ -40,7 +40,7 @@ public abstract class ProcessDAO extends DAO {
 			switch(a.getApprovalType()) {
 			case REQUIRED_APPROVAL:
 				processApproval.setUser(a.getUser());
-				processApproval.setProcessVersion(process.getVersion());
+//				processApproval.setProcessVersion(process.getVersion());
 				processApproval.setTitle("Process added");
 				getEntityManager().persist(processApproval);
 			case REVIEW:
@@ -53,7 +53,9 @@ public abstract class ProcessDAO extends DAO {
 	private void updateAlerts(ProductionProcess process) {
 		List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(process);
 		for(ApprovalTask approval: approvals) {
-			approval.setDecision(DecisionType.NOT_ATTENDED);
+			if(approval.getDecision() != DecisionType.NOT_ATTENDED) {
+				approval.setDecision(DecisionType.EDIT_NOT_ATTENDED);
+			}			
 			approval.setTitle("Process added and edited");
 		}
 		
