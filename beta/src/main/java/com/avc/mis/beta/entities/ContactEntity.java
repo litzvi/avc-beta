@@ -17,6 +17,8 @@ import lombok.ToString;
 /**
  * @author Zvi
  *
+ * Abstract class inherited by entities referencing ContactDetails entity.
+ * e.g. Phone, Fax, Email, Address, PaymentAccount
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
@@ -24,7 +26,6 @@ import lombok.ToString;
 public abstract class ContactEntity extends SubjectEntityWithId {
 
 	@ToString.Exclude
-//	@JsonBackReference(value = "contactDetails_phones")
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contactId", updatable = false)
 	private ContactDetails contactDetails;

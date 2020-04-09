@@ -11,6 +11,9 @@ import lombok.EqualsAndHashCode;
 /**
  * @author Zvi
  *
+ * Abstract class representing entities that provide information of another object 
+ * and not referenced by other objects.
+ * Has an ordinal value indicating priority between multiple entities of the same class, owned by the same object.
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)

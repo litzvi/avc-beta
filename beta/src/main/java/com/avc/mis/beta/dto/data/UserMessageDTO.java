@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 import com.avc.mis.beta.dto.ProcessDTO;
-import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.data.UserMessage;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.values.ProcessType;
@@ -17,7 +16,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.Value;
 
 /**
  * @author Zvi

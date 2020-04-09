@@ -88,7 +88,7 @@ public class OrderItem extends ProcessEntity{
 
 	@PrePersist @PreUpdate
 	@Override
-	public void prePersistOrUpdate() {
+	public void prePersist() {
 		if(!isLegal()) {
 			throw new IllegalArgumentException(this.getIllegalMessage());
 		}

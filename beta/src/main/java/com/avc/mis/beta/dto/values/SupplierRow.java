@@ -13,9 +13,7 @@ import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 

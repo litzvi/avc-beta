@@ -50,7 +50,7 @@ public class SupplyCategory extends ValueEntity {
 	
 	@PrePersist @PreUpdate
 	@Override
-	public void prePersistOrUpdate() {
+	public void prePersist() {
 		if(!isLegal())
 			throw new IllegalArgumentException("Category name can't be blank");
 	}

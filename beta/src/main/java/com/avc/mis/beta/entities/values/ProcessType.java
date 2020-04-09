@@ -6,15 +6,11 @@ package com.avc.mis.beta.entities.values;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -23,7 +19,6 @@ import org.hibernate.annotations.BatchSize;
 import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.data.ProcessTypeAlert;
-import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

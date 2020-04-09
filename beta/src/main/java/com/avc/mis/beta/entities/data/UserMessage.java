@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.entities.ProcessDataEntity;
+import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @BatchSize(size = DAO.BATCH_SIZE)
 @Table(name = "USER_MESSAGES")
-public class UserMessage extends ProcessDataEntity {
+public class UserMessage extends ProcessInfoEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -43,7 +43,7 @@ public class UserMessage extends ProcessDataEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return super.isLegal() && this.getUser() != null;
+		return this.getUser() != null;
 	}
 
 	@JsonIgnore

@@ -9,16 +9,25 @@ import javax.persistence.PreUpdate;
 
 /**
  * @author Zvi
- *
+ * 
+ * Base class extended by all persistence entities.
+ * Checks Legality of persisted or updated entity before updating database.
  */
 @MappedSuperclass
 public abstract class BaseEntity implements Insertable {
 	
 	public abstract String getIllegalMessage();
 	
-	@PrePersist @PreUpdate
+	@PrePersist
 	@Override
-	public void prePersistOrUpdate() {
+	public void prePersist() {
+		if(!isLegal())
+			throw new IllegalArgumentException(this.getIllegalMessage());
+	}
+	
+	@PreUpdate
+	@Override
+	public void preUpdate() {
 		if(!isLegal())
 			throw new IllegalArgumentException(this.getIllegalMessage());
 	}

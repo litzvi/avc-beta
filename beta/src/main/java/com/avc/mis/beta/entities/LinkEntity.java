@@ -14,6 +14,9 @@ import lombok.EqualsAndHashCode;
 /**
  * @author Zvi
  *
+ * Abstract class representing entities who aren't data or value entities but are rather 
+ * internal program structure information, either as glue between entities are instructions
+ * for business protocol. e.g. ContactDetails, ProcessTypeAlert
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)

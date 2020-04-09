@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.entities.ProcessDataEntity;
+import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @BatchSize(size = DAO.BATCH_SIZE)
 @Table(name = "PROCESS_APPROVALS")
-public class ApprovalTask extends ProcessDataEntity {
+public class ApprovalTask extends ProcessInfoEntity {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -47,12 +47,12 @@ public class ApprovalTask extends ProcessDataEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return super.isLegal() && this.decision != null;
+		return this.decision != null;
 	}
 
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "Process approval needs to reference a process and have a decision";
+		return "Process approval needs to have a decision";
 	}
 }

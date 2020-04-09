@@ -13,7 +13,8 @@ import lombok.EqualsAndHashCode;
 
 /**
  * @author Zvi
- *
+ * Abstract class representing entities that represent a real world interacting object, with a generated id. 
+ * Usually referenced by other data entities, therefore should only be soft deleted. 
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)

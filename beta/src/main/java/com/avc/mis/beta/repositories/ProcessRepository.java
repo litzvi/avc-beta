@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.entities.data.ProcessTypeAlert;
-import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.ProductionProcess;

@@ -10,7 +10,6 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.data.UserMessage;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
-import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 

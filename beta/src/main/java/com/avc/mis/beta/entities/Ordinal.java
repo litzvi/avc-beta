@@ -8,12 +8,18 @@ import java.util.Comparator;
 /**
  * @author Zvi
  *
+ *	Interface for object that have an Integer as an ordinal value.
  */
 public interface Ordinal {
 	public Integer getOrdinal();
 	public void setOrdinal(Integer ordinal);
 	
 
+	/**
+	 * Compares two objects by their ordinal value, smaller values are first in order.
+	 * @param <T>
+	 * @return comparator with a method for comparing by ordinal value. 
+	 */
 	public static <T extends Ordinal> Comparator<T> ordinalComparator() {
 		return new Comparator<T>() {
 

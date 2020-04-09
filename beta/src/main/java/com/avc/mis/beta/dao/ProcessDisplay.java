@@ -15,7 +15,6 @@ import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ApprovalTask;
-import com.avc.mis.beta.entities.process.ProductionProcess;
 
 /**
  * @author Zvi

@@ -12,6 +12,8 @@ import lombok.EqualsAndHashCode;
 /**
  * @author Zvi
  *
+ * Abstract class for entities that represent data that can be seen and updated by more than one user,
+ * therefore needs to have a version.
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
