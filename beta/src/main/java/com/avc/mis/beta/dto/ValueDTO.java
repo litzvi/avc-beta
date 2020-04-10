@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * DTO for entities who represent records that already exists in the database. e.g. country, city.
+ * 
  * @author Zvi
  *
  */

@@ -29,13 +29,13 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class ProductionProcessDTO extends ProcessDTO {
 	
-	@EqualsAndHashCode.Exclude
+	@EqualsAndHashCode.Exclude // no need to compare for testing
 	private Instant createdDate;
 //	private Instant modifiedDate;
-	private UserEntity staffRecording;
+	@EqualsAndHashCode.Exclude // no need to compare for testing
+	private UserEntity userRecording; //perhaps only user name
 	private PoCode poCode;
-//	private Integer poId;
-	private String processType;
+	private String processType; // use string instead of object or enum
 	private ProductionLine productionLine;
 	private OffsetDateTime recordedTime;
 	private Duration duration;
@@ -49,7 +49,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 			String remarks) {
 		super(id, version);
 		this.createdDate = createdDate;
-		this.staffRecording = staffRecording;
+		this.userRecording = staffRecording;
 		this.poCode = poCode;
 		this.processType = processType.getValue();
 		this.productionLine = productionLine;
@@ -63,7 +63,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 	public ProductionProcessDTO(@NonNull ProductionProcess process) {
 		super(process.getId(), process.getVersion());
 		this.createdDate = process.getCreatedDate();
-		this.staffRecording = process.getUser();
+		this.userRecording = process.getUser();
 		this.poCode = process.getPoCode();
 		this.processType = process.getProcessType().getValue();
 		this.productionLine = process.getProductionLine();

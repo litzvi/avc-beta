@@ -16,10 +16,12 @@ import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.values.ProcessType;
 
 /**
+ * Spring repository for accessing all notification information and requirements of production processes.
+ * 
  * @author Zvi
  *
  */
-public interface ProcessRepository extends BaseRepository<ProductionProcess> {
+public interface ProcessInfoRepository extends BaseRepository<ProductionProcess> {
 
 	@Query("select a from ProcessTypeAlert a where a.processType = ?1")
 	List<ProcessTypeAlert> findProcessTypeAlerts(ProcessType processType);

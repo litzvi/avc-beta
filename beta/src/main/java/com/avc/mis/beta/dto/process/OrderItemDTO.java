@@ -27,10 +27,8 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class OrderItemDTO extends ProcessDTO {
 
-//	@EqualsAndHashCode.Exclude
-//	private Integer id;
-	@EqualsAndHashCode.Exclude
-	private Integer poId;
+//	@EqualsAndHashCode.Exclude // for testing 
+//	private Integer poId; //perhaps not needed, and if yes maybe get the whole PoCode
 	private Item item;
 	private MeasureUnit measureUnit;
 	private BigDecimal numberUnits;
@@ -40,21 +38,12 @@ public class OrderItemDTO extends ProcessDTO {
 	private String defects;
 	private String remarks;
 	
-	/**
-	 * @param poId
-	 * @param item
-	 * @param numberUnits
-	 * @param currency
-	 * @param unitPrice
-	 * @param deliveryDate
-	 * @param defects
-	 * @param remarks
-	 */
-	public OrderItemDTO(Integer id, Long version, Integer poId, Item item, 
+	
+	public OrderItemDTO(Integer id, Long version, Item item, 
 			MeasureUnit measureUnit, BigDecimal numberUnits, Currency currency, BigDecimal unitPrice,
 			LocalDate deliveryDate, String defects, String remarks) {
 		super(id, version);
-		this.poId = poId;
+//		this.poId = poId;
 		this.item = item;
 		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits;
@@ -67,7 +56,7 @@ public class OrderItemDTO extends ProcessDTO {
 	
 	public OrderItemDTO(@NonNull OrderItem orderItem) {
 		super(orderItem.getId(), orderItem.getVersion());
-		this.poId = orderItem.getPo().getId();
+//		this.poId = orderItem.getPo().getId();
 		this.item = orderItem.getItem();
 		this.measureUnit = orderItem.getMeasureUnit();
 		this.numberUnits = orderItem.getNumberUnits();

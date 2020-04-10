@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * DTO for entities that represent process recordings who record auditing data.
+ * 
  * @author Zvi
  *
  */

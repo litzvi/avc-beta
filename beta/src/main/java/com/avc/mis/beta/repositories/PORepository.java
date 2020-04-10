@@ -19,6 +19,8 @@ import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.ProcessType;
 
 /**
+ * Spring repository for accessing purchase order information.
+ * 
  * @author Zvi
  *
  */
@@ -57,7 +59,7 @@ public interface PORepository extends BaseRepository<PO> {
 	Optional<PoDTO> findOrderByProcessId(Integer id);
 	
 	@Query("select new com.avc.mis.beta.dto.process.OrderItemDTO("
-			+ "i.id, i.version, po.id, item, i.measureUnit, i.numberUnits, i.currency, "
+			+ "i.id, i.version, item, i.measureUnit, i.numberUnits, i.currency, "
 			+ "i.unitPrice, i.deliveryDate, i.defects, i.remarks) "
 		+ "from OrderItem i "
 		+ "left join i.item item "

@@ -31,8 +31,8 @@ public enum MeasureUnit {
 
 	/**
 	 * @param numberUnits
-	 * @param measureUnit
-	 * @param measureUnit2
+	 * @param from
+	 * @param to
 	 * @return
 	 */
 	public static BigDecimal convert(BigDecimal numberUnits, MeasureUnit from, MeasureUnit to) {

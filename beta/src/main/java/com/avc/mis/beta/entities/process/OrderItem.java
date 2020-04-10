@@ -40,14 +40,14 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PO_ITEMS")
-public class OrderItem extends ProcessEntity{
+public class OrderItem extends ProcessEntity {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "POid", updatable = false, nullable = false)
 	private PO po;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	
@@ -64,7 +64,6 @@ public class OrderItem extends ProcessEntity{
 	
 	private LocalDate deliveryDate;
 	private String defects;//maybe change to enum that can get percentage
-	private String remarks;
 	
 	public void setCurrency(String currencyCode) {
 		if(currencyCode != null)
@@ -95,10 +94,6 @@ public class OrderItem extends ProcessEntity{
 		if(this.measureUnit == null) {
 			this.measureUnit = item.getMeasureUnit();
 		}
-//		if(this.measureUnit != null && this.measureUnit != this.item.getMeasureUnit()) {			
-//			this.numberUnits = MeasureUnit.convert(
-//					this.numberUnits, this.measureUnit, this.item.getMeasureUnit());
-//		}
 	}
 	
 	@Override

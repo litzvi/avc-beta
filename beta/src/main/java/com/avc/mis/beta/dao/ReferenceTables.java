@@ -22,6 +22,9 @@ import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 
 /**
+ * Used to access Value entities - {@link com.avc.mis.beta.entities.ValueEntity}
+ * Gets list for user input data to reference (usually by choosing from a list).
+ *  
  * @author Zvi
  *
  */

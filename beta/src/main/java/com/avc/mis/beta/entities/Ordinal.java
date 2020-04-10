@@ -6,9 +6,10 @@ package com.avc.mis.beta.entities;
 import java.util.Comparator;
 
 /**
+ *	Interface for object that have an Integer as an ordinal value.
+ *
  * @author Zvi
  *
- *	Interface for object that have an Integer as an ordinal value.
  */
 public interface Ordinal {
 	public Integer getOrdinal();

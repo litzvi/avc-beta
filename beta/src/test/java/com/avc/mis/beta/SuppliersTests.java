@@ -49,7 +49,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1427;
+	private static Integer SERIAL_NO = 1436;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -132,7 +132,7 @@ class SuppliersTests {
 		
 		return supplier;
 	}
-	@Disabled
+//	@Disabled
 	@Test
 	void suppliersTest() {
 		//supplier with null name
@@ -235,8 +235,8 @@ class SuppliersTests {
 		suppliers.addEntity(addedFax, supplier.getContactDetails());
 		expected.getContactDetails().getPhones().add(new PhoneDTO(addedPhone));
 		expected.getContactDetails().getFaxes().add(new FaxDTO(addedFax));
-		suppliers.removeEntity(removedPhone);
-		suppliers.removeEntity(removedFax);
+		suppliers.permenentlyRemoveEntity(removedPhone);
+		suppliers.permenentlyRemoveEntity(removedFax);
 		expected.getContactDetails().getPhones().remove(new PhoneDTO(removedPhone));
 		expected.getContactDetails().getFaxes().remove(new FaxDTO(removedFax));
 		suppliers.editEntity(updatedPhone);

@@ -20,9 +20,11 @@ import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.repositories.PORepository;
 
 /**
+ * Service for accessing and manipulating purchase orders.
+ * 
  * @author Zvi
  *
- */
+s */
 @Repository
 @Transactional(readOnly = true)
 public class Orders extends ProcessDAO {
@@ -97,8 +99,9 @@ public class Orders extends ProcessDAO {
 	
 	//for testing only
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Deprecated
 	public void removeOrder(int orderId) {
-		removeEntity(PO.class, orderId);
+		permenentlyRemoveEntity(PO.class, orderId);
 	}
 	
 }

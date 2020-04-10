@@ -13,6 +13,8 @@ import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.Supplier;
 
 /**
+ * Spring repository for accessing information of company suppliers.
+ * 
  * @author Zvi
  *
  */

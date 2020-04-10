@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.data;
+package com.avc.mis.beta.entities.process;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

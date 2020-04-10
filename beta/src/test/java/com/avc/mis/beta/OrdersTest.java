@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.dao.Orders;
-import com.avc.mis.beta.dao.ProcessDisplay;
+import com.avc.mis.beta.dao.ProcessInfoDisplay;
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
@@ -66,7 +66,7 @@ public class OrdersTest {
 	ReferenceTables referenceTables;
 	
 	@Autowired
-	ProcessDisplay processDisplay;
+	ProcessInfoDisplay processDisplay;
 	
 	private PO basicOrder() {
 		//build purchase order
@@ -104,7 +104,7 @@ public class OrdersTest {
 		return items;
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 

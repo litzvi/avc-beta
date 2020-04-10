@@ -9,12 +9,9 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 /**
- * @author Zvi
- *
  * Main Interface defining required characteristics for all entities that can be inserted to the database.
  * Has to have an Id, method to check legality and setting the required foreign key reference to the non owning side.
- */
-/**
+ * 
  * @author Zvi
  *
  */

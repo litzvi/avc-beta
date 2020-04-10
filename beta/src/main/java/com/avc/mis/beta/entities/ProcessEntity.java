@@ -15,7 +15,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -26,10 +28,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Abstract class for data entities that represent process recordings who record auditing data.
+ * e.g. users who created/modified, corresponding dates and optional remarks.
+ * 
  * @author Zvi
  *
- * Abstract class for data entities that represent process recording that record auditing data.
- * e.g. users who created/modified, corresponding dates and optional remarks.
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
@@ -52,8 +55,15 @@ public abstract class ProcessEntity extends DataEntity {
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userId", updatable = false)
+	@JoinColumn(name = "userCreatingId", updatable = false)
+//	@CreatedBy
 	private UserEntity user;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userModifingId")
+//	@LastModifiedBy
+	private UserEntity modifiedBy;
 	
 	private String remarks;
 

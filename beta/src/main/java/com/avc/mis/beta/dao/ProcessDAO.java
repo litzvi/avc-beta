@@ -7,13 +7,16 @@ import java.util.List;
 
 import com.avc.mis.beta.entities.data.ProcessTypeAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
-import com.avc.mis.beta.entities.data.UserMessage;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.process.UserMessage;
 
 /**
+ * Abstract class inherited by all process data manipulating services.
+ * ensures all process notifications are handled when inserting, editing or removing data about production processes.
+ * 
  * @author Zvi
  *
  */

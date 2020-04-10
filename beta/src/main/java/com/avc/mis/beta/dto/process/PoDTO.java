@@ -33,10 +33,9 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class PoDTO extends ProductionProcessDTO {
 	
-//	private ContractType contractType;
 	private SupplierBasic supplier;
 	private OrderStatus orderStatus;
-	private Set<OrderItemDTO> orderItems;
+	private Set<OrderItemDTO> orderItems; //can use a SortedSet like ContactDetails to maintain order
 	
 	public PoDTO(Integer id, Long version, Instant createdDate, UserEntity staffRecording, 
 			PoCode poCode, ProcessType processType, ProductionLine productionLine, 
@@ -48,15 +47,12 @@ public class PoDTO extends ProductionProcessDTO {
 				poCode, processType, productionLine, 
 				recordedTime, duration, numOfWorkers, processStatus, remarks);
 		this.supplier = new SupplierBasic(supplierId, supplierVersion, supplierName);
-//		this.contractType = contractType;
 		this.orderStatus = orderStatus;
-//		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toSet());
 
 	}
 	
 	public PoDTO(@NonNull PO po) {
 		super(po);
-//		this.contractType = po.getPoCode().getContractType();
 		this.supplier = new SupplierBasic(po.getSupplier());
 		this.orderStatus = po.getOrderStatus();
 		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toSet());

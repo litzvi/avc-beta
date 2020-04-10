@@ -11,6 +11,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * DTO for entities that represent information of another object 
+ * and not referenced by other objects.
+ * Also have an ordinal value indicating priority between multiple entities of the same class, 
+ * owned by the same object.
+ * 
  * @author Zvi
  *
  */

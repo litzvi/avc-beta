@@ -25,6 +25,10 @@ import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.repositories.SupplierRepository;
 
 /**
+ * A service for manipulating entities related to Business Contacts.
+ * Currently only for supplier, but should be adjusted for all Business Contacts -
+ * perhaps names should be changed as well.
+ * 
  * @author Zvi
  *
  */
@@ -76,11 +80,6 @@ public class Suppliers extends SoftDeletableDAO {
 			new IllegalArgumentException("No supplier with given ID"));
 		SupplierDTO supplierDTO = new SupplierDTO(supplier);
 		
-//		ContactDetails contactDetails = supplier.getContactDetails();		
-//		ContactDetailsDTO contactDetailsDTO = new ContactDetailsDTO(contactDetails);		
-//		contactDetailsDTO.setPhones(phoneRepository.findAllByContactDetailsId(contactDetails.getId()));		
-//		supplierDTO.setContactDetails(contactDetailsDTO);
-		
 		getSupplierRepository().findCompanyContactsByCompnyId(id)
 			.forEach((cc) -> supplierDTO.addCompanyContact(cc));
 		
@@ -95,7 +94,7 @@ public class Suppliers extends SoftDeletableDAO {
 	 */
 	public void removeSupplier(int supplierId) {
 		SoftDeleted entity = getEntityManager().getReference(Supplier.class, supplierId);
-		softDeleteEntity(entity);	
+		removeEntity(entity);	
 	}
 	
 	/**
@@ -136,7 +135,7 @@ public class Suppliers extends SoftDeletableDAO {
 	
 	public void removeAccount(int accountId) {
 		Insertable entity = getEntityManager().getReference(PaymentAccount.class, accountId);
-		removeEntity(entity);	
+		permenentlyRemoveEntity(entity);	
 	}
 	
 	public void editContactPerson(CompanyContact contact) {
@@ -166,23 +165,26 @@ public class Suppliers extends SoftDeletableDAO {
 	
 	public void removeContactPerson(int contactId) {
 		SoftDeleted entity = getEntityManager().getReference(CompanyContact.class, contactId);
-		softDeleteEntity(entity);
+		removeEntity(entity);
 	}
 	
 	//for testing - should be removed
+	@Deprecated
 	public void addEntity(Insertable entity, Insertable reference) {
 		super.addEntity(entity, reference);
 	}
 	
 	//for testing - should be removed
+	@Deprecated
 	public Insertable editEntity(Insertable entity) {
 		return super.editEntity(entity);
 	}
 	
 	//public - for testing only
+	@Deprecated
 	@Override
-	public void removeEntity(Insertable entity) {
-		super.removeEntity(entity);; 
+	public void permenentlyRemoveEntity(Insertable entity) {
+		super.permenentlyRemoveEntity(entity);; 
 	}
 
 	

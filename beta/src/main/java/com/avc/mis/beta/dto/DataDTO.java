@@ -9,6 +9,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * DTO for entities that can be edited by multiple users.
+ * contains a version.
+ * 
  * @author Zvi
  *
  */

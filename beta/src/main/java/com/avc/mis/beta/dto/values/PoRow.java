@@ -36,17 +36,6 @@ public class PoRow extends ValueDTO {
 	LocalDate deliveryDate;
 	OrderStatus orderStatus;
 	
-	/**
-	 * @param id
-	 * @param contractTypeCode
-	 * @param supplierName
-	 * @param itemName
-	 * @param amount
-	 * @param measureUnit
-	 * @param contractDate
-	 * @param deliveryDate
-	 * @param orderStatus
-	 */
 	public PoRow(@NonNull Integer id, PoCode poCode, String supplierName, String itemName, BigDecimal amount,
 			MeasureUnit measureUnit, OffsetDateTime contractDate, LocalDate deliveryDate, OrderStatus orderStatus) {
 		super(id);

@@ -22,9 +22,13 @@ import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 
 /**
+ * Base repository which is the root for all Spring repositories.
+ * Defines methods that are often accessed my multiple types of repositories.
+ * e.g. general referenced lists of @see ValueEntity e.g. list of cities.
+ * 
  * @author Zvi
  * @param <T>
- *
+ * 
  */
 @RestResource(exported = false)
 public interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{

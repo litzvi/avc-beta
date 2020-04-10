@@ -12,11 +12,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * @author Zvi
- *
  * Abstract class representing entities with ID, that provide information of another object 
  * and not referenced by other objects.
  * Has an ordinal value indicating priority between multiple entities of the same class, owned by the same object.
+ * 
+ * @author Zvi
+ *
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)

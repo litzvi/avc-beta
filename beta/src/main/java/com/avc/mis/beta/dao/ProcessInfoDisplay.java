@@ -17,12 +17,16 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 
 /**
+ * Used for accessing and updating information notifying about processes (rather then process data itself). 
+ * e.g. messages and approvals.
+ * Basically for handling entities who are instance of {@link com.avc.mis.beta.entities.ProcessInfoEntity}
+ * 
  * @author Zvi
  *
  */
 @Repository
 @Transactional(readOnly = true)
-public class ProcessDisplay extends DAO {
+public class ProcessInfoDisplay extends DAO {
 	
 	@Autowired Orders orders;
 	
@@ -49,7 +53,8 @@ public class ProcessDisplay extends DAO {
 		}
 		return null;
 	}
-	
+
+	// if stale process fetched separately
 //	public String getProcessApproved(int approvalId) {
 //		//TODO
 //		return null;
@@ -59,7 +64,6 @@ public class ProcessDisplay extends DAO {
 	public void approveProcess(ApprovalTask approval, String decisionType) {
 		DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
 		approval.setDecision(decision);
-//		approval.setProcessVersion(processVersion);
 		editEntity(approval);			
 	}
 	

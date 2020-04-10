@@ -35,14 +35,8 @@ public class ApprovalTask extends ProcessInfoEntity {
 	@Column(nullable = false)
 	private DecisionType decision = DecisionType.NOT_ATTENDED;
 	
-//	private Long processVersion;
-	
 	@Lob
 	private String processSnapshot;
-	
-//	public String getDecision() {
-//		return this.decision.name();
-//	}
 		
 	@JsonIgnore
 	@Override

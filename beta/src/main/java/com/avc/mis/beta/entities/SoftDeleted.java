@@ -4,9 +4,10 @@
 package com.avc.mis.beta.entities;
 
 /**
+ * Interface for entities that can be soft deleted - set as not active but not be fiscally removed.
+ * 
  * @author Zvi
  *
- * Interface for entities that can be soft deleted - set as not active but not be fiscally removed.
  */
 public interface SoftDeleted extends Insertable {
 

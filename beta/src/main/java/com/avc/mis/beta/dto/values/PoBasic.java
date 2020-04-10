@@ -24,12 +24,6 @@ public class PoBasic extends ValueDTO {
 	String supplierName;
 	OrderStatus orderStatus;
 	
-	/**
-	 * @param id
-	 * @param contractTypeCode
-	 * @param supplierName
-	 * @param orderStatus
-	 */
 	public PoBasic(@NonNull Integer id, PoCode poCode, String supplierName, OrderStatus orderStatus) {
 		super(id);
 		this.value = poCode.getValue();

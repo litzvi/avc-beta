@@ -15,10 +15,11 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * @author Zvi
- *
  * Abstract class inherited by entities referencing ContactDetails entity.
  * e.g. Phone, Fax, Email, Address, PaymentAccount
+ * 
+ * @author Zvi
+ *
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)

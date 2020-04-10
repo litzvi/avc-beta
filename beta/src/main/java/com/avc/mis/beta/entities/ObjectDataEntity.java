@@ -10,10 +10,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * @author Zvi
- *
  * Abstract class representing entities that represent a real world interacting object. 
  * Usually referenced by other data entities, therefore should only be soft deleted. 
+ * 
+ * @author Zvi
+ *
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)

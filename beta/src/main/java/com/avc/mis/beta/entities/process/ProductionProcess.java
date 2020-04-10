@@ -23,7 +23,6 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
-import com.avc.mis.beta.entities.data.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
@@ -35,6 +34,11 @@ import lombok.EqualsAndHashCode;
 /**
  * @author Zvi
  *
+ * Entity that holds core information recoded for every process:
+ * PO code, 
+ * type of process (Cashew order, receive order, roasting etc.),
+ * production line (if have multiple), user recorded time, duration,
+ * number of workers and the process status(cancelled, finalised etc.)
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
@@ -43,18 +47,17 @@ import lombok.EqualsAndHashCode;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class ProductionProcess extends ProcessEntity {	
 
-//	@ToString.Exclude
 	//cascade remove for testing 
 	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(updatable = false)
 	private PoCode poCode;
 	
 	@JsonIgnore
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "typeId", nullable = false, updatable = false)
 	private ProcessType processType;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "productionLineId", updatable = false)
 	private ProductionLine productionLine;
 	
@@ -63,10 +66,11 @@ public class ProductionProcess extends ProcessEntity {
 	private Duration duration;//seconds
 	private Integer numOfWorkers;
 	
-	@ManyToOne 
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "statusId"/*, nullable = false*/)
 	private ProcessStatus status;
 	
+
 	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<ApprovalTask> approvals = new HashSet<>();
 	

@@ -8,10 +8,11 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
 /**
- * @author Zvi
- * 
  * Base class extended by all persistence entities.
  * Checks Legality of persisted or updated entity before updating database.
+ * 
+ * @author Zvi
+ *
  */
 @MappedSuperclass
 public abstract class BaseEntity implements Insertable {
