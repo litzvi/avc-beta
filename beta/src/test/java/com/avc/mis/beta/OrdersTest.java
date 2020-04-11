@@ -104,7 +104,7 @@ public class OrdersTest {
 		return items;
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 
