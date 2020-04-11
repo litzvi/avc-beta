@@ -62,13 +62,14 @@ public class UserEntity extends ObjectDataEntity {
 	@Column(name = "role", nullable = false)
 	private Set<Role> roles = new HashSet<>();
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "positionId")
-	private CompanyPosition position;
+	//should be only in staff
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "positionId")
+//	private CompanyPosition position;
 
 	@Override
 	public boolean isLegal() {
-		return person != null;
+		return this.person != null;
 	}
 
 	@JsonIgnore

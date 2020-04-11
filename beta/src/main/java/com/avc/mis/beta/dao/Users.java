@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -32,11 +33,15 @@ public class Users extends SoftDeletableDAO implements UserDetailsService {
 	
 	/**
 	 * Adds a new login user not connected to existing person.
+	 * Might have or not have the person's details.
 	 * @param user UserEntity with person field null.
 	 */
 	public void addUser(UserEntity user) {
-		Person person = new Person();
-		person.setName(user.getUsername());
+		Person person = user.getPerson();
+		if(person == null) {
+			person = new Person();
+			person.setName(user.getUsername());
+		}		
 		user.setPerson(person);
 		addEntity(user.getPerson());		
 		openUserForPerson(user);
@@ -47,7 +52,9 @@ public class Users extends SoftDeletableDAO implements UserDetailsService {
 	 * @param user UserEntity referencing an existing person
 	 */
 	public void openUserForPerson(UserEntity user) {
-		//check that person exists
+		if(user.getPerson() == null) {
+			throw new IllegalArgumentException("Trying to open user without existing person. See addUser(user) method.");
+		}
 		user.setPassword(encoder.encode(user.getPassword()));
 		addEntity(user);
 	}
@@ -59,4 +66,14 @@ public class Users extends SoftDeletableDAO implements UserDetailsService {
 		user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + username));
 		return user.get();
 	}
+	
+//	@Transactional(readOnly = true)
+//	public UserDTO getUserByUsername(String username) {
+//		
+//	}
+//	
+//	@Transactional(readOnly = true)
+//	public UserDTO getUserById(Integer id) {
+//		
+//	}
 }
