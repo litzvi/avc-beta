@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.data;
+package com.avc.mis.beta.dto.values;
 
 import java.util.Collection;
 import java.util.List;
@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.avc.mis.beta.dto.DataDTO;
+import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.Role;
 
@@ -27,21 +28,21 @@ import lombok.NonNull;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class UserDTO extends DataDTO implements UserDetails {
+public class UserLogin extends ValueDTO implements UserDetails {
 	
 	private String username;
 	private String password;
 	private List<GrantedAuthority> authorities;
 	
-	public UserDTO(Integer id, Long version, String username, String password, Collection<Role> roles) {
-		super(id, version);
+	public UserLogin(Integer id, String username, String password, Collection<Role> roles) {
+		super(id);
 		this.username = username;
 		this.password = password;
 		authorities = roles.stream().map(u->new SimpleGrantedAuthority(u.name())).collect(Collectors.toList());
 	}
 	
-	public UserDTO(@NonNull UserEntity user) {
-		super(user.getId(), user.getVersion());
+	public UserLogin(@NonNull UserEntity user) {
+		super(user.getId());
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		authorities = user.getRoles().stream().map(u->new SimpleGrantedAuthority(u.name())).collect(Collectors.toList());
