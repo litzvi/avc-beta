@@ -49,7 +49,7 @@ class SuppliersTests {
 	@Autowired
 	ReferenceTables referenceTables;
 	
-	private static Integer SERIAL_NO = 1440;
+	static Integer SERIAL_NO = 1449;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {

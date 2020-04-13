@@ -24,11 +24,12 @@ import com.avc.mis.beta.repositories.UserRepository;
  */
 @Repository
 @Transactional(rollbackFor = Throwable.class)
-public class Users extends SoftDeletableDAO implements UserDetailsService {
+public class Users extends SoftDeletableDAO {
 	
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
 	private PasswordEncoder encoder;
 	
 	/**
@@ -59,21 +60,25 @@ public class Users extends SoftDeletableDAO implements UserDetailsService {
 		addEntity(user);
 	}
 	
-	@Override
+//	@Override
+//	@Transactional(readOnly = true)
+//	public UserLogin loadUserByUsername(String username) throws UsernameNotFoundException {
+//		Optional<UserLogin> user = userRepository.findByUsername(username);
+//		user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + username));
+//		return user.get();
+//	}
+	
 	@Transactional(readOnly = true)
-	public UserLogin loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<UserLogin> user = userRepository.findByUsername(username);
-		user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + username));
+	public UserDTO getUserByUsername(String username) {
+		Optional<UserDTO> user = userRepository.findUserByUsername(username);
+		user.orElseThrow(() -> new IllegalArgumentException("No User with given username"));
 		return user.get();
 	}
 	
-//	@Transactional(readOnly = true)
-//	public UserDTO getUserByUsername(String username) {
-//		
-//	}
-//	
-//	@Transactional(readOnly = true)
-//	public UserDTO getUserById(Integer id) {
-//		
-//	}
+	@Transactional(readOnly = true)
+	public UserDTO getUserById(Integer id) {
+		Optional<UserDTO> user = userRepository.findById(id);
+		user.orElseThrow(() -> new IllegalArgumentException("No User with given ID"));
+		return user.get();
+	}
 }

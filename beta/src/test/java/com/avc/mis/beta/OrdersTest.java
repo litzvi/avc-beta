@@ -20,6 +20,7 @@ import com.avc.mis.beta.dao.Orders;
 import com.avc.mis.beta.dao.ProcessInfoDisplay;
 import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dao.Users;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
@@ -34,6 +35,7 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.OrderStatus;
+import com.avc.mis.beta.entities.enums.Role;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
@@ -58,6 +60,9 @@ public class OrdersTest {
 
 	@Autowired
 	Orders orders;
+	
+	@Autowired
+	Users users;
 	
 	@Autowired
 	Suppliers suppliers;
@@ -205,6 +210,13 @@ public class OrdersTest {
 			e.printStackTrace();
 		}
 		
+		//insert a user
+		UserEntity user = new UserEntity();
+		user.setUsername("isral" + SuppliersTests.SERIAL_NO);
+		user.setPassword("309");
+		user.getRoles().add(Role.SYSTEM_MANAGER);
+			users.addUser(user);
+	
 		
 	}	
 }
