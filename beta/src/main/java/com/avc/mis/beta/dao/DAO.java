@@ -50,12 +50,21 @@ public abstract class DAO {
 		return entityManager;
 	}
 	
+	/**
+	 * Used for adding entity that references a detached entity.
+	 * @param entity the entity to persist.
+	 * @param reference detached entity referenced by entity (the owner of the association).
+	 */
 	void addEntity(Insertable entity, Insertable reference) {
 		reference = getEntityManager().getReference(reference.getClass(), reference.getId());
 		entity.setReference(reference);
 		addEntity(entity);
 	}
 	
+	/**
+	 * Adding an entity that all it's associations are currently managed.
+	 * @param entity to be persisted
+	 */
 	void addEntity(Insertable entity) {
 		getEntityManager().persist(entity);
 	}

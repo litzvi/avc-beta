@@ -56,13 +56,13 @@ public abstract class ProcessEntity extends DataEntity {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userCreatingId", updatable = false)
-//	@CreatedBy
-	private UserEntity user;
+	@CreatedBy
+	private UserEntity createdBy;
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userModifingId")
-//	@LastModifiedBy
+	@LastModifiedBy
 	private UserEntity modifiedBy;
 	
 	private String remarks;

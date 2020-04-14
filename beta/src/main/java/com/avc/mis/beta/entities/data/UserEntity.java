@@ -21,6 +21,9 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
+import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.enums.Role;
 import com.avc.mis.beta.entities.values.CompanyPosition;
@@ -37,6 +40,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@BatchSize(size = DAO.BATCH_SIZE)
 @Entity
 @Table(name = "USERS")
 public class UserEntity extends ObjectDataEntity {
@@ -45,7 +49,7 @@ public class UserEntity extends ObjectDataEntity {
 	@Id
 	private Integer id;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "personId")
 	@MapsId
 	private Person person;
@@ -66,6 +70,11 @@ public class UserEntity extends ObjectDataEntity {
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "positionId")
 //	private CompanyPosition position;
+	
+	@Override
+	public void setReference(Object person) {
+		this.setPerson((Person)person);
+	}
 
 	@Override
 	public boolean isLegal() {

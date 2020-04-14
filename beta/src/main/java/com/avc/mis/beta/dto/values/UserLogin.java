@@ -28,21 +28,21 @@ import lombok.NonNull;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class UserLogin extends ValueDTO implements UserDetails {
+public class UserLogin extends DataDTO implements UserDetails {
 	
 	private String username;
 	private String password;
 	private List<GrantedAuthority> authorities;
 	
-	public UserLogin(Integer id, String username, String password, Collection<Role> roles) {
-		super(id);
+	public UserLogin(Integer id, Long version, String username, String password, Collection<Role> roles) {
+		super(id, version);
 		this.username = username;
 		this.password = password;
 		authorities = roles.stream().map(u->new SimpleGrantedAuthority(u.name())).collect(Collectors.toList());
 	}
 	
 	public UserLogin(@NonNull UserEntity user) {
-		super(user.getId());
+		super(user.getId(), user.getVersion());
 		this.username = user.getUsername();
 		this.password = user.getPassword();
 		authorities = user.getRoles().stream().map(u->new SimpleGrantedAuthority(u.name())).collect(Collectors.toList());

@@ -22,6 +22,7 @@ import com.avc.mis.beta.dao.ReferenceTables;
 import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dao.Users;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
@@ -30,6 +31,7 @@ import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.dto.values.SupplierBasic;
+import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -203,7 +205,7 @@ public class OrdersTest {
 //				t.setDecisionType(DecisionType.APPROVED.name());
 //				task.setProcessVersion(p.getVersion());
 				processDisplay.setProcessDecision(t.getId(), 
-						DecisionType.APPROVED.name(), processSnapshot);
+				DecisionType.APPROVED.name(), processSnapshot);
 			});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -215,8 +217,46 @@ public class OrdersTest {
 		user.setUsername("isral" + SuppliersTests.SERIAL_NO);
 		user.setPassword("309");
 		user.getRoles().add(Role.SYSTEM_MANAGER);
-			users.addUser(user);
-	
+		users.addUser(user);
+		Person p = user.getPerson();
+		p.setName("isssssssssral" + SuppliersTests.SERIAL_NO);
+		users.EditPersonalDetails(user);
+//		suppliers.permenentlyRemoveEntity(user);
+//		suppliers.permenentlyRemoveEntity(user.getPerson());
+		
+		//insert user with 2 roles
+		user = new UserEntity();
+		user.setUsername("zvi" + SuppliersTests.SERIAL_NO);
+		user.setPassword("309");
+		user.getRoles().add(Role.SYSTEM_MANAGER);
+		user.getRoles().add(Role.MANAGER);
+		users.addUser(user);
+		user.setUsername("zzzzzvi" + SuppliersTests.SERIAL_NO);
+		user.setPassword("password");
+		user.getRoles().clear();
+		users.editUser(user);
+		suppliers.permenentlyRemoveEntity(user);
+		suppliers.permenentlyRemoveEntity(user.getPerson());
+		
+		//open user for existing person
+		user = new UserEntity();
+		user.setUsername("eli" + SuppliersTests.SERIAL_NO);
+		user.setPassword("309");
+		user.getRoles().add(Role.SYSTEM_MANAGER);
+		user.getRoles().add(Role.MANAGER);
+		Person person = new Person();
+		person.setId(64);
+		user.setPerson(person);
+		users.openUserForPerson(user);
+		UserDTO userByusername = users.getUserByUsername("eli" + SuppliersTests.SERIAL_NO);
+		UserDTO userById = users.getUserById(user.getId());
+		assertEquals(userByusername, userById, "Failed test fetching user by id vs. by username");
+		user.setUsername("pessi" + SuppliersTests.SERIAL_NO);
+		user.setPassword("password");
+		user.getRoles().clear();
+		users.editUser(user);
+		users.permenentlyRemoveUser(user.getId());
+
 		
 	}	
 }

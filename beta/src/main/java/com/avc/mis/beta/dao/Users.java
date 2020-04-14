@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.UserLogin;
+import com.avc.mis.beta.entities.SoftDeleted;
 import com.avc.mis.beta.entities.data.Person;
+import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.repositories.UserRepository;
 
@@ -44,8 +46,9 @@ public class Users extends SoftDeletableDAO {
 			person.setName(user.getUsername());
 		}		
 		user.setPerson(person);
-		addEntity(user.getPerson());		
-		openUserForPerson(user);
+		addEntity(user.getPerson());
+		user.setPassword(encoder.encode(user.getPassword()));
+		addEntity(user);
 	}
 	
 	/**
@@ -57,28 +60,71 @@ public class Users extends SoftDeletableDAO {
 			throw new IllegalArgumentException("Trying to open user without existing person. See addUser(user) method.");
 		}
 		user.setPassword(encoder.encode(user.getPassword()));
-		addEntity(user);
+		addEntity(user, user.getPerson());
 	}
 	
-//	@Override
-//	@Transactional(readOnly = true)
-//	public UserLogin loadUserByUsername(String username) throws UsernameNotFoundException {
-//		Optional<UserLogin> user = userRepository.findByUsername(username);
-//		user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + username));
-//		return user.get();
-//	}
 	
+	/**
+	 * Find user with full details with given username - including id card and contact details if exist.
+	 * @param username of the user to find
+	 * @return UserDTO with full details 
+	 * @throws IllegalArgumentException if there is no User with given username.
+	 */
 	@Transactional(readOnly = true)
 	public UserDTO getUserByUsername(String username) {
-		Optional<UserDTO> user = userRepository.findUserByUsername(username);
+		Optional<UserEntity> user = userRepository.findUserByUsername(username);
 		user.orElseThrow(() -> new IllegalArgumentException("No User with given username"));
-		return user.get();
+		return new UserDTO(user.get());
 	}
 	
+	/**
+	 * Find user with full details with given id - including id card and contact details if exist.
+	 * @param id of the user to find
+	 * @return UserDTO with full details 
+	 * @throws IllegalArgumentException if there is no User with given id.
+	 */
 	@Transactional(readOnly = true)
 	public UserDTO getUserById(Integer id) {
-		Optional<UserDTO> user = userRepository.findById(id);
+		Optional<UserEntity> user = userRepository.findById(id);
 		user.orElseThrow(() -> new IllegalArgumentException("No User with given ID"));
-		return user.get();
+		return new UserDTO(user.get());
+	}
+	
+	/**
+	 * Sets the user as not active
+	 * @param userId of UserEntity to be set
+	 */
+	public void removeUser(int userId) {
+		SoftDeleted entity = getEntityManager().getReference(UserEntity.class, userId);
+		removeEntity(entity);
+	}
+	
+	/**
+	 * For testing only
+	 * @param personId
+	 */
+	@Deprecated
+	public void permenentlyRemoveUser(int personId) {
+		permenentlyRemoveEntity(UserEntity.class, personId);
+	}
+	
+	/**
+	 * Edit the user details, dosen't edit the person details for this user.
+	 * @param user to be edited
+	 */
+	public void editUser(UserEntity user) {
+		editEntity(user);
+	}
+	
+	/**
+	 * Edits all the personal details of this user, will edit user and person details.
+	 * @param user to be edited
+	 */
+	public void EditPersonalDetails(UserEntity user) {
+		Person person = user.getPerson();
+		editEntity(user);
+		if(person != null)
+			editEntity(person);
+		
 	}
 }

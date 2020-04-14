@@ -63,7 +63,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 	public ProductionProcessDTO(@NonNull ProductionProcess process) {
 		super(process.getId(), process.getVersion());
 		this.createdDate = process.getCreatedDate();
-		this.userRecording = process.getUser();
+		this.userRecording = process.getCreatedBy();
 		this.poCode = process.getPoCode();
 		this.processType = process.getProcessType().getValue();
 		this.productionLine = process.getProductionLine();

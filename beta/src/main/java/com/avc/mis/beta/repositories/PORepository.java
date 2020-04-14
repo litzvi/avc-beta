@@ -36,7 +36,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "from PO po "
 			+ "left join po.poCode po_code "
 			+ "left join po.supplier s "
-			+ "left join po.user p_user "
+			+ "left join po.createdBy p_user "
 			+ "left join po.productionLine p_line "
 			+ "left join po.status p_status "
 		+ "where po_code.id = :codeId ")
@@ -52,7 +52,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "from PO po "
 			+ "left join po.poCode po_code "
 			+ "left join po.supplier s "
-			+ "left join po.user p_user "
+			+ "left join po.createdBy p_user "
 			+ "left join po.productionLine p_line "
 			+ "left join po.status p_status "
 		+ "where po.id = :id ")

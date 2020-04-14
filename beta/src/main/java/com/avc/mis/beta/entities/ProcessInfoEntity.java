@@ -17,6 +17,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -58,6 +59,12 @@ public abstract class ProcessInfoEntity extends DataEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", updatable = false)
 	private UserEntity user;
+	
+	@JsonIgnore
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userModifingId")
+	@LastModifiedBy
+	private UserEntity modifiedBy;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processId", nullable = false, updatable = false)
