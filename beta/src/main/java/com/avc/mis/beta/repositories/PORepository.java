@@ -27,7 +27,7 @@ import com.avc.mis.beta.entities.values.ProcessType;
 public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
-			+ "po.id, po.version, po.createdDate, p_user, "
+			+ "po.id, po.version, po.createdDate, p_user.username, "
 			+ "po_code, po.processType, p_line, "
 			+ "po.recordedTime, po.duration, po.numOfWorkers, "
 			+ "p_status, po.remarks, "
@@ -43,7 +43,7 @@ public interface PORepository extends BaseRepository<PO> {
 	Optional<PoDTO> findOrderByPoCodeId(Integer codeId);
 	
 	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
-			+ "po.id, po.version, po.createdDate, p_user, "
+			+ "po.id, po.version, po.createdDate, p_user.username, "
 			+ "po_code, po.processType, p_line, "
 			+ "po.recordedTime, po.duration, po.numOfWorkers, "
 			+ "p_status, po.remarks, "

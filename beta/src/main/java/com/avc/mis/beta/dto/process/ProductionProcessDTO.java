@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.process;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -33,7 +34,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 	private Instant createdDate;
 //	private Instant modifiedDate;
 	@EqualsAndHashCode.Exclude // no need to compare for testing
-	private UserEntity userRecording; //perhaps only user name
+	private String userRecording; //perhaps only user name
 	private PoCode poCode;
 	private String processType; // use string instead of object or enum
 	private ProductionLine productionLine;
@@ -44,12 +45,12 @@ public class ProductionProcessDTO extends ProcessDTO {
 	private String remarks;
 	
 	public ProductionProcessDTO(Integer id, Long version, Instant createdDate, 
-			UserEntity staffRecording, PoCode poCode, ProcessType processType, ProductionLine productionLine, 
+			String userRecording, PoCode poCode, ProcessType processType, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus status, 
 			String remarks) {
 		super(id, version);
 		this.createdDate = createdDate;
-		this.userRecording = staffRecording;
+		this.userRecording = userRecording;
 		this.poCode = poCode;
 		this.processType = processType.getValue();
 		this.productionLine = productionLine;
@@ -63,7 +64,8 @@ public class ProductionProcessDTO extends ProcessDTO {
 	public ProductionProcessDTO(@NonNull ProductionProcess process) {
 		super(process.getId(), process.getVersion());
 		this.createdDate = process.getCreatedDate();
-		this.userRecording = process.getCreatedBy();
+		if(process.getCreatedBy() != null)
+			this.userRecording = process.getCreatedBy().getUsername();
 		this.poCode = process.getPoCode();
 		this.processType = process.getProcessType().getValue();
 		this.productionLine = process.getProductionLine();

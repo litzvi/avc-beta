@@ -117,7 +117,13 @@ public class OrdersTest {
 		//insert an order 
 		PO po = basicOrder();
 		orders.addCashewOrder(po);
-		PoDTO expected = new PoDTO(po);
+		PoDTO expected = null;
+		try {
+			expected = new PoDTO(po);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		PoDTO actual = orders.getOrder(po.getPoCode().getId());	
 		assertEquals(expected, actual, "failed test adding po");
 		

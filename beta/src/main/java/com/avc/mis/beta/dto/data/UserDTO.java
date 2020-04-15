@@ -28,14 +28,15 @@ public class UserDTO extends DataDTO {
 	
 	private PersonDTO person;
 	private String username;
-	private String password;
+	//needed for filling in the password - never sending
+	private String password = null; 
 	private Set<String> authorities;
 	
-	public UserDTO(Integer id, Long version, Person person, String username, String password, Collection<Role> roles) {
+	public UserDTO(Integer id, Long version, Person person, String username, Collection<Role> roles) {
 		super(id, version);
 		this.person = new PersonDTO(person);
 		this.username = username;
-		this.password = password;
+//		this.password = password;
 		authorities = roles.stream().map(u->u.name()).collect(Collectors.toSet());
 	}
 	
@@ -43,7 +44,7 @@ public class UserDTO extends DataDTO {
 		super(user.getId(), user.getVersion());
 		this.person = new PersonDTO(user.getPerson());
 		this.username = user.getUsername();
-		this.password = user.getPassword();
+//		this.password = user.getPassword();
 		authorities = user.getRoles().stream().map(u->u.name()).collect(Collectors.toSet());
 	}
 }
