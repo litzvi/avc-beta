@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.Repository;
 
-import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.entities.data.UserEntity;
 

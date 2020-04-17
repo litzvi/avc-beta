@@ -15,8 +15,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -26,7 +24,6 @@ import org.hibernate.annotations.BatchSize;
 import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.enums.Role;
-import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;

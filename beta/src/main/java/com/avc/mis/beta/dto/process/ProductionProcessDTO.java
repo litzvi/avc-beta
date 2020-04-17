@@ -6,10 +6,8 @@ package com.avc.mis.beta.dto.process;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
 import com.avc.mis.beta.dto.ProcessDTO;
-import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.values.ProcessStatus;
