@@ -5,6 +5,7 @@ package com.avc.mis.beta.entities.data;
 
 import java.time.LocalDate;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -17,6 +18,7 @@ import javax.persistence.Table;
 import com.avc.mis.beta.entities.DataEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.values.Country;
+import com.avc.mis.beta.utilities.LocalDateToLong;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -48,7 +50,11 @@ public class IdCard extends DataEntity {
 	private Person person;
 	
 	private String idNumber;
+	
+	@Convert(converter = LocalDateToLong.class)
 	private LocalDate dob;
+	
+	@Convert(converter = LocalDateToLong.class)
 	private LocalDate dateOfIssue;
 	private String placeOfIssue;
 	

@@ -106,7 +106,7 @@ public class OrdersTest {
 		return items;
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 
@@ -126,7 +126,7 @@ public class OrdersTest {
 		po.setOrderStatus(OrderStatus.OPEN_APPROVED);
 		expected = new PoDTO(po);
 		orders.editOrder(po);
-		actual = orders.getOrder(po.getPoCode().getId());	
+		actual = orders.getOrder(po.getPoCode().getId());
 		assertEquals(expected, actual, "failed test editing po order status");		
 		
 		Supplier supplier = po.getSupplier();
@@ -246,7 +246,7 @@ public class OrdersTest {
 		user.getRoles().add(Role.SYSTEM_MANAGER);
 		user.getRoles().add(Role.MANAGER);
 		Person person = new Person();
-		person.setId(64);
+		person.setId(1);
 		user.setPerson(person);
 		users.openUserForPerson(user);
 		UserDTO userByusername = users.getUserByUsername("eli" + SuppliersTests.SERIAL_NO);

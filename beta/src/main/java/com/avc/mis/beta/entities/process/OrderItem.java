@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Currency;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -22,6 +23,7 @@ import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.utilities.LocalDateToLong;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
@@ -62,7 +64,9 @@ public class OrderItem extends ProcessEntity {
 	
 	private BigDecimal unitPrice;
 	
+	@Convert(converter = LocalDateToLong.class)
 	private LocalDate deliveryDate;
+	
 	private String defects;//maybe change to enum that can get percentage
 	
 	public void setCurrency(String currencyCode) {
