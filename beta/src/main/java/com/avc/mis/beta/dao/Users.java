@@ -43,6 +43,8 @@ public class Users extends SoftDeletableDAO {
 		}		
 		user.setPerson(person);
 		addEntity(user.getPerson());
+//		String generatedPass = RandomStringUtils.random(8, true, true);
+		//perhaps send email
 		user.setPassword(encoder.encode(user.getPassword()));
 		addEntity(user);
 	}
@@ -55,6 +57,8 @@ public class Users extends SoftDeletableDAO {
 		if(user.getPerson() == null) {
 			throw new IllegalArgumentException("Trying to open user without existing person. See addUser(user) method.");
 		}
+//		String generatedPass = RandomStringUtils.random(8, true, true);
+		//perhaps send email
 		user.setPassword(encoder.encode(user.getPassword()));
 		addEntity(user, user.getPerson());
 	}

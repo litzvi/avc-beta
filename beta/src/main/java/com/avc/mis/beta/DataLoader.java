@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -24,9 +25,11 @@ public class DataLoader implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		//insert users
+		//insert SYSTEM MANAGER
 		UserEntity user = new UserEntity();
 		user.setUsername("isral309@gmail.com");
+//		String generatedPass = RandomStringUtils.random(8, true, true);
+		//perhaps send email
 		user.setPassword("309");
 		user.getRoles().add(Role.SYSTEM_MANAGER);
 		users.addUser(user);

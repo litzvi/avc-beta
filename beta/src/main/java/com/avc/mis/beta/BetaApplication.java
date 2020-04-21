@@ -9,6 +9,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.Role;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
 @SpringBootApplication
@@ -23,7 +24,7 @@ public class BetaApplication {
 	@Bean
 	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
 		return args -> {
-
+			System.out.println("commandLineRunner in BetaApplication");
 		};
 	}
 	
