@@ -43,7 +43,7 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Company extends ObjectEntityWithId {
 	
-	@Column(unique = true, nullable = false)
+	@Column(unique = true, nullable = false, updatable = false)
 	private String name;
 	private String localName;
 	private String englishName;

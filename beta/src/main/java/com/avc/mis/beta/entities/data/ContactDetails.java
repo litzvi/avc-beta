@@ -43,7 +43,7 @@ import lombok.ToString;
 @BatchSize(size = DAO.BATCH_SIZE)
 @Table(name = "CONTACT_DETAILS", uniqueConstraints = 
 	{ @UniqueConstraint(columnNames = { "companyId", "personId" }) })
-@Check(constraints = "(companyId is null) xor (personId is null)")
+@Check(constraints = "(company_id is null) XOR (person_id is null)")
 public class ContactDetails extends LinkEntity {
 
 	@ToString.Exclude

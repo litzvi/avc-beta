@@ -30,6 +30,7 @@ import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.dto.values.SupplierBasic;
+import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -257,6 +258,10 @@ public class OrdersTest {
 		user.getRoles().clear();
 		users.editUser(user);
 		users.permenentlyRemoveUser(user.getId());
+		
+		//get users table
+		List<UserRow> usersTable = users.getUsersTable();
+		usersTable.forEach(u -> System.out.println(u));
 
 		
 	}	

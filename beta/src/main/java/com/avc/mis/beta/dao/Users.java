@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dao;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.data.UserDTO;
+import com.avc.mis.beta.dto.values.SupplierRow;
+import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.entities.SoftDeleted;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -29,6 +33,14 @@ public class Users extends SoftDeletableDAO {
 	
 	@Autowired
 	private PasswordEncoder encoder;
+	
+	@Transactional(readOnly = true)
+	public List<UserRow> getUsersTable() {
+//		List<UserRow> userRows = this.userRepository.findUserRowTable();
+		List<UserRow> userRows = new ArrayList<>();
+		this.userRepository.findAll().forEach(u -> userRows.add(new UserRow(u)));
+		return userRows;		
+	}
 	
 	/**
 	 * Adds a new login user not connected to existing person.

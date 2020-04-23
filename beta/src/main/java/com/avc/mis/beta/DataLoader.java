@@ -3,9 +3,11 @@
  */
 package com.avc.mis.beta;
 
-import org.apache.commons.lang3.RandomStringUtils;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import com.avc.mis.beta.dao.Users;
@@ -17,23 +19,24 @@ import com.avc.mis.beta.entities.enums.Role;
  *
  */
 @Component
-public class DataLoader implements CommandLineRunner {
+public class DataLoader implements ApplicationRunner {
 
 	@Autowired
 	Users users;
 	
 	@Override
-	public void run(String... args) throws Exception {
-		
+	public void run(ApplicationArguments args) throws Exception {
+	
 		//insert SYSTEM MANAGER
-		UserEntity user = new UserEntity();
-		user.setUsername("isral309@gmail.com");
-//		String generatedPass = RandomStringUtils.random(8, true, true);
-		//perhaps send email
-		user.setPassword("309");
-		user.getRoles().add(Role.SYSTEM_MANAGER);
-		users.addUser(user);
-		
+		List<String> names = args.getOptionValues("n");
+		List<String> passwords = args.getOptionValues("p");
+		if(names != null && !names.isEmpty() && passwords != null && !passwords.isEmpty()) {
+			UserEntity user = new UserEntity();
+			user.setUsername(names.get(0));
+			user.setPassword(passwords.get(0));
+			user.getRoles().add(Role.SYSTEM_MANAGER);
+			users.addUser(user);
+		}
 	}
 
 }

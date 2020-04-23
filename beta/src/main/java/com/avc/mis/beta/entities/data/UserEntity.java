@@ -13,16 +13,14 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.entities.ObjectDataEntity;
+import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.avc.mis.beta.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -40,18 +38,13 @@ import lombok.NoArgsConstructor;
 @BatchSize(size = DAO.BATCH_SIZE)
 @Entity
 @Table(name = "USERS")
-public class UserEntity extends ObjectDataEntity {
+public class UserEntity extends ObjectEntityWithId {
 	
-	@EqualsAndHashCode.Include
-	@Id
-	private Integer id;
-	
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "personId")
-	@MapsId
 	private Person person;
 	
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, unique = true, updatable = false)
 	private String username;
 	
 	@Column(nullable = false)
@@ -61,6 +54,7 @@ public class UserEntity extends ObjectDataEntity {
 	@ElementCollection(targetClass = Role.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
+	@BatchSize(size = DAO.BATCH_SIZE)
 	private Set<Role> roles = new HashSet<>();
 	
 	//should be only in staff

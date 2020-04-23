@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "PERSONS")
 public class Person extends ObjectEntityWithId {
 	
-	@Column(nullable = false)
+	@Column(nullable = false, updatable = false)
 	private String name;
 
 	@JsonManagedReference(value = "person_idCard")
