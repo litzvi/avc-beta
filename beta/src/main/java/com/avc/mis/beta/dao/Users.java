@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.data.UserDTO;
+import com.avc.mis.beta.dto.values.PersonBasic;
 import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.entities.SoftDeleted;
@@ -39,6 +40,11 @@ public class Users extends SoftDeletableDAO {
 		List<UserRow> userRows = new ArrayList<>();
 		this.userRepository.findAll().forEach(u -> userRows.add(new UserRow(u)));
 		return userRows;		
+	}
+	
+	@Transactional(readOnly = true)
+	public List<PersonBasic> getPersonsBasic() {
+		return this.userRepository.findAllPersonsBasic();		
 	}
 	
 	/**

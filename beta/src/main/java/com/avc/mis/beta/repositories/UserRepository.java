@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.values.PersonBasic;
 import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -42,6 +43,11 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 
 //	@Query("select u from UserEntity u ")
 	List<UserEntity> findAll();
+
+	@Query("select new com.avc.mis.beta.dto.values.PersonBasic(p.id, p.version, p.name) "
+			+ "from Person p "
+			+ "where p.active = true")
+	List<PersonBasic> findAllPersonsBasic();
 	
 //	@Query("select new com.avc.mis.beta.dto.values.UserRow(u.id, p.name, u.username, u.roles, u.active) "
 //			+ "from UserEntity u "

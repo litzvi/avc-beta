@@ -27,6 +27,7 @@ import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.dto.values.PersonBasic;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.dto.values.SupplierBasic;
@@ -262,6 +263,10 @@ public class OrdersTest {
 		//get users table
 		List<UserRow> usersTable = users.getUsersTable();
 		usersTable.forEach(u -> System.out.println(u));
+		
+		//get list of persons basic
+		List<PersonBasic> personsBasic = users.getPersonsBasic();
+		personsBasic.forEach(m -> System.out.println(m));
 
 		
 	}	
