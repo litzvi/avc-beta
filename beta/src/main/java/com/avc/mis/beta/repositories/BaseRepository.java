@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
+import org.springframework.data.rest.core.annotation.RestResource;
 
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
@@ -29,7 +30,7 @@ import com.avc.mis.beta.entities.values.SupplyCategory;
  * @param <T>
  * 
  */
-//@RestResource(exported = false)
+@RestResource(exported = false)
 public interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 
 	@Query("select c from City c where c.active = true")

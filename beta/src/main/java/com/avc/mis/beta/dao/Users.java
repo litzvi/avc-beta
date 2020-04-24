@@ -36,7 +36,6 @@ public class Users extends SoftDeletableDAO {
 	
 	@Transactional(readOnly = true)
 	public List<UserRow> getUsersTable() {
-//		List<UserRow> userRows = this.userRepository.findUserRowTable();
 		List<UserRow> userRows = new ArrayList<>();
 		this.userRepository.findAll().forEach(u -> userRows.add(new UserRow(u)));
 		return userRows;		
