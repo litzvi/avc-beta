@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import com.avc.mis.beta.dao.Orders;
 import com.avc.mis.beta.dao.ProcessInfoDisplay;
@@ -71,6 +73,9 @@ public class OrdersTest {
 	
 	@Autowired
 	ProcessInfoDisplay processDisplay;
+	
+	@Autowired
+	UserDetailsService userDetailsService;
 	
 	private PO basicOrder() {
 		//build purchase order
@@ -260,13 +265,17 @@ public class OrdersTest {
 		users.editUser(user);
 		users.permenentlyRemoveUser(user.getId());
 		
+		//get list of persons basic
+		List<PersonBasic> personsBasic = users.getPersonsBasic();
+		personsBasic.forEach(m -> System.out.println(m));
+		
 		//get users table
 		List<UserRow> usersTable = users.getUsersTable();
 		usersTable.forEach(u -> System.out.println(u));
 		
-		//get list of persons basic
-		List<PersonBasic> personsBasic = users.getPersonsBasic();
-		personsBasic.forEach(m -> System.out.println(m));
+		//get one user for logging in
+		String username = usersTable.get(0).getUsername();
+		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
 		
 	}	

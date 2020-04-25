@@ -14,11 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.PersonBasic;
-import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.entities.SoftDeleted;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.repositories.PersonRepository;
 import com.avc.mis.beta.repositories.UserRepository;
 
 /**
@@ -33,6 +33,9 @@ public class Users extends SoftDeletableDAO {
 	private UserRepository userRepository;
 	
 	@Autowired
+	private PersonRepository personRepository;
+	
+	@Autowired
 	private PasswordEncoder encoder;
 	
 	@Transactional(readOnly = true)
@@ -44,7 +47,7 @@ public class Users extends SoftDeletableDAO {
 	
 	@Transactional(readOnly = true)
 	public List<PersonBasic> getPersonsBasic() {
-		return this.userRepository.findAllPersonsBasic();		
+		return this.personRepository.findAllPersonsBasic();		
 	}
 	
 	/**
@@ -79,7 +82,6 @@ public class Users extends SoftDeletableDAO {
 		user.setPassword(encoder.encode(user.getPassword()));
 		addEntity(user, user.getPerson());
 	}
-	
 	
 	/**
 	 * Find user with full details with given username - including id card and contact details if exist.

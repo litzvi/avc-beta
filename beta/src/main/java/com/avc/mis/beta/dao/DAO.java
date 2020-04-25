@@ -22,7 +22,10 @@ import com.avc.mis.beta.repositories.ReferenceTablesRepository;
  */
 public abstract class DAO {
 	
+
+	//batch size used for entities
 	public static final int BATCH_SIZE = 20;
+		
 	
 	@Autowired private ReferenceTablesRepository referenceRepository;
 	@Autowired private ProcessInfoRepository processRepository;
@@ -30,14 +33,14 @@ public abstract class DAO {
 	
 
 	/**
-	 * @return the processRepository
+	 * @return the processInfoRepository
 	 */
 	ProcessInfoRepository getProcessRepository() {
 		return processRepository;
 	}
 
 	/**
-	 * @return the baseRepository
+	 * @return the referenceTablesRepository
 	 */
 	ReferenceTablesRepository getReferenceRepository() {
 		return referenceRepository;

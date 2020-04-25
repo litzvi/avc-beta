@@ -17,6 +17,7 @@ import javax.persistence.PreUpdate;
 @MappedSuperclass
 public abstract class BaseEntity implements Insertable {
 	
+	
 	public abstract String getIllegalMessage();
 	
 	@PrePersist
