@@ -20,7 +20,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.BatchSize;
 
-import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,7 +38,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@BatchSize(size = DAO.BATCH_SIZE)
+@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name="COMPANIES")
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Company extends ObjectEntityWithId {
@@ -58,7 +58,7 @@ public class Company extends ObjectEntityWithId {
 	
 	@JsonManagedReference(value = "company_companyContacts")
 	@OneToMany(mappedBy = "company",cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@BatchSize(size = DAO.BATCH_SIZE)
+	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<CompanyContact> companyContacts = new HashSet<>();
 	
 	public void setCompanyContacts(CompanyContact[] companyContacts) {

@@ -8,6 +8,6 @@ package com.avc.mis.beta.entities.enums;
  *
  */
 public enum Role {
-	MANAGER,
-	SYSTEM_MANAGER
+	ROLE_MANAGER,
+	ROLE_SYSTEM_MANAGER
 }

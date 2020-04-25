@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,7 +43,7 @@ public class Bank extends ValueEntity {
 	
 	@ToString.Exclude
 	@OneToMany(mappedBy = "bank", fetch = FetchType.LAZY)
-	@BatchSize(size = DAO.BATCH_SIZE)
+	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	@JsonIgnore
 	private Set<BankBranch> branches = new HashSet<>();
 	

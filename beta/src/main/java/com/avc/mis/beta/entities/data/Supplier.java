@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -42,7 +43,7 @@ public class Supplier extends Company {
 			joinColumns = @JoinColumn(name = "companyId", referencedColumnName = "companyId"), 
 			inverseJoinColumns = @JoinColumn(name = "categoryId", referencedColumnName = "id"))
 	@ManyToMany(fetch = FetchType.LAZY)
-	@BatchSize(size = DAO.BATCH_SIZE)
+	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<SupplyCategory> supplyCategories = new HashSet<>();
 
 	@JsonIgnore

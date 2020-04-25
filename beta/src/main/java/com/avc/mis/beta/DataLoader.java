@@ -27,14 +27,14 @@ public class DataLoader implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 	
-		//insert SYSTEM MANAGER
+		//insert SYSTEM ROLE_MANAGER
 		List<String> names = args.getOptionValues("n");
 		List<String> passwords = args.getOptionValues("p");
 		if(names != null && !names.isEmpty() && passwords != null && !passwords.isEmpty()) {
 			UserEntity user = new UserEntity();
 			user.setUsername(names.get(0));
 			user.setPassword(passwords.get(0));
-			user.getRoles().add(Role.SYSTEM_MANAGER);
+			user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 			users.addUser(user);
 		}
 	}

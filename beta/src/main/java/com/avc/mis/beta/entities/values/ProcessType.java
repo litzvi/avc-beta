@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.data.ProcessTypeAlert;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -45,7 +46,7 @@ public class ProcessType extends ValueEntity {
 //			joinColumns = @JoinColumn(name = "processTypeId", referencedColumnName = "id"), 
 //			inverseJoinColumns = @JoinColumn(name = "staffId", referencedColumnName = "personId"))
 	@OneToMany(mappedBy = "processType", fetch = FetchType.LAZY)
-	@BatchSize(size = DAO.BATCH_SIZE)
+	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<ProcessTypeAlert> alertRequirments = new HashSet<>();
 	
 	public String getValue() {

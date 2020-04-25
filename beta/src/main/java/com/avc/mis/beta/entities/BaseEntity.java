@@ -16,8 +16,10 @@ import javax.persistence.PreUpdate;
  */
 @MappedSuperclass
 public abstract class BaseEntity implements Insertable {
-	
-	
+
+	//batch size used for entities
+	public static final int BATCH_SIZE = 20;
+			
 	public abstract String getIllegalMessage();
 	
 	@PrePersist

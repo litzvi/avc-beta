@@ -5,6 +5,7 @@ package com.avc.mis.beta.repositories;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
@@ -35,7 +36,7 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 	@Query("select s from Supplier s "
 			+ "left join fetch s.contactDetails cd "
 			+ "where s.active = true")
-	List<Supplier> findAll();
+	Stream<Supplier> findAll();
 	
 	@Query("select s from Supplier s "
 			+ "left join fetch s.contactDetails cd "

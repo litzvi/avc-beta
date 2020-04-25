@@ -6,6 +6,7 @@ package com.avc.mis.beta.dao;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,30 +22,42 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.repositories.PersonRepository;
 import com.avc.mis.beta.repositories.UserRepository;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 /**
+ * 
+ * 
  * @author Zvi
  *
  */
 @Repository
+@Getter(value = AccessLevel.PRIVATE)
 @Transactional(rollbackFor = Throwable.class)
 public class Users extends SoftDeletableDAO {
 	
-	@Autowired
-	private UserRepository userRepository;
+	@Autowired private UserRepository userRepository;
 	
-	@Autowired
-	private PersonRepository personRepository;
+	@Autowired private PersonRepository personRepository;
 	
-	@Autowired
-	private PasswordEncoder encoder;
+	@Autowired private PasswordEncoder encoder;
 	
+	/**
+	 * Gets the table of all system users
+	 * @return List of UserRow - id, username, password, roles and if the user is active.
+	 */
 	@Transactional(readOnly = true)
 	public List<UserRow> getUsersTable() {
-		List<UserRow> userRows = new ArrayList<>();
-		this.userRepository.findAll().forEach(u -> userRows.add(new UserRow(u)));
+//		List<UserRow> userRows = getUserRepository().findUserRowTable();
+//		List<UserRow> userRows = new ArrayList<>();
+		List<UserRow> userRows = this.userRepository.findAll().map(u -> new UserRow(u)).collect(Collectors.toList());
 		return userRows;		
 	}
 	
+	/**
+	 * Gets a list of existing people in the database, in basic form for referencing - id, version and name
+	 * @return List of PersonBasic for all persons.
+	 */
 	@Transactional(readOnly = true)
 	public List<PersonBasic> getPersonsBasic() {
 		return this.personRepository.findAllPersonsBasic();		

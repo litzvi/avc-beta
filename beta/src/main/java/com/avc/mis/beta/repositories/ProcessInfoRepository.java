@@ -11,6 +11,7 @@ import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.entities.data.ProcessTypeAlert;
 import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.values.ProcessType;
@@ -53,5 +54,14 @@ public interface ProcessInfoRepository extends BaseRepository<ProductionProcess>
 		+ "join pa.user u "
 		+ "where u.id = :userId ")
 	List<ApprovalTaskDTO> findAllApprovalsByUser(Integer userId);
+
+	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
+			+ "m.id, m.version, m.title, p.id, p.processType, m.createdDate, m.label) "
+		+ "from UserMessage m "
+		+ "join m.process p "
+		+ "join m.user u "
+		+ "where u.id = ?1 "
+		+ "and m.label in ?2")
+	List<UserMessageDTO> findAllMessagesByUserAndLable(Integer userId, MessageLabel[] lables);
 
 }

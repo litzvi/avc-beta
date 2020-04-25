@@ -19,7 +19,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
 
-import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.avc.mis.beta.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -35,7 +35,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-@BatchSize(size = DAO.BATCH_SIZE)
+@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name = "USERS")
 public class UserEntity extends ObjectEntityWithId {
@@ -54,7 +54,7 @@ public class UserEntity extends ObjectEntityWithId {
 	@ElementCollection(targetClass = Role.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
-	@BatchSize(size = DAO.BATCH_SIZE)
+	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<Role> roles = new HashSet<>();
 	
 	//should be only in staff

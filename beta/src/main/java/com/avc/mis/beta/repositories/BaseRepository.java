@@ -6,6 +6,7 @@ package com.avc.mis.beta.repositories;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 
 import com.avc.mis.beta.dto.values.BankBranchDTO;
@@ -30,6 +31,7 @@ import com.avc.mis.beta.entities.values.SupplyCategory;
  * 
  */
 //@RestResource(exported = false)
+@NoRepositoryBean
 public interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 
 	@Query("select c from City c where c.active = true")

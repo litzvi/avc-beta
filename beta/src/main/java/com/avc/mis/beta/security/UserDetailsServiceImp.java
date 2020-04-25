@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.values.UserLogin;
-import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.repositories.UserRepository;
 
 /**
@@ -29,8 +28,9 @@ public class UserDetailsServiceImp implements UserDetailsService {
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Optional<UserEntity> userEntity = userRepository.findByUsername(username);		
-		return new UserLogin(userEntity.orElseThrow(() -> new UsernameNotFoundException("Not found: " + username)));
+		Optional<UserLogin> user = userRepository.findByUsername(username);
+		user.orElseThrow(() -> new UsernameNotFoundException("Not found: " + username));
+		return user.get();
 	}
 
 }

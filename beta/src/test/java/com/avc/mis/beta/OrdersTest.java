@@ -184,10 +184,10 @@ public class OrdersTest {
 			}
 		}
 		
-		//get list of message for user
+		//get list of new message for user
 		List<UserMessageDTO> messages;
 		try {
-			messages = processDisplay.getAllMessages(1);
+			messages = processDisplay.getAllNewMessages(1);
 			messages.forEach(m -> System.out.println(m));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -224,7 +224,7 @@ public class OrdersTest {
 		UserEntity user = new UserEntity();
 		user.setUsername("isral" + SuppliersTests.SERIAL_NO);
 		user.setPassword("309");
-		user.getRoles().add(Role.SYSTEM_MANAGER);
+		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		users.addUser(user);
 		Person p = user.getPerson();
 		p.setName("isssssssssral" + SuppliersTests.SERIAL_NO);
@@ -236,8 +236,8 @@ public class OrdersTest {
 		user = new UserEntity();
 		user.setUsername("zvi" + SuppliersTests.SERIAL_NO);
 		user.setPassword("309");
-		user.getRoles().add(Role.SYSTEM_MANAGER);
-		user.getRoles().add(Role.MANAGER);
+		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
+		user.getRoles().add(Role.ROLE_MANAGER);
 		users.addUser(user);
 		user.setUsername("zzzzzvi" + SuppliersTests.SERIAL_NO);
 		user.setPassword("password");
@@ -250,8 +250,8 @@ public class OrdersTest {
 		user = new UserEntity();
 		user.setUsername("eli" + SuppliersTests.SERIAL_NO);
 		user.setPassword("309");
-		user.getRoles().add(Role.SYSTEM_MANAGER);
-		user.getRoles().add(Role.MANAGER);
+		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
+		user.getRoles().add(Role.ROLE_MANAGER);
 		Person person = new Person();
 		person.setId(1);
 		user.setPerson(person);

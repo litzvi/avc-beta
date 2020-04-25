@@ -5,6 +5,8 @@ package com.avc.mis.beta.dao;
 
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.avc.mis.beta.entities.data.ProcessTypeAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -20,31 +22,47 @@ import com.avc.mis.beta.entities.process.UserMessage;
  * @author Zvi
  *
  */
+@Transactional(rollbackFor = Throwable.class)
 public abstract class ProcessDAO extends DAO {
 	
+	
+	/**
+	 * Adding (persisting) a process. 
+	 * Adds the process and adds required notifications.
+	 * @param process ProductionProcess to be added.
+	 */
 	void addProcessEntity(ProductionProcess process) {
-		getEntityManager().persist(process);
+		addEntity(process);
 		addAlerts(process);
 	}
 	
+	/**
+	 * editing (merging) a process or process information. 
+	 * Edits the process and adds required notifications.
+	 * @param process ProductionProcess to be edited.
+	 */
 	void editProcessEntity(ProductionProcess process) {
 		process.setModifiedDate(null);
 		editEntity(process);
-		updateAlerts(process);
+		editAlerts(process);
 	}
 	
+	
+	/**
+	 * Sets up needed approvals and messages (notifications), for adding a process of the given type.
+	 * @param process the new ProductionProcess
+	 */
 	private void addAlerts(ProductionProcess process) {
 		
 		List<ProcessTypeAlert> alerts = getProcessRepository().findProcessTypeAlerts(process.getProcessType());
-		for(ProcessTypeAlert a: alerts) {
-			ApprovalTask processApproval = new ApprovalTask();
-			processApproval.setProcess(process);
+		for(ProcessTypeAlert a: alerts) {			
 			switch(a.getApprovalType()) {
 			case REQUIRED_APPROVAL:
+				ApprovalTask processApproval = new ApprovalTask();
+				processApproval.setProcess(process);
 				processApproval.setUser(a.getUser());
-//				processApproval.setProcessVersion(process.getVersion());
 				processApproval.setTitle("Process added");
-				getEntityManager().persist(processApproval);
+				addEntity(processApproval, a.getUser());
 			case REVIEW:
 				addMessage(a.getUser(), process, "New process added");
 				break;
@@ -52,7 +70,11 @@ public abstract class ProcessDAO extends DAO {
 		}
 	}
 	
-	private void updateAlerts(ProductionProcess process) {
+	/**
+	 * Sets up needed approvals and messages (notifications), for editing a process of the given type.
+	 * @param process the edited ProductionProcess
+	 */
+	private void editAlerts(ProductionProcess process) {
 		List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(process);
 		for(ApprovalTask approval: approvals) {
 			if(approval.getDecision() != DecisionType.NOT_ATTENDED) {
@@ -67,12 +89,18 @@ public abstract class ProcessDAO extends DAO {
 		}
 	}
 	
+	/**
+	 * Adds a new message (notification) for a given user about a given process.
+	 * @param user the recipient of the message.
+	 * @param process ProductionProcess that's the subject of the message.
+	 * @param title the message title
+	 */
 	private void addMessage(UserEntity user, ProductionProcess process, String title) {
 		UserMessage userMessage = new UserMessage();
 		userMessage.setProcess(process);
 		userMessage.setUser(user);
 		userMessage.setTitle(title);
 		userMessage.setLabel(MessageLabel.NEW);
-		getEntityManager().persist(userMessage);	
+		addEntity(userMessage, user);	
 	}
 }
