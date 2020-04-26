@@ -41,7 +41,7 @@ import lombok.NoArgsConstructor;
 public class UserEntity extends ObjectEntityWithId {
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "personId")
+	@JoinColumn(name = "personId", updatable = false)
 	private Person person;
 	
 	@Column(nullable = false, unique = true, updatable = false)

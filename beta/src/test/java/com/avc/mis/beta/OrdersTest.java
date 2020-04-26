@@ -10,12 +10,13 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.avc.mis.beta.dao.Orders;
 import com.avc.mis.beta.dao.ProcessInfoDisplay;
@@ -53,6 +54,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  */
 @SpringBootTest
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration
+@WithUserDetails("isral1561")
 public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
@@ -74,8 +78,7 @@ public class OrdersTest {
 	@Autowired
 	ProcessInfoDisplay processDisplay;
 	
-	@Autowired
-	UserDetailsService userDetailsService;
+	
 	
 	private PO basicOrder() {
 		//build purchase order
@@ -120,12 +123,7 @@ public class OrdersTest {
 		PO po = basicOrder();
 		orders.addCashewOrder(po);
 		PoDTO expected = null;
-		try {
-			expected = new PoDTO(po);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		expected = new PoDTO(po);
 		PoDTO actual = orders.getOrder(po.getPoCode().getId());	
 		assertEquals(expected, actual, "failed test adding po");
 		
@@ -187,7 +185,7 @@ public class OrdersTest {
 		//get list of new message for user
 		List<UserMessageDTO> messages;
 		try {
-			messages = processDisplay.getAllNewMessages(1);
+			messages = processDisplay.getAllNewMessages();
 			messages.forEach(m -> System.out.println(m));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -198,7 +196,7 @@ public class OrdersTest {
 		List<ApprovalTaskDTO> tasks;
 		ObjectMapper objMapper = new ObjectMapper();
 		try {
-			tasks = processDisplay.getAllRequiredApprovals(1);
+			tasks = processDisplay.getAllRequiredApprovals();
 //			ApprovalTask task = new ApprovalTask();
 			tasks.forEach(t -> {
 //				task.setId(t.getId());
@@ -213,7 +211,7 @@ public class OrdersTest {
 //				t.setDecisionType(DecisionType.APPROVED.name());
 //				task.setProcessVersion(p.getVersion());
 				processDisplay.setProcessDecision(t.getId(), 
-				DecisionType.APPROVED.name(), processSnapshot);
+						DecisionType.APPROVED.name(), processSnapshot);
 			});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -273,10 +271,9 @@ public class OrdersTest {
 		List<UserRow> usersTable = users.getUsersTable();
 		usersTable.forEach(u -> System.out.println(u));
 		
-		//get one user for logging in
-		String username = usersTable.get(0).getUsername();
-		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-
+		//get messages for logged in user
+		List<UserMessageDTO> userMessages = processDisplay.getAllMessages();
+		userMessages.forEach(m -> System.out.println(m));
 		
 	}	
 }

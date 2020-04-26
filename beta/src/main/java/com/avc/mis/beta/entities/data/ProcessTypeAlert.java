@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "PROCESS_ALERTS")
 public class ProcessTypeAlert extends LinkEntity {
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processTypeId", nullable = false, updatable = false)
 	private ProcessType processType;
 	

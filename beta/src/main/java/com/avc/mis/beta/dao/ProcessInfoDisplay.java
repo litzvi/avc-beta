@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,13 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ApprovalTask;
+import com.avc.mis.beta.utilities.UserAware;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * Used for accessing and updating information notifying about processes (rather then process data itself). 
@@ -35,41 +39,56 @@ public class ProcessInfoDisplay extends DAO {
 	
 	@Autowired Orders orders;
 	
+	@Autowired
+	UserAware userAware;
+	
 	/**
-	 * Get messages for a given user.
-	 * @param userId id of the user.
-	 * @return List of messages for the given user including the subject process information.
+	 * Gets the logged in user id.
+	 * @return the id of currently logged in user.
+	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<UserMessageDTO> getAllMessages(Integer userId) {
-		return getProcessRepository().findAllMessagesByUser(userId);
+	private Integer getCurrentUserId() {
+		Optional<UserLogin> userEntity = userAware.getCurrentUser();
+		userEntity.orElseThrow(() -> new IllegalStateException("No user logged in or user not reachable"));
+		return userEntity.get().getId();
 	}
 	
 	/**
-	 * Get new - not read - messages for a given user.
-	 * @param userId id of the user.
+	 * Get messages for logged in user.
+	 * @return List of messages for the current user including the subject process information.
+	 * @throws IllegalStateException if logged in UserEntity not available.
+	 */
+	public List<UserMessageDTO> getAllMessages() {		
+		return getProcessRepository().findAllMessagesByUser(getCurrentUserId());
+	}
+	
+	/**
+	 * Get new - not read - messages for a logged in user.
 	 * @return List of new  messages for the given user including the subject process information.
+	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<UserMessageDTO> getAllNewMessages(Integer userId) {
-		return getProcessRepository().findAllMessagesByUserAndLable(userId, new MessageLabel[] {MessageLabel.NEW});
+	public List<UserMessageDTO> getAllNewMessages() {
+		return getProcessRepository().findAllMessagesByUserAndLable(getCurrentUserId(), 
+				new MessageLabel[] {MessageLabel.NEW});
 	}
 	
 	/**
-	 * Get all unattended approval tasks required for the given user.
-	 * @param userId id of the user.
+	 * Get all unattended approval tasks required for the current logged in user.
 	 * @return List of unattended approval tasks including the subject process information.
+	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<ApprovalTaskDTO> getAllRequiredApprovals(Integer userId) {
-		return getProcessRepository().findAllRequiredApprovalsByUser(userId, 
+	public List<ApprovalTaskDTO> getAllRequiredApprovals() {
+		return getProcessRepository().findAllRequiredApprovalsByUser(getCurrentUserId(), 
 				new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED});
 	}
 	
 	/**
-	 * Get all approval tasks for the given user.
-	 * @param userId id of the user.
-	 * @return List of approval tasks including the subject process information.
+	 * Get all approval tasks for the current logged in user.
+	 * @return List of approval tasks including the subject process information for current user.
+	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<ApprovalTaskDTO> getAllApprovals(Integer userId) {
-		return getProcessRepository().findAllApprovalsByUser(userId);
+	public List<ApprovalTaskDTO> getAllApprovals() {
+		return getProcessRepository().findAllApprovalsByUser(getCurrentUserId());
 	}
 	
 	/**
@@ -90,22 +109,22 @@ public class ProcessInfoDisplay extends DAO {
 		return null;
 	}
 
-	// if stale process fetched separately
-//	public String getProcessApproved(int approvalId) {
-//		//TODO
-//		return null;
-//	}
-	
 	/**
 	 * Approve (or any other decision) to a approval task for a process.
-	 * @param approval the approval task with id.
+	 * @param approval the approval task with id and user with id.
 	 * @param decisionType the decision made.
+	 * @throws IllegalArgumentException trying to approve for another user.
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void approveProcess(ApprovalTask approval, String decisionType) {
-		DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
-		approval.setDecision(decision);
-		editEntity(approval);			
+		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
+			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
+			approval.setDecision(decision);
+			editEntity(approval);	
+		}
+		else {
+			throw new IllegalArgumentException("Can't approve for another user");
+		}
 	}
 	
 	/**
@@ -113,13 +132,20 @@ public class ProcessInfoDisplay extends DAO {
 	 * @param approvalId the ApprovalTask id.
 	 * @param decisionType the decision made.
 	 * @param processSnapshot snapshot of the process as seen by the approver.
+	 * @throws IllegalArgumentException trying to approve for another user.
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void setProcessDecision(int approvalId, String decisionType, String processSnapshot) {
+		//check if belongs to current user
 		ApprovalTask approval = getEntityManager().find(ApprovalTask.class, approvalId);
-		DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
-		approval.setDecision(decision);
-		approval.setProcessSnapshot(processSnapshot);
-		editEntity(approval);			
+		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
+			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
+			approval.setDecision(decision);
+			approval.setProcessSnapshot(processSnapshot);
+			editEntity(approval);	
+		}
+		else {
+			throw new IllegalArgumentException("Can't approve for another user");
+		}		
 	}
 }

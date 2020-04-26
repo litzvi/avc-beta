@@ -62,7 +62,7 @@ public abstract class ProcessDAO extends DAO {
 				processApproval.setProcess(process);
 				processApproval.setUser(a.getUser());
 				processApproval.setTitle("Process added");
-				addEntity(processApproval, a.getUser());
+				addEntity(processApproval); //user already in the persistence context
 			case REVIEW:
 				addMessage(a.getUser(), process, "New process added");
 				break;
@@ -91,7 +91,7 @@ public abstract class ProcessDAO extends DAO {
 	
 	/**
 	 * Adds a new message (notification) for a given user about a given process.
-	 * @param user the recipient of the message.
+	 * @param user the recipient of the message, assumes user is already in the persistence context.
 	 * @param process ProductionProcess that's the subject of the message.
 	 * @param title the message title
 	 */
@@ -101,6 +101,6 @@ public abstract class ProcessDAO extends DAO {
 		userMessage.setUser(user);
 		userMessage.setTitle(title);
 		userMessage.setLabel(MessageLabel.NEW);
-		addEntity(userMessage, user);	
+		addEntity(userMessage);	//user already in the persistence context
 	}
 }
