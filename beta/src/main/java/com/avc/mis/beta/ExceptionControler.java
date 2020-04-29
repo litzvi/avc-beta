@@ -39,6 +39,12 @@ public class ExceptionControler {
         return error(HttpStatus.BAD_REQUEST, e);
     }
 	
+//	//already handled in handleFatalException
+//	@ExceptionHandler({IllegalStateException.class})
+//    public ResponseEntity<String> handleDataIntegrityViolationException(IllegalStateException e){
+//        return error(HttpStatus.BAD_REQUEST, e);
+//    }
+	
 	@ExceptionHandler({DataIntegrityViolationException.class})
     public ResponseEntity<String> handleDataIntegrityViolationException(NestedRuntimeException e){
         return error(HttpStatus.BAD_REQUEST, e.getRootCause());

@@ -4,6 +4,8 @@
 package com.avc.mis.beta.dto.data;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.entities.enums.MessageLabel;
@@ -28,16 +30,18 @@ public class UserMessageDTO extends DataDTO {
 	private Integer processId;
 	private String processType;
 	private Instant createdDate;
+	private String modifiedBy;
 	private String label;
 	private String remarks;
 	
 	public UserMessageDTO(Integer id, Long version, String title, Integer processId, ProcessType processType, 
-			Instant createdDate, MessageLabel label) {
+			Instant createdDate, String modifiedBy, MessageLabel label) {
 		super(id, version);
 		this.title = title;
 		this.processId = processId;
 		this.processType = processType.getValue();
 //		this.createdDate = LocalDateTime.ofInstant(createdDate, ZoneOffset.UTC);
+		this.modifiedBy = modifiedBy;
 		this.createdDate = createdDate;
 		this.label = label.name();
 	}
@@ -48,6 +52,7 @@ public class UserMessageDTO extends DataDTO {
 		this.processId = message.getProcess().getId();
 		this.processType = message.getProcess().getProcessType().getValue();
 //		this.createdDate = LocalDateTime.ofInstant(message.getCreatedDate(), ZoneOffset.UTC);
+		this.modifiedBy = message.getModifiedBy().getPerson().getName();
 		this.createdDate = message.getCreatedDate();
 		this.label = message.getLabel();
 	}

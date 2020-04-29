@@ -7,6 +7,8 @@ import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -14,6 +16,7 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -33,6 +36,10 @@ public class SupplyCategory extends ValueEntity {
 	
 	@Column(name = "name", unique = true, nullable = false)
 	private String value;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private SupplyGroup supplyGroup;
 	
 	public void setValue(String value) {
 		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);

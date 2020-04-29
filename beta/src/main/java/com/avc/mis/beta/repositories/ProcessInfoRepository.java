@@ -31,35 +31,41 @@ public interface ProcessInfoRepository extends BaseRepository<ProductionProcess>
 	List<ApprovalTask> findProcessApprovals(ProductionProcess process);
 
 	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
-				+ "m.id, m.version, m.title, p.id, p.processType, m.createdDate, m.label) "
+				+ "m.id, m.version, m.title, p.id, p.processType, m.createdDate, pr.name,  m.label) "
 			+ "from UserMessage m "
 			+ "join m.process p "
 			+ "join m.user u "
+			+ "join u.person pr "
 			+ "where u.id = ?1 ")
 	List<UserMessageDTO> findAllMessagesByUser(Integer userId);
 
 	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
-			+ "pa.id, pa.version, pa.title, p.id, p.processType, pa.createdDate, pa.decision, pa.processSnapshot) "
+			+ "pa.id, pa.version, pa.title, p.id, p.processType, pa.createdDate, "
+			+ "pr.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 		+ "join pa.process p "
 		+ "join pa.user u "
+		+ "join u.person pr "
 		+ "where pa.decision in :decisions "
 			+ "and u.id = :userId ")
 	List<ApprovalTaskDTO> findAllRequiredApprovalsByUser(Integer userId, DecisionType[] decisions);
 
 	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
-			+ "pa.id, pa.version, pa.title, p.id, p.processType, pa.createdDate, pa.decision, pa.processSnapshot) "
+			+ "pa.id, pa.version, pa.title, p.id, p.processType, pa.createdDate, "
+			+ "pr.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 		+ "join pa.process p "
 		+ "join pa.user u "
+		+ "join u.person pr "
 		+ "where u.id = :userId ")
 	List<ApprovalTaskDTO> findAllApprovalsByUser(Integer userId);
 
 	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
-			+ "m.id, m.version, m.title, p.id, p.processType, m.createdDate, m.label) "
+			+ "m.id, m.version, m.title, p.id, p.processType, m.createdDate, pr.name, m.label) "
 		+ "from UserMessage m "
 		+ "join m.process p "
 		+ "join m.user u "
+		+ "join u.person pr "
 		+ "where u.id = ?1 "
 		+ "and m.label in ?2")
 	List<UserMessageDTO> findAllMessagesByUserAndLable(Integer userId, MessageLabel[] lables);

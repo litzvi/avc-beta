@@ -111,11 +111,14 @@ public class ProcessInfoDisplay extends DAO {
 
 	/**
 	 * Approve (or any other decision) to a approval task for a process.
+	 * ATTENTION! Should not be used because ApprovalTask user can be changed with current user, 
+	 * and will be approved since user isn't updated in the database.
 	 * @param approval the approval task with id and user with id.
 	 * @param decisionType the decision made.
 	 * @throws IllegalArgumentException trying to approve for another user.
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Deprecated
 	public void approveProcess(ApprovalTask approval, String decisionType) {
 		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
 			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
@@ -136,7 +139,6 @@ public class ProcessInfoDisplay extends DAO {
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void setProcessDecision(int approvalId, String decisionType, String processSnapshot) {
-		//check if belongs to current user
 		ApprovalTask approval = getEntityManager().find(ApprovalTask.class, approvalId);
 		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
 			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);

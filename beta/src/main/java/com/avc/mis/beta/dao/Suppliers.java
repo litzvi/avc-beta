@@ -23,6 +23,7 @@ import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.repositories.SupplierRepository;
 
 import lombok.AccessLevel;
@@ -69,11 +70,29 @@ public class Suppliers extends SoftDeletableDAO {
 	/**
 	 * Get a list of suppliers basic information -  id, name and version - for given supply category.
 	 * @param categoryId id of SupplyCategory
-	 * @return List of SupplierRow of all suppliers with given SupplyCategory
+	 * @return List of SupplierBasic of all suppliers with given SupplyCategory
 	 */
 	@Transactional(readOnly = true)
 	public List<SupplierBasic> getSuppliersBasic(Integer categoryId) {
 		return getSupplierRepository().findSuppliersByCategoryBasic(categoryId);
+	}
+	
+	/**
+	 * Get a list of CASHEW suppliers basic information -  id, name and version.
+	 * @return List of SupplierBasic of all CASHEW suppliers.
+	 */
+	@Transactional(readOnly = true)
+	public List<SupplierBasic> getCashewSuppliersBasic() {
+		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.CASHEW);
+	}
+	
+	/**
+	 * Get a list of GENERAL suppliers basic information -  id, name and version.
+	 * @return List of SupplierBasic of all GENERAL suppliers.
+	 */
+	@Transactional(readOnly = true)
+	public List<SupplierBasic> getGeneralSuppliersBasic() {
+		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.GENERAL);
 	}
 		
 	/**

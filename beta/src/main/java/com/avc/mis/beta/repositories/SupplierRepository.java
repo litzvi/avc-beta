@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 
 /**
  * Spring repository for accessing information of company suppliers.
@@ -27,6 +28,14 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "where c.id = :categoryId "
 				+ "and s.active = true")
 	List<SupplierBasic> findSuppliersByCategoryBasic(Integer categoryId);
+	
+	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.version, s.name) "
+			+ "from Supplier s "
+			+ "join s.supplyCategories c "
+			+ "where c.supplyGroup = :supplyGroup "
+				+ "and s.active = true")
+	List<SupplierBasic> findSuppliersByGroupBasic(SupplyGroup supplyGroup);
+	
 	
 	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.version, s.name) "
 			+ "from Supplier s "
@@ -51,5 +60,6 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "where cc.company.id = :id "
 				+ "and cc.active = true")
 	List<CompanyContact> findCompanyContactsByCompnyId(Integer id);
+
 	
 }

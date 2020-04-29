@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dto.values;
 
+import java.util.Set;
+
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,6 +25,8 @@ public class SupplierBasic extends DataDTO {
 	@JsonIgnore
 	@ToString.Exclude
 	String name;
+	
+//	Set<String> supplyCategories;
 	
 	public SupplierBasic(Integer id, Long version, String name) {
 		super(id, version);

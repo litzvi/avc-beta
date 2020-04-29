@@ -41,6 +41,16 @@ public class BankBranch extends ValueEntity {
 		this.value = value.trim();
 	}
 	
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof Country) {
+			this.setBank((Bank)referenced);
+		}
+		else {
+			throw new ClassCastException("Branch needs to have a bank, bank not set");
+		}		
+	}
+	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}

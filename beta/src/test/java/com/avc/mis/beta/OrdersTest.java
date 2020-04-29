@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.avc.mis.beta.dao.Orders;
 import com.avc.mis.beta.dao.ProcessInfoDisplay;
-import com.avc.mis.beta.dao.ReferenceTables;
+import com.avc.mis.beta.dao.ValueTablesReader;
 import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dao.Users;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
@@ -73,7 +74,7 @@ public class OrdersTest {
 	Suppliers suppliers;
 	
 	@Autowired
-	ReferenceTables referenceTables;
+	ValueTablesReader referenceTables;
 	
 	@Autowired
 	ProcessInfoDisplay processDisplay;
@@ -116,7 +117,7 @@ public class OrdersTest {
 		return items;
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 

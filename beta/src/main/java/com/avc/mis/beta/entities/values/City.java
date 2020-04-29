@@ -15,6 +15,8 @@ import javax.persistence.UniqueConstraint;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
+import com.avc.mis.beta.entities.data.Company;
+import com.avc.mis.beta.entities.data.Person;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -43,6 +45,16 @@ public class City extends ValueEntity {
 
 	public void setValue(String value) {
 		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
+	}
+	
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof Country) {
+			this.setCountry((Country)referenced);
+		}
+		else {
+			throw new ClassCastException("City needs to have a country, Country not set");
+		}		
 	}
 	
 	protected boolean canEqual(Object o) {

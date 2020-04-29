@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
-import com.avc.mis.beta.repositories.ReferenceTablesRepository;
+import com.avc.mis.beta.repositories.ValueTablesRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -25,11 +25,11 @@ import lombok.Getter;
  * @author Zvi
  *
  */
-@Getter(value = AccessLevel.PACKAGE)
+@Getter(value = AccessLevel.PROTECTED)
 @Transactional(rollbackFor = Throwable.class)
 public abstract class DAO {
 	
-	@Autowired private ReferenceTablesRepository referenceRepository;
+	@Autowired private ValueTablesRepository valueTablesRepository;
 	@Autowired private ProcessInfoRepository processRepository;
 	@Autowired private EntityManager entityManager;
 	
