@@ -24,13 +24,15 @@ import lombok.Value;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class UserRow extends ValueDTO {
 	
+	String personName;
 	String username;
 	String password; //might be removed
 	Set<Role> roles;
 	boolean active;
 	
-	public UserRow(Integer id, String username, Set<Role> roles, Boolean active) {
+	public UserRow(Integer id, String personName, String username, Set<Role> roles, Boolean active) {
 		super(id);
+		this.personName = personName;
 		this.username = username;
 		this.password = null;
 		this.roles = roles;
@@ -40,6 +42,7 @@ public class UserRow extends ValueDTO {
 	
 	public UserRow(@NonNull UserEntity user) {
 		super(user.getId());
+		this.personName = user.getPerson().getName();
 		this.username = user.getUsername();
 		this.password = null;
 		this.roles = user.getRoles().stream().collect(Collectors.toSet());

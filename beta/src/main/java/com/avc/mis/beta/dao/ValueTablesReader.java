@@ -27,6 +27,9 @@ import com.avc.mis.beta.entities.values.SupplyCategory;
 /**
  * Used to access full lists (tables) of active Value entities - {@link com.avc.mis.beta.entities.ValueEntity}
  * Gets list for user input data to reference (usually by choosing from a list).
+ * Dosen't get non active entities (soft deleted entities).
+ * Value entities should be first in restore order before other types of Entities, 
+ * ideally getters should be ordered by restore order.
  *  
  * @author Zvi
  *
