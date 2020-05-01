@@ -18,6 +18,7 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ApprovalTask;
+import com.avc.mis.beta.entities.process.UserMessage;
 import com.avc.mis.beta.utilities.UserAware;
 
 import lombok.AccessLevel;
@@ -149,5 +150,17 @@ public class ProcessInfoDisplay extends DAO {
 		else {
 			throw new IllegalArgumentException("Can't approve for another user");
 		}		
+	}
+	
+	public void setMessageLabel(int messageId, String labelName) {
+		UserMessage message = getEntityManager().find(UserMessage.class, messageId);
+		if(getCurrentUserId().equals(message.getUser().getId())) {//user changes his own message label
+			MessageLabel label = Enum.valueOf(MessageLabel.class, labelName);
+			message.setLabel(label);
+			editEntity(message);
+		}
+		else {
+			throw new IllegalArgumentException("Can't change message label for another user");
+		}
 	}
 }

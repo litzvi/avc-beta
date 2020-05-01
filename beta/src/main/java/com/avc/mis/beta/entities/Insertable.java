@@ -21,6 +21,9 @@ public interface Insertable {
 	
 	public Integer getId();
 	
+	//used for setting id to null when restoring, so dosen't check if record exists for old id.
+	public void setId(Integer id);
+	
 	/**
 	 * Checks if object has the required not null-able data.
 	 * Dosen't check if required references - foreign keys for database are set.

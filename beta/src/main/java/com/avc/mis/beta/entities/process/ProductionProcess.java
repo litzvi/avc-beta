@@ -47,8 +47,8 @@ import lombok.EqualsAndHashCode;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class ProductionProcess extends ProcessEntity {	
 
-	//cascade remove for testing 
-	@OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+	//cascade remove for testing - need to change to many to one 
+	@ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(updatable = false)
 	private PoCode poCode;
 	

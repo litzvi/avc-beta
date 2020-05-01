@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.repositories.jpa.BankBranchRepository;
 import com.avc.mis.beta.repositories.jpa.BankRepository;
 import com.avc.mis.beta.utilities.UpgradeService;
 
@@ -25,11 +26,18 @@ public class BackupTest {
 
 	@Autowired UpgradeService upgradeService;
 	@Autowired BankRepository bankRepository;
+	@Autowired BankBranchRepository branchRepository;
 
-	@Disabled
+//	@Disabled
 	@Test
 	void backupTest() {
+		System.out.println("starting backup");
 		Map<Class<? extends BaseEntity>, List<? extends BaseEntity>> backup = upgradeService.backup();
+		System.out.println("end of backup");
+		
+		System.out.println("deleting branches");
+		branchRepository.deleteAll();
+		System.out.println("deleting banks");
 		bankRepository.deleteAll();
 		try {
 			upgradeService.restore(backup);

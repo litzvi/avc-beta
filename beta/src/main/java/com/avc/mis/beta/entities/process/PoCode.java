@@ -33,7 +33,7 @@ public class PoCode {
 	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
 	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
 	@Column(nullable = false, updatable = false)
-	private Integer id;
+	private Integer code;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "contractTypeId", updatable = false, nullable = false)
@@ -43,6 +43,6 @@ public class PoCode {
 	 * @return a string representing full PO code. e.g. VAT900001
 	 */
 	public String getValue() {
-		return String.format("%s%010d", this.contractType.getValue(), this.id);
+		return String.format("%s%010d", this.contractType.getValue(), this.code);
 	}
 }

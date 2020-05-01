@@ -9,5 +9,7 @@ package com.avc.mis.beta.entities.enums;
  */
 public enum MessageLabel {
 	NEW,
-	SEEN	
+	STARRED,
+	SEEN,
+	BIN
 }

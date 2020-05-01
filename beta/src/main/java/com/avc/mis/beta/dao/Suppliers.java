@@ -46,16 +46,6 @@ public class Suppliers extends SoftDeletableDAO {
 	private SupplierRepository supplierRepository;
 	
 	/**
-	 * Get a list of all suppliers basic information -  id, name and version.
-	 * Usually used for referencing a supplier in another process.
-	 * @return List of SupplierBasic of all existing suppliers.
-	 */
-	@Transactional(readOnly = true)
-	public List<SupplierBasic> getSuppliersBasic() {
-		return getSupplierRepository().findAllSuppliersBasic();
-	}
-		
-	/**
 	 * Get Table of all suppliers with partial info - id, name, emails, phones and supply categories -
 	 * to show in the table.
 	 * @return List of SupplierRow of all suppliers
@@ -65,35 +55,7 @@ public class Suppliers extends SoftDeletableDAO {
 		List<SupplierRow> supplierRows = getSupplierRepository().findAll()
 				.map((s) -> new SupplierRow(s)).collect(Collectors.toList());
 		return supplierRows;		
-	}
-	
-	/**
-	 * Get a list of suppliers basic information -  id, name and version - for given supply category.
-	 * @param categoryId id of SupplyCategory
-	 * @return List of SupplierBasic of all suppliers with given SupplyCategory
-	 */
-	@Transactional(readOnly = true)
-	public List<SupplierBasic> getSuppliersBasic(Integer categoryId) {
-		return getSupplierRepository().findSuppliersByCategoryBasic(categoryId);
-	}
-	
-	/**
-	 * Get a list of CASHEW suppliers basic information -  id, name and version.
-	 * @return List of SupplierBasic of all CASHEW suppliers.
-	 */
-	@Transactional(readOnly = true)
-	public List<SupplierBasic> getCashewSuppliersBasic() {
-		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.CASHEW);
-	}
-	
-	/**
-	 * Get a list of GENERAL suppliers basic information -  id, name and version.
-	 * @return List of SupplierBasic of all GENERAL suppliers.
-	 */
-	@Transactional(readOnly = true)
-	public List<SupplierBasic> getGeneralSuppliersBasic() {
-		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.GENERAL);
-	}
+	}	
 		
 	/**
 	 * Adds (persists) the given supplier with all information - 
@@ -105,7 +67,9 @@ public class Suppliers extends SoftDeletableDAO {
 		getEntityManager().persist(supplier);
 		for(CompanyContact contact: supplier.getCompanyContacts()) {
 			Person person = contact.getPerson();
-			getEntityManager().persist(person);
+			if(person.getId() == null) {
+				getEntityManager().persist(person);
+			}
 			getEntityManager().persist(contact);			
 		}		
 	}

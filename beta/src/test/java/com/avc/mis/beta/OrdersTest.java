@@ -74,13 +74,11 @@ public class OrdersTest {
 	Suppliers suppliers;
 	
 	@Autowired
-	ValueTablesReader referenceTables;
+	ValueTablesReader valueTableReader;
 	
 	@Autowired
 	ProcessInfoDisplay processDisplay;
-	
-	
-	
+
 	private PO basicOrder() {
 		//build purchase order
 		PO po = new PO();
@@ -125,14 +123,21 @@ public class OrdersTest {
 		orders.addCashewOrder(po);
 		PoDTO expected = null;
 		expected = new PoDTO(po);
-		PoDTO actual = orders.getOrder(po.getPoCode().getId());	
+		PoDTO actual;
+		try {
+			actual = orders.getOrder(po.getPoCode().getCode());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}	
 		assertEquals(expected, actual, "failed test adding po");
 		
 		//edit order status
 		po.setOrderStatus(OrderStatus.OPEN_APPROVED);
 		expected = new PoDTO(po);
 		orders.editOrder(po);
-		actual = orders.getOrder(po.getPoCode().getId());
+		actual = orders.getOrder(po.getPoCode().getCode());
 		assertEquals(expected, actual, "failed test editing po order status");		
 		
 		Supplier supplier = po.getSupplier();
@@ -156,15 +161,15 @@ public class OrdersTest {
 //		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//get suppliers by supply category
-		List<SupplierBasic> suppliersByCategory = suppliers.getSuppliersBasic(3);
+		List<SupplierBasic> suppliersByCategory = valueTableReader.getSuppliersBasic(3);
 		suppliersByCategory.forEach(s -> System.out.println(s));
 		
 		//list of bank branches
-		List<BankBranchDTO> branchList = referenceTables.getAllBankBranchesDTO();
+		List<BankBranchDTO> branchList = valueTableReader.getAllBankBranchesDTO();
 		branchList.forEach((i)->System.out.println(i));
 		
 		//get list of cities
-		List<CityDTO> cityList =  referenceTables.getAllCitiesDTO();
+		List<CityDTO> cityList =  valueTableReader.getAllCitiesDTO();
 		for(CityDTO city: cityList)
 			System.out.println(city);
 		

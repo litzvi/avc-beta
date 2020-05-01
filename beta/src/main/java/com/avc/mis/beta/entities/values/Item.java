@@ -11,6 +11,7 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -35,6 +36,10 @@ public class Item extends ValueEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(updatable = false, nullable = false)
 	private MeasureUnit measureUnit;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private SupplyGroup supplyGroup;
 
 	@JsonIgnore
 	@Override

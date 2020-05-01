@@ -4,11 +4,14 @@
 package com.avc.mis.beta.dao;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.values.SupplierBasic;
+import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
@@ -16,7 +19,9 @@ import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessTypeAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
+import com.avc.mis.beta.repositories.SupplierRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,7 +37,7 @@ import lombok.Getter;
  *
  */
 @Repository
-@Getter(value = AccessLevel.PACKAGE)
+@Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
 public class ObjectTableReader extends DAO {
 	
@@ -73,5 +78,10 @@ public class ObjectTableReader extends DAO {
 //----------------------------Contact Details Objects-------------------------------------------
 	
 	//no need to add them for now - address, email, fax, phone and payment account.
+	
+	
+//---------------------------------DTOs---------------------------------------------------------
+	
+	
 	
 }
