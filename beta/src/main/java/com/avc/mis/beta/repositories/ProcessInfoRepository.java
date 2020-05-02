@@ -31,19 +31,21 @@ public interface ProcessInfoRepository extends BaseRepository<ProductionProcess>
 	List<ApprovalTask> findProcessApprovals(ProductionProcess process);
 
 	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
-				+ "m.id, m.version, m.title, p.id, p.processType, m.createdDate, pr.name,  m.label) "
+				+ "m.id, m.version, c, m.title, p.id, p.processType, m.createdDate, pr.name,  m.label) "
 			+ "from UserMessage m "
 			+ "join m.process p "
+			+ "join p.poCode c "
 			+ "join m.user u "
 			+ "join u.person pr "
 			+ "where u.id = ?1 ")
 	List<UserMessageDTO> findAllMessagesByUser(Integer userId);
 
 	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
-			+ "pa.id, pa.version, pa.title, p.id, p.processType, pa.createdDate, "
+			+ "pa.id, pa.version, c, pa.title, p.id, p.processType, pa.createdDate, "
 			+ "pr.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 		+ "join pa.process p "
+		+ "join p.poCode c "
 		+ "join pa.user u "
 		+ "join u.person pr "
 		+ "where pa.decision in :decisions "
@@ -51,19 +53,21 @@ public interface ProcessInfoRepository extends BaseRepository<ProductionProcess>
 	List<ApprovalTaskDTO> findAllRequiredApprovalsByUser(Integer userId, DecisionType[] decisions);
 
 	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
-			+ "pa.id, pa.version, pa.title, p.id, p.processType, pa.createdDate, "
+			+ "pa.id, pa.version, c, pa.title, p.id, p.processType, pa.createdDate, "
 			+ "pr.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 		+ "join pa.process p "
+		+ "join p.poCode c "
 		+ "join pa.user u "
 		+ "join u.person pr "
 		+ "where u.id = :userId ")
 	List<ApprovalTaskDTO> findAllApprovalsByUser(Integer userId);
 
 	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
-			+ "m.id, m.version, m.title, p.id, p.processType, m.createdDate, pr.name, m.label) "
+			+ "m.id, m.version, c, m.title, p.id, p.processType, m.createdDate, pr.name, m.label) "
 		+ "from UserMessage m "
 		+ "join m.process p "
+		+ "join p.poCode c "
 		+ "join m.user u "
 		+ "join u.person pr "
 		+ "where u.id = ?1 "
