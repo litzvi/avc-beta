@@ -76,19 +76,19 @@ public class Suppliers extends SoftDeletableDAO {
 	
 	/**
 	 * Gets all supplier information for given supplier id
-	 * @param id of the supplier to get.
+	 * @param supplierId of the supplier to get.
 	 * @return SuppplierDTO with full supplier information
 	 * @throws IllegalArgumentException if supplier with given id doesn't exist
 	 */
 	@Transactional(readOnly = true)
-	public SupplierDTO getSupplier(int id) {
+	public SupplierDTO getSupplier(int supplierId) {
 		
-		Optional<Supplier> optionalSupplier = getSupplierRepository().findById(id);
+		Optional<Supplier> optionalSupplier = getSupplierRepository().findById(supplierId);
 		Supplier supplier = optionalSupplier.orElseThrow(() -> 
 			new IllegalArgumentException("No supplier with given ID"));
 		SupplierDTO supplierDTO = new SupplierDTO(supplier);
 		
-		getSupplierRepository().findCompanyContactsByCompnyId(id)
+		getSupplierRepository().findCompanyContactsByCompnyId(supplierId)
 			.forEach((cc) -> supplierDTO.addCompanyContact(cc));
 		
 		return supplierDTO;

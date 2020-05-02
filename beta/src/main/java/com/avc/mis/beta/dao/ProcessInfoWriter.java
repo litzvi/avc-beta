@@ -5,6 +5,7 @@ package com.avc.mis.beta.dao;
 
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.entities.data.ProcessTypeAlert;
@@ -22,8 +23,9 @@ import com.avc.mis.beta.entities.process.UserMessage;
  * @author Zvi
  *
  */
+@Repository
 @Transactional(rollbackFor = Throwable.class)
-public abstract class ProcessDAO extends DAO {
+public class ProcessInfoWriter extends DAO {
 	
 	
 	/**
@@ -101,8 +103,7 @@ public abstract class ProcessDAO extends DAO {
 		for(ProcessTypeAlert alert: alerts) {
 			addMessage(alert.getUser(), process, 
 					"Process decision: " + approval.getDecision() 
-					+ ", made by: " + approval.getUser().getPerson().getName()
-					+ " for PO: " + process.getPoCode().getValue());
+					+ ", made by: " + approval.getUser().getPerson().getName());
 		}
 		
 	}

@@ -111,13 +111,13 @@ public class Users extends SoftDeletableDAO {
 	
 	/**
 	 * Find user with full details with given id - including id card and contact details if exist.
-	 * @param id of the user to find
+	 * @param userId of the user to find
 	 * @return UserDTO with full details 
 	 * @throws IllegalArgumentException if there is no User with given id.
 	 */
 	@Transactional(readOnly = true)
-	public UserDTO getUserById(Integer id) {
-		Optional<UserEntity> user = userRepository.findById(id);
+	public UserDTO getUserById(Integer userId) {
+		Optional<UserEntity> user = userRepository.findById(userId);
 		user.orElseThrow(() -> new IllegalArgumentException("No User with given ID"));
 		return new UserDTO(user.get());
 	}
@@ -152,7 +152,7 @@ public class Users extends SoftDeletableDAO {
 	 * Edits all the personal details of this user, will edit user and person details.
 	 * @param user to be edited
 	 */
-	public void EditPersonalDetails(UserEntity user) {
+	public void editPersonalDetails(UserEntity user) {
 		Person person = user.getPerson();
 		editEntity(user);
 		if(person != null)

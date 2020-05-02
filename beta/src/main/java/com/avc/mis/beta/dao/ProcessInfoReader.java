@@ -36,7 +36,7 @@ import lombok.NonNull;
 @Repository
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
-public class ProcessInfoDisplay extends DAO {
+public class ProcessInfoReader extends DAO {
 	
 	@Autowired Orders orders;
 	

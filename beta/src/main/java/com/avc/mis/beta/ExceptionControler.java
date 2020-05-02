@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ExceptionControler {
 	
-	//IllegalStateException - ProcessInfoDisplay
+	//IllegalStateException - ProcessInfoReader
 
     private ResponseEntity<String> error(HttpStatus status, Throwable e) {
         log.error("Exception : ", e);

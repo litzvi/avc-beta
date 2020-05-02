@@ -31,7 +31,7 @@ import lombok.Getter;
 @Repository
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
-public class Orders extends ProcessDAO {
+public class Orders extends ProcessInfoWriter {
 	
 	@Autowired private PORepository poRepository;	
 			
