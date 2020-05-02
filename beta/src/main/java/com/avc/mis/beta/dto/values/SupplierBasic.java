@@ -28,7 +28,7 @@ public class SupplierBasic extends DataDTO {
 	
 //	Set<String> supplyCategories;
 	
-	public SupplierBasic(Integer id, Long version, String name) {
+	public SupplierBasic(Integer id, Integer version, String name) {
 		super(id, version);
 		this.name = name;
 	}

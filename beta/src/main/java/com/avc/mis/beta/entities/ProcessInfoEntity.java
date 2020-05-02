@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
@@ -60,11 +61,11 @@ public abstract class ProcessInfoEntity extends DataEntity {
 	@JoinColumn(name = "userId", updatable = false)
 	private UserEntity user;
 	
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userModifingId")
-	@LastModifiedBy
-	private UserEntity modifiedBy;
+//	@JsonIgnore
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "userModifingId")
+//	@LastModifiedBy
+//	private UserEntity modifiedBy;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processId", nullable = false, updatable = false)
@@ -72,6 +73,7 @@ public abstract class ProcessInfoEntity extends DataEntity {
 	
 	private String title;
 
+	@Lob
 	private String remarks;
 	
 	@JsonIgnore

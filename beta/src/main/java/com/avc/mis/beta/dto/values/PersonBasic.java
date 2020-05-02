@@ -24,7 +24,7 @@ public class PersonBasic extends DataDTO {
 	@ToString.Exclude
 	String name;
 	
-	public PersonBasic(Integer id, Long version, String name) {
+	public PersonBasic(Integer id, Integer version, String name) {
 		super(id, version);
 		this.name = name;
 	}

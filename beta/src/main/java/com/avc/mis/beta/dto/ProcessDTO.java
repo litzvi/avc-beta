@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class ProcessDTO extends DataDTO {
 
-	public ProcessDTO(Integer id, Long version) {
+	public ProcessDTO(Integer id, Integer version) {
 		super(id, version);
 	}
 }

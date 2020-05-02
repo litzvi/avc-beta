@@ -42,7 +42,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 	private ProcessStatus status;
 	private String remarks;
 	
-	public ProductionProcessDTO(Integer id, Long version, Instant createdDate, 
+	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, 
 			String userRecording, PoCode poCode, ProcessType processType, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus status, 
 			String remarks) {

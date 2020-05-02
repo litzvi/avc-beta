@@ -36,11 +36,11 @@ public class PoDTO extends ProductionProcessDTO {
 	private OrderStatus orderStatus;
 	private Set<OrderItemDTO> orderItems; //can use a SortedSet like ContactDetails to maintain order
 	
-	public PoDTO(Integer id, Long version, Instant createdDate, String staffRecording, 
+	public PoDTO(Integer id, Integer version, Instant createdDate, String staffRecording, 
 			PoCode poCode, ProcessType processType, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, String remarks,
-			Integer supplierId, Long supplierVersion, String supplierName, 
+			Integer supplierId, Integer supplierVersion, String supplierName, 
 			OrderStatus orderStatus) {
 		super(id, version, createdDate, staffRecording, 
 				poCode, processType, productionLine, 

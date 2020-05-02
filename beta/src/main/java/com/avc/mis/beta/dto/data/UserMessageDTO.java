@@ -30,18 +30,18 @@ public class UserMessageDTO extends DataDTO {
 	private Integer processId;
 	private String processType;
 	private Instant createdDate;
-	private String modifiedBy;
+	private String userName;
 	private String label;
 	private String remarks;
 	
-	public UserMessageDTO(Integer id, Long version, String title, Integer processId, ProcessType processType, 
-			Instant createdDate, String modifiedBy, MessageLabel label) {
+	public UserMessageDTO(Integer id, Integer version, String title, Integer processId, ProcessType processType, 
+			Instant createdDate, String userName, MessageLabel label) {
 		super(id, version);
 		this.title = title;
 		this.processId = processId;
 		this.processType = processType.getValue();
 //		this.createdDate = LocalDateTime.ofInstant(createdDate, ZoneOffset.UTC);
-		this.modifiedBy = modifiedBy;
+		this.userName = userName;
 		this.createdDate = createdDate;
 		this.label = label.name();
 	}
@@ -52,7 +52,7 @@ public class UserMessageDTO extends DataDTO {
 		this.processId = message.getProcess().getId();
 		this.processType = message.getProcess().getProcessType().getValue();
 //		this.createdDate = LocalDateTime.ofInstant(message.getCreatedDate(), ZoneOffset.UTC);
-		this.modifiedBy = message.getModifiedBy().getPerson().getName();
+		this.userName = message.getUser().getPerson().getName();
 		this.createdDate = message.getCreatedDate();
 		this.label = message.getLabel();
 	}

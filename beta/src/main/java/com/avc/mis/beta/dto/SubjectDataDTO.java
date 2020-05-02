@@ -27,7 +27,7 @@ public abstract class SubjectDataDTO extends DataDTO implements Ordinal {
 
 	private Integer ordinal;
 	
-	public SubjectDataDTO(Integer id, Long version, Integer ordinal) {
+	public SubjectDataDTO(Integer id, Integer version, Integer ordinal) {
 		super(id, version);
 		this.ordinal = ordinal;
 	}

@@ -33,7 +33,7 @@ public class UserLogin extends DataDTO implements UserDetails {
 	private String password;
 	private List<GrantedAuthority> authorities;
 	
-	public UserLogin(Integer id, Long version, String username, String password, Collection<Role> roles) {
+	public UserLogin(Integer id, Integer version, String username, String password, Collection<Role> roles) {
 		super(id, version);
 		this.username = username;
 		this.password = password;

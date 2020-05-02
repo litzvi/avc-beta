@@ -21,5 +21,5 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public abstract class DataEntity extends BaseEntity {
 	@Version
-	private Long version;
+	private Integer version;
 }

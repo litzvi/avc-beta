@@ -28,7 +28,7 @@ public class BackupTest {
 	@Autowired BankRepository bankRepository;
 	@Autowired BankBranchRepository branchRepository;
 
-//	@Disabled
+	@Disabled
 	@Test
 	void backupTest() {
 		System.out.println("starting backup");

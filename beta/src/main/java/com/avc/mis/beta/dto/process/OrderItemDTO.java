@@ -39,7 +39,7 @@ public class OrderItemDTO extends ProcessDTO {
 	private String remarks;
 	
 	
-	public OrderItemDTO(Integer id, Long version, Item item, 
+	public OrderItemDTO(Integer id, Integer version, Item item, 
 			MeasureUnit measureUnit, BigDecimal numberUnits, Currency currency, BigDecimal unitPrice,
 			LocalDate deliveryDate, String defects, String remarks) {
 		super(id, version);

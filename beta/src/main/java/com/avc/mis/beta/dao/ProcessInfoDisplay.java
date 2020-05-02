@@ -40,19 +40,7 @@ public class ProcessInfoDisplay extends DAO {
 	
 	@Autowired Orders orders;
 	
-	@Autowired
-	UserAware userAware;
 	
-	/**
-	 * Gets the logged in user id.
-	 * @return the id of currently logged in user.
-	 * @throws IllegalStateException if logged in UserEntity not available.
-	 */
-	private Integer getCurrentUserId() {
-		Optional<UserLogin> userEntity = userAware.getCurrentUser();
-		userEntity.orElseThrow(() -> new IllegalStateException("No user logged in or user not reachable"));
-		return userEntity.get().getId();
-	}
 	
 	/**
 	 * Get messages for logged in user.
@@ -110,57 +98,5 @@ public class ProcessInfoDisplay extends DAO {
 		return null;
 	}
 
-	/**
-	 * Approve (or any other decision) to a approval task for a process.
-	 * ATTENTION! Should not be used because ApprovalTask user can be changed with current user, 
-	 * and will be approved since user isn't updated in the database.
-	 * @param approval the approval task with id and user with id.
-	 * @param decisionType the decision made.
-	 * @throws IllegalArgumentException trying to approve for another user.
-	 */
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	@Deprecated
-	public void approveProcess(ApprovalTask approval, String decisionType) {
-		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
-			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
-			approval.setDecision(decision);
-			editEntity(approval);	
-		}
-		else {
-			throw new IllegalArgumentException("Can't approve for another user");
-		}
-	}
 	
-	/**
-	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.
-	 * @param approvalId the ApprovalTask id.
-	 * @param decisionType the decision made.
-	 * @param processSnapshot snapshot of the process as seen by the approver.
-	 * @throws IllegalArgumentException trying to approve for another user.
-	 */
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void setProcessDecision(int approvalId, String decisionType, String processSnapshot) {
-		ApprovalTask approval = getEntityManager().find(ApprovalTask.class, approvalId);
-		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
-			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
-			approval.setDecision(decision);
-			approval.setProcessSnapshot(processSnapshot);
-			editEntity(approval);	
-		}
-		else {
-			throw new IllegalArgumentException("Can't approve for another user");
-		}		
-	}
-	
-	public void setMessageLabel(int messageId, String labelName) {
-		UserMessage message = getEntityManager().find(UserMessage.class, messageId);
-		if(getCurrentUserId().equals(message.getUser().getId())) {//user changes his own message label
-			MessageLabel label = Enum.valueOf(MessageLabel.class, labelName);
-			message.setLabel(label);
-			editEntity(message);
-		}
-		else {
-			throw new IllegalArgumentException("Can't change message label for another user");
-		}
-	}
 }

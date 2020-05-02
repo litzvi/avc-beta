@@ -32,7 +32,7 @@ public class PhoneDTO extends SubjectDataDTO {
 	 * @param version
 	 * @param value
 	 */
-	public PhoneDTO(Integer id, Long version, String value, int ordinal) {
+	public PhoneDTO(Integer id, Integer version, String value, int ordinal) {
 		super(id, version, ordinal);
 		this.value = value;
 	}

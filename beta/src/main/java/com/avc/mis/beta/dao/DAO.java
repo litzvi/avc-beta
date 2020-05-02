@@ -3,15 +3,19 @@
  */
 package com.avc.mis.beta.dao;
 
+import java.util.Optional;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
+import com.avc.mis.beta.utilities.UserAware;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,6 +36,18 @@ public abstract class DAO {
 	@Autowired private ValueTablesRepository valueTablesRepository;
 	@Autowired private ProcessInfoRepository processRepository;
 	@Autowired private EntityManager entityManager;
+	@Autowired UserAware userAware;
+	
+	/**
+	 * Gets the logged in user id.
+	 * @return the id of currently logged in user.
+	 * @throws IllegalStateException if logged in UserEntity not available.
+	 */
+	Integer getCurrentUserId() {
+		Optional<UserLogin> userEntity = userAware.getCurrentUser();
+		userEntity.orElseThrow(() -> new IllegalStateException("No user logged in or user not reachable"));
+		return userEntity.get().getId();
+	}
 	
 	/**
 	 * Used for adding entity that references a detached entity.

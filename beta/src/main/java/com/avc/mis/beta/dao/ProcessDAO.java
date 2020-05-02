@@ -89,6 +89,24 @@ public abstract class ProcessDAO extends DAO {
 		}
 	}
 	
+
+	/**
+	 * Adds new notifications/messages about a decision made on a process.
+	 * @param approval full approval that includes the process, user and decision.
+	 */
+	private void approvalAlerts(ApprovalTask approval) {
+		ProductionProcess process = approval.getProcess();
+		List<ProcessTypeAlert> alerts = getProcessRepository()
+				.findProcessTypeAlerts(process.getProcessType());
+		for(ProcessTypeAlert alert: alerts) {
+			addMessage(alert.getUser(), process, 
+					"Process decision: " + approval.getDecision() 
+					+ ", made by: " + approval.getUser().getPerson().getName()
+					+ " for PO: " + process.getPoCode().getValue());
+		}
+		
+	}
+	
 	/**
 	 * Adds a new message (notification) for a given user about a given process.
 	 * @param user the recipient of the message, assumes user is already in the persistence context.
@@ -102,5 +120,66 @@ public abstract class ProcessDAO extends DAO {
 		userMessage.setTitle(title);
 		userMessage.setLabel(MessageLabel.NEW);
 		addEntity(userMessage);	//user already in the persistence context
+	}
+	
+	/**
+	 * Approve (or any other decision) to a approval task for a process.
+	 * ATTENTION! Should not be used because ApprovalTask user can be changed with current user, 
+	 * and will be approved since user isn't updated in the database.
+	 * @param approval the approval task with id and user with id.
+	 * @param decisionType the decision made.
+	 * @throws IllegalArgumentException trying to approve for another user.
+	 */
+//	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Deprecated
+	public void approveProcess(ApprovalTask approval, String decisionType) {
+		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
+			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
+			approval.setDecision(decision);
+			editEntity(approval);
+			approvalAlerts(approval);
+		}
+		else {
+			throw new IllegalArgumentException("Can't approve for another user");
+		}
+	}
+	
+	/**
+	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.
+	 * @param approvalId the ApprovalTask id.
+	 * @param decisionType the decision made.
+	 * @param processSnapshot snapshot of the process as seen by the approver.
+	 * @throws IllegalArgumentException trying to approve for another user.
+	 */
+//	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void setProcessDecision(int approvalId, String decisionType, String processSnapshot) {
+		ApprovalTask approval = getEntityManager().find(ApprovalTask.class, approvalId);
+		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
+			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
+			approval.setDecision(decision);
+			approval.setProcessSnapshot(processSnapshot);
+			editEntity(approval);
+			approvalAlerts(approval);
+		}
+		else {
+			throw new IllegalArgumentException("Can't approve for another user");
+		}		
+	}
+	
+	/**
+	 * Changes the label of the message. e.g. from NEW to SEEN
+	 * @param messageId
+	 * @param labelName
+	 */
+	public void setMessageLabel(int messageId, String labelName) {
+		UserMessage message = getEntityManager().find(UserMessage.class, messageId);
+		if(getCurrentUserId().equals(message.getUser().getId())) {//user changes his own message label
+			MessageLabel label = Enum.valueOf(MessageLabel.class, labelName);
+			message.setLabel(label);
+			editEntity(message);
+		}
+		else {
+			throw new IllegalArgumentException("Can't change message label for another user");
+		}
 	}
 }

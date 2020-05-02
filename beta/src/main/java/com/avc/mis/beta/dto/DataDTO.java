@@ -21,9 +21,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public abstract class DataDTO extends BaseDTO {
 	
-	private Long version;
+	private Integer version;
 	
-	public DataDTO(Integer id, Long version) {
+	public DataDTO(Integer id, Integer version) {
 		super(id);
 		this.version = version;
 	}

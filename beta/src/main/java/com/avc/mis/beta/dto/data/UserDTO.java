@@ -32,7 +32,7 @@ public class UserDTO extends DataDTO {
 	private String password = null; 
 	private Set<String> authorities;
 	
-	public UserDTO(Integer id, Long version, Person person, String username, Collection<Role> roles) {
+	public UserDTO(Integer id, Integer version, Person person, String username, Collection<Role> roles) {
 		super(id, version);
 		this.person = new PersonDTO(person);
 		this.username = username;

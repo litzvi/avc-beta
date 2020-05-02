@@ -21,9 +21,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.avc.mis.beta.dao.Orders;
 import com.avc.mis.beta.dao.ProcessInfoDisplay;
-import com.avc.mis.beta.dao.ValueTablesReader;
 import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dao.Users;
+import com.avc.mis.beta.dao.ValueTablesReader;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
@@ -57,7 +57,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
-@WithUserDetails("isral1561")
+@WithUserDetails("eli")
 public class OrdersTest {
 	
 	private final int NUM_ITEMS = 3;
@@ -115,7 +115,7 @@ public class OrdersTest {
 		return items;
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 
@@ -124,13 +124,7 @@ public class OrdersTest {
 		PoDTO expected = null;
 		expected = new PoDTO(po);
 		PoDTO actual;
-		try {
-			actual = orders.getOrder(po.getPoCode().getCode());
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw e1;
-		}	
+		actual = orders.getOrder(po.getPoCode().getCode());
 		assertEquals(expected, actual, "failed test adding po");
 		
 		//edit order status
@@ -181,11 +175,7 @@ public class OrdersTest {
 		//get list of cashew orders
 		List<PoRow> pos =  orders.findCashewOrders(new OrderStatus[] {OrderStatus.OPEN_PENDING});
 		for(PoRow row: pos) {
-			try {
-				System.out.println(row);
-			}catch(Exception e) {
-				e.printStackTrace();
-			}
+			System.out.println(row);
 		}
 		
 		//get list of new message for user
@@ -196,6 +186,7 @@ public class OrdersTest {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw e;
 		}
 		
 		//get list approval tasks for user
@@ -216,7 +207,7 @@ public class OrdersTest {
 				}
 //				t.setDecisionType(DecisionType.APPROVED.name());
 //				task.setProcessVersion(p.getVersion());
-				processDisplay.setProcessDecision(t.getId(), 
+				orders.setProcessDecision(t.getId(), 
 						DecisionType.APPROVED.name(), processSnapshot);
 			});
 		} catch (Exception e) {
@@ -257,7 +248,7 @@ public class OrdersTest {
 		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		user.getRoles().add(Role.ROLE_MANAGER);
 		Person person = new Person();
-		person.setId(1);
+		person.setId(2);
 		user.setPerson(person);
 		users.openUserForPerson(user);
 		UserDTO userByusername = users.getUserByUsername("eli" + SuppliersTests.SERIAL_NO);
