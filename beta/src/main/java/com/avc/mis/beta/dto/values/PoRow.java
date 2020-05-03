@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.values;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Currency;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -35,9 +36,13 @@ public class PoRow extends ValueDTO {
 	OffsetDateTime contractDate;
 	LocalDate deliveryDate;
 	OrderStatus orderStatus;
+	String defects;
+	Currency currency;
+	BigDecimal unitPrice;
 	
 	public PoRow(@NonNull Integer id, PoCode poCode, String supplierName, String itemName, BigDecimal amount,
-			MeasureUnit measureUnit, OffsetDateTime contractDate, LocalDate deliveryDate, OrderStatus orderStatus) {
+			MeasureUnit measureUnit, OffsetDateTime contractDate, LocalDate deliveryDate, OrderStatus orderStatus,
+			String defects, Currency currency, BigDecimal unitPrice) {
 		super(id);
 //		this.poCodeId = poCodeId;
 		this.value = poCode.getValue();
@@ -48,6 +53,9 @@ public class PoRow extends ValueDTO {
 		this.contractDate = contractDate;
 		this.deliveryDate = deliveryDate;
 		this.orderStatus = orderStatus;
+		this.defects = defects;
+		this.currency = currency;
+		this.unitPrice = unitPrice;
 	}
 	
 	/**
@@ -66,6 +74,9 @@ public class PoRow extends ValueDTO {
 		this.contractDate = po.getRecordedTime();
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.orderStatus = po.getOrderStatus();
+		this.defects = orderItem.getDefects();
+		this.currency = orderItem.getCurrency();
+		this.unitPrice = orderItem.getUnitPrice();
 		
 	}
 	

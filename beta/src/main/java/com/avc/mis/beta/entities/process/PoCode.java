@@ -43,6 +43,6 @@ public class PoCode {
 	 * @return a string representing full PO code. e.g. VAT900001
 	 */
 	public String getValue() {
-		return String.format("%s%010d", this.contractType.getValue(), this.code);
+		return String.format("%s-%d", this.contractType.getValue(), this.code);
 	}
 }

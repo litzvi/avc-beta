@@ -20,8 +20,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.avc.mis.beta.dao.Orders;
-import com.avc.mis.beta.dao.ProcessInfoWriter;
+import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dao.ProcessInfoReader;
+import com.avc.mis.beta.dao.ProcessInfoWriter;
 import com.avc.mis.beta.dao.Suppliers;
 import com.avc.mis.beta.dao.Users;
 import com.avc.mis.beta.dao.ValueTablesReader;
@@ -81,7 +82,7 @@ public class OrdersTest {
 	ProcessInfoReader processDisplay;
 	
 	@Autowired
-	ProcessInfoWriter processDAO;
+	ProcessInfoWriter processInfoWriter;
 
 	private PO basicOrder() {
 		//build purchase order
@@ -119,7 +120,7 @@ public class OrdersTest {
 		return items;
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 
@@ -211,7 +212,7 @@ public class OrdersTest {
 				}
 //				t.setDecisionType(DecisionType.APPROVED.name());
 //				task.setProcessVersion(p.getVersion());
-				processDAO.setProcessDecision(t.getId(), 
+				processInfoWriter.setProcessDecision(t.getId(), 
 						DecisionType.APPROVED.name(), processSnapshot);
 			});
 		} catch (Exception e) {

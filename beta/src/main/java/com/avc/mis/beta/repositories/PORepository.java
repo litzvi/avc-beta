@@ -76,7 +76,8 @@ public interface PORepository extends BaseRepository<PO> {
 	List<PoBasic> findByOrderTypeAndStatusesBasic(ProcessName orderType, OrderStatus[] statuses);
 	
 	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code, s.name, i.value, "
-			+ "oi.numberUnits, oi.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus) "
+			+ "oi.numberUnits, oi.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus, "
+			+ "oi.defects, oi.currency, oi.unitPrice) "
 		+ "from PO po "
 		+ "left join po.poCode po_code "
 		+ "left join po.supplier s "
