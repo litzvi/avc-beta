@@ -74,6 +74,10 @@ public class OrderItem extends ProcessEntity {
 			this.currency = Currency.getInstance(currencyCode);
 	}
 	
+	public void setDeliveryDate(String deliveryDate) {
+		this.deliveryDate = LocalDate.parse(deliveryDate);
+	}
+	
 	
 	public void setMeasureUnit(String measureUnit) {
 		this.measureUnit = MeasureUnit.valueOf(measureUnit);

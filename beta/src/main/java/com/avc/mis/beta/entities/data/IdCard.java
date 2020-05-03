@@ -62,6 +62,10 @@ public class IdCard extends DataEntity {
 	@JoinColumn(name = "nationality")
 	private Country nationality;
 	
+	public void setDob(String dob) {
+		this.dob = LocalDate.parse(dob);
+	}
+	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}

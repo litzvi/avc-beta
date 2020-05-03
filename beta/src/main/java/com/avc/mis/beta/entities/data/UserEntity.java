@@ -47,7 +47,7 @@ public class UserEntity extends ObjectEntityWithId {
 	@Column(nullable = false, unique = true, updatable = false)
 	private String username;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, updatable = false)
 	private String password;
 	
 	@CollectionTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "personId"))

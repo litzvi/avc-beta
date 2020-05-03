@@ -43,6 +43,11 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 
 //	@Query("select u from UserEntity u ")
 	Stream<UserEntity> findAll();
+
+	@Query("update UserEntity u "
+			+ "set u.password = :newPassword "
+			+ "where u.id := userId and u.password = :oldPassword")
+	void changePassword(Integer userId, String oldPassword, String newPassword);
 	
 //	@org.springframework.data.jdbc.repository.query.Query(
 //			"select new com.avc.mis.beta.dto.values.UserRow(u.id, u.username, u.roles, u.active) "

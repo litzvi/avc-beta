@@ -56,6 +56,7 @@ public class PoRow extends ValueDTO {
 		this.defects = defects;
 		this.currency = currency;
 		this.unitPrice = unitPrice;
+	
 	}
 	
 	/**

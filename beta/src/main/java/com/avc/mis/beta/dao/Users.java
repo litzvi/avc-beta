@@ -148,6 +148,10 @@ public class Users extends SoftDeletableDAO {
 		editEntity(user);
 	}
 	
+	public void changePassword(Integer userId, String oldPassword, String newPassword) {
+		userRepository.changePassword(userId, oldPassword, newPassword);
+	}
+	
 	/**
 	 * Edits all the personal details of this user, will edit user and person details.
 	 * @param user to be edited

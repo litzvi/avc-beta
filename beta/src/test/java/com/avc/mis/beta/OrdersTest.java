@@ -115,12 +115,12 @@ public class OrdersTest {
 			items[i].setCurrency("USD");
 			items[i].setMeasureUnit("KG");
 			items[i].setUnitPrice(new BigDecimal("1.16"));
-			items[i].setDeliveryDate(LocalDate.of(1983, 11, 23));
+			items[i].setDeliveryDate("1983-11-23");
 		}
 		return items;
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 
