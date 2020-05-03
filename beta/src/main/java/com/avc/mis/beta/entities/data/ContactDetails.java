@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -160,6 +161,13 @@ public class ContactDetails extends LinkEntity {
 	public String getIllegalMessage() {
 		return "Contact details not legal\n "
 				+ "has to reference a compony or person";
+	}
+	
+	@PreUpdate
+	@Override
+	public void preUpdate() {
+//		if(!isLegal())
+//			throw new IllegalArgumentException(this.getIllegalMessage());
 	}
 		
 }

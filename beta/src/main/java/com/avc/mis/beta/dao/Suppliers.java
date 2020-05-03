@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.data.SupplierDTO;
-import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.SoftDeleted;
@@ -23,7 +22,6 @@ import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.repositories.SupplierRepository;
 
 import lombok.AccessLevel;

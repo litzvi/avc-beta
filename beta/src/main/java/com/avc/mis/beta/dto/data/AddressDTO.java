@@ -27,6 +27,7 @@ public class AddressDTO extends DataDTO {
 	public AddressDTO(@NonNull Address address) {
 		super(address.getId(), address.getVersion());
 		this.streetAddress = address.getStreetAddress();
-		this.city = new CityDTO(address.getCity());
+		if(address.getCity() != null)
+			this.city = new CityDTO(address.getCity());
 	}
 }

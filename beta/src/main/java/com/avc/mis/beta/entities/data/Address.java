@@ -52,7 +52,7 @@ public class Address extends ContactEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return StringUtils.isNotBlank(getStreetAddress());
+		return StringUtils.isNotBlank(getStreetAddress()) || streetAddress == null;
 	}
 	
 	@Override
