@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao;
+package com.avc.mis.beta.service;
 
 import java.util.List;
 import java.util.Map;
@@ -9,8 +9,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.ItemBasic;
@@ -29,6 +31,7 @@ import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.repositories.SupplierRepository;
+import com.avc.mis.beta.repositories.ValueTablesRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -43,12 +46,13 @@ import lombok.Getter;
  * @author Zvi
  *
  */
-@Repository
+@Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
-public class ValueTablesReader extends DAO {
+public class ValueTablesReader {
 	
 	@Autowired private SupplierRepository supplierRepository;
+	@Autowired private ValueTablesRepository valueTablesRepository;
 
 	
 	public List<Country> getAllCountries() {

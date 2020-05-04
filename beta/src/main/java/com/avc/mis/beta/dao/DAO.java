@@ -7,12 +7,16 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.data.CompanyContact;
+import com.avc.mis.beta.entities.data.Person;
+import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
 import com.avc.mis.beta.utilities.UserAware;
@@ -29,26 +33,14 @@ import lombok.Getter;
  * @author Zvi
  *
  */
-@Getter(value = AccessLevel.PROTECTED)
-@Transactional(rollbackFor = Throwable.class)
-public abstract class DAO {
+@Getter(value = AccessLevel.PACKAGE)
+//@Transactional(rollbackFor = Throwable.class)
+public abstract class DAO extends ReadDAO {
 	
-	@Autowired private ValueTablesRepository valueTablesRepository;
-	@Autowired private ProcessInfoRepository processRepository;
+//	@Autowired private ValueTablesRepository valueTablesRepository;
+//	@Autowired private ProcessInfoRepository processRepository;
 	@Autowired private EntityManager entityManager;
-	@Autowired UserAware userAware;
-	
-	/**
-	 * Gets the logged in user id.
-	 * @return the id of currently logged in user.
-	 * @throws IllegalStateException if logged in UserEntity not available.
-	 */
-	Integer getCurrentUserId() {
-		Optional<UserLogin> userEntity = userAware.getCurrentUser();
-		userEntity.orElseThrow(() -> new IllegalStateException("No user logged in or user not reachable"));
-		return userEntity.get().getId();
-	}
-	
+		
 	/**
 	 * Used for adding entity that references a detached entity.
 	 * @param entity the entity to persisted.
@@ -57,8 +49,24 @@ public abstract class DAO {
 	 */
 	//public only for testing
 	public void addEntity(BaseEntity entity, BaseEntity reference) {
-		reference = getEntityManager().getReference(reference.getClass(), reference.getId());
-		entity.setReference(reference);
+		setEntityReference(entity, reference.getClass(), reference.getId());
+//		reference = getEntityManager().getReference(reference.getClass(), reference.getId());
+//		entity.setReference(reference);
+		addEntity(entity);
+	}
+	
+	/**
+	 * Used for adding entity that references a detached entity, with referenced entity id.
+	 * @param <T> extends BaseEntity
+	 * @param entity the entity to persisted.
+	 * @param referenceClass class of detached entity referenced by entity (the owner of the association).
+	 * @param referenceId id of detached entity referenced by entity (the owner of the association).
+	 */
+	//public only for testing
+	public <T extends BaseEntity> void addEntity(BaseEntity entity, Class<T> referenceClass, Integer referenceId) {
+		setEntityReference(entity, referenceClass, referenceId);
+//		T reference = getEntityManager().getReference(referenceClass, referenceId);
+//		entity.setReference(reference);
 		addEntity(entity);
 	}
 	
@@ -67,31 +75,34 @@ public abstract class DAO {
 	 * @param entity to be persisted
 	 * @throws IllegalArgumentException, EntityExistsException, TransactionRequiredException
 	 */
-	void addEntity(BaseEntity entity) {
+	public void addEntity(BaseEntity entity) {
 		getEntityManager().persist(entity);
 	}
 	
+
 	/**
-	 * Used for permanently removed from persistence context - deleted from the database.
-	 * @param entity to be removed 
-	 * @throws IllegalArgumentException , TransactionRequiredException, EntityNotFoundException
+	 * Adds an entity with Hibernate session.save().
+	 * Used in {@link Orders.addOrder} in order to let Hibernate to decide if to auto generate key.
+	 * @param entity to be persisted
 	 */
-	//public only for testing
-	public void permenentlyRemoveEntity(BaseEntity entity) {
-		permenentlyRemoveEntity(entity.getClass(), entity.getId());
+	public void addEntityWithFlexibleGenerator(BaseEntity entity) {
+		Session session = getEntityManager().unwrap(Session.class);
+		session.save(entity);
 	}
 	
 	/**
-	 * Used for permanently removed from persistence context - deleted from the database.
-	 * @param entityClass the class of the entity
-	 * @param id of the removed entity
-	 * @throws IllegalArgumentException , TransactionRequiredException, EntityNotFoundException
+	 * Sets the reference for the entity so it's ready for manipulation by the persistence manager.
+	 * @param <T>
+	 * @param entity the entity holds a reference.
+	 * @param referenceClass class of detached entity referenced by entity (the owner of the association).
+	 * @param referenceId id of detached entity referenced by entity (the owner of the association).
 	 */
-	void permenentlyRemoveEntity(Class<? extends BaseEntity> entityClass, Integer id) {
-		Insertable entity = getEntityManager().getReference(entityClass, id);
-		getEntityManager().remove(entity); 
+	public <T extends BaseEntity> void setEntityReference(
+			BaseEntity entity, Class<T> referenceClass, Integer referenceId) {
+		T reference = getEntityManager().getReference(referenceClass, referenceId);
+		entity.setReference(reference);
 	}
-	
+
 	/**
 	 * @param entity the entity with edited state information including id.
 	 * @return the newly edited entity
@@ -99,7 +110,6 @@ public abstract class DAO {
 	 * dosen't have an id set or is a removed entity.
 	 * TransactionRequiredException
 	 */
-	//public for testing
 	public BaseEntity editEntity(BaseEntity entity) {
 		if(entity.getId() == null) {
 			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");

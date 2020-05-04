@@ -1,15 +1,17 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao;
+package com.avc.mis.beta.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.data.BankAccount;
@@ -36,10 +38,10 @@ import lombok.Getter;
  * @author Zvi
  *
  */
-@Repository
+@Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
-public class ObjectTableReader extends DAO {
+public class ObjectTableReader {
 	
 	@Autowired private ObjectTablesRepository objectTablesRepository;
 	

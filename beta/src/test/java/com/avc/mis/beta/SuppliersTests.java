@@ -15,8 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
-import com.avc.mis.beta.dao.ValueTablesReader;
-import com.avc.mis.beta.dao.Suppliers;
+import com.avc.mis.beta.dao.DeletableDAO;
+import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.dto.data.FaxDTO;
 import com.avc.mis.beta.dto.data.PhoneDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
@@ -35,6 +35,8 @@ import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.SupplyCategory;
+import com.avc.mis.beta.service.Suppliers;
+import com.avc.mis.beta.service.ValueTablesReader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
@@ -49,7 +51,7 @@ class SuppliersTests {
 	@Autowired
 	ValueTablesReader referenceTables;
 	
-	static Integer SERIAL_NO = 1633;
+	static Integer SERIAL_NO = 1650;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -133,7 +135,7 @@ class SuppliersTests {
 		return supplier;
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void suppliersTest() {
 		//supplier with null name

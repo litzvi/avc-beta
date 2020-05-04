@@ -5,6 +5,9 @@ package com.avc.mis.beta.dao;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,8 +16,14 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.process.ApprovalTask;
+import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.process.UserMessage;
+import com.avc.mis.beta.repositories.ProcessInfoRepository;
+import com.avc.mis.beta.utilities.UserAware;
+
+import lombok.AccessLevel;
+import lombok.Getter;
 
 /**
  * Abstract class inherited by all process data manipulating services.
@@ -23,16 +32,19 @@ import com.avc.mis.beta.entities.process.UserMessage;
  * @author Zvi
  *
  */
-@Transactional(rollbackFor = Throwable.class)
-public abstract class ProcessInfoDAO extends DAO {
+@Getter(value = AccessLevel.PRIVATE)
+@Repository
+//@Transactional(rollbackFor = Throwable.class)
+public class ProcessInfoDAO extends DAO {
 	
+	@Autowired private ProcessInfoRepository processRepository;
 	
 	/**
 	 * Adding (persisting) a process. 
 	 * Adds the process and adds required notifications.
 	 * @param process ProductionProcess to be added.
 	 */
-	void addProcessEntity(ProductionProcess process) {
+	public void addProcessEntity(ProductionProcess process) {
 		addEntity(process);
 		addAlerts(process);
 	}
@@ -42,7 +54,7 @@ public abstract class ProcessInfoDAO extends DAO {
 	 * Edits the process and adds required notifications.
 	 * @param process ProductionProcess to be edited.
 	 */
-	void editProcessEntity(ProductionProcess process) {
+	public void editProcessEntity(ProductionProcess process) {
 		process.setModifiedDate(null);
 		editEntity(process);
 		editAlerts(process);
@@ -130,7 +142,6 @@ public abstract class ProcessInfoDAO extends DAO {
 	 * @param decisionType the decision made.
 	 * @throws IllegalArgumentException trying to approve for another user.
 	 */
-//	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	@Deprecated
 	public void approveProcess(ApprovalTask approval, String decisionType) {
 		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
@@ -151,7 +162,6 @@ public abstract class ProcessInfoDAO extends DAO {
 	 * @param processSnapshot snapshot of the process as seen by the approver.
 	 * @throws IllegalArgumentException trying to approve for another user.
 	 */
-//	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void setProcessDecision(int approvalId, String decisionType, String processSnapshot) {
 		ApprovalTask approval = getEntityManager().find(ApprovalTask.class, approvalId);
 		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
@@ -182,4 +192,5 @@ public abstract class ProcessInfoDAO extends DAO {
 			throw new IllegalArgumentException("Can't change message label for another user");
 		}
 	}
+
 }

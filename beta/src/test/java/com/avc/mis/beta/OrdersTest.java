@@ -19,13 +19,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.avc.mis.beta.dao.Orders;
+import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
-import com.avc.mis.beta.dao.ProcessInfoReader;
-import com.avc.mis.beta.dao.ProcessInfoWriter;
-import com.avc.mis.beta.dao.Suppliers;
-import com.avc.mis.beta.dao.Users;
-import com.avc.mis.beta.dao.ValueTablesReader;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
@@ -49,6 +44,12 @@ import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.service.Orders;
+import com.avc.mis.beta.service.ProcessInfoReader;
+import com.avc.mis.beta.service.ProcessInfoWriter;
+import com.avc.mis.beta.service.Suppliers;
+import com.avc.mis.beta.service.Users;
+import com.avc.mis.beta.service.ValueTablesReader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -83,6 +84,7 @@ public class OrdersTest {
 	
 	@Autowired
 	ProcessInfoWriter processInfoWriter;
+	
 
 	private PO basicOrder() {
 		//build purchase order
@@ -120,7 +122,7 @@ public class OrdersTest {
 		return items;
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 
@@ -243,8 +245,8 @@ public class OrdersTest {
 		user.setPassword("password");
 		user.getRoles().clear();
 		users.editUser(user);
-		suppliers.permenentlyRemoveEntity(user);
-		suppliers.permenentlyRemoveEntity(user.getPerson());
+		users.permenentlyRemoveUser(user.getId());
+		users.permenentlyRemovePerson(user.getPerson().getId());
 		
 		//open user for existing person
 		user = new UserEntity();

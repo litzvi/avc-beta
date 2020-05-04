@@ -1,11 +1,14 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao;
+package com.avc.mis.beta.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.values.*;
 
@@ -18,9 +21,11 @@ import com.avc.mis.beta.entities.values.*;
  * @author Zvi
  *
  */
-@Repository
+@Service
 @Transactional(rollbackFor = Throwable.class)
-public class ValueWriter extends SoftDeletableDAO {
+public class ValueWriter {
+	
+	@Autowired private SoftDeletableDAO dao;
 	
 	/**
 	 * Edit the existing entity to it's new set values. 
@@ -29,7 +34,7 @@ public class ValueWriter extends SoftDeletableDAO {
 	 * @throws IllegalArgumentException if entity's id isn't set or new data isn't legal.
 	 */
 	public void edit(ValueEntity entity) {
-		super.editEntity(entity);
+		dao.editEntity(entity);
 	}
 	
 	/**
@@ -37,50 +42,50 @@ public class ValueWriter extends SoftDeletableDAO {
 	 * @param entity the ValueEntity to be removed - CAUTION if any other editable field is changed it will be edited.
 	 */
 	public void remove(ValueEntity entity) {
-		removeEntity(entity);
+		dao.removeEntity(entity);
 	}
 
 	public void addCountry(Country country) {
-		addEntity(country);
+		dao.addEntity(country);
 	}
 	
 	public void addCity(City city) {		
-		addEntity(city, city.getCountry());
+		dao.addEntity(city, city.getCountry());
 	}
 	
 	public void addBank(Bank bank) {
-		addEntity(bank);
+		dao.addEntity(bank);
 	}
 	
 	public void addBankBranch(BankBranch branch) {
-		addEntity(branch, branch.getBank());
+		dao.addEntity(branch, branch.getBank());
 	}
 	
 	public void addSupplyCategory(SupplyCategory category) {
-		addEntity(category);
+		dao.addEntity(category);
 	}
 	
 	public void addCompanyPosition(CompanyPosition position) {
-		addEntity(position);
+		dao.addEntity(position);
 	}
 	
 	public void addItem(Item item) {
-		addEntity(item);
+		dao.addEntity(item);
 	}
 	
 	public void addContractType(ContractType type) {
-		addEntity(type);
+		dao.addEntity(type);
 	}
 	
 	public void addProcessStatus(ProcessStatus status) {
-		addEntity(status);
+		dao.addEntity(status);
 	}
 	
 	public void addProcessType(ProcessType type) {
-		addEntity(type);
+		dao.addEntity(type);
 	}
 	
 	public void addProductionLine(ProductionLine line) {
-		addEntity(line);
+		dao.addEntity(line);
 	}
 }

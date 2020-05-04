@@ -10,9 +10,9 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import com.avc.mis.beta.dao.Users;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.Role;
+import com.avc.mis.beta.service.Users;
 
 /**
  * @author Zvi

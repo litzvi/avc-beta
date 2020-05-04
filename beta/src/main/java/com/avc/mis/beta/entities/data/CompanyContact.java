@@ -60,8 +60,17 @@ public class CompanyContact extends ObjectEntityWithId {
 	 * @param company need to be instance of Company
 	 */
 	@Override
-	public void setReference(Object company) {
-		this.setCompany((Company)company);
+	public void setReference(Object referenced) {
+//		this.setCompany((Company)company);
+		if(referenced instanceof Company) {
+			this.setCompany((Company)referenced);
+		}
+		else if(referenced instanceof Person) {
+			this.setPerson((Person)referenced);
+		}
+		else {
+			throw new ClassCastException("Referenced object dosen't match CompanyContact references");
+		}
 	}
 
 	@JsonIgnore

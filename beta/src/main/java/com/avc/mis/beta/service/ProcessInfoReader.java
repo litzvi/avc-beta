@@ -1,15 +1,18 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao;
+package com.avc.mis.beta.service;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.DAO;
+import com.avc.mis.beta.dao.ReadOnlyDAO;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
@@ -19,6 +22,7 @@ import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.UserMessage;
+import com.avc.mis.beta.repositories.ProcessInfoRepository;
 import com.avc.mis.beta.utilities.UserAware;
 
 import lombok.AccessLevel;
@@ -33,14 +37,15 @@ import lombok.NonNull;
  * @author Zvi
  *
  */
-@Repository
+@Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
-public class ProcessInfoReader extends DAO {
+public class ProcessInfoReader {
 	
+	@Autowired ReadOnlyDAO dao;
+	
+	@Autowired private ProcessInfoRepository processRepository;
 	@Autowired Orders orders;
-	
-	
 	
 	/**
 	 * Get messages for logged in user.
@@ -48,7 +53,7 @@ public class ProcessInfoReader extends DAO {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<UserMessageDTO> getAllMessages() {		
-		return getProcessRepository().findAllMessagesByUser(getCurrentUserId());
+		return getProcessRepository().findAllMessagesByUser(dao.getCurrentUserId());
 	}
 	
 	/**
@@ -57,7 +62,7 @@ public class ProcessInfoReader extends DAO {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<UserMessageDTO> getAllNewMessages() {
-		return getProcessRepository().findAllMessagesByUserAndLable(getCurrentUserId(), 
+		return getProcessRepository().findAllMessagesByUserAndLable(dao.getCurrentUserId(), 
 				new MessageLabel[] {MessageLabel.NEW});
 	}
 	
@@ -67,7 +72,7 @@ public class ProcessInfoReader extends DAO {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<ApprovalTaskDTO> getAllRequiredApprovals() {
-		return getProcessRepository().findAllRequiredApprovalsByUser(getCurrentUserId(), 
+		return getProcessRepository().findAllRequiredApprovalsByUser(dao.getCurrentUserId(), 
 				new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED});
 	}
 	
@@ -77,7 +82,7 @@ public class ProcessInfoReader extends DAO {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<ApprovalTaskDTO> getAllApprovals() {
-		return getProcessRepository().findAllApprovalsByUser(getCurrentUserId());
+		return getProcessRepository().findAllApprovalsByUser(dao.getCurrentUserId());
 	}
 	
 	/**

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao;
+package com.avc.mis.beta.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,8 +9,12 @@ import java.util.Optional;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.DeletableDAO;
+import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
@@ -28,10 +32,15 @@ import lombok.Getter;
  * @author Zvi
  *
  */
-@Repository
+@Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
-public class Orders extends ProcessInfoDAO {
+public class Orders {
+	
+	@Autowired private ProcessInfoDAO dao;
+	
+	@Deprecated
+	@Autowired private DeletableDAO deletableDAO;
 	
 	@Autowired private PORepository poRepository;	
 			
@@ -71,12 +80,13 @@ public class Orders extends ProcessInfoDAO {
 		return getPoRepository().findByOrderTypeAndStatusesBasic(ProcessName.GENERAL_ORDER, statuses);
 	}
 	
-	@Transactional(rollbackFor = Throwable.class)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addOrder(PO po) {
 		//using save rather than persist in case POid was assigned by user
-		Session session = getEntityManager().unwrap(Session.class);
-		session.save(po.getPoCode());
-		addProcessEntity(po);			
+		dao.addEntityWithFlexibleGenerator(po.getPoCode());
+//		Session session = getEntityManager().unwrap(Session.class);
+//		session.save(po.getPoCode());
+		dao.addProcessEntity(po);			
 	}
 
 	/**
@@ -138,14 +148,14 @@ public class Orders extends ProcessInfoDAO {
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editOrder(PO po) {
-		editProcessEntity(po);
+		dao.editProcessEntity(po);
 	}
 	
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	@Deprecated
 	public void removeOrder(int orderId) {
-		permenentlyRemoveEntity(PO.class, orderId);
+		getDeletableDAO().permenentlyRemoveEntity(PO.class, orderId);
 	}
 	
 }

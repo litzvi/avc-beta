@@ -32,13 +32,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * @author Zvi
- *
+ * 
  * Entity that holds core information recoded for every process:
  * PO code, 
  * type of process (Cashew order, receive order, roasting etc.),
  * production line (if have multiple), user recorded time, duration,
  * number of workers and the process status(cancelled, finalised etc.)
+ * 
+ * @author Zvi
+ * 
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)

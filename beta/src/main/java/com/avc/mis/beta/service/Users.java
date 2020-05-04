@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao;
+package com.avc.mis.beta.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,11 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.DeletableDAO;
+import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.PersonBasic;
 import com.avc.mis.beta.dto.values.UserRow;
@@ -31,15 +34,18 @@ import lombok.Getter;
  * @author Zvi
  *
  */
-@Repository
+@Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(rollbackFor = Throwable.class)
-public class Users extends SoftDeletableDAO {
+public class Users {
 	
-	@Autowired private UserRepository userRepository;
+	@Autowired private SoftDeletableDAO dao;
 	
-	@Autowired private PersonRepository personRepository;
+	@Deprecated
+	@Autowired private DeletableDAO deletableDAO;
 	
+	@Autowired private UserRepository userRepository;	
+	@Autowired private PersonRepository personRepository;	
 	@Autowired private PasswordEncoder encoder;
 	
 	/**
@@ -50,7 +56,7 @@ public class Users extends SoftDeletableDAO {
 	public List<UserRow> getUsersTable() {
 //		List<UserRow> userRows = getUserRepository().findUserRowTable();
 //		List<UserRow> userRows = new ArrayList<>();
-		List<UserRow> userRows = this.userRepository.findAll().map(u -> new UserRow(u)).collect(Collectors.toList());
+		List<UserRow> userRows = getUserRepository().findAll().map(u -> new UserRow(u)).collect(Collectors.toList());
 		return userRows;		
 	}
 	
@@ -60,7 +66,7 @@ public class Users extends SoftDeletableDAO {
 	 */
 	@Transactional(readOnly = true)
 	public List<PersonBasic> getPersonsBasic() {
-		return this.personRepository.findAllPersonsBasic();		
+		return getPersonRepository().findAllPersonsBasic();		
 	}
 	
 	/**
@@ -75,11 +81,11 @@ public class Users extends SoftDeletableDAO {
 			person.setName(user.getUsername());
 		}		
 		user.setPerson(person);
-		addEntity(user.getPerson());
+		dao.addEntity(user.getPerson());
 //		String generatedPass = RandomStringUtils.random(8, true, true);
 		//perhaps send email
 		user.setPassword(encoder.encode(user.getPassword()));
-		addEntity(user);
+		dao.addEntity(user);
 	}
 	
 	/**
@@ -93,7 +99,7 @@ public class Users extends SoftDeletableDAO {
 //		String generatedPass = RandomStringUtils.random(8, true, true);
 		//perhaps send email
 		user.setPassword(encoder.encode(user.getPassword()));
-		addEntity(user, user.getPerson());
+		dao.addEntity(user, user.getPerson());
 	}
 	
 	/**
@@ -104,7 +110,7 @@ public class Users extends SoftDeletableDAO {
 	 */
 	@Transactional(readOnly = true)
 	public UserDTO getUserByUsername(String username) {
-		Optional<UserEntity> user = userRepository.findUserByUsername(username);
+		Optional<UserEntity> user = getUserRepository().findUserByUsername(username);
 		user.orElseThrow(() -> new IllegalArgumentException("No User with given username"));
 		return new UserDTO(user.get());
 	}
@@ -117,7 +123,7 @@ public class Users extends SoftDeletableDAO {
 	 */
 	@Transactional(readOnly = true)
 	public UserDTO getUserById(Integer userId) {
-		Optional<UserEntity> user = userRepository.findById(userId);
+		Optional<UserEntity> user = getUserRepository().findById(userId);
 		user.orElseThrow(() -> new IllegalArgumentException("No User with given ID"));
 		return new UserDTO(user.get());
 	}
@@ -127,8 +133,17 @@ public class Users extends SoftDeletableDAO {
 	 * @param userId of UserEntity to be set
 	 */
 	public void removeUser(int userId) {
-		SoftDeleted entity = getEntityManager().getReference(UserEntity.class, userId);
-		removeEntity(entity);
+//		SoftDeleted entity = getEntityManager().getReference(UserEntity.class, userId);
+		dao.removeEntity(UserEntity.class, userId);
+	}
+	
+	/**
+	 * For testing only
+	 * @param userId
+	 */
+	@Deprecated
+	public void permenentlyRemoveUser(int userId) {
+		getDeletableDAO().permenentlyRemoveEntity(UserEntity.class, userId);
 	}
 	
 	/**
@@ -136,16 +151,16 @@ public class Users extends SoftDeletableDAO {
 	 * @param personId
 	 */
 	@Deprecated
-	public void permenentlyRemoveUser(int personId) {
-		permenentlyRemoveEntity(UserEntity.class, personId);
-	}
+	public void permenentlyRemovePerson(int personId) {
+		getDeletableDAO().permenentlyRemoveEntity(Person.class, personId);
+	}	
 	
 	/**
 	 * Edit the user details, dosen't edit the person details for this user.
 	 * @param user to be edited
 	 */
 	public void editUser(UserEntity user) {
-		editEntity(user);
+		dao.editEntity(user);
 	}
 	
 //	public void changePassword(Integer userId, String oldPassword, String newPassword) {
@@ -158,9 +173,9 @@ public class Users extends SoftDeletableDAO {
 	 */
 	public void editPersonalDetails(UserEntity user) {
 		Person person = user.getPerson();
-		editEntity(user);
+		dao.editEntity(user);
 		if(person != null)
-			editEntity(person);
+			dao.editEntity(person);
 		
 	}
 }

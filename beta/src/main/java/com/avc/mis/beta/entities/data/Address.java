@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 @Table(name="ADDRESSES")
 public class Address extends ContactEntity {
 
-	@Column(nullable = false)
+//	@Column(nullable = false) -- could be null
 	private String streetAddress;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -52,7 +52,7 @@ public class Address extends ContactEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return StringUtils.isNotBlank(getStreetAddress()) || streetAddress == null;
+		return StringUtils.isNotBlank(getStreetAddress()) || (city != null && city.getId() != null);
 	}
 	
 	@Override

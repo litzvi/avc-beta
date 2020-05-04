@@ -130,8 +130,10 @@ public class UpgradeService extends DAO {
 	 * @param tablename
 	 */
 	private <T extends ValueEntity> void updateToOldId(Map<Integer, T> map, String tablename) {
-		getEntityManager().flush();
-//		Connection con = getEntityManager().unwrap(Connection.class);
+		/*
+		 * getEntityManager().flush();
+		 */
+		//		Connection con = getEntityManager().unwrap(Connection.class);
 		
 		//create list of parameters
 		List<Object[]> batchArgs = new ArrayList<Object[]>();
@@ -148,7 +150,7 @@ public class UpgradeService extends DAO {
 		batchArgs.forEach(e -> System.out.println(e[0] + ", " + e[1]));
 		String sql = "update " + tablename + " set id = ? where id = ?";
 		System.out.println(jdbcTemplate.batchUpdate(sql, batchArgs)[0]);
-		getEntityManager().clear();
+		/* getEntityManager().clear(); */
 		
 //		Query query = getEntityManager().createNativeQuery(sql);
 //		for(int i=0; i < oldList.size(); i++) {

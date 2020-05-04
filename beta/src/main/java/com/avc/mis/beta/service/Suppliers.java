@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao;
+package com.avc.mis.beta.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,11 +9,19 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.DeletableDAO;
+import com.avc.mis.beta.dao.SoftDeletableDAO;
+import com.avc.mis.beta.dto.data.BankAccountDTO;
+import com.avc.mis.beta.dto.data.CompanyContactDTO;
+import com.avc.mis.beta.dto.data.PaymentAccountDTO;
+import com.avc.mis.beta.dto.data.PersonDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.SoftDeleted;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
@@ -21,7 +29,9 @@ import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
+import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.repositories.SupplierRepository;
 
 import lombok.AccessLevel;
@@ -35,13 +45,16 @@ import lombok.Getter;
  * @author Zvi
  *
  */
-@Repository
+@Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(rollbackFor = Throwable.class)
-public class Suppliers extends SoftDeletableDAO {
+public class Suppliers {
+
+	@Autowired private SoftDeletableDAO dao;
 	
-	@Autowired
-	private SupplierRepository supplierRepository;
+	@Autowired private DeletableDAO deletableDAO;
+	
+	@Autowired private SupplierRepository supplierRepository;
 	
 	/**
 	 * Get Table of all suppliers with partial info - id, name, emails, phones and supply categories -
@@ -62,13 +75,13 @@ public class Suppliers extends SoftDeletableDAO {
 	 * @throws IllegalArgumentException if supplier name isn't set or not legal.
 	 */
 	public void addSupplier(Supplier supplier) {
-		getEntityManager().persist(supplier);
+		dao.addEntity(supplier);
 		for(CompanyContact contact: supplier.getCompanyContacts()) {
 			Person person = contact.getPerson();
 			if(person.getId() == null) {
-				getEntityManager().persist(person);
+				dao.addEntity(person);
 			}
-			getEntityManager().persist(contact);			
+			dao.addEntity(contact);			
 		}		
 	}
 	
@@ -99,8 +112,9 @@ public class Suppliers extends SoftDeletableDAO {
 	 * @param supplierId
 	 */
 	public void removeSupplier(int supplierId) {
-		SoftDeleted entity = getEntityManager().getReference(Supplier.class, supplierId);
-		removeEntity(entity);	
+//		SoftDeleted entity = getEntityManager().getReference(Supplier.class, supplierId);
+//		removeEntity(entity);	
+		dao.removeEntity(Supplier.class, supplierId);
 	}
 	
 	/**
@@ -109,17 +123,17 @@ public class Suppliers extends SoftDeletableDAO {
 	 */
 	@Deprecated
 	public void permenentlyRemoveSupplier(int supplierId) {
-		Supplier supplier = getEntityManager().getReference(Supplier.class, supplierId);
-		for(PaymentAccount paymentAccount: supplier.getContactDetails().getPaymentAccounts())  {
-			BankAccount bankAccount = paymentAccount.getBankAccount();
-			getEntityManager().remove(bankAccount);
+		SupplierDTO supplier = getSupplier(supplierId);
+		for(PaymentAccountDTO paymentAccount: supplier.getContactDetails().getPaymentAccounts())  {
+			BankAccountDTO bankAccount = paymentAccount.getBankAccount();
+			getDeletableDAO().permenentlyRemoveEntity(BankAccount.class, bankAccount.getId());
 		}
-		for(CompanyContact companyContact: supplier.getCompanyContacts())  {
-			Person person = companyContact.getPerson();
-			getEntityManager().remove(companyContact);
-			getEntityManager().remove(person);
+		for(CompanyContactDTO companyContact: supplier.getCompanyContacts())  {
+			PersonDTO person = companyContact.getPerson();
+			getDeletableDAO().permenentlyRemoveEntity(CompanyContact.class, companyContact.getId());
+			getDeletableDAO().permenentlyRemoveEntity(Person.class, person.getId());
 		}
-		getEntityManager().remove(supplier);
+		getDeletableDAO().permenentlyRemoveEntity(Supplier.class, supplier.getId());
 	}
 	
 	/**
@@ -129,7 +143,7 @@ public class Suppliers extends SoftDeletableDAO {
 	 * @return the edited supplier
 	 */
 	public Supplier editSupplierMainInfo(Supplier supplier) {
-		return (Supplier)editEntity(supplier);
+		return (Supplier)dao.editEntity(supplier);
 	}
 	
 	/**
@@ -138,7 +152,7 @@ public class Suppliers extends SoftDeletableDAO {
 	 * @param contactDetails with all ContactDetails editable details set to state after edit.
 	 */
 	public void editContactInfo(ContactDetails contactDetails) {
-		editEntity(contactDetails);
+		dao.editEntity(contactDetails);
 	}
 	
 	/**
@@ -146,7 +160,7 @@ public class Suppliers extends SoftDeletableDAO {
 	 * @param account with all PaymentAccount editable details set to state after edit.
 	 */
 	public void editAccount(PaymentAccount account) {
-		editEntity(account);
+		dao.editEntity(account);
 	}
 	
 	/**
@@ -156,11 +170,11 @@ public class Suppliers extends SoftDeletableDAO {
 	 * or person has no qualified name.
 	 */
 	public void editContactPerson(CompanyContact contact) {
-		editEntity(contact);
+		dao.editEntity(contact);
 		Person person = contact.getPerson();
 		if(person != null && person.isLegal()) {
-			editEntity(person);
-			editEntity(person.getContactDetails());
+			dao.editEntity(person);
+			dao.editEntity(person.getContactDetails());
 		}
 		else {
 			throw new IllegalArgumentException("Company contact not edited, missing or illegal information");
@@ -173,19 +187,18 @@ public class Suppliers extends SoftDeletableDAO {
 	 * @param contactId ContactDetails id of the account owner
 	 */
 	public void addAccount(PaymentAccount account, int contactId) {
-		ContactDetails contactDetails = getEntityManager().getReference(ContactDetails.class, contactId);
-		account.setContactDetails(contactDetails);
-		addEntity(account);
+//		ContactDetails contactDetails = getEntityManager().getReference(ContactDetails.class, contactId);
+//		account.setContactDetails(contactDetails);
+		dao.addEntity(account, ContactDetails.class, contactId);
 	}
-	
 	
 	/**
 	 * Removes account from ContactDetails
 	 * @param accountId
 	 */
 	public void removeAccount(int accountId) {
-		BaseEntity entity = getEntityManager().getReference(PaymentAccount.class, accountId);
-		permenentlyRemoveEntity(entity);	
+//		BaseEntity entity = getEntityManager().getReference(PaymentAccount.class, accountId);
+		getDeletableDAO().permenentlyRemoveEntity(PaymentAccount.class, accountId);	
 	}
 	
 	/**
@@ -195,15 +208,26 @@ public class Suppliers extends SoftDeletableDAO {
 	 * @throws IllegalArgumentException if person isn't set or has a non qualifying name.
 	 */
 	public void addContactPerson(CompanyContact contact, int companyId) {
-		Company company = getEntityManager().getReference(Company.class, companyId);
-		contact.setCompany(company);
+//		Company company = getEntityManager().getReference(Company.class, companyId);
+//		contact.setCompany(company);
 		Person person = contact.getPerson();
-		if(person != null && person.isLegal()) {
-			getEntityManager().persist(person);
-			getEntityManager().persist(contact);
+		if(person != null) {
+			if(person.getId() != null) {
+				//need to decide if to edit person
+				dao.setEntityReference(contact, Person.class, person.getId());
+				dao.addEntity(contact, Company.class, companyId);
+			}
+			else if(person.isLegal()) {
+				dao.addEntity(person);
+//				getEntityManager().persist(contact);
+				dao.addEntity(contact, Company.class, companyId);
+			}
+			else {
+				throw new IllegalArgumentException("Person information is illegal");
+			}
 		}
 		else {
-			throw new IllegalArgumentException("Missing or illegal information for new company contact");
+			throw new IllegalArgumentException("Company contact has to reference an existing or new person");
 		}
 	}
 	
@@ -212,8 +236,35 @@ public class Suppliers extends SoftDeletableDAO {
 	 * @param contactId id of CompanyContact to remove
 	 */
 	public void removeContactPerson(int contactId) {
-		SoftDeleted entity = getEntityManager().getReference(CompanyContact.class, contactId);
-		removeEntity(entity);
+//		SoftDeleted entity = getEntityManager().getReference(CompanyContact.class, contactId);
+		dao.removeEntity(CompanyContact.class, contactId);
+	}
+	
+	/**
+	 * For testing only, needed because calling DAO directly has no transaction
+	 * @param id
+	 */
+	@Deprecated
+	public void addEntity(BaseEntity entity, BaseEntity reference) {
+		dao.addEntity(entity, reference);
+	}
+	
+	/**
+	 * For testing only, needed because calling DAO directly has no transaction
+	 * @param identity
+	 */
+	@Deprecated
+	public void permenentlyRemoveEntity(BaseEntity entity) {
+		getDeletableDAO().permenentlyRemoveEntity(entity);
+	}
+
+	/**
+	 * For testing only, needed because calling DAO directly has no transaction
+	 * @param entity
+	 */
+	@Deprecated
+	public void editEntity(BaseEntity entity) {
+		dao.editEntity(entity);
 	}
 	
 }
