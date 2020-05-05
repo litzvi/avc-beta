@@ -19,7 +19,6 @@ import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Check;
 
-import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.LinkEntity;
@@ -83,7 +82,7 @@ public class ContactDetails extends LinkEntity {
 
 //	@JsonManagedReference(value = "contactDetails_paymentAccount")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
-		orphanRemoval = true, fetch = FetchType.LAZY)
+			/* orphanRemoval = true, */ fetch = FetchType.LAZY)
 	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	

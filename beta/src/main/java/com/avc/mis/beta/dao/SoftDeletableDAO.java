@@ -4,10 +4,8 @@
 package com.avc.mis.beta.dao;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.entities.SoftDeleted;
-import com.avc.mis.beta.entities.data.Supplier;
 
 /**
  * Acts as a buffer for entities that shouldn't be physically deleted.

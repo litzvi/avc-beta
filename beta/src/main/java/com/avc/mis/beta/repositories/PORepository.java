@@ -16,7 +16,6 @@ import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.values.ProcessType;
 
 /**
  * Spring repository for accessing purchase order information.
@@ -87,7 +86,4 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "where t.value = ?1 and po.orderStatus in ?2 ")
 	List<PoRow> findByOrderTypeAndStatuses(ProcessName orderType, OrderStatus[] statuses);
 
-	@Query("select t from ProcessType t where t.value = :value")
-	ProcessType findProcessTypeByValue(ProcessName value);
-	
 }

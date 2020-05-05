@@ -16,7 +16,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
 
-import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.data.ProcessTypeAlert;
@@ -51,6 +50,12 @@ public class ProcessType extends ValueEntity {
 	
 	public String getValue() {
 		return value.name();
+	}
+	
+	@Override
+	public String toString() {
+		return getValue();
+		
 	}
 
 	@JsonIgnore

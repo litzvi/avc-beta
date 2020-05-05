@@ -66,6 +66,10 @@ public class IdCard extends DataEntity {
 		this.dob = LocalDate.parse(dob);
 	}
 	
+	public void setDateOfIssue(String dateOfIssue) {
+		this.dateOfIssue = LocalDate.parse(dateOfIssue);
+	}
+	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}

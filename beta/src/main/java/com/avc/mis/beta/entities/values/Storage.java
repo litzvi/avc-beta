@@ -3,20 +3,15 @@
  */
 package com.avc.mis.beta.entities.values;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -24,7 +19,6 @@ import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * @author Zvi
@@ -35,36 +29,30 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
-@Table(name="BANKS")
-public class Bank extends ValueEntity {
+@Table(name="WAREHOUSE_LOCATIONS")
+public class Storage extends ValueEntity {
 	
-	@Column(name = "name", nullable = false, unique = true)
+	@Column(name = "name", nullable = false)
 	private String value;
 	
-	@ToString.Exclude
-	@OneToMany(mappedBy = "bank", fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
-	@JsonIgnore
-	private Set<BankBranch> branches = new HashSet<>();
+	private BigDecimal weightCapacityKg;
+	
+	private BigDecimal volumeSpaceM3;
 	
 	public void setValue(String value) {
-		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);		
+		this.value = value.trim();
 	}
-	
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
-	
+
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return StringUtils.isNotBlank(getValue());
 	}
-	
+
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "Bank name can't be blank";
+		return "Storage name can't be blank";
 	}
-	
+
 }

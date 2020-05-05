@@ -4,7 +4,6 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
-import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;

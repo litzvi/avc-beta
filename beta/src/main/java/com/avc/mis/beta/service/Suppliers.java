@@ -8,7 +8,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,17 +20,13 @@ import com.avc.mis.beta.dto.data.PersonDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.SoftDeleted;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.repositories.SupplierRepository;
 
 import lombok.AccessLevel;

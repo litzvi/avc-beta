@@ -12,6 +12,7 @@ import org.springframework.data.repository.Repository;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.City;
@@ -37,7 +38,9 @@ import com.avc.mis.beta.entities.values.SupplyCategory;
 @NoRepositoryBean
 public interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 
-
+	@Query("select t from ProcessType t where t.value = :value")
+	ProcessType findProcessTypeByValue(ProcessName value);
+		
 	@Query("select b from Bank b where b.active = true")
 	List<Bank> findAllBanks();
 	

@@ -52,7 +52,7 @@ public class ApprovalTaskDTO extends DataDTO {
 	
 	public ApprovalTaskDTO(@NonNull ApprovalTask approval) {
 		super(approval.getId(), approval.getVersion());
-		this.title = approval.getTitle();
+		this.title = approval.getDescription();
 		this.processId = approval.getProcess().getId();
 		this.poCode = approval.getProcess().getPoCode().getValue();
 		this.processType = approval.getProcess().getProcessType().getValue();

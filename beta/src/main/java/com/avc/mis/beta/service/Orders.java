@@ -6,15 +6,12 @@ package com.avc.mis.beta.service;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
-import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
@@ -134,11 +131,11 @@ public class Orders {
 	 */
 	public PoDTO getOrderByProcessId(int processId) {
 		Optional<PoDTO> order = getPoRepository().findOrderByProcessId(processId);
-		PoDTO po = order.orElseThrow(
+		PoDTO poDTO = order.orElseThrow(
 				()->new IllegalArgumentException("No order with given process id"));
-		po.setOrderItems(getPoRepository().findOrderItemsByPo(po.getId()));
+		poDTO.setOrderItems(getPoRepository().findOrderItemsByPo(poDTO.getId()));
 		
-		return po;
+		return poDTO;
 	}
 	
 	/**

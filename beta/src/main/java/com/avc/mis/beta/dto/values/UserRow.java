@@ -3,12 +3,10 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ValueDTO;
-import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.Role;
 

@@ -13,30 +13,28 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.values.Item;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Value;
 
 /**
  * @author Zvi
  *
  */
-@Data
+@Value
 @EqualsAndHashCode(callSuper = false)
-@NoArgsConstructor
 public class OrderItemDTO extends ProcessDTO {
 
 //	@EqualsAndHashCode.Exclude // for testing 
 //	private Integer poId; //perhaps not needed, and if yes maybe get the whole PoCode
-	private Item item;
-	private MeasureUnit measureUnit;
-	private BigDecimal numberUnits;
-	private Currency currency;
-	private BigDecimal unitPrice;
-	private LocalDate deliveryDate;
-	private String defects;
-	private String remarks;
+	Item item;
+	MeasureUnit measureUnit;
+	BigDecimal numberUnits;
+	Currency currency;
+	BigDecimal unitPrice;
+	LocalDate deliveryDate;
+	String defects;
+	String remarks;
 	
 	
 	public OrderItemDTO(Integer id, Integer version, Item item, 

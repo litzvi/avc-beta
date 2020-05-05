@@ -4,13 +4,22 @@
 package com.avc.mis.beta.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.values.*;
+import com.avc.mis.beta.entities.values.Bank;
+import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.values.City;
+import com.avc.mis.beta.entities.values.CompanyPosition;
+import com.avc.mis.beta.entities.values.ContractType;
+import com.avc.mis.beta.entities.values.Country;
+import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.values.ProcessStatus;
+import com.avc.mis.beta.entities.values.ProcessType;
+import com.avc.mis.beta.entities.values.ProductionLine;
+import com.avc.mis.beta.entities.values.SupplyCategory;
 
 /**
  * Used for adding (inserting, persisting) Value entities - {@link com.avc.mis.beta.entities.ValueEntity}.

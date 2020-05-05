@@ -3,8 +3,6 @@
  */
 package com.avc.mis.beta.utilities;
 
-import java.sql.Connection;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,11 +11,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-
-import org.hibernate.ReplicationMode;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;

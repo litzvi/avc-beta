@@ -5,7 +5,6 @@ package com.avc.mis.beta.entities.data;
 
 import java.util.Optional;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;

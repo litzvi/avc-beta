@@ -15,8 +15,6 @@ import javax.persistence.UniqueConstraint;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.data.Company;
-import com.avc.mis.beta.entities.data.Person;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;

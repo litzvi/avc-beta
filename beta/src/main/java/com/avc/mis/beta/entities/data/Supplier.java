@@ -16,7 +16,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
 
-import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -53,6 +53,7 @@ public class OrderItem extends ProcessEntity {
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	
+	@Column(nullable = false)
 	private BigDecimal numberUnits;	
 	
 	@Enumerated(EnumType.STRING)

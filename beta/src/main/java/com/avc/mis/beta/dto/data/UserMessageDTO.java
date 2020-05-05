@@ -4,8 +4,6 @@
 package com.avc.mis.beta.dto.data;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.entities.enums.MessageLabel;
@@ -51,7 +49,7 @@ public class UserMessageDTO extends DataDTO {
 	
 	public UserMessageDTO(@NonNull UserMessage message) {
 		super(message.getId(), message.getVersion());
-		this.title = message.getTitle();
+		this.title = message.getDescription();
 		this.processId = message.getProcess().getId();
 		this.poCode = message.getProcess().getPoCode().getValue();
 		this.processType = message.getProcess().getProcessType().getValue();

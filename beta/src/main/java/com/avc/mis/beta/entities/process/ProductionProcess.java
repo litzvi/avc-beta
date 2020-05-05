@@ -17,10 +17,12 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
 import com.avc.mis.beta.entities.values.ProcessStatus;
@@ -28,8 +30,11 @@ import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 
@@ -49,7 +54,7 @@ import lombok.EqualsAndHashCode;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class ProductionProcess extends ProcessEntity {	
 
-	//cascade remove for testing - need to change to many to one 
+	//cascade remove for testing 
 	@ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JoinColumn(updatable = false)
 	private PoCode poCode;
@@ -72,12 +77,35 @@ public class ProductionProcess extends ProcessEntity {
 	@JoinColumn(name = "statusId"/*, nullable = false*/)
 	private ProcessStatus status;
 	
-
-	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, orphanRemoval = true)
+	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@OneToMany(mappedBy = "process", orphanRemoval = true, 
+		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@BatchSize(size = BaseEntity.BATCH_SIZE)
+	private Set<ProcessItem> processItems = new HashSet<>();
+		
+	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Set<ApprovalTask> approvals = new HashSet<>();
-	
-	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, orphanRemoval = true)
+		
+	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Set<UserMessage> messages = new HashSet<>();
+	
+	/**
+	 * Gets the list of Items as an array (can be ordered).
+	 * @return the processItems
+	 */
+	public ProcessItem[] getProcessItems() {
+		return (ProcessItem[])this.processItems.toArray(new ProcessItem[this.processItems.size()]);
+	}
+
+	/**
+	 * Setter for adding items that are processed, 
+	 * receives an array (which can be ordered, for later use to add an order to the items).
+	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
+	 * @param processItems the processItems to set
+	 */
+	public void setProcessItems(ProcessItem[] processItems) {
+		this.processItems = Insertable.filterAndSetReference(processItems, (t) -> {t.setReference(this);	return t;});
+	}
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
@@ -102,7 +130,7 @@ public class ProductionProcess extends ProcessEntity {
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "Process does not have an inset recordedTime or process type";
+		return "Process does not have a recordedTime or process type ";
 	}
 	
 	@PreUpdate

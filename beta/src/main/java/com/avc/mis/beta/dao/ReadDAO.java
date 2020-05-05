@@ -5,8 +5,6 @@ package com.avc.mis.beta.dao;
 
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.avc.mis.beta.dto.values.UserLogin;

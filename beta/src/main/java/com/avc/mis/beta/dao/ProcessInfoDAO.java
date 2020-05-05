@@ -5,22 +5,17 @@ package com.avc.mis.beta.dao;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.entities.data.ProcessTypeAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.process.ApprovalTask;
-import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.process.UserMessage;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
-import com.avc.mis.beta.utilities.UserAware;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -74,10 +69,10 @@ public class ProcessInfoDAO extends DAO {
 				ApprovalTask processApproval = new ApprovalTask();
 				processApproval.setProcess(process);
 				processApproval.setUser(a.getUser());
-				processApproval.setTitle("Process added");
+				processApproval.setDescription(process.getProcessType() + " process added");
 				addEntity(processApproval); //user already in the persistence context
 			case REVIEW:
-				addMessage(a.getUser(), process, "New process added");
+				addMessage(a.getUser(), process, "New " + process.getProcessType() + " process added");
 				break;
 			}
 		}
@@ -93,12 +88,12 @@ public class ProcessInfoDAO extends DAO {
 			if(approval.getDecision() != DecisionType.NOT_ATTENDED) {
 				approval.setDecision(DecisionType.EDIT_NOT_ATTENDED);
 			}			
-			approval.setTitle("Process added and edited");
+			approval.setDescription(process.getProcessType() + "process added and edited");
 		}
 		
 		List<ProcessTypeAlert> alerts = getProcessRepository().findProcessTypeAlerts(process.getProcessType());
 		for(ProcessTypeAlert alert: alerts) {
-			addMessage(alert.getUser(), process, "Old process edited");
+			addMessage(alert.getUser(), process, process.getProcessType() + "Old process edited");
 		}
 	}
 	
@@ -129,7 +124,7 @@ public class ProcessInfoDAO extends DAO {
 		UserMessage userMessage = new UserMessage();
 		userMessage.setProcess(process);
 		userMessage.setUser(user);
-		userMessage.setTitle(title);
+		userMessage.setDescription(title);
 		userMessage.setLabel(MessageLabel.NEW);
 		addEntity(userMessage);	//user already in the persistence context
 	}

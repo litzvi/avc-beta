@@ -3,26 +3,15 @@
  */
 package com.avc.mis.beta.entities;
 
-import java.time.Instant;
-
-import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,26 +30,26 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class ProcessInfoEntity extends DataEntity {
+public abstract class ProcessInfoEntity extends ProcessEntity {
 
-	@EqualsAndHashCode.Include
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;		
-
-	@JsonIgnore
-	@Column(updatable = false, nullable = false)
-	@CreatedDate
-    private Instant createdDate;
- 
-	@JsonIgnore
-    @LastModifiedDate
-    private Instant modifiedDate;    
-
-	@JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "userId", updatable = false)
-	private UserEntity user;
-	
+//	@EqualsAndHashCode.Include
+//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private Integer id;		
+//
+//	@JsonIgnore
+//	@Column(updatable = false, nullable = false)
+//	@CreatedDate
+//    private Instant createdDate;
+// 
+//	@JsonIgnore
+//    @LastModifiedDate
+//    private Instant modifiedDate;    
+//
+//	@JsonIgnore
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "userId", updatable = false)
+//	private UserEntity user;
+//	
 //	@JsonIgnore
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "userModifingId")
@@ -71,10 +60,10 @@ public abstract class ProcessInfoEntity extends DataEntity {
 	@JoinColumn(name = "processId", nullable = false, updatable = false)
 	private ProductionProcess process;
 	
-	private String title;
+	private String description;
 
-	@Lob
-	private String remarks;
+//	@Lob
+//	private String remarks;
 	
 	@JsonIgnore
 	@Override
@@ -85,7 +74,7 @@ public abstract class ProcessInfoEntity extends DataEntity {
 	@PrePersist
 	@Override
 	public void prePersist() {
-		if(!isLegal() && this.process != null)
+		if(!isLegal())
 			throw new IllegalArgumentException(this.getIllegalMessage());
 	}
 	

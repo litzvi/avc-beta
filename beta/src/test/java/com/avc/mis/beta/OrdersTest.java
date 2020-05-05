@@ -6,7 +6,6 @@ package com.avc.mis.beta;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -19,8 +18,6 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.avc.mis.beta.dao.DeletableDAO;
-import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
@@ -122,7 +119,7 @@ public class OrdersTest {
 		return items;
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 
@@ -255,7 +252,7 @@ public class OrdersTest {
 		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		user.getRoles().add(Role.ROLE_MANAGER);
 		Person person = new Person();
-		person.setId(2);
+		person.setId(10);
 		user.setPerson(person);
 		users.openUserForPerson(user);
 		UserDTO userByusername = users.getUserByUsername("eli" + SuppliersTests.SERIAL_NO);
