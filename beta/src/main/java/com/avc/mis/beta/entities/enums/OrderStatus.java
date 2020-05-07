@@ -9,7 +9,10 @@ package com.avc.mis.beta.entities.enums;
  */
 public enum OrderStatus {
 	OPEN_PENDING,
-	OPEN_APPROVED;
+	OPEN_APPROVED,
+	RECEIVED_PENDING,
+	RECEIVED_APPROVED,
+	RECEIVED_CLOSED;
 	
 	public String toString() {
 		switch(this) {

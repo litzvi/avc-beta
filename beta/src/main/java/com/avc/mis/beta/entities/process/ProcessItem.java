@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
@@ -42,35 +43,52 @@ public class ProcessItem extends ProcessInfoEntity {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "itemPoId", updatable = false)
-	private PO itemPo;
+	@JoinColumn(name = "itemPoCode", updatable = false)
+	private PoCode itemPo; //should be null for receiving, for items used in the process
 	
-	@Column(nullable = false)
+	@Column(nullable = false, scale = 3)
 	private BigDecimal unitAmount = BigDecimal.ONE;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private MeasureUnit measureUnit;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, scale = 3)
 	private BigDecimal numberUnits;	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "storageLocationId")
-	private Storage storageLocation;	
+	private Storage storageLocation;
+	
+	public void setMeasureUnit(String measureUnit) {
+		this.measureUnit = MeasureUnit.valueOf(measureUnit);
+	}
+	
+	protected boolean canEqual(Object o) {
+		return Insertable.canEqualCheckNullId(this, o);
+	}
+	
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof ProductionProcess) {
+			this.setProcess((ProductionProcess)referenced);
+		}
+		else {
+			throw new ClassCastException("Referenced object isn't a production process");
+		}		
+	}
 	
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return super.isLegal() && item != null && unitAmount != null
+		return item != null && unitAmount != null
 				&& measureUnit != null && numberUnits != null ;
 	}
 
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "Process item needs to reference a process, "
-				+ "specify an item, unit amount, measure unit and number of units";
+		return "Process item specify an item, unit amount, measure unit and number of units";
 	}
 
 }

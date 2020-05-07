@@ -6,7 +6,9 @@ package com.avc.mis.beta.dto.process;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -42,6 +44,9 @@ public class ReceiptDTO extends ProductionProcessDTO {
 	 */
 	public ReceiptDTO(@NonNull Receipt receipt) {
 		super(receipt);
+		this.processItems = Arrays.stream(receipt.getProcessItems())
+				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
+
 	}
 	
 	

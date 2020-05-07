@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.avc.mis.beta.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,7 +51,7 @@ public class UserEntity extends ObjectEntityWithId {
 	@Column(nullable = false, updatable = false)
 	private String password;
 	
-	@CollectionTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "personId"))
+	@CollectionTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "userId"))
 	@ElementCollection(targetClass = Role.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
@@ -61,6 +62,10 @@ public class UserEntity extends ObjectEntityWithId {
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "positionId")
 //	private CompanyPosition position;
+	
+	protected boolean canEqual(Object o) {
+		return Insertable.canEqualCheckNullId(this, o);
+	}
 	
 	@Override
 	public void setReference(Object person) {

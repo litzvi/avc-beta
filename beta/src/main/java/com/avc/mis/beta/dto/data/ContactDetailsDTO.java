@@ -4,6 +4,8 @@
 package com.avc.mis.beta.dto.data;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -30,7 +32,8 @@ public class ContactDetailsDTO extends LinkDTO {
 	private SortedSet<FaxDTO> faxes = new TreeSet<FaxDTO>(Ordinal.ordinalComparator());
 	private SortedSet<EmailDTO> emails = new TreeSet<EmailDTO>(Ordinal.ordinalComparator());
 	private AddressDTO addresses;
-	private SortedSet<PaymentAccountDTO> paymentAccounts = new TreeSet<PaymentAccountDTO>(Ordinal.ordinalComparator());
+//	private SortedSet<PaymentAccountDTO> paymentAccounts = new TreeSet<PaymentAccountDTO>(Ordinal.ordinalComparator());
+	private Set<PaymentAccountDTO> paymentAccounts = new HashSet<PaymentAccountDTO>();
 	
 	/**
 	 * @param contactDetails

@@ -37,7 +37,7 @@ public class Person extends ObjectEntityWithId {
 	private String name;
 
 	@JsonManagedReference(value = "person_idCard")
-	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
+	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, 
 			/* orphanRemoval = true, */ fetch = FetchType.LAZY)
 	private IdCard idCard;
 

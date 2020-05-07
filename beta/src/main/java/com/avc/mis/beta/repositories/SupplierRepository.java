@@ -24,19 +24,18 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 	
 	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.version, s.name) "
 			+ "from Supplier s "
-			+ "join s.supplyCategories c "
+			+ "left join s.supplyCategories c "
 			+ "where c.id = :categoryId "
 				+ "and s.active = true")
 	List<SupplierBasic> findSuppliersByCategoryBasic(Integer categoryId);
 	
-	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.version, s.name) "
+	@Query("select distinct new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.version, s.name) "
 			+ "from Supplier s "
-			+ "join s.supplyCategories c "
+			+ "left join s.supplyCategories c "
 			+ "where c.supplyGroup = :supplyGroup "
-				+ "and s.active = true")
+				+ "and s.active = true ")
 	List<SupplierBasic> findSuppliersByGroupBasic(SupplyGroup supplyGroup);
-	
-	
+		
 	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "where s.active = true")

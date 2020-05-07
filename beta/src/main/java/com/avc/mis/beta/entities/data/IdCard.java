@@ -63,11 +63,13 @@ public class IdCard extends DataEntity {
 	private Country nationality;
 	
 	public void setDob(String dob) {
-		this.dob = LocalDate.parse(dob);
+		if(dob != null)
+			this.dob = LocalDate.parse(dob);
 	}
 	
 	public void setDateOfIssue(String dateOfIssue) {
-		this.dateOfIssue = LocalDate.parse(dateOfIssue);
+		if(dob != null)
+			this.dateOfIssue = LocalDate.parse(dateOfIssue);
 	}
 	
 	protected boolean canEqual(Object o) {

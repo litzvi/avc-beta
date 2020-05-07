@@ -11,12 +11,12 @@ import java.util.List;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
@@ -55,14 +55,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  */
 @SpringBootTest
-@RunWith(SpringJUnit4ClassRunner.class)
+@ExtendWith(SpringExtension.class)
+//@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
 @WithUserDetails("eli")
 public class OrdersTest {
 	
-	private final int NUM_ITEMS = 3;
+	public static final int NUM_ITEMS = 3;
 	
-	private final int PROCESS_NO = 5000124;
+	public static int PROCESS_NO = 5000126;
 
 	@Autowired
 	Orders orders;
@@ -119,7 +120,7 @@ public class OrdersTest {
 		return items;
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void ordersTest() {
 		//insert an order 
@@ -252,7 +253,7 @@ public class OrdersTest {
 		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		user.getRoles().add(Role.ROLE_MANAGER);
 		Person person = new Person();
-		person.setId(10);
+		person.setId(2);
 		user.setPerson(person);
 		users.openUserForPerson(user);
 		UserDTO userByusername = users.getUserByUsername("eli" + SuppliersTests.SERIAL_NO);

@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.avc.mis.beta.entities.ContactEntity;
 import com.avc.mis.beta.entities.Insertable;
@@ -28,7 +29,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 //@Where(clause = "deleted = false")
-@Table(name="PAYMENT_ACCOUNTS")
+@Table(name="PAYMENT_ACCOUNTS", uniqueConstraints = 
+	{ @UniqueConstraint(columnNames = { "contactId", "ordinal" }) })
 public class PaymentAccount extends ContactEntity {
 	
 	@JoinTable(name = "BANK_PAYEES", 

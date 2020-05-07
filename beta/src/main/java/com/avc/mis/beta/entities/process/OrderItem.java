@@ -53,16 +53,17 @@ public class OrderItem extends ProcessEntity {
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, scale = 3)
 	private BigDecimal numberUnits;	
 	
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(nullable = false, scale = 3)
 	private MeasureUnit measureUnit;
 	
 	@Setter(value = AccessLevel.NONE)
 	private Currency currency;
 	
+	@Column(scale = 2)
 	private BigDecimal unitPrice;
 	
 	@Convert(converter = LocalDateToLong.class)
@@ -76,12 +77,14 @@ public class OrderItem extends ProcessEntity {
 	}
 	
 	public void setDeliveryDate(String deliveryDate) {
-		this.deliveryDate = LocalDate.parse(deliveryDate);
+		if(deliveryDate != null)
+			this.deliveryDate = LocalDate.parse(deliveryDate);
 	}
 	
 	
 	public void setMeasureUnit(String measureUnit) {
-		this.measureUnit = MeasureUnit.valueOf(measureUnit);
+		if(measureUnit != null)
+			this.measureUnit = MeasureUnit.valueOf(measureUnit);
 	}
 	
 	protected boolean canEqual(Object o) {

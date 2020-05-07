@@ -3,11 +3,14 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.repositories.ReceiptRepository;
@@ -62,14 +65,14 @@ public class OrderReceipts {
 //		
 //	}
 	
-//	public ReceiptDTO getReceiptByProcessId(int processId) {
-//		Optional<ReceiptDTO> receipt = getReceiptRepository().findReceiptByProcessId(processId);
-//		ReceiptDTO receiptDTO = receipt.orElseThrow(
-//				()->new IllegalArgumentException("No order receipt with given process id"));
-//		receiptDTO.setProcessItems(getReceiptRepository().findProcessItemsById(processId));
-//		
-//		return receiptDTO;
-//	}
+	public ReceiptDTO getReceiptByProcessId(int processId) {
+		Optional<ReceiptDTO> receipt = getReceiptRepository().findReceiptByProcessId(processId);
+		ReceiptDTO receiptDTO = receipt.orElseThrow(
+				()->new IllegalArgumentException("No order receipt with given process id"));
+		receiptDTO.setProcessItems(getReceiptRepository().findProcessItemsById(processId));
+		
+		return receiptDTO;
+	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editReceipt(Receipt receipt) {

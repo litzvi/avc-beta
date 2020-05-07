@@ -49,7 +49,7 @@ class SuppliersTests {
 	@Autowired
 	ValueTablesReader referenceTables;
 	
-	static Integer SERIAL_NO = 1662;
+	static Integer SERIAL_NO = 1668;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -133,7 +133,7 @@ class SuppliersTests {
 		return supplier;
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void suppliersTest() {
 		//supplier with null name

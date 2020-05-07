@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.LinkEntity;
 import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.values.ProcessType;
@@ -43,6 +44,10 @@ public class ProcessTypeAlert extends LinkEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private ApprovalType approvalType;
+	
+	protected boolean canEqual(Object o) {
+		return Insertable.canEqualCheckNullId(this, o);
+	}
 
 	@JsonIgnore
 	@Override

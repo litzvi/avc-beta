@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @author Zvi
  *
@@ -16,6 +18,11 @@ import javax.persistence.Table;
 @PrimaryKeyJoinColumn(name = "processId")
 public class Receipt extends ProductionProcess {
 
+	@JsonIgnore
+	@Override
+	protected boolean canEqual(Object o) {
+		return super.canEqual(o);
+	}
 	
 	@Override
 	public boolean isLegal() {
