@@ -108,8 +108,7 @@ public class ProcessInfoDAO extends DAO {
 				.findProcessTypeAlerts(process.getProcessType());
 		for(ProcessTypeAlert alert: alerts) {
 			addMessage(alert.getUser(), process, 
-					"Process decision: " + approval.getDecision() 
-					+ ", made by: " + approval.getUser().getPerson().getName());
+					"Process decision: " + approval.getDecision());
 		}
 		
 	}

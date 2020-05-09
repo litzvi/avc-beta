@@ -31,13 +31,14 @@ public class ApprovalTaskDTO extends DataDTO {
 	private String processType;
 	private Instant createdDate;
 	private String userName;
+	private String modifiedBy;
 	private String decisionType;
 	//might be wrong to initialise before fetching
 	private String processSnapshot;
 	private String remarks;
 	
 	public ApprovalTaskDTO(Integer id, Integer version, PoCode poCode, String title, Integer processId, ProcessType processType, 
-			Instant createdDate, String userName, DecisionType decision, String processSnapshot) {
+			Instant createdDate, String userName, String modifiedBy, DecisionType decision, String processSnapshot) {
 		super(id, version);
 		this.title = title;
 		this.processId = processId;
@@ -45,6 +46,7 @@ public class ApprovalTaskDTO extends DataDTO {
 		this.processType = processType.getValue();
 //		this.createdDate = LocalDateTime.ofInstant(createdDate, ZoneOffset.UTC);
 		this.userName = userName;
+		this.modifiedBy = modifiedBy;
 		this.createdDate = createdDate;
 		this.decisionType = decision.name();
 		this.processSnapshot = processSnapshot;
@@ -58,6 +60,7 @@ public class ApprovalTaskDTO extends DataDTO {
 		this.processType = approval.getProcess().getProcessType().getValue();
 //		this.createdDate = LocalDateTime.ofInstant(approval.getCreatedDate(), ZoneOffset.UTC);
 		this.userName = approval.getUser().getPerson().getName();
+		this.modifiedBy = approval.getModifiedBy().getPerson().getName();
 		this.createdDate = approval.getCreatedDate();
 		this.decisionType = approval.getDecision().name();
 		this.processSnapshot = approval.getProcessSnapshot();

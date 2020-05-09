@@ -83,7 +83,8 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "left join po.processType t "
 		+ "join po.orderItems oi "
 			+ "left join oi.item i "
-		+ "where t.value = ?1 and po.orderStatus in ?2 ")
+		+ "where t.value = ?1 and po.orderStatus in ?2 "
+		+ "ORDER BY po.createdDate DESC ")
 	List<PoRow> findByOrderTypeAndStatuses(ProcessName orderType, OrderStatus[] statuses);
 
 }

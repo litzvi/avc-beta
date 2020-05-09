@@ -29,8 +29,10 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 //@Where(clause = "deleted = false")
-@Table(name="PAYMENT_ACCOUNTS", uniqueConstraints = 
-	{ @UniqueConstraint(columnNames = { "contactId", "ordinal" }) })
+@Table(name = "PAYMENT_ACCOUNTS"/*
+								 * , uniqueConstraints = { @UniqueConstraint(columnNames = { "contactId",
+								 * "ordinal" }) }
+								 */)
 public class PaymentAccount extends ContactEntity {
 	
 	@JoinTable(name = "BANK_PAYEES", 

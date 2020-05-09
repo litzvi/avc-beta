@@ -43,7 +43,8 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 	
 	@Query("select s from Supplier s "
 			+ "left join fetch s.contactDetails cd "
-			+ "where s.active = true")
+			+ "where s.active = true "
+			+ "ORDER BY s.name ASC ")
 	Stream<Supplier> findAll();
 	
 	@Query("select s from Supplier s "

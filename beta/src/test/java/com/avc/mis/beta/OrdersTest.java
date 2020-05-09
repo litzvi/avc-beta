@@ -93,7 +93,7 @@ public class OrdersTest {
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
 		poCode.setContractType(contractType);
-		Supplier supplier = SuppliersTests.basicSupplier();
+		Supplier supplier = SuppliersTest.basicSupplier();
 		suppliers.addSupplier(supplier);
 		po.setSupplier(supplier);
 		//build process
@@ -130,7 +130,15 @@ public class OrdersTest {
 		expected = new PoDTO(po);
 		PoDTO actual;
 		actual = orders.getOrder(po.getPoCode().getCode());
-		assertEquals(expected, actual, "failed test adding po");
+		System.out.println(expected);
+		System.out.println(actual);
+		try {
+			assertEquals(expected, actual, "failed test adding po");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		
 		//edit order status
 		po.setOrderStatus(OrderStatus.OPEN_APPROVED);
@@ -222,24 +230,24 @@ public class OrdersTest {
 		
 		//insert a user
 		UserEntity user = new UserEntity();
-		user.setUsername("isral" + SuppliersTests.SERIAL_NO);
+		user.setUsername("isral" + SuppliersTest.SERIAL_NO);
 		user.setPassword("309");
 		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		users.addUser(user);
 		Person p = user.getPerson();
-		p.setName("isssssssssral" + SuppliersTests.SERIAL_NO);
+		p.setName("isssssssssral" + SuppliersTest.SERIAL_NO);
 		users.editPersonalDetails(user);
 //		suppliers.permenentlyRemoveEntity(user);
 //		suppliers.permenentlyRemoveEntity(user.getPerson());
 		
 		//insert user with 2 roles
 		user = new UserEntity();
-		user.setUsername("zvi" + SuppliersTests.SERIAL_NO);
+		user.setUsername("zvi" + SuppliersTest.SERIAL_NO);
 		user.setPassword("309");
 		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		user.getRoles().add(Role.ROLE_MANAGER);
 		users.addUser(user);
-		user.setUsername("zzzzzvi" + SuppliersTests.SERIAL_NO);
+		user.setUsername("zzzzzvi" + SuppliersTest.SERIAL_NO);
 		user.setPassword("password");
 		user.getRoles().clear();
 		users.editUser(user);
@@ -248,18 +256,18 @@ public class OrdersTest {
 		
 		//open user for existing person
 		user = new UserEntity();
-		user.setUsername("eli" + SuppliersTests.SERIAL_NO);
+		user.setUsername("eli" + SuppliersTest.SERIAL_NO);
 		user.setPassword("309");
 		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		user.getRoles().add(Role.ROLE_MANAGER);
 		Person person = new Person();
-		person.setId(2);
+		person.setId(52);
 		user.setPerson(person);
 		users.openUserForPerson(user);
-		UserDTO userByusername = users.getUserByUsername("eli" + SuppliersTests.SERIAL_NO);
+		UserDTO userByusername = users.getUserByUsername("eli" + SuppliersTest.SERIAL_NO);
 		UserDTO userById = users.getUserById(user.getId());
 		assertEquals(userByusername, userById, "Failed test fetching user by id vs. by username");
-		user.setUsername("pessi" + SuppliersTests.SERIAL_NO);
+		user.setUsername("pessi" + SuppliersTest.SERIAL_NO);
 		user.setPassword("password");
 		user.getRoles().clear();
 		users.editUser(user);

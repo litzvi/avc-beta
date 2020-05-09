@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
 @Entity
 @Table(name = "PO_CODES")
@@ -37,6 +38,7 @@ public class PoCode extends BaseEntity {
 	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
 	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
 	@Column(nullable = false, updatable = false)
+	@EqualsAndHashCode.Include
 	private Integer code;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -60,6 +62,10 @@ public class PoCode extends BaseEntity {
 	public void setId(Integer id) {
 		this.code = id;
 		
+	}
+	
+	protected boolean canEqual(Object o) {
+		return Insertable.canEqualCheckNullId(this, o);
 	}
 
 	@Override

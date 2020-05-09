@@ -39,7 +39,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 //@Transactional
-class SuppliersTests {
+class SuppliersTest {
 	
 	private final int NUM_ITEMS = 3;
 	
@@ -49,7 +49,7 @@ class SuppliersTests {
 	@Autowired
 	ValueTablesReader referenceTables;
 	
-	static Integer SERIAL_NO = 1668;
+	static Integer SERIAL_NO = 1706;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -133,7 +133,7 @@ class SuppliersTests {
 		return supplier;
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void suppliersTest() {
 		//supplier with null name
@@ -246,7 +246,7 @@ class SuppliersTests {
 		expected.getContactDetails().getFaxes().add(new FaxDTO(updatedFax));
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
-		suppliers.permenentlyRemoveSupplier(supplier.getId());
+//		suppliers.permenentlyRemoveSupplier(supplier.getId());
 
 		//print list of suppliers table
 		List<SupplierRow> list = suppliers.getSuppliersTable();

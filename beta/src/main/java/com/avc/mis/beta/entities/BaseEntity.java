@@ -7,6 +7,9 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 /**
  * Base class extended by all persistence entities.
  * Checks Legality of persisted or updated entity before updating database.
