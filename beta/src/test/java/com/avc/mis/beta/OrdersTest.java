@@ -19,6 +19,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.data.ProcessAlertDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
@@ -31,16 +32,21 @@ import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.entities.data.Person;
+import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.OrderStatus;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.Role;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.values.ProcessType;
+import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessInfoWriter;
@@ -63,7 +69,7 @@ public class OrdersTest {
 	
 	public static final int NUM_ITEMS = 3;
 	
-	public static int PROCESS_NO = 5000126;
+	public static int PROCESS_NO = 9000020;
 
 	@Autowired
 	Orders orders;
@@ -82,6 +88,8 @@ public class OrdersTest {
 	
 	@Autowired
 	ProcessInfoWriter processInfoWriter;
+	
+	@Autowired private PORepository poRepository;
 	
 
 	private PO basicOrder() {
@@ -237,8 +245,8 @@ public class OrdersTest {
 		Person p = user.getPerson();
 		p.setName("isssssssssral" + SuppliersTest.SERIAL_NO);
 		users.editPersonalDetails(user);
-//		suppliers.permenentlyRemoveEntity(user);
-//		suppliers.permenentlyRemoveEntity(user.getPerson());
+		suppliers.permenentlyRemoveEntity(user);
+		suppliers.permenentlyRemoveEntity(user.getPerson());
 		
 		//insert user with 2 roles
 		user = new UserEntity();
@@ -271,7 +279,14 @@ public class OrdersTest {
 		user.setPassword("password");
 		user.getRoles().clear();
 		users.editUser(user);
-		users.permenentlyRemoveUser(user.getId());
+		
+		//add, edit, remove processTypeAlert
+		Integer processAlertId = processInfoWriter.addProcessTypeAlert(user.getId(), 
+				poRepository.findProcessTypeByValue(ProcessName.CASHEW_ORDER), ApprovalType.REQUIRED_APPROVAL);
+		ProcessAlert processAlert = processDisplay.getProcessTypeAlert(processAlertId);
+		processInfoWriter.editProcessTypeAlert(processAlert, ApprovalType.REVIEW);
+//		users.permenentlyRemoveUser(user.getId());
+
 		
 		//get list of persons basic
 		List<PersonBasic> personsBasic = users.getPersonsBasic();
@@ -284,6 +299,11 @@ public class OrdersTest {
 		//get messages for logged in user
 		List<UserMessageDTO> userMessages = processDisplay.getAllMessages();
 		userMessages.forEach(m -> System.out.println(m));
+		
+		//get processTypeAlerts
+		List<ProcessAlertDTO> alerts = processDisplay.getAllProcessTypeAlerts();
+		alerts.forEach(m -> System.out.println(m));
+		
 		
 	}	
 }

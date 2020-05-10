@@ -32,11 +32,13 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 	Optional<ReceiptDTO> findReceiptByProcessId(int id);
 
 	@Query("select new com.avc.mis.beta.dto.process.ProcessItemDTO("
-			+ "i.id, i.version, item, i.itemPo, i.unitAmount, i.measureUnit, i.numberUnits, "
-			+ "i.storageLocation, i.description, i.remarks) "
+			+ "i.id, i.version, item, itemPo, i.unitAmount, i.measureUnit, i.numberUnits, "
+			+ "storageLocation, i.description, i.remarks) "
 		+ "from ProcessItem i "
-		+ "left join i.item item "
-		+ "join i.process p "
+			+ "join i.item item "
+			+ "join i.process p "
+			+ "left join i.itemPo itemPo "
+			+ "left join i.storageLocation storageLocation "
 		+ "where p.id = :processId ")
 	Set<ProcessItemDTO> findProcessItemsById(int processId);
 

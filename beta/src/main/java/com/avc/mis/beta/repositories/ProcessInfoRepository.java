@@ -8,8 +8,10 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.data.ProcessAlertDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
-import com.avc.mis.beta.entities.data.ProcessTypeAlert;
+import com.avc.mis.beta.entities.data.ProcessAlert;
+import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.process.ApprovalTask;
@@ -25,10 +27,10 @@ import com.avc.mis.beta.entities.values.ProcessType;
 public interface ProcessInfoRepository extends BaseRepository<ProductionProcess> {
 
 	@Query("select a "
-			+ "from ProcessTypeAlert a "
+			+ "from ProcessAlert a "
 			+ "join fetch a.user "
 			+ "where a.processType = ?1")
-	List<ProcessTypeAlert> findProcessTypeAlerts(ProcessType processType);
+	List<ProcessAlert> findProcessTypeAlerts(ProcessType processType);
 
 	@Query("select p.approvals from ProductionProcess p where p = ?1")
 	List<ApprovalTask> findProcessApprovals(ProductionProcess process);
@@ -89,14 +91,17 @@ public interface ProcessInfoRepository extends BaseRepository<ProductionProcess>
 		+ "ORDER BY m.createdDate DESC ")
 	List<UserMessageDTO> findAllMessagesByUserAndLable(Integer userId, MessageLabel[] lables);
 
-	@Query("select a from ProcessTypeAlert a "
-				+ "join fetch a.user "
-			+ "where a.id := id")
-	ProcessTypeAlert findProcessTypeAlertById(Integer id);
-
 	@Query("select a "
-			+ "from ProcessTypeAlert a "
-			+ "join fetch a.user ")
-	List<ProcessTypeAlert> findAllProcessTypeAlerts();
+			+ "from ProcessAlert a "
+				+ "join fetch a.user "
+			+ "where a.id = :id")
+	ProcessAlert findProcessTypeAlertById(Integer id);
+
+	@Query("select new com.avc.mis.beta.dto.data.ProcessAlertDTO(a.id, t.processName, "
+				+ "u.id, u.version, u.username, a.approvalType) "
+			+ "from ProcessAlert a "
+			+ "join a.user u "
+			+ "join a.processType t ")
+	List<ProcessAlertDTO> findAllProcessAlerts();
 
 }

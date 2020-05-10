@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.avc.mis.beta.entities.data.ProcessTypeAlert;
+import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
@@ -62,8 +62,8 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	private void addAlerts(ProductionProcess process) {
 		
-		List<ProcessTypeAlert> alerts = getProcessRepository().findProcessTypeAlerts(process.getProcessType());
-		for(ProcessTypeAlert a: alerts) {			
+		List<ProcessAlert> alerts = getProcessRepository().findProcessTypeAlerts(process.getProcessType());
+		for(ProcessAlert a: alerts) {			
 			switch(a.getApprovalType()) {
 			case REQUIRED_APPROVAL:
 				ApprovalTask processApproval = new ApprovalTask();
@@ -91,8 +91,8 @@ public class ProcessInfoDAO extends DAO {
 			approval.setDescription(process.getProcessType() + "process added and edited");
 		}
 		
-		List<ProcessTypeAlert> alerts = getProcessRepository().findProcessTypeAlerts(process.getProcessType());
-		for(ProcessTypeAlert alert: alerts) {
+		List<ProcessAlert> alerts = getProcessRepository().findProcessTypeAlerts(process.getProcessType());
+		for(ProcessAlert alert: alerts) {
 			addMessage(alert.getUser(), process, process.getProcessType() + "Old process edited");
 		}
 	}
@@ -104,9 +104,9 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	private void approvalAlerts(ApprovalTask approval) {
 		ProductionProcess process = approval.getProcess();
-		List<ProcessTypeAlert> alerts = getProcessRepository()
+		List<ProcessAlert> alerts = getProcessRepository()
 				.findProcessTypeAlerts(process.getProcessType());
-		for(ProcessTypeAlert alert: alerts) {
+		for(ProcessAlert alert: alerts) {
 			addMessage(alert.getUser(), process, 
 					"Process decision: " + approval.getDecision());
 		}

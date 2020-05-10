@@ -23,6 +23,7 @@ import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
+import com.avc.mis.beta.entities.values.Storage;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 
 /**
@@ -37,8 +38,11 @@ import com.avc.mis.beta.entities.values.SupplyCategory;
 //@RestResource(exported = false)
 @NoRepositoryBean
 public interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
+	
+	@Query("select s from Storage s where s.active = true")
+	List<Storage> findAllStorages();
 
-	@Query("select t from ProcessType t where t.value = :value")
+	@Query("select t from ProcessType t where t.processName = :value")
 	ProcessType findProcessTypeByValue(ProcessName value);
 		
 	@Query("select b from Bank b where b.active = true")

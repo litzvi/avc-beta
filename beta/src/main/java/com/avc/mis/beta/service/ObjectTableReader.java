@@ -14,8 +14,9 @@ import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.ProcessTypeAlert;
+import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 
 import lombok.AccessLevel;
@@ -52,14 +53,18 @@ public class ObjectTableReader {
 		return getObjectTablesRepository().findAllCompanies();		
 	}
 	
+	public List<PoCode> getAllPoCodes() {
+		return getObjectTablesRepository().findAllPoCodes();		
+	}
+	
 //-----------------------------Dependent Objects--------------------------------------------
 	
 	public List<CompanyContact> getAllCompanyContacts() {
 		return getObjectTablesRepository().findAllCompanyContacts();		
 	}
 	
-	public List<ProcessTypeAlert> getAllProcessTypeAlerts() {
-		return getObjectTablesRepository().findAllProcessTypeAlerts();		
+	public List<ProcessAlert> getAllProcessTypeAlerts() {
+		return getObjectTablesRepository().findAllProcessAlerts();		
 	}
 	
 	public List<ContactDetails> getAllContactDetails() {

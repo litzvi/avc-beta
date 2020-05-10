@@ -13,14 +13,20 @@ import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.ProcessTypeAlert;
+import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.process.PoCode;
 
 /**
  * @author Zvi
  *
  */
 public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithId> {
+	
+//-----------Finding all Base entities--------------
+	
+	@Query("select e from PoCode e")
+	List<PoCode> findAllPoCodes();
 	
 //-----------Finding all Object entities with active=true--------------
 
@@ -41,10 +47,11 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	
 //------------Finding all Link entities------------
 
-	@Query("select e from ProcessTypeAlert e")
-	List<ProcessTypeAlert> findAllProcessTypeAlerts();
+	@Query("select e from ProcessAlert e")
+	List<ProcessAlert> findAllProcessAlerts();
 
 	@Query("select e from ContactDetails e")
 	List<ContactDetails> findAllContactDetails();
 
+	
 }

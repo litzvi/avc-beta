@@ -18,7 +18,7 @@ import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.data.ProcessTypeAlert;
+import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -37,19 +37,21 @@ import lombok.NoArgsConstructor;
 @Table(name="PROCESS_TYPES")
 public class ProcessType extends ValueEntity {
 
+	@JsonIgnore
 	@Enumerated(EnumType.STRING)
 	@Column(name = "name", unique = true, nullable = false)
-	private ProcessName value;
+	private ProcessName processName;
 	
 //	@JoinTable(name = "APPROVAL_REQUIRMENTS",
 //			joinColumns = @JoinColumn(name = "processTypeId", referencedColumnName = "id"), 
 //			inverseJoinColumns = @JoinColumn(name = "staffId", referencedColumnName = "personId"))
+	@JsonIgnore
 	@OneToMany(mappedBy = "processType", fetch = FetchType.LAZY)
 	@BatchSize(size = BaseEntity.BATCH_SIZE)
-	private Set<ProcessTypeAlert> alertRequirments = new HashSet<>();
+	private Set<ProcessAlert> alertRequirments = new HashSet<>();
 	
 	public String getValue() {
-		return value.name();
+		return processName.name();
 	}
 	
 	@Override
@@ -61,7 +63,7 @@ public class ProcessType extends ValueEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return value != null;
+		return processName != null;
 	}
 
 	@JsonIgnore

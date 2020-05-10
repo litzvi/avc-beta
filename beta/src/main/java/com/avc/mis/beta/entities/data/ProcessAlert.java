@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "PROCESS_ALERTS", indexes = {@Index(columnList = "processTypeId")},
 	uniqueConstraints = { @UniqueConstraint(columnNames = { "processTypeId", "userId" }) })
-public class ProcessTypeAlert extends LinkEntity {
+public class ProcessAlert extends LinkEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processTypeId", nullable = false, updatable = false)

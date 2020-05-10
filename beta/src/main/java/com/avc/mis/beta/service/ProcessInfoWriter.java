@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
-import com.avc.mis.beta.entities.data.ProcessTypeAlert;
+import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.process.ApprovalTask;
@@ -35,21 +35,23 @@ public class ProcessInfoWriter {
 	 * @param userId the id of UserEntity to be notified
 	 * @param processType the type of process to notify for.
 	 * @param approvalType type of approval needed from user for given process type.
+	 * @return id of the newly added ProcessAlert
 	 */
-	public void addProcessTypeAlert(Integer userId, ProcessType processType, ApprovalType approvalType) {
-		ProcessTypeAlert processTypeAlert = new ProcessTypeAlert();
+	public Integer addProcessTypeAlert(Integer userId, ProcessType processType, ApprovalType approvalType) {
+		ProcessAlert processTypeAlert = new ProcessAlert();
 		processTypeAlert.setProcessType(processType);
 		processTypeAlert.setApprovalType(approvalType);
 		deletableDAO.addEntity(processTypeAlert, UserEntity.class, userId);
+		return processTypeAlert.getId();
 	}
 	
-	public void editProcessTypeAlert(ProcessTypeAlert processTypeAlert, ApprovalType approvalType) {
+	public void editProcessTypeAlert(ProcessAlert processTypeAlert, ApprovalType approvalType) {
 		processTypeAlert.setApprovalType(approvalType);
 		deletableDAO.editEntity(processTypeAlert);
 	}
 	
 	public void removeProcessTypeAlert(Integer processTypeAlertId) {
-		ProcessTypeAlert processTypeAlert = processInfoReader.getProcessTypeAlert(processTypeAlertId);
+		ProcessAlert processTypeAlert = processInfoReader.getProcessTypeAlert(processTypeAlertId);
 		String title = "You where removed from getting alerts on " + processTypeAlert.getProcessType().getValue();
 		dao.addMessage(processTypeAlert.getUser(), null, title);
 		deletableDAO.permenentlyRemoveEntity(processTypeAlert);

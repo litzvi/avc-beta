@@ -71,7 +71,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "left join po.poCode po_code "
 		+ "left join po.supplier s "
 		+ "left join po.processType t "
-		+ "where t.value = ?1 and po.orderStatus in ?2 ")
+		+ "where t.processName = ?1 and po.orderStatus in ?2 ")
 	List<PoBasic> findByOrderTypeAndStatusesBasic(ProcessName orderType, OrderStatus[] statuses);
 	
 	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code, s.name, i.value, "
@@ -83,7 +83,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "left join po.processType t "
 		+ "join po.orderItems oi "
 			+ "left join oi.item i "
-		+ "where t.value = ?1 and po.orderStatus in ?2 "
+		+ "where t.processName = ?1 and po.orderStatus in ?2 "
 		+ "ORDER BY po.createdDate DESC ")
 	List<PoRow> findByOrderTypeAndStatuses(ProcessName orderType, OrderStatus[] statuses);
 

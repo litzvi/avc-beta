@@ -11,9 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ReadOnlyDAO;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.data.ProcessAlertDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
-import com.avc.mis.beta.entities.data.ProcessTypeAlert;
+import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -42,21 +43,21 @@ public class ProcessInfoReader {
 	
 	
 	/**
-	 * Gets a ProcessTypeAlert that contains a user to be notified, 
+	 * Gets a ProcessAlert that contains a user to be notified, 
 	 * for a given process and the type of approval required.
-	 * @param id of requested ProcessTypeAlert
-	 * @return ProcessTypeAlert with the given id.
+	 * @param id of requested ProcessAlert
+	 * @return ProcessAlert with the given id.
 	 */
-	ProcessTypeAlert getProcessTypeAlert(Integer id) {
+	public ProcessAlert getProcessTypeAlert(Integer id) {
 		return processRepository.findProcessTypeAlertById(id);
 	}
 	
 	/**
 	 * Gets all the alerts requirements set in the system
-	 * @return List of ProcessTypeAlert Objects
+	 * @return List of ProcessAlert Objects
 	 */
-	public List<ProcessTypeAlert> getProcessTypeAlerts() {
-		return processRepository.findAllProcessTypeAlerts();
+	public List<ProcessAlertDTO> getAllProcessTypeAlerts() {
+		return processRepository.findAllProcessAlerts();
 	}
 	
 	/**

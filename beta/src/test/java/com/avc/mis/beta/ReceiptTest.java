@@ -84,8 +84,9 @@ public class ReceiptTest {
 		receipts.addCashewReceipt(receipt);
 		ReceiptDTO expected = new ReceiptDTO(receipt);
 		ReceiptDTO actual = receipts.getReceiptByProcessId(receipt.getId());
+		System.out.println(actual);
 		assertEquals(expected, actual, "failed test adding order receipt");
-		
+
 		//
 		
 	}

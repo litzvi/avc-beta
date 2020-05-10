@@ -69,6 +69,7 @@ public class OrderReceipts {
 		Optional<ReceiptDTO> receipt = getReceiptRepository().findReceiptByProcessId(processId);
 		ReceiptDTO receiptDTO = receipt.orElseThrow(
 				()->new IllegalArgumentException("No order receipt with given process id"));
+		System.out.println(processId);
 		receiptDTO.setProcessItems(getReceiptRepository().findProcessItemsById(processId));
 		
 		return receiptDTO;
