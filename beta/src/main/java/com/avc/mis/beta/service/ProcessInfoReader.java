@@ -13,6 +13,7 @@ import com.avc.mis.beta.dao.ReadOnlyDAO;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.entities.data.ProcessTypeAlert;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -34,10 +35,29 @@ import lombok.Getter;
 @Transactional(readOnly = true)
 public class ProcessInfoReader {
 	
-	@Autowired ReadOnlyDAO dao;
+	@Autowired private ReadOnlyDAO dao;
 	
 	@Autowired private ProcessInfoRepository processRepository;
-	@Autowired Orders orders;
+	@Autowired private Orders orders;
+	
+	
+	/**
+	 * Gets a ProcessTypeAlert that contains a user to be notified, 
+	 * for a given process and the type of approval required.
+	 * @param id of requested ProcessTypeAlert
+	 * @return ProcessTypeAlert with the given id.
+	 */
+	ProcessTypeAlert getProcessTypeAlert(Integer id) {
+		return processRepository.findProcessTypeAlertById(id);
+	}
+	
+	/**
+	 * Gets all the alerts requirements set in the system
+	 * @return List of ProcessTypeAlert Objects
+	 */
+	public List<ProcessTypeAlert> getProcessTypeAlerts() {
+		return processRepository.findAllProcessTypeAlerts();
+	}
 	
 	/**
 	 * Get messages for logged in user.

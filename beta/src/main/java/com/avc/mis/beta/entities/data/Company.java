@@ -11,6 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
@@ -39,7 +40,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @BatchSize(size = BaseEntity.BATCH_SIZE)
-@Table(name="COMPANIES")
+@Table(name="COMPANIES", indexes = {@Index(columnList = "name", unique = true)})
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Company extends ObjectEntityWithId {
 	

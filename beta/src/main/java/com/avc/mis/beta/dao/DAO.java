@@ -106,4 +106,15 @@ public abstract class DAO extends ReadDAO {
 		}
 		return getEntityManager().merge(entity);
 	}	
+	
+	/**
+	 * Search for an entity of the specified class and primary key. 
+	 * @param entityClass entity class
+	 * @param id primary key
+	 * @return the found entity instance or null if the entity does not exist
+	 * @throws IllegalArgumentException if id is null
+	 */
+	public <T extends BaseEntity> T find(Class<T> entityClass, Integer id) {
+		return getEntityManager().find(entityClass, id);
+	}
 }

@@ -7,8 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.entities.data.ProcessTypeAlert;
+import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.process.ApprovalTask;
+import com.avc.mis.beta.entities.values.ProcessType;
 
 /**
  * @author Zvi
@@ -20,6 +25,35 @@ public class ProcessInfoWriter {
 	
 	@Autowired private ProcessInfoDAO dao;
 	
+	@Autowired private DeletableDAO deletableDAO;
+	
+	@Autowired private ProcessInfoReader processInfoReader;
+	
+	
+	/**
+	 * Sets an alert to be sent to the given user, when a process of the given type is added or edited.
+	 * @param userId the id of UserEntity to be notified
+	 * @param processType the type of process to notify for.
+	 * @param approvalType type of approval needed from user for given process type.
+	 */
+	public void addProcessTypeAlert(Integer userId, ProcessType processType, ApprovalType approvalType) {
+		ProcessTypeAlert processTypeAlert = new ProcessTypeAlert();
+		processTypeAlert.setProcessType(processType);
+		processTypeAlert.setApprovalType(approvalType);
+		deletableDAO.addEntity(processTypeAlert, UserEntity.class, userId);
+	}
+	
+	public void editProcessTypeAlert(ProcessTypeAlert processTypeAlert, ApprovalType approvalType) {
+		processTypeAlert.setApprovalType(approvalType);
+		deletableDAO.editEntity(processTypeAlert);
+	}
+	
+	public void removeProcessTypeAlert(Integer processTypeAlertId) {
+		ProcessTypeAlert processTypeAlert = processInfoReader.getProcessTypeAlert(processTypeAlertId);
+		String title = "You where removed from getting alerts on " + processTypeAlert.getProcessType().getValue();
+		dao.addMessage(processTypeAlert.getUser(), null, title);
+		deletableDAO.permenentlyRemoveEntity(processTypeAlert);
+	}
 
 	/**
 	 * Approve (or any other decision) to a approval task for a process.
@@ -39,10 +73,11 @@ public class ProcessInfoWriter {
 	 * @param approvalId the ApprovalTask id.
 	 * @param decisionType the decision made.
 	 * @param processSnapshot snapshot of the process as seen by the approver.
+	 * @param remarks
 	 * @throws IllegalArgumentException trying to approve for another user.
 	 */
-	public void setProcessDecision(int approvalId, String decisionType, String processSnapshot) {
-		dao.setProcessDecision(approvalId, decisionType, processSnapshot);		
+	public void setProcessDecision(int approvalId, String decisionType, String processSnapshot, String remarks) {
+		dao.setProcessDecision(approvalId, decisionType, processSnapshot, remarks);		
 	}
 	
 	/**

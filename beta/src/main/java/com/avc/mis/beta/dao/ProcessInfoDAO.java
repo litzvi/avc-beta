@@ -119,7 +119,7 @@ public class ProcessInfoDAO extends DAO {
 	 * @param process ProductionProcess that's the subject of the message.
 	 * @param title the message title
 	 */
-	private void addMessage(UserEntity user, ProductionProcess process, String title) {
+	public void addMessage(UserEntity user, ProductionProcess process, String title) {
 		UserMessage userMessage = new UserMessage();
 		userMessage.setProcess(process);
 		userMessage.setUser(user);
@@ -154,14 +154,17 @@ public class ProcessInfoDAO extends DAO {
 	 * @param approvalId the ApprovalTask id.
 	 * @param decisionType the decision made.
 	 * @param processSnapshot snapshot of the process as seen by the approver.
+	 * @param remarks
 	 * @throws IllegalArgumentException trying to approve for another user.
 	 */
-	public void setProcessDecision(int approvalId, String decisionType, String processSnapshot) {
+	public void setProcessDecision(int approvalId, String decisionType, 
+			String processSnapshot, String remarks) {
 		ApprovalTask approval = getEntityManager().find(ApprovalTask.class, approvalId);
 		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
 			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
 			approval.setDecision(decision);
 			approval.setProcessSnapshot(processSnapshot);
+			approval.setRemarks(remarks);
 			editEntity(approval);
 			approvalAlerts(approval);
 		}

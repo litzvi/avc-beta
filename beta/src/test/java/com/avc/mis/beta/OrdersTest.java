@@ -221,7 +221,7 @@ public class OrdersTest {
 //				t.setDecisionType(DecisionType.APPROVED.name());
 //				task.setProcessVersion(p.getVersion());
 				processInfoWriter.setProcessDecision(t.getId(), 
-						DecisionType.APPROVED.name(), processSnapshot);
+						DecisionType.APPROVED.name(), processSnapshot, null);
 			});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

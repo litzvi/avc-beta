@@ -24,7 +24,10 @@ import com.avc.mis.beta.entities.values.ProcessType;
  */
 public interface ProcessInfoRepository extends BaseRepository<ProductionProcess> {
 
-	@Query("select a from ProcessTypeAlert a where a.processType = ?1")
+	@Query("select a "
+			+ "from ProcessTypeAlert a "
+			+ "join fetch a.user "
+			+ "where a.processType = ?1")
 	List<ProcessTypeAlert> findProcessTypeAlerts(ProcessType processType);
 
 	@Query("select p.approvals from ProductionProcess p where p = ?1")
@@ -85,5 +88,15 @@ public interface ProcessInfoRepository extends BaseRepository<ProductionProcess>
 			+ "and m.label in ?2 "
 		+ "ORDER BY m.createdDate DESC ")
 	List<UserMessageDTO> findAllMessagesByUserAndLable(Integer userId, MessageLabel[] lables);
+
+	@Query("select a from ProcessTypeAlert a "
+				+ "join fetch a.user "
+			+ "where a.id := id")
+	ProcessTypeAlert findProcessTypeAlertById(Integer id);
+
+	@Query("select a "
+			+ "from ProcessTypeAlert a "
+			+ "join fetch a.user ")
+	List<ProcessTypeAlert> findAllProcessTypeAlerts();
 
 }

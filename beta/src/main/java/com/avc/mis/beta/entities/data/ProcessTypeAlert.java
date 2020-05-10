@@ -8,9 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.LinkEntity;
@@ -30,7 +32,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "PROCESS_ALERTS")
+@Table(name = "PROCESS_ALERTS", indexes = {@Index(columnList = "processTypeId")},
+	uniqueConstraints = { @UniqueConstraint(columnNames = { "processTypeId", "userId" }) })
 public class ProcessTypeAlert extends LinkEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -47,6 +50,11 @@ public class ProcessTypeAlert extends LinkEntity {
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
+	}
+	
+	@Override
+	public void setReference(Object user) {
+		this.setUser((UserEntity)user);
 	}
 
 	@JsonIgnore
