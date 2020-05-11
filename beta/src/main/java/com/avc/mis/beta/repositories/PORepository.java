@@ -13,6 +13,7 @@ import com.avc.mis.beta.dto.process.OrderItemDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
+import com.avc.mis.beta.entities.enums.OrderItemStatus;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
@@ -73,6 +74,30 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "left join po.processType t "
 		+ "where t.processName = ?1 and po.orderStatus in ?2 ")
 	List<PoBasic> findByOrderTypeAndStatusesBasic(ProcessName orderType, OrderStatus[] statuses);
+	
+	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po_code, s.name, po.orderStatus) "
+		+ "from PO po "
+		+ "left join po.poCode po_code "
+		+ "left join po.supplier s "
+		+ "left join po.processType t "
+		+ "left join po.orderItems oi "
+		+ "where t.processName = ?1 and oi.status in ?2 "
+		+ "group by po.id ")
+	List<PoBasic> findByOrderTypeAndItemStatusesBasic(ProcessName orderType, OrderItemStatus[] statuses);
+		
+	
+	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code, s.name, i.value, "
+			+ "oi.numberUnits, oi.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus, "
+			+ "oi.defects, oi.currency, oi.unitPrice) "
+		+ "from PO po "
+		+ "left join po.poCode po_code "
+		+ "left join po.supplier s "
+		+ "left join po.processType t "
+		+ "join po.orderItems oi "
+			+ "left join oi.item i "
+		+ "where t.processName = ?1 and oi.status in ?2 "
+		+ "ORDER BY po.createdDate DESC ")
+	List<PoRow> findByOrderTypeAndItemStatuses(ProcessName orderType, OrderItemStatus[] statuses);
 	
 	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code, s.name, i.value, "
 			+ "oi.numberUnits, oi.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus, "

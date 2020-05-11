@@ -37,6 +37,7 @@ import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.OrderItemStatus;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.Role;
@@ -189,12 +190,12 @@ public class OrdersTest {
 			System.out.println(city);
 		
 		//get list of cashew orders
-		List<PoBasic> posBasic =  orders.findCashewOrdersBasic(new OrderStatus[] {OrderStatus.OPEN_PENDING});
+		List<PoBasic> posBasic =  orders.findCashewOrdersBasic(new OrderItemStatus[] {OrderItemStatus.OPEN});
 		for(PoBasic row: posBasic)
 			System.out.println(row);
 		
 		//get list of cashew orders
-		List<PoRow> pos =  orders.findCashewOrders(new OrderStatus[] {OrderStatus.OPEN_PENDING});
+		List<PoRow> pos =  orders.findCashewOrders(new OrderItemStatus[] {OrderItemStatus.OPEN});
 		for(PoRow row: pos) {
 			System.out.println(row);
 		}

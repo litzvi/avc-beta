@@ -22,6 +22,7 @@ import javax.persistence.Table;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.OrderItemStatus;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.utilities.LocalDateToLong;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -70,6 +71,10 @@ public class OrderItem extends ProcessEntity {
 	private LocalDate deliveryDate;
 	
 	private String defects;//maybe change to enum that can get percentage
+	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private OrderItemStatus status = OrderItemStatus.OPEN;
 	
 	public void setCurrency(String currencyCode) {
 		if(currencyCode != null)

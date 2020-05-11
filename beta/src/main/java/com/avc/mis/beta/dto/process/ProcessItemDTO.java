@@ -61,7 +61,7 @@ public class ProcessItemDTO extends ProcessDTO {
 		this.item = processItem.getItem();
 		this.itemPo = processItem.getItemPo();
 		this.measureUnit = processItem.getMeasureUnit();
-		this.unitAmount = processItem.getNumberUnits();
+		this.unitAmount = processItem.getUnitAmount();
 		this.numberUnits = processItem.getNumberUnits();
 		this.storageLocation = processItem.getStorageLocation();
 		this.remarks = processItem.getRemarks();

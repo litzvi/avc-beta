@@ -11,4 +11,8 @@ public enum RecordStatus {
 	DEFAULT,
 	ACTIVE,
 	REMOVED
+//	,
+//	OPEN,
+//	CLOSED,
+//	PENDING
 }

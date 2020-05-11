@@ -67,7 +67,7 @@ public class ReceiptTest {
 		for(int i=0; i<items.length; i++) {
 			items[i] = new ProcessItem();
 			items[i].setItem(item);
-			items[i].setUnitAmount(BigDecimal.valueOf(10));
+			items[i].setUnitAmount(BigDecimal.valueOf(10, 2));//because database is set to scale 2
 			items[i].setMeasureUnit("KG");
 			items[i].setNumberUnits(new BigDecimal(i).setScale(2));
 			items[i].setStorageLocation(storage);

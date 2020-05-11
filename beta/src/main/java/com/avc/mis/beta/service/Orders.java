@@ -15,6 +15,7 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.dto.values.PoRow;
+import com.avc.mis.beta.entities.enums.OrderItemStatus;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
@@ -43,11 +44,11 @@ public class Orders {
 			
 	/**
 	 * Gets the table of all Cashew Orders with given OrderStatus
-	 * @param statuses OrderStatuses of the requested orders
+	 * @param statuses OrderItemStatus of the requested order items (lines)
 	 * @return List of PoRow for all orders the are in one of the given statuses.
 	 */
-	public List<PoRow> findCashewOrders(OrderStatus[] statuses) {
-		return getPoRepository().findByOrderTypeAndStatuses(ProcessName.CASHEW_ORDER, statuses);
+	public List<PoRow> findCashewOrders(OrderItemStatus[] statuses) {
+		return getPoRepository().findByOrderTypeAndItemStatuses(ProcessName.CASHEW_ORDER, statuses);
 	}
 	
 	/**
@@ -61,11 +62,11 @@ public class Orders {
 	
 	/**
 	 * Gets the basic information of all Cashew Orders with given OrderStatus - id, poCode, supplier and orderStatus.
-	 * @param statuses OrderStatuses of the requested orders
+	 * @param statuses OrderItemStatus of the requested order items
 	 * @return List of PoRow for all orders the are in one of the given statuses.
 	 */
-	public List<PoBasic> findCashewOrdersBasic(OrderStatus[] statuses) {
-		return getPoRepository().findByOrderTypeAndStatusesBasic(ProcessName.CASHEW_ORDER, statuses);		
+	public List<PoBasic> findCashewOrdersBasic(OrderItemStatus[] statuses) {
+		return getPoRepository().findByOrderTypeAndItemStatusesBasic(ProcessName.CASHEW_ORDER, statuses);		
 	}
 	
 	/**
