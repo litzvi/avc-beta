@@ -93,8 +93,9 @@ public class ProcessItem extends ProcessInfoEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return item != null && unitAmount != null
-				&& measureUnit != null && numberUnits != null ;
+		return item != null && unitAmount != null && measureUnit != null && numberUnits != null 
+				&& unitAmount.compareTo(BigDecimal.ZERO) > 0
+				&& numberUnits.compareTo(BigDecimal.ZERO) > 0;
 	}
 
 	@JsonIgnore

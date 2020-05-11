@@ -99,7 +99,9 @@ public class OrderItem extends ProcessEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return item != null;
+		return item != null && measureUnit != null && numberUnits != null && unitPrice != null
+				&& numberUnits.compareTo(BigDecimal.ZERO) > 0
+				&& unitPrice.compareTo(BigDecimal.ZERO) >= 0;
 	}
 
 	@PrePersist @PreUpdate
