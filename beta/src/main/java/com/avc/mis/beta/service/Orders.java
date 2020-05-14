@@ -51,6 +51,15 @@ public class Orders {
 		return getPoRepository().findByOrderTypeAndItemStatuses(ProcessName.CASHEW_ORDER, statuses);
 	}
 	
+	
+	/**
+	 * Get Cashew purchase orders that where not received.
+	 * @return list of PoRow for orders that are yet to be received
+	 */
+	public List<PoRow> findOpenCashewOrders() {
+		return getPoRepository().findOpenOrderByType(ProcessName.CASHEW_ORDER);
+	}
+	
 	/**
 	 * Gets the table of all General Orders with given OrderStatus
 	 * @param statuses OrderStatuses of the requested orders

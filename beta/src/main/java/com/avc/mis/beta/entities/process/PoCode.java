@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.avc.mis.beta.entities.BaseEntity;
@@ -30,6 +31,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
+@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name = "PO_CODES")
 public class PoCode extends BaseEntity {

@@ -17,6 +17,7 @@ import com.avc.mis.beta.entities.process.PoCode;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.Value;
 
 /**
@@ -25,6 +26,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class PoRow extends ValueDTO {
 	
 //	int poCodeId;

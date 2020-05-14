@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * DTO for entities who represent records that already exists in the database. e.g. country, city.
@@ -16,6 +17,7 @@ import lombok.NonNull;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 public abstract class ValueDTO extends BaseDTO {
 

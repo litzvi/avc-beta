@@ -26,6 +26,7 @@ import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ProcessItem;
 import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.process.ReceiptItem;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Storage;
@@ -58,19 +59,23 @@ public class ReceiptTest {
 		return receipt;
 	}
 	
-	private ProcessItem[] processItems(int numOfItems) {
-		ProcessItem[] items = new ProcessItem[numOfItems];
+	private ReceiptItem[] processItems(int numOfItems) {
+		ReceiptItem[] items = new ReceiptItem[numOfItems];
 		Item item = new Item();
 		item.setId(1);
 		Storage storage = new Storage();
 		storage.setId(1);
+		OrderItem orderItem = new OrderItem();
+		orderItem.setId(96);
+		orderItem.setVersion(0);
 		for(int i=0; i<items.length; i++) {
-			items[i] = new ProcessItem();
+			items[i] = new ReceiptItem();
 			items[i].setItem(item);
 			items[i].setUnitAmount(BigDecimal.valueOf(10, 2));//because database is set to scale 2
 			items[i].setMeasureUnit("KG");
 			items[i].setNumberUnits(new BigDecimal(i).setScale(2));
 			items[i].setStorageLocation(storage);
+			items[i].setOrderItem(orderItem);
 		}
 //		Arrays.stream(items).forEach(i -> System.out.println(i));
 		return items;

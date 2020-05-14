@@ -95,8 +95,8 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "left join po.processType t "
 		+ "join po.orderItems oi "
 			+ "left join oi.item i "
-		+ "where t.processName = ?1 and oi.status in ?2 "
-		+ "ORDER BY po.createdDate DESC ")
+		+ "where t.processName = ?1 and oi.status in ?2 ")
+//		+ "ORDER BY po.createdDate DESC ") // maybe by delivery date
 	List<PoRow> findByOrderTypeAndItemStatuses(ProcessName orderType, OrderItemStatus[] statuses);
 	
 	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code, s.name, i.value, "
@@ -108,8 +108,22 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "left join po.processType t "
 		+ "join po.orderItems oi "
 			+ "left join oi.item i "
-		+ "where t.processName = ?1 and po.orderStatus in ?2 "
-		+ "ORDER BY po.createdDate DESC ")
+		+ "where t.processName = ?1 and po.orderStatus in ?2 ")
+//		+ "ORDER BY po.createdDate DESC ") // maybe by delivery date
 	List<PoRow> findByOrderTypeAndStatuses(ProcessName orderType, OrderStatus[] statuses);
+
+	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code, s.name, i.value, "
+			+ "oi.numberUnits, oi.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus, "
+			+ "oi.defects, oi.currency, oi.unitPrice) "
+		+ "from PO po "
+		+ "join po.supplier s "
+		+ "join po.poCode po_code "
+		+ "join po.processType t "
+		+ "join po.orderItems oi "
+			+ "join oi.item i "
+		+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
+			+ "and t.processName = ?1 "
+		+ "ORDER BY oi.deliveryDate DESC ")
+	List<PoRow> findOpenOrderByType(ProcessName cashewOrder);
 
 }

@@ -16,6 +16,7 @@ import com.avc.mis.beta.entities.process.ProcessItem;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Storage;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
@@ -23,7 +24,7 @@ import lombok.Value;
  * @author Zvi
  *
  */
-@Value
+@Data
 @EqualsAndHashCode(callSuper = false)
 public class ProcessItemDTO extends ProcessDTO {
 

@@ -70,7 +70,7 @@ public class OrdersTest {
 	
 	public static final int NUM_ITEMS = 3;
 	
-	public static int PROCESS_NO = 9000020;
+	public static int PROCESS_NO = 9000037;
 
 	@Autowired
 	Orders orders;
@@ -304,6 +304,10 @@ public class OrdersTest {
 		//get processTypeAlerts
 		List<ProcessAlertDTO> alerts = processDisplay.getAllProcessTypeAlerts();
 		alerts.forEach(m -> System.out.println(m));
+		
+		//get all open cashew orders
+		List<PoRow> openCashewList = orders.findOpenCashewOrders();
+		openCashewList.forEach(o -> System.out.println(o));
 		
 		
 	}	
