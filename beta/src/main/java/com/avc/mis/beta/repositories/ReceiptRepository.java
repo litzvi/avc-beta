@@ -3,6 +3,9 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -10,6 +13,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
+import com.avc.mis.beta.dto.values.ReceiptRow;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.Receipt;
 
 /**
@@ -41,6 +47,23 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "left join i.storageLocation storageLocation "
 		+ "where p.id = :processId ")
 	Set<ProcessItemDTO> findProcessItemsById(int processId);
+
+	@Query("select new com.avc.mis.beta.dto.values.ReceiptRow( "
+			+ "r.id, po_code, s.name, i.value, "
+			+ "oi.numberUnits, " 
+			+ "oi.measureUnit, r.recordedTime, SUM(pi.unitAmount * pi.numberUnits), pi.measureUnit, "
+			+ "sto.value) "
+			+ "from Receipt r "
+				+ "join r.poCode po_code "
+				+ "join r.supplier s "
+				+ "join r.processItems pi "
+					+ "join pi.item i "
+					+ "join pi.storageLocation sto "
+					+ "left join pi.orderItem oi "
+			+ "join r.processType t "
+			+ "where t.processName = com.avc.mis.beta.entities.enums.ProcessName.CASHEW_RECEIPT "
+			+ "group by r.id, oi ")
+	List<ReceiptRow> findCashewReceiptByType();
 
 	/**
 	 * @param processId

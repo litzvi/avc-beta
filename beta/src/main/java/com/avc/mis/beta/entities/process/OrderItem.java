@@ -72,10 +72,10 @@ public class OrderItem extends ProcessEntity {
 	
 	private String defects;//maybe change to enum that can get percentage
 	
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private OrderItemStatus status = OrderItemStatus.OPEN;
-	
+//	@Enumerated(EnumType.STRING)
+//	@Column(nullable = false)
+//	private OrderItemStatus status = OrderItemStatus.OPEN;
+//	
 	public void setCurrency(String currencyCode) {
 		if(currencyCode != null)
 			this.currency = Currency.getInstance(currencyCode);

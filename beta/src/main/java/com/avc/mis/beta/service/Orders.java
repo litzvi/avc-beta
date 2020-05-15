@@ -41,19 +41,9 @@ public class Orders {
 	@Autowired private DeletableDAO deletableDAO;
 	
 	@Autowired private PORepository poRepository;	
-			
-	/**
-	 * Gets the table of all Cashew Orders with given OrderStatus
-	 * @param statuses OrderItemStatus of the requested order items (lines)
-	 * @return List of PoRow for all orders the are in one of the given statuses.
-	 */
-	public List<PoRow> findCashewOrders(OrderItemStatus[] statuses) {
-		return getPoRepository().findByOrderTypeAndItemStatuses(ProcessName.CASHEW_ORDER, statuses);
-	}
-	
 	
 	/**
-	 * Get Cashew purchase orders that where not received.
+	 * Get the table of all Cashew purchase orders that are active and where not received.
 	 * @return list of PoRow for orders that are yet to be received
 	 */
 	public List<PoRow> findOpenCashewOrders() {
@@ -61,31 +51,64 @@ public class Orders {
 	}
 	
 	/**
-	 * Gets the table of all General Orders with given OrderStatus
-	 * @param statuses OrderStatuses of the requested orders
-	 * @return List of PoRow for all orders the are in one of the given statuses.
+	 * Get the table of all General purchase orders that are active and where not received.
+	 * @return list of PoRow for orders that are yet to be received
 	 */
-	public List<PoRow> findGeneralOrders(OrderStatus[] statuses) {
-		return getPoRepository().findByOrderTypeAndStatuses(ProcessName.GENERAL_ORDER, statuses);
+	public List<PoRow> findOpenGeneralOrders() {
+		return getPoRepository().findOpenOrderByType(ProcessName.GENERAL_ORDER);
 	}
 	
 	/**
-	 * Gets the basic information of all Cashew Orders with given OrderStatus - id, poCode, supplier and orderStatus.
-	 * @param statuses OrderItemStatus of the requested order items
-	 * @return List of PoRow for all orders the are in one of the given statuses.
+	 * Gets the basic information of all open Cashew Orders with given OrderStatus - id, poCode, supplier and orderStatus.
+	 * @return List of PoBasic for all open Cashew orders.
 	 */
-	public List<PoBasic> findCashewOrdersBasic(OrderItemStatus[] statuses) {
-		return getPoRepository().findByOrderTypeAndItemStatusesBasic(ProcessName.CASHEW_ORDER, statuses);		
+	public List<PoBasic> findOpenCashewOrdersBasic() {
+		return getPoRepository().findOpenOrderByTypeBasic(ProcessName.CASHEW_ORDER);		
 	}
 	
 	/**
 	 * Gets the basic information of all General Orders with given OrderStatus - id, poCode, supplier and orderStatus.
-	 * @param statuses OrderStatuses of the requested orders
-	 * @return List of PoRow for all orders the are in one of the given statuses.
+	 * @return List of PoBasic for all open General orders.
 	 */
-	public List<PoBasic> findGeneralOrdersBasic(OrderStatus[] statuses) {
-		return getPoRepository().findByOrderTypeAndStatusesBasic(ProcessName.GENERAL_ORDER, statuses);
+	public List<PoBasic> findOpenGeneralOrdersBasic() {
+		return getPoRepository().findOpenOrderByTypeBasic(ProcessName.GENERAL_ORDER);
 	}
+	
+//	/**
+//	 * Gets the table of all Cashew Orders with given OrderStatus
+//	 * @param statuses OrderItemStatus of the requested order items (lines)
+//	 * @return List of PoRow for all orders the are in one of the given statuses.
+//	 */
+//	public List<PoRow> findCashewOrders(OrderItemStatus[] statuses) {
+//		return getPoRepository().findByOrderTypeAndItemStatuses(ProcessName.CASHEW_ORDER, statuses);
+//	}
+//	
+//	/**
+//	 * Gets the table of all General Orders with given OrderStatus
+//	 * @param statuses OrderStatuses of the requested orders
+//	 * @return List of PoRow for all orders the are in one of the given statuses.
+//	 */
+//	public List<PoRow> findGeneralOrders(OrderStatus[] statuses) {
+//		return getPoRepository().findByOrderTypeAndStatuses(ProcessName.GENERAL_ORDER, statuses);
+//	}
+//	
+//	/**
+//	 * Gets the basic information of all Cashew Orders with given OrderStatus - id, poCode, supplier and orderStatus.
+//	 * @param statuses OrderItemStatus of the requested order items
+//	 * @return List of PoRow for all orders the are in one of the given statuses.
+//	 */
+//	public List<PoBasic> findCashewOrdersBasic(OrderItemStatus[] statuses) {
+//		return getPoRepository().findByOrderTypeAndItemStatusesBasic(ProcessName.CASHEW_ORDER, statuses);		
+//	}
+//	
+//	/**
+//	 * Gets the basic information of all General Orders with given OrderStatus - id, poCode, supplier and orderStatus.
+//	 * @param statuses OrderStatuses of the requested orders
+//	 * @return List of PoRow for all orders the are in one of the given statuses.
+//	 */
+//	public List<PoBasic> findGeneralOrdersBasic(OrderStatus[] statuses) {
+//		return getPoRepository().findByOrderTypeAndStatusesBasic(ProcessName.GENERAL_ORDER, statuses);
+//	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addOrder(PO po) {

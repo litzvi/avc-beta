@@ -3,15 +3,19 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
+import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.repositories.ReceiptRepository;
 
@@ -31,13 +35,16 @@ public class OrderReceipts {
 	
 	@Autowired private ReceiptRepository receiptRepository;	
 	
+	@Deprecated
+	@Autowired private DeletableDAO deletableDAO;
+		
 	
-//	public List<ReceiptRow> findCashewReceipts() {
-//		
-//	}
-//	
+	public List<ReceiptRow> findCashewReceipts() {
+		return getReceiptRepository().findCashewReceiptByType();
+	}
+	
 //	public List<ReceiptRow> findGeneralReceipts() {
-//		
+//		return getReceiptRepository().findReceiptByType(ProcessName.GENERAL_RECEIPT);		
 //	}
 	
 	/**
@@ -80,4 +87,9 @@ public class OrderReceipts {
 		dao.editProcessEntity(receipt);
 	}
 
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Deprecated
+	public void removeReceipt(int receiptId) {
+		getDeletableDAO().permenentlyRemoveEntity(Receipt.class, receiptId);
+	}
 }

@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.avc.mis.beta.entities.Insertable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -27,4 +29,8 @@ public class ReceiptItem extends ProcessItem {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "orderItemId")
 	private OrderItem orderItem;
+	
+	protected boolean canEqual(Object o) {
+		return Insertable.canEqualCheckNullId(this, o);
+	}
 }

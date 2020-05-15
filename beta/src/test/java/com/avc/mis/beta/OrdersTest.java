@@ -70,7 +70,7 @@ public class OrdersTest {
 	
 	public static final int NUM_ITEMS = 3;
 	
-	public static int PROCESS_NO = 9000037;
+	public static int PROCESS_NO = 9000034;
 
 	@Autowired
 	Orders orders;
@@ -98,7 +98,7 @@ public class OrdersTest {
 		PO po = new PO();
 		PoCode poCode = new PoCode();
 		po.setPoCode(poCode);
-//		poCode.setId(PROCESS_NO);
+		poCode.setId(PROCESS_NO);
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
 		poCode.setContractType(contractType);
@@ -190,12 +190,12 @@ public class OrdersTest {
 			System.out.println(city);
 		
 		//get list of cashew orders
-		List<PoBasic> posBasic =  orders.findCashewOrdersBasic(new OrderItemStatus[] {OrderItemStatus.OPEN});
+		List<PoBasic> posBasic =  orders.findOpenCashewOrdersBasic();
 		for(PoBasic row: posBasic)
 			System.out.println(row);
 		
 		//get list of cashew orders
-		List<PoRow> pos =  orders.findCashewOrders(new OrderItemStatus[] {OrderItemStatus.OPEN});
+		List<PoRow> pos =  orders.findOpenCashewOrders();
 		for(PoRow row: pos) {
 			System.out.println(row);
 		}
@@ -270,7 +270,7 @@ public class OrdersTest {
 		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		user.getRoles().add(Role.ROLE_MANAGER);
 		Person person = new Person();
-		person.setId(52);
+		person.setId(1);
 		user.setPerson(person);
 		users.openUserForPerson(user);
 		UserDTO userByusername = users.getUserByUsername("eli" + SuppliersTest.SERIAL_NO);
