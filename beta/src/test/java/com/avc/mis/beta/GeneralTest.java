@@ -20,9 +20,11 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
+import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.process.OrderItem;
@@ -48,8 +50,10 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800001;
+	static final Integer PO_CODE = 800007;
 	static final Integer NUM_PO_ITEMS = 2;
+	
+	@Autowired private DeletableDAO deletableDAO;
 	
 	@Autowired ValueTablesRepository valueTablesRepository;
 
@@ -63,7 +67,7 @@ public class GeneralTest {
 	void orderAndReceiveTest() {
 		//create basic supplier with all existing supply categories
 		Supplier supplier = new Supplier();
-		supplier.setName("Test General supplier2");
+		supplier.setName("Test supplier" + PO_CODE);
 		supplier.setSupplyCategories(valueTablesReader.getAllSupplyCategories().stream().collect(Collectors.toSet()));
 		suppliers.addSupplier(supplier);
 		SupplierDTO supplierDTO = suppliers.getSupplier(supplier.getId());
@@ -111,8 +115,8 @@ public class GeneralTest {
 			receiptItems[2*i].setUnitAmount(BigDecimal.valueOf(50));
 			receiptItems[2*i].setNumberUnits(BigDecimal.valueOf(326));
 			
-			receiptItems[2*i+1].setUnitAmount(BigDecimal.valueOf(1));
-			receiptItems[2*i+1].setNumberUnits(BigDecimal.valueOf(26));
+			receiptItems[2*i+1].setUnitAmount(BigDecimal.valueOf(26));
+			receiptItems[2*i+1].setNumberUnits(BigDecimal.valueOf(1));
 				
 		}
 		receipt.setProcessItems(receiptItems);
@@ -125,10 +129,16 @@ public class GeneralTest {
 		System.out.println("Purchase Order: " + poDTO);
 		System.out.println("Order receipt: " + receiptDTO);
 		
+		//print received orders
+		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
+		receiptRows.forEach(r -> System.out.println(r));
+		
 		//remove all
 		receipts.removeReceipt(receiptDTO.getId());
 		orders.removeOrder(poDTO.getId());
+		suppliers.permenentlyRemoveEntity(poCode);
 		suppliers.permenentlyRemoveSupplier(supplierDTO.getId());
-
+		
+		
 	}
 }

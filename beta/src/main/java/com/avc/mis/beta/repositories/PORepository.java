@@ -60,9 +60,10 @@ public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.process.OrderItemDTO("
 			+ "i.id, i.version, item, i.measureUnit, i.numberUnits, i.currency, "
-			+ "i.unitPrice, i.deliveryDate, i.defects, i.remarks) "
+			+ "i.unitPrice, i.deliveryDate, i.defects, i.remarks, ri is not null) "
 		+ "from OrderItem i "
-		+ "left join i.item item "
+			+ "left join ReceiptItem ri on ri.orderItem = i "
+		+ "join i.item item "
 		+ "join i.po po "
 		+ "where po.id = :poid ")
 	Set<OrderItemDTO> findOrderItemsByPo(Integer poid);

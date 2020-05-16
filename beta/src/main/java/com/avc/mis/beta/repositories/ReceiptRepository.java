@@ -61,9 +61,9 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 					+ "join pi.storageLocation sto "
 					+ "left join pi.orderItem oi "
 			+ "join r.processType t "
-			+ "where t.processName = com.avc.mis.beta.entities.enums.ProcessName.CASHEW_RECEIPT "
+			+ "where t.processName = :processName "
 			+ "group by r.id, oi ")
-	List<ReceiptRow> findCashewReceiptByType();
+	List<ReceiptRow> findAllReceiptsByType(ProcessName processName);
 
 	/**
 	 * @param processId

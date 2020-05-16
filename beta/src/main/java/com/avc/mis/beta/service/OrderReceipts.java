@@ -39,17 +39,24 @@ public class OrderReceipts {
 	@Autowired private DeletableDAO deletableDAO;
 		
 	
+	/**
+	 * Gets rows for table of Cashew received orders. Contains all receipts including receipt without order.	 * 
+	 * @return List of ReceiptRow - id, PO#, supplier, item, order amount, receipt amount,
+	 * receipt date and storage - for every received item.
+	 */
 	public List<ReceiptRow> findCashewReceipts() {
-		return getReceiptRepository().findCashewReceiptByType();
+		return getReceiptRepository().findAllReceiptsByType(ProcessName.CASHEW_RECEIPT);
 	}
 	
-//	public List<ReceiptRow> findGeneralReceipts() {
-//		return getReceiptRepository().findReceiptByType(ProcessName.GENERAL_RECEIPT);		
-//	}
-	
 	/**
-	 * @param receipt
+	 * Gets rows for table of General received orders. Contains all receipts including receipt without order.	 * 
+	 * @return List of ReceiptRow - id, PO#, supplier, item, order amount, receipt amount,
+	 * receipt date and storage - for every received item.
 	 */
+	public List<ReceiptRow> findGeneralReceipts() {
+		return getReceiptRepository().findAllReceiptsByType(ProcessName.GENERAL_RECEIPT);		
+	}
+		
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addReceipt(Receipt receipt) {
 		dao.addProcessEntity(receipt);

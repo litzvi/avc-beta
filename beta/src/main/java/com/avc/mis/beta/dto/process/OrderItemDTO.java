@@ -35,11 +35,12 @@ public class OrderItemDTO extends ProcessDTO {
 	LocalDate deliveryDate;
 	String defects;
 	String remarks;
+	Boolean received;
 	
 	
 	public OrderItemDTO(Integer id, Integer version, Item item, 
 			MeasureUnit measureUnit, BigDecimal numberUnits, Currency currency, BigDecimal unitPrice,
-			LocalDate deliveryDate, String defects, String remarks) {
+			LocalDate deliveryDate, String defects, String remarks, Boolean received) {
 		super(id, version);
 //		this.poId = poId;
 		this.item = item;
@@ -50,6 +51,7 @@ public class OrderItemDTO extends ProcessDTO {
 		this.deliveryDate = deliveryDate;
 		this.defects = defects;
 		this.remarks = remarks;
+		this.received = received;
 
 //		this.numberUnits.setScale(3);//for testing with assertEquals
 //		this.unitPrice.setScale(2);//for testing with assertEquals
@@ -66,6 +68,7 @@ public class OrderItemDTO extends ProcessDTO {
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.defects = orderItem.getDefects();
 		this.remarks = orderItem.getRemarks();
+		this.received = false; //should be null - set as false for testing for a newly created order
 		
 //		this.numberUnits.setScale(3);//for testing with assertEquals
 //		this.unitPrice.setScale(2);//for testing with assertEquals

@@ -43,15 +43,15 @@ public class ProcessItemDTO extends ProcessDTO {
 		super(id, version);
 		this.item = item;
 		this.itemPo = itemPo;
-		this.unitAmount = unitAmount;
+		this.unitAmount = unitAmount.setScale(3);
 		this.measureUnit = measureUnit;
-		this.numberUnits = numberUnits;
+		this.numberUnits = numberUnits.setScale(3);
 		this.storageLocation = storageLocation;
 		this.description = description;
 		this.remarks = description;
 		
-		this.unitAmount.setScale(3);//for testing with assertEquals
-		this.numberUnits.setScale(3);//for testing with assertEquals
+//		this.unitAmount.setScale(3);//for testing with assertEquals
+//		this.numberUnits.setScale(3);//for testing with assertEquals
 		
 	}
 	
@@ -65,13 +65,13 @@ public class ProcessItemDTO extends ProcessDTO {
 		this.item = processItem.getItem();
 		this.itemPo = processItem.getItemPo();
 		this.measureUnit = processItem.getMeasureUnit();
-		this.unitAmount = processItem.getUnitAmount();
-		this.numberUnits = processItem.getNumberUnits();
+		this.unitAmount = processItem.getUnitAmount().setScale(3);
+		this.numberUnits = processItem.getNumberUnits().setScale(3);
 		this.storageLocation = processItem.getStorageLocation();
 		this.remarks = processItem.getRemarks();
 		
-		this.unitAmount.setScale(3);//for testing with assertEquals
-		this.numberUnits.setScale(3);//for testing with assertEquals
+//		this.unitAmount.setScale(3);//for testing with assertEquals
+//		this.numberUnits.setScale(3);//for testing with assertEquals
 		
 	}
 

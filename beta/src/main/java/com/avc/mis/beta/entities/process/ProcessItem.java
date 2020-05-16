@@ -63,7 +63,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	@Column(nullable = false, scale = 3)
 	private BigDecimal numberUnits;	
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "storageLocationId")
 	private Storage storageLocation;
 	
