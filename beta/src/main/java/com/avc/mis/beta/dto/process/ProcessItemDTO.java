@@ -50,6 +50,9 @@ public class ProcessItemDTO extends ProcessDTO {
 		this.description = description;
 		this.remarks = description;
 		
+		this.unitAmount.setScale(3);//for testing with assertEquals
+		this.numberUnits.setScale(3);//for testing with assertEquals
+		
 	}
 	
 	
@@ -66,6 +69,10 @@ public class ProcessItemDTO extends ProcessDTO {
 		this.numberUnits = processItem.getNumberUnits();
 		this.storageLocation = processItem.getStorageLocation();
 		this.remarks = processItem.getRemarks();
+		
+		this.unitAmount.setScale(3);//for testing with assertEquals
+		this.numberUnits.setScale(3);//for testing with assertEquals
+		
 	}
 
 

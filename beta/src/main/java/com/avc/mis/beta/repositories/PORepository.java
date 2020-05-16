@@ -126,7 +126,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "ORDER BY oi.deliveryDate DESC ")
 	List<PoRow> findOpenOrderByType(ProcessName orderType);
 
-	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po_code, s.name, s.id, po.orderStatus) "
+	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po_code, s.name, s.id, s.version, po.orderStatus) "
 			+ "from PO po "
 			+ "join po.poCode po_code "
 			+ "join po.supplier s "

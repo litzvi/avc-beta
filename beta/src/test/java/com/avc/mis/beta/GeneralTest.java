@@ -48,7 +48,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800000;
+	static final Integer PO_CODE = 800001;
 	static final Integer NUM_PO_ITEMS = 2;
 	
 	@Autowired ValueTablesRepository valueTablesRepository;
@@ -63,7 +63,7 @@ public class GeneralTest {
 	void orderAndReceiveTest() {
 		//create basic supplier with all existing supply categories
 		Supplier supplier = new Supplier();
-		supplier.setName("general test supplier");
+		supplier.setName("Test General supplier");
 		supplier.setSupplyCategories(valueTablesReader.getAllSupplyCategories().stream().collect(Collectors.toSet()));
 		suppliers.addSupplier(supplier);
 		SupplierDTO supplierDTO = suppliers.getSupplier(supplier.getId());
