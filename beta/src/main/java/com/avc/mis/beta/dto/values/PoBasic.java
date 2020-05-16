@@ -23,13 +23,15 @@ public class PoBasic extends ValueDTO {
 	Integer poCode;
 	String value;
 	String supplierName;
+	Integer supplierId;
 	OrderStatus orderStatus;
 	
-	public PoBasic(@NonNull Integer id, PoCode poCode, String supplierName, OrderStatus orderStatus) {
+	public PoBasic(@NonNull Integer id, PoCode poCode, String supplierName, Integer supplierId, OrderStatus orderStatus) {
 		super(id);
 		this.poCode  = poCode.getCode();
 		this.value = poCode.getValue();
 		this.supplierName = supplierName;
+		this.supplierId = supplierId;
 		this.orderStatus = orderStatus;
 	}
 	
@@ -38,6 +40,7 @@ public class PoBasic extends ValueDTO {
 		this.poCode  = po.getPoCode().getCode();
 		this.value = po.getPoCode().getValue();
 		this.supplierName = po.getSupplier().getName();
+		this.supplierId = po.getSupplier().getId();
 		this.orderStatus = po.getOrderStatus();
 	}
 	

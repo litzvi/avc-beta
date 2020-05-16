@@ -5,15 +5,20 @@ package com.avc.mis.beta.entities.values;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.ValueEntity;
+import com.avc.mis.beta.entities.enums.ContractTypeCode;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author Zvi
@@ -29,13 +34,24 @@ public class ContractType extends ValueEntity {
 	@Column(unique = true, nullable = false)
 	private String name;
 	
+	@JsonIgnore
+	@Enumerated(EnumType.STRING)
 	@Column(name = "code", unique = true, nullable = false)
-	private String value;
+	private ContractTypeCode code;
+	
+	public void setValue(String value) {
+		if(value != null)
+			this.code = ContractTypeCode.valueOf(value);
+	}
+	
+	public String getValue() {
+		return code.name();
+	}
 
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return StringUtils.isNotBlank(getName()) && StringUtils.isNotBlank(getValue());
+		return StringUtils.isNotBlank(getName()) && getValue() != null;
 	}
 
 	@JsonIgnore

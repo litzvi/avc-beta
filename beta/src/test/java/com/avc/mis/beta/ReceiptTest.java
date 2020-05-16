@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Disabled;
@@ -23,6 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.avc.mis.beta.dto.process.OrderItemDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
+import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
@@ -106,7 +108,7 @@ public class ReceiptTest {
 		for(OrderItemDTO oItem: orderItems) {
 			items[i] = new ReceiptItem();
 			items[i].setItem(oItem.getItem());
-			items[i].setUnitAmount(BigDecimal.valueOf(10, 2));//because database is set to scale 2
+			items[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
 			items[i].setMeasureUnit("KG");
 			items[i].setNumberUnits(oItem.getNumberUnits().divide(BigDecimal.valueOf(10, 2)).setScale(2));
 			items[i].setStorageLocation(storage);
@@ -130,7 +132,7 @@ public class ReceiptTest {
 		for(int i=0; i<items.length; i++) {
 			items[i] = new ReceiptItem();
 			items[i].setItem(item);
-			items[i].setUnitAmount(BigDecimal.valueOf(10, 2));//because database is set to scale 2
+			items[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
 			items[i].setMeasureUnit("KG");
 			items[i].setNumberUnits(new BigDecimal(i).setScale(2));
 			items[i].setStorageLocation(storage);
@@ -142,12 +144,13 @@ public class ReceiptTest {
 //	@Disabled
 	@Test
 	void receiptTest() {
-		//insert order receipt without orderS
+		//insert order receipt without order
 		Receipt receipt = basicReceipt();
 		receipts.addCashewReceipt(receipt);
 		ReceiptDTO expected = new ReceiptDTO(receipt);
 		ReceiptDTO actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding receipt without order");
+		System.out.println(actual);
 
 		//insert order receipt for order
 		receipt = orderReceipt();
@@ -155,6 +158,11 @@ public class ReceiptTest {
 		expected = new ReceiptDTO(receipt);
 		actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding order receipt");
+		System.out.println(actual);
+		
+		//
+		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
+		receiptRows.forEach(r -> System.out.println(r));
 	}
 
 

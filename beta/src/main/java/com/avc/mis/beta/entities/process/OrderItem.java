@@ -58,7 +58,7 @@ public class OrderItem extends ProcessEntity {
 	private BigDecimal numberUnits;	
 	
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, scale = 3)
+	@Column(nullable = false)
 	private MeasureUnit measureUnit;
 	
 	@Setter(value = AccessLevel.NONE)
