@@ -63,7 +63,7 @@ public class GeneralTest {
 	void orderAndReceiveTest() {
 		//create basic supplier with all existing supply categories
 		Supplier supplier = new Supplier();
-		supplier.setName("Test General supplier");
+		supplier.setName("Test General supplier2");
 		supplier.setSupplyCategories(valueTablesReader.getAllSupplyCategories().stream().collect(Collectors.toSet()));
 		suppliers.addSupplier(supplier);
 		SupplierDTO supplierDTO = suppliers.getSupplier(supplier.getId());

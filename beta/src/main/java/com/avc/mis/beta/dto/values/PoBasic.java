@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
@@ -18,7 +18,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class PoBasic extends ValueDTO {
+public class PoBasic extends DataDTO {
 
 	Integer poCode;
 	String value;
@@ -26,9 +26,9 @@ public class PoBasic extends ValueDTO {
 	SupplierBasic supplier;
 	OrderStatus orderStatus;
 	
-	public PoBasic(@NonNull Integer id, PoCode poCode, 
+	public PoBasic(@NonNull Integer id, Integer version, PoCode poCode, 
 			String supplierName, Integer supplierId, Integer supplierVersion, OrderStatus orderStatus) {
-		super(id);
+		super(id, version);
 		this.poCode  = poCode.getCode();
 		this.value = poCode.getValue();
 		this.supplierName = supplierName;
@@ -37,7 +37,7 @@ public class PoBasic extends ValueDTO {
 	}
 	
 	public PoBasic(PO po) {
-		super(po.getId());
+		super(po.getId(), po.getVersion());
 		this.poCode  = po.getPoCode().getCode();
 		this.value = po.getPoCode().getValue();
 		this.supplierName = po.getSupplier().getName();

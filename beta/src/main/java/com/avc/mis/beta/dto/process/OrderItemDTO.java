@@ -44,15 +44,15 @@ public class OrderItemDTO extends ProcessDTO {
 //		this.poId = poId;
 		this.item = item;
 		this.measureUnit = measureUnit;
-		this.numberUnits = numberUnits;
+		this.numberUnits = numberUnits.setScale(3);
 		this.currency = currency;
-		this.unitPrice = unitPrice;
+		this.unitPrice = unitPrice.setScale(2);
 		this.deliveryDate = deliveryDate;
 		this.defects = defects;
 		this.remarks = remarks;
 
-		this.numberUnits.setScale(3);//for testing with assertEquals
-		this.unitPrice.setScale(2);//for testing with assertEquals
+//		this.numberUnits.setScale(3);//for testing with assertEquals
+//		this.unitPrice.setScale(2);//for testing with assertEquals
 	}
 	
 	public OrderItemDTO(@NonNull OrderItem orderItem) {
@@ -60,15 +60,15 @@ public class OrderItemDTO extends ProcessDTO {
 //		this.poId = orderItem.getPo().getId();
 		this.item = orderItem.getItem();
 		this.measureUnit = orderItem.getMeasureUnit();
-		this.numberUnits = orderItem.getNumberUnits();
+		this.numberUnits = orderItem.getNumberUnits().setScale(3);
 		this.currency = orderItem.getCurrency();
-		this.unitPrice = orderItem.getUnitPrice();
+		this.unitPrice = orderItem.getUnitPrice().setScale(2);
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.defects = orderItem.getDefects();
 		this.remarks = orderItem.getRemarks();
 		
-		this.numberUnits.setScale(3);//for testing with assertEquals
-		this.unitPrice.setScale(2);//for testing with assertEquals
+//		this.numberUnits.setScale(3);//for testing with assertEquals
+//		this.unitPrice.setScale(2);//for testing with assertEquals
 	}
 	
 	public String getCurrency() {
