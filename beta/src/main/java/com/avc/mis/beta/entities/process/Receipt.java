@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
@@ -35,7 +36,11 @@ public class Receipt extends ProductionProcess {
 	
 	@ManyToOne 
 	@JoinColumn(name = "supplierId", updatable = false, nullable = false)
-	private Supplier supplier; 
+	private Supplier supplier; 	
+
+	public void setProcessItems(ReceiptItem[] receiptItems) {
+		super.setProcessItems(receiptItems);
+	}
 	
 	@JsonIgnore
 	@Override
@@ -52,5 +57,5 @@ public class Receipt extends ProductionProcess {
 	public String getIllegalMessage() {
 		return super.getIllegalMessage() + " or no items received ";
 	}
-
+	
 }

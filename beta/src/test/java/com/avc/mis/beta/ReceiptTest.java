@@ -68,7 +68,7 @@ public class ReceiptTest {
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());
 		//add order items
-		ProcessItem[] items = processItems(OrdersTest.NUM_ITEMS);				
+		ReceiptItem[] items = processItems(OrdersTest.NUM_ITEMS);				
 		receipt.setProcessItems(items);
 		return receipt;
 	}
@@ -121,8 +121,8 @@ public class ReceiptTest {
 		return items;
 	}
 
-	private ProcessItem[] processItems(int numOfItems) {
-		ProcessItem[] items = new ProcessItem[numOfItems];
+	private ReceiptItem[] processItems(int numOfItems) {
+		ReceiptItem[] items = new ReceiptItem[numOfItems];
 		Item item = new Item();
 		item.setId(1);
 		Storage storage = new Storage();

@@ -3,18 +3,15 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.process.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
+import com.avc.mis.beta.dto.process.ReceiptItemDTO;
 import com.avc.mis.beta.dto.values.ReceiptRow;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.Receipt;
 
@@ -37,16 +34,17 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 		+ "where r.id = :id ")
 	Optional<ReceiptDTO> findReceiptByProcessId(int id);
 
-	@Query("select new com.avc.mis.beta.dto.process.ProcessItemDTO("
+	@Query("select new com.avc.mis.beta.dto.process.ReceiptItemDTO("
 			+ "i.id, i.version, item, itemPo, i.unitAmount, i.measureUnit, i.numberUnits, "
-			+ "storageLocation, i.description, i.remarks) "
-		+ "from ProcessItem i "
+			+ "storageLocation, i.description, i.remarks, oi.id, oi.version) "
+		+ "from ReceiptItem i "
+			+ "left join i.orderItem oi "
 			+ "join i.item item "
 			+ "join i.process p "
 			+ "left join i.itemPo itemPo "
 			+ "left join i.storageLocation storageLocation "
 		+ "where p.id = :processId ")
-	Set<ProcessItemDTO> findProcessItemsById(int processId);
+	Set<ReceiptItemDTO> findReceiptItemsById(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.values.ReceiptRow( "
 			+ "r.id, po_code, s.name, i.value, "

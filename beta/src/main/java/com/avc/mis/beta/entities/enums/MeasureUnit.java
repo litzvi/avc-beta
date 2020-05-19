@@ -10,8 +10,9 @@ import java.math.BigDecimal;
  *
  */
 public enum MeasureUnit {
-	KG("1", "2.205"),
-	LBS("0.454", "1.0");
+	KG("1", "2.2046"),
+	LBS("0.4536", "1.0"),
+	OZ("0.02835", "0.0625");
 	
 	private BigDecimal kg;
 	private BigDecimal lbs;

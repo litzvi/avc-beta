@@ -55,7 +55,7 @@ import lombok.Setter;
 public class ProductionProcess extends ProcessEntity {	
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(updatable = false)
+	@JoinColumn(updatable = false, nullable = false)
 	private PoCode poCode;
 	
 	@JsonIgnore
@@ -102,7 +102,7 @@ public class ProductionProcess extends ProcessEntity {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param processItems the processItems to set
 	 */
-	public void setProcessItems(ProcessItem[] processItems) {
+	void setProcessItems(ProcessItem[] processItems) {
 		this.processItems = Insertable.filterAndSetReference(processItems, (t) -> {t.setReference(this);	return t;});
 	}
 	

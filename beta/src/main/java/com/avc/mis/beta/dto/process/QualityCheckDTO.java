@@ -11,7 +11,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.entities.process.PoCode;
-import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.process.QualityCheck;
+import com.avc.mis.beta.entities.process.RawItemQuality;
 import com.avc.mis.beta.entities.process.ReceiptItem;
 import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
@@ -31,27 +33,22 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class ReceiptDTO extends ProductionProcessDTO {
+public class QualityCheckDTO extends ProductionProcessDTO {
 
-	private Set<ReceiptItemDTO> receiptItems; //can use a SortedSet like ContactDetails to maintain order
+	private Set<RawItemQualityDTO> checkItems; //can use a SortedSet like ContactDetails to maintain order
 	
-	public ReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, PoCode poCode,
+	public QualityCheckDTO(Integer id, Integer version, Instant createdDate, String userRecording, PoCode poCode,
 			ProcessType processType, ProductionLine productionLine, OffsetDateTime recordedTime, Duration duration,
 			Integer numOfWorkers, ProcessStatus status, String remarks) {
 		super(id, version, createdDate, userRecording, poCode, processType, productionLine, recordedTime, duration,
 				numOfWorkers, status, remarks);
 	}
-
-	/**
-	 * @param process
-	 */
-	public ReceiptDTO(@NonNull Receipt receipt) {
-		super(receipt);
-		this.receiptItems = Arrays.stream(receipt.getProcessItems())
-				.map(i->{return new ReceiptItemDTO((ReceiptItem) i);}).collect(Collectors.toSet());
-
+	
+	public QualityCheckDTO(@NonNull QualityCheck check) {
+		super(check);
+		this.checkItems = Arrays.stream(check.getProcessItems())
+				.map(i->{return new RawItemQualityDTO((RawItemQuality)i);}).collect(Collectors.toSet());
 	}
-	
-	
 
+	
 }

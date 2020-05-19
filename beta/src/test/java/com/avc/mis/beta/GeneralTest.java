@@ -23,6 +23,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
+import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.entities.data.Supplier;
@@ -30,6 +31,8 @@ import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
+import com.avc.mis.beta.entities.process.QualityCheck;
+import com.avc.mis.beta.entities.process.RawItemQuality;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.ReceiptItem;
 import com.avc.mis.beta.entities.values.Item;
@@ -37,6 +40,7 @@ import com.avc.mis.beta.entities.values.Storage;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
 import com.avc.mis.beta.service.OrderReceipts;
 import com.avc.mis.beta.service.Orders;
+import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.ValueTablesReader;
 
@@ -50,8 +54,9 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800007;
+	static final Integer PO_CODE = 800008;
 	static final Integer NUM_PO_ITEMS = 2;
+	static final Integer NUM_OF_CHECKS = 1;
 	
 	@Autowired private DeletableDAO deletableDAO;
 	
@@ -62,6 +67,7 @@ public class GeneralTest {
 	@Autowired Suppliers suppliers;
 	@Autowired Orders orders;
 	@Autowired OrderReceipts receipts;
+	@Autowired QualityChecks checks;
 	
 	@Test
 	void orderAndReceiveTest() {
@@ -124,16 +130,36 @@ public class GeneralTest {
 		ReceiptDTO receiptDTO = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(new ReceiptDTO(receipt), receiptDTO, "Order Receipt not added or fetched correctly");
 		
+		//add QC for received order
+		QualityCheck check = new QualityCheck();
+		check.setPoCode(poCode);
+		check.setRecordedTime(OffsetDateTime.now());
+		RawItemQuality[] rawItemQualities = new RawItemQuality[NUM_PO_ITEMS];
+		for(int i=0; i < rawItemQualities.length; i++) {
+			rawItemQualities[i] = new RawItemQuality();
+			rawItemQualities[i].setItem(orderItems[i].getItem());
+			rawItemQualities[i].setStorageLocation(storages.get(i));
+			rawItemQualities[i].setMeasureUnit("OZ");
+			rawItemQualities[i].setUnitAmount(BigDecimal.valueOf(8));
+			rawItemQualities[i].setNumberUnits(BigDecimal.valueOf(2));
+		}
+		check.setProcessItems(rawItemQualities);
+		checks.addCashewReceiptCheck(check);
+		QualityCheckDTO checkDTO = checks.getQcByProcessId(check.getId());
+		assertEquals(new QualityCheckDTO(check), checkDTO, "QC not added or fetched correctly");
+		
 		//print all
 		System.out.println("Supplier: " + supplierDTO);
 		System.out.println("Purchase Order: " + poDTO);
 		System.out.println("Order receipt: " + receiptDTO);
+		System.out.println("QC test: " + checkDTO);
 		
 		//print received orders
 		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
 		receiptRows.forEach(r -> System.out.println(r));
 		
 		//remove all
+		checks.removeCheck(check.getId());
 		receipts.removeReceipt(receiptDTO.getId());
 		orders.removeOrder(poDTO.getId());
 		suppliers.permenentlyRemoveEntity(poCode);
