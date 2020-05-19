@@ -59,9 +59,9 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 					+ "join pi.storageLocation sto "
 					+ "left join pi.orderItem oi "
 			+ "join r.processType t "
-			+ "where t.processName = :processName "
+			+ "where t.processName in :processNames "
 			+ "group by r.id, oi ")
-	List<ReceiptRow> findAllReceiptsByType(ProcessName processName);
+	List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames);
 
 	/**
 	 * @param processId

@@ -45,7 +45,8 @@ public class OrderReceipts {
 	 * receipt date and storage - for every received item.
 	 */
 	public List<ReceiptRow> findCashewReceipts() {
-		return getReceiptRepository().findAllReceiptsByType(ProcessName.CASHEW_RECEIPT);
+		return getReceiptRepository().findAllReceiptsByType(
+				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT});
 	}
 	
 	/**
@@ -54,11 +55,18 @@ public class OrderReceipts {
 	 * receipt date and storage - for every received item.
 	 */
 	public List<ReceiptRow> findGeneralReceipts() {
-		return getReceiptRepository().findAllReceiptsByType(ProcessName.GENERAL_RECEIPT);		
+		return getReceiptRepository().findAllReceiptsByType(new ProcessName[] {ProcessName.GENERAL_RECEIPT});		
 	}
 		
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	private void addOrderReceipt(Receipt receipt) {
+		dao.addProcessEntity(receipt);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addReceipt(Receipt receipt) {
+		//using save rather than persist in case POid was assigned by user
+		dao.addEntityWithFlexibleGenerator(receipt.getPoCode());
 		dao.addProcessEntity(receipt);
 	}
 	
@@ -66,6 +74,12 @@ public class OrderReceipts {
 	public void addCashewReceipt(Receipt receipt) {
 		receipt.setProcessType(getReceiptRepository().findProcessTypeByValue(ProcessName.CASHEW_RECEIPT));
 		addReceipt(receipt);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addCashewOrderReceipt(Receipt receipt) {
+		receipt.setProcessType(getReceiptRepository().findProcessTypeByValue(ProcessName.CASHEW_ORDER_RECEIPT));
+		addOrderReceipt(receipt);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

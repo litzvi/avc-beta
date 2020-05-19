@@ -45,6 +45,7 @@ public class QualityCheck extends ProductionProcess {
 //	@JoinColumn(name = "storageLocationId")
 //	private Storage storageLocation;
 	
+
 	public void setProcessItems(RawItemQuality[] qualityChecks) {
 		super.setProcessItems(qualityChecks);
 	}

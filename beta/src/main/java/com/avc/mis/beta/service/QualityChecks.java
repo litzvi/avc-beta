@@ -14,6 +14,7 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.repositories.QcRepository;
@@ -50,6 +51,11 @@ public class QualityChecks {
 		qualityCheckDTO.setCheckItems(getQcRepository().findCheckItemsById(processId));
 		
 		return qualityCheckDTO;
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editCheck(QualityCheck check) {
+		dao.editProcessEntity(check);
 	}
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
