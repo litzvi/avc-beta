@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.avc.mis.beta.entities.data.BankAccount;
@@ -59,25 +60,45 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 //--------------------Finding PO code lists-----------------------
 	
 
-	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po.version, "
-				+ "po_code.code, po_code.contractType, s.name, s.id, s.version) "
-			+ "from PO po "
-			+ "join po.poCode po_code "
-			+ "join po_code.supplier s "
-			+ "join po.processType t "
-			+ "join po.orderItems oi "
-			+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
-				+ "and t.processName = ?1 ")
-	List<PoBasic> findOpenOrderByTypeBasic(ProcessName orderType);
+//	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po.version, "
+//				+ "po_code.code, po_code.contractType, s.name, s.id, s.version) "
+//			+ "from PO po "
+//			+ "join po.poCode po_code "
+//			+ "join po_code.supplier s "
+//			+ "join po.processType t "
+//			+ "join po.orderItems oi "
+//			+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
+//				+ "and t.processName = ?1 ")
+//	List<PoBasic> findOpenOrderByTypeBasic(ProcessName orderType);
+//
+//	@Query("select new com.avc.mis.beta.dto.values.PoBasic(r.id, r.version, "
+//				+ "po_code.code, po_code.contractType, s.name, s.id, s.version) "
+//			+ "from Receipt r "
+//			+ "join r.poCode po_code "
+//			+ "join po_code.supplier s "
+//			+ "join r.processType t "
+//				+ "where t.processName in ?1 ")
+//	List<PoBasic> findReceivedPOsBasic(ProcessName[] receiptType);
 
-	@Query("select new com.avc.mis.beta.dto.values.PoBasic(r.id, r.version, "
-				+ "po_code.code, po_code.contractType, s.name, s.id, s.version) "
-			+ "from Receipt r "
-			+ "join r.poCode po_code "
-			+ "join po_code.supplier s "
-			+ "join r.processType t "
-				+ "where t.processName in ?1 ")
-	List<PoBasic> findReceivedPOsBasic(ProcessName[] receiptType);
+	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("
+			+ "po_code.code, po_code.contractType, s.id, s.version, s.name) "
+		+ "from PO po "
+		+ "join po.poCode po_code "
+		+ "join po_code.supplier s "
+		+ "join po.processType t "
+		+ "join po.orderItems oi "
+		+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
+			+ "and t.processName = ?1 ")
+	List<PoCodeDTO> findOpenOrderByTypePoCode(ProcessName cashewOrder);
+
+	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("
+			+ "po_code.code, po_code.contractType, s.id, s.version, s.name) "
+		+ "from Receipt r "
+		+ "join r.poCode po_code "
+		+ "join po_code.supplier s "
+		+ "join r.processType t "
+			+ "where t.processName in ?1 ")
+	List<PoCodeDTO> findReceivedPoCode(ProcessName[] processNames);
 
 
 	

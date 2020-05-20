@@ -11,14 +11,12 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * @author Zvi

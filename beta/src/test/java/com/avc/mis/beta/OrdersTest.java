@@ -22,6 +22,7 @@ import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.ProcessAlertDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
+import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
@@ -193,8 +194,8 @@ public class OrdersTest {
 			System.out.println(city);
 		
 		//get list of cashew orders
-		List<PoBasic> posBasic =  objectTableReader.findOpenCashewOrdersBasic();
-		for(PoBasic row: posBasic)
+		List<PoCodeDTO> posBasic =  objectTableReader.findOpenCashewOrdersPoCode();
+		for(PoCodeDTO row: posBasic)
 			System.out.println(row);
 		
 		//get list of cashew orders

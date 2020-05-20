@@ -9,7 +9,6 @@ import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.values.ProcessType;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;

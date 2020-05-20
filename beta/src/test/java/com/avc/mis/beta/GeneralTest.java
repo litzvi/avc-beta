@@ -54,7 +54,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800013;
+	static final Integer PO_CODE = 800016;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -126,7 +126,8 @@ public class GeneralTest {
 		}
 		receipt.setReceiptItems(receiptItems);
 		receipts.addCashewOrderReceipt(receipt);
-		ReceiptDTO receiptDTO = receipts.getReceiptByProcessId(receipt.getId());
+		ReceiptDTO receiptDTO;
+		receiptDTO = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(new ReceiptDTO(receipt), receiptDTO, "Order Receipt not added or fetched correctly");
 		
 		//add QC for received order

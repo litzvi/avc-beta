@@ -17,7 +17,6 @@ import org.hibernate.annotations.BatchSize;
 
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.data.Supplier;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;

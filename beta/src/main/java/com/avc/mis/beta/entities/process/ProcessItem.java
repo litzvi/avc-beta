@@ -4,11 +4,8 @@
 package com.avc.mis.beta.entities.process;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Currency;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -24,7 +21,6 @@ import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Storage;
-import com.avc.mis.beta.utilities.LocalDateToLong;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;

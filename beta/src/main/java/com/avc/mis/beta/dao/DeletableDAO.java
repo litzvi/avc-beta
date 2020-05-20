@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.data.ProcessAlert;
 
 /**
  * Data access object for objects that could be permanently deleted from underlying persistence context.

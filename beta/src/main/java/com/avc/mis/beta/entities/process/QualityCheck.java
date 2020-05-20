@@ -3,18 +3,10 @@
  */
 package com.avc.mis.beta.entities.process;
 
-import java.math.BigDecimal;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.values.Item;
-import com.avc.mis.beta.entities.values.Storage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;

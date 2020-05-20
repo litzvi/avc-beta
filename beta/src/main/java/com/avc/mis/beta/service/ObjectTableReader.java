@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.PoBasic;
-import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
@@ -84,30 +84,58 @@ public class ObjectTableReader {
 	
 	
 //---------------------------------DTOs---------------------------------------------------------
+
+	//commented so should use the same methods that return list of PoCodeDTO
+//	/**
+//	 * Gets the basic information of all open Cashew Orders with given OrderStatus - id, poCode, supplier and orderStatus.
+//	 * @return List of PoBasic for all open Cashew orders.
+//	 */
+//	public List<PoBasic> findOpenCashewOrdersBasic() {
+//		return getObjectTablesRepository().findOpenOrderByTypeBasic(ProcessName.CASHEW_ORDER);		
+//	}
+//	
+//	/**
+//	 * Gets the basic information of all General Orders with given OrderStatus - id, poCode, supplier and orderStatus.
+//	 * @return List of PoBasic for all open General orders.
+//	 */
+//	public List<PoBasic> findOpenGeneralOrdersBasic() {
+//		return getObjectTablesRepository().findOpenOrderByTypeBasic(ProcessName.GENERAL_ORDER);
+//	}
+//	
+//	/**
+//	 * Get the table of all active Cashew po that can be processed.
+//	 * @return list of PoRow for po's that are still active - still in production.
+//	 */
+//	public List<PoBasic> findActiveCashewPoBasic() {
+//		List<PoBasic> list = findOpenCashewOrdersBasic();
+//		list.addAll(getObjectTablesRepository().findReceivedPOsBasic(
+//				new ProcessName[] {ProcessName.CASHEW_ORDER_RECEIPT, ProcessName.CASHEW_RECEIPT}));
+//		return list;
+//	}
 	
 	/**
 	 * Gets the basic information of all open Cashew Orders with given OrderStatus - id, poCode, supplier and orderStatus.
 	 * @return List of PoBasic for all open Cashew orders.
 	 */
-	public List<PoBasic> findOpenCashewOrdersBasic() {
-		return getObjectTablesRepository().findOpenOrderByTypeBasic(ProcessName.CASHEW_ORDER);		
+	public List<PoCodeDTO> findOpenCashewOrdersPoCode() {
+		return getObjectTablesRepository().findOpenOrderByTypePoCode(ProcessName.CASHEW_ORDER);		
 	}
 	
 	/**
 	 * Gets the basic information of all General Orders with given OrderStatus - id, poCode, supplier and orderStatus.
 	 * @return List of PoBasic for all open General orders.
 	 */
-	public List<PoBasic> findOpenGeneralOrdersBasic() {
-		return getObjectTablesRepository().findOpenOrderByTypeBasic(ProcessName.GENERAL_ORDER);
+	public List<PoCodeDTO> findOpenGeneralOrdersPoCode() {
+		return getObjectTablesRepository().findOpenOrderByTypePoCode(ProcessName.GENERAL_ORDER);
 	}
 	
 	/**
 	 * Get the table of all active Cashew po that can be processed.
 	 * @return list of PoRow for po's that are still active - still in production.
 	 */
-	public List<PoBasic> findActiveCashewPoBasic() {
-		List<PoBasic> list = findOpenCashewOrdersBasic();
-		list.addAll(getObjectTablesRepository().findReceivedPOsBasic(
+	public List<PoCodeDTO> findActiveCashewPoCode() {
+		List<PoCodeDTO> list = findOpenCashewOrdersPoCode();
+		list.addAll(getObjectTablesRepository().findReceivedPoCode(
 				new ProcessName[] {ProcessName.CASHEW_ORDER_RECEIPT, ProcessName.CASHEW_RECEIPT}));
 		return list;
 	}

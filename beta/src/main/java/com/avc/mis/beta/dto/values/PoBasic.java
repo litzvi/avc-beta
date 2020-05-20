@@ -5,9 +5,7 @@ package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
-import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.values.ContractType;
 
 import lombok.EqualsAndHashCode;

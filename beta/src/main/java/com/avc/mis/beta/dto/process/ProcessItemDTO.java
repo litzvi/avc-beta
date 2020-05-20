@@ -4,12 +4,9 @@
 package com.avc.mis.beta.dto.process;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Currency;
-
-import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ProcessItem;
@@ -18,7 +15,6 @@ import com.avc.mis.beta.entities.values.Storage;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Value;
 
 /**
  * @author Zvi
@@ -29,7 +25,7 @@ import lombok.Value;
 public class ProcessItemDTO extends ProcessDTO {
 
 	Item item;
-	PoCode itemPo;
+	PoCodeBasic itemPo;
 	BigDecimal unitAmount;
 	MeasureUnit measureUnit;
 	BigDecimal numberUnits;	
@@ -42,7 +38,8 @@ public class ProcessItemDTO extends ProcessDTO {
 			Storage storageLocation, String description, String remarks) {
 		super(id, version);
 		this.item = item;
-		this.itemPo = itemPo;
+		if(itemPo != null)
+			this.itemPo = new PoCodeBasic(itemPo);
 		this.unitAmount = unitAmount.setScale(3);
 		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(3);
@@ -63,7 +60,8 @@ public class ProcessItemDTO extends ProcessDTO {
 		super(processItem.getId(), processItem.getVersion());
 		this.description = processItem.getDescription();
 		this.item = processItem.getItem();
-		this.itemPo = processItem.getItemPo();
+		if(processItem.getItemPo() != null)
+			this.itemPo = new PoCodeBasic(processItem.getItemPo());
 		this.measureUnit = processItem.getMeasureUnit();
 		this.unitAmount = processItem.getUnitAmount().setScale(3);
 		this.numberUnits = processItem.getNumberUnits().setScale(3);
