@@ -48,6 +48,7 @@ import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.PORepository;
+import com.avc.mis.beta.service.ObjectTableReader;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessInfoWriter;
@@ -92,6 +93,8 @@ public class OrdersTest {
 	
 	@Autowired private PORepository poRepository;
 	
+	@Autowired ObjectTableReader objectTableReader;
+	
 
 	private PO basicOrder() {
 		//build purchase order
@@ -99,13 +102,13 @@ public class OrdersTest {
 		PoCode poCode = new PoCode();
 		po.setPoCode(poCode);
 		poCode.setId(PROCESS_NO);
+		Supplier supplier = SuppliersTest.basicSupplier();
+		suppliers.addSupplier(supplier);
+		poCode.setSupplier(supplier);
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
 		poCode.setContractType(contractType);
-		Supplier supplier = SuppliersTest.basicSupplier();
-		suppliers.addSupplier(supplier);
-		po.setSupplier(supplier);
-		//build process
+				//build process
 		po.setRecordedTime(OffsetDateTime.now());
 		//add order items
 		OrderItem[] items = orderItems(NUM_ITEMS);				
@@ -156,7 +159,7 @@ public class OrdersTest {
 		actual = orders.getOrder(po.getPoCode().getCode());
 		assertEquals(expected, actual, "failed test editing po order status");		
 		
-		Supplier supplier = po.getSupplier();
+		Supplier supplier = po.getPoCode().getSupplier();
 		orders.removeOrder(po.getId());
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
@@ -190,7 +193,7 @@ public class OrdersTest {
 			System.out.println(city);
 		
 		//get list of cashew orders
-		List<PoBasic> posBasic =  orders.findOpenCashewOrdersBasic();
+		List<PoBasic> posBasic =  objectTableReader.findOpenCashewOrdersBasic();
 		for(PoBasic row: posBasic)
 			System.out.println(row);
 		

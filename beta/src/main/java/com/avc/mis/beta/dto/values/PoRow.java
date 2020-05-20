@@ -70,7 +70,7 @@ public class PoRow extends ValueDTO {
 		super(po.getId());
 //		this.poCodeId = po.getPoCode().getId();
 		this.value = po.getPoCode().getValue();
-		this.supplierName = po.getSupplier().getName();
+		this.supplierName = po.getPoCode().getSupplier().getName();
 		this.itemName = orderItem.getItem().getValue();
 		this.amount = orderItem.getNumberUnits();
 		this.measureUnit = orderItem.getMeasureUnit();

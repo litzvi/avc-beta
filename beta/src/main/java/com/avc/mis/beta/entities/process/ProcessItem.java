@@ -33,6 +33,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
+ * Represents an Item that the process adds to stock. perhaps name should be changed to InItem/ImportItem/AddedItem
+ * 
  * @author Zvi
  *
  */

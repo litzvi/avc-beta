@@ -54,7 +54,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800008;
+	static final Integer PO_CODE = 800013;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -84,8 +84,8 @@ public class GeneralTest {
 		PoCode poCode = new PoCode();
 		poCode.setId(PO_CODE);
 		poCode.setContractType(valueTablesRepository.findContractTypeByValue(ContractTypeCode.VAT));
+		poCode.setSupplier(supplier);
 		po.setPoCode(poCode);
-		po.setSupplier(supplier);
 		po.setRecordedTime(OffsetDateTime.now());
 		OrderItem[] orderItems = new OrderItem[NUM_PO_ITEMS];
 		List<Item> items = valueTablesReader.getAllItems();
@@ -107,7 +107,6 @@ public class GeneralTest {
 		Receipt receipt = new Receipt();
 		receipt.setPoCode(poCode);
 		receipt.setRecordedTime(OffsetDateTime.now());
-		receipt.setSupplier(supplier);
 		ReceiptItem[] receiptItems = new ReceiptItem[NUM_PO_ITEMS*2];
 		List<Storage> storages = valueTablesReader.getAllStorages();
 		for(int i=0; i < receiptItems.length; i++) {
@@ -125,8 +124,8 @@ public class GeneralTest {
 			receiptItems[2*i+1].setNumberUnits(BigDecimal.valueOf(1));
 				
 		}
-		receipt.setProcessItems(receiptItems);
-		receipts.addCashewReceipt(receipt);
+		receipt.setReceiptItems(receiptItems);
+		receipts.addCashewOrderReceipt(receipt);
 		ReceiptDTO receiptDTO = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(new ReceiptDTO(receipt), receiptDTO, "Order Receipt not added or fetched correctly");
 		
@@ -143,7 +142,7 @@ public class GeneralTest {
 			rawItemQualities[i].setUnitAmount(BigDecimal.valueOf(8));
 			rawItemQualities[i].setNumberUnits(BigDecimal.valueOf(2));
 		}
-		check.setProcessItems(rawItemQualities);
+		check.setQualityChecks(rawItemQualities);
 		checks.addCashewReceiptCheck(check);
 		QualityCheckDTO checkDTO = checks.getQcByProcessId(check.getId());
 		assertEquals(new QualityCheckDTO(check), checkDTO, "QC not added or fetched correctly");

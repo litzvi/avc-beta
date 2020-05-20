@@ -46,7 +46,7 @@ public class QualityCheck extends ProductionProcess {
 //	private Storage storageLocation;
 	
 
-	public void setProcessItems(RawItemQuality[] qualityChecks) {
+	public void setQualityChecks(RawItemQuality[] qualityChecks) {
 		super.setProcessItems(qualityChecks);
 	}
 	

@@ -17,7 +17,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.repositories.QcRepository;
+import com.avc.mis.beta.repositories.QCRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,14 +33,32 @@ public class QualityChecks {
 	
 	@Autowired private ProcessInfoDAO dao;
 
-	@Autowired private QcRepository qcRepository;
+	@Autowired private QCRepository qcRepository;
 	
 	@Deprecated
 	@Autowired private DeletableDAO deletableDAO;
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewReceiptCheck(QualityCheck check) {
-		check.setProcessType(getQcRepository().findProcessTypeByValue(ProcessName.KERNEL_RECEIPT_QC));
+		check.setProcessType(getQcRepository().findProcessTypeByValue(ProcessName.CASHEW_RECEIPT_QC));
+		dao.addProcessEntity(check);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addCashewSampleCheck(QualityCheck check) {
+		check.setProcessType(getQcRepository().findProcessTypeByValue(ProcessName.SAMPLE_QC));
+		dao.addProcessEntity(check);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addCashewSupplierCheck(QualityCheck check) {
+		check.setProcessType(getQcRepository().findProcessTypeByValue(ProcessName.SUPPLIER_QC));
+		dao.addProcessEntity(check);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addCashewVinaControlCheck(QualityCheck check) {
+		check.setProcessType(getQcRepository().findProcessTypeByValue(ProcessName.VINA_CONTROL_QC));
 		dao.addProcessEntity(check);
 	}
 	

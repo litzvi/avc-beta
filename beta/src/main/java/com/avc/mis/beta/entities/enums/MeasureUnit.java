@@ -12,7 +12,8 @@ import java.math.BigDecimal;
 public enum MeasureUnit {
 	KG("1", "2.2046"),
 	LBS("0.4536", "1.0"),
-	OZ("0.02835", "0.0625");
+	OZ("0.02835", "0.0625"),
+	GRAM("0.001", "0.0022046");
 	
 	private BigDecimal kg;
 	private BigDecimal lbs;

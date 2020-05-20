@@ -17,6 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -43,12 +44,16 @@ public class PoCode extends BaseEntity {
 	@EqualsAndHashCode.Include
 	private Integer code;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "supplierId", updatable = false, nullable = false)
+	private Supplier supplier; 
+		
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "contractTypeId", updatable = false, nullable = false)
 	private ContractType contractType;
 	
 	/**
-	 * @return a string representing full PO code. e.g. VAT900001
+	 * @return a string representing full PO code. e.g. VAT-900001
 	 */
 	public String getValue() {
 		return String.format("%s-%d", this.contractType.getValue(), this.code);

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.ReceiptItem;
+import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
@@ -35,10 +36,13 @@ public class ReceiptDTO extends ProductionProcessDTO {
 
 	private Set<ReceiptItemDTO> receiptItems; //can use a SortedSet like ContactDetails to maintain order
 	
-	public ReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, PoCode poCode,
+	public ReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
+			Integer poCodeId, ContractType contractType, Integer supplierId, Integer supplierVersion, String supplierName,  
 			ProcessType processType, ProductionLine productionLine, OffsetDateTime recordedTime, Duration duration,
 			Integer numOfWorkers, ProcessStatus status, String remarks) {
-		super(id, version, createdDate, userRecording, poCode, processType, productionLine, recordedTime, duration,
+		super(id, version, createdDate, userRecording, 
+				poCodeId, contractType, supplierId, supplierVersion, supplierName, 
+				processType, productionLine, recordedTime, duration,
 				numOfWorkers, status, remarks);
 	}
 

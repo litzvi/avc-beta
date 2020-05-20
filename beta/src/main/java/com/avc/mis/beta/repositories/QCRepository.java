@@ -15,15 +15,17 @@ import com.avc.mis.beta.entities.process.QualityCheck;
  * @author Zvi
  *
  */
-public interface QcRepository extends BaseRepository<QualityCheck> {
+public interface QCRepository extends BaseRepository<QualityCheck> {
 
 	@Query("select new com.avc.mis.beta.dto.process.QualityCheckDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "po_code, r.processType, p_line, "
+			+ "po_code.code, po_code.contractType, s.id, s.version, s.name, "
+			+ "r.processType, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
 			+ "p_status, r.remarks) "
 		+ "from QualityCheck r "
-			+ "left join r.poCode po_code "
+			+ "join r.poCode po_code "
+			+ "join po_code.supplier s "
 			+ "left join r.createdBy p_user "
 			+ "left join r.productionLine p_line "
 			+ "left join r.status p_status "

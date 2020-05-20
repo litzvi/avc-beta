@@ -3,10 +3,12 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
@@ -15,6 +17,7 @@ import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoCode;
 
 /**
@@ -52,6 +55,30 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 
 	@Query("select e from ContactDetails e")
 	List<ContactDetails> findAllContactDetails();
+	
+//--------------------Finding PO code lists-----------------------
+	
+
+	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po.version, "
+				+ "po_code.code, po_code.contractType, s.name, s.id, s.version) "
+			+ "from PO po "
+			+ "join po.poCode po_code "
+			+ "join po_code.supplier s "
+			+ "join po.processType t "
+			+ "join po.orderItems oi "
+			+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
+				+ "and t.processName = ?1 ")
+	List<PoBasic> findOpenOrderByTypeBasic(ProcessName orderType);
+
+	@Query("select new com.avc.mis.beta.dto.values.PoBasic(r.id, r.version, "
+				+ "po_code.code, po_code.contractType, s.name, s.id, s.version) "
+			+ "from Receipt r "
+			+ "join r.poCode po_code "
+			+ "join po_code.supplier s "
+			+ "join r.processType t "
+				+ "where t.processName in ?1 ")
+	List<PoBasic> findReceivedPOsBasic(ProcessName[] receiptType);
+
 
 	
 }

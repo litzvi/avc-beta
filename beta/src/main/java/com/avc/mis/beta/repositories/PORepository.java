@@ -28,14 +28,14 @@ public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
 			+ "po.id, po.version, po.createdDate, p_user.username, "
-			+ "po_code, po.processType, p_line, "
+			+ "po_code.code, po_code.contractType, s.id, s.version, s.name, "
+			+ "po.processType, p_line, "
 			+ "po.recordedTime, po.duration, po.numOfWorkers, "
 			+ "p_status, po.remarks, "
-			+ "s.id, s.version, s.name, "
 			+ "po.orderStatus) "
 		+ "from PO po "
 			+ "left join po.poCode po_code "
-			+ "left join po.supplier s "
+			+ "left join po_code.supplier s "
 			+ "left join po.createdBy p_user "
 			+ "left join po.productionLine p_line "
 			+ "left join po.status p_status "
@@ -44,14 +44,14 @@ public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
 			+ "po.id, po.version, po.createdDate, p_user.username, "
-			+ "po_code, po.processType, p_line, "
+			+ "po_code.code, po_code.contractType, s.id, s.version, s.name, "
+			+ "po.processType, p_line, "
 			+ "po.recordedTime, po.duration, po.numOfWorkers, "
 			+ "p_status, po.remarks, "
-			+ "s.id, s.version, s.name, "
 			+ "po.orderStatus) "
 		+ "from PO po "
-			+ "left join po.poCode po_code "
-			+ "left join po.supplier s "
+			+ "join po.poCode po_code "
+			+ "join po_code.supplier s "
 			+ "left join po.createdBy p_user "
 			+ "left join po.productionLine p_line "
 			+ "left join po.status p_status "
@@ -117,8 +117,8 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "oi.numberUnits, oi.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus, "
 			+ "oi.defects, oi.currency, oi.unitPrice) "
 		+ "from PO po "
-		+ "join po.supplier s "
 		+ "join po.poCode po_code "
+		+ "join po_code.supplier s "
 		+ "join po.processType t "
 		+ "join po.orderItems oi "
 			+ "join oi.item i "
@@ -126,15 +126,5 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "and t.processName = ?1 "
 		+ "ORDER BY oi.deliveryDate DESC ")
 	List<PoRow> findOpenOrderByType(ProcessName orderType);
-
-	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po.version, po_code, s.name, s.id, s.version, po.orderStatus) "
-			+ "from PO po "
-			+ "join po.poCode po_code "
-			+ "join po.supplier s "
-			+ "join po.processType t "
-			+ "join po.orderItems oi "
-			+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
-				+ "and t.processName = ?1 ")
-	List<PoBasic> findOpenOrderByTypeBasic(ProcessName orderType);
 
 }

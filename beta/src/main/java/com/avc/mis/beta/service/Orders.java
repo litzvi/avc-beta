@@ -58,21 +58,7 @@ public class Orders {
 		return getPoRepository().findOpenOrderByType(ProcessName.GENERAL_ORDER);
 	}
 	
-	/**
-	 * Gets the basic information of all open Cashew Orders with given OrderStatus - id, poCode, supplier and orderStatus.
-	 * @return List of PoBasic for all open Cashew orders.
-	 */
-	public List<PoBasic> findOpenCashewOrdersBasic() {
-		return getPoRepository().findOpenOrderByTypeBasic(ProcessName.CASHEW_ORDER);		
-	}
 	
-	/**
-	 * Gets the basic information of all General Orders with given OrderStatus - id, poCode, supplier and orderStatus.
-	 * @return List of PoBasic for all open General orders.
-	 */
-	public List<PoBasic> findOpenGeneralOrdersBasic() {
-		return getPoRepository().findOpenOrderByTypeBasic(ProcessName.GENERAL_ORDER);
-	}
 	
 //	/**
 //	 * Gets the table of all Cashew Orders with given OrderStatus

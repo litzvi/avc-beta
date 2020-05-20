@@ -63,13 +63,13 @@ public class ReceiptTest {
 		poCode.setCode(OrdersTest.PROCESS_NO);
 		Supplier supplier = SuppliersTest.basicSupplier();
 		suppliers.addSupplier(supplier);
-		receipt.setSupplier(supplier);
+		poCode.setSupplier(supplier);
 		receipt.setPoCode(poCode);
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());
 		//add order items
 		ReceiptItem[] items = processItems(OrdersTest.NUM_ITEMS);				
-		receipt.setProcessItems(items);
+		receipt.setReceiptItems(items);
 		return receipt;
 	}
 	
@@ -83,12 +83,12 @@ public class ReceiptTest {
 		receipt.setRecordedTime(OffsetDateTime.now());
 		//add order items
 		PoDTO poDTO = orders.getOrder(OrdersTest.PROCESS_NO);
-		Supplier supplier = new Supplier();
-		supplier.setId(poDTO.getSupplier().getId());
-		supplier.setVersion(poDTO.getSupplier().getVersion());
-		receipt.setSupplier(supplier);
+//		Supplier supplier = new Supplier();
+//		supplier.setId(poDTO.getSupplier().getId());
+//		supplier.setVersion(poDTO.getSupplier().getVersion());
+//		receipt.setSupplier(supplier);
 		ReceiptItem[] items = receiptItems(poDTO);				
-		receipt.setProcessItems(items);
+		receipt.setReceiptItems(items);
 		return receipt;
 		
 		

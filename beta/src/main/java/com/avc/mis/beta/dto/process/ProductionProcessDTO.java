@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
@@ -33,7 +34,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 //	private Instant modifiedDate;
 	@EqualsAndHashCode.Exclude // no need to compare for testing
 	private String userRecording; //perhaps only user name
-	private PoCode poCode;
+	private PoCodeDTO poCode;
 	private String processType; // use string instead of object or enum
 	private ProductionLine productionLine;
 	private OffsetDateTime recordedTime;
@@ -42,14 +43,15 @@ public class ProductionProcessDTO extends ProcessDTO {
 	private ProcessStatus status;
 	private String remarks;
 	
-	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, 
-			String userRecording, PoCode poCode, ProcessType processType, ProductionLine productionLine, 
+	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
+			Integer poCodeId, ContractType contractType, Integer supplierId, Integer supplierVersion, String supplierName, 
+			ProcessType processType, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus status, 
 			String remarks) {
 		super(id, version);
 		this.createdDate = createdDate;
 		this.userRecording = userRecording;
-		this.poCode = poCode;
+		this.poCode = new PoCodeDTO(poCodeId, contractType, supplierId, supplierVersion, supplierName);
 		this.processType = processType.getValue();
 		this.productionLine = productionLine;
 		this.recordedTime = recordedTime;
@@ -64,7 +66,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 		this.createdDate = process.getCreatedDate();
 		if(process.getCreatedBy() != null)
 			this.userRecording = process.getCreatedBy().getUsername();
-		this.poCode = process.getPoCode();
+		this.poCode = new PoCodeDTO(process.getPoCode());
 		this.processType = process.getProcessType().getValue();
 		this.productionLine = process.getProductionLine();
 		this.recordedTime = process.getRecordedTime();
