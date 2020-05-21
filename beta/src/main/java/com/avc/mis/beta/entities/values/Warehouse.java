@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 @BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name="WAREHOUSE_LOCATIONS")
-public class Storage extends ValueEntity {
+public class Warehouse extends ValueEntity {
 	
 	@Column(name = "name", nullable = false)
 	private String value;
@@ -52,7 +52,7 @@ public class Storage extends ValueEntity {
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "Storage name can't be blank";
+		return "Warehouse name can't be blank";
 	}
 
 }

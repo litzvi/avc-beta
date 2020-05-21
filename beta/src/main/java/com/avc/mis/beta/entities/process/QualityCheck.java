@@ -35,7 +35,7 @@ public class QualityCheck extends ProductionProcess {
 //	
 //	@ManyToOne(fetch = FetchType.EAGER)
 //	@JoinColumn(name = "storageLocationId")
-//	private Storage storageLocation;
+//	private Warehouse storageLocation;
 	
 
 	public void setQualityChecks(RawItemQuality[] qualityChecks) {

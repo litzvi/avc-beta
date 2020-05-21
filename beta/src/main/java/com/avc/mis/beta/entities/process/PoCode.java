@@ -59,7 +59,7 @@ public class PoCode extends BaseEntity {
 		return String.format("%s-%d", this.contractType.getValue(), this.code);
 	}
 
-	@JsonIgnore
+//	@JsonIgnore
 	@Override
 	public Integer getId() {
 		return code;

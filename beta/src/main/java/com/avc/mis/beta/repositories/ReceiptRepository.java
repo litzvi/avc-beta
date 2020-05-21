@@ -21,6 +21,16 @@ import com.avc.mis.beta.entities.process.Receipt;
  */
 public interface ReceiptRepository extends BaseRepository<Receipt> {
 
+	@Query("select r  "
+		+ "from Receipt r "
+//			+ "join r.poCode po_code "
+//			+ "join po_code.supplier s "
+//			+ "left join r.createdBy p_user "
+//			+ "left join r.productionLine p_line "
+//			+ "left join r.status p_status "
+		+ "where r.id = :id ")
+	Optional<Receipt> findReceiptByProcessId(int id);
+	
 	@Query("select new com.avc.mis.beta.dto.process.ReceiptDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
 			+ "po_code.code, po_code.contractType, s.id, s.version, s.name, "
@@ -34,31 +44,31 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "left join r.productionLine p_line "
 			+ "left join r.status p_status "
 		+ "where r.id = :id ")
-	Optional<ReceiptDTO> findReceiptByProcessId(int id);
+	Optional<ReceiptDTO> findReceiptDTOByProcessId(int id);
 
 	@Query("select new com.avc.mis.beta.dto.process.ReceiptItemDTO("
-			+ "i.id, i.version, item, itemPo, i.unitAmount, i.measureUnit, i.numberUnits, "
-			+ "storageLocation, i.description, i.remarks, oi.id, oi.version) "
+			+ "i.id, i.version, item, itemPo, i.description, i.remarks, oi.id, oi.version) "
 		+ "from ReceiptItem i "
 			+ "left join i.orderItem oi "
 			+ "join i.item item "
 			+ "join i.process p "
 			+ "left join i.itemPo itemPo "
-			+ "left join i.storageLocation storageLocation "
+//			+ "left join i.storageLocation storageLocation "
 		+ "where p.id = :processId ")
 	Set<ReceiptItemDTO> findReceiptItemsById(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.values.ReceiptRow( "
 			+ "r.id, po_code, s.name, i.value, "
 			+ "oi.numberUnits, " 
-			+ "oi.measureUnit, r.recordedTime, SUM(pi.unitAmount * pi.numberUnits), pi.measureUnit, "
+			+ "oi.measureUnit, r.recordedTime, SUM(sf.unitAmount * sf.numberUnits), sf.measureUnit, "
 			+ "sto.value) "
 			+ "from Receipt r "
 				+ "join r.poCode po_code "
 				+ "join po_code.supplier s "
 				+ "join r.processItems pi "
 					+ "join pi.item i "
-					+ "join pi.storageLocation sto "
+					+ "join pi.storageForms sf "
+						+ "left join sf.storageLocation sto "
 					+ "left join pi.orderItem oi "
 			+ "join r.processType t "
 			+ "where t.processName in :processNames "

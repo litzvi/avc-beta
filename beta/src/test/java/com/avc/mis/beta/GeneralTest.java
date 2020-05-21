@@ -35,8 +35,9 @@ import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.process.RawItemQuality;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.ReceiptItem;
+import com.avc.mis.beta.entities.process.Storage;
 import com.avc.mis.beta.entities.values.Item;
-import com.avc.mis.beta.entities.values.Storage;
+import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
 import com.avc.mis.beta.service.OrderReceipts;
 import com.avc.mis.beta.service.Orders;
@@ -107,22 +108,27 @@ public class GeneralTest {
 		Receipt receipt = new Receipt();
 		receipt.setPoCode(poCode);
 		receipt.setRecordedTime(OffsetDateTime.now());
-		ReceiptItem[] receiptItems = new ReceiptItem[NUM_PO_ITEMS*2];
-		List<Storage> storages = valueTablesReader.getAllStorages();
+		ReceiptItem[] receiptItems = new ReceiptItem[NUM_PO_ITEMS];
+		List<Warehouse> storages = valueTablesReader.getAllStorages();
 		for(int i=0; i < receiptItems.length; i++) {
 			receiptItems[i] = new ReceiptItem();
-			receiptItems[i].setItem(orderItems[i/2].getItem());
-			receiptItems[i].setStorageLocation(storages.get(i/2));
-			receiptItems[i].setMeasureUnit("KG");
-			receiptItems[i].setOrderItem(orderItems[i/2]);			
-		}
-		for(int i=0; i < NUM_PO_ITEMS; i++) {
-			receiptItems[2*i].setUnitAmount(BigDecimal.valueOf(50));
-			receiptItems[2*i].setNumberUnits(BigDecimal.valueOf(326));
+			receiptItems[i].setItem(orderItems[i].getItem());
+			receiptItems[i].setOrderItem(orderItems[i]);
 			
-			receiptItems[2*i+1].setUnitAmount(BigDecimal.valueOf(26));
-			receiptItems[2*i+1].setNumberUnits(BigDecimal.valueOf(1));
-				
+			Storage[] storageForms = new Storage[2];
+			storageForms[0] = new Storage();
+			storageForms[0].setUnitAmount(BigDecimal.valueOf(50));
+			storageForms[0].setNumberUnits(BigDecimal.valueOf(326));
+			storageForms[0].setStorageLocation(storages.get(i));
+			storageForms[0].setMeasureUnit("KG");
+			
+			storageForms[1] = new Storage();
+			storageForms[1].setUnitAmount(BigDecimal.valueOf(26));
+			storageForms[1].setNumberUnits(BigDecimal.valueOf(1));
+			storageForms[1].setStorageLocation(storages.get(i));
+			storageForms[1].setMeasureUnit("KG");
+			
+			receiptItems[i].setStorageForms(storageForms);
 		}
 		receipt.setReceiptItems(receiptItems);
 		receipts.addCashewOrderReceipt(receipt);
@@ -138,10 +144,14 @@ public class GeneralTest {
 		for(int i=0; i < rawItemQualities.length; i++) {
 			rawItemQualities[i] = new RawItemQuality();
 			rawItemQualities[i].setItem(orderItems[i].getItem());
-			rawItemQualities[i].setStorageLocation(storages.get(i));
-			rawItemQualities[i].setMeasureUnit("OZ");
-			rawItemQualities[i].setUnitAmount(BigDecimal.valueOf(8));
-			rawItemQualities[i].setNumberUnits(BigDecimal.valueOf(2));
+			
+			Storage[] storageForms = new Storage[1];
+			storageForms[0] = new Storage();
+			storageForms[0].setUnitAmount(BigDecimal.valueOf(8));
+			storageForms[0].setNumberUnits(BigDecimal.valueOf(2));
+			storageForms[0].setStorageLocation(storages.get(i));
+			storageForms[0].setMeasureUnit("OZ");
+			
 		}
 		check.setQualityChecks(rawItemQualities);
 		checks.addCashewReceiptCheck(check);

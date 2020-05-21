@@ -32,9 +32,10 @@ import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ProcessItem;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.ReceiptItem;
+import com.avc.mis.beta.entities.process.Storage;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
-import com.avc.mis.beta.entities.values.Storage;
+import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.service.OrderReceipts;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.Suppliers;
@@ -101,17 +102,20 @@ public class ReceiptTest {
 	private ReceiptItem[] receiptItems(PoDTO poDTO) {
 		Set<OrderItemDTO> orderItems = poDTO.getOrderItems();
 		ReceiptItem[] items = new ReceiptItem[orderItems.size()];
-		Storage storage = new Storage();
+		Storage[] storageForms = new Storage[items.length];
+		Warehouse storage = new Warehouse();
 		OrderItem oi;
 		storage.setId(1);
 		int i=0;
 		for(OrderItemDTO oItem: orderItems) {
 			items[i] = new ReceiptItem();
+			storageForms[i] = new Storage();
 			items[i].setItem(oItem.getItem());
-			items[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
-			items[i].setMeasureUnit("KG");
-			items[i].setNumberUnits(oItem.getNumberUnits().divide(BigDecimal.valueOf(10, 2)).setScale(2));
-			items[i].setStorageLocation(storage);
+			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
+			storageForms[i].setMeasureUnit("KG");
+			storageForms[i].setNumberUnits(oItem.getNumberUnits().divide(BigDecimal.valueOf(10, 2)).setScale(2));
+			storageForms[i].setStorageLocation(storage);
+			items[i].setStorageForms(storageForms);
 			oi  = new OrderItem();
 			oi.setId(oItem.getId());
 			oi.setVersion(oItem.getVersion());
@@ -123,19 +127,22 @@ public class ReceiptTest {
 
 	private ReceiptItem[] processItems(int numOfItems) {
 		ReceiptItem[] items = new ReceiptItem[numOfItems];
+		Storage[] storageForms = new Storage[items.length];
 		Item item = new Item();
 		item.setId(1);
-		Storage storage = new Storage();
+		Warehouse storage = new Warehouse();
 		storage.setId(1);
 		OrderItem orderItem = new OrderItem();
 		orderItem.setId(96);
 		for(int i=0; i<items.length; i++) {
 			items[i] = new ReceiptItem();
+			storageForms[i] = new Storage();
 			items[i].setItem(item);
-			items[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
-			items[i].setMeasureUnit("KG");
-			items[i].setNumberUnits(new BigDecimal(i).setScale(2));
-			items[i].setStorageLocation(storage);
+			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
+			storageForms[i].setMeasureUnit("KG");
+			storageForms[i].setNumberUnits(new BigDecimal(i).setScale(2));
+			storageForms[i].setStorageLocation(storage);
+			items[i].setStorageForms(storageForms);
 		}
 //		Arrays.stream(items).forEach(i -> System.out.println(i));
 		return items;

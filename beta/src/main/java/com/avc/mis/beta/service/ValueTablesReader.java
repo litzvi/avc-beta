@@ -26,7 +26,7 @@ import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
-import com.avc.mis.beta.entities.values.Storage;
+import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.repositories.SupplierRepository;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
@@ -53,7 +53,7 @@ public class ValueTablesReader {
 	@Autowired private ValueTablesRepository valueTablesRepository;
 	
 	
-	public List<Storage> getAllStorages() {
+	public List<Warehouse> getAllStorages() {
 		return getValueTablesRepository().findAllStorages();		
 	}
 	

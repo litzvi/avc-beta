@@ -12,7 +12,7 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.RawItemQuality;
 import com.avc.mis.beta.entities.values.Item;
-import com.avc.mis.beta.entities.values.Storage;
+import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
@@ -47,15 +47,14 @@ public class RawItemQualityDTO extends ProcessItemDTO {
 	CheckStatus flavour; 
 	
 
-	public RawItemQualityDTO(Integer id, Integer version, Item item, PoCode itemPo, BigDecimal unitAmount,
-			MeasureUnit measureUnit, BigDecimal numberUnits, Storage storageLocation, String description,
+	public RawItemQualityDTO(Integer id, Integer version, Item item, PoCode itemPo, String description,
 			String remarks, 
 			BigDecimal breakage, BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal decay, BigDecimal insectDamage,
 			BigDecimal count, BigDecimal smallKernels, BigDecimal defectsAfterRoasting, BigDecimal weightLoss,
 			CheckStatus colour, CheckStatus flavour) {
-		super(id, version, item, itemPo, unitAmount, measureUnit, numberUnits, storageLocation, description, remarks);
+		super(id, version, item, itemPo, description, remarks);
 		this.breakage = breakage;
 		this.foreignMaterial = foreignMaterial;
 		this.humidity = humidity;

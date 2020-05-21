@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -26,7 +27,7 @@ import lombok.EqualsAndHashCode;
 @PrimaryKeyJoinColumn(name = "processItemId")
 public class ReceiptItem extends ProcessItem {
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "orderItemId")
 	private OrderItem orderItem;
 	
