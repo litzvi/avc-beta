@@ -50,7 +50,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 		super(id, version);
 		this.createdDate = createdDate;
 		this.userRecording = userRecording;
-		this.poCode = new PoCodeDTO(poCodeId, contractType, supplierId, supplierVersion, supplierName);
+		this.poCode = new PoCodeDTO(poCodeId, contractType, /*supplierId, supplierVersion,*/ supplierName);
 		this.processType = processType.getValue();
 		this.productionLine = productionLine;
 		this.recordedTime = recordedTime;

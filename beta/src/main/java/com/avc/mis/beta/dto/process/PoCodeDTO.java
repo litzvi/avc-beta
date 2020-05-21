@@ -22,20 +22,24 @@ import lombok.Value;
 public class PoCodeDTO extends BaseDTO {
 
 	ContractType contractType;
-	SupplierBasic supplier;
+	String supplierName;
+//	SupplierBasic supplier;
 	
 	public PoCodeDTO(Integer id, ContractType contractType, 
-			Integer supplierId, Integer supplierVersion, String supplierName) {
+			/*Integer supplierId, Integer supplierVersion, */
+			String supplierName) {
 		super(id);
 		this.contractType = contractType;
-		this.supplier = new SupplierBasic(supplierId, supplierVersion, supplierName);
+//		this.supplier = new SupplierBasic(supplierId, supplierVersion, supplierName);
+		this.supplierName = supplierName;
 	}
 	
 	
 	public PoCodeDTO(PoCode poCode) {
 		super(poCode.getCode());
 		this.contractType = poCode.getContractType();
-		this.supplier = new SupplierBasic(poCode.getSupplier());
+//		this.supplier = new SupplierBasic(poCode.getSupplier());
+		this.supplierName = poCode.getSupplier().getName();
 	}
 	
 	/**

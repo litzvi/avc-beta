@@ -81,7 +81,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 //	List<PoBasic> findReceivedPOsBasic(ProcessName[] receiptType);
 
 	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("
-			+ "po_code.code, po_code.contractType, s.id, s.version, s.name) "
+			+ "po_code.code, po_code.contractType, s.name) "
 		+ "from PO po "
 		+ "join po.poCode po_code "
 		+ "join po_code.supplier s "
@@ -92,7 +92,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	List<PoCodeDTO> findOpenOrderByTypePoCode(ProcessName cashewOrder);
 
 	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("
-			+ "po_code.code, po_code.contractType, s.id, s.version, s.name) "
+			+ "po_code.code, po_code.contractType, s.name) "
 		+ "from Receipt r "
 		+ "join r.poCode po_code "
 		+ "join po_code.supplier s "
