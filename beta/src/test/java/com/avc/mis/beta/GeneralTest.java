@@ -55,7 +55,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800016;
+	static final Integer PO_CODE = 800019;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -151,6 +151,8 @@ public class GeneralTest {
 			storageForms[0].setNumberUnits(BigDecimal.valueOf(2));
 			storageForms[0].setStorageLocation(storages.get(i));
 			storageForms[0].setMeasureUnit("OZ");
+			
+			rawItemQualities[i].setStorageForms(storageForms);
 			
 		}
 		check.setQualityChecks(rawItemQualities);

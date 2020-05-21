@@ -15,6 +15,7 @@ import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.Value;
 
 /**
@@ -22,6 +23,7 @@ import lombok.Value;
  *
  */
 @Value
+@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class RawItemQualityDTO extends ProcessItemDTO {
 

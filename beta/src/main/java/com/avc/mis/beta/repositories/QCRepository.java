@@ -33,8 +33,7 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 	Optional<QualityCheckDTO> findQcByProcessId(int id);
 
 	@Query("select new com.avc.mis.beta.dto.process.RawItemQualityDTO("
-			+ "i.id, i.version, item, itemPo, i.unitAmount, i.measureUnit, i.numberUnits, "
-			+ "storageLocation, i.description, i.remarks, "
+			+ "i.id, i.version, item, itemPo, i.description, i.remarks, "
 			+ "i.breakage, i.foreignMaterial, i.humidity, i.testa, " 
 			+ "i.scorched, i.deepCut, i.offColour, i.shrivel, i.desert, " 
 			+ "i.deepSpot, i.mold, i.dirty, i.decay, i.insectDamage, " 
@@ -44,7 +43,8 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 			+ "join i.item item "
 			+ "join i.process p "
 			+ "left join i.itemPo itemPo "
-			+ "left join i.storageLocation storageLocation "
+			+ "join i.storageForms sf "
+			+ "left join sf.storageLocation storageLocation "
 		+ "where p.id = :processId ")
 	Set<RawItemQualityDTO> findCheckItemsById(int processId);
 

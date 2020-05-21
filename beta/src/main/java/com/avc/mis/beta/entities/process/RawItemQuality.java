@@ -18,6 +18,7 @@ import com.avc.mis.beta.entities.enums.CheckStatus;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * @author Zvi
