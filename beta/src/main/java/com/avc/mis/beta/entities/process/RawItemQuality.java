@@ -27,7 +27,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "RECEIPT_ITEMS")
+@Table(name = "QC_RAW_ITEMS")
 @PrimaryKeyJoinColumn(name = "processItemId")
 public class RawItemQuality extends ProcessItem {
 

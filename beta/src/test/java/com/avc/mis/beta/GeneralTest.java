@@ -55,7 +55,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800019;
+	static final Integer PO_CODE = 800025;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -145,19 +145,20 @@ public class GeneralTest {
 			rawItemQualities[i] = new RawItemQuality();
 			rawItemQualities[i].setItem(orderItems[i].getItem());
 			
-			Storage[] storageForms = new Storage[1];
-			storageForms[0] = new Storage();
-			storageForms[0].setUnitAmount(BigDecimal.valueOf(8));
-			storageForms[0].setNumberUnits(BigDecimal.valueOf(2));
-			storageForms[0].setStorageLocation(storages.get(i));
-			storageForms[0].setMeasureUnit("OZ");
+			Storage[] QCStorageForms = new Storage[1];
+			QCStorageForms[0] = new Storage();
+			QCStorageForms[0].setUnitAmount(BigDecimal.valueOf(8));
+			QCStorageForms[0].setNumberUnits(BigDecimal.valueOf(2));
+			QCStorageForms[0].setStorageLocation(storages.get(i));
+			QCStorageForms[0].setMeasureUnit("OZ");
 			
-			rawItemQualities[i].setStorageForms(storageForms);
+			rawItemQualities[i].setStorageForms(QCStorageForms);
 			
 		}
 		check.setQualityChecks(rawItemQualities);
 		checks.addCashewReceiptCheck(check);
-		QualityCheckDTO checkDTO = checks.getQcByProcessId(check.getId());
+		QualityCheckDTO checkDTO;
+		checkDTO = checks.getQcByProcessId(check.getId());
 		assertEquals(new QualityCheckDTO(check), checkDTO, "QC not added or fetched correctly");
 		
 		//print all
