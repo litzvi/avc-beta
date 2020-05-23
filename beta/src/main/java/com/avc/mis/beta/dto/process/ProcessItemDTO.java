@@ -9,7 +9,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ProcessItem;
@@ -29,8 +31,8 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = false)
 public class ProcessItemDTO extends ProcessDTO {
 
-	private Item item;
-	private PoCodeBasic itemPo;
+	private ValueObject item;
+	private PoCodeDTO itemPo;
 	
 //	BigDecimal unitAmount;
 //	MeasureUnit measureUnit;
@@ -41,15 +43,21 @@ public class ProcessItemDTO extends ProcessDTO {
 	
 	private Set<StorageDTO> storageForms; //can use a SortedSet like ContactDetails to maintain order
 	
-	public ProcessItemDTO(Integer id, Integer version, Item item, PoCode itemPo,
+	public ProcessItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
+			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
 			/*BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, Warehouse storageLocation, */
 			String description, String remarks) {
 		super(id, version);
-		this.item = item;
-		if(itemPo != null)
-			this.itemPo = new PoCodeBasic(itemPo);
+		this.item = new ValueObject(itemId, itemValue);
+		if(poCodeId != null)
+			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
 		else
 			this.itemPo = null;
+//		if(itemPo != null)
+//			this.itemPo = new PoCodeBasic(itemPo);
+//		else
+//			this.itemPo = null;
+		
 //		this.unitAmount = unitAmount.setScale(3);
 //		this.measureUnit = measureUnit;
 //		this.numberUnits = numberUnits.setScale(3);
@@ -68,11 +76,12 @@ public class ProcessItemDTO extends ProcessDTO {
 	 */
 	public ProcessItemDTO(ProcessItem processItem) {
 		super(processItem.getId(), processItem.getVersion());
-		this.item = processItem.getItem();
+		this.item = new ValueObject(processItem.getItem());
 		if(processItem.getItemPo() != null)
-			this.itemPo = new PoCodeBasic(processItem.getItemPo());
+			this.itemPo = new PoCodeDTO(processItem.getItemPo());
 		else
 			this.itemPo = null;
+		
 //		this.measureUnit = processItem.getMeasureUnit();
 //		this.unitAmount = processItem.getUnitAmount().setScale(3);
 //		this.numberUnits = processItem.getNumberUnits().setScale(3);
@@ -87,6 +96,16 @@ public class ProcessItemDTO extends ProcessDTO {
 //		this.unitAmount.setScale(3);//for testing with assertEquals
 //		this.numberUnits.setScale(3);//for testing with assertEquals
 		
+	}
+
+
+	public ProcessItemDTO(Integer id, Integer version, ValueObject item, PoCodeDTO itemPo,
+			String description, String remarks) {
+		super(id, version);
+		this.item = item;
+		this.itemPo = itemPo;
+		this.description = description;
+		this.remarks = remarks;
 	}
 
 

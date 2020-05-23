@@ -93,14 +93,14 @@ public class OrderReceipts {
 //	}
 	
 	public ReceiptDTO getReceiptByProcessId(int processId) {
-		Optional<Receipt> result = getReceiptRepository().findReceiptByProcessId(processId);
-		Receipt receipt = result.orElseThrow(
-				()->new IllegalArgumentException("No order receipt with given process id"));
-		ReceiptDTO receiptDTO = new ReceiptDTO(receipt);
-//		Optional<ReceiptDTO> receipt = getReceiptRepository().findReceiptDTOByProcessId(processId);
-//		ReceiptDTO receiptDTO = receipt.orElseThrow(
+//		Optional<Receipt> result = getReceiptRepository().findReceiptByProcessId(processId);
+//		Receipt receipt = result.orElseThrow(
 //				()->new IllegalArgumentException("No order receipt with given process id"));
-//		receiptDTO.setReceiptItems(getReceiptRepository().findReceiptItemsById(processId));
+//		ReceiptDTO receiptDTO = new ReceiptDTO(receipt);
+		Optional<ReceiptDTO> receipt = getReceiptRepository().findReceiptDTOByProcessId(processId);
+		ReceiptDTO receiptDTO = receipt.orElseThrow(
+				()->new IllegalArgumentException("No order receipt with given process id"));
+		receiptDTO.setReceiptItems(getReceiptRepository().findReceiptItemWithStorage(processId));
 		
 		return receiptDTO;
 	}

@@ -51,6 +51,8 @@ import com.avc.mis.beta.service.Suppliers;
 @WithUserDetails("eli")
 public class ReceiptTest {
 	
+	public static int RECEIPT_PROCESS_NO = 800000;
+	
 	@Autowired OrderReceipts receipts;
 	
 	@Autowired Orders orders;
@@ -61,10 +63,13 @@ public class ReceiptTest {
 		//build order receipt
 		Receipt receipt = new Receipt();
 		PoCode poCode = new PoCode();
-		poCode.setCode(OrdersTest.PROCESS_NO);
+		poCode.setCode(RECEIPT_PROCESS_NO);
 		Supplier supplier = SuppliersTest.basicSupplier();
 		suppliers.addSupplier(supplier);
 		poCode.setSupplier(supplier);
+		ContractType contractType = new ContractType();
+		contractType.setId(1);
+		poCode.setContractType(contractType);
 		receipt.setPoCode(poCode);
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());
@@ -110,12 +115,14 @@ public class ReceiptTest {
 		for(OrderItemDTO oItem: orderItems) {
 			items[i] = new ReceiptItem();
 			storageForms[i] = new Storage();
-			items[i].setItem(oItem.getItem());
+			Item item = new Item();
+			item.setId(oItem.getItem().getId());
+			items[i].setItem(item);
 			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
 			storageForms[i].setMeasureUnit("KG");
 			storageForms[i].setNumberUnits(oItem.getNumberUnits().divide(BigDecimal.valueOf(10, 2)).setScale(2));
 			storageForms[i].setStorageLocation(storage);
-			items[i].setStorageForms(storageForms);
+			items[i].setStorageForms(new Storage[] {storageForms[i]});
 			oi  = new OrderItem();
 			oi.setId(oItem.getId());
 			oi.setVersion(oItem.getVersion());
@@ -142,7 +149,7 @@ public class ReceiptTest {
 			storageForms[i].setMeasureUnit("KG");
 			storageForms[i].setNumberUnits(new BigDecimal(i).setScale(2));
 			storageForms[i].setStorageLocation(storage);
-			items[i].setStorageForms(storageForms);
+			items[i].setStorageForms(new Storage[] {storageForms[i]});
 		}
 //		Arrays.stream(items).forEach(i -> System.out.println(i));
 		return items;
@@ -161,8 +168,14 @@ public class ReceiptTest {
 
 		//insert order receipt for order
 		receipt = orderReceipt();
-		receipts.addCashewReceipt(receipt);
-		expected = new ReceiptDTO(receipt);
+		receipts.addCashewOrderReceipt(receipt);
+		try {
+			expected = new ReceiptDTO(receipt);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding order receipt");
 		System.out.println(actual);

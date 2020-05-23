@@ -49,7 +49,7 @@ public class OrderItem extends ProcessEntity {
 	@JoinColumn(name = "POid", updatable = false, nullable = false)
 	private PO po;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	

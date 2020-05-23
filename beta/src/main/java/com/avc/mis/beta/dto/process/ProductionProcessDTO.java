@@ -8,6 +8,8 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.entities.enums.ContractTypeCode;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.ProcessStatus;
@@ -34,7 +36,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 	@EqualsAndHashCode.Exclude // no need to compare for testing
 	private String userRecording; //perhaps only user name
 	private PoCodeDTO poCode;
-	private String processType; // use string instead of object or enum
+	private ProcessName processName; // use string instead of object or enum
 	private ProductionLine productionLine;
 	private OffsetDateTime recordedTime;
 	private Duration duration;
@@ -43,15 +45,15 @@ public class ProductionProcessDTO extends ProcessDTO {
 	private String remarks;
 	
 	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-			Integer poCodeId, ContractType contractType, Integer supplierId, Integer supplierVersion, String supplierName, 
-			ProcessType processType, ProductionLine productionLine, 
+			Integer poCodeId, ContractTypeCode contractTypeCode, Integer supplierId, Integer supplierVersion, String supplierName, 
+			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus status, 
 			String remarks) {
 		super(id, version);
 		this.createdDate = createdDate;
 		this.userRecording = userRecording;
-		this.poCode = new PoCodeDTO(poCodeId, contractType, /*supplierId, supplierVersion,*/ supplierName);
-		this.processType = processType.getValue();
+		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
+		this.processName = processName;
 		this.productionLine = productionLine;
 		this.recordedTime = recordedTime;
 		this.duration = duration;
@@ -66,7 +68,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 		if(process.getCreatedBy() != null)
 			this.userRecording = process.getCreatedBy().getUsername();
 		this.poCode = new PoCodeDTO(process.getPoCode());
-		this.processType = process.getProcessType().getValue();
+		this.processName = process.getProcessType().getProcessName();
 		this.productionLine = process.getProductionLine();
 		this.recordedTime = process.getRecordedTime();
 		this.duration = process.getDuration();

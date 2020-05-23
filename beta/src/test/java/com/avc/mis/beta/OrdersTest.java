@@ -49,7 +49,7 @@ import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.PORepository;
-import com.avc.mis.beta.service.ObjectTableReader;
+import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessInfoWriter;
@@ -72,7 +72,7 @@ public class OrdersTest {
 	
 	public static final int NUM_ITEMS = 3;
 	
-	public static int PROCESS_NO = 9000034;
+	public static int PROCESS_NO = 9000039;
 
 	@Autowired
 	Orders orders;
@@ -94,7 +94,7 @@ public class OrdersTest {
 	
 	@Autowired private PORepository poRepository;
 	
-	@Autowired ObjectTableReader objectTableReader;
+	@Autowired ObjectTablesReader objectTableReader;
 	
 
 	private PO basicOrder() {
@@ -160,8 +160,10 @@ public class OrdersTest {
 		actual = orders.getOrder(po.getPoCode().getCode());
 		assertEquals(expected, actual, "failed test editing po order status");		
 		
-		Supplier supplier = po.getPoCode().getSupplier();
+		PoCode poCode = po.getPoCode();
+		Supplier supplier = poCode.getSupplier();
 		orders.removeOrder(po.getId());
+		suppliers.permenentlyRemoveEntity(poCode);
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//remove a line/item from order
@@ -184,9 +186,6 @@ public class OrdersTest {
 		List<SupplierBasic> suppliersByCategory = valueTableReader.getSuppliersBasic(3);
 		suppliersByCategory.forEach(s -> System.out.println(s));
 		
-		//list of bank branches
-		List<BankBranchDTO> branchList = valueTableReader.getAllBankBranchesDTO();
-		branchList.forEach((i)->System.out.println(i));
 		
 		//get list of cities
 		List<CityDTO> cityList =  valueTableReader.getAllCitiesDTO();
@@ -293,9 +292,6 @@ public class OrdersTest {
 //		users.permenentlyRemoveUser(user.getId());
 
 		
-		//get list of persons basic
-		List<PersonBasic> personsBasic = users.getPersonsBasic();
-		personsBasic.forEach(m -> System.out.println(m));
 		
 		//get users table
 		List<UserRow> usersTable = users.getUsersTable();

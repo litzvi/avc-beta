@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -11,9 +12,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.ReceiptItemDTO;
+import com.avc.mis.beta.dto.values.ReceiptItemWithStorage;
 import com.avc.mis.beta.dto.values.ReceiptRow;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.values.Warehouse;
 
 /**
  * @author Zvi
@@ -21,25 +26,27 @@ import com.avc.mis.beta.entities.process.Receipt;
  */
 public interface ReceiptRepository extends BaseRepository<Receipt> {
 
-	@Query("select r  "
-		+ "from Receipt r "
-//			+ "join r.poCode po_code "
-//			+ "join po_code.supplier s "
-//			+ "left join r.createdBy p_user "
-//			+ "left join r.productionLine p_line "
-//			+ "left join r.status p_status "
-		+ "where r.id = :id ")
-	Optional<Receipt> findReceiptByProcessId(int id);
+//	@Query("select r  "
+//		+ "from Receipt r "
+////			+ "join r.poCode po_code "
+////			+ "join po_code.supplier s "
+////			+ "left join r.createdBy p_user "
+////			+ "left join r.productionLine p_line "
+////			+ "left join r.status p_status "
+//		+ "where r.id = :id ")
+//	Optional<Receipt> findReceiptByProcessId(int id);
 	
 	@Query("select new com.avc.mis.beta.dto.process.ReceiptDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "po_code.code, po_code.contractType, s.id, s.version, s.name, "
-			+ "r.processType, p_line, "
+			+ "po_code.code, t.code, s.id, s.version, s.name, "
+			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
 			+ "p_status, r.remarks) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
-			+ "join po_code.supplier s "
+				+ "join po_code.contractType t "
+				+ "join po_code.supplier s "
+			+ "join r.processType pt "
 			+ "left join r.createdBy p_user "
 			+ "left join r.productionLine p_line "
 			+ "left join r.status p_status "
@@ -47,15 +54,38 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 	Optional<ReceiptDTO> findReceiptDTOByProcessId(int id);
 
 	@Query("select new com.avc.mis.beta.dto.process.ReceiptItemDTO("
-			+ "i.id, i.version, item, itemPo, i.description, i.remarks, oi.id, oi.version) "
+			+ "i.id, i.version, item.id, item.value, "
+			+ "itemPo.id, ct.code, s.name, "
+			+ "i.description, i.remarks, oi.id, oi.version) "
 		+ "from ReceiptItem i "
 			+ "left join i.orderItem oi "
 			+ "join i.item item "
 			+ "join i.process p "
 			+ "left join i.itemPo itemPo "
+				+ "join itemPo.contractType ct "
+				+ "join itemPo.supplier s "
 //			+ "left join i.storageLocation storageLocation "
 		+ "where p.id = :processId ")
 	Set<ReceiptItemDTO> findReceiptItemsById(int processId);
+	
+	@Query("select new com.avc.mis.beta.dto.values.ReceiptItemWithStorage( "
+			+ " i.id, i.version, item.id, item.value, "
+			+ "itemPo.id, ct.code, s.name, "
+			+ "sf.id, sf.version, "
+			+ "sf.unitAmount, sf.measureUnit, sf.numberUnits, "
+			+ "storageLocation.id, storageLocation.value, "
+			+ "i.description, i.remarks, oi.id, oi.version) "
+		+ "from ReceiptItem i "
+			+ "left join i.orderItem oi "
+			+ "join i.item item "
+			+ "join i.process p "
+			+ "left join i.itemPo itemPo "
+				+ "left join itemPo.contractType ct "
+				+ "left join itemPo.supplier s "
+			+ "join i.storageForms sf "
+				+ "left join sf.storageLocation storageLocation "
+		+ "where p.id = :processId ")
+	List<ReceiptItemWithStorage> findReceiptItemWithStorage(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.values.ReceiptRow( "
 			+ "r.id, po_code, s.name, i.value, "

@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.process;
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Storage;
@@ -26,7 +27,7 @@ public class StorageDTO extends ProcessDTO {
 	BigDecimal unitAmount;
 	MeasureUnit measureUnit;
 	BigDecimal numberUnits;	
-	Warehouse storageLocation;
+	ValueObject warehouseLocation;
 	String remarks;
 	
 	/**
@@ -34,12 +35,13 @@ public class StorageDTO extends ProcessDTO {
 	 */
 	public StorageDTO(Integer id, Integer version,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
-			Warehouse storageLocation, String remarks) {
+			Integer warehouseLocationId,  String warehouseLocationValue,
+			String remarks) {
 		super(id, version);
 		this.unitAmount = unitAmount.setScale(3);
 		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(3);
-		this.storageLocation = storageLocation;
+		this.warehouseLocation = new ValueObject(warehouseLocationId,  warehouseLocationValue);
 		this.remarks = remarks;
 	}
 	
@@ -52,8 +54,29 @@ public class StorageDTO extends ProcessDTO {
 		this.measureUnit = storage.getMeasureUnit();
 		this.unitAmount = storage.getUnitAmount().setScale(3);
 		this.numberUnits = storage.getNumberUnits().setScale(3);
-		this.storageLocation = storage.getStorageLocation();
+		this.warehouseLocation = new ValueObject(
+				storage.getStorageLocation().getId(),  storage.getStorageLocation().getValue());
 		this.remarks = storage.getRemarks();
+	}
+
+	/**
+	 * @param storageId
+	 * @param storageVersion
+	 * @param unitAmount2
+	 * @param measureUnit2
+	 * @param numberUnits2
+	 * @param warehouseLocation2
+	 * @param description
+	 */
+	public StorageDTO(Integer id, Integer version,
+			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
+			ValueObject warehouseLocation, String remarks) {
+		super(id, version);
+		this.unitAmount = unitAmount.setScale(3);
+		this.measureUnit = measureUnit;
+		this.numberUnits = numberUnits.setScale(3);
+		this.warehouseLocation = warehouseLocation;
+		this.remarks = remarks;
 	}
 	
 	

@@ -38,7 +38,7 @@ import lombok.Getter;
 @Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
-public class ObjectTableReader {
+public class ObjectTablesReader {
 	
 	@Autowired private ObjectTablesRepository objectTablesRepository;
 	
@@ -118,7 +118,7 @@ public class ObjectTableReader {
 	 * @return List of PoBasic for all open Cashew orders.
 	 */
 	public List<PoCodeDTO> findOpenCashewOrdersPoCode() {
-		return getObjectTablesRepository().findOpenOrderByTypePoCode(ProcessName.CASHEW_ORDER);		
+		return getObjectTablesRepository().findOpenPoCodeByType(ProcessName.CASHEW_ORDER);		
 	}
 	
 	/**
@@ -126,16 +126,17 @@ public class ObjectTableReader {
 	 * @return List of PoBasic for all open General orders.
 	 */
 	public List<PoCodeDTO> findOpenGeneralOrdersPoCode() {
-		return getObjectTablesRepository().findOpenOrderByTypePoCode(ProcessName.GENERAL_ORDER);
+		return getObjectTablesRepository().findOpenPoCodeByType(ProcessName.GENERAL_ORDER);
 	}
 	
 	/**
 	 * Get the table of all active Cashew po that can be processed.
+	 * Can be used for adding QC info on an existing order or receipt.
 	 * @return list of PoRow for po's that are still active - still in production.
 	 */
 	public List<PoCodeDTO> findActiveCashewPoCode() {
 		List<PoCodeDTO> list = findOpenCashewOrdersPoCode();
-		list.addAll(getObjectTablesRepository().findReceivedPoCode(
+		list.addAll(getObjectTablesRepository().findReceivedPoCodeByTypes(
 				new ProcessName[] {ProcessName.CASHEW_ORDER_RECEIPT, ProcessName.CASHEW_RECEIPT}));
 		return list;
 	}

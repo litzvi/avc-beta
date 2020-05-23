@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.values.ItemBasic;
+import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 
@@ -20,11 +20,11 @@ import com.avc.mis.beta.entities.enums.SupplyGroup;
  */
 public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 
-	@Query("select new com.avc.mis.beta.dto.values.ItemBasic(i.id, i.value) "
+	@Query("select new com.avc.mis.beta.dto.values.ValueObject(i.id, i.value) "
 			+ "from Item i "
 			+ "where i.supplyGroup = :supplyGroup "
 				+ "and i.active = true")
-	List<ItemBasic> findItemsByGroupBasic(SupplyGroup supplyGroup);
+	List<ValueObject> findItemsByGroupBasic(SupplyGroup supplyGroup);
 
 	
 }

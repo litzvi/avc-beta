@@ -48,7 +48,7 @@ public class PoCode extends BaseEntity {
 	@JoinColumn(name = "supplierId", updatable = false, nullable = false)
 	private Supplier supplier; 
 		
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contractTypeId", updatable = false, nullable = false)
 	private ContractType contractType;
 	

@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 import java.util.Currency;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.OrderItem;
@@ -29,8 +30,8 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class PoRow extends ValueDTO {
 	
-//	int poCodeId;
-	String value;
+	Integer poCodeId;
+	ContractTypeCode contractTypeCode;
 	String supplierName;
 	String itemName;
 	BigDecimal amount;
@@ -42,12 +43,14 @@ public class PoRow extends ValueDTO {
 	Currency currency;
 	BigDecimal unitPrice;
 	
-	public PoRow(@NonNull Integer id, PoCode poCode, String supplierName, String itemName, BigDecimal amount,
+	public PoRow(@NonNull Integer id, 
+			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
+			String itemName, BigDecimal amount,
 			MeasureUnit measureUnit, OffsetDateTime contractDate, LocalDate deliveryDate, OrderStatus orderStatus,
 			String defects, Currency currency, BigDecimal unitPrice) {
 		super(id);
-//		this.poCodeId = poCodeId;
-		this.value = poCode.getValue();
+		this.poCodeId = poCodeId;
+		this.contractTypeCode = contractTypeCode;
 		this.supplierName = supplierName;
 		this.itemName = itemName;
 		this.amount = amount;
@@ -68,9 +71,10 @@ public class PoRow extends ValueDTO {
 	public PoRow(PO po, OrderItem orderItem) {
 
 		super(po.getId());
-//		this.poCodeId = po.getPoCode().getId();
-		this.value = po.getPoCode().getValue();
-		this.supplierName = po.getPoCode().getSupplier().getName();
+		PoCode poCode = po.getPoCode();
+		this.poCodeId = poCode.getId();
+		this.contractTypeCode = poCode.getContractType().getCode();
+		this.supplierName = poCode.getSupplier().getName();
 		this.itemName = orderItem.getItem().getValue();
 		this.amount = orderItem.getNumberUnits();
 		this.measureUnit = orderItem.getMeasureUnit();
@@ -81,6 +85,13 @@ public class PoRow extends ValueDTO {
 		this.currency = orderItem.getCurrency();
 		this.unitPrice = orderItem.getUnitPrice();
 		
+	}
+	
+	/**
+	 * @return a string representing full PO code. e.g. VAT-900001
+	 */
+	public String getValue() {
+		return String.format("%s-%d", this.contractTypeCode, this.poCodeId);
 	}
 	
 	public String getMeasureUnit() {

@@ -4,6 +4,7 @@
 package com.avc.mis.beta;
 
 
+import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
@@ -55,7 +56,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800025;
+	static final Integer PO_CODE = 800042;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -135,6 +136,7 @@ public class GeneralTest {
 		ReceiptDTO receiptDTO;
 		receiptDTO = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(new ReceiptDTO(receipt), receiptDTO, "Order Receipt not added or fetched correctly");
+//		fail("finished");
 		
 		//add QC for received order
 		QualityCheck check = new QualityCheck();

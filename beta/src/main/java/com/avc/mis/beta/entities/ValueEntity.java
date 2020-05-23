@@ -31,5 +31,7 @@ public abstract class ValueEntity extends BaseEntity implements SoftDeleted {
 	
 	@Column(columnDefinition = "boolean default true")
 	private boolean active;
+	
+	public abstract String getValue();
 
 }

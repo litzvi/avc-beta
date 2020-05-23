@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.avc.mis.beta.entities.enums.CheckStatus;
+import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.RawItemQuality;
@@ -49,14 +50,16 @@ public class RawItemQualityDTO extends ProcessItemDTO {
 	CheckStatus flavour; 
 	
 
-	public RawItemQualityDTO(Integer id, Integer version, Item item, PoCode itemPo, String description,
-			String remarks, 
+	public RawItemQualityDTO(Integer id, Integer version, 
+			Integer itemId, String itemValue, 
+			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
+			String description, String remarks, 
 			BigDecimal breakage, BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal decay, BigDecimal insectDamage,
 			BigDecimal count, BigDecimal smallKernels, BigDecimal defectsAfterRoasting, BigDecimal weightLoss,
 			CheckStatus colour, CheckStatus flavour) {
-		super(id, version, item, itemPo, description, remarks);
+		super(id, version, itemId, itemValue, poCodeId, contractTypeCode, supplierName, description, remarks);
 		this.breakage = breakage;
 		this.foreignMaterial = foreignMaterial;
 		this.humidity = humidity;
