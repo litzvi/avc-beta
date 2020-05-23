@@ -3,8 +3,8 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import com.avc.mis.beta.dto.DataDTO;
-import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.ObjectEntityWithIdAndName;
+import com.avc.mis.beta.entities.data.Person;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
@@ -18,22 +18,20 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class SupplierBasic extends DataDTO {
+public class DataObjectWithName extends DataObject {
 	
 	@JsonIgnore
 	@ToString.Exclude
 	String name;
 	
-//	Set<String> supplyCategories;
-	
-	public SupplierBasic(Integer id, Integer version, String name) {
+	public DataObjectWithName(Integer id, Integer version, String name) {
 		super(id, version);
 		this.name = name;
 	}
 	
-	public SupplierBasic(@NonNull Supplier supplier) {
-		super(supplier.getId(), supplier.getVersion());
-		this.name = supplier.getName();
+	public DataObjectWithName(@NonNull ObjectEntityWithIdAndName entity) {
+		super(entity.getId(), entity.getVersion());
+		this.name = entity.getName();
 	}
 	
 	@ToString.Include(name = "value")

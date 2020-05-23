@@ -23,4 +23,6 @@ public abstract class ObjectDataEntity extends DataEntity implements SoftDeleted
 
 	@Column(columnDefinition = "boolean default true",nullable = false)
 	private boolean active = true;
+	
+//	public abstract String getName();
 }

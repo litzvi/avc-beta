@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.values.PersonBasic;
+import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.entities.data.Person;
 
 /**
@@ -16,8 +16,8 @@ import com.avc.mis.beta.entities.data.Person;
  */
 public interface PersonRepository extends BaseRepository<Person> {
 
-	@Query("select new com.avc.mis.beta.dto.values.PersonBasic(p.id, p.version, p.name) "
+	@Query("select new com.avc.mis.beta.dto.values.DataObjectWithName(p.id, p.version, p.name) "
 			+ "from Person p "
 			+ "where p.active = true")
-	List<PersonBasic> findAllPersonsBasic();
+	List<DataObjectWithName> findAllPersonsBasic();
 }

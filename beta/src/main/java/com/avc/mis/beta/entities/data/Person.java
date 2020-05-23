@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
+import com.avc.mis.beta.entities.ObjectEntityWithIdAndName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -31,11 +32,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PERSONS")
-public class Person extends ObjectEntityWithId {
+public class Person extends ObjectEntityWithIdAndName {
 	
-	@Column(nullable = false, updatable = false)
-	private String name;
-
 	@JsonManagedReference(value = "person_idCard")
 	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, 
 			/* orphanRemoval = true, */ fetch = FetchType.LAZY)
@@ -45,10 +43,7 @@ public class Person extends ObjectEntityWithId {
 	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
 	
-	public void setName(String name) {
-		this.name = Optional.ofNullable(name).map(s -> s.trim()).orElse(null);;
-	}
-
+	
 	public void setIdCard(IdCard idCard) {
 		if(idCard != null) {
 			idCard.setReference(this);
@@ -77,7 +72,7 @@ public class Person extends ObjectEntityWithId {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return StringUtils.isNotBlank(name);
+		return super.isLegal();
 	}
 	
 	@JsonIgnore

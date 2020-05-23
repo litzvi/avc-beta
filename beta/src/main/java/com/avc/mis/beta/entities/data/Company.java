@@ -24,6 +24,7 @@ import org.hibernate.annotations.BatchSize;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
+import com.avc.mis.beta.entities.ObjectEntityWithIdAndName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -42,10 +43,8 @@ import lombok.NoArgsConstructor;
 @BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name="COMPANIES", indexes = {@Index(columnList = "name", unique = true)})
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Company extends ObjectEntityWithId {
+public class Company extends ObjectEntityWithIdAndName {
 	
-	@Column(unique = true, nullable = false, updatable = false)
-	private String name;
 	private String localName;
 	private String englishName;
 	private String license;
@@ -84,11 +83,7 @@ public class Company extends ObjectEntityWithId {
 		}
 		return this.contactDetails;
 	}
-	
-	public void setName(String name) {
-		this.name = Optional.ofNullable(name).map(s -> s.trim()).orElse(null);
-	}
-	
+		
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
@@ -100,7 +95,7 @@ public class Company extends ObjectEntityWithId {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return StringUtils.isNotBlank(name);
+		return super.isLegal();
 	}
 	
 	@JsonIgnore

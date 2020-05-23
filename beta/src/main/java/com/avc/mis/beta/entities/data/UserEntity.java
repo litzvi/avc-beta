@@ -22,9 +22,11 @@ import org.hibernate.annotations.BatchSize;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
+import com.avc.mis.beta.entities.ObjectEntityWithIdAndName;
 import com.avc.mis.beta.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -41,12 +43,12 @@ import lombok.NoArgsConstructor;
 @Table(name = "USERS")
 public class UserEntity extends ObjectEntityWithId {
 	
+	@Column(unique = true, nullable = false, updatable = false)
+	private String username;
+	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "personId", updatable = false)
 	private Person person;
-	
-	@Column(nullable = false, unique = true, updatable = false)
-	private String username;
 	
 	@Column(nullable = false, updatable = false)
 	private String password;
@@ -63,6 +65,8 @@ public class UserEntity extends ObjectEntityWithId {
 //	@JoinColumn(name = "positionId")
 //	private CompanyPosition position;
 	
+	
+	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
@@ -74,12 +78,12 @@ public class UserEntity extends ObjectEntityWithId {
 
 	@Override
 	public boolean isLegal() {
-		return this.person != null;
+		return this.person != null && StringUtils.isNotBlank(username);
 	}
 
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "UserEntity has to reference a person";
+		return "UserEntity has to reference a person and have a username";
 	}
 }

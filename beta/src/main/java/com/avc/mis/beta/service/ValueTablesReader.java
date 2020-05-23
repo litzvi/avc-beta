@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.ValueObject;
-import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
@@ -26,8 +26,8 @@ import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
-import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.entities.values.SupplyCategory;
+import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.repositories.SupplierRepository;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
 
@@ -124,7 +124,7 @@ public class ValueTablesReader {
 	 * @return List of SupplierBasic of all existing suppliers.
 	 */
 	@Transactional(readOnly = true)
-	public List<SupplierBasic> getSuppliersBasic() {
+	public List<DataObjectWithName> getSuppliersBasic() {
 		return getSupplierRepository().findAllSuppliersBasic();
 	}
 			
@@ -134,7 +134,7 @@ public class ValueTablesReader {
 	 * @return List of SupplierBasic of all suppliers with given SupplyCategory
 	 */
 	@Transactional(readOnly = true)
-	public List<SupplierBasic> getSuppliersBasic(Integer categoryId) {
+	public List<DataObjectWithName> getSuppliersBasic(Integer categoryId) {
 		return getSupplierRepository().findSuppliersByCategoryBasic(categoryId);
 	}
 	
@@ -143,7 +143,7 @@ public class ValueTablesReader {
 	 * @return List of SupplierBasic of all CASHEW suppliers.
 	 */
 //	@Transactional(readOnly = true)
-	public List<SupplierBasic> getCashewSuppliersBasic() {
+	public List<DataObjectWithName> getCashewSuppliersBasic() {
 		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.CASHEW);
 	}
 	
@@ -152,7 +152,7 @@ public class ValueTablesReader {
 	 * @return List of SupplierBasic of all GENERAL suppliers.
 	 */
 //	@Transactional(readOnly = true)
-	public List<SupplierBasic> getGeneralSuppliersBasic() {
+	public List<DataObjectWithName> getGeneralSuppliersBasic() {
 		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.GENERAL);
 	}
 	

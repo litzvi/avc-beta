@@ -56,7 +56,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800042;
+	static final Integer PO_CODE = 800045;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	

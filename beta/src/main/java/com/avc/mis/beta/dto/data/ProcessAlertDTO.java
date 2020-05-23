@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.dto.LinkDTO;
+import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.UserEntity;

@@ -3,20 +3,10 @@
  */
 package com.avc.mis.beta;
 
-import static org.assertj.core.api.Assertions.fail;
-
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.avc.mis.beta.dto.process.PoCodeDTO;
-import com.avc.mis.beta.dto.values.BankBranchDTO;
-import com.avc.mis.beta.dto.values.CityDTO;
-import com.avc.mis.beta.dto.values.ValueObject;
-import com.avc.mis.beta.dto.values.PersonBasic;
-import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.Users;

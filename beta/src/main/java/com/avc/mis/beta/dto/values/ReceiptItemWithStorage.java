@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class ReceiptItemWithStorage extends ProcessItemWithStorage {
 
-	private ObjectWithIdAndVersion orderItem;
+	private DataObject orderItem;
 
 	public ReceiptItemWithStorage(Integer id, Integer version, Integer itemId, String itemValue, 
 			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
@@ -35,7 +35,7 @@ public class ReceiptItemWithStorage extends ProcessItemWithStorage {
 				storageId, storageVersion,
 				unitAmount, measureUnit, numberUnits, warehouseLocationId,  warehouseLocationValue, 
 				description, remarks);
-		this.orderItem = new ObjectWithIdAndVersion(orderItemId, orderItemVersion);
+		this.orderItem = new DataObject(orderItemId, orderItemVersion);
 	}
 	
 	public ReceiptItemDTO getReceiptItem() {

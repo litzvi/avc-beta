@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.values.SupplierBasic;
+import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
@@ -22,24 +22,24 @@ import com.avc.mis.beta.entities.enums.SupplyGroup;
  */
 public interface SupplierRepository extends BaseRepository<Supplier> {
 	
-	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.version, s.name) "
+	@Query("select new com.avc.mis.beta.dto.values.DataObjectWithName(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "left join s.supplyCategories c "
 			+ "where c.id = :categoryId "
 				+ "and s.active = true")
-	List<SupplierBasic> findSuppliersByCategoryBasic(Integer categoryId);
+	List<DataObjectWithName> findSuppliersByCategoryBasic(Integer categoryId);
 	
-	@Query("select distinct new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.version, s.name) "
+	@Query("select distinct new com.avc.mis.beta.dto.values.DataObjectWithName(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "left join s.supplyCategories c "
 			+ "where c.supplyGroup = :supplyGroup "
 				+ "and s.active = true ")
-	List<SupplierBasic> findSuppliersByGroupBasic(SupplyGroup supplyGroup);
+	List<DataObjectWithName> findSuppliersByGroupBasic(SupplyGroup supplyGroup);
 		
-	@Query("select new com.avc.mis.beta.dto.values.SupplierBasic(s.id, s.version, s.name) "
+	@Query("select new com.avc.mis.beta.dto.values.DataObjectWithName(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "where s.active = true")
-	List<SupplierBasic> findAllSuppliersBasic();
+	List<DataObjectWithName> findAllSuppliersBasic();
 	
 	@Query("select s from Supplier s "
 			+ "left join fetch s.contactDetails cd "

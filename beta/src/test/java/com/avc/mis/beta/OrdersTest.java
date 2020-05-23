@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +24,9 @@ import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
-import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
-import com.avc.mis.beta.dto.values.PersonBasic;
-import com.avc.mis.beta.dto.values.PoBasic;
+import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.PoRow;
-import com.avc.mis.beta.dto.values.SupplierBasic;
 import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessAlert;
@@ -38,7 +34,6 @@ import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.enums.DecisionType;
-import com.avc.mis.beta.entities.enums.OrderItemStatus;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.Role;
@@ -47,7 +42,6 @@ import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
-import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
@@ -183,7 +177,7 @@ public class OrdersTest {
 //		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//get suppliers by supply category
-		List<SupplierBasic> suppliersByCategory = valueTableReader.getSuppliersBasic(3);
+		List<DataObjectWithName> suppliersByCategory = valueTableReader.getSuppliersBasic(3);
 		suppliersByCategory.forEach(s -> System.out.println(s));
 		
 		

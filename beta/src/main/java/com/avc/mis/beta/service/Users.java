@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.dto.data.UserDTO;
-import com.avc.mis.beta.dto.values.PersonBasic;
+import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -62,7 +62,7 @@ public class Users {
 	 * @return List of PersonBasic for all persons.
 	 */
 	@Transactional(readOnly = true)
-	public List<PersonBasic> getPersonsBasic() {
+	public List<DataObjectWithName> getPersonsBasic() {
 		return getPersonRepository().findAllPersonsBasic();		
 	}
 	
