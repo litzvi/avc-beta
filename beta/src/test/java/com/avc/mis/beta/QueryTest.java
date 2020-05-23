@@ -3,11 +3,15 @@
  */
 package com.avc.mis.beta;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.service.ObjectTablesReader;
+import com.avc.mis.beta.service.OrderReceipts;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
@@ -23,6 +27,7 @@ public class QueryTest {
 	@Autowired ValueTablesReader valueTablesReader;
 	@Autowired Users users;
 	@Autowired Orders orders;
+	@Autowired OrderReceipts receipts;
 	
 	@Test
 	void queryTest() {
@@ -67,7 +72,12 @@ public class QueryTest {
 //		System.out.println(orders.getOrderByProcessId(poRows.get(0).getId()));
 		
 		//get list of cashew items
-		valueTablesReader.getCashewitemsBasic().forEach(i -> System.out.println(i));
+//		valueTablesReader.getCashewitemsBasic().forEach(i -> System.out.println(i));
+		
+		//print received orders
+		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
+		receiptRows.forEach(r -> System.out.println(r));
+				
 		
 	}
 }

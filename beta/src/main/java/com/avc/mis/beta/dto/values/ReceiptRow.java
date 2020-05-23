@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.PoCode;
 
@@ -24,7 +25,7 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class ReceiptRow extends ValueDTO {
 	
-	String value;
+	PoCodeBasic poCode;
 	String supplierName;
 	String itemName;
 	BigDecimal orderAmount;
@@ -36,11 +37,12 @@ public class ReceiptRow extends ValueDTO {
 	String storage;
 	
 	
-	public ReceiptRow(@NonNull Integer id, PoCode poCode, String supplierName, String itemName, BigDecimal orderAmount,
-			MeasureUnit orderMU, OffsetDateTime receiptDate, BigDecimal receiptAmount, MeasureUnit receiptMU, 
-			String storage) {
+	public ReceiptRow(@NonNull Integer id, 
+			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
+			String itemName, BigDecimal orderAmount, MeasureUnit orderMU, OffsetDateTime receiptDate, 
+			BigDecimal receiptAmount, MeasureUnit receiptMU, String storage) {
 		super(id);
-		this.value = poCode.getValue();
+		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
 		this.supplierName = supplierName;
 		this.itemName = itemName;
 		this.orderAmount = orderAmount;

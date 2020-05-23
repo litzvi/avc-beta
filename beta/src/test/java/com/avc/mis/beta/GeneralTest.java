@@ -120,13 +120,13 @@ public class GeneralTest {
 			storageForms[0] = new Storage();
 			storageForms[0].setUnitAmount(BigDecimal.valueOf(50));
 			storageForms[0].setNumberUnits(BigDecimal.valueOf(326));
-			storageForms[0].setStorageLocation(storages.get(i));
+			storageForms[0].setWarehouseLocation(storages.get(i));
 			storageForms[0].setMeasureUnit("KG");
 			
 			storageForms[1] = new Storage();
 			storageForms[1].setUnitAmount(BigDecimal.valueOf(26));
 			storageForms[1].setNumberUnits(BigDecimal.valueOf(1));
-			storageForms[1].setStorageLocation(storages.get(i));
+			storageForms[1].setWarehouseLocation(storages.get(i));
 			storageForms[1].setMeasureUnit("KG");
 			
 			receiptItems[i].setStorageForms(storageForms);
@@ -151,7 +151,7 @@ public class GeneralTest {
 			QCStorageForms[0] = new Storage();
 			QCStorageForms[0].setUnitAmount(BigDecimal.valueOf(8));
 			QCStorageForms[0].setNumberUnits(BigDecimal.valueOf(2));
-			QCStorageForms[0].setStorageLocation(storages.get(i));
+			QCStorageForms[0].setWarehouseLocation(storages.get(i));
 			QCStorageForms[0].setMeasureUnit("OZ");
 			
 			rawItemQualities[i].setStorageForms(QCStorageForms);

@@ -55,7 +55,7 @@ public class StorageDTO extends ProcessDTO {
 		this.unitAmount = storage.getUnitAmount().setScale(3);
 		this.numberUnits = storage.getNumberUnits().setScale(3);
 		this.warehouseLocation = new ValueObject(
-				storage.getStorageLocation().getId(),  storage.getStorageLocation().getValue());
+				storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
 		this.remarks = storage.getRemarks();
 	}
 

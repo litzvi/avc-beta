@@ -60,7 +60,7 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 				+ "join itemPo.contractType ct "
 				+ "join itemPo.supplier s "
 			+ "join i.storageForms sf "
-			+ "left join sf.storageLocation storageLocation "
+			+ "left join sf.warehouseLocation warehouseLocation "
 		+ "where p.id = :processId ")
 	Set<RawItemQualityDTO> findCheckItemsById(int processId);
 

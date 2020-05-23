@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.BaseDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
+import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.values.ContractType;
 
@@ -21,24 +22,24 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 public class PoCodeBasic extends BaseDTO {
 
-	ContractType contractType;
+	ContractTypeCode contractTypeCode;
 
-	public PoCodeBasic(Integer id, ContractType contractType) {
+	public PoCodeBasic(Integer id, ContractTypeCode contractTypeCode) {
 		super(id);
-		this.contractType = contractType;
+		this.contractTypeCode = contractTypeCode;
 	}
 	
 	
 	public PoCodeBasic(PoCode poCode) {
 		super(poCode.getCode());
-		this.contractType = poCode.getContractType();
+		this.contractTypeCode = poCode.getContractType().getCode();
 	}
 	
 	/**
 	 * @return a string representing full PO code. e.g. VAT-900001
 	 */
 	public String getValue() {
-		return String.format("%s-%d", this.contractType.getValue(), this.getId());
+		return String.format("%s-%d", this.contractTypeCode, this.getId());
 	}
 
 }

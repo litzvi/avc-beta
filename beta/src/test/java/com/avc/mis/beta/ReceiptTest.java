@@ -121,7 +121,7 @@ public class ReceiptTest {
 			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
 			storageForms[i].setMeasureUnit("KG");
 			storageForms[i].setNumberUnits(oItem.getNumberUnits().divide(BigDecimal.valueOf(10, 2)).setScale(2));
-			storageForms[i].setStorageLocation(storage);
+			storageForms[i].setWarehouseLocation(storage);
 			items[i].setStorageForms(new Storage[] {storageForms[i]});
 			oi  = new OrderItem();
 			oi.setId(oItem.getId());
@@ -148,7 +148,7 @@ public class ReceiptTest {
 			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
 			storageForms[i].setMeasureUnit("KG");
 			storageForms[i].setNumberUnits(new BigDecimal(i).setScale(2));
-			storageForms[i].setStorageLocation(storage);
+			storageForms[i].setWarehouseLocation(storage);
 			items[i].setStorageForms(new Storage[] {storageForms[i]});
 		}
 //		Arrays.stream(items).forEach(i -> System.out.println(i));

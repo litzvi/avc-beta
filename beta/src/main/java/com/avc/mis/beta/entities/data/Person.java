@@ -32,7 +32,10 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PERSONS")
-public class Person extends ObjectEntityWithIdAndName {
+public class Person extends ObjectEntityWithId {
+	
+	@Column(nullable = false, updatable = false)
+	private String name;
 	
 	@JsonManagedReference(value = "person_idCard")
 	@OneToOne(mappedBy = "person", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, 
@@ -72,9 +75,9 @@ public class Person extends ObjectEntityWithIdAndName {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return super.isLegal();
+		return StringUtils.isNotBlank(name);
 	}
-	
+		
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {

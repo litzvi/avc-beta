@@ -49,8 +49,8 @@ public class Storage extends ProcessEntity {
 	private BigDecimal numberUnits;	
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "storageLocationId")
-	private Warehouse storageLocation;
+	@JoinColumn(name = "warehouseLocationId")
+	private Warehouse warehouseLocation;
 	
 	public void setMeasureUnit(String measureUnit) {
 		this.measureUnit = MeasureUnit.valueOf(measureUnit);
