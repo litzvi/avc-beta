@@ -6,13 +6,21 @@ package com.avc.mis.beta;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.data.ProcessAlertDTO;
+import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.OrderReceipts;
 import com.avc.mis.beta.service.Orders;
+import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
 
@@ -21,10 +29,14 @@ import com.avc.mis.beta.service.ValueTablesReader;
  *
  */
 @SpringBootTest
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration
+@WithUserDetails("eli")
 public class QueryTest {
 	
 	@Autowired ObjectTablesReader objectTablesReader;
 	@Autowired ValueTablesReader valueTablesReader;
+	@Autowired ProcessInfoReader processInfoReader;
 	@Autowired Users users;
 	@Autowired Orders orders;
 	@Autowired OrderReceipts receipts;
@@ -75,9 +87,29 @@ public class QueryTest {
 //		valueTablesReader.getCashewitemsBasic().forEach(i -> System.out.println(i));
 		
 		//print received orders
-		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
-		receiptRows.forEach(r -> System.out.println(r));
-				
+//		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
+//		receiptRows.forEach(r -> System.out.println(r));
 		
+		//get messages for logged in user
+//		List<UserMessageDTO> userMessages = processInfoReader.getAllMessages();
+//		userMessages.forEach(m -> System.out.println(m));
+				
+		//get required approvals for logged in user		
+//		List<ApprovalTaskDTO> requierdTasks = processInfoReader.getAllRequiredApprovals();
+//		requierdTasks.forEach(i -> System.out.println(i));
+		
+		//get all approvals for logged in user		
+//		List<ApprovalTaskDTO> tasks = processInfoReader.getAllApprovals();
+//		tasks.forEach(i -> System.out.println(i));
+
+		//get list of new message for user
+//		List<UserMessageDTO> messages = processInfoReader.getAllNewMessages();
+//		messages.forEach(m -> System.out.println(m));
+		
+		//get processTypeAlerts
+		List<ProcessAlertDTO> alerts = processInfoReader.getAllProcessTypeAlerts();
+		alerts.forEach(m -> System.out.println(m));
+				
+			
 	}
 }

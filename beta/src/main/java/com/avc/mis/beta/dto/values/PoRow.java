@@ -30,8 +30,7 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class PoRow extends ValueDTO {
 	
-	Integer poCodeId;
-	ContractTypeCode contractTypeCode;
+	PoCodeBasic poCode;
 	String supplierName;
 	String itemName;
 	BigDecimal amount;
@@ -49,8 +48,7 @@ public class PoRow extends ValueDTO {
 			MeasureUnit measureUnit, OffsetDateTime contractDate, LocalDate deliveryDate, OrderStatus orderStatus,
 			String defects, Currency currency, BigDecimal unitPrice) {
 		super(id);
-		this.poCodeId = poCodeId;
-		this.contractTypeCode = contractTypeCode;
+		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
 		this.supplierName = supplierName;
 		this.itemName = itemName;
 		this.amount = amount;
@@ -72,8 +70,7 @@ public class PoRow extends ValueDTO {
 
 		super(po.getId());
 		PoCode poCode = po.getPoCode();
-		this.poCodeId = poCode.getId();
-		this.contractTypeCode = poCode.getContractType().getCode();
+		this.poCode = new PoCodeBasic(poCode);
 		this.supplierName = poCode.getSupplier().getName();
 		this.itemName = orderItem.getItem().getValue();
 		this.amount = orderItem.getNumberUnits();
@@ -91,7 +88,7 @@ public class PoRow extends ValueDTO {
 	 * @return a string representing full PO code. e.g. VAT-900001
 	 */
 	public String getValue() {
-		return String.format("%s-%d", this.contractTypeCode, this.poCodeId);
+		return this.poCode.getValue();
 	}
 	
 	public String getMeasureUnit() {

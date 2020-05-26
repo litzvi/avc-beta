@@ -49,7 +49,7 @@ class SuppliersTest {
 	@Autowired
 	ValueTablesReader referenceTables;
 	
-	static Integer SERIAL_NO = 1765;
+	static Integer SERIAL_NO = 1814;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -193,6 +193,7 @@ class SuppliersTest {
 		categories.remove(removedCategory);
 		categories.remove(addedCategory);
 		supplier = suppliers.editSupplierMainInfo(supplier);
+//		fail("uncomment previous line");
 		categories = supplier.getSupplyCategories();
 		categories.add(addedCategory);
 		expected.getSupplyCategories().remove(removedCategory);

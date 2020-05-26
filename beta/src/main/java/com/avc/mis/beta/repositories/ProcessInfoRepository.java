@@ -25,49 +25,64 @@ import com.avc.mis.beta.entities.values.ProcessType;
  */
 public interface ProcessInfoRepository extends BaseRepository<ProductionProcess> {
 
+//	@Query("select a "
+//			+ "from ProcessAlert a "
+//			+ "join fetch a.user "
+//			+ "where a.processType = ?1")
+//	List<ProcessAlert> findProcessTypeAlerts(ProcessType processType);
+	
 	@Query("select a "
 			+ "from ProcessAlert a "
 			+ "join fetch a.user "
-			+ "where a.processType = ?1")
-	List<ProcessAlert> findProcessTypeAlerts(ProcessType processType);
+			+ "join ProductionProcess p "
+				+ "on p.processType = a.processType "
+			+ "where p.id = ?1")
+	List<ProcessAlert> findProcessTypeAlertsByProcess(Integer processId);
+
 
 	@Query("select p.approvals from ProductionProcess p where p = ?1")
 	List<ApprovalTask> findProcessApprovals(ProductionProcess process);
 
 	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
-				+ "m.id, m.version, c, m.description, p.id, p.processType, m.createdDate, pr.name, prm.name,  m.label) "
+				+ "m.id, m.version, c.id, t.code, m.description, p.id, pt.processName, m.createdDate, pr.name, prm.name,  m.label) "
 			+ "from UserMessage m "
-			+ "join m.process p "
-			+ "join p.poCode c "
-			+ "join m.user u "
-			+ "join u.person pr "
-			+ "join m.modifiedBy um "
-			+ "join um.person prm "
+				+ "join m.process p "
+					+ "join p.processType pt "
+					+ "join p.poCode c "
+						+ "join c.contractType t "
+				+ "join m.user u "
+					+ "join u.person pr "
+				+ "join m.modifiedBy um "
+					+ "join um.person prm "
 			+ "where u.id = ?1 "
 			+ "ORDER BY m.createdDate DESC ")
 	List<UserMessageDTO> findAllMessagesByUser(Integer userId);
 
 	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
-			+ "pa.id, pa.version, c, pa.description, p.id, p.processType, pa.createdDate, "
+			+ "pa.id, pa.version, c.id, t.code, pa.description, p.id, pt.processName, pa.createdDate, "
 			+ "pr.name, prm.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
-		+ "join pa.process p "
-		+ "join p.poCode c "
-		+ "join pa.user u "
-		+ "join u.person pr "
-		+ "join pa.modifiedBy um "
-		+ "join um.person prm "
+			+ "join pa.process p "
+				+ "join p.processType pt "
+				+ "join p.poCode c "
+					+ "join c.contractType t "
+			+ "join pa.user u "
+				+ "join u.person pr "
+			+ "join pa.modifiedBy um "
+				+ "join um.person prm "
 		+ "where pa.decision in :decisions "
 			+ "and u.id = :userId "
 		+ "ORDER BY p.modifiedDate DESC ")
 	List<ApprovalTaskDTO> findAllRequiredApprovalsByUser(Integer userId, DecisionType[] decisions);
 
 	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
-			+ "pa.id, pa.version, c, pa.description, p.id, p.processType, pa.createdDate, "
+			+ "pa.id, pa.version, c.id, t.code, pa.description, p.id, pt.processName, pa.createdDate, "
 			+ "pr.name, prm.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 		+ "join pa.process p "
+			+ "join p.processType pt "
 		+ "join p.poCode c "
+			+ "join c.contractType t "
 		+ "join pa.user u "
 		+ "join u.person pr "
 		+ "join pa.modifiedBy um "
@@ -77,10 +92,12 @@ public interface ProcessInfoRepository extends BaseRepository<ProductionProcess>
 	List<ApprovalTaskDTO> findAllApprovalsByUser(Integer userId);
 
 	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
-			+ "m.id, m.version, c, m.description, p.id, p.processType, m.createdDate, pr.name, prm.name, m.label) "
+			+ "m.id, m.version, c.id, t.code, m.description, p.id, pt.processName, m.createdDate, pr.name, prm.name, m.label) "
 		+ "from UserMessage m "
 		+ "join m.process p "
+			+ "join p.processType pt "
 		+ "join p.poCode c "
+			+ "join c.contractType t "
 		+ "join m.user u "
 		+ "join u.person pr "
 		+ "join m.modifiedBy um "
@@ -92,7 +109,8 @@ public interface ProcessInfoRepository extends BaseRepository<ProductionProcess>
 
 	@Query("select a "
 			+ "from ProcessAlert a "
-				+ "join fetch a.user "
+//				+ "join fetch a.user "
+//				+ "join fetch a.processType "
 			+ "where a.id = :id")
 	ProcessAlert findProcessTypeAlertById(Integer id);
 

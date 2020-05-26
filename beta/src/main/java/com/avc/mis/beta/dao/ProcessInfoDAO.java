@@ -61,8 +61,9 @@ public class ProcessInfoDAO extends DAO {
 	 * @param process the new ProductionProcess
 	 */
 	private void addAlerts(ProductionProcess process) {
-		
-		List<ProcessAlert> alerts = getProcessRepository().findProcessTypeAlerts(process.getProcessType());
+
+		List<ProcessAlert> alerts = getProcessRepository().findProcessTypeAlertsByProcess(process.getId());
+
 		for(ProcessAlert a: alerts) {			
 			switch(a.getApprovalType()) {
 			case REQUIRED_APPROVAL:
@@ -83,7 +84,9 @@ public class ProcessInfoDAO extends DAO {
 	 * @param process the edited ProductionProcess
 	 */
 	private void editAlerts(ProductionProcess process) {
+
 		List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(process);
+
 		for(ApprovalTask approval: approvals) {
 			if(approval.getDecision() != DecisionType.NOT_ATTENDED) {
 				approval.setDecision(DecisionType.EDIT_NOT_ATTENDED);
@@ -91,7 +94,7 @@ public class ProcessInfoDAO extends DAO {
 			approval.setDescription(process.getProcessType() + "process added and edited");
 		}
 		
-		List<ProcessAlert> alerts = getProcessRepository().findProcessTypeAlerts(process.getProcessType());
+		List<ProcessAlert> alerts = getProcessRepository().findProcessTypeAlertsByProcess(process.getId());
 		for(ProcessAlert alert: alerts) {
 			addMessage(alert.getUser(), process, process.getProcessType() + "Old process edited");
 		}
@@ -104,8 +107,12 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	private void approvalAlerts(ApprovalTask approval) {
 		ProductionProcess process = approval.getProcess();
+
 		List<ProcessAlert> alerts = getProcessRepository()
-				.findProcessTypeAlerts(process.getProcessType());
+				.findProcessTypeAlertsByProcess(process.getId());
+//		List<ProcessAlert> alerts = getProcessRepository()
+//				.findProcessTypeAlerts(process.getProcessType());
+
 		for(ProcessAlert alert: alerts) {
 			addMessage(alert.getUser(), process, 
 					"Process decision: " + approval.getDecision());
@@ -159,7 +166,7 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public void setProcessDecision(int approvalId, String decisionType, 
 			String processSnapshot, String remarks) {
-		ApprovalTask approval = getEntityManager().find(ApprovalTask.class, approvalId);
+		ApprovalTask approval = getEntityManager().getReference(ApprovalTask.class, approvalId);
 		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
 			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
 			approval.setDecision(decision);

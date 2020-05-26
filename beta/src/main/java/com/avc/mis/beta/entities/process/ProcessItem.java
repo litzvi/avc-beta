@@ -48,6 +48,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
+@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "PROCESSED_ITEMS")
 @Inheritance(strategy=InheritanceType.JOINED)
 public class ProcessItem extends ProcessInfoEntity {

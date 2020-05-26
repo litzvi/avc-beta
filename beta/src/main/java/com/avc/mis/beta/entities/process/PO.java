@@ -17,6 +17,10 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
@@ -48,8 +52,9 @@ public class PO extends ProductionProcess {
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "po", orphanRemoval = true, 
-		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.ALL, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@BatchSize(size = BaseEntity.BATCH_SIZE)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<OrderItem> orderItems = new HashSet<>();
 	
 	/**

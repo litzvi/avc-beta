@@ -19,6 +19,9 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -41,6 +44,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
+@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "PO_ITEMS")
 public class OrderItem extends ProcessEntity {
 	
@@ -103,7 +107,7 @@ public class OrderItem extends ProcessEntity {
 				&& unitPrice.compareTo(BigDecimal.ZERO) >= 0;
 	}
 
-	@PrePersist @PreUpdate
+	@PrePersist @PreUpdate 
 	@Override
 	public void prePersist() {
 		if(!isLegal()) {

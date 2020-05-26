@@ -62,14 +62,14 @@ public class QualityChecks {
 	}
 	
 	public QualityCheckDTO getQcByProcessId(int processId) {
-		Optional<QualityCheck> result = getQcRepository().findQcByProcessId(processId);
-		QualityCheck qualityCheck = result.orElseThrow(
-				()->new IllegalArgumentException("No quality check with given process id"));
-		QualityCheckDTO qualityCheckDTO = new QualityCheckDTO(qualityCheck);
-//		Optional<QualityCheckDTO> check = getQcRepository().findQcDTOByProcessId(processId);
-//		QualityCheckDTO qualityCheckDTO = check.orElseThrow(
+//		Optional<QualityCheck> result = getQcRepository().findQcByProcessId(processId);
+//		QualityCheck qualityCheck = result.orElseThrow(
 //				()->new IllegalArgumentException("No quality check with given process id"));
-//		qualityCheckDTO.setCheckItems(getQcRepository().findCheckItemsById(processId));
+//		QualityCheckDTO qualityCheckDTO = new QualityCheckDTO(qualityCheck);
+		Optional<QualityCheckDTO> check = getQcRepository().findQcDTOByProcessId(processId);
+		QualityCheckDTO qualityCheckDTO = check.orElseThrow(
+				()->new IllegalArgumentException("No quality check with given process id"));
+		qualityCheckDTO.setCheckItems(getQcRepository().findCheckItemsById(processId));
 		
 		return qualityCheckDTO;
 	}

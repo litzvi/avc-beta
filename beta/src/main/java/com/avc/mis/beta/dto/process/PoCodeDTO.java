@@ -16,7 +16,7 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class PoCodeDTO extends BaseDTO {
 
@@ -35,6 +35,10 @@ public class PoCodeDTO extends BaseDTO {
 		super(poCode.getCode());
 		this.contractTypeCode = poCode.getContractType().getCode();
 		this.supplierName = poCode.getSupplier().getName();
+	}
+	
+	public Integer getCode() {
+		return getId();
 	}
 	
 	/**

@@ -17,15 +17,15 @@ import com.avc.mis.beta.entities.process.QualityCheck;
  */
 public interface QCRepository extends BaseRepository<QualityCheck> {
 	
-	@Query("select r "
-		+ "from QualityCheck r "
-//			+ "join r.poCode po_code "
-//			+ "join po_code.supplier s "
-//			+ "left join r.createdBy p_user "
-//			+ "left join r.productionLine p_line "
-//			+ "left join r.status p_status "
-		+ "where r.id = :id ")
-	Optional<QualityCheck> findQcByProcessId(int id);
+//	@Query("select r "
+//		+ "from QualityCheck r "
+////			+ "join r.poCode po_code "
+////			+ "join po_code.supplier s "
+////			+ "left join r.createdBy p_user "
+////			+ "left join r.productionLine p_line "
+////			+ "left join r.status p_status "
+//		+ "where r.id = :id ")
+//	Optional<QualityCheck> findQcByProcessId(int id);
 
 	@Query("select new com.avc.mis.beta.dto.process.QualityCheckDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "

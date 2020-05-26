@@ -138,6 +138,7 @@ public class Suppliers {
 	 * @return the edited supplier
 	 */
 	public Supplier editSupplierMainInfo(Supplier supplier) {
+//		dao.editEntity(supplier);
 		return (Supplier)dao.editEntity(supplier);
 	}
 	

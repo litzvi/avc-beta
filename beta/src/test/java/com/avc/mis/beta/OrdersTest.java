@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta;
 
+import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
@@ -66,7 +67,7 @@ public class OrdersTest {
 	
 	public static final int NUM_ITEMS = 3;
 	
-	public static int PROCESS_NO = 9000039;
+	public static int PROCESS_NO = 9000087;
 
 	@Autowired
 	Orders orders;
@@ -150,7 +151,9 @@ public class OrdersTest {
 		//edit order status
 		po.setOrderStatus(OrderStatus.OPEN_APPROVED);
 		expected = new PoDTO(po);
+		System.out.println("before edit");
 		orders.editOrder(po);
+		System.out.println("after edit");
 		actual = orders.getOrder(po.getPoCode().getCode());
 		assertEquals(expected, actual, "failed test editing po order status");		
 		
@@ -196,27 +199,17 @@ public class OrdersTest {
 		for(PoRow row: pos) {
 			System.out.println(row);
 		}
-		
-		//get list of new message for user
-		List<UserMessageDTO> messages;
-		try {
-			messages = processDisplay.getAllNewMessages();
-			messages.forEach(m -> System.out.println(m));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
-		
+				
 		//get list approval tasks for user
 		List<ApprovalTaskDTO> tasks;
 		ObjectMapper objMapper = new ObjectMapper();
 		try {
 			tasks = processDisplay.getAllRequiredApprovals();
+
 //			ApprovalTask task = new ApprovalTask();
 			tasks.forEach(t -> {
 //				task.setId(t.getId());
-				ProductionProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessType());
+				ProductionProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessName().name());
 				String processSnapshot = null;
 				try {
 					processSnapshot = objMapper.writeValueAsString(p);
@@ -228,11 +221,13 @@ public class OrdersTest {
 //				task.setProcessVersion(p.getVersion());
 				processInfoWriter.setProcessDecision(t.getId(), 
 						DecisionType.APPROVED.name(), processSnapshot, null);
+				
 			});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 		//insert a user
 		UserEntity user = new UserEntity();
@@ -280,8 +275,11 @@ public class OrdersTest {
 		
 		//add, edit, remove processTypeAlert
 		Integer processAlertId = processInfoWriter.addProcessTypeAlert(user.getId(), 
-				poRepository.findProcessTypeByValue(ProcessName.CASHEW_ORDER), ApprovalType.REQUIRED_APPROVAL);
+		poRepository.findProcessTypeByValue(ProcessName.CASHEW_ORDER), ApprovalType.REQUIRED_APPROVAL);
+		System.out.println("OrdersTest 279");
 		ProcessAlert processAlert = processDisplay.getProcessTypeAlert(processAlertId);
+		System.out.println(processAlert);
+	fail("finished");
 		processInfoWriter.editProcessTypeAlert(processAlert, ApprovalType.REVIEW);
 //		users.permenentlyRemoveUser(user.getId());
 
@@ -295,9 +293,6 @@ public class OrdersTest {
 		List<UserMessageDTO> userMessages = processDisplay.getAllMessages();
 		userMessages.forEach(m -> System.out.println(m));
 		
-		//get processTypeAlerts
-		List<ProcessAlertDTO> alerts = processDisplay.getAllProcessTypeAlerts();
-		alerts.forEach(m -> System.out.println(m));
 		
 		//get all open cashew orders
 		List<PoRow> openCashewList = orders.findOpenCashewOrders();

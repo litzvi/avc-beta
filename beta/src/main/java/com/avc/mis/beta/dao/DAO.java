@@ -104,6 +104,12 @@ public abstract class DAO extends ReadDAO {
 		if(entity.getId() == null) {
 			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
 		}
+		/*
+		 * using update saves the selects before updating but updates even if nothing
+		 * was changed therefore affecting the modifying date and user modifying.
+		 */
+//		Session session = getEntityManager().unwrap(Session.class); 
+//		session.update(entity);
 		return getEntityManager().merge(entity);
 	}	
 	
