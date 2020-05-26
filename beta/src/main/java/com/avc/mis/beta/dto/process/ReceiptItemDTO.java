@@ -50,10 +50,5 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 		this.orderItem = orderItem;
 	}
 	
-	public ReceiptItemDTO(ReceiptItemWithStorage ri) {
-		super(ri.getId(), ri.getVersion(), ri.getItem(), ri.getItemPo(), 
-				ri.getDescription(), ri.getRemarks());
-		this.orderItem = ri.getOrderItem();
-	}
-
+	
 }

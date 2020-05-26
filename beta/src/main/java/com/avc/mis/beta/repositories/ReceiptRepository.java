@@ -67,7 +67,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "itemPo.id, ct.code, s.name, "
 			+ "sf.id, sf.version, "
 			+ "sf.unitAmount, sf.measureUnit, sf.numberUnits, "
-			+ "warehouseLocation.id, warehouseLocation.value, "
+			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, "
 			+ "i.description, i.remarks, oi.id, oi.version) "
 		+ "from ReceiptItem i "
 			+ "left join i.orderItem oi "

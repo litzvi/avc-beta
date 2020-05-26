@@ -4,10 +4,10 @@
 package com.avc.mis.beta;
 
 
-import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -26,7 +26,7 @@ import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.dto.values.ReceiptRow;
+import com.avc.mis.beta.dto.process.SampleReceiptDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.process.OrderItem;
@@ -36,6 +36,8 @@ import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.process.RawItemQuality;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.ReceiptItem;
+import com.avc.mis.beta.entities.process.SampleItem;
+import com.avc.mis.beta.entities.process.SampleReceipt;
 import com.avc.mis.beta.entities.process.Storage;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -43,6 +45,7 @@ import com.avc.mis.beta.repositories.ValueTablesRepository;
 import com.avc.mis.beta.service.OrderReceipts;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.QualityChecks;
+import com.avc.mis.beta.service.Samples;
 import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.ValueTablesReader;
 
@@ -56,7 +59,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800046;
+	static final Integer PO_CODE = 800066;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -70,6 +73,7 @@ public class GeneralTest {
 	@Autowired Orders orders;
 	@Autowired OrderReceipts receipts;
 	@Autowired QualityChecks checks;
+	@Autowired Samples samples;
 	
 	@Test
 	void orderAndReceiveTest() {
@@ -160,22 +164,47 @@ public class GeneralTest {
 		check.setQualityChecks(rawItemQualities);
 		checks.addCashewReceiptCheck(check);
 		QualityCheckDTO checkDTO;
-		System.out.println("GeneralTest 163");
 		checkDTO = checks.getQcByProcessId(check.getId());
-		fail("finished");
+//		fail("finished");
 		assertEquals(new QualityCheckDTO(check), checkDTO, "QC not added or fetched correctly");
+		
+		//add receipt sample check for received orders
+		SampleReceipt sampleReceipt = new SampleReceipt();
+		sampleReceipt.setPoCode(poCode);
+		sampleReceipt.setRecordedTime(OffsetDateTime.now());
+		SampleItem[] sampleItems = new SampleItem[2];
+		sampleItems[0] = new SampleItem();
+		sampleItems[0].setItem(items.get(0));
+		sampleItems[0].setUnitAmount(BigDecimal.valueOf(50));
+		sampleItems[0].setMeasureUnit("KG");
+		sampleItems[0].setNumberOfSamples(BigInteger.valueOf(30));
+		sampleItems[0].setAvgTestedWeight(BigDecimal.valueOf(50.01));
+		sampleItems[0].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
+		sampleItems[1] = new SampleItem();
+		sampleItems[1].setItem(items.get(0));
+		sampleItems[1].setUnitAmount(BigDecimal.valueOf(26));
+		sampleItems[1].setMeasureUnit("KG");
+		sampleItems[1].setNumberOfSamples(BigInteger.valueOf(1));
+		sampleItems[1].setAvgTestedWeight(BigDecimal.valueOf(26.01));
+		sampleItems[1].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
+		sampleReceipt.setSampleItems(sampleItems);
+		System.out.println(sampleReceipt);
+		samples.addSampleReceipt(sampleReceipt);
+		SampleReceiptDTO sampleReceiptDTO;
+		sampleReceiptDTO = samples.getSampleReceiptByProcessId(sampleReceipt.getId());
+//		fail("finished");
+		assertEquals(new SampleReceiptDTO(sampleReceipt), sampleReceiptDTO, "Receipt sample not added or fetched correctly");
 		
 		//print all
 		System.out.println("Supplier: " + supplierDTO);
 		System.out.println("Purchase Order: " + poDTO);
 		System.out.println("Order receipt: " + receiptDTO);
 		System.out.println("QC test: " + checkDTO);
+		System.out.println("Receipt sample: " + sampleReceiptDTO);
 		
-		//print received orders
-		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
-		receiptRows.forEach(r -> System.out.println(r));
 		
 		//remove all
+		samples.removeSampleReceipt(sampleReceipt.getId());
 		checks.removeCheck(check.getId());
 		receipts.removeReceipt(receiptDTO.getId());
 		orders.removeOrder(poDTO.getId());

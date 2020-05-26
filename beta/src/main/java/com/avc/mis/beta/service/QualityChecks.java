@@ -69,7 +69,7 @@ public class QualityChecks {
 		Optional<QualityCheckDTO> check = getQcRepository().findQcDTOByProcessId(processId);
 		QualityCheckDTO qualityCheckDTO = check.orElseThrow(
 				()->new IllegalArgumentException("No quality check with given process id"));
-		qualityCheckDTO.setCheckItems(getQcRepository().findCheckItemsById(processId));
+		qualityCheckDTO.setCheckItems(getQcRepository().findRawItemQualityWithStorage(processId));
 		
 		return qualityCheckDTO;
 	}

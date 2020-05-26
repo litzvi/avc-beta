@@ -99,16 +99,6 @@ public class ProcessItem extends ProcessInfoEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
-	@Override
-	public void setReference(Object referenced) {
-		if(referenced instanceof ProductionProcess) {
-			this.setProcess((ProductionProcess)referenced);
-		}
-		else {
-			throw new ClassCastException("Referenced object isn't a production process");
-		}		
-	}
-	
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {

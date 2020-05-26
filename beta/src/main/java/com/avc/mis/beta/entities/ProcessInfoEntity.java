@@ -65,6 +65,16 @@ public abstract class ProcessInfoEntity extends ProcessEntity {
 //	@Lob
 //	private String remarks;
 	
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof ProductionProcess) {
+			this.setProcess((ProductionProcess)referenced);
+		}
+		else {
+			throw new ClassCastException("Referenced object isn't a production process");
+		}		
+	}
+	
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {

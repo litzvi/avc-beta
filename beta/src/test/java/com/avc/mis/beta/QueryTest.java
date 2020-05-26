@@ -90,6 +90,7 @@ public class QueryTest {
 //		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
 //		receiptRows.forEach(r -> System.out.println(r));
 		
+		
 		//get messages for logged in user
 //		List<UserMessageDTO> userMessages = processInfoReader.getAllMessages();
 //		userMessages.forEach(m -> System.out.println(m));

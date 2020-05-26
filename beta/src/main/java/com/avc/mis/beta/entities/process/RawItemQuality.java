@@ -31,58 +31,58 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "processItemId")
 public class RawItemQuality extends ProcessItem {
 
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal breakage;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal foreignMaterial;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal humidity;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal testa;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal scorched;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal deepCut;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal offColour;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal shrivel;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal desert;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal deepSpot;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal mold;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal dirty;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal decay;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal insectDamage;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal count;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal smallKernels;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal defectsAfterRoasting;
 	
-	@Column(scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal weightLoss;
 	
 	@Enumerated(EnumType.STRING)

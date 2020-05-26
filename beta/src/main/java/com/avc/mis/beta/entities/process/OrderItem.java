@@ -57,7 +57,7 @@ public class OrderItem extends ProcessEntity {
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	
-	@Column(nullable = false, scale = 3)
+	@Column(nullable = false, precision = 19, scale = 3)
 	private BigDecimal numberUnits;	
 	
 	@Enumerated(EnumType.STRING)
@@ -67,7 +67,7 @@ public class OrderItem extends ProcessEntity {
 	@Setter(value = AccessLevel.NONE)
 	private Currency currency;
 	
-	@Column(scale = 2)
+	@Column(precision = 19, scale = 2)
 	private BigDecimal unitPrice;
 	
 	@Convert(converter = LocalDateToLong.class)

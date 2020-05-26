@@ -77,7 +77,7 @@ public class ReceiptDTO extends ProductionProcessDTO {
 			.collect(Collectors.groupingBy(ReceiptItemWithStorage::getId, Collectors.toList()));
 		this.receiptItems = new HashSet<>();
 		for(List<ReceiptItemWithStorage> list: map.values()) {
-			ReceiptItemDTO receiptItem = new ReceiptItemDTO(list.get(0));
+			ReceiptItemDTO receiptItem = list.get(0).getReceiptItem();
 			receiptItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
 			this.receiptItems.add(receiptItem);
 		}

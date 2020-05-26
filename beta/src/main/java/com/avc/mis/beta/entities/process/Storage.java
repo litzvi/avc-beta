@@ -38,14 +38,14 @@ public class Storage extends ProcessEntity {
 	@JoinColumn(name = "processItemId", nullable = false, updatable = false)
 	private ProcessItem processItem;
 		
-	@Column(nullable = false, scale = 3)
+	@Column(nullable = false, precision = 19, scale = 3)
 	private BigDecimal unitAmount = BigDecimal.ONE;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private MeasureUnit measureUnit;
 	
-	@Column(nullable = false, scale = 3)
+	@Column(nullable = false, precision = 19, scale = 3)
 	private BigDecimal numberUnits;	
 	
 	@ManyToOne(fetch = FetchType.EAGER)

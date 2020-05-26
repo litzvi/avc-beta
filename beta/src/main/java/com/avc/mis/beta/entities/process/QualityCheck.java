@@ -30,7 +30,7 @@ public class QualityCheck extends ProductionProcess {
 //	@Column(nullable = false)
 //	private Integer numOfSamples;
 //	
-//	@Column(scale = 3)
+//	@Column(precision = 19, scale = 3)
 //	private BigDecimal sampleSize;	
 //	
 //	@ManyToOne(fetch = FetchType.EAGER)

@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.process;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -39,21 +40,25 @@ public class SampleItem extends ProcessInfoEntity {
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	
-	@Column(nullable = false, scale = 3)
+	@Column(nullable = false, precision = 19, scale = 3)
 	private BigDecimal unitAmount;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private MeasureUnit measureUnit;
 	
-	@Column(nullable = false, scale = 3)
-	private BigDecimal numberOfSamples;	
+	@Column(nullable = false)
+	private BigInteger numberOfSamples;	
 	
-	@Column(nullable = false, scale = 3)
+	@Column(nullable = false, precision = 19, scale = 3)
 	private BigDecimal avgTestedWeight;	
 	
-	@Column(nullable = false, scale = 3)
-	private BigDecimal emptyContainerWeight;	
+	@Column(nullable = false, precision = 19, scale = 3)
+	private BigDecimal emptyContainerWeight;
+	
+	public void setMeasureUnit(String measureUnit) {
+		this.measureUnit = MeasureUnit.valueOf(measureUnit);
+	}
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
@@ -65,7 +70,7 @@ public class SampleItem extends ProcessInfoEntity {
 		return item != null && unitAmount != null && measureUnit != null && numberOfSamples != null 
 				&& avgTestedWeight != null && emptyContainerWeight != null
 				&& unitAmount.compareTo(BigDecimal.ZERO) > 0
-				&& numberOfSamples.compareTo(BigDecimal.ZERO) > 0;
+				&& numberOfSamples.compareTo(BigInteger.ZERO) > 0;
 	}
 
 	@JsonIgnore

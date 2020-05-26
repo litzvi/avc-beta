@@ -24,6 +24,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -31,6 +32,7 @@ import lombok.Setter;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "SAMPLE_RECEIPTS")
 @PrimaryKeyJoinColumn(name = "processId")
@@ -57,7 +59,7 @@ public class SampleReceipt extends ProductionProcess {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param sampleItems the sampleItems to set
 	 */
-	void setSampleItems(SampleItem[] sampleItems) {
+	public void setSampleItems(SampleItem[] sampleItems) {
 		this.sampleItems = Insertable.filterAndSetReference(sampleItems, (t) -> {t.setReference(this);	return t;});
 	}
 	
