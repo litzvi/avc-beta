@@ -3,13 +3,18 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.process.ItemWeightDTO;
 import com.avc.mis.beta.dto.process.SampleItemDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
+import com.avc.mis.beta.dto.values.SampleItemWithWeight;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.SampleReceipt;
 
 /**
@@ -35,15 +40,25 @@ public interface SampleRepository extends BaseRepository<SampleReceipt> {
 		+ "where r.id = :id ")
 	Optional<SampleReceiptDTO> findSampleDTOByProcessId(int id);
 
-	@Query("select new com.avc.mis.beta.dto.process.SampleItemDTO( "
+//	@Query("select new com.avc.mis.beta.dto.process.SampleItemDTO( "
+//			+ " i.id, i.version, item.id, item.value, "
+//			+ "i.unitAmount, i.measureUnit, i.numberOfSamples, "
+//			+ "i.avgTestedWeight, i.emptyContainerWeight) "
+//		+ "from SampleItem i "
+//			+ "join i.item item "
+//			+ "join i.process p "
+//		+ "where p.id = :processId ")
+//	List<SampleItemDTO> findSampleItemsById(int processId);
+	
+	
+	@Query("select new com.avc.mis.beta.dto.values.SampleItemWithWeight( "
 			+ " i.id, i.version, item.id, item.value, "
-			+ "i.unitAmount, i.measureUnit, i.numberOfSamples, "
-			+ "i.avgTestedWeight, i.emptyContainerWeight) "
+			+ "i.unitAmount, i.measureUnit, i.emptyContainerWeight, "
+			+ "w.id, w.version, w.numberOfSamples, w.avgTestedWeight) "
 		+ "from SampleItem i "
 			+ "join i.item item "
 			+ "join i.process p "
+			+ "join i.itemWeights w "
 		+ "where p.id = :processId ")
-	List<SampleItemDTO> findSampleItemsById(int processId);
-	
-	
+	List<SampleItemWithWeight> findSampleItemsWithWeight(int processId);
 }

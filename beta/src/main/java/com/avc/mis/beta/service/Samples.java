@@ -47,7 +47,7 @@ public class Samples {
 		Optional<SampleReceiptDTO> sample = getSampleRepository().findSampleDTOByProcessId(processId);
 		SampleReceiptDTO sampleReceiptDTO = sample.orElseThrow(
 				()->new IllegalArgumentException("No receipt sample with given process id"));
-		sampleReceiptDTO.setSampleItems(getSampleRepository().findSampleItemsById(processId));
+		sampleReceiptDTO.setSampleItems(getSampleRepository().findSampleItemsWithWeight(processId));
 		
 		return sampleReceiptDTO;
 	}

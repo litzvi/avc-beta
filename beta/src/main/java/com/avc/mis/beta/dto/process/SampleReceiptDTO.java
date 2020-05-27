@@ -9,13 +9,13 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections4.Bag;
 import org.apache.commons.collections4.MultiSet;
-import org.apache.commons.collections4.bag.HashBag;
 import org.apache.commons.collections4.multiset.HashMultiSet;
 
+import com.avc.mis.beta.dto.values.SampleItemWithWeight;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.SampleReceipt;
@@ -60,6 +60,18 @@ public class SampleReceiptDTO extends ProductionProcessDTO {
 	
 	public void setSampleItems(Collection<SampleItemDTO> sampleItems) {
 		this.sampleItems = new HashMultiSet<SampleItemDTO>(sampleItems);
+	}
+	
+	public void setSampleItems(List<SampleItemWithWeight> sampleItems) {
+		Map<Integer, List<SampleItemWithWeight>> map = sampleItems.stream()
+				.collect(Collectors.groupingBy(SampleItemWithWeight::getId, Collectors.toList()));
+			this.sampleItems = new HashMultiSet<>();
+			for(List<SampleItemWithWeight> list: map.values()) {
+				SampleItemDTO sampleItem = list.get(0).getSampleItem();
+				sampleItem.setItemWeights(list.stream().map(i -> i.getItemWeight())
+						.collect(Collectors.toCollection(() -> {return new HashMultiSet<ItemWeightDTO>();})));
+				this.sampleItems.add(sampleItem);
+			}
 	}
 
 }

@@ -4,6 +4,7 @@
 package com.avc.mis.beta;
 
 
+import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
@@ -27,8 +28,10 @@ import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
+import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
+import com.avc.mis.beta.entities.process.ItemWeight;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
@@ -59,7 +62,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800066;
+	static final Integer PO_CODE = 800078;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -114,7 +117,7 @@ public class GeneralTest {
 		receipt.setPoCode(poCode);
 		receipt.setRecordedTime(OffsetDateTime.now());
 		ReceiptItem[] receiptItems = new ReceiptItem[NUM_PO_ITEMS];
-		List<Warehouse> storages = valueTablesReader.getAllStorages();
+		List<Warehouse> storages = valueTablesReader.getAllWarehouses();
 		for(int i=0; i < receiptItems.length; i++) {
 			receiptItems[i] = new ReceiptItem();
 			receiptItems[i].setItem(orderItems[i].getItem());
@@ -167,7 +170,7 @@ public class GeneralTest {
 		checkDTO = checks.getQcByProcessId(check.getId());
 //		fail("finished");
 		assertEquals(new QualityCheckDTO(check), checkDTO, "QC not added or fetched correctly");
-		
+
 		//add receipt sample check for received orders
 		SampleReceipt sampleReceipt = new SampleReceipt();
 		sampleReceipt.setPoCode(poCode);
@@ -177,20 +180,26 @@ public class GeneralTest {
 		sampleItems[0].setItem(items.get(0));
 		sampleItems[0].setUnitAmount(BigDecimal.valueOf(50));
 		sampleItems[0].setMeasureUnit("KG");
-		sampleItems[0].setNumberOfSamples(BigInteger.valueOf(30));
-		sampleItems[0].setAvgTestedWeight(BigDecimal.valueOf(50.01));
+		ItemWeight[] itemWeights1 = new ItemWeight[1];
+		itemWeights1[0] = new ItemWeight();
+		itemWeights1[0].setNumberOfSamples(BigInteger.valueOf(30));
+		itemWeights1[0].setAvgTestedWeight(BigDecimal.valueOf(50.01));
+		sampleItems[0].setItemWeights(itemWeights1);
 		sampleItems[0].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
 		sampleItems[1] = new SampleItem();
 		sampleItems[1].setItem(items.get(0));
 		sampleItems[1].setUnitAmount(BigDecimal.valueOf(26));
 		sampleItems[1].setMeasureUnit("KG");
-		sampleItems[1].setNumberOfSamples(BigInteger.valueOf(1));
-		sampleItems[1].setAvgTestedWeight(BigDecimal.valueOf(26.01));
+		ItemWeight[] itemWeights2 = new ItemWeight[1];
+		itemWeights2[0] = new ItemWeight();
+		itemWeights2[0].setNumberOfSamples(BigInteger.valueOf(1));
+		itemWeights2[0].setAvgTestedWeight(BigDecimal.valueOf(26.01));
+		sampleItems[1].setItemWeights(itemWeights2);
 		sampleItems[1].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
 		sampleReceipt.setSampleItems(sampleItems);
-		System.out.println(sampleReceipt);
 		samples.addSampleReceipt(sampleReceipt);
 		SampleReceiptDTO sampleReceiptDTO;
+		System.out.println("line 202");
 		sampleReceiptDTO = samples.getSampleReceiptByProcessId(sampleReceipt.getId());
 //		fail("finished");
 		assertEquals(new SampleReceiptDTO(sampleReceipt), sampleReceiptDTO, "Receipt sample not added or fetched correctly");

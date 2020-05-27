@@ -53,8 +53,8 @@ public class ValueTablesReader {
 	@Autowired private ValueTablesRepository valueTablesRepository;
 	
 	
-	public List<Warehouse> getAllStorages() {
-		return getValueTablesRepository().findAllStorages();		
+	public List<Warehouse> getAllWarehouses() {
+		return getValueTablesRepository().findAllWarehouses();		
 	}
 	
 	public List<Country> getAllCountries() {
@@ -102,6 +102,10 @@ public class ValueTablesReader {
 	}
 	
 //----------------------------DTO---------------------------------------------------------	
+	
+	public List<ValueObject> getAllWarehousesDTO() {
+		return getValueTablesRepository().findAllWarehousesDTO();		
+	}
 	
 	public List<CityDTO> getAllCitiesDTO() {
 		return getValueTablesRepository().findAllCitiesDTO();

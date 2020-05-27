@@ -11,6 +11,7 @@ import org.springframework.data.repository.Repository;
 
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -40,9 +41,14 @@ import com.avc.mis.beta.entities.values.SupplyCategory;
 @NoRepositoryBean
 public interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 	
-	@Query("select s from Warehouse s where s.active = true")
-	List<Warehouse> findAllStorages();
+	@Query("select new com.avc.mis.beta.dto.values.ValueObject(s.id, s.value) "
+			+ "from Warehouse s where s.active = true")
+	List<ValueObject> findAllWarehousesDTO();
 
+	@Query("select s "
+			+ "from Warehouse s where s.active = true")
+	List<Warehouse> findAllWarehouses();
+	
 	@Query("select t from ProcessType t where t.processName = :value")
 	ProcessType findProcessTypeByValue(ProcessName value);
 	
