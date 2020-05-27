@@ -33,8 +33,8 @@ public class PoCodeDTO extends BaseDTO {
 	
 	public PoCodeDTO(PoCode poCode) {
 		super(poCode.getCode());
-		this.contractTypeCode = poCode.getContractType().getCode();
-		this.supplierName = poCode.getSupplier().getName();
+		this.contractTypeCode = poCode.getContractType() != null ? poCode.getContractType().getCode(): null;
+		this.supplierName = poCode.getSupplier() != null ? poCode.getSupplier().getName(): null;
 	}
 	
 	public Integer getCode() {

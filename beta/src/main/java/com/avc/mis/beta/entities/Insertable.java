@@ -45,11 +45,24 @@ public interface Insertable {
 	 * @param <T> 
 	 * @param tArray array of entities
 	 * @param p operator that sets the reference of T with the owning entity.
-	 * @return Set of entities that are legal to insert/update and their reference set.
+	 * @return Set of entities that are legal to insert/update with their reference set.
 	 */
 	static <T extends Insertable> Set<T> filterAndSetReference(T[] tArray, UnaryOperator<T> p) {
 		return Arrays.stream(tArray)
 			.filter(t -> t.isLegal())
+			.map(t -> p.apply(t))
+			.collect(Collectors.toSet());
+	}
+	
+	/**
+	 * Applies the setReference operator for every element.
+	 * @param <T> 
+	 * @param tArray array of entities
+	 * @param p operator that sets the reference of T with the owning entity.
+	 * @return Set of entities to insert/update with their reference set.
+	 */
+	static <T extends Insertable> Set<T> setReferences(T[] tArray, UnaryOperator<T> p) {
+		return Arrays.stream(tArray)
 			.map(t -> p.apply(t))
 			.collect(Collectors.toSet());
 	}

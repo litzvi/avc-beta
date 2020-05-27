@@ -60,7 +60,7 @@ public class SampleReceipt extends ProductionProcess {
 	 * @param sampleItems the sampleItems to set
 	 */
 	public void setSampleItems(SampleItem[] sampleItems) {
-		this.sampleItems = Insertable.filterAndSetReference(sampleItems, (t) -> {t.setReference(this);	return t;});
+		this.sampleItems = Insertable.setReferences(sampleItems, (t) -> {t.setReference(this);	return t;});
 	}
 	
 	@JsonIgnore

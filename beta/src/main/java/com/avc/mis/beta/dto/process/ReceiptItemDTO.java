@@ -33,7 +33,8 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName,
 			String description, String remarks, Integer orderItemId, Integer orderItemVersion) {
 		super(id, version, itemId, itemValue, poCodeId, contractTypeCode, supplierName, description, remarks);
-		this.orderItem = new DataObject(orderItemId, orderItemVersion);
+		if(orderItemId != null)
+			this.orderItem = new DataObject(orderItemId, orderItemVersion);
 	}
 
 	

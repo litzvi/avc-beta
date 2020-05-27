@@ -71,7 +71,7 @@ public class SampleItem extends ProcessInfoEntity {
 	}
 
 	public void setItemWeights(ItemWeight[] itemWeights) {
-		this.itemWeights = Insertable.filterAndSetReference(itemWeights, (t) -> {t.setReference(this);	return t;});
+		this.itemWeights = Insertable.setReferences(itemWeights, (t) -> {t.setReference(this);	return t;});
 	}
 	
 	

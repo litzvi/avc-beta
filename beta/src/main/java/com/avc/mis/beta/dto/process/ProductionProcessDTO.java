@@ -36,6 +36,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 	@EqualsAndHashCode.Exclude // no need to compare for testing
 	private String userRecording; //perhaps only user name
 	private PoCodeDTO poCode;
+	@EqualsAndHashCode.Exclude //if poCode is the same than it's enough, because might be null when testing.
 	private ProcessName processName; // use string instead of object or enum
 	private ProductionLine productionLine;
 	private OffsetDateTime recordedTime;
@@ -68,7 +69,8 @@ public class ProductionProcessDTO extends ProcessDTO {
 		if(process.getCreatedBy() != null)
 			this.userRecording = process.getCreatedBy().getUsername();
 		this.poCode = new PoCodeDTO(process.getPoCode());
-		this.processName = process.getProcessType().getProcessName();
+		if(process.getProcessType() != null)
+			this.processName = process.getProcessType().getProcessName();
 		this.productionLine = process.getProductionLine();
 		this.recordedTime = process.getRecordedTime();
 		this.duration = process.getDuration();

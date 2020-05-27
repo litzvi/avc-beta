@@ -92,7 +92,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	 * @param storageForms the storageForms to set
 	 */
 	public void setStorageForms(Storage[] storageForms) {
-		this.storageForms = Insertable.filterAndSetReference(storageForms, (t) -> {t.setReference(this);	return t;});
+		this.storageForms = Insertable.setReferences(storageForms, (t) -> {t.setReference(this);	return t;});
 	}
 	
 	protected boolean canEqual(Object o) {

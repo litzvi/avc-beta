@@ -72,7 +72,7 @@ public class PO extends ProductionProcess {
 	 * @param orderItems the orderItems to set
 	 */
 	public void setOrderItems(OrderItem[] orderItems) {
-		this.orderItems = Insertable.filterAndSetReference(orderItems, (t) -> {t.setReference(this);	return t;});
+		this.orderItems = Insertable.setReferences(orderItems, (t) -> {t.setReference(this);	return t;});
 	}
 
 	protected boolean canEqual(Object o) {

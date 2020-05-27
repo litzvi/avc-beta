@@ -51,7 +51,7 @@ import com.avc.mis.beta.service.Suppliers;
 @WithUserDetails("eli")
 public class ReceiptTest {
 	
-	public static int RECEIPT_PROCESS_NO = 800000;
+	public static int RECEIPT_PROCESS_NO = 800004;
 	
 	@Autowired OrderReceipts receipts;
 	

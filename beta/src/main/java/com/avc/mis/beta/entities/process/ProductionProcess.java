@@ -103,7 +103,7 @@ public class ProductionProcess extends ProcessEntity {
 	 * @param processItems the processItems to set
 	 */
 	void setProcessItems(ProcessItem[] processItems) {
-		this.processItems = Insertable.filterAndSetReference(processItems, (t) -> {t.setReference(this);	return t;});
+		this.processItems = Insertable.setReferences(processItems, (t) -> {t.setReference(this);	return t;});
 	}
 	
 	protected boolean canEqual(Object o) {

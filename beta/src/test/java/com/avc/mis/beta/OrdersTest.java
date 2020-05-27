@@ -67,7 +67,7 @@ public class OrdersTest {
 	
 	public static final int NUM_ITEMS = 3;
 	
-	public static int PROCESS_NO = 9000087;
+	public static int PROCESS_NO = 9000091;
 
 	@Autowired
 	Orders orders;
@@ -119,7 +119,7 @@ public class OrdersTest {
 		for(int i=0; i<items.length; i++) {
 			items[i] = new OrderItem();
 			items[i].setItem(item);
-			items[i].setNumberUnits(new BigDecimal(i).setScale(2));
+			items[i].setNumberUnits(new BigDecimal(i+1).setScale(2));
 			items[i].setCurrency("USD");
 			items[i].setMeasureUnit("KG");
 			items[i].setUnitPrice(new BigDecimal("1.16"));
@@ -278,8 +278,7 @@ public class OrdersTest {
 		poRepository.findProcessTypeByValue(ProcessName.CASHEW_ORDER), ApprovalType.REQUIRED_APPROVAL);
 		System.out.println("OrdersTest 279");
 		ProcessAlert processAlert = processDisplay.getProcessTypeAlert(processAlertId);
-		System.out.println(processAlert);
-	fail("finished");
+//	fail("finished");
 		processInfoWriter.editProcessTypeAlert(processAlert, ApprovalType.REVIEW);
 //		users.permenentlyRemoveUser(user.getId());
 
