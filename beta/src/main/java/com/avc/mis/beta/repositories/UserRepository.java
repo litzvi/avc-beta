@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -13,7 +12,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.dto.values.ValueObject;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.Role;
 

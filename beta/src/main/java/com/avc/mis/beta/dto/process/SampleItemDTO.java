@@ -4,10 +4,8 @@
 package com.avc.mis.beta.dto.process;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.MultiSet;
@@ -17,6 +15,7 @@ import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.SampleItem;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +29,7 @@ import lombok.NonNull;
 @EqualsAndHashCode(callSuper = false)
 public class SampleItemDTO extends ProcessDTO {
 	
-	private BasicValueEntity item;
+	private BasicValueEntity<Item> item;
 	private BigDecimal unitAmount;
 	private MeasureUnit measureUnit;
 //	private BigInteger numberOfSamples;	
@@ -43,7 +42,7 @@ public class SampleItemDTO extends ProcessDTO {
 	public SampleItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal emptyContainerWeight) {
 		super(id, version);
-		this.item = new BasicValueEntity(itemId, itemValue);
+		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.unitAmount = unitAmount.setScale(3);
 		this.measureUnit = measureUnit;
 //		this.numberOfSamples = numberOfSamples;
@@ -53,7 +52,7 @@ public class SampleItemDTO extends ProcessDTO {
 
 	public SampleItemDTO(@NonNull SampleItem sampleItem) {
 		super(sampleItem.getId(), sampleItem.getVersion());
-		this.item = new BasicValueEntity(sampleItem.getItem());
+		this.item = new BasicValueEntity<Item>(sampleItem.getItem());
 		this.unitAmount = sampleItem.getUnitAmount().setScale(3);
 		this.measureUnit = sampleItem.getMeasureUnit();
 //		this.numberOfSamples = sampleItem.getNumberOfSamples();

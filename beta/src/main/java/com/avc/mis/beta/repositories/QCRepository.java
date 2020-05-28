@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -12,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.RawItemQualityDTO;
 import com.avc.mis.beta.dto.values.RawItemQualityWithStorage;
-import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.process.QualityCheck;
 /**
  * @author Zvi

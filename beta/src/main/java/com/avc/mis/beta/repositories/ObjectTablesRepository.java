@@ -3,13 +3,11 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.PoCodeDTO;
-import com.avc.mis.beta.dto.values.PoBasic;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;

@@ -17,8 +17,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-import lombok.Value;
-import lombok.experimental.NonFinal;
 
 /**
  * @author Zvi

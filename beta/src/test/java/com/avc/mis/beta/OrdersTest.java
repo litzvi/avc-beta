@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta;
 
-import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
@@ -19,7 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.data.ProcessAlertDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
@@ -182,24 +180,7 @@ public class OrdersTest {
 		//get suppliers by supply category
 		List<DataObjectWithName> suppliersByCategory = valueTableReader.getSuppliersBasic(3);
 		suppliersByCategory.forEach(s -> System.out.println(s));
-		
-		
-		//get list of cities
-		List<CityDTO> cityList =  valueTableReader.getAllCitiesDTO();
-		for(CityDTO city: cityList)
-			System.out.println(city);
-		
-		//get list of cashew orders
-		List<PoCodeDTO> posBasic =  objectTableReader.findOpenCashewOrdersPoCode();
-		for(PoCodeDTO row: posBasic)
-			System.out.println(row);
-		
-		//get list of cashew orders
-		List<PoRow> pos =  orders.findOpenCashewOrders();
-		for(PoRow row: pos) {
-			System.out.println(row);
-		}
-				
+						
 		//get list approval tasks for user
 		List<ApprovalTaskDTO> tasks;
 		ObjectMapper objMapper = new ObjectMapper();
@@ -282,21 +263,6 @@ public class OrdersTest {
 		processInfoWriter.editProcessTypeAlert(processAlert, ApprovalType.REVIEW);
 //		users.permenentlyRemoveUser(user.getId());
 
-		
-		
-		//get users table
-		List<UserRow> usersTable = users.getUsersTable();
-		usersTable.forEach(u -> System.out.println(u));
-		
-		//get messages for logged in user
-		List<UserMessageDTO> userMessages = processDisplay.getAllMessages();
-		userMessages.forEach(m -> System.out.println(m));
-		
-		
-		//get all open cashew orders
-		List<PoRow> openCashewList = orders.findOpenCashewOrders();
-		openCashewList.forEach(o -> System.out.println(o));
-		
 		
 	}	
 }

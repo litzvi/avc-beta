@@ -13,11 +13,8 @@ import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.data.CompanyContact;
-import com.avc.mis.beta.entities.data.Email;
-import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
-import com.avc.mis.beta.entities.values.SupplyCategory;
 
 /**
  * Spring repository for accessing information of company suppliers.

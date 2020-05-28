@@ -17,12 +17,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.BatchSize;
-
-import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
-import com.avc.mis.beta.entities.ObjectEntityWithIdAndName;
 import com.avc.mis.beta.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

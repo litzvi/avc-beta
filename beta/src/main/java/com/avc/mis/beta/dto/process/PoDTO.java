@@ -14,9 +14,7 @@ import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.ProcessStatus;
-import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;

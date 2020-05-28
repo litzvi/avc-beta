@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.avc.mis</groupId>
 	<artifactId>beta</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>beta</name>
 	<description>Beta version project for AVC MIS</description>

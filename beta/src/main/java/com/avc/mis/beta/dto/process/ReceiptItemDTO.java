@@ -3,14 +3,9 @@
  */
 package com.avc.mis.beta.dto.process;
 
-import java.util.Set;
-
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.DataObject;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
-import com.avc.mis.beta.dto.values.ReceiptItemWithStorage;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
-import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ReceiptItem;
 import com.avc.mis.beta.entities.values.Item;
 
@@ -45,7 +40,7 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 	}
 
 
-	public ReceiptItemDTO(Integer id, Integer version, BasicValueEntity item, PoCodeDTO itemPo, 
+	public ReceiptItemDTO(Integer id, Integer version, BasicValueEntity<Item> item, PoCodeDTO itemPo, 
 			String description, String remarks, DataObject orderItem) {
 		super(id, version, item, itemPo, description, remarks);
 		this.orderItem = orderItem;

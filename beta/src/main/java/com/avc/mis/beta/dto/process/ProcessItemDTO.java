@@ -3,25 +3,18 @@
  */
 package com.avc.mis.beta.dto.process;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ProcessItem;
-import com.avc.mis.beta.entities.process.ReceiptItem;
 import com.avc.mis.beta.entities.values.Item;
-import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Value;
 
 /**
  * @author Zvi
@@ -31,7 +24,7 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = false)
 public class ProcessItemDTO extends ProcessDTO {
 
-	private BasicValueEntity item;
+	private BasicValueEntity<Item> item;
 	private PoCodeDTO itemPo;
 	
 //	BigDecimal unitAmount;
@@ -48,7 +41,7 @@ public class ProcessItemDTO extends ProcessDTO {
 			/*BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, Warehouse storageLocation, */
 			String description, String remarks) {
 		super(id, version);
-		this.item = new BasicValueEntity(itemId, itemValue);
+		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		if(poCodeId != null)
 			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
 		else
@@ -76,7 +69,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	 */
 	public ProcessItemDTO(ProcessItem processItem) {
 		super(processItem.getId(), processItem.getVersion());
-		this.item = new BasicValueEntity(processItem.getItem());
+		this.item = new BasicValueEntity<Item>(processItem.getItem());
 		if(processItem.getItemPo() != null)
 			this.itemPo = new PoCodeDTO(processItem.getItemPo());
 		else
@@ -99,7 +92,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	}
 
 
-	public ProcessItemDTO(Integer id, Integer version, BasicValueEntity item, PoCodeDTO itemPo,
+	public ProcessItemDTO(Integer id, Integer version, BasicValueEntity<Item> item, PoCodeDTO itemPo,
 			String description, String remarks) {
 		super(id, version);
 		this.item = item;

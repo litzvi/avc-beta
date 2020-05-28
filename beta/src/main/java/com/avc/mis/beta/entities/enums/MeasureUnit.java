@@ -42,9 +42,11 @@ public enum MeasureUnit {
 		case KG:
 			return from.kg.multiply(numberUnits);
 		case LBS:
-			return from.lbs.multiply(numberUnits);			
+			return from.lbs.multiply(numberUnits);
+		default:
+			throw new IllegalArgumentException("Can only convert to KG or LBS");
+			
 		}
-		return null;
 	}
 	
 }

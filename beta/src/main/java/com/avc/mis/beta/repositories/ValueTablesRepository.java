@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.values.Item;
 
 /**
  * Spring repository for accessing lists of {@link ValueEntity} entities, 
@@ -24,7 +25,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 			+ "from Item i "
 			+ "where i.supplyGroup = :supplyGroup "
 				+ "and i.active = true")
-	List<BasicValueEntity> findItemsByGroupBasic(SupplyGroup supplyGroup);
+	List<BasicValueEntity<Item>> findItemsByGroupBasic(SupplyGroup supplyGroup);
 
 	
 }

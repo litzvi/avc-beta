@@ -15,14 +15,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.values.RawItemQualityWithStorage;
-import com.avc.mis.beta.dto.values.ReceiptItemWithStorage;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.process.RawItemQuality;
-import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.ProcessStatus;
-import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;

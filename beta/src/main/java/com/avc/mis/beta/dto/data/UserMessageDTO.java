@@ -10,9 +10,7 @@ import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.UserMessage;
-import com.avc.mis.beta.entities.values.ProcessType;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

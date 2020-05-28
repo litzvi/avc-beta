@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -23,9 +22,8 @@ import lombok.experimental.NonFinal;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class UserRow extends ValueDTO implements Serializable{
+public class UserRow extends ValueDTO {
 	
-	private static final long serialVersionUID = 2L;
 	
 	String personName;
 	String username;

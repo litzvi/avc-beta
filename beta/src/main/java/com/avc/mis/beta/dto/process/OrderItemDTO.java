@@ -28,7 +28,7 @@ public class OrderItemDTO extends ProcessDTO {
 
 //	@EqualsAndHashCode.Exclude // for testing 
 //	private Integer poId; //perhaps not needed, and if yes maybe get the whole PoCode
-	BasicValueEntity item;
+	BasicValueEntity<Item> item;
 	MeasureUnit measureUnit;
 	BigDecimal numberUnits;
 	Currency currency;
@@ -44,7 +44,7 @@ public class OrderItemDTO extends ProcessDTO {
 			LocalDate deliveryDate, String defects, String remarks, Boolean received) {
 		super(id, version);
 //		this.poId = poId;
-		this.item = new BasicValueEntity(itemId, itemValue);
+		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(3);
 		this.currency = currency;
@@ -61,7 +61,7 @@ public class OrderItemDTO extends ProcessDTO {
 	public OrderItemDTO(@NonNull OrderItem orderItem) {
 		super(orderItem.getId(), orderItem.getVersion());
 //		this.poId = orderItem.getPo().getId();
-		this.item = new BasicValueEntity(orderItem.getItem());
+		this.item = new BasicValueEntity<Item>(orderItem.getItem());
 		this.measureUnit = orderItem.getMeasureUnit();
 		this.numberUnits = orderItem.getNumberUnits().setScale(3);
 		this.currency = orderItem.getCurrency();

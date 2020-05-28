@@ -18,7 +18,6 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import com.avc.mis.beta.dto.data.FaxDTO;
 import com.avc.mis.beta.dto.data.PhoneDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
-import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.entities.data.Address;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.CompanyContact;

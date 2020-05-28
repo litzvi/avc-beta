@@ -4,7 +4,6 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.entities.ObjectEntityWithIdAndName;
-import com.avc.mis.beta.entities.data.Person;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;

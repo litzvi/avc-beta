@@ -14,9 +14,6 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.BatchSize;
-
-import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.enums.ProcessName;

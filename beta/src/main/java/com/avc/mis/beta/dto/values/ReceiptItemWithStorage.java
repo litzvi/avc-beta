@@ -9,11 +9,8 @@ import com.avc.mis.beta.dto.process.ReceiptItemDTO;
 import com.avc.mis.beta.dto.process.StorageDTO;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.PoCode;
-import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * @author Zvi

@@ -10,8 +10,8 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 
 import com.avc.mis.beta.dto.values.BankBranchDTO;
-import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -25,8 +25,8 @@ import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
-import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.entities.values.SupplyCategory;
+import com.avc.mis.beta.entities.values.Warehouse;
 
 /**
  * Base repository which is the root for all Spring repositories.
@@ -43,7 +43,7 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	
 	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(s.id, s.value) "
 			+ "from Warehouse s where s.active = true")
-	List<BasicValueEntity> findAllWarehousesDTO();
+	List<BasicValueEntity<Warehouse>> findAllWarehousesDTO();
 
 	@Query("select s "
 			+ "from Warehouse s where s.active = true")

@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
@@ -103,7 +103,7 @@ public class ValueTablesReader {
 	
 //----------------------------DTO---------------------------------------------------------	
 	
-	public List<BasicValueEntity> getAllWarehousesDTO() {
+	public List<BasicValueEntity<Warehouse>> getAllWarehousesDTO() {
 		return getValueTablesRepository().findAllWarehousesDTO();		
 	}
 	
@@ -165,7 +165,7 @@ public class ValueTablesReader {
 	 * @return List of BasicValueEntity of all CASHEW items.
 	 */
 //	@Transactional(readOnly = true)
-	public List<BasicValueEntity> getCashewitemsBasic() {
+	public List<BasicValueEntity<Item>> getCashewitemsBasic() {
 		return getValueTablesRepository().findItemsByGroupBasic(SupplyGroup.CASHEW);
 	}
 	
@@ -174,7 +174,7 @@ public class ValueTablesReader {
 	 * @return List of BasicValueEntity of all GENERAL items.
 	 */
 //	@Transactional(readOnly = true)
-	public List<BasicValueEntity> getGeneralItemsBasic() {
+	public List<BasicValueEntity<Item>> getGeneralItemsBasic() {
 		return getValueTablesRepository().findItemsByGroupBasic(SupplyGroup.GENERAL);
 	}
 	
