@@ -39,8 +39,8 @@ public class BankAccount extends ObjectEntityWithId {
 	@Column(nullable = false)
 	private String ownerName;
 		
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="branchId", nullable = false)
-	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private BankBranch branch;
 	
 	public void setOwnerName(String ownerName) {

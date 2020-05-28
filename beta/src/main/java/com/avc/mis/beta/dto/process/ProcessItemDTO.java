@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ProcessDTO;
-import com.avc.mis.beta.dto.values.ValueObject;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -31,7 +31,7 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = false)
 public class ProcessItemDTO extends ProcessDTO {
 
-	private ValueObject item;
+	private BasicValueEntity item;
 	private PoCodeDTO itemPo;
 	
 //	BigDecimal unitAmount;
@@ -48,7 +48,7 @@ public class ProcessItemDTO extends ProcessDTO {
 			/*BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, Warehouse storageLocation, */
 			String description, String remarks) {
 		super(id, version);
-		this.item = new ValueObject(itemId, itemValue);
+		this.item = new BasicValueEntity(itemId, itemValue);
 		if(poCodeId != null)
 			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
 		else
@@ -76,7 +76,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	 */
 	public ProcessItemDTO(ProcessItem processItem) {
 		super(processItem.getId(), processItem.getVersion());
-		this.item = new ValueObject(processItem.getItem());
+		this.item = new BasicValueEntity(processItem.getItem());
 		if(processItem.getItemPo() != null)
 			this.itemPo = new PoCodeDTO(processItem.getItemPo());
 		else
@@ -99,7 +99,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	}
 
 
-	public ProcessItemDTO(Integer id, Integer version, ValueObject item, PoCodeDTO itemPo,
+	public ProcessItemDTO(Integer id, Integer version, BasicValueEntity item, PoCodeDTO itemPo,
 			String description, String remarks) {
 		super(id, version);
 		this.item = item;

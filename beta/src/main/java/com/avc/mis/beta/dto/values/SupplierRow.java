@@ -12,23 +12,36 @@ import com.avc.mis.beta.entities.data.Email;
 import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.SupplyCategory;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
+import lombok.experimental.NonFinal;
 
 /**
  * @author Zvi
  *
  */
-@Value
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class SupplierRow extends ValueDTO {
 	
-	String name;
-	Set<String> phones;
-	Set<String> emails;
-	Set<String> supplyCategories;
+	private String name;
+	private Set<String> phones;
+	private Set<String> emails;
+	private Set<String> supplyCategories;
+	
+	@JsonIgnore
+	private Integer contactDetailsId; //for joining with sets
+	
+	
+	public SupplierRow(Integer id, String name, Integer contactDetailsId) {
+		super(id);
+		this.name = name;
+		this.contactDetailsId = contactDetailsId;
+	}
 		
 	public SupplierRow(@NonNull Supplier supplier) {
 		super(supplier.getId());
@@ -41,4 +54,14 @@ public class SupplierRow extends ValueDTO {
 				.map(SupplyCategory::getValue).collect(Collectors.toSet());
 
 	}
+	
+	public SupplierRow(Integer id, String name, 
+			Set<String> phones, Set<String> emails, Set<String> supplyCategories) {
+		super(id);
+		this.name = name;
+		this.phones = phones;
+		this.emails = emails;
+		this.supplyCategories = supplyCategories;
+	}
+	
 }

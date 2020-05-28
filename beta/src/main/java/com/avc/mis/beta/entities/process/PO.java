@@ -53,7 +53,7 @@ public class PO extends ProductionProcess {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "po", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.ALL, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<OrderItem> orderItems = new HashSet<>();
 	

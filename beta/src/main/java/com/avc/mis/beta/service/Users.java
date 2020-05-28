@@ -3,9 +3,13 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,8 +21,10 @@ import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.UserRow;
+import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.Role;
 import com.avc.mis.beta.repositories.PersonRepository;
 import com.avc.mis.beta.repositories.UserRepository;
 
@@ -51,9 +57,12 @@ public class Users {
 	 */
 	@Transactional(readOnly = true)
 	public List<UserRow> getUsersTable() {
-//		List<UserRow> userRows = getUserRepository().findUserRowTable();
-//		List<UserRow> userRows = new ArrayList<>();
-		List<UserRow> userRows = getUserRepository().findAll().map(u -> new UserRow(u)).collect(Collectors.toList());
+		List<UserRow> userRows = getUserRepository().findUserRowTable();
+		Stream<ValueObject<Role>> roles = getUserRepository().findAllRolesByUsers();
+		Map<Integer, Set<Role>> rolesMap = roles
+				.collect(Collectors.groupingBy(ValueObject::getId, 
+						Collectors.mapping(ValueObject::getValue, Collectors.toSet())));
+		userRows.forEach(r -> r.setRoles(rolesMap.get(r.getId())));
 		return userRows;		
 	}
 	

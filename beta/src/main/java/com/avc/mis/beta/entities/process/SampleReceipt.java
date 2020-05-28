@@ -42,7 +42,7 @@ public class SampleReceipt extends ProductionProcess {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<SampleItem> sampleItems = new HashSet<>();
 	
 	/**

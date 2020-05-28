@@ -10,9 +10,14 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.values.DataObjectWithName;
+import com.avc.mis.beta.dto.values.SupplierRow;
+import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.data.CompanyContact;
+import com.avc.mis.beta.entities.data.Email;
+import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.values.SupplyCategory;
 
 /**
  * Spring repository for accessing information of company suppliers.
@@ -41,11 +46,11 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "where s.active = true")
 	List<DataObjectWithName> findAllSuppliersBasic();
 	
-	@Query("select s from Supplier s "
-			+ "left join fetch s.contactDetails cd "
-			+ "where s.active = true "
-			+ "ORDER BY s.name ASC ")
-	Stream<Supplier> findAll();
+//	@Query("select s from Supplier s "
+//			+ "left join fetch s.contactDetails cd "
+//			+ "where s.active = true "
+//			+ "ORDER BY s.name ASC ")
+//	Stream<Supplier> findAll();
 	
 	@Query("select s from Supplier s "
 			+ "left join fetch s.contactDetails cd "
@@ -60,6 +65,25 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "where cc.company.id = :id "
 				+ "and cc.active = true")
 	List<CompanyContact> findCompanyContactsByCompnyId(Integer id);
-
 	
+	@Query("select new com.avc.mis.beta.dto.values.SupplierRow(s.id, s.name, cd.id) "
+			+ "from Supplier s "
+			+ "left join s.contactDetails cd "
+			+ "where s.active = true")
+	List<SupplierRow> findAllSupplierRows();
+	
+	@Query("select new com.avc.mis.beta.dto.values.ValueObject(cd.id, p.value) "
+			+ "from Phone p "
+				+ "join p.contactDetails cd ")
+	Stream<ValueObject<String>> findAllPhoneValues();
+	
+	@Query("select new com.avc.mis.beta.dto.values.ValueObject(cd.id, e.value) "
+			+ "from Email e "
+				+ "join e.contactDetails cd ")
+	Stream<ValueObject<String>> findAllEmailValues();
+
+	@Query("select new com.avc.mis.beta.dto.values.ValueObject(s.id, c.value) "
+			+ "from Supplier s "
+				+ "join s.supplyCategories c ")
+	Stream<ValueObject<String>> findAllSupplyCategoryValues();
 }

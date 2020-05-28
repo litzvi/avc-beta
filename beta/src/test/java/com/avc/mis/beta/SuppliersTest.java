@@ -49,7 +49,7 @@ class SuppliersTest {
 	@Autowired
 	ValueTablesReader referenceTables;
 	
-	static Integer SERIAL_NO = 1826;
+	static Integer SERIAL_NO = 1842;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
@@ -155,7 +155,7 @@ class SuppliersTest {
 		}
 		//adding supplier
 		supplier = basicSupplier();
-		SupplierDTO expected = new SupplierDTO(supplier);
+		SupplierDTO expected = new SupplierDTO(supplier, true);
 		expected.setName(supplier.getName().trim());
 		suppliers.addSupplier(supplier);
 		SupplierDTO actual = null;
@@ -175,7 +175,7 @@ class SuppliersTest {
 		supplier.setLicense("\tnew  license \t");
 		supplier.setTaxCode("new  \ttaxCode\t ");
 		supplier.setRegistrationLocation("\tnew   registrationLocation - any text  \t");
-		expected = new SupplierDTO(supplier);
+		expected = new SupplierDTO(supplier, true);
 		suppliers.editSupplierMainInfo(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test adding supplier with white spaces added to all info fields");
@@ -184,7 +184,7 @@ class SuppliersTest {
 		
 		//add, remove supply categories
 		supplier = fullSupplier();
-		expected = new SupplierDTO(supplier);
+		expected = new SupplierDTO(supplier, true);
 		suppliers.addSupplier(supplier);
 		Set<SupplyCategory> categories = supplier.getSupplyCategories();
 		Iterator<SupplyCategory> it = categories.iterator();
@@ -207,7 +207,7 @@ class SuppliersTest {
 		
 		//add supplier with full details
 		supplier = fullSupplier();
-		expected = new SupplierDTO(supplier);
+		expected = new SupplierDTO(supplier, true);
 		expected.getContactDetails().getPhones().forEach(phone -> phone.getValue().trim());
 		expected.getContactDetails().getEmails().forEach(email -> email.getValue().trim());		
 		suppliers.addSupplier(supplier);
@@ -217,7 +217,7 @@ class SuppliersTest {
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		//add supplier with full details add, remove and update a phone, fax and email
 		supplier = fullSupplier();
-		expected = new SupplierDTO(supplier);
+		expected = new SupplierDTO(supplier, true);
 		suppliers.addSupplier(supplier);
 		Phone[] phones = supplier.getContactDetails().getPhones();
 		Fax[] faxes = supplier.getContactDetails().getFaxes();
@@ -249,9 +249,6 @@ class SuppliersTest {
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
 //		suppliers.permenentlyRemoveSupplier(supplier.getId());
 
-		//print list of suppliers table
-		List<SupplierRow> list = suppliers.getSuppliersTable();
-//		list.forEach(s -> System.out.println(s));
 		
 		
 		
@@ -262,7 +259,6 @@ class SuppliersTest {
 	void addAndGetSuppliertest() {
 		Supplier supplier = fullSupplier();
 		suppliers.addSupplier(supplier);
-		SupplierDTO actual = null;
 		System.out.println("getting supplier...");
 		System.out.println(suppliers.getSupplier(supplier.getId()));
 

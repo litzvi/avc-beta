@@ -4,10 +4,8 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
-import com.avc.mis.beta.entities.ValueEntity;
 
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.Value;
 
 /**
@@ -16,17 +14,12 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class ValueObject extends ValueDTO {
-	
-	String value;
+public class ValueObject<T> extends ValueDTO {
 
-	public ValueObject(Integer id, String value) {
+	T value;
+
+	public ValueObject(Integer id, T value) {
 		super(id);
 		this.value = value;
-	}
-	
-	public ValueObject(@NonNull ValueEntity entity) {
-		super(entity.getId());
-		this.value = entity.getValue();
 	}
 }

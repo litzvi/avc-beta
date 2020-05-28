@@ -3,13 +3,19 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.values.UserLogin;
+import com.avc.mis.beta.dto.values.UserRow;
+import com.avc.mis.beta.dto.values.ValueObject;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.Role;
 
 /**
  * @author Zvi
@@ -42,17 +48,29 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 	Optional<UserEntity> findById(Integer id);
 
 //	@Query("select u from UserEntity u ")
-	Stream<UserEntity> findAll();
+//	Stream<UserEntity> findAll();
 
 //	@Query("update UserEntity u "
 //			+ "set u.password = :newPassword "
 //			+ "where u.id := userId and u.password = :oldPassword")
 //	void changePassword(Integer userId, String oldPassword, String newPassword);
 	
+	@Query("select new com.avc.mis.beta.dto.values.UserRow(u.id, p.name, u.username, u.active) "
+			+ "from UserEntity u "
+				+ "join u.person p "
+			+ "where u.active = true")
+	List<UserRow> findUserRowTable();
+	
 //	@org.springframework.data.jdbc.repository.query.Query(
-//			"select new com.avc.mis.beta.dto.values.UserRow(u.id, u.username, u.roles, u.active) "
+//			"select new com.avc.mis.beta.dto.values.UserRow(u.id, p.name, u.username, u.roles, u.active) "
 //			+ "from UserEntity u "
-////				+ "left join u.person p"
-//			)
+//				+ "join u.person p "
+//			+ "where u.active = true")
 //	List<UserRow> findUserRowTable();
+	
+	@Query("select new com.avc.mis.beta.dto.values.ValueObject(u.id, r) "
+			+ "from UserEntity u "
+				+ "join u.roles r "
+			+ "where u.active = true")
+	Stream<ValueObject<Role>> findAllRolesByUsers();
 }

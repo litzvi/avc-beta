@@ -15,12 +15,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.ProcessAlertDTO;
+import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.values.ReceiptRow;
+import com.avc.mis.beta.dto.values.SupplierRow;
+import com.avc.mis.beta.dto.values.UserRow;
+import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.OrderReceipts;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
+import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
 
@@ -38,6 +43,7 @@ public class QueryTest {
 	@Autowired ValueTablesReader valueTablesReader;
 	@Autowired ProcessInfoReader processInfoReader;
 	@Autowired Users users;
+	@Autowired Suppliers suppliers;
 	@Autowired Orders orders;
 	@Autowired OrderReceipts receipts;
 	
@@ -108,8 +114,21 @@ public class QueryTest {
 //		messages.forEach(m -> System.out.println(m));
 		
 		//get processTypeAlerts
-		List<ProcessAlertDTO> alerts = processInfoReader.getAllProcessTypeAlerts();
-		alerts.forEach(m -> System.out.println(m));
+//		List<ProcessAlertDTO> alerts = processInfoReader.getAllProcessTypeAlerts();
+//		alerts.forEach(m -> System.out.println(m));
+				
+		//get users table
+//		List<UserRow> usersTable = users.getUsersTable();
+//		usersTable.forEach(u -> System.out.println(u));
+		
+		//get user by id
+//		List<UserEntity> userList = objectTablesReader.getAllUsers();
+//		UserDTO user = users.getUserById(userList.get(4).getId());
+//		System.out.println(user);
+		
+		//print list of suppliers table
+//		List<SupplierRow> list = suppliers.getSuppliersTable();
+//		list.forEach(s -> System.out.println(s));
 				
 			
 	}

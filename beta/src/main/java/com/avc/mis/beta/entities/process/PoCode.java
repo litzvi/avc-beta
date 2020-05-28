@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
-@BatchSize(size = BaseEntity.BATCH_SIZE)
+//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name = "PO_CODES")
 public class PoCode extends BaseEntity {

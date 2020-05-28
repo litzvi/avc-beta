@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@BatchSize(size = BaseEntity.BATCH_SIZE)
+//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "USER_MESSAGES")
 public class UserMessage extends ProcessInfoEntity {
 	

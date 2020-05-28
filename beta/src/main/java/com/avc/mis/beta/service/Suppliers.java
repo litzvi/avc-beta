@@ -4,8 +4,11 @@
 package com.avc.mis.beta.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +21,9 @@ import com.avc.mis.beta.dto.data.CompanyContactDTO;
 import com.avc.mis.beta.dto.data.PaymentAccountDTO;
 import com.avc.mis.beta.dto.data.PersonDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
+import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.SupplierRow;
+import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
@@ -33,6 +38,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
+ * 
  * A service for manipulating entities related to Business Contacts.
  * Currently only for supplier, but should be adjusted for all Business Contacts -
  * perhaps names should be changed as well.
@@ -58,8 +64,22 @@ public class Suppliers {
 	 */
 	@Transactional(readOnly = true)
 	public List<SupplierRow> getSuppliersTable() {
-		List<SupplierRow> supplierRows = getSupplierRepository().findAll()
-				.map((s) -> new SupplierRow(s)).collect(Collectors.toList());
+		
+		List<SupplierRow> supplierRows = getSupplierRepository().findAllSupplierRows();
+		Map<Integer, Set<String>> phones = getSupplierRepository().findAllPhoneValues()
+				.collect(Collectors.groupingBy(ValueObject<String>::getId, 
+						Collectors.mapping(ValueObject<String>::getValue, Collectors.toSet())));
+		Map<Integer, Set<String>> emails = getSupplierRepository().findAllEmailValues()
+				.collect(Collectors.groupingBy(ValueObject<String>::getId, 
+						Collectors.mapping(ValueObject<String>::getValue, Collectors.toSet())));
+		Map<Integer, Set<String>> categories = getSupplierRepository().findAllSupplyCategoryValues()
+				.collect(Collectors.groupingBy(ValueObject<String>::getId, 
+						Collectors.mapping(ValueObject<String>::getValue, Collectors.toSet())));
+		supplierRows.forEach((s) -> {
+			s.setPhones(phones.get(s.getContactDetailsId())); 
+			s.setEmails(emails.get(s.getContactDetailsId()));
+			s.setSupplyCategories(categories.get(s.getId()));
+		});
 		return supplierRows;		
 	}	
 		
@@ -92,8 +112,8 @@ public class Suppliers {
 		Optional<Supplier> optionalSupplier = getSupplierRepository().findById(supplierId);
 		Supplier supplier = optionalSupplier.orElseThrow(() -> 
 			new IllegalArgumentException("No supplier with given ID"));
-		SupplierDTO supplierDTO = new SupplierDTO(supplier);
-		
+		SupplierDTO supplierDTO = new SupplierDTO(supplier, false);
+		System.out.println("line 116");
 		getSupplierRepository().findCompanyContactsByCompnyId(supplierId)
 			.forEach((cc) -> supplierDTO.addCompanyContact(cc));
 		

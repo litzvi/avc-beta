@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-@BatchSize(size = BaseEntity.BATCH_SIZE)
+//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name="BANK_BRANCHES")
 public class BankBranch extends ValueEntity {
@@ -37,7 +37,7 @@ public class BankBranch extends ValueEntity {
 	@Column(name = "name", nullable = false)
 	private String value;
 	
-	@ManyToOne(optional = false, fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "bankId", nullable = false)
 	private Bank bank;
 	

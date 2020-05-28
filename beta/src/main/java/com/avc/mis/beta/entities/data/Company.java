@@ -40,7 +40,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@BatchSize(size = BaseEntity.BATCH_SIZE)
+//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name="COMPANIES", indexes = {@Index(columnList = "name", unique = true)})
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Company extends ObjectEntityWithIdAndName {
@@ -58,7 +58,7 @@ public class Company extends ObjectEntityWithIdAndName {
 	
 	@JsonManagedReference(value = "company_companyContacts")
 	@OneToMany(mappedBy = "company",cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<CompanyContact> companyContacts = new HashSet<>();
 	
 	public void setCompanyContacts(CompanyContact[] companyContacts) {

@@ -33,7 +33,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-@BatchSize(size = BaseEntity.BATCH_SIZE)
+//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name="BANKS")
 public class Bank extends ValueEntity {
@@ -43,7 +43,7 @@ public class Bank extends ValueEntity {
 	
 	@ToString.Exclude
 	@OneToMany(mappedBy = "bank", fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	@JsonIgnore
 	private Set<BankBranch> branches = new HashSet<>();
 	

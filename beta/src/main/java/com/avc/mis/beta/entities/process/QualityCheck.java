@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
 @PrimaryKeyJoinColumn(name = "processId")
 public class QualityCheck extends ProductionProcess {
 	
-//	@ManyToOne(fetch = FetchType.EAGER)
+//	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 //	private Item item;
 //	
@@ -33,13 +33,13 @@ public class QualityCheck extends ProductionProcess {
 //	@Column(precision = 19, scale = 3)
 //	private BigDecimal sampleSize;	
 //	
-//	@ManyToOne(fetch = FetchType.EAGER)
+//	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "storageLocationId")
 //	private Warehouse storageLocation;
 	
 
-	public void setQualityChecks(RawItemQuality[] qualityChecks) {
-		super.setProcessItems(qualityChecks);
+	public void setCheckItems(RawItemQuality[] checkItems) {
+		super.setProcessItems(checkItems);
 	}
 	
 	@JsonIgnore

@@ -54,7 +54,7 @@ import lombok.Setter;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class ProductionProcess extends ProcessEntity {	
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(updatable = false, nullable = false)
 	private PoCode poCode;
 	
@@ -79,7 +79,7 @@ public class ProductionProcess extends ProcessEntity {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<ProcessItem> processItems = new HashSet<>();
 		
 	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

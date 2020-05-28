@@ -37,7 +37,7 @@ public class CompanyDTO extends DataDTO {
 	/**
 	 * @param company
 	 */
-	public CompanyDTO(@NonNull Company company) {
+	public CompanyDTO(@NonNull Company company, boolean hasContacts) {
 		super(company.getId(), company.getVersion());
 		this.name = company.getName();
 		this.localName = company.getLocalName();
@@ -47,7 +47,11 @@ public class CompanyDTO extends DataDTO {
 		this.registrationLocation = company.getRegistrationLocation();
 		if(company.getContactDetails() != null)
 			this.contactDetails = new ContactDetailsDTO(company.getContactDetails());
-		if(company.getCompanyContacts() != null)
+		/*
+		 * causing chaotic load of company contacts when getting from db 
+		 * but needed for creating DTO from detached object
+		 */
+		if(hasContacts && company.getCompanyContacts() != null)
 			Arrays.stream(company.getCompanyContacts())
 				.forEach((contact) -> this.companyContacts.add(new CompanyContactDTO(contact)));
 	}

@@ -30,8 +30,8 @@ public class SupplierDTO extends CompanyDTO {
 	/**
 	 * @param supplier
 	 */
-	public SupplierDTO(@NonNull Supplier supplier) {
-		super(supplier);
+	public SupplierDTO(@NonNull Supplier supplier, boolean hasContacts) {
+		super(supplier, hasContacts);
 		this.supplyCategories.addAll(supplier.getSupplyCategories());
 	}
 	

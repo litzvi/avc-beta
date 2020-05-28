@@ -48,7 +48,7 @@ public class Storage extends ProcessEntity {
 	@Column(nullable = false, precision = 19, scale = 3)
 	private BigDecimal numberUnits;	
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "warehouseLocationId")
 	private Warehouse warehouseLocation;
 	

@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@BatchSize(size = BaseEntity.BATCH_SIZE)
+//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "PROCESS_APPROVALS")
 public class ApprovalTask extends ProcessInfoEntity {	
 

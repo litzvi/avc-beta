@@ -41,7 +41,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@BatchSize(size = BaseEntity.BATCH_SIZE)
+//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "CONTACT_DETAILS", uniqueConstraints = 
 	{ @UniqueConstraint(columnNames = { "companyId", "personId" }) })
 @Check(constraints = "(company_id is null) XOR (person_id is null)")
@@ -61,29 +61,29 @@ public class ContactDetails extends LinkEntity {
 
 //	@JsonManagedReference(value = "contactDetails_phones")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<Phone> phones = new HashSet<>();
 
 //	@JsonManagedReference(value = "contactDetails_faxes")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<Fax> faxes = new HashSet<>();
 
 //	@JsonManagedReference(value = "contactDetails_emails")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<Email> emails = new HashSet<>();
 
 //	@JsonManagedReference(value = "contactDetails_addresses")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JsonFormat(with = Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<Address> addresses = new HashSet<>();
 
 //	@JsonManagedReference(value = "contactDetails_paymentAccount")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
 			/* orphanRemoval = true, */ fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	
 	public void setPhones(Phone[] phones) {

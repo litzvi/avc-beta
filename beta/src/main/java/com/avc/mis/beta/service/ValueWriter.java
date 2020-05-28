@@ -20,6 +20,7 @@ import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.entities.values.SupplyCategory;
+import com.avc.mis.beta.entities.values.Warehouse;
 
 /**
  * Used for adding (inserting, persisting) Value entities - {@link com.avc.mis.beta.entities.ValueEntity}.
@@ -42,7 +43,7 @@ public class ValueWriter {
 	 * @param entity ValueEntity with all values set for the state after edit.
 	 * @throws IllegalArgumentException if entity's id isn't set or new data isn't legal.
 	 */
-	public void edit(ValueEntity entity) {
+	public <T extends ValueEntity> void edit(T entity) {
 		dao.editEntity(entity);
 	}
 	
@@ -50,7 +51,7 @@ public class ValueWriter {
 	 * Sets the entity as not active, dosen't permanently remove from database.
 	 * @param entity the ValueEntity to be removed - CAUTION if any other editable field is changed it will be edited.
 	 */
-	public void remove(ValueEntity entity) {
+	public <T extends ValueEntity> void remove(T entity) {
 		dao.removeEntity(entity);
 	}
 
@@ -96,5 +97,9 @@ public class ValueWriter {
 	
 	public void addProductionLine(ProductionLine line) {
 		dao.addEntity(line);
+	}
+	
+	public void addWarehouse(Warehouse warehouse) {
+		dao.addEntity(warehouse);
 	}
 }

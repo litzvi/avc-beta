@@ -38,7 +38,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-@BatchSize(size = BaseEntity.BATCH_SIZE)
+//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name = "USERS")
 public class UserEntity extends ObjectEntityWithId {
@@ -46,8 +46,8 @@ public class UserEntity extends ObjectEntityWithId {
 	@Column(unique = true, nullable = false, updatable = false)
 	private String username;
 	
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "personId", updatable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "personId", updatable = false, nullable = false)
 	private Person person;
 	
 	@Column(nullable = false, updatable = false)
@@ -57,7 +57,7 @@ public class UserEntity extends ObjectEntityWithId {
 	@ElementCollection(targetClass = Role.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<Role> roles = new HashSet<>();
 	
 	//should be only in staff

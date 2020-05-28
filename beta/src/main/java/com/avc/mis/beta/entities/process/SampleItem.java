@@ -46,7 +46,7 @@ import lombok.Setter;
 @Table(name = "SAMPLE_ITEMS")
 public class SampleItem extends ProcessInfoEntity {
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	
@@ -63,7 +63,7 @@ public class SampleItem extends ProcessInfoEntity {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "sampleItem", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<ItemWeight> itemWeights = new HashSet<>();
 	
 	public ItemWeight[] getItemWeights() {

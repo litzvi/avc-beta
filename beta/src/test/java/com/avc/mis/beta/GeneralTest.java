@@ -28,7 +28,7 @@ import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
-import com.avc.mis.beta.dto.values.ValueObject;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.process.ItemWeight;
@@ -86,7 +86,7 @@ public class GeneralTest {
 		supplier.setSupplyCategories(valueTablesReader.getAllSupplyCategories().stream().collect(Collectors.toSet()));
 		suppliers.addSupplier(supplier);
 		SupplierDTO supplierDTO = suppliers.getSupplier(supplier.getId());
-		assertEquals(new SupplierDTO(supplier), supplierDTO, "Supplier not added or fetched correctly");
+		assertEquals(new SupplierDTO(supplier, true), supplierDTO, "Supplier not added or fetched correctly");
 		
 		//create a cashew order with 2 order lines
 		PO po = new PO();
@@ -164,7 +164,7 @@ public class GeneralTest {
 			rawItemQualities[i].setStorageForms(QCStorageForms);
 			
 		}
-		check.setQualityChecks(rawItemQualities);
+		check.setCheckItems(rawItemQualities);
 		checks.addCashewReceiptCheck(check);
 		QualityCheckDTO checkDTO;
 		checkDTO = checks.getQcByProcessId(check.getId());

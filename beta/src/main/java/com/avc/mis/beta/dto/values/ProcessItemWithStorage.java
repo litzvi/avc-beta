@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.StorageDTO;
-import com.avc.mis.beta.dto.values.ValueObject;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -27,7 +27,7 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = false)
 public class ProcessItemWithStorage extends ProcessDTO {
 
-	private ValueObject item;
+	private BasicValueEntity item;
 	private PoCodeDTO itemPo;
 	
 	private Integer storageId;
@@ -35,7 +35,7 @@ public class ProcessItemWithStorage extends ProcessDTO {
 	private BigDecimal unitAmount;
 	private MeasureUnit measureUnit;
 	private BigDecimal numberUnits;	
-	private ValueObject warehouseLocation;
+	private BasicValueEntity warehouseLocation;
 	private String description;
 	private String remarks;
 	
@@ -47,7 +47,7 @@ public class ProcessItemWithStorage extends ProcessDTO {
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String description, String remarks) {
 		super(id, version);
-		this.item = new ValueObject(itemId, itemValue);
+		this.item = new BasicValueEntity(itemId, itemValue);
 		if(poCodeId != null)
 			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
 //		if(itemPo != null)
@@ -61,7 +61,7 @@ public class ProcessItemWithStorage extends ProcessDTO {
 		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(3);
 		if(warehouseLocationId != null)
-			this.warehouseLocation = new ValueObject(warehouseLocationId,  warehouseLocationValue);
+			this.warehouseLocation = new BasicValueEntity(warehouseLocationId,  warehouseLocationValue);
 		this.description = description;
 		this.remarks = remarks;
 		

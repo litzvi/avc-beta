@@ -47,7 +47,7 @@ public class ProcessType extends ValueEntity {
 //			inverseJoinColumns = @JoinColumn(name = "staffId", referencedColumnName = "personId"))
 	@JsonIgnore
 	@OneToMany(mappedBy = "processType", fetch = FetchType.LAZY)
-	@BatchSize(size = BaseEntity.BATCH_SIZE)
+//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<ProcessAlert> alertRequirments = new HashSet<>();
 	
 	public String getValue() {

@@ -9,7 +9,7 @@ import java.util.Currency;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.ProcessDTO;
-import com.avc.mis.beta.dto.values.ValueObject;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.values.Item;
@@ -28,7 +28,7 @@ public class OrderItemDTO extends ProcessDTO {
 
 //	@EqualsAndHashCode.Exclude // for testing 
 //	private Integer poId; //perhaps not needed, and if yes maybe get the whole PoCode
-	ValueObject item;
+	BasicValueEntity item;
 	MeasureUnit measureUnit;
 	BigDecimal numberUnits;
 	Currency currency;
@@ -44,7 +44,7 @@ public class OrderItemDTO extends ProcessDTO {
 			LocalDate deliveryDate, String defects, String remarks, Boolean received) {
 		super(id, version);
 //		this.poId = poId;
-		this.item = new ValueObject(itemId, itemValue);
+		this.item = new BasicValueEntity(itemId, itemValue);
 		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(3);
 		this.currency = currency;
@@ -61,7 +61,7 @@ public class OrderItemDTO extends ProcessDTO {
 	public OrderItemDTO(@NonNull OrderItem orderItem) {
 		super(orderItem.getId(), orderItem.getVersion());
 //		this.poId = orderItem.getPo().getId();
-		this.item = new ValueObject(orderItem.getItem());
+		this.item = new BasicValueEntity(orderItem.getItem());
 		this.measureUnit = orderItem.getMeasureUnit();
 		this.numberUnits = orderItem.getNumberUnits().setScale(3);
 		this.currency = orderItem.getCurrency();
