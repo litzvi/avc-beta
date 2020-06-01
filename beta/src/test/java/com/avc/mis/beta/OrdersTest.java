@@ -65,7 +65,7 @@ public class OrdersTest {
 	
 	public static final int NUM_ITEMS = 3;
 	
-	public static int PROCESS_NO = 9000093;
+	public static int PROCESS_NO = 9000094;
 
 	@Autowired
 	Orders orders;

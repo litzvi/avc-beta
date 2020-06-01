@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -32,6 +34,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "STORAGE_FORMS")
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Storage extends ProcessEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -72,12 +75,14 @@ public class Storage extends ProcessEntity {
 	
 	@Override
 	public boolean isLegal() {
-		return unitAmount != null && measureUnit != null && numberUnits != null;
+		return unitAmount != null && measureUnit != null && numberUnits != null
+				&& numberUnits.compareTo(BigDecimal.ZERO) > 0
+				&& unitAmount.compareTo(BigDecimal.ZERO) > 0;
 	}
 
 	@Override
 	public String getIllegalMessage() {
-		return "Storage information must contain unit amount, measure unit and number of units";
+		return "Storage information must contain unit amount, measure unit and positive number of units";
 	}
 
 }

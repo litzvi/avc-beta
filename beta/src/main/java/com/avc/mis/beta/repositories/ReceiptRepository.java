@@ -82,10 +82,10 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 	List<ReceiptItemWithStorage> findReceiptItemWithStorage(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.values.ReceiptRow( "
-			+ "r.id, po_code.id, ct.code, s.name, i.value, "
-			+ "oi.numberUnits, " 
-			+ "oi.measureUnit, r.recordedTime, SUM(sf.unitAmount * sf.numberUnits), sf.measureUnit, "
-			+ "sto.value) "
+				+ "r.id, po_code.id, ct.code, s.name, i.value, "
+				+ "oi.numberUnits, oi.measureUnit, "
+				+ "r.recordedTime, SUM(sf.unitAmount * sf.numberUnits), sf.measureUnit, sto.value, "
+				+ "added.amount, added.measureUnit) "
 			+ "from Receipt r "
 				+ "join r.poCode po_code "
 					+ "join po_code.supplier s "
@@ -94,9 +94,12 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 					+ "join pi.item i "
 					+ "join pi.storageForms sf "
 						+ "left join sf.warehouseLocation sto "
+					+ "left join ExtraAdded as added "
+						+ "on added.processItem = pi "
 					+ "left join pi.orderItem oi "
 			+ "join r.processType t "
-			+ "where t.processName in :processNames "
+			+ "where type(sf) <> ExtraAdded "
+				+ "and t.processName in :processNames "
 			+ "group by r.id, oi ")
 	List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames);
 
