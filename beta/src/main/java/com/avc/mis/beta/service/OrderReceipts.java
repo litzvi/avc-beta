@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,23 +85,23 @@ public class OrderReceipts {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addExtra(ExtraAdded added, Integer receiptItemId) {
-		ReceiptItem receiptItem = new ReceiptItem();
-		receiptItem.setId(receiptItemId);
-		dao.addEntity(added, receiptItem);
-	}
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editExtra(ExtraAdded added) {
-		dao.editEntity(added);
-	}
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addGeneralReceipt(Receipt receipt) {
 		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_RECEIPT));
 		addReceipt(receipt);
 	}
 	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addExtra(ExtraAdded[] added, Integer receiptItemId) {
+		ReceiptItem receiptItem = new ReceiptItem();
+		receiptItem.setId(receiptItemId);
+		Arrays.stream(added).forEach(r -> dao.addEntity(r, receiptItem));
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editExtra(ExtraAdded[] added) {
+		Arrays.stream(added).forEach(r -> dao.addEntity(r));
+	}
+		
 	//maybe has a few
 //	public ReceiptDTO getReceipt(int poCode) {
 //		

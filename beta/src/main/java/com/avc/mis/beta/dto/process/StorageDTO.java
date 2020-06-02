@@ -28,9 +28,7 @@ public class StorageDTO extends ProcessDTO {
 	BasicValueEntity<Warehouse> warehouseLocation;
 	String remarks;
 	
-	/**
-	 * 
-	 */
+	
 	public StorageDTO(Integer id, Integer version,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
 			Integer warehouseLocationId,  String warehouseLocationValue,

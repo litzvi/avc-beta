@@ -23,6 +23,7 @@ import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.process.ExtraAdded;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -182,6 +183,13 @@ public class ReceiptTest {
 		actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding order receipt");
 		System.out.println(actual);
+		
+		//add extra bonus
+//		ExtraAdded added = new ExtraAdded();
+//		added.setAmount(BigDecimal.valueOf(50));
+//		receipts.addExtra(added, receipt.getProcessItems()[0].getId());
+		
+
 		
 		//
 		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
