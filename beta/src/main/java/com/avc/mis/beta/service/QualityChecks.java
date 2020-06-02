@@ -37,25 +37,25 @@ public class QualityChecks {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewReceiptCheck(QualityCheck check) {
-		check.setProcessType(getQcRepository().findProcessTypeByValue(ProcessName.CASHEW_RECEIPT_QC));
+		check.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT_QC));
 		dao.addProcessEntity(check);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewSampleCheck(QualityCheck check) {
-		check.setProcessType(getQcRepository().findProcessTypeByValue(ProcessName.SAMPLE_QC));
+		check.setProcessType(dao.getProcessTypeByValue(ProcessName.SAMPLE_QC));
 		dao.addProcessEntity(check);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewSupplierCheck(QualityCheck check) {
-		check.setProcessType(getQcRepository().findProcessTypeByValue(ProcessName.SUPPLIER_QC));
+		check.setProcessType(dao.getProcessTypeByValue(ProcessName.SUPPLIER_QC));
 		dao.addProcessEntity(check);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewVinaControlCheck(QualityCheck check) {
-		check.setProcessType(getQcRepository().findProcessTypeByValue(ProcessName.VINA_CONTROL_QC));
+		check.setProcessType(dao.getProcessTypeByValue(ProcessName.VINA_CONTROL_QC));
 		dao.addProcessEntity(check);
 	}
 	

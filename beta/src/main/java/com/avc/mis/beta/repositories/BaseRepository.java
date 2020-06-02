@@ -4,6 +4,7 @@
 package com.avc.mis.beta.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
@@ -50,7 +51,7 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	List<Warehouse> findAllWarehouses();
 	
 	@Query("select t from ProcessType t where t.processName = :value")
-	ProcessType findProcessTypeByValue(ProcessName value);
+	Optional<ProcessType> findProcessTypeByValue(ProcessName value);
 	
 	//for inserting contract type in testing
 	@Query("select t from ContractType t where t.code = :value")

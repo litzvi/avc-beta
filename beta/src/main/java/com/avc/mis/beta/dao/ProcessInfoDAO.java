@@ -12,9 +12,11 @@ import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.process.UserMessage;
+import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 
 import lombok.AccessLevel;
@@ -33,6 +35,12 @@ import lombok.Getter;
 public class ProcessInfoDAO extends DAO {
 	
 	@Autowired private ProcessInfoRepository processRepository;
+	
+	
+	public ProcessType getProcessTypeByValue(ProcessName value) {
+		return getProcessRepository().findProcessTypeByValue(value)
+				.orElseThrow(() -> new NullPointerException("No such process type"));
+	}
 	
 	/**
 	 * Adding (persisting) a process. 

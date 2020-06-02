@@ -17,6 +17,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
@@ -65,7 +66,7 @@ public class OrdersTest {
 	
 	public static final int NUM_ITEMS = 3;
 	
-	public static int PROCESS_NO = 9000094;
+	public static int PROCESS_NO = 9000097;
 
 	@Autowired
 	Orders orders;
@@ -85,7 +86,8 @@ public class OrdersTest {
 	@Autowired
 	ProcessInfoWriter processInfoWriter;
 	
-	@Autowired private PORepository poRepository;
+//	@Autowired private PORepository poRepository;
+	@Autowired private ProcessInfoDAO dao;
 	
 	@Autowired ObjectTablesReader objectTableReader;
 	
@@ -256,7 +258,7 @@ public class OrdersTest {
 		
 		//add, edit, remove processTypeAlert
 		Integer processAlertId = processInfoWriter.addProcessTypeAlert(user.getId(), 
-		poRepository.findProcessTypeByValue(ProcessName.CASHEW_ORDER), ApprovalType.REQUIRED_APPROVAL);
+		dao.getProcessTypeByValue(ProcessName.CASHEW_ORDER), ApprovalType.REQUIRED_APPROVAL);
 		System.out.println("OrdersTest 279");
 		ProcessAlert processAlert = processDisplay.getProcessTypeAlert(processAlertId);
 //	fail("finished");

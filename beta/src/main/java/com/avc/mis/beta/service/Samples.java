@@ -37,7 +37,7 @@ public class Samples {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addSampleReceipt(SampleReceipt sample) {
-		sample.setProcessType(getSampleRepository().findProcessTypeByValue(ProcessName.SAMPLE_RECEIPET));
+		sample.setProcessType(dao.getProcessTypeByValue(ProcessName.SAMPLE_RECEIPET));
 		dao.addProcessEntity(sample);
 	}
 	

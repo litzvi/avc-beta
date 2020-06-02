@@ -15,7 +15,9 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.ExtraAdded;
 import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.process.ReceiptItem;
 import com.avc.mis.beta.repositories.ReceiptRepository;
 
 import lombok.AccessLevel;
@@ -71,19 +73,31 @@ public class OrderReceipts {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewReceipt(Receipt receipt) {
-		receipt.setProcessType(getReceiptRepository().findProcessTypeByValue(ProcessName.CASHEW_RECEIPT));
+		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT));
 		addReceipt(receipt);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewOrderReceipt(Receipt receipt) {
-		receipt.setProcessType(getReceiptRepository().findProcessTypeByValue(ProcessName.CASHEW_ORDER_RECEIPT));
+		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_ORDER_RECEIPT));
 		addOrderReceipt(receipt);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addExtra(ExtraAdded added, Integer receiptItemId) {
+		ReceiptItem receiptItem = new ReceiptItem();
+		receiptItem.setId(receiptItemId);
+		dao.addEntity(added, receiptItem);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editExtra(ExtraAdded added) {
+		dao.editEntity(added);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addGeneralReceipt(Receipt receipt) {
-		receipt.setProcessType(getReceiptRepository().findProcessTypeByValue(ProcessName.GENERAL_RECEIPT));
+		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_RECEIPT));
 		addReceipt(receipt);
 	}
 	

@@ -109,7 +109,7 @@ public class Orders {
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewOrder(PO po) {
-		po.setProcessType(getPoRepository().findProcessTypeByValue(ProcessName.CASHEW_ORDER));
+		po.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_ORDER));
 		addOrder(po);		
 	}
 	
@@ -120,7 +120,7 @@ public class Orders {
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addGeneralOrder(PO po) {		
-		po.setProcessType(getPoRepository().findProcessTypeByValue(ProcessName.GENERAL_ORDER));
+		po.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_ORDER));
 		addOrder(po);	
 	}
 	

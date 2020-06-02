@@ -46,7 +46,7 @@ import com.avc.mis.beta.service.Suppliers;
 @WithUserDetails("eli")
 public class ReceiptTest {
 	
-	public static int RECEIPT_PROCESS_NO = 800006;
+	public static int RECEIPT_PROCESS_NO = 800008;
 	
 	@Autowired OrderReceipts receipts;
 	
@@ -69,7 +69,9 @@ public class ReceiptTest {
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());
 		//add order items
-		ReceiptItem[] items = processItems(OrdersTest.NUM_ITEMS);				
+		ReceiptItem[] items = processItems(OrdersTest.NUM_ITEMS);	
+		for(ReceiptItem item: items)
+			System.out.println(item);
 		receipt.setReceiptItems(items);
 		return receipt;
 	}
@@ -142,7 +144,7 @@ public class ReceiptTest {
 			items[i].setItem(item);
 			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
 			storageForms[i].setMeasureUnit("KG");
-			storageForms[i].setNumberUnits(new BigDecimal(i).setScale(2));
+			storageForms[i].setNumberUnits(new BigDecimal(i+1).setScale(2));
 			storageForms[i].setWarehouseLocation(storage);
 			items[i].setStorageForms(new Storage[] {storageForms[i]});
 		}
@@ -155,7 +157,13 @@ public class ReceiptTest {
 	void receiptTest() {
 		//insert order receipt without order
 		Receipt receipt = basicReceipt();
-		receipts.addCashewReceipt(receipt);
+		try {
+			receipts.addCashewReceipt(receipt);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		ReceiptDTO expected = new ReceiptDTO(receipt);
 		ReceiptDTO actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding receipt without order");
