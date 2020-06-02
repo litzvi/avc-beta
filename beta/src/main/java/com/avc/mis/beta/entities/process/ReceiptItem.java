@@ -33,7 +33,7 @@ public class ReceiptItem extends ProcessItem {
 	@JoinColumn(name = "orderItemId")
 	private OrderItem orderItem;
 	
-	@Column(nullable = false, precision = 19, scale = 3)
+	@Column(precision = 19, scale = 3)
 	private BigDecimal extraRequested;	
 	
 	protected boolean canEqual(Object o) {
