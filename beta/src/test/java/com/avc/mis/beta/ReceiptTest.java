@@ -48,7 +48,7 @@ import com.avc.mis.beta.service.Suppliers;
 @WithUserDetails("eli")
 public class ReceiptTest {
 	
-	public static int RECEIPT_PROCESS_NO = 800012;
+	public static int RECEIPT_PROCESS_NO = 800024;
 	
 	@Autowired OrderReceipts receipts;
 	
@@ -126,6 +126,7 @@ public class ReceiptTest {
 			oi.setId(oItem.getId());
 			oi.setVersion(oItem.getVersion());
 			items[i].setOrderItem(oi);
+			items[i].setExtraRequested(BigDecimal.valueOf(200));
 			i++;
 		}
 		return items;
@@ -149,7 +150,6 @@ public class ReceiptTest {
 			storageForms[i].setNumberUnits(new BigDecimal(i+1).setScale(2));
 			storageForms[i].setWarehouseLocation(storage);
 			items[i].setStorageForms(new Storage[] {storageForms[i]});
-			items[i].setExtraRequested(BigDecimal.valueOf(200));
 		}
 //		Arrays.stream(items).forEach(i -> System.out.println(i));
 		return items;
@@ -189,14 +189,26 @@ public class ReceiptTest {
 		//add extra bonus
 		ExtraAdded[] added = new ExtraAdded[1];
 		added[0] = new ExtraAdded();
-		added[0].setUnitAmount(BigDecimal.valueOf(50));//because database is set to scale 2
+		added[0].setUnitAmount(BigDecimal.valueOf(500));//because database is set to scale 2
 		added[0].setMeasureUnit("KG");
 		added[0].setNumberUnits(new BigDecimal(4).setScale(2));
 		receipts.addExtra(added, receipt.getProcessItems()[0].getId());
 		receipt.getProcessItems()[0]
 				.setStorageForms(ArrayUtils.addAll(receipt.getProcessItems()[0].getStorageForms(), added));
-		expected = new ReceiptDTO(receipt);
-		actual = receipts.getReceiptByProcessId(receipt.getId());
+		try {
+			expected = new ReceiptDTO(receipt);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+		try {
+			actual = receipts.getReceiptByProcessId(receipt.getId());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		assertEquals(expected, actual, "failed test adding extra bonus");
 		
 		//

@@ -10,6 +10,7 @@ import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.StorageDTO;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.Storage;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 
@@ -35,6 +36,7 @@ public class ProcessItemWithStorage extends ProcessDTO {
 	private BasicValueEntity<Warehouse> warehouseLocation;
 	private String description;
 	private String remarks;
+	private Class<? extends Storage> clazz;
 	
 	
 	public ProcessItemWithStorage(Integer id, Integer version, Integer itemId, String itemValue, 
@@ -42,7 +44,7 @@ public class ProcessItemWithStorage extends ProcessDTO {
 			Integer storageId, Integer storageVersion,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
 			Integer warehouseLocationId,  String warehouseLocationValue,
-			String description, String remarks) {
+			String description, String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		if(poCodeId != null)
@@ -66,7 +68,7 @@ public class ProcessItemWithStorage extends ProcessDTO {
 	
 	public StorageDTO getStorage() {
 		return new StorageDTO(storageId, storageVersion, 
-				unitAmount, measureUnit, numberUnits, warehouseLocation, description);
+				unitAmount, measureUnit, numberUnits, warehouseLocation, description, clazz);
 	}
 
 }

@@ -34,14 +34,14 @@ public class ReceiptRow extends ValueDTO {
 	MeasureUnit receiptMU;
 	String storage;
 	BigDecimal extraAdded;
-//	MeasureUnit extraAddedMU;
+	MeasureUnit extraAddedMU;
 	
 	
 	public ReceiptRow(@NonNull Integer id, 
 			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
 			String itemName, BigDecimal orderAmount, MeasureUnit orderMU, OffsetDateTime receiptDate, 
 			BigDecimal receiptAmount, MeasureUnit receiptMU, String storage, 
-			BigDecimal extraAdded) {
+			BigDecimal extraAdded, MeasureUnit extraAddedMU) {
 		super(id);
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
 		this.supplierName = supplierName;
@@ -53,7 +53,7 @@ public class ReceiptRow extends ValueDTO {
 		this.receiptMU = receiptMU;
 		this.storage = storage;
 		this.extraAdded = extraAdded;
-//		this.extraAddedMU = extraAddedMU;
+		this.extraAddedMU = extraAddedMU;
 	}
 	
 }

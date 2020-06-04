@@ -10,6 +10,7 @@ import com.avc.mis.beta.dto.process.StorageDTO;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.Storage;
 
 import lombok.Data;
 
@@ -29,7 +30,7 @@ public class RawItemQualityWithStorage {
 			Integer storageId, Integer storageVersion,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks,
-			String description, String remarks,
+			String description, String remarks, Class<? extends Storage> clazz,
 			BigDecimal breakage, BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal decay, BigDecimal insectDamage,
@@ -46,7 +47,7 @@ public class RawItemQualityWithStorage {
 				colour, flavour);
 		this.storage = new StorageDTO(storageId, storageVersion, 
 				unitAmount, measureUnit, numberUnits, 
-				warehouseLocationId, warehouseLocationValue, storageRemarks);
+				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 	}
 	
 	

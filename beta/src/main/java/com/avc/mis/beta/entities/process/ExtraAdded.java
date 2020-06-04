@@ -23,6 +23,10 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "storageId")
 public class ExtraAdded extends Storage {
 	
+	public void setExtraAdded(boolean isExtraAdded) {
+		
+	}
+	
 //	public ExtraAdded() {
 //		super();
 //		setNumberUnits(BigDecimal.ZERO);

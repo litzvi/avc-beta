@@ -81,11 +81,11 @@ public abstract class ProcessInfoEntity extends ProcessEntity {
 		return this.process != null;
 	}
 	
-	@PrePersist
-	@Override
-	public void prePersist() {
-		if(!isLegal())
-			throw new IllegalArgumentException(this.getIllegalMessage());
-	}
+//	@PrePersist
+//	@Override
+//	public void prePersist() {
+//		if(!isLegal())
+//			throw new IllegalArgumentException(this.getIllegalMessage());
+//	}
 	
 }

@@ -27,18 +27,22 @@ public class StorageDTO extends ProcessDTO {
 	BigDecimal numberUnits;	
 	BasicValueEntity<Warehouse> warehouseLocation;
 	String remarks;
-	
+	Class<? extends Storage> clazz;
 	
 	public StorageDTO(Integer id, Integer version,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
 			Integer warehouseLocationId,  String warehouseLocationValue,
-			String remarks) {
+			String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
 		this.unitAmount = unitAmount.setScale(3);
 		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(3);
-		this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
+		if(warehouseLocationId != null && warehouseLocationValue != null)
+			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
+		else
+			this.warehouseLocation = null;
 		this.remarks = remarks;
+		this.clazz = clazz;
 	}
 	
 	/**
@@ -50,9 +54,15 @@ public class StorageDTO extends ProcessDTO {
 		this.measureUnit = storage.getMeasureUnit();
 		this.unitAmount = storage.getUnitAmount().setScale(3);
 		this.numberUnits = storage.getNumberUnits().setScale(3);
-		this.warehouseLocation = new BasicValueEntity<Warehouse>(
-				storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
+		if(storage.getWarehouseLocation() != null) {
+			this.warehouseLocation = new BasicValueEntity<Warehouse>(
+					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
+		}
+		else {
+			this.warehouseLocation = null;
+		}
 		this.remarks = storage.getRemarks();
+		this.clazz = storage.getClass();
 	}
 
 	/**
@@ -66,13 +76,14 @@ public class StorageDTO extends ProcessDTO {
 	 */
 	public StorageDTO(Integer id, Integer version,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
-			BasicValueEntity<Warehouse> warehouseLocation, String remarks) {
+			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
 		this.unitAmount = unitAmount.setScale(3);
 		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(3);
 		this.warehouseLocation = warehouseLocation;
 		this.remarks = remarks;
+		this.clazz = clazz;
 	}
 	
 	

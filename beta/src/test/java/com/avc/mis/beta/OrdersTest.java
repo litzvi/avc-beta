@@ -66,7 +66,7 @@ public class OrdersTest {
 	
 	public static final int NUM_ITEMS = 3;
 	
-	public static int PROCESS_NO = 9000097;
+	public static int PROCESS_NO = 9000098;
 
 	@Autowired
 	Orders orders;
@@ -245,7 +245,7 @@ public class OrdersTest {
 		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		user.getRoles().add(Role.ROLE_MANAGER);
 		Person person = new Person();
-		person.setId(1);
+		person.setId(10);
 		user.setPerson(person);
 		users.openUserForPerson(user);
 		UserDTO userByusername = users.getUserByUsername("eli" + SuppliersTest.SERIAL_NO);

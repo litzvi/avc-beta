@@ -66,7 +66,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	@OneToMany(mappedBy = "processItem", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 //	@BatchSize(size = BaseEntity.BATCH_SIZE)
-	private Set<Storage> storageForms = new HashSet<>();
+	Set<Storage> storageForms = new HashSet<>();
 	
 	/**
 	 * Gets the list of Storage forms as an array (can be ordered).
