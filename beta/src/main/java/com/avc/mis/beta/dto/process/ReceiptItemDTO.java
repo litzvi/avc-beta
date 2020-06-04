@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dto.process;
 
+import java.util.Set;
+
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
@@ -24,6 +26,8 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 	
 	private DataObject orderItem;
 
+//	private Set<StorageDTO> extraAdded; //can use a SortedSet like ContactDetails to maintain order	
+	
 	public ReceiptItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
 			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName,
 			String description, String remarks, Integer orderItemId, Integer orderItemVersion) {

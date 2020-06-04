@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.values.Warehouse;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -37,6 +38,7 @@ import lombok.NoArgsConstructor;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Storage extends ProcessEntity {
 	
+	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processItemId", nullable = false, updatable = false)
 	private ProcessItem processItem;

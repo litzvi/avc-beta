@@ -48,7 +48,7 @@ import com.avc.mis.beta.service.Suppliers;
 @WithUserDetails("eli")
 public class ReceiptTest {
 	
-	public static int RECEIPT_PROCESS_NO = 800024;
+	public static int RECEIPT_PROCESS_NO = 800030;
 	
 	@Autowired OrderReceipts receipts;
 	
@@ -71,10 +71,12 @@ public class ReceiptTest {
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());
 		//add order items
-		ReceiptItem[] items = processItems(OrdersTest.NUM_ITEMS);	
+		ReceiptItem[] items = processItems(OrdersTest.NUM_ITEMS);
 		for(ReceiptItem item: items)
 			System.out.println(item);
+		System.out.println("line 77");
 		receipt.setReceiptItems(items);
+		System.out.println("line 79");
 		return receipt;
 	}
 	
@@ -135,6 +137,7 @@ public class ReceiptTest {
 	private ReceiptItem[] processItems(int numOfItems) {
 		ReceiptItem[] items = new ReceiptItem[numOfItems];
 		Storage[] storageForms = new Storage[items.length];
+		ExtraAdded[] added = new ExtraAdded[items.length];
 		Item item = new Item();
 		item.setId(1);
 		Warehouse storage = new Warehouse();
@@ -150,6 +153,12 @@ public class ReceiptTest {
 			storageForms[i].setNumberUnits(new BigDecimal(i+1).setScale(2));
 			storageForms[i].setWarehouseLocation(storage);
 			items[i].setStorageForms(new Storage[] {storageForms[i]});
+			//add extra bonus
+			added[i] = new ExtraAdded();
+			added[i].setUnitAmount(BigDecimal.valueOf(1));//because database is set to scale 2
+			added[i].setMeasureUnit("KG");
+			added[i].setNumberUnits(new BigDecimal(4).setScale(2));
+			items[i].setExtraAdded(new ExtraAdded[] {added[i]});
 		}
 //		Arrays.stream(items).forEach(i -> System.out.println(i));
 		return items;
@@ -160,6 +169,7 @@ public class ReceiptTest {
 	void receiptTest() {
 		//insert order receipt without order
 		Receipt receipt = basicReceipt();
+		System.out.println("line 170");
 		try {
 			receipts.addCashewReceipt(receipt);
 		} catch (Exception e1) {

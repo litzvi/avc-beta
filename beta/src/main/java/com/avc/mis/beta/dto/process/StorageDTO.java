@@ -27,7 +27,8 @@ public class StorageDTO extends ProcessDTO {
 	BigDecimal numberUnits;	
 	BasicValueEntity<Warehouse> warehouseLocation;
 	String remarks;
-	Class<? extends Storage> clazz;
+	String className;
+//	Class<? extends Storage> clazz;
 	
 	public StorageDTO(Integer id, Integer version,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
@@ -42,7 +43,7 @@ public class StorageDTO extends ProcessDTO {
 		else
 			this.warehouseLocation = null;
 		this.remarks = remarks;
-		this.clazz = clazz;
+		this.className = clazz.getSimpleName();
 	}
 	
 	/**
@@ -62,7 +63,7 @@ public class StorageDTO extends ProcessDTO {
 			this.warehouseLocation = null;
 		}
 		this.remarks = storage.getRemarks();
-		this.clazz = storage.getClass();
+		this.className = storage.getClass().getSimpleName();
 	}
 
 	/**
@@ -83,7 +84,7 @@ public class StorageDTO extends ProcessDTO {
 		this.numberUnits = numberUnits.setScale(3);
 		this.warehouseLocation = warehouseLocation;
 		this.remarks = remarks;
-		this.clazz = clazz;
+		this.className = clazz.getSimpleName();
 	}
 	
 	
