@@ -134,9 +134,13 @@ public class ObjectTablesReader {
 	 * @return list of PoRow for po's that are still active - still in production.
 	 */
 	public List<PoCodeDTO> findActiveCashewPoCode() {
-		List<PoCodeDTO> list = findOpenCashewOrdersPoCode();
-		list.addAll(getObjectTablesRepository().findReceivedPoCodeByTypes(
-				new ProcessName[] {ProcessName.CASHEW_ORDER_RECEIPT, ProcessName.CASHEW_RECEIPT}));
+		List<PoCodeDTO> list = getObjectTablesRepository()
+				.findPoCodeByTypes(
+						new ProcessName[] {ProcessName.CASHEW_ORDER, 
+								ProcessName.CASHEW_ORDER_RECEIPT, ProcessName.CASHEW_RECEIPT});
+//		List<PoCodeDTO> list = findOpenCashewOrdersPoCode();
+//		list.addAll(getObjectTablesRepository().findReceivedPoCodeByTypes(
+//				new ProcessName[] {ProcessName.CASHEW_ORDER_RECEIPT, ProcessName.CASHEW_RECEIPT}));
 		return list;
 	}
 	

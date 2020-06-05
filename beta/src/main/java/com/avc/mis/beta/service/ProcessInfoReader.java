@@ -40,6 +40,7 @@ public class ProcessInfoReader {
 	
 	@Autowired private ProcessInfoRepository processRepository;
 	@Autowired private Orders orders;
+	@Autowired private OrderReceipts orderReceipts;
 	
 	
 	/**
@@ -111,6 +112,9 @@ public class ProcessInfoReader {
 		case CASHEW_ORDER:
 		case GENERAL_ORDER:
 			return orders.getOrderByProcessId(processId);
+		case CASHEW_ORDER_RECEIPT:
+		case CASHEW_RECEIPT:
+			return orderReceipts.getReceiptByProcessId(processId);
 			default:
 		}
 		return null;

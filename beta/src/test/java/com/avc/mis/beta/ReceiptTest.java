@@ -48,7 +48,7 @@ import com.avc.mis.beta.service.Suppliers;
 @WithUserDetails("eli")
 public class ReceiptTest {
 	
-	public static int RECEIPT_PROCESS_NO = 800030;
+	public static int RECEIPT_PROCESS_NO = 800034;
 	
 	@Autowired OrderReceipts receipts;
 	
@@ -170,14 +170,15 @@ public class ReceiptTest {
 		//insert order receipt without order
 		Receipt receipt = basicReceipt();
 		System.out.println("line 170");
+		receipts.addCashewReceipt(receipt);
+		ReceiptDTO expected;
 		try {
-			receipts.addCashewReceipt(receipt);
+			expected = new ReceiptDTO(receipt);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			throw e1;
 		}
-		ReceiptDTO expected = new ReceiptDTO(receipt);
 		ReceiptDTO actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding receipt without order");
 		System.out.println(actual);

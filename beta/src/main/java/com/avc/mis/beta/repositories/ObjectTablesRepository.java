@@ -100,6 +100,14 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 			+ "where t.processName in ?1 ")
 	List<PoCodeDTO> findReceivedPoCodeByTypes(ProcessName[] processNames);
 
-
-	
+	//will also give old (history) po_codes
+	@Query("select distinct new com.avc.mis.beta.dto.process.PoCodeDTO("
+			+ "po_code.code, c.code, s.name) "
+		+ "from ProductionProcess p "
+		+ "join p.poCode po_code "
+			+ "join po_code.contractType c "
+			+ "join po_code.supplier s "
+		+ "join p.processType t "
+			+ "where t.processName in ?1 ")
+	List<PoCodeDTO> findPoCodeByTypes(ProcessName[] processNames);
 }

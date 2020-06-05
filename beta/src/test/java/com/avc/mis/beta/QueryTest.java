@@ -61,8 +61,8 @@ public class QueryTest {
 //		openCashewOrdersBasic.forEach(row -> System.out.println(row));
 //		
 //		//get list of cashew orders and receipts
-//		List<PoCodeDTO> activeCashewBasic =  objectTablesReader.findActiveCashewPoCode();
-//		activeCashewBasic.forEach(row -> System.out.println(row));
+		List<PoCodeDTO> activeCashewBasic =  objectTablesReader.findActiveCashewPoCode();
+		activeCashewBasic.forEach(row -> System.out.println(row));
 //		
 //		//get order by po code
 //		activeCashewBasic =  objectTablesReader.findActiveCashewPoCode();
@@ -98,8 +98,8 @@ public class QueryTest {
 //		valueTablesReader.getCashewitemsBasic().forEach(i -> System.out.println(i));
 //		
 //		//print received orders
-		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
-		receiptRows.forEach(r -> System.out.println(r));
+//		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
+//		receiptRows.forEach(r -> System.out.println(r));
 //		
 //		
 //		//get messages for logged in user

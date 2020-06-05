@@ -24,17 +24,19 @@ public class ReceiptItemWithStorage {
 	private StorageDTO storage;
 	
 	private DataObject orderItem;
-
+	
+	
 	public ReceiptItemWithStorage(Integer id, Integer version, Integer itemId, String itemValue, 
 			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
 			Integer storageId, Integer storageVersion,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
-			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks,
-			String description, String remarks, Class<? extends Storage> clazz,
-			Integer orderItemId, Integer orderItemVersion) {
+			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
+			Class<? extends Storage> clazz,
+			String description, String remarks, 
+			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
 		this.receiptItem = new ReceiptItemDTO(id, version, itemId, itemValue, 
 				poCodeId, contractTypeCode, supplierName,
-				description, remarks, orderItemId, orderItemVersion);
+				description, remarks, orderItemId, orderItemVersion, extraRequested, extraMU);
 		this.storage = new StorageDTO(storageId, storageVersion, 
 				unitAmount, measureUnit, numberUnits, 
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
