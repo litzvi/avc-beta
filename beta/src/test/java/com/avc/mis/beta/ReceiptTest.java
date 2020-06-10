@@ -48,7 +48,7 @@ import com.avc.mis.beta.service.Suppliers;
 @WithUserDetails("eli")
 public class ReceiptTest {
 	
-	public static int RECEIPT_PROCESS_NO = 800034;
+	public static int RECEIPT_PROCESS_NO = 800037;
 	
 	@Autowired OrderReceipts receipts;
 	
@@ -119,9 +119,11 @@ public class ReceiptTest {
 			Item item = new Item();
 			item.setId(oItem.getItem().getId());
 			items[i].setItem(item);
-			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
-			storageForms[i].setMeasureUnit("KG");
-			storageForms[i].setNumberUnits(oItem.getNumberUnits().divide(BigDecimal.valueOf(10, 2)).setScale(2));
+//			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
+			storageForms[i].setUnitAmount(BigDecimal.valueOf(1));
+			storageForms[i].setMeasureUnit("LBS");
+//			storageForms[i].setNumberUnits(oItem.getNumberUnits().divide(BigDecimal.valueOf(10, 2)).setScale(2));
+			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
 			storageForms[i].setWarehouseLocation(storage);
 			items[i].setStorageForms(new Storage[] {storageForms[i]});
 			oi  = new OrderItem();
@@ -148,9 +150,11 @@ public class ReceiptTest {
 			items[i] = new ReceiptItem();
 			storageForms[i] = new Storage();
 			items[i].setItem(item);
-			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
-			storageForms[i].setMeasureUnit("KG");
-			storageForms[i].setNumberUnits(new BigDecimal(i+1).setScale(2));
+//			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
+			storageForms[i].setUnitAmount(BigDecimal.valueOf(1));
+			storageForms[i].setMeasureUnit("LBS");
+//			storageForms[i].setNumberUnits(new BigDecimal(i+1).setScale(2));
+			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
 			storageForms[i].setWarehouseLocation(storage);
 			items[i].setStorageForms(new Storage[] {storageForms[i]});
 			//add extra bonus
@@ -222,9 +226,7 @@ public class ReceiptTest {
 		}
 		assertEquals(expected, actual, "failed test adding extra bonus");
 		
-		//
-		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
-		receiptRows.forEach(r -> System.out.println(r));
+		
 	}
 
 

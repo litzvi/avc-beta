@@ -10,12 +10,13 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

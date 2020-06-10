@@ -8,9 +8,10 @@ import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

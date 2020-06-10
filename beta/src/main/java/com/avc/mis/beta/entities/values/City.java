@@ -13,11 +13,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;

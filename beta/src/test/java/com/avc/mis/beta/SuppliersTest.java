@@ -3,6 +3,7 @@ package com.avc.mis.beta;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -48,12 +49,12 @@ class SuppliersTest {
 	@Autowired
 	ValueTablesReader referenceTables;
 	
-	static Integer SERIAL_NO = 1895;
+	static Integer SERIAL_NO = 1901;
 	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
 		Supplier supplier = new Supplier();
-		supplier.setName(" \t test supplier	 \t" + SERIAL_NO);
+		supplier.setName(" \t test supplier	 \t" + OffsetDateTime.now());
 		supplier.setLocalName(" localName\t");
 		supplier.setEnglishName("\t  englishName ");
 		supplier.setLicense("\t  license \t");

@@ -9,11 +9,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.avc.mis.beta.entities.ContactEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import io.micrometer.core.instrument.util.StringUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
