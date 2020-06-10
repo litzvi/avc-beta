@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.StorageDTO;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
@@ -28,8 +29,8 @@ public class PoInventoryRow extends ValueDTO {
 	PoCodeBasic poCode;
 	String supplierName;
 	String itemName;
-	BigDecimal amount;
-	MeasureUnit measureUnit;
+	AmountWithUnit amount;
+//	MeasureUnit measureUnit;
 	private Set<StorageDTO> storageForms;
 	
 	

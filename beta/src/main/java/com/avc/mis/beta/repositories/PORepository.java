@@ -60,12 +60,13 @@ public interface PORepository extends BaseRepository<PO> {
 	Optional<PoDTO> findOrderByProcessId(Integer id);
 	
 	@Query("select new com.avc.mis.beta.dto.process.OrderItemDTO("
-			+ "i.id, i.version, item.id, item.value, i.measureUnit, i.numberUnits, i.currency, "
+			+ "i.id, i.version, item.id, item.value, units.amount, units.measureUnit, i.currency, "
 			+ "i.unitPrice, i.deliveryDate, i.defects, i.remarks, ri is not null) "
 		+ "from OrderItem i "
-			+ "left join ReceiptItem ri on ri.orderItem = i "
-		+ "join i.item item "
-		+ "join i.po po "
+			+ "join i.numberUnits units "
+				+ "left join ReceiptItem ri on ri.orderItem = i "
+			+ "join i.item item "
+			+ "join i.po po "
 		+ "where po.id = :poid ")
 	Set<OrderItemDTO> findOrderItemsByPo(Integer poid);
 	
@@ -115,7 +116,7 @@ public interface PORepository extends BaseRepository<PO> {
 //	List<PoRow> findByOrderTypeAndStatuses(ProcessName orderType, OrderStatus[] statuses);
 
 	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code.code, ct.code, s.name, i.value, "
-			+ "oi.numberUnits, oi.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus, "
+			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus, "
 			+ "oi.defects, oi.currency, oi.unitPrice) "
 		+ "from PO po "
 		+ "join po.poCode po_code "
@@ -123,6 +124,7 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "join po_code.supplier s "
 		+ "join po.processType t "
 		+ "join po.orderItems oi "
+			+ "join oi.numberUnits units "
 			+ "join oi.item i "
 		+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
 			+ "and t.processName = ?1 "

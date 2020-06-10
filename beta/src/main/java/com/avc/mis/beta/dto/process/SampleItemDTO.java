@@ -13,6 +13,7 @@ import org.apache.commons.collections4.multiset.HashMultiSet;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.SampleItem;
 import com.avc.mis.beta.entities.values.Item;
@@ -30,8 +31,9 @@ import lombok.NonNull;
 public class SampleItemDTO extends ProcessDTO {
 	
 	private BasicValueEntity<Item> item;
-	private BigDecimal unitAmount;
-	private MeasureUnit measureUnit;
+	private AmountWithUnit amountWeighed;
+//	private BigDecimal amountWeighed;
+//	private MeasureUnit measureUnit;
 //	private BigInteger numberOfSamples;	
 //	private BigDecimal avgTestedWeight;
 	private BigDecimal emptyContainerWeight;
@@ -43,8 +45,9 @@ public class SampleItemDTO extends ProcessDTO {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal emptyContainerWeight) {
 		super(id, version);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		this.unitAmount = unitAmount.setScale(3);
-		this.measureUnit = measureUnit;
+		this.amountWeighed = new AmountWithUnit(unitAmount.setScale(3), measureUnit);
+//		this.unitAmount = amountWeighed.setScale(3);
+//		this.measureUnit = measureUnit;
 //		this.numberOfSamples = numberOfSamples;
 //		this.avgTestedWeight = avgTestedWeight.setScale(3);
 		this.emptyContainerWeight = emptyContainerWeight.setScale(3);
@@ -53,8 +56,8 @@ public class SampleItemDTO extends ProcessDTO {
 	public SampleItemDTO(@NonNull SampleItem sampleItem) {
 		super(sampleItem.getId(), sampleItem.getVersion());
 		this.item = new BasicValueEntity<Item>(sampleItem.getItem());
-		this.unitAmount = sampleItem.getUnitAmount().setScale(3);
-		this.measureUnit = sampleItem.getMeasureUnit();
+		this.amountWeighed = sampleItem.getAmountWeighed().setScale(3);
+//		this.measureUnit = sampleItem.getMeasureUnit();
 //		this.numberOfSamples = sampleItem.getNumberOfSamples();
 //		this.avgTestedWeight = sampleItem.getAvgTestedWeight().setScale(3);
 		this.emptyContainerWeight = sampleItem.getEmptyContainerWeight().setScale(3);

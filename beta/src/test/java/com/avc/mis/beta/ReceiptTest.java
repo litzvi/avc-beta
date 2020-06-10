@@ -24,6 +24,7 @@ import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.process.ExtraAdded;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PoCode;
@@ -48,7 +49,7 @@ import com.avc.mis.beta.service.Suppliers;
 @WithUserDetails("eli")
 public class ReceiptTest {
 	
-	public static int RECEIPT_PROCESS_NO = 800037;
+	public static int RECEIPT_PROCESS_NO = 800038;
 	
 	@Autowired OrderReceipts receipts;
 	
@@ -120,8 +121,8 @@ public class ReceiptTest {
 			item.setId(oItem.getItem().getId());
 			items[i].setItem(item);
 //			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
-			storageForms[i].setUnitAmount(BigDecimal.valueOf(1));
-			storageForms[i].setMeasureUnit("LBS");
+			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
+//			storageForms[i].setMeasureUnit("LBS");
 //			storageForms[i].setNumberUnits(oItem.getNumberUnits().divide(BigDecimal.valueOf(10, 2)).setScale(2));
 			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
 			storageForms[i].setWarehouseLocation(storage);
@@ -130,7 +131,7 @@ public class ReceiptTest {
 			oi.setId(oItem.getId());
 			oi.setVersion(oItem.getVersion());
 			items[i].setOrderItem(oi);
-			items[i].setExtraRequested(BigDecimal.valueOf(200));
+			items[i].setExtraRequested(new AmountWithUnit(BigDecimal.valueOf(200)));
 			i++;
 		}
 		return items;
@@ -151,16 +152,16 @@ public class ReceiptTest {
 			storageForms[i] = new Storage();
 			items[i].setItem(item);
 //			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
-			storageForms[i].setUnitAmount(BigDecimal.valueOf(1));
-			storageForms[i].setMeasureUnit("LBS");
+			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
+//			storageForms[i].setMeasureUnit("LBS");
 //			storageForms[i].setNumberUnits(new BigDecimal(i+1).setScale(2));
 			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
 			storageForms[i].setWarehouseLocation(storage);
 			items[i].setStorageForms(new Storage[] {storageForms[i]});
 			//add extra bonus
 			added[i] = new ExtraAdded();
-			added[i].setUnitAmount(BigDecimal.valueOf(1));//because database is set to scale 2
-			added[i].setMeasureUnit("KG");
+			added[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "KG"));//because database is set to scale 2
+//			added[i].setMeasureUnit("KG");
 			added[i].setNumberUnits(new BigDecimal(4).setScale(2));
 			items[i].setExtraAdded(new ExtraAdded[] {added[i]});
 		}
@@ -204,8 +205,8 @@ public class ReceiptTest {
 		//add extra bonus
 		ExtraAdded[] added = new ExtraAdded[1];
 		added[0] = new ExtraAdded();
-		added[0].setUnitAmount(BigDecimal.valueOf(500));//because database is set to scale 2
-		added[0].setMeasureUnit("KG");
+		added[0].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(500), "KG"));//because database is set to scale 2
+//		added[0].setMeasureUnit("KG");
 		added[0].setNumberUnits(new BigDecimal(4).setScale(2));
 		receipts.addExtra(added, receipt.getProcessItems()[0].getId());
 		receipt.getProcessItems()[0]

@@ -7,7 +7,10 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,6 +24,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.AccessLevel;
@@ -58,12 +62,20 @@ public class ReceiptItem extends ProcessItem {
 	@JoinColumn(name = "orderItemId")
 	private OrderItem orderItem;
 	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal extraRequested;
+	@AttributeOverrides({
+        @AttributeOverride(name="amount",
+                           column=@Column(name="extraRequested", precision = 19, scale = 3))
+    })
+	@Embedded
+	private AmountWithUnit extraRequested;
 	
-	@Enumerated(EnumType.STRING)
-//	@Column(nullable = false)
-	private MeasureUnit measureUnit;
+	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal extraRequested;
+//	
+//	@Enumerated(EnumType.STRING)
+////	@Column(nullable = false)
+//	private MeasureUnit measureUnit;
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);

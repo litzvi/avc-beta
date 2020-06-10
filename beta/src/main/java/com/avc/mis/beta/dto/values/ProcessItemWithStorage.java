@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.StorageDTO;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.Storage;
@@ -30,8 +31,8 @@ public class ProcessItemWithStorage extends ProcessDTO {
 	
 	private Integer storageId;
 	private Integer storageVersion;
-	private BigDecimal unitAmount;
-	private MeasureUnit measureUnit;
+	private AmountWithUnit unitAmount;
+//	private MeasureUnit measureUnit;
 	private BigDecimal numberUnits;	
 	private BasicValueEntity<Warehouse> warehouseLocation;
 	private String description;
@@ -56,8 +57,8 @@ public class ProcessItemWithStorage extends ProcessDTO {
 		
 		this.storageId = storageId;
 		this.storageVersion = storageVersion;
-		this.unitAmount = unitAmount.setScale(3);
-		this.measureUnit = measureUnit;
+		this.unitAmount = new AmountWithUnit(unitAmount.setScale(3), measureUnit);
+//		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(3);
 		if(warehouseLocationId != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
@@ -68,7 +69,7 @@ public class ProcessItemWithStorage extends ProcessDTO {
 	
 	public StorageDTO getStorage() {
 		return new StorageDTO(storageId, storageVersion, 
-				unitAmount, measureUnit, numberUnits, warehouseLocation, description, clazz);
+				unitAmount, numberUnits, warehouseLocation, description, clazz);
 	}
 
 }

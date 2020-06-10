@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.DataObject;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.ReceiptItem;
@@ -27,8 +28,8 @@ import lombok.ToString;
 public class ReceiptItemDTO extends ProcessItemDTO {
 	
 	private DataObject orderItem;
-	private BigDecimal extraRequested;
-	private MeasureUnit measureUnit;
+	private AmountWithUnit extraRequested;
+//	private MeasureUnit measureUnit;
 
 //	private Set<StorageDTO> extraAdded; //can use a SortedSet like ContactDetails to maintain order	
 	
@@ -39,9 +40,9 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 		super(id, version, itemId, itemValue, poCodeId, contractTypeCode, supplierName, description, remarks);
 		if(orderItemId != null)
 			this.orderItem = new DataObject(orderItemId, orderItemVersion);
-		if(extraRequested != null)
-			this.extraRequested = extraRequested.setScale(3);
-		this.measureUnit = measureUnit;
+		if(extraRequested != null) {
+			this.extraRequested = new AmountWithUnit(extraRequested.setScale(3), measureUnit);
+		}
 	}
 
 	
@@ -49,20 +50,22 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 		super(receiptItem);
 		if(receiptItem.getOrderItem() != null)
 			this.orderItem = new DataObject(receiptItem.getOrderItem());
-		if(receiptItem.getExtraRequested() != null)
+		if(receiptItem.getExtraRequested() != null) {
 			this.extraRequested = receiptItem.getExtraRequested().setScale(3);
-		this.measureUnit = receiptItem.getMeasureUnit();
+		}
+//		this.measureUnit = receiptItem.getMeasureUnit();
 	}
 
 
 	public ReceiptItemDTO(Integer id, Integer version, BasicValueEntity<Item> item, PoCodeDTO itemPo, 
 			String description, String remarks, 
-			DataObject orderItem, BigDecimal extraRequested, MeasureUnit measureUnit) {
+			DataObject orderItem, AmountWithUnit extraRequested) {
 		super(id, version, item, itemPo, description, remarks);
 		this.orderItem = orderItem;
-		if(extraRequested != null)
+		if(extraRequested != null) {
 			this.extraRequested = extraRequested.setScale(3);
-		this.measureUnit = measureUnit;
+		}
+//		this.measureUnit = measureUnit;
 	}
 	
 	

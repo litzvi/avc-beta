@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 import java.util.Currency;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.OrderStatus;
@@ -33,8 +34,8 @@ public class PoRow extends ValueDTO {
 	PoCodeBasic poCode;
 	String supplierName;
 	String itemName;
-	BigDecimal amount;
-	MeasureUnit measureUnit;
+	AmountWithUnit numberUnits;
+//	MeasureUnit measureUnit;
 	OffsetDateTime contractDate;
 	LocalDate deliveryDate;
 	OrderStatus orderStatus;
@@ -51,8 +52,8 @@ public class PoRow extends ValueDTO {
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
 		this.supplierName = supplierName;
 		this.itemName = itemName;
-		this.amount = amount;
-		this.measureUnit = measureUnit;
+		this.numberUnits = new AmountWithUnit(amount.setScale(3), measureUnit);
+//		this.measureUnit = measureUnit;
 		this.contractDate = contractDate;
 		this.deliveryDate = deliveryDate;
 		this.orderStatus = orderStatus;
@@ -73,8 +74,8 @@ public class PoRow extends ValueDTO {
 		this.poCode = new PoCodeBasic(poCode);
 		this.supplierName = poCode.getSupplier().getName();
 		this.itemName = orderItem.getItem().getValue();
-		this.amount = orderItem.getNumberUnits();
-		this.measureUnit = orderItem.getMeasureUnit();
+		this.numberUnits = orderItem.getNumberUnits().clone();
+//		this.measureUnit = orderItem.getMeasureUnit();
 		this.contractDate = po.getRecordedTime();
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.orderStatus = po.getOrderStatus();
@@ -91,9 +92,9 @@ public class PoRow extends ValueDTO {
 		return this.poCode.getValue();
 	}
 	
-	public String getMeasureUnit() {
-		return this.measureUnit.toString();
-	}
+//	public String getMeasureUnit() {
+//		return this.measureUnit.toString();
+//	}
 	
 	public String getOrderStatus() {
 		return this.orderStatus.toString();

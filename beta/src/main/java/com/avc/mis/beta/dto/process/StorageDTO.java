@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.Storage;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -22,8 +23,8 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = false)
 public class StorageDTO extends ProcessDTO {
 
-	BigDecimal unitAmount;
-	MeasureUnit measureUnit;
+	AmountWithUnit unitAmount;
+//	MeasureUnit measureUnit;
 	BigDecimal numberUnits;	
 	BasicValueEntity<Warehouse> warehouseLocation;
 	String remarks;
@@ -35,8 +36,8 @@ public class StorageDTO extends ProcessDTO {
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
-		this.unitAmount = unitAmount.setScale(3);
-		this.measureUnit = measureUnit;
+		this.unitAmount = new AmountWithUnit(unitAmount.setScale(3), measureUnit);
+//		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(3);
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
@@ -52,7 +53,7 @@ public class StorageDTO extends ProcessDTO {
 	 */
 	public StorageDTO(Storage storage) {
 		super(storage.getId(), storage.getVersion());
-		this.measureUnit = storage.getMeasureUnit();
+//		this.measureUnit = storage.getMeasureUnit();
 		this.unitAmount = storage.getUnitAmount().setScale(3);
 		this.numberUnits = storage.getNumberUnits().setScale(3);
 		if(storage.getWarehouseLocation() != null) {
@@ -76,11 +77,11 @@ public class StorageDTO extends ProcessDTO {
 	 * @param description
 	 */
 	public StorageDTO(Integer id, Integer version,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
+			AmountWithUnit unitAmount, BigDecimal numberUnits, 
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
-		this.unitAmount = unitAmount.setScale(3);
-		this.measureUnit = measureUnit;
+		this.unitAmount = unitAmount;
+//		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(3);
 		this.warehouseLocation = warehouseLocation;
 		this.remarks = remarks;

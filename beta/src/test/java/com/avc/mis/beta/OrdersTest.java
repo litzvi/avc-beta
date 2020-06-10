@@ -32,6 +32,7 @@ import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.OrderStatus;
@@ -66,7 +67,7 @@ public class OrdersTest {
 	
 	public static final int NUM_ITEMS = 3;
 	
-	public static int PROCESS_NO = 9000099;
+	public static int PROCESS_NO = 9000102;
 
 	@Autowired
 	Orders orders;
@@ -119,9 +120,9 @@ public class OrdersTest {
 		for(int i=0; i<items.length; i++) {
 			items[i] = new OrderItem();
 			items[i].setItem(item);
-			items[i].setNumberUnits(new BigDecimal(i+1).setScale(2));
+			items[i].setNumberUnits(new AmountWithUnit(new BigDecimal(i+1).setScale(2), "KG"));
 			items[i].setCurrency("USD");
-			items[i].setMeasureUnit("KG");
+//			items[i].setMeasureUnit("KG");
 			items[i].setUnitPrice(new BigDecimal("1.16"));
 			items[i].setDeliveryDate("1983-11-23");
 		}

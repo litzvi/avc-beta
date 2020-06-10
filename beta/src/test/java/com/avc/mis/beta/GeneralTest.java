@@ -28,6 +28,7 @@ import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.process.ItemWeight;
 import com.avc.mis.beta.entities.process.OrderItem;
@@ -60,7 +61,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800078;
+	static final Integer PO_CODE = 800081;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -99,9 +100,9 @@ public class GeneralTest {
 		for(int i=0; i < NUM_PO_ITEMS; i++) {
 			orderItems[i] = new OrderItem();
 			orderItems[i].setItem(items.get(i));
-			orderItems[i].setNumberUnits(new BigDecimal(35000));
+			orderItems[i].setNumberUnits(new AmountWithUnit(new BigDecimal(35000), "LBS"));
 			orderItems[i].setCurrency("USD");
-			orderItems[i].setMeasureUnit("LBS");
+//			orderItems[i].setMeasureUnit("LBS");
 			orderItems[i].setUnitPrice(new BigDecimal("2.99"));
 			orderItems[i].setDeliveryDate(LocalDate.now().toString());			
 		}
@@ -123,16 +124,16 @@ public class GeneralTest {
 			
 			Storage[] storageForms = new Storage[2];
 			storageForms[0] = new Storage();
-			storageForms[0].setUnitAmount(BigDecimal.valueOf(50));
+			storageForms[0].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(50), "KG"));
 			storageForms[0].setNumberUnits(BigDecimal.valueOf(326));
 			storageForms[0].setWarehouseLocation(storages.get(i));
-			storageForms[0].setMeasureUnit("KG");
+//			storageForms[0].setMeasureUnit("KG");
 			
 			storageForms[1] = new Storage();
-			storageForms[1].setUnitAmount(BigDecimal.valueOf(26));
+			storageForms[1].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(26), "KG"));
 			storageForms[1].setNumberUnits(BigDecimal.valueOf(1));
 			storageForms[1].setWarehouseLocation(storages.get(i));
-			storageForms[1].setMeasureUnit("KG");
+//			storageForms[1].setMeasureUnit("KG");
 			
 			receiptItems[i].setStorageForms(storageForms);
 		}
@@ -154,10 +155,10 @@ public class GeneralTest {
 			
 			Storage[] QCStorageForms = new Storage[1];
 			QCStorageForms[0] = new Storage();
-			QCStorageForms[0].setUnitAmount(BigDecimal.valueOf(8));
+			QCStorageForms[0].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(8), "OZ"));
 			QCStorageForms[0].setNumberUnits(BigDecimal.valueOf(2));
 			QCStorageForms[0].setWarehouseLocation(storages.get(i));
-			QCStorageForms[0].setMeasureUnit("OZ");
+//			QCStorageForms[0].setMeasureUnit("OZ");
 			
 			rawItemQualities[i].setStorageForms(QCStorageForms);
 			
@@ -176,8 +177,8 @@ public class GeneralTest {
 		SampleItem[] sampleItems = new SampleItem[2];
 		sampleItems[0] = new SampleItem();
 		sampleItems[0].setItem(items.get(0));
-		sampleItems[0].setUnitAmount(BigDecimal.valueOf(50));
-		sampleItems[0].setMeasureUnit("KG");
+		sampleItems[0].setAmountWeighed(new AmountWithUnit(BigDecimal.valueOf(50), "KG"));
+//		sampleItems[0].setMeasureUnit("KG");
 		ItemWeight[] itemWeights1 = new ItemWeight[1];
 		itemWeights1[0] = new ItemWeight();
 		itemWeights1[0].setNumberOfSamples(BigInteger.valueOf(30));
@@ -186,8 +187,8 @@ public class GeneralTest {
 		sampleItems[0].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
 		sampleItems[1] = new SampleItem();
 		sampleItems[1].setItem(items.get(0));
-		sampleItems[1].setUnitAmount(BigDecimal.valueOf(26));
-		sampleItems[1].setMeasureUnit("KG");
+		sampleItems[1].setAmountWeighed(new AmountWithUnit(BigDecimal.valueOf(26), "KG"));
+//		sampleItems[1].setMeasureUnit("KG");
 		ItemWeight[] itemWeights2 = new ItemWeight[1];
 		itemWeights2[0] = new ItemWeight();
 		itemWeights2[0].setNumberOfSamples(BigInteger.valueOf(1));
@@ -195,7 +196,13 @@ public class GeneralTest {
 		sampleItems[1].setItemWeights(itemWeights2);
 		sampleItems[1].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
 		sampleReceipt.setSampleItems(sampleItems);
-		samples.addSampleReceipt(sampleReceipt);
+		try {
+			samples.addSampleReceipt(sampleReceipt);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		SampleReceiptDTO sampleReceiptDTO;
 		System.out.println("line 202");
 		sampleReceiptDTO = samples.getSampleReceiptByProcessId(sampleReceipt.getId());

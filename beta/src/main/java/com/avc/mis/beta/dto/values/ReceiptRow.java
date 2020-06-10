@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
@@ -27,14 +28,14 @@ public class ReceiptRow extends ValueDTO {
 	PoCodeBasic poCode;
 	String supplierName;
 	String itemName;
-	BigDecimal orderAmount;
-	MeasureUnit orderMU;
+	AmountWithUnit orderAmount;
+//	MeasureUnit orderMU;
 	OffsetDateTime receiptDate;
-	BigDecimal receiptAmount;
-	MeasureUnit receiptMU;
+	AmountWithUnit receiptAmount;
+//	MeasureUnit receiptMU;
 	String storage;
-	BigDecimal extraAdded;
-	MeasureUnit extraAddedMU;
+	AmountWithUnit extraAdded;
+//	MeasureUnit extraAddedMU;
 	
 	
 	public ReceiptRow(@NonNull Integer id, 
@@ -46,14 +47,14 @@ public class ReceiptRow extends ValueDTO {
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
 		this.supplierName = supplierName;
 		this.itemName = itemName;
-		this.orderAmount = orderAmount;
-		this.orderMU = orderMU;
+		this.orderAmount = new AmountWithUnit(orderAmount, orderMU);
+//		this.orderMU = orderMU;
 		this.receiptDate = receiptDate;
-		this.receiptAmount = receiptAmount;
-		this.receiptMU = receiptMU;
+		this.receiptAmount = new AmountWithUnit(receiptAmount, receiptMU);
+//		this.receiptMU = receiptMU;
 		this.storage = storage;
-		this.extraAdded = extraAdded;
-		this.extraAddedMU = extraAddedMU;
+		this.extraAdded = new AmountWithUnit(extraAdded, extraAddedMU);
+//		this.extraAddedMU = extraAddedMU;
 	}
 	
 }

@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.values.Item;
@@ -29,8 +30,9 @@ public class OrderItemDTO extends ProcessDTO {
 //	@EqualsAndHashCode.Exclude // for testing 
 //	private Integer poId; //perhaps not needed, and if yes maybe get the whole PoCode
 	BasicValueEntity<Item> item;
-	MeasureUnit measureUnit;
-	BigDecimal numberUnits;
+	AmountWithUnit numberUnits;
+//	MeasureUnit measureUnit;
+//	BigDecimal numberUnits;
 	Currency currency;
 	BigDecimal unitPrice;
 	LocalDate deliveryDate;
@@ -40,13 +42,13 @@ public class OrderItemDTO extends ProcessDTO {
 	
 	
 	public OrderItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
-			MeasureUnit measureUnit, BigDecimal numberUnits, Currency currency, BigDecimal unitPrice,
+			BigDecimal numberUnits, MeasureUnit measureUnit, Currency currency, BigDecimal unitPrice,
 			LocalDate deliveryDate, String defects, String remarks, Boolean received) {
 		super(id, version);
 //		this.poId = poId;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		this.measureUnit = measureUnit;
-		this.numberUnits = numberUnits.setScale(3);
+//		this.measureUnit = measureUnit;
+		this.numberUnits = new AmountWithUnit(numberUnits.setScale(3), measureUnit);
 		this.currency = currency;
 		this.unitPrice = unitPrice.setScale(2);
 		this.deliveryDate = deliveryDate;
@@ -62,7 +64,7 @@ public class OrderItemDTO extends ProcessDTO {
 		super(orderItem.getId(), orderItem.getVersion());
 //		this.poId = orderItem.getPo().getId();
 		this.item = new BasicValueEntity<Item>(orderItem.getItem());
-		this.measureUnit = orderItem.getMeasureUnit();
+//		this.measureUnit = orderItem.getMeasureUnit();
 		this.numberUnits = orderItem.getNumberUnits().setScale(3);
 		this.currency = orderItem.getCurrency();
 		this.unitPrice = orderItem.getUnitPrice().setScale(2);

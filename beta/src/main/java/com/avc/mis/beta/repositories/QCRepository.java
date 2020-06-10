@@ -69,7 +69,7 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 			+ " i.id, i.version, item.id, item.value, "
 			+ "itemPo.id, ct.code, s.name, "
 			+ "sf.id, sf.version, "
-			+ "sf.unitAmount, sf.measureUnit, sf.numberUnits, "
+			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, "
 			+ "i.description, i.remarks, type(sf), "
 			+ "i.breakage, i.foreignMaterial, i.humidity, i.testa, "
@@ -84,6 +84,7 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 				+ "left join itemPo.contractType ct "
 				+ "left join itemPo.supplier s "
 			+ "join i.storageForms sf "
+				+ "join sf.unitAmount unit "
 				+ "left join sf.warehouseLocation warehouseLocation "
 		+ "where p.id = :processId ")
 	Set<RawItemQualityWithStorage> findRawItemQualityWithStorage(int processId);

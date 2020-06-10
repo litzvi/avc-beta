@@ -7,8 +7,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Convert;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,6 +24,7 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.utilities.LocalDateToLong;
@@ -54,12 +58,21 @@ public class OrderItem extends ProcessEntity {
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	
-	@Column(nullable = false, precision = 19, scale = 3)
-	private BigDecimal numberUnits;	
+	@AttributeOverrides({
+        @AttributeOverride(name="amount",
+                           column=@Column(name="numberUnits", nullable = false, precision = 19, scale = 3)),
+        @AttributeOverride(name="measureUnit",
+                           column=@Column(nullable = false))
+    })
+	@Embedded
+	private AmountWithUnit numberUnits;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private MeasureUnit measureUnit;
+//	@Column(nullable = false, precision = 19, scale = 3)
+//	private BigDecimal numberUnits;	
+//	
+//	@Enumerated(EnumType.STRING)
+//	@Column(nullable = false)
+//	private MeasureUnit measureUnit;
 	
 	@Setter(value = AccessLevel.NONE)
 	private Currency currency;
@@ -87,10 +100,10 @@ public class OrderItem extends ProcessEntity {
 	}
 	
 	
-	public void setMeasureUnit(String measureUnit) {
-		if(measureUnit != null)
-			this.measureUnit = MeasureUnit.valueOf(measureUnit);
-	}
+//	public void setMeasureUnit(String measureUnit) {
+//		if(measureUnit != null)
+//			this.measureUnit = MeasureUnit.valueOf(measureUnit);
+//	}
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
@@ -99,19 +112,19 @@ public class OrderItem extends ProcessEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return item != null && measureUnit != null && numberUnits != null && unitPrice != null
-				&& numberUnits.compareTo(BigDecimal.ZERO) > 0
+		return item != null && numberUnits.isFilled() && unitPrice != null
+				&& numberUnits.signum() > 0
 				&& unitPrice.compareTo(BigDecimal.ZERO) >= 0;
 	}
 
 	@PrePersist @PreUpdate 
 	@Override
 	public void prePersist() {
+		if(this.numberUnits.getMeasureUnit() == null) {
+			this.numberUnits.setMeasureUnit(item.getMeasureUnit());
+		}
 		if(!isLegal()) {
 			throw new IllegalArgumentException(this.getIllegalMessage());
-		}
-		if(this.measureUnit == null) {
-			this.measureUnit = item.getMeasureUnit();
 		}
 	}
 	

@@ -5,7 +5,10 @@ package com.avc.mis.beta.entities.process;
 
 import java.math.BigDecimal;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,6 +21,7 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Warehouse;
 
@@ -42,14 +46,23 @@ public class Storage extends ProcessEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processItemId", nullable = false, updatable = false)
 	private ProcessItem processItem;
+	
+	@AttributeOverrides({
+        @AttributeOverride(name="amount",
+                           column=@Column(name="unitAmount", nullable = false, precision = 19, scale = 3)),
+        @AttributeOverride(name="measureUnit",
+                           column=@Column(nullable = false))
+    })
+	@Embedded
+	private AmountWithUnit unitAmount = new AmountWithUnit(BigDecimal.ONE);
 		
-	@Column(nullable = false, precision = 19, scale = 3)
-	private BigDecimal unitAmount = BigDecimal.ONE;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private MeasureUnit measureUnit;
-	
+//	@Column(nullable = false, precision = 19, scale = 3)
+//	private BigDecimal unitAmount = BigDecimal.ONE;
+//	
+//	@Enumerated(EnumType.STRING)
+//	@Column(nullable = false)
+//	private MeasureUnit measureUnit;
+//	
 	@Column(nullable = false, precision = 19, scale = 3)
 	private BigDecimal numberUnits;	
 	
@@ -57,9 +70,9 @@ public class Storage extends ProcessEntity {
 	@JoinColumn(name = "warehouseLocationId")
 	private Warehouse warehouseLocation;
 	
-	public void setMeasureUnit(String measureUnit) {
-		this.measureUnit = MeasureUnit.valueOf(measureUnit);
-	}
+//	public void setMeasureUnit(String measureUnit) {
+//		this.measureUnit = MeasureUnit.valueOf(measureUnit);
+//	}
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
@@ -77,9 +90,9 @@ public class Storage extends ProcessEntity {
 	
 	@Override
 	public boolean isLegal() {
-		return unitAmount != null && measureUnit != null && numberUnits != null
+		return unitAmount.isFilled() && numberUnits != null
 				&& numberUnits.compareTo(BigDecimal.ZERO) > 0
-				&& unitAmount.compareTo(BigDecimal.ZERO) > 0;
+				&& unitAmount.signum() > 0;
 	}
 
 	@Override
