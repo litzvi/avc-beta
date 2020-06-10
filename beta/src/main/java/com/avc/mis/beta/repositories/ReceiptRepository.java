@@ -86,8 +86,8 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 				+ "r.id, po_code.id, ct.code, s.name, i.value, "
 				+ "oi.numberUnits, oi.measureUnit, "
 				+ "r.recordedTime, "
-				+ "SUM(sf.unitAmount * sf.numberUnits * uom.multiply / uom.divide), i.measureUnit, sto.value, "
-//				+ "FUNCTION(GROUP_CONCAT, sto.value), "
+				+ "SUM(sf.unitAmount * sf.numberUnits * uom.multiply / uom.divide), i.measureUnit, "
+				+ "function('GROUP_CONCAT', sto.value), "
 				+ "pi.extraRequested, pi.measureUnit) "
 			+ "from Receipt r "
 				+ "join r.poCode po_code "
@@ -106,7 +106,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "join r.processType t "
 //			+ "where type(sf) <> ExtraAdded "
 				+ "where t.processName in :processNames "
-			+ "group by r.id, oi, pi, sto.value ")
+			+ "group by r.id, oi, pi ")
 	List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames);
 
 	/**
