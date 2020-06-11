@@ -24,6 +24,7 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
@@ -74,11 +75,17 @@ public class OrderItem extends ProcessEntity {
 //	@Column(nullable = false)
 //	private MeasureUnit measureUnit;
 	
-	@Setter(value = AccessLevel.NONE)
-	private Currency currency;
+	@AttributeOverrides({
+        @AttributeOverride(name="amount",
+                           column=@Column(name="unitPrice"))    })
+	@Embedded
+	private AmountWithCurrency unitPrice;
 	
-	@Column(precision = 19, scale = 2)
-	private BigDecimal unitPrice;
+//	@Setter(value = AccessLevel.NONE)
+//	private Currency currency;
+//	
+//	@Column(precision = 19, scale = 2)
+//	private BigDecimal unitPrice;
 	
 	@Convert(converter = LocalDateToLong.class)
 	private LocalDate deliveryDate;
@@ -89,10 +96,10 @@ public class OrderItem extends ProcessEntity {
 //	@Column(nullable = false)
 //	private OrderItemStatus status = OrderItemStatus.OPEN;
 //	
-	public void setCurrency(String currencyCode) {
-		if(currencyCode != null)
-			this.currency = Currency.getInstance(currencyCode);
-	}
+//	public void setCurrency(String currencyCode) {
+//		if(currencyCode != null)
+//			this.currency = Currency.getInstance(currencyCode);
+//	}
 	
 	public void setDeliveryDate(String deliveryDate) {
 		if(deliveryDate != null)
@@ -112,9 +119,9 @@ public class OrderItem extends ProcessEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return item != null && numberUnits.isFilled() && unitPrice != null
+		return item != null && numberUnits.isFilled() && unitPrice.isFilled()
 				&& numberUnits.signum() > 0
-				&& unitPrice.compareTo(BigDecimal.ZERO) >= 0;
+				&& unitPrice.signum() >= 0;
 	}
 
 	@PrePersist @PreUpdate 

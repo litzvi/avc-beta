@@ -60,11 +60,12 @@ public interface PORepository extends BaseRepository<PO> {
 	Optional<PoDTO> findOrderByProcessId(Integer id);
 	
 	@Query("select new com.avc.mis.beta.dto.process.OrderItemDTO("
-			+ "i.id, i.version, item.id, item.value, units.amount, units.measureUnit, i.currency, "
-			+ "i.unitPrice, i.deliveryDate, i.defects, i.remarks, ri is not null) "
+			+ "i.id, i.version, item.id, item.value, units.amount, units.measureUnit, "
+			+ "price.amount, price.currency, i.deliveryDate, i.defects, i.remarks, ri is not null) "
 		+ "from OrderItem i "
 			+ "join i.numberUnits units "
 				+ "left join ReceiptItem ri on ri.orderItem = i "
+			+ "left join i.unitPrice price "
 			+ "join i.item item "
 			+ "join i.po po "
 		+ "where po.id = :poid ")
@@ -117,7 +118,7 @@ public interface PORepository extends BaseRepository<PO> {
 
 	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code.code, ct.code, s.name, i.value, "
 			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus, "
-			+ "oi.defects, oi.currency, oi.unitPrice) "
+			+ "oi.defects, price.amount, price.currency) "
 		+ "from PO po "
 		+ "join po.poCode po_code "
 			+ "join po_code.contractType ct "
@@ -125,6 +126,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "join po.processType t "
 		+ "join po.orderItems oi "
 			+ "join oi.numberUnits units "
+			+ "left join oi.unitPrice price "
 			+ "join oi.item i "
 		+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
 			+ "and t.processName = ?1 "

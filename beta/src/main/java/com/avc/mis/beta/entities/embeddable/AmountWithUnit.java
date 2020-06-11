@@ -26,7 +26,6 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class AmountWithUnit implements Cloneable {
 
-//	@Column(precision = 19, scale = 3)
 	private BigDecimal amount = BigDecimal.ZERO;
 	
 	@Enumerated(EnumType.STRING)
@@ -41,6 +40,12 @@ public class AmountWithUnit implements Cloneable {
 	public AmountWithUnit(BigDecimal amount, String measureUnit) {
 		super();
 		this.amount = amount;
+		this.measureUnit = MeasureUnit.valueOf(measureUnit);
+	}
+	
+	public AmountWithUnit(String amount, String measureUnit) {
+		super();
+		this.amount = (new BigDecimal(amount));
 		this.measureUnit = MeasureUnit.valueOf(measureUnit);
 	}
 		

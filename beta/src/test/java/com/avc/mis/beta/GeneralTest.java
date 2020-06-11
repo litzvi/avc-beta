@@ -28,6 +28,7 @@ import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.process.ItemWeight;
@@ -100,10 +101,10 @@ public class GeneralTest {
 		for(int i=0; i < NUM_PO_ITEMS; i++) {
 			orderItems[i] = new OrderItem();
 			orderItems[i].setItem(items.get(i));
-			orderItems[i].setNumberUnits(new AmountWithUnit(new BigDecimal(35000), "LBS"));
-			orderItems[i].setCurrency("USD");
+			orderItems[i].setNumberUnits(new AmountWithUnit("35000", "LBS"));
+//			orderItems[i].setCurrency("USD");
 //			orderItems[i].setMeasureUnit("LBS");
-			orderItems[i].setUnitPrice(new BigDecimal("2.99"));
+			orderItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			orderItems[i].setDeliveryDate(LocalDate.now().toString());			
 		}
 		po.setOrderItems(orderItems);

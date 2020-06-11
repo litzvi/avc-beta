@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 import java.util.Currency;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -40,14 +41,15 @@ public class PoRow extends ValueDTO {
 	LocalDate deliveryDate;
 	OrderStatus orderStatus;
 	String defects;
-	Currency currency;
-	BigDecimal unitPrice;
+	AmountWithCurrency unitPrice;
+//	Currency currency;
+//	BigDecimal unitPrice;
 	
 	public PoRow(@NonNull Integer id, 
 			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
 			String itemName, BigDecimal amount,
 			MeasureUnit measureUnit, OffsetDateTime contractDate, LocalDate deliveryDate, OrderStatus orderStatus,
-			String defects, Currency currency, BigDecimal unitPrice) {
+			String defects, BigDecimal unitPrice, Currency currency) {
 		super(id);
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
 		this.supplierName = supplierName;
@@ -58,8 +60,8 @@ public class PoRow extends ValueDTO {
 		this.deliveryDate = deliveryDate;
 		this.orderStatus = orderStatus;
 		this.defects = defects;
-		this.currency = currency;
-		this.unitPrice = unitPrice;
+//		this.currency = currency;
+		this.unitPrice = new AmountWithCurrency(unitPrice, currency);
 	
 	}
 	
@@ -80,8 +82,8 @@ public class PoRow extends ValueDTO {
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.orderStatus = po.getOrderStatus();
 		this.defects = orderItem.getDefects();
-		this.currency = orderItem.getCurrency();
-		this.unitPrice = orderItem.getUnitPrice();
+//		this.currency = orderItem.getCurrency();
+		this.unitPrice = orderItem.getUnitPrice().clone();
 		
 	}
 	

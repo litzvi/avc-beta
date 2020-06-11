@@ -49,12 +49,13 @@ class SuppliersTest {
 	@Autowired
 	ValueTablesReader referenceTables;
 	
+	private static String SUPPLIER_NAME = " \t test supplier	 \t" + OffsetDateTime.now();
 	static Integer SERIAL_NO = 1907;
-	private ObjectMapper objMapper = new ObjectMapper(); 
+//	private ObjectMapper objMapper = new ObjectMapper(); 
 	
 	public static Supplier basicSupplier() {
 		Supplier supplier = new Supplier();
-		supplier.setName(" \t test supplier	 \t" + SERIAL_NO);
+		supplier.setName(SUPPLIER_NAME);
 		supplier.setLocalName(" localName\t");
 		supplier.setEnglishName("\t  englishName ");
 		supplier.setLicense("\t  license \t");

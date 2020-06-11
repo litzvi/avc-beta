@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.OrderItem;
@@ -33,8 +34,9 @@ public class OrderItemDTO extends ProcessDTO {
 	AmountWithUnit numberUnits;
 //	MeasureUnit measureUnit;
 //	BigDecimal numberUnits;
-	Currency currency;
-	BigDecimal unitPrice;
+	AmountWithCurrency unitPrice;
+//	Currency currency;
+//	BigDecimal unitPrice;
 	LocalDate deliveryDate;
 	String defects;
 	String remarks;
@@ -42,15 +44,15 @@ public class OrderItemDTO extends ProcessDTO {
 	
 	
 	public OrderItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
-			BigDecimal numberUnits, MeasureUnit measureUnit, Currency currency, BigDecimal unitPrice,
+			BigDecimal numberUnits, MeasureUnit measureUnit, BigDecimal unitPrice, Currency currency,
 			LocalDate deliveryDate, String defects, String remarks, Boolean received) {
 		super(id, version);
 //		this.poId = poId;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 //		this.measureUnit = measureUnit;
 		this.numberUnits = new AmountWithUnit(numberUnits.setScale(3), measureUnit);
-		this.currency = currency;
-		this.unitPrice = unitPrice.setScale(2);
+//		this.currency = currency;
+		this.unitPrice = new AmountWithCurrency(unitPrice, currency);
 		this.deliveryDate = deliveryDate;
 		this.defects = defects;
 		this.remarks = remarks;
@@ -66,8 +68,8 @@ public class OrderItemDTO extends ProcessDTO {
 		this.item = new BasicValueEntity<Item>(orderItem.getItem());
 //		this.measureUnit = orderItem.getMeasureUnit();
 		this.numberUnits = orderItem.getNumberUnits().setScale(3);
-		this.currency = orderItem.getCurrency();
-		this.unitPrice = orderItem.getUnitPrice().setScale(2);
+//		this.currency = orderItem.getCurrency();
+		this.unitPrice = orderItem.getUnitPrice().clone();
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.defects = orderItem.getDefects();
 		this.remarks = orderItem.getRemarks();
@@ -77,7 +79,7 @@ public class OrderItemDTO extends ProcessDTO {
 //		this.unitPrice.setScale(2);//for testing with assertEquals
 	}
 	
-	public String getCurrency() {
-		return Optional.ofNullable(this.currency).map(c -> c.getCurrencyCode()).orElse(null);
-	}
+//	public String getCurrency() {
+//		return Optional.ofNullable(this.currency).map(c -> c.getCurrencyCode()).orElse(null);
+//	}
 }
