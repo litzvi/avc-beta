@@ -25,6 +25,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Embeddable
 public class AmountWithUnit implements Cloneable {
+	
+	private static final int DISPLAY_SCALE = 3;
 
 	private BigDecimal amount = BigDecimal.ZERO;
 	
@@ -69,7 +71,10 @@ public class AmountWithUnit implements Cloneable {
 	}
 	
 	public String getValue() {
-		return String.format("%s%s", this.amount, this.measureUnit);
+		if(!isFilled()) {
+			return null;
+		}
+		return String.format("%s %s", this.amount.setScale(DISPLAY_SCALE), this.measureUnit);
 	}
 	
 	public boolean isFilled() {

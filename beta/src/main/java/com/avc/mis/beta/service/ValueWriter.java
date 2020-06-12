@@ -91,9 +91,9 @@ public class ValueWriter {
 		dao.addEntity(status);
 	}
 	
-	public void addProcessType(ProcessType type) {
-		dao.addEntity(type);
-	}
+//	public void addProcessType(ProcessType type) {
+//		dao.addEntity(type);
+//	}
 	
 	public void addProductionLine(ProductionLine line) {
 		dao.addEntity(line);

@@ -42,7 +42,8 @@ public class UserDTO extends DataDTO {
 	
 	public UserDTO(@NonNull UserEntity user) {
 		super(user.getId(), user.getVersion());
-		this.person = new PersonDTO(user.getPerson());
+		if(user.getPerson() != null)
+			this.person = new PersonDTO(user.getPerson());
 		this.username = user.getUsername();
 //		this.password = user.getPassword();
 		authorities = user.getRoles().stream().map(u->u.name()).collect(Collectors.toSet());

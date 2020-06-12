@@ -3,16 +3,20 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.process.ApprovalTask;
+import com.avc.mis.beta.entities.process.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
 
 /**
@@ -28,6 +32,14 @@ public class ProcessInfoWriter {
 	@Autowired private DeletableDAO deletableDAO;
 	
 	@Autowired private ProcessInfoReader processInfoReader;
+
+
+	@Deprecated
+	public void removeUserMessages(Integer userId) {
+		List<UserMessageDTO> userMessages = processInfoReader.getAllUserMessages(userId);
+		userMessages.forEach(m -> deletableDAO.permenentlyRemoveEntity(UserMessage.class, m.getId()));
+
+	}
 	
 	
 	/**

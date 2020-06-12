@@ -3,9 +3,11 @@
  */
 package com.avc.mis.beta;
 
+import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
@@ -27,6 +29,7 @@ import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.process.ExtraAdded;
 import com.avc.mis.beta.entities.process.OrderItem;
+import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.ReceiptItem;
@@ -37,6 +40,7 @@ import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.service.OrderReceipts;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.Suppliers;
+import com.avc.mis.beta.service.ValueTablesReader;
 
 /**
  * @author Zvi
@@ -49,21 +53,30 @@ import com.avc.mis.beta.service.Suppliers;
 @WithUserDetails("eli")
 public class ReceiptTest {
 	
-	public static int RECEIPT_PROCESS_NO = 800038;
+	private static final int NUM_ITEMS = 3;
+	private static int RECEIPT_PROCESS_NO = LocalDateTime.now().hashCode();
+
+	@Autowired TestService service;
 	
 	@Autowired OrderReceipts receipts;
 	
 	@Autowired Orders orders;
 	
 	@Autowired Suppliers suppliers;
-
+	
+	@Autowired
+	private ValueTablesReader valueTableReader;
+	
+	
 	private Receipt basicReceipt() {
 		//build order receipt
 		Receipt receipt = new Receipt();
 		PoCode poCode = new PoCode();
 		poCode.setCode(RECEIPT_PROCESS_NO);
-		Supplier supplier = SuppliersTest.basicSupplier();
-		suppliers.addSupplier(supplier);
+//		SuppliersTest suppliersTest = new SuppliersTest();
+//		Supplier supplier = suppliersTest.basicSupplier();
+//		suppliers.addSupplier(supplier);
+		Supplier supplier = service.addBasicSupplier();
 		poCode.setSupplier(supplier);
 		ContractType contractType = new ContractType();
 		contractType.setId(1);
@@ -72,7 +85,7 @@ public class ReceiptTest {
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());
 		//add order items
-		ReceiptItem[] items = processItems(OrdersTest.NUM_ITEMS);
+		ReceiptItem[] items = processItems(NUM_ITEMS);
 		for(ReceiptItem item: items)
 			System.out.println(item);
 		System.out.println("line 77");
@@ -81,25 +94,23 @@ public class ReceiptTest {
 		return receipt;
 	}
 	
-	private Receipt orderReceipt() {
+	private Receipt orderReceipt(int processNo) {
 		//build order receipt
 		Receipt receipt = new Receipt();
 		PoCode poCode = new PoCode();
-		poCode.setCode(OrdersTest.PROCESS_NO);
+		poCode.setCode(processNo);
 		receipt.setPoCode(poCode);
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());
 		//add order items
-		PoDTO poDTO = orders.getOrder(OrdersTest.PROCESS_NO);
+		PoDTO poDTO = orders.getOrder(processNo);
 //		Supplier supplier = new Supplier();
 //		supplier.setId(poDTO.getSupplier().getId());
 //		supplier.setVersion(poDTO.getSupplier().getVersion());
 //		receipt.setSupplier(supplier);
 		ReceiptItem[] items = receiptItems(poDTO);				
 		receipt.setReceiptItems(items);
-		return receipt;
-		
-		
+		return receipt;		
 	}
 	
 	/**
@@ -174,34 +185,21 @@ public class ReceiptTest {
 	void receiptTest() {
 		//insert order receipt without order
 		Receipt receipt = basicReceipt();
-		System.out.println("line 170");
 		receipts.addCashewReceipt(receipt);
 		ReceiptDTO expected;
-		try {
-			expected = new ReceiptDTO(receipt);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw e1;
-		}
+		expected = new ReceiptDTO(receipt);
 		ReceiptDTO actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding receipt without order");
-		System.out.println(actual);
+		receipts.removeReceipt(receipt.getId());
 
 		//insert order receipt for order
-		receipt = orderReceipt();
+		PO po = service.addBasicCashewOrder();
+		receipt = orderReceipt(po.getPoCode().getId());
 		receipts.addCashewOrderReceipt(receipt);
-		try {
-			expected = new ReceiptDTO(receipt);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
+		expected = new ReceiptDTO(receipt);
 		actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding order receipt");
-		System.out.println(actual);
-		
+				
 		//add extra bonus
 		ExtraAdded[] added = new ExtraAdded[1];
 		added[0] = new ExtraAdded();
@@ -226,7 +224,9 @@ public class ReceiptTest {
 			throw e;
 		}
 		assertEquals(expected, actual, "failed test adding extra bonus");
-		
+		receipts.removeReceipt(receipt.getId());		
+		service.cleanup(po);
+
 		
 	}
 

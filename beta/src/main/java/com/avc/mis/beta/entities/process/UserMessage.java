@@ -49,13 +49,13 @@ public class UserMessage extends ProcessInfoEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return super.isLegal() && this.getUser() != null;
+		return this.getUser() != null;
 	}
 
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "Message needs to belong to process and user";
+		return "Message needs to belong to user";
 	}
 
 }

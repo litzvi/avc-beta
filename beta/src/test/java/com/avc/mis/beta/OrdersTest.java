@@ -3,11 +3,14 @@
  */
 package com.avc.mis.beta;
 
+import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,205 +71,126 @@ public class OrdersTest {
 	
 	public static final int NUM_ITEMS = 3;
 	
-	public static int PROCESS_NO = 9000102;
+//	public static int PROCESS_NO = 9000107;
+	public int PROCESS_NO = LocalDateTime.now().hashCode();
+
+	@Autowired TestService service;
 
 	@Autowired
 	Orders orders;
 	
 	@Autowired
-	Users users;
+	private Suppliers suppliers;
 	
 	@Autowired
-	Suppliers suppliers;
+	private ValueTablesReader valueTableReader;
 	
 	@Autowired
-	ValueTablesReader valueTableReader;
+	private ProcessInfoReader processDisplay;
 	
 	@Autowired
-	ProcessInfoReader processDisplay;
-	
-	@Autowired
-	ProcessInfoWriter processInfoWriter;
-	
-//	@Autowired private PORepository poRepository;
-	@Autowired private ProcessInfoDAO dao;
-	
-	@Autowired ObjectTablesReader objectTableReader;
-	
+	private ProcessInfoWriter processInfoWriter;
+		
 
-	private PO basicOrder() {
+	public PO basicOrder(ValueTablesReader valueTableReader) {
+		
 		//build purchase order
 		PO po = new PO();
 		PoCode poCode = new PoCode();
 		po.setPoCode(poCode);
 		poCode.setId(PROCESS_NO);
-		Supplier supplier = SuppliersTest.basicSupplier();
-		suppliers.addSupplier(supplier);
+		Supplier supplier = service.addBasicSupplier();
 		poCode.setSupplier(supplier);
-		ContractType contractType = new ContractType();
-		contractType.setId(1);
-		poCode.setContractType(contractType);
-				//build process
+		List<ContractType> contractTypes = valueTableReader.getAllContractTypes();
+		if(contractTypes.isEmpty())
+			fail("No Contract Types in database for running this test");
+		poCode.setContractType(contractTypes.get(0));
+		
+		//build process
 		po.setRecordedTime(OffsetDateTime.now());
+		
 		//add order items
-		OrderItem[] items = orderItems(NUM_ITEMS);				
+		OrderItem[] items = orderItems(NUM_ITEMS, valueTableReader);				
 		po.setOrderItems(items);
 		return po;
 	}
 	
-	private OrderItem[] orderItems(int numOfItems) {
-		OrderItem[] items = new OrderItem[numOfItems];
-		Item item = new Item();
-		item.setId(1);
-		for(int i=0; i<items.length; i++) {
-			items[i] = new OrderItem();
-			items[i].setItem(item);
-			items[i].setNumberUnits(new AmountWithUnit(new BigDecimal(i+1).setScale(2), "KG"));
-//			items[i].setCurrency("USD");
-//			items[i].setMeasureUnit("KG");
-			items[i].setUnitPrice(new AmountWithCurrency("1.16", "USD"));
-			items[i].setDeliveryDate("1983-11-23");
+	private OrderItem[] orderItems(int numOfItems, ValueTablesReader valueTableReader) {
+		OrderItem[] orderItems = new OrderItem[numOfItems];
+		List<Item> items = valueTableReader.getAllItems();
+		if(items.size() < orderItems.length)
+			fail("Database has less than " + orderItems.length + " items, not enough for test");
+		for(int i=0; i<orderItems.length; i++) {
+			orderItems[i] = new OrderItem();
+			orderItems[i].setItem(items.get(i));
+			orderItems[i].setNumberUnits(new AmountWithUnit(new BigDecimal(i+1), "KG"));
+			orderItems[i].setUnitPrice(new AmountWithCurrency("1.16", "USD"));
+			orderItems[i].setDeliveryDate("1983-11-23");
 		}
-		return items;
+		return orderItems;
+	}
+	
+		
+	private PO insertOrder() {
+		//insert an order 
+		PO po = basicOrder(valueTableReader);
+		orders.addCashewOrder(po);
+		return po;
 	}
 	
 //	@Disabled
 	@Test
 	void ordersTest() {
+		
 		//insert an order 
-		PO po = basicOrder();
-		orders.addCashewOrder(po);
+		PO po = insertOrder();
 		PoDTO expected = null;
 		expected = new PoDTO(po);
-		PoDTO actual;
-		actual = orders.getOrder(po.getPoCode().getCode());
-		System.out.println(expected);
-		System.out.println(actual);
-		try {
-			assertEquals(expected, actual, "failed test adding po");
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw e1;
-		}
-		
+		PoDTO actual = orders.getOrder(po.getPoCode().getCode());
+		assertEquals(expected, actual, "failed test adding po");
+
 		//edit order status
 		po.setOrderStatus(OrderStatus.OPEN_APPROVED);
 		expected = new PoDTO(po);
-		System.out.println("before edit");
 		orders.editOrder(po);
-		System.out.println("after edit");
 		actual = orders.getOrder(po.getPoCode().getCode());
 		assertEquals(expected, actual, "failed test editing po order status");		
 		
-		PoCode poCode = po.getPoCode();
-		Supplier supplier = poCode.getSupplier();
-		orders.removeOrder(po.getId());
-		suppliers.permenentlyRemoveEntity(poCode);
-		suppliers.permenentlyRemoveSupplier(supplier.getId());
-		
+		//cleanup
+		service.cleanup(po);
+
 		//remove a line/item from order
-		po = basicOrder();
-		orders.addCashewOrder(po);
-		OrderItem[] items = new OrderItem[NUM_ITEMS-1];
-		items[0] = po.getOrderItems()[0];
-		items[1] = po.getOrderItems()[1];
+		po = insertOrder();
+		OrderItem[] oldItems = po.getOrderItems();
+		OrderItem[] items = new OrderItem[oldItems.length - 1];
+		IntStream.range(0, items.length).forEach(i -> items[i] = oldItems[i]);
 		po.setOrderItems(items);;
 		expected = new PoDTO(po);
 		orders.editOrder(po);
 		actual = orders.getOrderByProcessId(po.getId());	
 		assertEquals(expected, actual, "failed test editing po order status");
-//		
-//		supplier = po.getSupplier();
-//		orders.removeOrder(po.getId());
-//		suppliers.permenentlyRemoveSupplier(supplier.getId());
-		
-		//get suppliers by supply category
-		List<DataObjectWithName> suppliersByCategory = valueTableReader.getSuppliersBasic(3);
-		suppliersByCategory.forEach(s -> System.out.println(s));
-						
+				
 		//get list approval tasks for user
 		List<ApprovalTaskDTO> tasks;
 		ObjectMapper objMapper = new ObjectMapper();
-		try {
-			tasks = processDisplay.getAllRequiredApprovals();
+		tasks = processDisplay.getAllRequiredApprovals();
 
-//			ApprovalTask task = new ApprovalTask();
-			tasks.forEach(t -> {
-//				task.setId(t.getId());
-				ProductionProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessName().name());
-				String processSnapshot = null;
-				try {
-					processSnapshot = objMapper.writeValueAsString(p);
-				} catch (JsonProcessingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-//				t.setDecisionType(DecisionType.APPROVED.name());
-//				task.setProcessVersion(p.getVersion());
-				processInfoWriter.setProcessDecision(t.getId(), 
-						DecisionType.APPROVED.name(), processSnapshot, null);
-				
-			});
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		tasks.forEach(t -> {
+			ProductionProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessName().name());
+			String processSnapshot = null;
+			try {
+				processSnapshot = objMapper.writeValueAsString(p);
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			processInfoWriter.setProcessDecision(t.getId(), 
+					DecisionType.APPROVED.name(), processSnapshot, null);
+			
+		});
 		
-		
-		//insert a user
-		UserEntity user = new UserEntity();
-		user.setUsername("isral" + SuppliersTest.SERIAL_NO);
-		user.setPassword("309");
-		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
-		users.addUser(user);
-		Person p = user.getPerson();
-		p.setName("isssssssssral" + SuppliersTest.SERIAL_NO);
-		users.editPersonalDetails(user);
-		suppliers.permenentlyRemoveEntity(user);
-		suppliers.permenentlyRemoveEntity(user.getPerson());
-		
-		//insert user with 2 roles
-		user = new UserEntity();
-		user.setUsername("zvi" + SuppliersTest.SERIAL_NO);
-		user.setPassword("309");
-		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
-		user.getRoles().add(Role.ROLE_MANAGER);
-		users.addUser(user);
-		user.setUsername("zzzzzvi" + SuppliersTest.SERIAL_NO);
-		user.setPassword("password");
-		user.getRoles().clear();
-		users.editUser(user);
-		users.permenentlyRemoveUser(user.getId());
-		users.permenentlyRemovePerson(user.getPerson().getId());
-		
-		//open user for existing person
-		user = new UserEntity();
-		user.setUsername("eli" + SuppliersTest.SERIAL_NO);
-		user.setPassword("309");
-		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
-		user.getRoles().add(Role.ROLE_MANAGER);
-		Person person = new Person();
-		person.setId(10);
-		user.setPerson(person);
-		users.openUserForPerson(user);
-		UserDTO userByusername = users.getUserByUsername("eli" + SuppliersTest.SERIAL_NO);
-		UserDTO userById = users.getUserById(user.getId());
-		assertEquals(userByusername, userById, "Failed test fetching user by id vs. by username");
-		user.setUsername("pessi" + SuppliersTest.SERIAL_NO);
-		user.setPassword("password");
-		user.getRoles().clear();
-		users.editUser(user);
-		
-		//add, edit, remove processTypeAlert
-		Integer processAlertId = processInfoWriter.addProcessTypeAlert(user.getId(), 
-		dao.getProcessTypeByValue(ProcessName.CASHEW_ORDER), ApprovalType.REQUIRED_APPROVAL);
-		System.out.println("OrdersTest 279");
-		ProcessAlert processAlert = processDisplay.getProcessTypeAlert(processAlertId);
-//	fail("finished");
-		processInfoWriter.editProcessTypeAlert(processAlert, ApprovalType.REVIEW);
-//		users.permenentlyRemoveUser(user.getId());
+		//cleanup
+		service.cleanup(po);
 
-		
 	}	
 }

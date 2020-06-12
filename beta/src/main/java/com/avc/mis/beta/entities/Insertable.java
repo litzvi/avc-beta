@@ -49,7 +49,7 @@ public interface Insertable {
 	 */
 	static <T extends Insertable> Set<T> filterAndSetReference(T[] tArray, UnaryOperator<T> p) {
 		return Arrays.stream(tArray)
-			.filter(t -> t.isLegal())
+			.filter(t -> t != null && t.isLegal())
 			.map(t -> p.apply(t))
 			.collect(Collectors.toSet());
 	}
@@ -63,6 +63,7 @@ public interface Insertable {
 	 */
 	static <T extends Insertable> Set<T> setReferences(T[] tArray, UnaryOperator<T> p) {
 		return Arrays.stream(tArray)
+			.filter(t -> t != null)
 			.map(t -> p.apply(t))
 			.collect(Collectors.toSet());
 	}

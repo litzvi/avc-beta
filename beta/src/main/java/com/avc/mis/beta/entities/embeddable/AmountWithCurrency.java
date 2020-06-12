@@ -23,8 +23,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Embeddable
 public class AmountWithCurrency implements Cloneable {
+	
+	private static final int SCALE = 2;
 
-	@Column(precision = 19, scale = 2)
+
+	@Column(precision = 19, scale = SCALE)
 	private BigDecimal amount;
 	
 	@Setter(value = AccessLevel.NONE)
@@ -33,13 +36,13 @@ public class AmountWithCurrency implements Cloneable {
 
 	public AmountWithCurrency(BigDecimal amount, Currency currency) {
 		super();
-		this.amount = amount.setScale(2);
+		this.amount = amount.setScale(SCALE);
 		this.currency = currency;
 	}
 	
 	public AmountWithCurrency(String amount, String currencyCode) {
 		super();
-		this.amount = (new BigDecimal(amount)).setScale(2);
+		this.amount = (new BigDecimal(amount)).setScale(SCALE);
 		this.currency = Currency.getInstance(currencyCode);
 	}
 
@@ -50,7 +53,7 @@ public class AmountWithCurrency implements Cloneable {
 	}
 	
 	public void setAmount(BigDecimal amount) {
-		this.amount = amount.setScale(2);
+		this.amount = amount.setScale(SCALE);
 	}
 	
 	public void setCurrency(String currencyCode) {

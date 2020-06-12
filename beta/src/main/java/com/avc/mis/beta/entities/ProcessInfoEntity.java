@@ -57,7 +57,7 @@ public abstract class ProcessInfoEntity extends ProcessEntity {
 //	private UserEntity modifiedBy;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "processId", nullable = false, updatable = false)
+	@JoinColumn(name = "processId", updatable = false)
 	private ProductionProcess process;
 	
 	private String description;

@@ -3,11 +3,13 @@ package com.avc.mis.beta;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -16,9 +18,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
+import com.avc.mis.beta.dto.data.ContactDetailsDTO;
 import com.avc.mis.beta.dto.data.FaxDTO;
 import com.avc.mis.beta.dto.data.PhoneDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
+import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.entities.data.Address;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.CompanyContact;
@@ -41,19 +45,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 //@Transactional
 class SuppliersTest {
 	
-	private final int NUM_ITEMS = 3;
+	private static final int NUM_ITEMS = 3;
+	
+	@Autowired TestService service;
 	
 	@Autowired
-	Suppliers suppliers;
+	private Suppliers suppliers;
 	
 	@Autowired
-	ValueTablesReader referenceTables;
+	private ValueTablesReader valueTablesReader;
 	
-	private static String SUPPLIER_NAME = " \t test supplier	 \t" + OffsetDateTime.now();
-	static Integer SERIAL_NO = 1907;
-//	private ObjectMapper objMapper = new ObjectMapper(); 
+	private final String SUPPLIER_NAME = " \t test supplier	 \t" + LocalDateTime.now().hashCode();
 	
-	public static Supplier basicSupplier() {
+	public Supplier basicSupplier() {
 		Supplier supplier = new Supplier();
 		supplier.setName(SUPPLIER_NAME);
 		supplier.setLocalName(" localName\t");
@@ -66,51 +70,63 @@ class SuppliersTest {
 	
 	public Supplier fullSupplier() {
 		Supplier supplier = basicSupplier();
-		//add supply categories
-		List<SupplyCategory> supplyCategories = referenceTables.getAllSupplyCategories();
-		supplyCategories.remove(1);
-		supplyCategories.forEach(category -> supplier.getSupplyCategories().add(category));
+		
+		//add all supply categories besides for one
+		List<SupplyCategory> supplyCategories = valueTablesReader.getAllSupplyCategories();
+		if(supplyCategories.isEmpty())
+			fail("No Supply Categories in database");
+		IntStream.range(1, supplyCategories.size())
+			.forEach(i -> supplier.getSupplyCategories().add(supplyCategories.get(i)));
+		
 		//add phones
 		Phone[] phones = new Phone[NUM_ITEMS];
 		for(int i=0; i<phones.length; i++) {
 			phones[i] = new Phone();
-			phones[i].setValue(" value " + i) ;
-//			phones[i].setDeleted(true);
+			phones[i].setValue(" phone " + i) ;
 		}
 		supplier.getContactDetails().setPhones(phones);
+		
 		//add faxes
 		Fax[] faxes = new Fax[NUM_ITEMS];
 		for(int i=0; i<faxes.length; i++) {
 			faxes[i] = new Fax();
-			faxes[i].setValue(" value " + i) ;
+			faxes[i].setValue(" fax " + i) ;
 		}
 		supplier.getContactDetails().setFaxes(faxes);
+		
 		//add emails
 		Email[] emails = new Email[NUM_ITEMS];
 		for(int i=0; i<emails.length; i++) {
 			emails[i] = new Email();
-			emails[i].setValue(" value " + i + "	  	") ;
+			emails[i].setValue(" email " + i + "	  	") ;
 		}
 		supplier.getContactDetails().setEmails(emails);
+		
 		//add address
 		Address address = new Address();
-		List<City> cities = referenceTables.getAllCities();
+		List<City> cities = valueTablesReader.getAllCities();
+		if(cities.isEmpty())
+			fail("No Cities in database");
 		address.setCity(cities.get(0));
-		address.setStreetAddress("streetAddress for full supplier");
+		address.setStreetAddress("streetAddress");
 		supplier.getContactDetails().setAddresses(new Address[] {address});
+		
 		//add payment accounts
 		PaymentAccount[] paymentAccounts = new PaymentAccount[NUM_ITEMS];
-		List<BankBranch> branches = referenceTables.getAllBankBranches();
+		List<BankBranch> branches = valueTablesReader.getAllBankBranches();
+		if(branches.isEmpty())
+			fail("No Bank Branches in database");
 		BankBranch branch = branches.get(0);
 		for(int i=0; i<paymentAccounts.length; i++) {
 			paymentAccounts[i] = new PaymentAccount();
 			BankAccount bankAccount = new BankAccount();
-			bankAccount.setAccountNo("account number for full supplier " + i);
-			bankAccount.setOwnerName("owner name for full supplier " + i);			
+			bankAccount.setAccountNo("account " + i);
+			bankAccount.setOwnerName("owner name " + i);			
 			bankAccount.setBranch(branch);
 			paymentAccounts[i].setBankAccount(bankAccount);
 		}
 		supplier.getContactDetails().setPaymentAccounts(paymentAccounts);
+		
 		//add company contacts
 		CompanyContact[] contacts = new CompanyContact[NUM_ITEMS];
 		for(int i=0; i<contacts.length; i++) {
@@ -146,6 +162,7 @@ class SuppliersTest {
 		} catch (InvalidDataAccessApiUsageException e) {
 			System.out.println(e.getMessage());
 		}
+		
 		//supplier with name of white spaces
 		supplier.setName(" 	");
 		try {
@@ -154,33 +171,35 @@ class SuppliersTest {
 		} catch (InvalidDataAccessApiUsageException e) {
 			System.out.println(e.getMessage());
 		}
+		
 		//adding supplier
 		supplier = basicSupplier();
 		SupplierDTO expected = new SupplierDTO(supplier, true);
-		expected.setName(supplier.getName().trim());
+		expected.setName(supplier.getName().trim()); //check that name is trimmed
 		suppliers.addSupplier(supplier);
 		SupplierDTO actual = null;
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test adding supplier with white spaces added to all info fields");
+		
 		//try adding supplier with duplicate name
-		Supplier dupSupplier = basicSupplier();
+		Supplier duplicateSupplier = basicSupplier();
 		try {
-			suppliers.addSupplier(dupSupplier);
+			suppliers.addSupplier(duplicateSupplier);
 			fail("should throw exception for duplicate supplier name");
 		}catch(DataIntegrityViolationException e) {
 			System.out.println(e.getMessage());
 		}
+		
 		//edit main supplier info
 		supplier.setLocalName("new localName\t");
 		supplier.setEnglishName("\tnew  englishName ");
 		supplier.setLicense("\tnew  license \t");
 		supplier.setTaxCode("new  \ttaxCode\t ");
-		supplier.setRegistrationLocation("\tnew   registrationLocation - any text  \t");
+		supplier.setRegistrationLocation("\tnew   registrationLocation  \t");
 		expected = new SupplierDTO(supplier, true);
 		suppliers.editSupplierMainInfo(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
-		assertEquals(expected, actual, "Failed test adding supplier with white spaces added to all info fields");
-//		assertTrue(supplier.getVersion().equals(0));
+		assertEquals(expected, actual, "Failed test editing supplier with white spaces added to all info fields");
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//add, remove supply categories
@@ -188,93 +207,82 @@ class SuppliersTest {
 		expected = new SupplierDTO(supplier, true);
 		suppliers.addSupplier(supplier);
 		Set<SupplyCategory> categories = supplier.getSupplyCategories();
+		if(categories.size() < 2)
+			fail("Not enough supplier categories for add and remove test");
 		Iterator<SupplyCategory> it = categories.iterator();
 		SupplyCategory removedCategory = it.next();
 		SupplyCategory addedCategory = it.next();
 		categories.remove(removedCategory);
 		categories.remove(addedCategory);
 		supplier = suppliers.editSupplierMainInfo(supplier);
-//		fail("uncomment previous line");
 		categories = supplier.getSupplyCategories();
 		categories.add(addedCategory);
 		expected.getSupplyCategories().remove(removedCategory);
 		suppliers.editSupplierMainInfo(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
-		System.out.println(removedCategory);
-		System.out.println(addedCategory);
 		assertEquals(expected, actual, "Failed test adding and removing supply categories");
-//		assertTrue(supplier.getVersion().equals(2L));
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
 		
 		//add supplier with full details
 		supplier = fullSupplier();
 		expected = new SupplierDTO(supplier, true);
-		expected.getContactDetails().getPhones().forEach(phone -> phone.getValue().trim());
-		expected.getContactDetails().getEmails().forEach(email -> email.getValue().trim());		
 		suppliers.addSupplier(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test adding supplier contact details");
-		System.out.println(actual);
 		suppliers.permenentlyRemoveSupplier(supplier.getId());
-		//add supplier with full details add, remove and update a phone, fax and email
+		
+		//add supplier with full details add, remove and update a phones and faxes.
 		supplier = fullSupplier();
 		expected = new SupplierDTO(supplier, true);
 		suppliers.addSupplier(supplier);
-		Phone[] phones = supplier.getContactDetails().getPhones();
-		Fax[] faxes = supplier.getContactDetails().getFaxes();
-		Phone removedPhone = phones[0];
-		Fax removedFax = faxes[0];
-		Phone updatedPhone = phones[1];
-		Fax updatedFax = faxes[1];
-		expected.getContactDetails().getPhones().remove(new PhoneDTO(updatedPhone));
-		expected.getContactDetails().getFaxes().remove(new FaxDTO(updatedFax));
+		ContactDetails contactDetails = supplier.getContactDetails();
+		ContactDetailsDTO contactDetailsDTO = expected.getContactDetails();
+		
+		Phone[] phones = contactDetails.getPhones();
+		Phone removedPhone = phones[0];		
+		contactDetailsDTO.getPhones().remove(new PhoneDTO(removedPhone));
+		Phone addedPhone = new Phone(); 
+		addedPhone.setValue("added phone"); 
+		addedPhone.setOrdinal(removedPhone.getOrdinal()); //when ordinal is null, Sorted set comparison isn't working
+		phones[0] = addedPhone;
+		contactDetailsDTO.getPhones().add(new PhoneDTO(addedPhone));
+		Phone updatedPhone = phones[1]; 
+		contactDetailsDTO.getPhones().remove(new PhoneDTO(updatedPhone));
 		updatedPhone.setValue("updated value");
+		contactDetailsDTO.getPhones().add(new PhoneDTO(updatedPhone));
+		contactDetails.setPhones(phones);
+		
+		Fax[] faxes = contactDetails.getFaxes();
+		Fax removedFax = faxes[0]; 
+		contactDetailsDTO.getFaxes().remove(new FaxDTO(removedFax));
+		Fax addedFax = new Fax(); 
+		addedFax.setValue("added fax"); 
+		addedFax.setOrdinal(removedFax.getOrdinal()); //when ordinal is null, Sorted set comparison isn't working
+		faxes[0] = addedFax;
+		contactDetailsDTO.getFaxes().add(new FaxDTO(addedFax));
+		Fax updatedFax = faxes[1]; 
+		contactDetailsDTO.getFaxes().remove(new FaxDTO(updatedFax));
 		updatedFax.setValue("updated value");
-		Phone addedPhone = new Phone();
-		Fax addedFax = new Fax();
-		addedPhone.setValue("added phone 1");
-		addedFax.setValue("added fax 1");
-		suppliers.addEntity(addedPhone, supplier.getContactDetails());
-		suppliers.addEntity(addedFax, supplier.getContactDetails());
-		expected.getContactDetails().getPhones().add(new PhoneDTO(addedPhone));
-		expected.getContactDetails().getFaxes().add(new FaxDTO(addedFax));
-		suppliers.permenentlyRemoveEntity(removedPhone);
-		suppliers.permenentlyRemoveEntity(removedFax);
-		expected.getContactDetails().getPhones().remove(new PhoneDTO(removedPhone));
-		expected.getContactDetails().getFaxes().remove(new FaxDTO(removedFax));
-		suppliers.editEntity(updatedPhone);
-		suppliers.editEntity(updatedFax);
-		expected.getContactDetails().getPhones().add(new PhoneDTO(updatedPhone));
-		expected.getContactDetails().getFaxes().add(new FaxDTO(updatedFax));
+		contactDetailsDTO.getFaxes().add(new FaxDTO(updatedFax));
+		contactDetails.setFaxes(faxes);
+
+		suppliers.editContactInfo(contactDetails);
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
-//		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		suppliers.permenentlyRemoveSupplier(supplier.getId());
 
-		
 		
 		
 	}
-	
-	@Disabled
-	@Test
-	void addAndGetSuppliertest() {
-		Supplier supplier = fullSupplier();
-		suppliers.addSupplier(supplier);
-		System.out.println("getting supplier...");
-		System.out.println(suppliers.getSupplier(supplier.getId()));
-
-	}
-
-	
+		
 	private Supplier buildSupplier(String name) {
 		Supplier supplier = new Supplier();
 		supplier.setName(name);
 		
-		List<SupplyCategory> supplyCategories = referenceTables.getAllSupplyCategories();
+		List<SupplyCategory> supplyCategories = valueTablesReader.getAllSupplyCategories();
 		supplyCategories.forEach(category -> supplier.getSupplyCategories().add(category));
 		
 		ContactDetails contactDetails = new ContactDetails();
-		System.out.println(contactDetails);
 		supplier.setContactDetails(contactDetails);
 		List<Phone> phones = new ArrayList<>();
 		List<Fax> faxes = new ArrayList<>();

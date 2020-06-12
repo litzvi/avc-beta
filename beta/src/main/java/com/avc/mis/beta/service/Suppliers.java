@@ -111,7 +111,6 @@ public class Suppliers {
 		Supplier supplier = optionalSupplier.orElseThrow(() -> 
 			new IllegalArgumentException("No supplier with given ID"));
 		SupplierDTO supplierDTO = new SupplierDTO(supplier, false);
-		System.out.println("line 116");
 		getSupplierRepository().findCompanyContactsByCompnyId(supplierId)
 			.forEach((cc) -> supplierDTO.addCompanyContact(cc));
 		

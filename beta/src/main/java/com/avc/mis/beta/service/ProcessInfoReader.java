@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ReadOnlyDAO;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.ProcessAlertDTO;
@@ -18,6 +19,7 @@ import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.UserMessage;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 
 import lombok.AccessLevel;
@@ -68,6 +70,11 @@ public class ProcessInfoReader {
 	 */
 	public List<UserMessageDTO> getAllMessages() {		
 		return getProcessRepository().findAllMessagesByUser(dao.getCurrentUserId());
+	}
+	
+	@Deprecated
+	public List<UserMessageDTO> getAllUserMessages(Integer userId) {		
+		return getProcessRepository().findAllMessagesByUser(userId);
 	}
 	
 	/**
