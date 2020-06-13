@@ -5,14 +5,10 @@ package com.avc.mis.beta.dto.values;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.ValueDTO;
-import com.avc.mis.beta.dto.process.StorageDTO;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.Storage;
 
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
 
@@ -22,26 +18,21 @@ import lombok.Value;
  */
 @Value
 @ToString(callSuper = true)
-public class PoInventoryRowWithStorage{
+public class PoInventoryRowWithStorage extends ProcessItemWithStorage {
 
-	PoCodeBasic poCode;
-	String supplierName;
-	String itemName;
-	StorageDTO storage;
 	
-	public PoInventoryRowWithStorage(
+	public PoInventoryRowWithStorage(Integer id, Integer version, Integer itemId, String itemValue, 
 			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
-			String itemName,
 			Integer storageId, Integer storageVersion,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
-			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
-			Class<? extends Storage> clazz) {
-		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
-		this.supplierName = supplierName;
-		this.itemName = itemName;
-		this.storage = new StorageDTO(storageId, storageVersion, 
+			Integer warehouseLocationId, String warehouseLocationValue, 
+			String description, String remarks, Class<? extends Storage> clazz) {
+		super(id, version, itemId, itemValue, 
+				poCodeId, contractTypeCode, supplierName, 
+				storageId, storageVersion, 
 				unitAmount, measureUnit, numberUnits, 
-				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
+				warehouseLocationId, warehouseLocationValue, 
+				description, remarks, clazz);
 	}
 	
 	

@@ -4,12 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -22,24 +18,19 @@ import com.avc.mis.beta.dto.data.ContactDetailsDTO;
 import com.avc.mis.beta.dto.data.FaxDTO;
 import com.avc.mis.beta.dto.data.PhoneDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
-import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.entities.data.Address;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Email;
 import com.avc.mis.beta.entities.data.Fax;
-import com.avc.mis.beta.entities.data.IdCard;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Phone;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.BankBranch;
-import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.Suppliers;
-import com.avc.mis.beta.service.ValueTablesReader;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 //@Transactional
@@ -47,13 +38,8 @@ class SuppliersTest {
 	
 	private static final int NUM_ITEMS = 3;
 	
-	@Autowired TestService service;
-	
-	@Autowired
-	private Suppliers suppliers;
-	
-	@Autowired
-	private ValueTablesReader valueTablesReader;
+	@Autowired private TestService service;	
+	@Autowired private Suppliers suppliers;	
 	
 	private final String SUPPLIER_NAME = " \t test supplier	 \t" + LocalDateTime.now().hashCode();
 	
@@ -72,11 +58,8 @@ class SuppliersTest {
 		Supplier supplier = basicSupplier();
 		
 		//add all supply categories besides for one
-		List<SupplyCategory> supplyCategories = valueTablesReader.getAllSupplyCategories();
-		if(supplyCategories.isEmpty())
-			fail("No Supply Categories in database");
-		IntStream.range(1, supplyCategories.size())
-			.forEach(i -> supplier.getSupplyCategories().add(supplyCategories.get(i)));
+		supplier.getSupplyCategories().addAll(service.getSupplyCategories());
+		supplier.getSupplyCategories().remove(service.getSupplycategory());
 		
 		//add phones
 		Phone[] phones = new Phone[NUM_ITEMS];
@@ -103,20 +86,15 @@ class SuppliersTest {
 		supplier.getContactDetails().setEmails(emails);
 		
 		//add address
-		Address address = new Address();
-		List<City> cities = valueTablesReader.getAllCities();
-		if(cities.isEmpty())
-			fail("No Cities in database");
-		address.setCity(cities.get(0));
+		Address address = new Address();		
+		address.setCity(service.getCity());
 		address.setStreetAddress("streetAddress");
 		supplier.getContactDetails().setAddresses(new Address[] {address});
 		
 		//add payment accounts
 		PaymentAccount[] paymentAccounts = new PaymentAccount[NUM_ITEMS];
-		List<BankBranch> branches = valueTablesReader.getAllBankBranches();
-		if(branches.isEmpty())
-			fail("No Bank Branches in database");
-		BankBranch branch = branches.get(0);
+		
+		BankBranch branch = service.getBankBranch();
 		for(int i=0; i<paymentAccounts.length; i++) {
 			paymentAccounts[i] = new PaymentAccount();
 			BankAccount bankAccount = new BankAccount();
@@ -200,7 +178,7 @@ class SuppliersTest {
 		suppliers.editSupplierMainInfo(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test editing supplier with white spaces added to all info fields");
-		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		service.cleanup(supplier);
 		
 		//add, remove supply categories
 		supplier = fullSupplier();
@@ -221,7 +199,7 @@ class SuppliersTest {
 		suppliers.editSupplierMainInfo(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test adding and removing supply categories");
-		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		service.cleanup(supplier);
 		
 		//add supplier with full details
 		supplier = fullSupplier();
@@ -229,7 +207,7 @@ class SuppliersTest {
 		suppliers.addSupplier(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test adding supplier contact details");
-		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		service.cleanup(supplier);
 		
 		//add supplier with full details add, remove and update a phones and faxes.
 		supplier = fullSupplier();
@@ -269,69 +247,68 @@ class SuppliersTest {
 		suppliers.editContactInfo(contactDetails);
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
-		suppliers.permenentlyRemoveSupplier(supplier.getId());
+		service.cleanup(supplier);
 
 		
 		
 	}
 		
-	private Supplier buildSupplier(String name) {
-		Supplier supplier = new Supplier();
-		supplier.setName(name);
-		
-		List<SupplyCategory> supplyCategories = valueTablesReader.getAllSupplyCategories();
-		supplyCategories.forEach(category -> supplier.getSupplyCategories().add(category));
-		
-		ContactDetails contactDetails = new ContactDetails();
-		supplier.setContactDetails(contactDetails);
-		List<Phone> phones = new ArrayList<>();
-		List<Fax> faxes = new ArrayList<>();
-		List<Email> emails = new ArrayList<>();
-		for(int i=0; i<2; i++) {
-			Phone phone = new Phone();
-			Phone duplicate = new Phone();
-			Fax fax = new Fax();
-			Email email = new Email();
-			phone.setValue("phone" + i);
-			duplicate.setValue("phone" + i);
-			fax.setValue("fax" + i);
-			email.setValue("email" + i);
-			phones.add(phone);
-			phones.add(duplicate);
-			faxes.add(fax);
-			emails.add(email);
-			
-		}
-		contactDetails.setPhones(phones.toArray(new Phone[phones.size()]));
-		contactDetails.setFaxes(faxes.toArray(new Fax[faxes.size()]));
-		contactDetails.setEmails(emails.toArray(new Email[emails.size()]));
-		PaymentAccount paymentAccount = new PaymentAccount();		
-		BankAccount bankAccount = new BankAccount();
-		bankAccount.setOwnerName("ownerName" + name);
-		bankAccount.setAccountNo("accountNo" + name);
-		BankBranch bankBranch = new BankBranch();
-		bankBranch.setId(1);
-		bankAccount.setBranch(bankBranch);
-		paymentAccount.setBankAccount(bankAccount);
-		contactDetails.setPaymentAccounts(new PaymentAccount[] {paymentAccount});		
-
-		CompanyContact companyContact;
-		Person person;
-		for(int i=0; i<2; i++) {
-			companyContact = new CompanyContact();
-			person = new Person();
-			person.setName("person" + i);
-			IdCard idCard = new IdCard();
-			idCard.setIdNumber("id card" + i);
-			person.setIdCard(idCard);
-			companyContact.setPerson(person);
-			supplier.setCompanyContacts(new CompanyContact[] {companyContact});
-		}
-		
-		
-		return supplier;
-		
-	}
+//	private Supplier buildSupplier(String name) {
+//		Supplier supplier = new Supplier();
+//		supplier.setName(name);
+//		
+//		supplier.getSupplyCategories().addAll(service.getSupplyCategories());
+//		
+//		ContactDetails contactDetails = new ContactDetails();
+//		supplier.setContactDetails(contactDetails);
+//		List<Phone> phones = new ArrayList<>();
+//		List<Fax> faxes = new ArrayList<>();
+//		List<Email> emails = new ArrayList<>();
+//		for(int i=0; i<2; i++) {
+//			Phone phone = new Phone();
+//			Phone duplicate = new Phone();
+//			Fax fax = new Fax();
+//			Email email = new Email();
+//			phone.setValue("phone" + i);
+//			duplicate.setValue("phone" + i);
+//			fax.setValue("fax" + i);
+//			email.setValue("email" + i);
+//			phones.add(phone);
+//			phones.add(duplicate);
+//			faxes.add(fax);
+//			emails.add(email);
+//			
+//		}
+//		contactDetails.setPhones(phones.toArray(new Phone[phones.size()]));
+//		contactDetails.setFaxes(faxes.toArray(new Fax[faxes.size()]));
+//		contactDetails.setEmails(emails.toArray(new Email[emails.size()]));
+//		PaymentAccount paymentAccount = new PaymentAccount();		
+//		BankAccount bankAccount = new BankAccount();
+//		bankAccount.setOwnerName("ownerName" + name);
+//		bankAccount.setAccountNo("accountNo" + name);
+//		BankBranch bankBranch = new BankBranch();
+//		bankBranch.setId(1);
+//		bankAccount.setBranch(bankBranch);
+//		paymentAccount.setBankAccount(bankAccount);
+//		contactDetails.setPaymentAccounts(new PaymentAccount[] {paymentAccount});		
+//
+//		CompanyContact companyContact;
+//		Person person;
+//		for(int i=0; i<2; i++) {
+//			companyContact = new CompanyContact();
+//			person = new Person();
+//			person.setName("person" + i);
+//			IdCard idCard = new IdCard();
+//			idCard.setIdNumber("id card" + i);
+//			person.setIdCard(idCard);
+//			companyContact.setPerson(person);
+//			supplier.setCompanyContacts(new CompanyContact[] {companyContact});
+//		}
+//		
+//		
+//		return supplier;
+//		
+//	}
 			
 	
 	@Disabled

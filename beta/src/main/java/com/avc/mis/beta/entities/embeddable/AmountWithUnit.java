@@ -5,7 +5,6 @@ package com.avc.mis.beta.entities.embeddable;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;

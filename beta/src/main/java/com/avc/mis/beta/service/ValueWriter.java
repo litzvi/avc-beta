@@ -17,7 +17,6 @@ import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Country;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProcessStatus;
-import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;

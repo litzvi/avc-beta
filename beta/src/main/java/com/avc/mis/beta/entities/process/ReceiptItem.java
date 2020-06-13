@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.entities.process;
 
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,8 +11,6 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -25,7 +22,6 @@ import javax.persistence.Transient;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.AccessLevel;
 import lombok.Data;

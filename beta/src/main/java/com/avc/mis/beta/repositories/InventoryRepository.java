@@ -7,7 +7,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.values.PoInventoryRow;
+import com.avc.mis.beta.dto.tableRows.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.tableRows.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PoCode;
 
@@ -17,9 +18,53 @@ import com.avc.mis.beta.entities.process.PoCode;
  */
 public interface InventoryRepository extends BaseRepository<PoCode> {
 
-//	@Query("select com.avc.mis.beta.dto.values.PoInventoryRow() "
-//			+ "from ReceiptItem i "
-//			+ "join i.storageForms s ")
-//	List<PoInventoryRow> findInventoryTable(SupplyGroup cashew);
-
+//	@Query("select new com.avc.mis.beta.dto.values.PoInventoryRowWithStorage( "
+//			+ "pi.id, pi.version, item.id, item.value, "
+//			+ "poCode.code, ct.code, s.name, "
+//			+ "sf.id, sf.version, "
+//			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
+//			+ "warehouseLocation.id, warehouseLocation.value, "
+//			+ "pi.description, sf.remarks, type(sf) "
+//			+ ") "
+//		+ "from ProcessItem pi "
+//			+ "join pi.item item "
+//			+ "join pi.process p "
+//				+ "join p.poCode poCode "
+//					+ "join poCode.contractType ct "
+//					+ "join poCode.supplier s "
+//			+ "pi.storageForms sf "
+//				+ "join sf.unitAmount unit "
+//				+ "left join sf.warehouseLocation warehouseLocation "
+//		+ "where item.supplyGroup = ?1 ")
+//	List<PoInventoryRowWithStorage> findInventoryTable(SupplyGroup supplyGroup);
+	
+	@Query("select new com.avc.mis.beta.dto.tableRows.ProcessItemInventoryRow( "
+			+ "pi.id, item.id, item.value, "
+			+ "poCode.code, ct.code, s.name, "
+			+ "p.recordedTime, "
+			+ "SUM(unit.amount * sf.numberUnits * uom.multiply / uom.divide), item.measureUnit) "
+		+ "from ProcessItem pi "
+			+ "join pi.item item "
+			+ "join pi.process p "
+				+ "join p.poCode poCode "
+					+ "join poCode.contractType ct "
+					+ "join poCode.supplier s "
+			+ "join pi.storageForms sf "
+				+ "join sf.unitAmount unit "
+					+ "join UOM uom "
+						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
+		+ "where item.supplyGroup = ?1 "
+		+ "group by pi ")
+	List<ProcessItemInventoryRow> findInventoryProcessItem(SupplyGroup supplyGroup);
+	
+	@Query("select new com.avc.mis.beta.dto.tableRows.StorageInventoryRow( "
+			+ "sf.id, pi.id, unit.amount, unit.measureUnit, sf.numberUnits, "
+			+ "sto.id, sto.value) "
+		+ "from ProcessItem pi "
+			+ "join pi.item item "
+			+ "join pi.storageForms sf "
+				+ "join sf.unitAmount unit "
+				+ "left join sf.warehouseLocation sto "
+		+ "where item.supplyGroup = ?1 ")
+	List<StorageInventoryRow> findInventoryStorage(SupplyGroup supplyGroup);
 }

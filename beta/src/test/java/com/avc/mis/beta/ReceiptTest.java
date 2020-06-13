@@ -48,154 +48,29 @@ import com.avc.mis.beta.service.ValueTablesReader;
  */
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-//@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
 @WithUserDetails("eli")
 public class ReceiptTest {
-	
-	private static final int NUM_ITEMS = 3;
-	private static int RECEIPT_PROCESS_NO = LocalDateTime.now().hashCode();
 
-	@Autowired TestService service;
-	
-	@Autowired OrderReceipts receipts;
-	
-	@Autowired Orders orders;
-	
+	@Autowired TestService service;	
+	@Autowired OrderReceipts receipts;	
+	@Autowired Orders orders;	
 	@Autowired Suppliers suppliers;
-	
-	@Autowired
-	private ValueTablesReader valueTableReader;
-	
-	
-	private Receipt basicReceipt() {
-		//build order receipt
-		Receipt receipt = new Receipt();
-		PoCode poCode = new PoCode();
-		poCode.setCode(RECEIPT_PROCESS_NO);
-//		SuppliersTest suppliersTest = new SuppliersTest();
-//		Supplier supplier = suppliersTest.basicSupplier();
-//		suppliers.addSupplier(supplier);
-		Supplier supplier = service.addBasicSupplier();
-		poCode.setSupplier(supplier);
-		ContractType contractType = new ContractType();
-		contractType.setId(1);
-		poCode.setContractType(contractType);
-		receipt.setPoCode(poCode);
-		//build process
-		receipt.setRecordedTime(OffsetDateTime.now());
-		//add order items
-		ReceiptItem[] items = processItems(NUM_ITEMS);
-		for(ReceiptItem item: items)
-			System.out.println(item);
-		System.out.println("line 77");
-		receipt.setReceiptItems(items);
-		System.out.println("line 79");
-		return receipt;
-	}
-	
-	private Receipt orderReceipt(int processNo) {
-		//build order receipt
-		Receipt receipt = new Receipt();
-		PoCode poCode = new PoCode();
-		poCode.setCode(processNo);
-		receipt.setPoCode(poCode);
-		//build process
-		receipt.setRecordedTime(OffsetDateTime.now());
-		//add order items
-		PoDTO poDTO = orders.getOrder(processNo);
-//		Supplier supplier = new Supplier();
-//		supplier.setId(poDTO.getSupplier().getId());
-//		supplier.setVersion(poDTO.getSupplier().getVersion());
-//		receipt.setSupplier(supplier);
-		ReceiptItem[] items = receiptItems(poDTO);				
-		receipt.setReceiptItems(items);
-		return receipt;		
-	}
-	
-	/**
-	 * @param numItems
-	 * @return
-	 */
-	private ReceiptItem[] receiptItems(PoDTO poDTO) {
-		Set<OrderItemDTO> orderItems = poDTO.getOrderItems();
-		ReceiptItem[] items = new ReceiptItem[orderItems.size()];
-		Storage[] storageForms = new Storage[items.length];
-		Warehouse storage = new Warehouse();
-		OrderItem oi;
-		storage.setId(1);
-		int i=0;
-		for(OrderItemDTO oItem: orderItems) {
-			items[i] = new ReceiptItem();
-			storageForms[i] = new Storage();
-			Item item = new Item();
-			item.setId(oItem.getItem().getId());
-			items[i].setItem(item);
-//			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
-			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
-//			storageForms[i].setMeasureUnit("LBS");
-//			storageForms[i].setNumberUnits(oItem.getNumberUnits().divide(BigDecimal.valueOf(10, 2)).setScale(2));
-			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
-			storageForms[i].setWarehouseLocation(storage);
-			items[i].setStorageForms(new Storage[] {storageForms[i]});
-			oi  = new OrderItem();
-			oi.setId(oItem.getId());
-			oi.setVersion(oItem.getVersion());
-			items[i].setOrderItem(oi);
-			items[i].setExtraRequested(new AmountWithUnit(BigDecimal.valueOf(200)));
-			i++;
-		}
-		return items;
-	}
-
-	private ReceiptItem[] processItems(int numOfItems) {
-		ReceiptItem[] items = new ReceiptItem[numOfItems];
-		Storage[] storageForms = new Storage[items.length];
-		ExtraAdded[] added = new ExtraAdded[items.length];
-		Item item = new Item();
-		item.setId(1);
-		Warehouse storage = new Warehouse();
-		storage.setId(1);
-		OrderItem orderItem = new OrderItem();
-		orderItem.setId(96);
-		for(int i=0; i<items.length; i++) {
-			items[i] = new ReceiptItem();
-			storageForms[i] = new Storage();
-			items[i].setItem(item);
-//			storageForms[i].setUnitAmount(BigDecimal.valueOf(1000, 2));//because database is set to scale 2
-			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
-//			storageForms[i].setMeasureUnit("LBS");
-//			storageForms[i].setNumberUnits(new BigDecimal(i+1).setScale(2));
-			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
-			storageForms[i].setWarehouseLocation(storage);
-			items[i].setStorageForms(new Storage[] {storageForms[i]});
-			//add extra bonus
-			added[i] = new ExtraAdded();
-			added[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "KG"));//because database is set to scale 2
-//			added[i].setMeasureUnit("KG");
-			added[i].setNumberUnits(new BigDecimal(4).setScale(2));
-			items[i].setExtraAdded(new ExtraAdded[] {added[i]});
-		}
-//		Arrays.stream(items).forEach(i -> System.out.println(i));
-		return items;
-	}
 	
 //	@Disabled
 	@Test
 	void receiptTest() {
 		//insert order receipt without order
-		Receipt receipt = basicReceipt();
-		receipts.addCashewReceipt(receipt);
+		Receipt receipt = service.addBasicCashewReceipt();
 		ReceiptDTO expected;
 		expected = new ReceiptDTO(receipt);
 		ReceiptDTO actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding receipt without order");
-		receipts.removeReceipt(receipt.getId());
+		service.cleanup(receipt);
 
 		//insert order receipt for order
 		PO po = service.addBasicCashewOrder();
-		receipt = orderReceipt(po.getPoCode().getId());
-		receipts.addCashewOrderReceipt(receipt);
+		receipt = service.getCashewOrderReceipt(po.getPoCode().getId());
 		expected = new ReceiptDTO(receipt);
 		actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding order receipt");
@@ -204,30 +79,15 @@ public class ReceiptTest {
 		ExtraAdded[] added = new ExtraAdded[1];
 		added[0] = new ExtraAdded();
 		added[0].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(500), "KG"));//because database is set to scale 2
-//		added[0].setMeasureUnit("KG");
 		added[0].setNumberUnits(new BigDecimal(4).setScale(2));
 		receipts.addExtra(added, receipt.getProcessItems()[0].getId());
 		receipt.getProcessItems()[0]
 				.setStorageForms(ArrayUtils.addAll(receipt.getProcessItems()[0].getStorageForms(), added));
-		try {
-			expected = new ReceiptDTO(receipt);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
-		try {
-			actual = receipts.getReceiptByProcessId(receipt.getId());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
+		expected = new ReceiptDTO(receipt);
+		actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding extra bonus");
-		receipts.removeReceipt(receipt.getId());		
-		service.cleanup(po);
-
-		
+		service.cleanup(receipt);		
+		service.cleanup(po);		
 	}
 
 
