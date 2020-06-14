@@ -3,8 +3,12 @@
  */
 package com.avc.mis.beta.dao;
 
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.stereotype.Repository;
 
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.SoftDeleted;
 
 /**
@@ -22,17 +26,32 @@ public class SoftDeletableDAO extends DAO {
 	 * @param entity the entity to be removed.
 	 * @throws IllegalArgumentException
 	 */
-	public void removeEntity(SoftDeleted entity) {
+	@Deprecated
+	public <T extends BaseEntity & SoftDeleted> void removeEntity(T entity, Class<T> entityClass) {
 		if(entity.getId() == null) {
 			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
 		}
-		entity.setActive(false);
-		getEntityManager().merge(entity); 
+		
+	    CriteriaUpdate<T> update = 
+	    		getEntityManager().getCriteriaBuilder().createCriteriaUpdate(entityClass);
+	    Root<T> root = update.from(entityClass);
+	    getEntityManager().createQuery(update.
+	    		set("active", false).where(root.get("id").in(entity.getId()))).executeUpdate();
+	   
 	}
 	
-	public void removeEntity(Class<? extends SoftDeleted> entityClass, int entityId) {
-		SoftDeleted entity = getEntityManager().getReference(entityClass, entityId);
-		removeEntity(entity);	
+	public <T extends BaseEntity & SoftDeleted> void removeEntity(Class<T> entityClass, int entityId) {
+		T entity = getEntityManager().getReference(entityClass, entityId);
+		if(entity.getId() == null) {
+			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
+		}
+		
+	    CriteriaUpdate<T> update = 
+	    		getEntityManager().getCriteriaBuilder().createCriteriaUpdate(entityClass);
+	    Root<T> root = update.from(entityClass);
+	    getEntityManager().createQuery(update.
+	    		set("active", false).where(root.get("id").in(entity.getId()))).executeUpdate();
+	   	
 	}
 
 }

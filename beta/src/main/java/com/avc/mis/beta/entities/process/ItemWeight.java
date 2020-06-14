@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,7 +41,7 @@ public class ItemWeight extends ProcessEntity {
 	@Column(nullable = false)
 	private BigInteger numberOfSamples;	
 	
-	@Column(nullable = false, precision = 19, scale = 3)
+	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
 	private BigDecimal avgTestedWeight;
 
 	

@@ -42,16 +42,29 @@ public class ValueWriter {
 	 * @param entity ValueEntity with all values set for the state after edit.
 	 * @throws IllegalArgumentException if entity's id isn't set or new data isn't legal.
 	 */
-	public <T extends ValueEntity> void edit(T entity) {
-		dao.editEntity(entity);
+	public <T extends ValueEntity> T edit(T entity) {
+		return dao.editEntity(entity);
 	}
 	
 	/**
 	 * Sets the entity as not active, dosen't permanently remove from database.
 	 * @param entity the ValueEntity to be removed - CAUTION if any other editable field is changed it will be edited.
 	 */
+	@Deprecated
 	public <T extends ValueEntity> void remove(T entity) {
-		dao.removeEntity(entity);
+		//check if it's one of the permitted classes
+		dao.removeEntity(entity, (Class<T>)entity.getClass());
+	}
+	
+	/**
+	 * Sets the entity as not active, dosen't permanently remove from database.
+	 * @param <T>
+	 * @param entityClass
+	 * @param entityId
+	 */
+	public <T extends ValueEntity> void remove(Class<T> entityClass, int entityId) {
+		//check if it's one of the permitted classes
+		dao.removeEntity(entityClass, entityId);
 	}
 
 	public void addCountry(Country country) {

@@ -60,7 +60,7 @@ public class ReceiptItem extends ProcessItem {
 	
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
-                           column=@Column(name="extraRequested", precision = 19, scale = 3))
+                           column=@Column(name="extraRequested", precision = 19, scale = AmountWithUnit.SCALE))
     })
 	@Embedded
 	private AmountWithUnit extraRequested;

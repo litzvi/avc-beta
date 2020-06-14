@@ -100,7 +100,7 @@ public abstract class DAO extends ReadDAO {
 	 * dosen't have an id set or is a removed entity.
 	 * TransactionRequiredException
 	 */
-	public BaseEntity editEntity(BaseEntity entity) {
+	public <T extends BaseEntity> T editEntity(T entity) {
 		if(entity.getId() == null) {
 			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
 		}

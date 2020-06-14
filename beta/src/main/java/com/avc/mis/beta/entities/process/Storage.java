@@ -46,7 +46,8 @@ public class Storage extends ProcessEntity {
 	
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
-                           column=@Column(name="unitAmount", nullable = false, precision = 19, scale = 3)),
+                           column=@Column(name="unitAmount", nullable = false, 
+                           	precision = 19, scale = AmountWithUnit.SCALE)),
         @AttributeOverride(name="measureUnit",
                            column=@Column(nullable = false))
     })
@@ -60,7 +61,7 @@ public class Storage extends ProcessEntity {
 //	@Column(nullable = false)
 //	private MeasureUnit measureUnit;
 //	
-	@Column(nullable = false, precision = 19, scale = 3)
+	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
 	private BigDecimal numberUnits;	
 	
 	@ManyToOne(fetch = FetchType.LAZY)

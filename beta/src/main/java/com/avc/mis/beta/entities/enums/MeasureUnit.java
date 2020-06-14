@@ -16,6 +16,7 @@ public enum MeasureUnit {
 	OZ,
 	GRAM;
 
+//	public static final int SCALE = 3;
 	private static final BigDecimal LBS_IN_KG = new BigDecimal("0.4536");
 	private static final BigDecimal GRAM_IN_KG = new BigDecimal("0.001");
 	private static final BigDecimal LBS_IN_OZ = new BigDecimal("16");

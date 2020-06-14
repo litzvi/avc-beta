@@ -16,10 +16,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.data.UserDTO;
-import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessAlert;
@@ -27,7 +25,6 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.Role;
-import com.avc.mis.beta.entities.process.UserMessage;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 import com.avc.mis.beta.security.UserDetailsServiceImp;
 import com.avc.mis.beta.service.ObjectTablesReader;
@@ -45,7 +42,7 @@ import com.avc.mis.beta.service.Users;
 @WithUserDetails("eli")
 public class UsersTest {
 	
-	private static Integer SERIAL_NO = 1937;
+	private static Integer SERIAL_NO = 1938;
 	
 	@Autowired private Users users;
 	

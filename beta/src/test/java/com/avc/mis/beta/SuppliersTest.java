@@ -249,8 +249,6 @@ class SuppliersTest {
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
 		service.cleanup(supplier);
 
-		
-		
 	}
 		
 //	private Supplier buildSupplier(String name) {

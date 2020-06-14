@@ -4,6 +4,8 @@
 package com.avc.mis.beta.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,8 +59,10 @@ public class ProcessInfoReader {
 	 * Gets all the alerts requirements set in the system
 	 * @return List of ProcessAlert Objects
 	 */
-	public List<ProcessAlertDTO> getAllProcessTypeAlerts() {
-		return processRepository.findAllProcessAlerts();
+	public Map<ProcessName, List<ProcessAlertDTO>> getAllProcessTypeAlerts() {
+		List<ProcessAlertDTO> processTypeAlerts = processRepository.findAllProcessAlerts();
+		return processTypeAlerts.stream().collect(Collectors.groupingBy(ProcessAlertDTO::getProcessName));
+		
 	}
 	
 	/**

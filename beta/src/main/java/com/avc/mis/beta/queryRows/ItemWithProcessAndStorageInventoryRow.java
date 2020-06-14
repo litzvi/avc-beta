@@ -4,6 +4,7 @@
 package com.avc.mis.beta.queryRows;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.process.PoCodeDTO;
@@ -40,7 +41,8 @@ public class ItemWithProcessAndStorageInventoryRow {
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
 		this.receiptDate = receiptDate;
-		this.poDateAmount = new AmountWithUnit(poDateAmount.setScale(3), itemMU);;
+		this.poDateAmount = new AmountWithUnit(
+				poDateAmount.setScale(AmountWithUnit.SCALE, RoundingMode.HALF_DOWN), itemMU);
 //		this.storage = new StorageInventoryRow(unitAmount, measureUnit, numberUnits, 
 //				warehouseLocationId,  warehouseLocationValue);
 	}

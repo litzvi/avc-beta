@@ -54,7 +54,8 @@ public class OrderItem extends ProcessEntity {
 	
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
-                           column=@Column(name="numberUnits", nullable = false, precision = 19, scale = 3)),
+                           column=@Column(name="numberUnits", nullable = false, 
+                           	precision = 19, scale = AmountWithUnit.SCALE)),
         @AttributeOverride(name="measureUnit",
                            column=@Column(nullable = false))
     })

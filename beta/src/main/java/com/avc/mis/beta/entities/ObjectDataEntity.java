@@ -21,7 +21,7 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public abstract class ObjectDataEntity extends DataEntity implements SoftDeleted {
 
-	@Column(columnDefinition = "boolean default true",nullable = false)
+	@Column(nullable = false, updatable = false, columnDefinition = "boolean default true")
 	private boolean active = true;
 	
 //	public abstract String getName();

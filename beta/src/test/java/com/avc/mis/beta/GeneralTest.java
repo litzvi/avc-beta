@@ -3,12 +3,13 @@
  */
 package com.avc.mis.beta;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +43,7 @@ import com.avc.mis.beta.entities.process.ReceiptItem;
 import com.avc.mis.beta.entities.process.SampleItem;
 import com.avc.mis.beta.entities.process.SampleReceipt;
 import com.avc.mis.beta.entities.process.Storage;
+import com.avc.mis.beta.entities.values.Country;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
@@ -51,6 +53,7 @@ import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.Samples;
 import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.ValueWriter;
 
 /**
  * @author Zvi
@@ -77,6 +80,8 @@ public class GeneralTest {
 	@Autowired OrderReceipts receipts;
 	@Autowired QualityChecks checks;
 	@Autowired Samples samples;
+	
+	@Autowired ValueWriter valueWriter;
 	
 	@Test
 	void orderAndReceiveTest() {
@@ -227,5 +232,17 @@ public class GeneralTest {
 		suppliers.permenentlyRemoveSupplier(supplierDTO.getId());
 		
 		
+		//test softDelete
+		Country country = new Country();
+		country.setValue("Imaginary country" + LocalDateTime.now().hashCode());
+		valueWriter.addCountry(country);
+		List<Country> countries = valueTablesRepository.findAllCountries();
+		int index = countries.indexOf(country);
+		Country persistedCountry = countries.get(index);
+		assertTrue(persistedCountry.isActive());
+		valueWriter.remove(country.getClass(), country.getId());
+		countries = valueTablesRepository.findAllCountries();
+		index = countries.indexOf(country);
+		assertTrue(index == -1);
 	}
 }

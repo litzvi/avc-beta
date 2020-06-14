@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.embeddable;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Currency;
 import java.util.Optional;
 
@@ -36,13 +37,13 @@ public class AmountWithCurrency implements Cloneable {
 
 	public AmountWithCurrency(BigDecimal amount, Currency currency) {
 		super();
-		this.amount = amount.setScale(SCALE);
+		this.amount = amount.setScale(SCALE, RoundingMode.HALF_DOWN);
 		this.currency = currency;
 	}
 	
 	public AmountWithCurrency(String amount, String currencyCode) {
 		super();
-		this.amount = (new BigDecimal(amount)).setScale(SCALE);
+		this.amount = (new BigDecimal(amount)).setScale(SCALE, RoundingMode.HALF_DOWN);
 		this.currency = Currency.getInstance(currencyCode);
 	}
 
@@ -53,7 +54,7 @@ public class AmountWithCurrency implements Cloneable {
 	}
 	
 	public void setAmount(BigDecimal amount) {
-		this.amount = amount.setScale(SCALE);
+		this.amount = amount.setScale(SCALE, RoundingMode.HALF_DOWN);
 	}
 	
 	public void setCurrency(String currencyCode) {

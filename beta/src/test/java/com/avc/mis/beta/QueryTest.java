@@ -6,6 +6,7 @@ package com.avc.mis.beta;
 import static org.assertj.core.api.Assertions.fail;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,6 @@ import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.tableRows.ItemInventoryRow;
-import com.avc.mis.beta.dto.tableRows.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
@@ -31,6 +31,7 @@ import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.CashewReports;
 import com.avc.mis.beta.service.ObjectTablesReader;
@@ -126,8 +127,8 @@ public class QueryTest {
 		messages.forEach(m -> System.out.println(m));
 		
 		//get processTypeAlerts
-		List<ProcessAlertDTO> alerts = processInfoReader.getAllProcessTypeAlerts();
-		alerts.forEach(m -> System.out.println(m));
+		Map<ProcessName, List<ProcessAlertDTO>> alerts = processInfoReader.getAllProcessTypeAlerts();
+		alerts.forEach((k, v) -> {System.out.println(k); v.forEach(m -> System.out.println(m));});
 				
 		//get users table
 		List<UserRow> usersTable = users.getUsersTable();
@@ -165,9 +166,10 @@ public class QueryTest {
 	@Test
 	void oneQueryTest() {
 
-		//cashew inventory table
-		List<ItemInventoryRow> inventoryRows = cashewReports.getCashewInventoryTable();
-		inventoryRows.forEach(r -> System.out.println(r));
-		
+
+		//get processTypeAlerts
+		Map<ProcessName, List<ProcessAlertDTO>> alerts = processInfoReader.getAllProcessTypeAlerts();
+		alerts.forEach((k, v) -> {System.out.println(k); v.forEach(m -> System.out.println(m));});
+			
 	}
 }

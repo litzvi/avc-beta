@@ -45,22 +45,22 @@ public class SampleItemDTO extends ProcessDTO {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal emptyContainerWeight) {
 		super(id, version);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		this.amountWeighed = new AmountWithUnit(unitAmount.setScale(3), measureUnit);
+		this.amountWeighed = new AmountWithUnit(unitAmount.setScale(AmountWithUnit.SCALE), measureUnit);
 //		this.unitAmount = amountWeighed.setScale(3);
 //		this.measureUnit = measureUnit;
 //		this.numberOfSamples = numberOfSamples;
 //		this.avgTestedWeight = avgTestedWeight.setScale(3);
-		this.emptyContainerWeight = emptyContainerWeight.setScale(3);
+		this.emptyContainerWeight = emptyContainerWeight.setScale(AmountWithUnit.SCALE);
 	}
 
 	public SampleItemDTO(@NonNull SampleItem sampleItem) {
 		super(sampleItem.getId(), sampleItem.getVersion());
 		this.item = new BasicValueEntity<Item>(sampleItem.getItem());
-		this.amountWeighed = sampleItem.getAmountWeighed().setScale(3);
+		this.amountWeighed = sampleItem.getAmountWeighed().setScale(AmountWithUnit.SCALE);
 //		this.measureUnit = sampleItem.getMeasureUnit();
 //		this.numberOfSamples = sampleItem.getNumberOfSamples();
 //		this.avgTestedWeight = sampleItem.getAvgTestedWeight().setScale(3);
-		this.emptyContainerWeight = sampleItem.getEmptyContainerWeight().setScale(3);
+		this.emptyContainerWeight = sampleItem.getEmptyContainerWeight().setScale(AmountWithUnit.SCALE);
 		
 		this.itemWeights = Arrays.stream(sampleItem.getItemWeights())
 				.map(i->{return new ItemWeightDTO(i);})

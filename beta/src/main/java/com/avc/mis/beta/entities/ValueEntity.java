@@ -29,8 +29,8 @@ public abstract class ValueEntity extends BaseEntity implements SoftDeleted {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(columnDefinition = "boolean default true")
-	private boolean active;
+	@Column(nullable = false, updatable = false, columnDefinition = "boolean default true")
+	private boolean active = true;
 	
 	public abstract String getValue();
 

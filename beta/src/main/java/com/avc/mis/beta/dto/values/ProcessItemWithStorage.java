@@ -57,9 +57,9 @@ public class ProcessItemWithStorage extends ProcessDTO {
 		
 		this.storageId = storageId;
 		this.storageVersion = storageVersion;
-		this.unitAmount = new AmountWithUnit(unitAmount.setScale(3), measureUnit);
+		this.unitAmount = new AmountWithUnit(unitAmount.setScale(AmountWithUnit.SCALE), measureUnit);
 //		this.measureUnit = measureUnit;
-		this.numberUnits = numberUnits.setScale(3);
+		this.numberUnits = numberUnits.setScale(AmountWithUnit.SCALE);
 		if(warehouseLocationId != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		this.description = description;

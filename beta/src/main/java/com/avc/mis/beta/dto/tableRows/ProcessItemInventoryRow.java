@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.tableRows;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -43,7 +44,8 @@ public class ProcessItemInventoryRow extends ValueDTO {
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
 		this.receiptDate = receiptDate;
-		this.totalAmount = new AmountWithUnit(totalAmount.setScale(3), measureUnit);
+		this.totalAmount = new AmountWithUnit(
+				totalAmount.setScale(AmountWithUnit.SCALE, RoundingMode.HALF_DOWN), measureUnit);
 		
 	}
 	
