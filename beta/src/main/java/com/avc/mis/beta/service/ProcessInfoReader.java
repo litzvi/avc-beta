@@ -16,7 +16,9 @@ import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.ProcessAlertDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.entities.data.ProcessAlert;
+import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -57,11 +59,15 @@ public class ProcessInfoReader {
 	
 	/**
 	 * Gets all the alerts requirements set in the system
-	 * @return List of ProcessAlert Objects
+	 * @return nested Map by Process name, Approval type with List of Users.
 	 */
-	public Map<ProcessName, List<ProcessAlertDTO>> getAllProcessTypeAlerts() {
+	public Map<ProcessName, Map<ApprovalType, List<UserBasic>>> getAllProcessTypeAlerts() {
 		List<ProcessAlertDTO> processTypeAlerts = processRepository.findAllProcessAlerts();
-		return processTypeAlerts.stream().collect(Collectors.groupingBy(ProcessAlertDTO::getProcessName));
+		return processTypeAlerts.stream()
+			.collect(Collectors.groupingBy(ProcessAlertDTO::getProcessName, 
+					Collectors.groupingBy(ProcessAlertDTO::getApprovalType, 
+							Collectors.mapping(ProcessAlertDTO::getUser, Collectors.toList()))));
+//		return processTypeAlerts.stream().collect(Collectors.groupingBy(ProcessAlertDTO::getProcessName));
 		
 	}
 	

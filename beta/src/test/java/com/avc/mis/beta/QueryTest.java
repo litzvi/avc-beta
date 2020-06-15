@@ -29,8 +29,10 @@ import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.PoRow;
 import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.dto.values.SupplierRow;
+import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.ApprovalType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.CashewReports;
@@ -127,8 +129,8 @@ public class QueryTest {
 		messages.forEach(m -> System.out.println(m));
 		
 		//get processTypeAlerts
-		Map<ProcessName, List<ProcessAlertDTO>> alerts = processInfoReader.getAllProcessTypeAlerts();
-		alerts.forEach((k, v) -> {System.out.println(k); v.forEach(m -> System.out.println(m));});
+//		Map<ProcessName, List<ProcessAlertDTO>> alerts = processInfoReader.getAllProcessTypeAlerts();
+//		alerts.forEach((k, v) -> {System.out.println(k); v.forEach(m -> System.out.println(m));});
 				
 		//get users table
 		List<UserRow> usersTable = users.getUsersTable();
@@ -168,8 +170,16 @@ public class QueryTest {
 
 
 		//get processTypeAlerts
-		Map<ProcessName, List<ProcessAlertDTO>> alerts = processInfoReader.getAllProcessTypeAlerts();
-		alerts.forEach((k, v) -> {System.out.println(k); v.forEach(m -> System.out.println(m));});
+		Map<ProcessName, Map<ApprovalType, List<UserBasic>>> alerts = processInfoReader.getAllProcessTypeAlerts();
+		alerts.forEach((k, v) -> {
+			System.out.println(k + ":\n");
+			v.forEach((l, w) -> {
+						System.out.println("\t" + l + "$");
+						w.forEach(u -> {
+							System.out.println("\t\t" + u);
+						});
+			});
+		});
 			
 	}
 }
