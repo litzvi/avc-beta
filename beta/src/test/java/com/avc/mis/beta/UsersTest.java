@@ -50,7 +50,7 @@ public class UsersTest {
 	
 	@Autowired private ProcessInfoWriter processInfoWriter;
 	
-	@Autowired private ProcessInfoDAO dao;
+//	@Autowired private ProcessInfoDAO dao;
 	
 	@Autowired private ProcessInfoReader processDisplay;
 	
@@ -129,7 +129,7 @@ public class UsersTest {
 		
 		//add, edit, remove processTypeAlert
 		Integer processAlertId = processInfoWriter.addProcessTypeAlert(user.getId(), 
-				dao.getProcessTypeByValue(ProcessName.CASHEW_ORDER), ApprovalType.REQUIRED_APPROVAL);
+				ProcessName.CASHEW_ORDER, ApprovalType.REQUIRED_APPROVAL);
 		ProcessAlert processAlert = processDisplay.getProcessTypeAlert(processAlertId);
 		processInfoWriter.editProcessTypeAlert(processAlert, ApprovalType.REVIEW);
 		processInfoWriter.removeProcessTypeAlert(processAlertId);

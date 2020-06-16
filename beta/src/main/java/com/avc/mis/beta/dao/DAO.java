@@ -15,20 +15,17 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
- * Base class for data access objects services(dao).
- * DAO object are spring components, used as services to access different module entities data.
- * This class holds entity manager and repository components needed to access data in multiple modules.
+ * Abstract base class for modifying data access objects repositories(dao).
+ * DAO object are spring components, used as repositories to access different module entities data.
+ * This class has an entity manager needed to access data in multiple modules.
  * Also implements basic add, edit and remove (persist, merge and remove) of entities.
 
  * @author Zvi
  *
  */
 @Getter(value = AccessLevel.PACKAGE)
-//@Transactional(rollbackFor = Throwable.class)
 public abstract class DAO extends ReadDAO {
-	
-//	@Autowired private ValueTablesRepository valueTablesRepository;
-//	@Autowired private ProcessInfoRepository processRepository;
+
 	@Autowired private EntityManager entityManager;
 		
 	/**
@@ -37,11 +34,8 @@ public abstract class DAO extends ReadDAO {
 	 * @param reference detached entity referenced by entity (the owner of the association).
 	 * @throws IllegalArgumentException, EntityNotFoundException, EntityExistsException, TransactionRequiredException
 	 */
-	//public only for testing
 	public void addEntity(BaseEntity entity, BaseEntity reference) {
 		setEntityReference(entity, reference.getClass(), reference.getId());
-//		reference = getEntityManager().getReference(reference.getClass(), reference.getId());
-//		entity.setReference(reference);
 		addEntity(entity);
 	}
 	
@@ -51,12 +45,10 @@ public abstract class DAO extends ReadDAO {
 	 * @param entity the entity to persisted.
 	 * @param referenceClass class of detached entity referenced by entity (the owner of the association).
 	 * @param referenceId id of detached entity referenced by entity (the owner of the association).
+	 * @throws IllegalArgumentException, EntityNotFoundException, EntityExistsException, TransactionRequiredException
 	 */
-	//public only for testing
 	public <T extends BaseEntity> void addEntity(BaseEntity entity, Class<T> referenceClass, Integer referenceId) {
 		setEntityReference(entity, referenceClass, referenceId);
-//		T reference = getEntityManager().getReference(referenceClass, referenceId);
-//		entity.setReference(reference);
 		addEntity(entity);
 	}
 	
@@ -105,7 +97,7 @@ public abstract class DAO extends ReadDAO {
 			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
 		}
 		/*
-		 * using update saves the selects before updating but updates even if nothing
+		 * using update saves running the selects before updating, but updates even if nothing
 		 * was changed therefore affecting the modifying date and user modifying.
 		 */
 //		Session session = getEntityManager().unwrap(Session.class); 

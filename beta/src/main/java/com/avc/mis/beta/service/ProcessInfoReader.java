@@ -45,6 +45,8 @@ public class ProcessInfoReader {
 	@Autowired private ProcessInfoRepository processRepository;
 	@Autowired private Orders orders;
 	@Autowired private OrderReceipts orderReceipts;
+	@Autowired private QualityChecks qualityChecks;
+	@Autowired private Samples samples;
 	
 	
 	/**
@@ -61,12 +63,12 @@ public class ProcessInfoReader {
 	 * Gets all the alerts requirements set in the system
 	 * @return nested Map by Process name, Approval type with List of Users.
 	 */
-	public Map<ProcessName, Map<ApprovalType, List<UserBasic>>> getAllProcessTypeAlerts() {
+	public Map<ProcessName, Map<ApprovalType, List<ProcessAlertDTO>>> getAllProcessTypeAlerts() {
 		List<ProcessAlertDTO> processTypeAlerts = processRepository.findAllProcessAlerts();
 		return processTypeAlerts.stream()
 			.collect(Collectors.groupingBy(ProcessAlertDTO::getProcessName, 
-					Collectors.groupingBy(ProcessAlertDTO::getApprovalType, 
-							Collectors.mapping(ProcessAlertDTO::getUser, Collectors.toList()))));
+					Collectors.groupingBy(ProcessAlertDTO::getApprovalType, Collectors.toList())));
+//							Collectors.mapping(ProcessAlertDTO::getUser, Collectors.toList()))));
 //		return processTypeAlerts.stream().collect(Collectors.groupingBy(ProcessAlertDTO::getProcessName));
 		
 	}
@@ -130,6 +132,13 @@ public class ProcessInfoReader {
 		case CASHEW_ORDER_RECEIPT:
 		case CASHEW_RECEIPT:
 			return orderReceipts.getReceiptByProcessId(processId);
+		case CASHEW_RECEIPT_QC:
+		case SUPPLIER_QC:
+		case VINA_CONTROL_QC:
+		case SAMPLE_QC:
+			return qualityChecks.getQcByProcessId(processId);
+		case SAMPLE_RECEIPET:
+			return samples.getSampleReceiptByProcessId(processId);
 			default:
 		}
 		return null;

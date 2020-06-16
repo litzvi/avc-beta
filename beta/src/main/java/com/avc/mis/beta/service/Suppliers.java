@@ -257,10 +257,10 @@ public class Suppliers {
 	 * For testing only, needed because calling DAO directly has no transaction
 	 * @param id
 	 */
-	@Deprecated
-	public void addEntity(BaseEntity entity, BaseEntity reference) {
-		dao.addEntity(entity, reference);
-	}
+//	@Deprecated
+//	public void addEntity(BaseEntity entity, BaseEntity reference) {
+//		dao.addEntity(entity, reference);
+//	}
 	
 	/**
 	 * For testing only, needed because calling DAO directly has no transaction

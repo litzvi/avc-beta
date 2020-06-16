@@ -23,20 +23,28 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
- * Abstract class inherited by all process data manipulating services.
- * ensures all process notifications are handled when inserting, editing or removing data about production processes.
+ * Data access object class used by all process data manipulating services.
+ * Provides access process managing data (e.g. ProcessTypes) for services classes,
+ * ensures all process notifications are handled when inserting, editing or removing data 
+ * of/about production processes.
  * 
  * @author Zvi
  *
  */
 @Getter(value = AccessLevel.PRIVATE)
 @Repository
-//@Transactional(rollbackFor = Throwable.class)
 public class ProcessInfoDAO extends DAO {
 	
 	@Autowired private ProcessInfoRepository processRepository;
 	
 	
+	/**
+	 * Gets the ProcessType by it's unique name. 
+	 * ProcessType is a wrapper for Enum values of ProcessName. 
+	 * @param value unique ProcessName for requested ProcessType.
+	 * @return ProcessType with the given name.
+	 * @throws NullPointerException if ProcessType with given name dosen't exist.
+	 */
 	public ProcessType getProcessTypeByValue(ProcessName value) {
 		return getProcessRepository().findProcessTypeByValue(value)
 				.orElseThrow(() -> new NullPointerException("No such process type"));
@@ -88,7 +96,7 @@ public class ProcessInfoDAO extends DAO {
 	}
 	
 	/**
-	 * Sets up needed approvals and messages (notifications), for editing a process of the given type.
+	 * Sets up needed approvals and messages (notifications), for editing the given process.
 	 * @param process the edited ProductionProcess
 	 */
 	private void editAlerts(ProductionProcess process) {
@@ -118,8 +126,6 @@ public class ProcessInfoDAO extends DAO {
 
 		List<ProcessAlert> alerts = getProcessRepository()
 				.findProcessTypeAlertsByProcess(process.getId());
-//		List<ProcessAlert> alerts = getProcessRepository()
-//				.findProcessTypeAlerts(process.getProcessType());
 
 		for(ProcessAlert alert: alerts) {
 			addMessage(alert.getUser(), process, 

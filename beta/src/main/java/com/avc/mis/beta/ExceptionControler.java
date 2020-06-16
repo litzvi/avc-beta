@@ -22,6 +22,15 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ExceptionControler {
 	
+	/* 
+	 * DAO#addEntity - 
+	 * @throws IllegalArgumentException, EntityNotFoundException, EntityExistsException, TransactionRequiredException
+	 *  
+	 * ProcessInfoDAO -
+	 * @throws NullPointerException if no such process type.
+	 * 
+	 */
+	
 	//IllegalStateException - ProcessInfoReader
 
     private ResponseEntity<String> error(HttpStatus status, Throwable e) {

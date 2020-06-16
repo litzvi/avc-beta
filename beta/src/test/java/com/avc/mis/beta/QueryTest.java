@@ -129,7 +129,8 @@ public class QueryTest {
 		messages.forEach(m -> System.out.println(m));
 		
 		//get processTypeAlerts
-				Map<ProcessName, Map<ApprovalType, List<UserBasic>>> alerts = processInfoReader.getAllProcessTypeAlerts();
+				Map<ProcessName, Map<ApprovalType, List<ProcessAlertDTO>>> alerts = 
+						processInfoReader.getAllProcessTypeAlerts();
 				alerts.forEach((k, v) -> {
 					System.out.println(k + ":\n");
 					v.forEach((l, w) -> {

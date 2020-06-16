@@ -30,39 +30,12 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class ProcessInfoEntity extends ProcessEntity {
-
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;		
-//
-//	@JsonIgnore
-//	@Column(updatable = false, nullable = false)
-//	@CreatedDate
-//    private Instant createdDate;
-// 
-//	@JsonIgnore
-//    @LastModifiedDate
-//    private Instant modifiedDate;    
-//
-//	@JsonIgnore
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "userId", updatable = false)
-//	private UserEntity user;
-//	
-//	@JsonIgnore
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "userModifingId")
-//	@LastModifiedBy
-//	private UserEntity modifiedBy;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processId", updatable = false)
 	private ProductionProcess process;
 	
 	private String description;
-
-//	@Lob
-//	private String remarks;
 	
 	@Override
 	public void setReference(Object referenced) {
@@ -79,12 +52,5 @@ public abstract class ProcessInfoEntity extends ProcessEntity {
 	public boolean isLegal() {
 		return this.process != null;
 	}
-	
-//	@PrePersist
-//	@Override
-//	public void prePersist() {
-//		if(!isLegal())
-//			throw new IllegalArgumentException(this.getIllegalMessage());
-//	}
 	
 }

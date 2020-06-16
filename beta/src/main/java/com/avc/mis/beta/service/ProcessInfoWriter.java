@@ -15,6 +15,7 @@ import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.entities.data.ProcessAlert;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ApprovalType;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
@@ -45,13 +46,13 @@ public class ProcessInfoWriter {
 	/**
 	 * Sets an alert to be sent to the given user, when a process of the given type is added or edited.
 	 * @param userId the id of UserEntity to be notified
-	 * @param processType the type of process to notify for.
+	 * @param processName the name of the type of process to notify for.
 	 * @param approvalType type of approval needed from user for given process type.
 	 * @return id of the newly added ProcessAlert
 	 */
-	public Integer addProcessTypeAlert(Integer userId, ProcessType processType, ApprovalType approvalType) {
+	public Integer addProcessTypeAlert(Integer userId, ProcessName processName, ApprovalType approvalType) {
 		ProcessAlert processTypeAlert = new ProcessAlert();
-		processTypeAlert.setProcessType(processType);
+		processTypeAlert.setProcessType(dao.getProcessTypeByValue(processName));
 		processTypeAlert.setApprovalType(approvalType);
 		deletableDAO.addEntity(processTypeAlert, UserEntity.class, userId);
 		return processTypeAlert.getId();

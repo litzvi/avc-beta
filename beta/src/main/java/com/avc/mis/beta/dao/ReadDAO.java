@@ -14,6 +14,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
+ * Abstract root base class for all data access objects.
+ * 
  * @author Zvi
  *
  */

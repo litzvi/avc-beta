@@ -27,7 +27,7 @@ public class DataLoader implements ApplicationRunner {
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
 	
-		//insert SYSTEM ROLE_MANAGER
+		//insert an initial SYSTEM_MANAGER in order to have application access on startup
 		List<String> names = args.getOptionValues("n");
 		List<String> passwords = args.getOptionValues("p");
 		if(names != null && !names.isEmpty() && passwords != null && !passwords.isEmpty()) {
@@ -37,6 +37,8 @@ public class DataLoader implements ApplicationRunner {
 			user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 			users.addUser(user);
 		}
+		
+		//should fill ProcessTypes, UOM and ContractTyoes
 	}
 
 }

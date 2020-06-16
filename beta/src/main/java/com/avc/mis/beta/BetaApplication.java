@@ -18,13 +18,6 @@ public class BetaApplication {
 		SpringApplication.run(BetaApplication.class, args);
 	}
 
-//	@Bean
-//	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-//		return args -> {
-//
-//		};
-//	}
-	
 	@Bean
     public AuditorAware<UserEntity> auditorAware() {
         return new AuditorAwareImpl();

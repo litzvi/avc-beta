@@ -66,7 +66,7 @@ public class ProcessType extends ValueEntity {
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "Process type value can't be blank";
+		return "Process type has to have a unique value";
 	}
 
 }
