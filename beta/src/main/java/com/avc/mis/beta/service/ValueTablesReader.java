@@ -52,7 +52,6 @@ public class ValueTablesReader {
 	@Autowired private SupplierRepository supplierRepository;
 	@Autowired private ValueTablesRepository valueTablesRepository;
 	
-	
 	public List<Warehouse> getAllWarehouses() {
 		return getValueTablesRepository().findAllWarehouses();		
 	}

@@ -27,6 +27,7 @@ public class UserRow extends ValueDTO {
 	
 	String personName;
 	String username;
+	String value;
 	String password; //might be removed
 	@NonFinal Set<Role> roles;
 	boolean active;
@@ -35,6 +36,7 @@ public class UserRow extends ValueDTO {
 		super(id);
 		this.personName = personName;
 		this.username = username;
+		this.value = username;
 		this.password = null;
 		this.roles = roles.stream().collect(Collectors.toSet());
 		this.active = active;
@@ -44,6 +46,7 @@ public class UserRow extends ValueDTO {
 		super(id);
 		this.personName = personName;
 		this.username = username;
+		this.value = username;
 		this.password = null;
 		this.active = active;
 	}
@@ -53,6 +56,7 @@ public class UserRow extends ValueDTO {
 		super(user.getId());
 		this.personName = user.getPerson().getName();
 		this.username = user.getUsername();
+		this.value = user.getUsername();
 		this.password = null;
 		this.roles = user.getRoles().stream().collect(Collectors.toSet());
 		this.active = user.isActive();

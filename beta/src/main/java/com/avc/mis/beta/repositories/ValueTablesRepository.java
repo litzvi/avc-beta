@@ -28,4 +28,5 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 	List<BasicValueEntity<Item>> findItemsByGroupBasic(SupplyGroup supplyGroup);
 
 	
+	
 }

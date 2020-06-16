@@ -34,7 +34,7 @@ import lombok.Getter;
 @Transactional(readOnly = true)
 public class CashewReports {
 	
-	@Autowired InventoryRepository inventoryRepository;
+	@Autowired private InventoryRepository inventoryRepository;
 	
 	public List<ItemInventoryRow> getCashewInventoryTable() {
 		

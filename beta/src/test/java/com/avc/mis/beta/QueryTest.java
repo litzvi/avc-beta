@@ -63,7 +63,7 @@ public class QueryTest {
 	@Autowired OrderReceipts receipts;
 	@Autowired CashewReports cashewReports;
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void queryTest() {
 		//get list of cashew orders
@@ -129,8 +129,16 @@ public class QueryTest {
 		messages.forEach(m -> System.out.println(m));
 		
 		//get processTypeAlerts
-//		Map<ProcessName, List<ProcessAlertDTO>> alerts = processInfoReader.getAllProcessTypeAlerts();
-//		alerts.forEach((k, v) -> {System.out.println(k); v.forEach(m -> System.out.println(m));});
+				Map<ProcessName, Map<ApprovalType, List<UserBasic>>> alerts = processInfoReader.getAllProcessTypeAlerts();
+				alerts.forEach((k, v) -> {
+					System.out.println(k + ":\n");
+					v.forEach((l, w) -> {
+								System.out.println("\t" + l + "$");
+								w.forEach(u -> {
+									System.out.println("\t\t" + u);
+								});
+					});
+				});
 				
 		//get users table
 		List<UserRow> usersTable = users.getUsersTable();
@@ -169,17 +177,5 @@ public class QueryTest {
 	void oneQueryTest() {
 
 
-		//get processTypeAlerts
-		Map<ProcessName, Map<ApprovalType, List<UserBasic>>> alerts = processInfoReader.getAllProcessTypeAlerts();
-		alerts.forEach((k, v) -> {
-			System.out.println(k + ":\n");
-			v.forEach((l, w) -> {
-						System.out.println("\t" + l + "$");
-						w.forEach(u -> {
-							System.out.println("\t\t" + u);
-						});
-			});
-		});
-			
 	}
 }

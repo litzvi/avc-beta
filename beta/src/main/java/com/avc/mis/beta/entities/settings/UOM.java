@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.values;
+package com.avc.mis.beta.entities.settings;
 
 import java.math.BigDecimal;
 
@@ -14,6 +14,7 @@ import javax.persistence.UniqueConstraint;
 
 import com.avc.mis.beta.entities.LinkEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,17 +40,19 @@ public class UOM extends LinkEntity {
 	@Column(updatable = false, nullable = false)
 	private MeasureUnit toUnit;
 	
-	@Column(nullable = false, updatable = false, precision = 19, scale = 4)
+	@Column(nullable = false, precision = 19, scale = 4)
 	private BigDecimal multiply = BigDecimal.ONE;
 	
-	@Column(nullable = false, updatable = false, precision = 19, scale = 4)
+	@Column(nullable = false, precision = 19, scale = 4)
 	private BigDecimal divide = BigDecimal.ONE;
 
+	@JsonIgnore
 	@Override
 	public boolean isLegal() {
 		return fromUnit != null && toUnit != null && multiply != null && divide != null;
 	}
 
+	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
 		return "All fields have to have values and can't be null";
