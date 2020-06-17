@@ -3,11 +3,13 @@
  */
 package com.avc.mis.beta;
 
+import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -32,6 +34,7 @@ import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
+import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.ItemWeight;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
@@ -49,6 +52,7 @@ import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
 import com.avc.mis.beta.service.OrderReceipts;
 import com.avc.mis.beta.service.Orders;
+import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.Samples;
 import com.avc.mis.beta.service.Suppliers;
@@ -65,14 +69,11 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800081;
+	static final Integer PO_CODE = 800087;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
-	@Autowired private DeletableDAO deletableDAO;
-	
 	@Autowired ValueTablesRepository valueTablesRepository;
-
 	
 	@Autowired ValueTablesReader valueTablesReader;
 	@Autowired Suppliers suppliers;
@@ -82,6 +83,7 @@ public class GeneralTest {
 	@Autowired Samples samples;
 	
 	@Autowired ValueWriter valueWriter;
+	@Autowired ProcessInfoWriter processInfoWriter;
 	
 	@Test
 	void orderAndReceiveTest() {
@@ -117,6 +119,21 @@ public class GeneralTest {
 		PoDTO poDTO = orders.getOrderByProcessId(po.getId());
 		assertEquals(new PoDTO(po), poDTO, "PO not added or fetched correctly");
 		
+		//change order process life cycle to lock process for editing
+		processInfoWriter.setProcessRecordStatus(RecordStatus.LOCKED, po.getId());
+		poDTO = orders.getOrderByProcessId(po.getId());
+		assertEquals(RecordStatus.LOCKED, poDTO.getStatus(), "Didn't change life cycle record status");
+		try {
+			processInfoWriter.setProcessRecordStatus(RecordStatus.EDITABLE, po.getId());
+			fail("Should not be able to change to previous life cycle status");
+		} catch (Exception e1) {}
+		//check that process can't be edited after it's locked
+		po.setDuration(Duration.ofHours(24));
+		try {
+			orders.editOrder(po);
+			fail("Should not be able to edit at locked status life cycle");
+		} catch (Exception e1) {}
+		
 		//receive both order lines in parts and different storages
 		Receipt receipt = new Receipt();
 		receipt.setPoCode(poCode);
@@ -148,7 +165,7 @@ public class GeneralTest {
 		ReceiptDTO receiptDTO;
 		receiptDTO = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(new ReceiptDTO(receipt), receiptDTO, "Order Receipt not added or fetched correctly");
-//		fail("finished");
+		
 		
 		//add QC for received order
 		QualityCheck check = new QualityCheck();
@@ -212,8 +229,9 @@ public class GeneralTest {
 		SampleReceiptDTO sampleReceiptDTO;
 		System.out.println("line 202");
 		sampleReceiptDTO = samples.getSampleReceiptByProcessId(sampleReceipt.getId());
-//		fail("finished");
 		assertEquals(new SampleReceiptDTO(sampleReceipt), sampleReceiptDTO, "Receipt sample not added or fetched correctly");
+		
+		
 		
 		//print all
 		System.out.println("Supplier: " + supplierDTO);
@@ -232,17 +250,6 @@ public class GeneralTest {
 		suppliers.permenentlyRemoveSupplier(supplierDTO.getId());
 		
 		
-		//test softDelete
-		Country country = new Country();
-		country.setValue("Imaginary country" + LocalDateTime.now().hashCode());
-		valueWriter.addCountry(country);
-		List<Country> countries = valueTablesRepository.findAllCountries();
-		int index = countries.indexOf(country);
-		Country persistedCountry = countries.get(index);
-		assertTrue(persistedCountry.isActive());
-		valueWriter.remove(country.getClass(), country.getId());
-		countries = valueTablesRepository.findAllCountries();
-		index = countries.indexOf(country);
-		assertTrue(index == -1);
+		
 	}
 }

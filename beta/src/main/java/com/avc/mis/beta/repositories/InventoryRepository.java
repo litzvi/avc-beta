@@ -46,6 +46,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
 			+ "join pi.process p "
+				+ "join p.lifeCycle lc "
 				+ "join p.poCode poCode "
 					+ "join poCode.contractType ct "
 					+ "join poCode.supplier s "
@@ -53,7 +54,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "join sf.unitAmount unit "
 					+ "join UOM uom "
 						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
-		+ "where item.supplyGroup = ?1 "
+		+ "where item.supplyGroup = ?1 and "
+			+ "lc.status = com.avc.mis.beta.entities.enums.RecordStatus.FINAL "
 		+ "group by pi ")
 	List<ProcessItemInventoryRow> findInventoryProcessItem(SupplyGroup supplyGroup);
 	

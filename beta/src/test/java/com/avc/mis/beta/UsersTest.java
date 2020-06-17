@@ -20,9 +20,9 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.ProcessAlert;
+import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
-import com.avc.mis.beta.entities.enums.ApprovalType;
+import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.Role;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
@@ -129,9 +129,9 @@ public class UsersTest {
 		
 		//add, edit, remove processTypeAlert
 		Integer processAlertId = processInfoWriter.addProcessTypeAlert(user.getId(), 
-				ProcessName.CASHEW_ORDER, ApprovalType.REQUIRED_APPROVAL);
-		ProcessAlert processAlert = processDisplay.getProcessTypeAlert(processAlertId);
-		processInfoWriter.editProcessTypeAlert(processAlert, ApprovalType.REVIEW);
+				ProcessName.CASHEW_ORDER, ManagementType.APPROVAL);
+		ProcessManagement processAlert = processDisplay.getProcessTypeAlert(processAlertId);
+		processInfoWriter.editProcessTypeAlert(processAlert, ManagementType.REVIEW);
 		processInfoWriter.removeProcessTypeAlert(processAlertId);
 		processInfoWriter.removeUserMessages(user.getId());
 		users.permenentlyRemoveUser(user.getId());

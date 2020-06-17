@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.data.ProcessAlert;
+import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,7 +45,7 @@ public class ProcessType extends ValueEntity {
 	@JsonIgnore
 	@OneToMany(mappedBy = "processType", fetch = FetchType.LAZY)
 //	@BatchSize(size = BaseEntity.BATCH_SIZE)
-	private Set<ProcessAlert> alertRequirments = new HashSet<>();
+	private Set<ProcessManagement> alertRequirments = new HashSet<>();
 	
 	public String getValue() {
 		return processName.name();

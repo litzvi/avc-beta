@@ -4,16 +4,20 @@
 package com.avc.mis.beta.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.data.ProcessAlertDTO;
+import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
-import com.avc.mis.beta.entities.data.ProcessAlert;
+import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
+import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.ApprovalTask;
+import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
 /**
@@ -25,22 +29,22 @@ import com.avc.mis.beta.entities.process.ProductionProcess;
 public interface ProcessInfoRepository extends BaseRepository<ProductionProcess> {
 
 //	@Query("select a "
-//			+ "from ProcessAlert a "
+//			+ "from ProcessManagement a "
 //			+ "join fetch a.user "
 //			+ "where a.processType = ?1")
-//	List<ProcessAlert> findProcessTypeAlerts(ProcessType processType);
+//	List<ProcessManagement> findProcessTypeAlerts(ProcessType processType);
 	
 	@Query("select a "
-			+ "from ProcessAlert a "
+			+ "from ProcessManagement a "
 			+ "join fetch a.user "
 			+ "join ProductionProcess p "
 				+ "on p.processType = a.processType "
 			+ "where p.id = ?1")
-	List<ProcessAlert> findProcessTypeAlertsByProcess(Integer processId);
+	List<ProcessManagement> findProcessTypeAlertsByProcess(Integer processId);
 
 
-	@Query("select p.approvals from ProductionProcess p where p = ?1")
-	List<ApprovalTask> findProcessApprovals(ProductionProcess process);
+	@Query("select p.approvals from ProductionProcess p where p.id = ?1")
+	List<ApprovalTask> findProcessApprovals(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
 				+ "m.id, m.version, c.id, t.code, m.description, p.id, pt.processName, m.createdDate, pr.name, prm.name,  m.label) "
@@ -107,17 +111,48 @@ public interface ProcessInfoRepository extends BaseRepository<ProductionProcess>
 	List<UserMessageDTO> findAllMessagesByUserAndLable(Integer userId, MessageLabel[] lables);
 
 	@Query("select a "
-			+ "from ProcessAlert a "
+			+ "from ProcessManagement a "
 //				+ "join fetch a.user "
 //				+ "join fetch a.processType "
 			+ "where a.id = :id")
-	ProcessAlert findProcessTypeAlertById(Integer id);
+	ProcessManagement findProcessManagementById(Integer id);
 
-	@Query("select new com.avc.mis.beta.dto.data.ProcessAlertDTO(a.id, t.processName, "
-				+ "u.id, u.version, u.username, a.approvalType) "
-			+ "from ProcessAlert a "
+	@Query("select new com.avc.mis.beta.dto.data.ProcessManagementDTO(a.id, t.processName, "
+				+ "u.id, u.version, u.username, a.managementType) "
+			+ "from ProcessManagement a "
 			+ "join a.user u "
 			+ "join a.processType t ")
-	List<ProcessAlertDTO> findAllProcessAlerts();
+	List<ProcessManagementDTO> findAllProcessManagements();
+
+
+//	@Modifying
+//	@Query("update ProcessLifeCycle c "
+//			+ "join c.process p "
+//			+ "join ProcessManagement m "
+//					+ "on p.processType = m.processType "
+//				+ "join m.user u "
+//			+ "set c.status = :status "
+//			+ "where p.id = :processId and "
+//				+ "u.id = :currentUserId and "
+//				+ "m.managementType = com.avc.mis.beta.entities.enums.ManagementType.MANAGER ")
+//	int updateLifeCycleStatus(RecordStatus status, Integer processId, Integer currentUserId);
+	
+	@Query("select c "
+			+ "from ProcessLifeCycle c "
+				+ "join c.process p "
+				+ "join ProcessManagement m "
+					+ "on p.processType = m.processType "
+					+ "join m.user u "
+			+ "where p.id = :processId and "
+				+ "u.id = :currentUserId and "
+				+ "m.managementType = com.avc.mis.beta.entities.enums.ManagementType.MANAGER ")
+	Optional<ProcessLifeCycle> findProcessLifeCycleManagerByUser(Integer processId, Integer currentUserId);
+
+
+	@Query("select c.status "
+			+ "from ProcessLifeCycle c "
+				+ "join c.process p "
+			+ "where p.id = :processId ")
+	RecordStatus findProcessLifeCycleStatus(Integer processId);
 
 }

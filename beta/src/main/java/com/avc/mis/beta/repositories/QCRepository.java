@@ -33,7 +33,7 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 			+ "po_code.code, t.code, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
-			+ "p_status, r.remarks) "
+			+ "lc.status, r.remarks) "
 		+ "from QualityCheck r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType t "
@@ -41,7 +41,8 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 			+ "join r.processType pt "
 			+ "left join r.createdBy p_user "
 			+ "left join r.productionLine p_line "
-			+ "left join r.status p_status "
+			+ "join r.lifeCycle lc "
+//			+ "left join r.status p_status "
 		+ "where r.id = :id ")
 	Optional<QualityCheckDTO> findQcDTOByProcessId(int id);
 

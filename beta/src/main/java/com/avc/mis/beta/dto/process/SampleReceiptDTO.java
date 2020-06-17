@@ -18,8 +18,8 @@ import org.apache.commons.collections4.multiset.HashMultiSet;
 import com.avc.mis.beta.dto.values.SampleItemWithWeight;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.SampleReceipt;
-import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
@@ -44,7 +44,7 @@ public class SampleReceiptDTO extends ProductionProcessDTO {
 	public SampleReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, ContractTypeCode contractTypeCode, Integer supplierId, Integer supplierVersion, String supplierName,  
 			ProcessName processName, ProductionLine productionLine, OffsetDateTime recordedTime, Duration duration,
-			Integer numOfWorkers, ProcessStatus status, String remarks) {
+			Integer numOfWorkers, RecordStatus status, String remarks) {
 		super(id, version, createdDate, userRecording, 
 				poCodeId, contractTypeCode, supplierId, supplierVersion, supplierName, 
 				processName, productionLine, recordedTime, duration,

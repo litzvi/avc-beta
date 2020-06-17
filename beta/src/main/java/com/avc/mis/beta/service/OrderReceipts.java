@@ -69,7 +69,7 @@ public class OrderReceipts {
 	private void addReceipt(Receipt receipt) {
 		//using save rather than persist in case POid was assigned by user
 		dao.addEntityWithFlexibleGenerator(receipt.getPoCode());
-		dao.addProcessEntity(receipt);
+		addOrderReceipt(receipt);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -91,10 +91,16 @@ public class OrderReceipts {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addGeneralOrderReceipt(Receipt receipt) {
+		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_RECEIPT));
+		addOrderReceipt(receipt);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addExtra(ExtraAdded[] added, Integer receiptItemId) {
-		ReceiptItem receiptItem = new ReceiptItem();
-		receiptItem.setId(receiptItemId);
-		Arrays.stream(added).forEach(r -> dao.addEntity(r, receiptItem));
+//		ReceiptItem receiptItem = new ReceiptItem();
+//		receiptItem.setId(receiptItemId);
+		Arrays.stream(added).forEach(r -> dao.addEntity(r, ReceiptItem.class, receiptItemId));
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

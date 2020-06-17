@@ -15,7 +15,7 @@ import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.ProcessAlert;
+import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoCode;
@@ -65,7 +65,7 @@ public class ObjectTablesReader {
 		return getObjectTablesRepository().findAllCompanyContacts();		
 	}
 	
-	public List<ProcessAlert> getAllProcessTypeAlerts() {
+	public List<ProcessManagement> getAllProcessTypeAlerts() {
 		return getObjectTablesRepository().findAllProcessAlerts();		
 	}
 	

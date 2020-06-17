@@ -19,6 +19,7 @@ import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
+import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.data.Person;
@@ -72,6 +73,15 @@ public class Users {
 	@Transactional(readOnly = true)
 	public List<DataObjectWithName> getPersonsBasic() {
 		return getPersonRepository().findAllPersonsBasic();		
+	}
+	
+	/**
+	 * Gets a list of existing users in the database, in basic form for referencing - id, version and name
+	 * @return List of UserBasic for all users.
+	 */
+	@Transactional(readOnly = true)
+	public List<UserBasic> getUsersBasic() {
+		return getUserRepository().findAllBasic();		
 	}
 	
 	/**

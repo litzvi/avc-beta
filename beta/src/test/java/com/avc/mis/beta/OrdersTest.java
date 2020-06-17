@@ -5,6 +5,7 @@ package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -21,7 +22,6 @@ import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.entities.enums.DecisionType;
-import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.service.Orders;
@@ -63,7 +63,7 @@ public class OrdersTest {
 		assertEquals(expected, actual, "failed test adding po");
 
 		//edit order status
-		po.setOrderStatus(OrderStatus.OPEN_APPROVED);
+		po.setDuration(Duration.ofHours(15));
 		expected = new PoDTO(po);
 		orders.editOrder(po);
 		actual = orders.getOrder(po.getPoCode().getCode());

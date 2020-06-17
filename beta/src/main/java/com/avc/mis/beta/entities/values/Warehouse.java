@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import org.apache.commons.lang3.StringUtils;
 
 import com.avc.mis.beta.entities.ValueEntity;
+import com.avc.mis.beta.entities.ValueInterface;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -28,7 +29,7 @@ import lombok.NoArgsConstructor;
 //@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name="WAREHOUSE_LOCATIONS")
-public class Warehouse extends ValueEntity {
+public class Warehouse extends ValueEntity implements ValueInterface {
 	
 	@Column(name = "name", nullable = false)
 	private String value;

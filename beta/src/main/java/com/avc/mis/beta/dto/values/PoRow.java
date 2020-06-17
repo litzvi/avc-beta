@@ -13,7 +13,6 @@ import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.enums.OrderStatus;
 import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
@@ -39,7 +38,7 @@ public class PoRow extends ValueDTO {
 //	MeasureUnit measureUnit;
 	OffsetDateTime contractDate;
 	LocalDate deliveryDate;
-	OrderStatus orderStatus;
+//	OrderStatus orderStatus;
 	String defects;
 	AmountWithCurrency unitPrice;
 //	Currency currency;
@@ -48,7 +47,7 @@ public class PoRow extends ValueDTO {
 	public PoRow(@NonNull Integer id, 
 			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
 			String itemName, BigDecimal amount,
-			MeasureUnit measureUnit, OffsetDateTime contractDate, LocalDate deliveryDate, OrderStatus orderStatus,
+			MeasureUnit measureUnit, OffsetDateTime contractDate, LocalDate deliveryDate, 
 			String defects, BigDecimal unitPrice, Currency currency) {
 		super(id);
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
@@ -58,7 +57,7 @@ public class PoRow extends ValueDTO {
 //		this.measureUnit = measureUnit;
 		this.contractDate = contractDate;
 		this.deliveryDate = deliveryDate;
-		this.orderStatus = orderStatus;
+//		this.orderStatus = orderStatus;
 		this.defects = defects;
 //		this.currency = currency;
 		this.unitPrice = new AmountWithCurrency(unitPrice, currency);
@@ -80,7 +79,7 @@ public class PoRow extends ValueDTO {
 //		this.measureUnit = orderItem.getMeasureUnit();
 		this.contractDate = po.getRecordedTime();
 		this.deliveryDate = orderItem.getDeliveryDate();
-		this.orderStatus = po.getOrderStatus();
+//		this.orderStatus = po.getOrderStatus();
 		this.defects = orderItem.getDefects();
 //		this.currency = orderItem.getCurrency();
 		this.unitPrice = orderItem.getUnitPrice().clone();
@@ -97,10 +96,10 @@ public class PoRow extends ValueDTO {
 //	public String getMeasureUnit() {
 //		return this.measureUnit.toString();
 //	}
-	
-	public String getOrderStatus() {
-		return this.orderStatus.toString();
-	}
+//	
+//	public String getOrderStatus() {
+//		return this.orderStatus.toString();
+//	}
 
 	
 }

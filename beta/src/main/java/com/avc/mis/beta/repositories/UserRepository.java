@@ -9,6 +9,7 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.dto.values.UserRow;
 import com.avc.mis.beta.dto.values.ValueObject;
@@ -45,8 +46,10 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 				+ "and u.active = true")
 	Optional<UserEntity> findById(Integer id);
 
-//	@Query("select u from UserEntity u ")
-//	Stream<UserEntity> findAll();
+	@Query("select new com.avc.mis.beta.dto.values.UserBasic(u.id, u.version, u.username) "
+			+ "from UserEntity u "
+			+ "where u.active = true")
+	List<UserBasic> findAllBasic();
 
 //	@Query("update UserEntity u "
 //			+ "set u.password = :newPassword "

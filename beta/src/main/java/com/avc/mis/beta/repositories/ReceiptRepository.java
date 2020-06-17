@@ -35,7 +35,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "po_code.code, t.code, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
-			+ "p_status, r.remarks) "
+			+ "lc.status, r.remarks) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType t "
@@ -43,7 +43,8 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "join r.processType pt "
 			+ "left join r.createdBy p_user "
 			+ "left join r.productionLine p_line "
-			+ "left join r.status p_status "
+			+ "join r.lifeCycle lc "
+//			+ "left join r.status p_status "
 		+ "where r.id = :id ")
 	Optional<ReceiptDTO> findReceiptDTOByProcessId(int id);
 

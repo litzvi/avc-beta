@@ -10,8 +10,9 @@ import java.time.OffsetDateTime;
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.ProductionProcess;
-import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
@@ -40,13 +41,13 @@ public class ProductionProcessDTO extends ProcessDTO {
 	private OffsetDateTime recordedTime;
 	private Duration duration;
 	private Integer numOfWorkers;
-	private ProcessStatus status;
+	private RecordStatus status;
 	private String remarks;
 	
 	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, ContractTypeCode contractTypeCode, Integer supplierId, Integer supplierVersion, String supplierName, 
 			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus status, 
+			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, RecordStatus status, 
 			String remarks) {
 		super(id, version);
 		this.createdDate = createdDate;
@@ -73,7 +74,7 @@ public class ProductionProcessDTO extends ProcessDTO {
 		this.recordedTime = process.getRecordedTime();
 		this.duration = process.getDuration();
 		this.numOfWorkers = process.getNumOfWorkers();
-		this.status = process.getStatus();
+		this.status = process.getLifeCycle().getStatus();
 		this.remarks = process.getRemarks();
 	}
 }

@@ -8,11 +8,8 @@ package com.avc.mis.beta.entities.enums;
  *
  */
 public enum RecordStatus {
-	DEFAULT,
-	ACTIVE,
-	REMOVED
-//	,
-//	OPEN,
-//	CLOSED,
-//	PENDING
+	EDITABLE,
+	LOCKED,
+	FINAL
+//	HISTORY //might be needed and need to update inventory queries accordingly
 }

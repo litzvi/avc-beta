@@ -12,10 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
-import com.avc.mis.beta.entities.data.ProcessAlert;
+import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
-import com.avc.mis.beta.entities.enums.ApprovalType;
+import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
@@ -47,24 +48,24 @@ public class ProcessInfoWriter {
 	 * Sets an alert to be sent to the given user, when a process of the given type is added or edited.
 	 * @param userId the id of UserEntity to be notified
 	 * @param processName the name of the type of process to notify for.
-	 * @param approvalType type of approval needed from user for given process type.
-	 * @return id of the newly added ProcessAlert
+	 * @param managementType type of approval needed from user for given process type.
+	 * @return id of the newly added ProcessManagement
 	 */
-	public Integer addProcessTypeAlert(Integer userId, ProcessName processName, ApprovalType approvalType) {
-		ProcessAlert processTypeAlert = new ProcessAlert();
+	public Integer addProcessTypeAlert(Integer userId, ProcessName processName, ManagementType managementType) {
+		ProcessManagement processTypeAlert = new ProcessManagement();
 		processTypeAlert.setProcessType(dao.getProcessTypeByValue(processName));
-		processTypeAlert.setApprovalType(approvalType);
+		processTypeAlert.setManagementType(managementType);
 		deletableDAO.addEntity(processTypeAlert, UserEntity.class, userId);
 		return processTypeAlert.getId();
 	}
 	
-	public void editProcessTypeAlert(ProcessAlert processTypeAlert, ApprovalType approvalType) {
-		processTypeAlert.setApprovalType(approvalType);
+	public void editProcessTypeAlert(ProcessManagement processTypeAlert, ManagementType managementType) {
+		processTypeAlert.setManagementType(managementType);
 		deletableDAO.editEntity(processTypeAlert);
 	}
 	
 	public void removeProcessTypeAlert(Integer processTypeAlertId) {
-		ProcessAlert processTypeAlert = processInfoReader.getProcessTypeAlert(processTypeAlertId);
+		ProcessManagement processTypeAlert = processInfoReader.getProcessTypeAlert(processTypeAlertId);
 		String title = "You where removed from getting alerts on " + processTypeAlert.getProcessType().getValue();
 		dao.addMessage(processTypeAlert.getUser(), null, title);
 		deletableDAO.permenentlyRemoveEntity(processTypeAlert);
@@ -93,6 +94,15 @@ public class ProcessInfoWriter {
 	 */
 	public void setProcessDecision(int approvalId, String decisionType, String processSnapshot, String remarks) {
 		dao.setProcessDecision(approvalId, decisionType, processSnapshot, remarks);		
+	}
+	
+	/**
+	 * Sets the record status for the process life cycle. e.g. LOCKED - information of the process can't be edited
+	 * @param recordStatus the editing/state life cycle of the process.
+	 * @param processId
+	 */
+	public void setProcessRecordStatus(RecordStatus recordStatus, Integer processId) {
+		dao.setProcessRecordStatus(recordStatus, processId);
 	}
 	
 	/**

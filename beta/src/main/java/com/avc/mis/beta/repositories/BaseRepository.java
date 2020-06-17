@@ -23,7 +23,6 @@ import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Country;
 import com.avc.mis.beta.entities.values.Item;
-import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.entities.values.SupplyCategory;
@@ -93,8 +92,8 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	@Query("select t from ContractType t where t.active = true")
 	List<ContractType> findAllContractTypes();
 
-	@Query("select t from ProcessStatus t where t.active = true")
-	List<ProcessStatus> findAllProcessStatuses();
+//	@Query("select t from ProcessStatus t where t.active = true")
+//	List<ProcessStatus> findAllProcessStatuses();
 
 	@Query("select t from ProcessType t where t.active = true")
 	List<ProcessType> findAllProcessTypes();

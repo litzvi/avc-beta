@@ -28,8 +28,7 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "po_code.code, t.code, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "po.recordedTime, po.duration, po.numOfWorkers, "
-			+ "p_status, po.remarks, "
-			+ "po.orderStatus) "
+			+ "lc.status, po.remarks) "
 		+ "from PO po "
 			+ "join po.poCode po_code "
 				+ "join po_code.contractType t "
@@ -37,7 +36,8 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "join po.processType pt "
 			+ "left join po.createdBy p_user "
 			+ "left join po.productionLine p_line "
-			+ "left join po.status p_status "
+			+ "join po.lifeCycle lc "
+//			+ "left join po.status p_status "
 		+ "where po_code.id = :codeId ")
 	Optional<PoDTO> findOrderByPoCodeId(Integer codeId);
 	
@@ -46,8 +46,7 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "po_code.code, t.code, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "po.recordedTime, po.duration, po.numOfWorkers, "
-			+ "p_status, po.remarks, "
-			+ "po.orderStatus) "
+			+ "lc.status, po.remarks) "
 		+ "from PO po "
 			+ "join po.poCode po_code "
 				+ "join po_code.contractType t "
@@ -55,7 +54,8 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "join po.processType pt "
 			+ "left join po.createdBy p_user "
 			+ "left join po.productionLine p_line "
-			+ "left join po.status p_status "
+			+ "join po.lifeCycle lc "
+//			+ "left join po.status p_status "
 		+ "where po.id = :id ")
 	Optional<PoDTO> findOrderByProcessId(Integer id);
 	
@@ -117,7 +117,7 @@ public interface PORepository extends BaseRepository<PO> {
 //	List<PoRow> findByOrderTypeAndStatuses(ProcessName orderType, OrderStatus[] statuses);
 
 	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code.code, ct.code, s.name, i.value, "
-			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus, "
+			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency) "
 		+ "from PO po "
 		+ "join po.poCode po_code "

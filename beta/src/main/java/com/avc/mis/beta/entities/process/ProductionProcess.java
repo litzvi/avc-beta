@@ -17,12 +17,12 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PreUpdate;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
-import com.avc.mis.beta.entities.values.ProcessStatus;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -69,9 +69,13 @@ public class ProductionProcess extends ProcessEntity {
 	private Duration duration;//seconds
 	private Integer numOfWorkers;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "statusId"/*, nullable = false*/)
-	private ProcessStatus status;
+	@OneToOne(mappedBy = "process", cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
+			fetch = FetchType.LAZY, optional = false)
+	private ProcessLifeCycle lifeCycle = new ProcessLifeCycle();
+	
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "statusId"/*, nullable = false*/)
+//	private ProcessStatus status;
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
@@ -110,7 +114,7 @@ public class ProductionProcess extends ProcessEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return this.processType != null;
+		return this.processType != null && lifeCycle != null;
 	}
 
 //	@Override
@@ -129,10 +133,10 @@ public class ProductionProcess extends ProcessEntity {
 		return "Process does not have a recordedTime or process type ";
 	}
 	
-	@PreUpdate
+	@PrePersist
 	@Override
-	public void preUpdate() {
-//		if(!isLegal())
-//			throw new IllegalArgumentException(this.getIllegalMessage());
+	public void prePersist() {
+		super.prePersist();
+		lifeCycle.setReference(this);
 	}
 }

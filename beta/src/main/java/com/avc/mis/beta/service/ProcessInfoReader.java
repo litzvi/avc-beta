@@ -13,15 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ReadOnlyDAO;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.data.ProcessAlertDTO;
+import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.UserBasic;
-import com.avc.mis.beta.entities.data.ProcessAlert;
-import com.avc.mis.beta.entities.enums.ApprovalType;
+import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 
 import lombok.AccessLevel;
@@ -50,26 +51,26 @@ public class ProcessInfoReader {
 	
 	
 	/**
-	 * Gets a ProcessAlert that contains a user to be notified, 
+	 * Gets a ProcessManagement that contains a user to be notified, 
 	 * for a given process and the type of approval required.
-	 * @param id of requested ProcessAlert
-	 * @return ProcessAlert with the given id.
+	 * @param id of requested ProcessManagement
+	 * @return ProcessManagement with the given id.
 	 */
-	public ProcessAlert getProcessTypeAlert(Integer id) {
-		return processRepository.findProcessTypeAlertById(id);
+	public ProcessManagement getProcessTypeAlert(Integer id) {
+		return processRepository.findProcessManagementById(id);
 	}
 	
 	/**
 	 * Gets all the alerts requirements set in the system
-	 * @return nested Map by Process name, Approval type with List of Users.
+	 * @return nested Map by Process name with List of ProcessManagementDTO, that contains user and approval type.
 	 */
-	public Map<ProcessName, Map<ApprovalType, List<ProcessAlertDTO>>> getAllProcessTypeAlerts() {
-		List<ProcessAlertDTO> processTypeAlerts = processRepository.findAllProcessAlerts();
+	public Map<ProcessName, Map<UserBasic, List<BasicValueEntity<ProcessManagement>>>> getAllProcessTypeAlerts() {
+		List<ProcessManagementDTO> processTypeAlerts = processRepository.findAllProcessManagements();
 		return processTypeAlerts.stream()
-			.collect(Collectors.groupingBy(ProcessAlertDTO::getProcessName, 
-					Collectors.groupingBy(ProcessAlertDTO::getApprovalType, Collectors.toList())));
-//							Collectors.mapping(ProcessAlertDTO::getUser, Collectors.toList()))));
-//		return processTypeAlerts.stream().collect(Collectors.groupingBy(ProcessAlertDTO::getProcessName));
+			.collect(Collectors.groupingBy(ProcessManagementDTO::getProcessName, 
+					Collectors.groupingBy(ProcessManagementDTO::getUser, 
+							Collectors.mapping(ProcessManagementDTO::getApprovalType, Collectors.toList()))));
+//		return processTypeAlerts.stream().collect(Collectors.groupingBy(ProcessManagementDTO::getProcessName));
 		
 	}
 	

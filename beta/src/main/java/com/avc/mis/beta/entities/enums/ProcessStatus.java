@@ -8,7 +8,6 @@ package com.avc.mis.beta.entities.enums;
  *
  */
 public enum ProcessStatus {
-
 	ACTIVE,
 	CLOSED,
 	CANCELLED,

@@ -3,17 +3,25 @@
  */
 package com.avc.mis.beta.dao;
 
+import java.security.AccessControlException;
 import java.util.List;
+import java.util.Optional;
+
+import javax.naming.NoPermissionException;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.avc.mis.beta.entities.data.ProcessAlert;
+import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.ApprovalTask;
+import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.process.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
@@ -65,7 +73,11 @@ public class ProcessInfoDAO extends DAO {
 	 * Edits the process and adds required notifications.
 	 * @param process ProductionProcess to be edited.
 	 */
-	public void editProcessEntity(ProductionProcess process) {
+	public <T extends ProductionProcess> void editProcessEntity(T process) {
+		RecordStatus status = getProcessRepository().findProcessLifeCycleStatus(process.getId());
+		if(status != RecordStatus.EDITABLE) {
+			throw new AccessControlException("Process was closed for edit");
+		}
 		process.setModifiedDate(null);
 		editEntity(process);
 		editAlerts(process);
@@ -78,11 +90,11 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	private void addAlerts(ProductionProcess process) {
 
-		List<ProcessAlert> alerts = getProcessRepository().findProcessTypeAlertsByProcess(process.getId());
+		List<ProcessManagement> alerts = getProcessRepository().findProcessTypeAlertsByProcess(process.getId());
 
-		for(ProcessAlert a: alerts) {			
-			switch(a.getApprovalType()) {
-			case REQUIRED_APPROVAL:
+		for(ProcessManagement a: alerts) {			
+			switch(a.getManagementType()) {
+			case APPROVAL:
 				ApprovalTask processApproval = new ApprovalTask();
 				processApproval.setProcess(process);
 				processApproval.setUser(a.getUser());
@@ -90,6 +102,8 @@ public class ProcessInfoDAO extends DAO {
 				addEntity(processApproval); //user already in the persistence context
 			case REVIEW:
 				addMessage(a.getUser(), process, "New " + process.getProcessType() + " process added");
+				break;
+			default:
 				break;
 			}
 		}
@@ -101,7 +115,7 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	private void editAlerts(ProductionProcess process) {
 
-		List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(process);
+		List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(process.getId());
 
 		for(ApprovalTask approval: approvals) {
 			if(approval.getDecision() != DecisionType.NOT_ATTENDED) {
@@ -110,8 +124,8 @@ public class ProcessInfoDAO extends DAO {
 			approval.setDescription(process.getProcessType() + "process added and edited");
 		}
 		
-		List<ProcessAlert> alerts = getProcessRepository().findProcessTypeAlertsByProcess(process.getId());
-		for(ProcessAlert alert: alerts) {
+		List<ProcessManagement> alerts = getProcessRepository().findProcessTypeAlertsByProcess(process.getId());
+		for(ProcessManagement alert: alerts) {
 			addMessage(alert.getUser(), process, process.getProcessType() + "Old process edited");
 		}
 	}
@@ -124,10 +138,10 @@ public class ProcessInfoDAO extends DAO {
 	private void approvalAlerts(ApprovalTask approval) {
 		ProductionProcess process = approval.getProcess();
 
-		List<ProcessAlert> alerts = getProcessRepository()
+		List<ProcessManagement> alerts = getProcessRepository()
 				.findProcessTypeAlertsByProcess(process.getId());
 
-		for(ProcessAlert alert: alerts) {
+		for(ProcessManagement alert: alerts) {
 			addMessage(alert.getUser(), process, 
 					"Process decision: " + approval.getDecision());
 		}
@@ -166,7 +180,7 @@ public class ProcessInfoDAO extends DAO {
 			approvalAlerts(approval);
 		}
 		else {
-			throw new IllegalArgumentException("Can't approve for another user");
+			throw new AccessControlException("Can't approve for another user");
 		}
 	}
 	
@@ -190,8 +204,45 @@ public class ProcessInfoDAO extends DAO {
 			approvalAlerts(approval);
 		}
 		else {
-			throw new IllegalArgumentException("Can't approve for another user");
+			throw new AccessControlException("Can't approve for another user");
 		}		
+	}
+	
+	/**
+	 * Sets the record status for the process life cycle. e.g. LOCKED - information of the process can't be edited
+	 * @param recordStatus the editing/state life cycle of the process.
+	 * @param processId
+	 */
+	public void setProcessRecordStatus(RecordStatus recordStatus, Integer processId) {	
+		
+		Optional<ProcessLifeCycle> optional = 
+				getProcessRepository().findProcessLifeCycleManagerByUser(processId, getCurrentUserId());
+		ProcessLifeCycle processLifeCycle = optional
+			.orElseThrow(() -> new AccessControlException("You don't have permission to manage process life cycle"));
+		
+		
+		if(processLifeCycle.getStatus().compareTo(recordStatus)  < 0) {
+			
+			//check that for all required approvals satisfied if changed to final
+			if(recordStatus == RecordStatus.FINAL) {
+				List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(processId);
+				if(approvals.stream().anyMatch(a -> a.getDecision() != DecisionType.APPROVED)) {
+					throw new IllegalStateException("Can't finalize process before fully approved");
+				}				
+			}
+			
+//			processLifeCycle.setStatus(recordStatus); // record status is not updatable for security
+			CriteriaUpdate<ProcessLifeCycle> update = 
+		    		getEntityManager().getCriteriaBuilder().createCriteriaUpdate(ProcessLifeCycle.class);
+		    Root<ProcessLifeCycle> root = update.from(ProcessLifeCycle.class);
+		    getEntityManager().createQuery(update.
+		    		set("status", recordStatus).where(root.get("id").in(processLifeCycle.getId()))).executeUpdate();
+		   
+		}
+		else {
+			throw new IllegalArgumentException("Can't change life cycle status, from: " + 
+					processLifeCycle.getStatus() + " to: " + recordStatus);
+		}
 	}
 	
 	/**
@@ -207,7 +258,7 @@ public class ProcessInfoDAO extends DAO {
 			editEntity(message);
 		}
 		else {
-			throw new IllegalArgumentException("Can't change message label for another user");
+			throw new AccessControlException("Can't change message label for another user");
 		}
 	}
 

@@ -16,7 +16,8 @@ import javax.persistence.UniqueConstraint;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.LinkEntity;
-import com.avc.mis.beta.entities.enums.ApprovalType;
+import com.avc.mis.beta.entities.ValueInterface;
+import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,9 +33,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "PROCESS_ALERTS", indexes = {@Index(columnList = "processTypeId")},
-	uniqueConstraints = { @UniqueConstraint(columnNames = { "processTypeId", "userId" }) })
-public class ProcessAlert extends LinkEntity {
+@Table(name = "PROCESS_MANAGEMENT", indexes = {
+		@Index(columnList = "processTypeId") }/*
+												 * , uniqueConstraints = { @UniqueConstraint(columnNames = {
+												 * "processTypeId", "userId" }) }
+												 */)
+public class ProcessManagement extends LinkEntity implements ValueInterface {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processTypeId", nullable = false, updatable = false)
@@ -46,7 +50,12 @@ public class ProcessAlert extends LinkEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private ApprovalType approvalType;
+	private ManagementType managementType;
+	
+	@Override
+	public String getValue() {
+		return managementType.toString();
+	}
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
@@ -60,13 +69,13 @@ public class ProcessAlert extends LinkEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return processType != null && user != null && approvalType != null;
+		return processType != null && user != null && managementType != null;
 	}
 
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "Process alert needs to specify: process type, user(staff) and approval type";
+		return "Process management needs to specify: process type, user(staff) and management type";
 	}
 
 }

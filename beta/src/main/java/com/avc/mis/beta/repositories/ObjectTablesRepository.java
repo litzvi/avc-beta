@@ -14,7 +14,7 @@ import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.ProcessAlert;
+import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoCode;
@@ -49,8 +49,8 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	
 //------------Finding all Link entities------------
 
-	@Query("select e from ProcessAlert e")
-	List<ProcessAlert> findAllProcessAlerts();
+	@Query("select e from ProcessManagement e")
+	List<ProcessManagement> findAllProcessAlerts();
 
 	@Query("select e from ContactDetails e")
 	List<ContactDetails> findAllContactDetails();

@@ -28,6 +28,7 @@ public class ExceptionControler {
 	 *  
 	 * ProcessInfoDAO -
 	 * @throws NullPointerException if no such process type.
+	 * @throws AccessControlException if no permission
 	 * 
 	 */
 	

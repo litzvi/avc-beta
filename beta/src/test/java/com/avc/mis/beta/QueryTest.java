@@ -18,12 +18,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.data.ProcessAlertDTO;
+import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.tableRows.ItemInventoryRow;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.PoRow;
@@ -31,9 +32,11 @@ import com.avc.mis.beta.dto.values.ReceiptRow;
 import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.values.UserRow;
+import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
-import com.avc.mis.beta.entities.enums.ApprovalType;
+import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.CashewReports;
 import com.avc.mis.beta.service.ObjectTablesReader;
@@ -54,6 +57,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 @WithUserDetails("eli")
 public class QueryTest {
 	
+	@Autowired TestService service;
 	@Autowired ObjectTablesReader objectTablesReader;
 	@Autowired ValueTablesReader valueTablesReader;
 	@Autowired ProcessInfoReader processInfoReader;
@@ -66,6 +70,10 @@ public class QueryTest {
 //	@Disabled
 	@Test
 	void queryTest() {
+
+		PO po = service.addBasicCashewOrder();
+
+		
 		//get list of cashew orders
 		List<PoCodeDTO> openCashewOrdersBasic =  objectTablesReader.findOpenCashewOrdersPoCode();
 		openCashewOrdersBasic.forEach(row -> System.out.println(row));
@@ -77,9 +85,17 @@ public class QueryTest {
 		//get order by po code
 		activeCashewBasic =  objectTablesReader.findActiveCashewPoCode();
 		if(activeCashewBasic.isEmpty()) {
-			fail("Couldn't test fetching purchase order by po code, no active orders");
+			fail("Couldn't test fetching purchase order by po code");
 		}
 		System.out.println(orders.getOrder(activeCashewBasic.get(0).getId()));
+		
+		//get order by process id
+		List<PoRow> poRows =  orders.findOpenCashewOrders();
+		if(poRows.isEmpty()) {
+			fail("Couldn't test fetching purchase order by process id, no open orders");
+		}
+		System.out.println(orders.getOrderByProcessId(poRows.get(0).getId()));
+				
 				
 		//list of bank branches
 		List<BankBranchDTO> branchList = valueTablesReader.getAllBankBranchesDTO();
@@ -97,12 +113,6 @@ public class QueryTest {
 		//find table of open cashew orders
 		orders.findOpenCashewOrders().forEach(i -> System.out.println(i));
 		
-		//get order by process id
-		List<PoRow> poRows =  orders.findOpenCashewOrders();
-		if(poRows.isEmpty()) {
-			fail("Couldn't test fetching purchase order by process id, no open orders");
-		}
-		System.out.println(orders.getOrderByProcessId(poRows.get(0).getId()));
 		
 		//get list of cashew items
 		valueTablesReader.getCashewitemsBasic().forEach(i -> System.out.println(i));
@@ -129,17 +139,17 @@ public class QueryTest {
 		messages.forEach(m -> System.out.println(m));
 		
 		//get processTypeAlerts
-				Map<ProcessName, Map<ApprovalType, List<ProcessAlertDTO>>> alerts = 
-						processInfoReader.getAllProcessTypeAlerts();
-				alerts.forEach((k, v) -> {
-					System.out.println(k + ":\n");
-					v.forEach((l, w) -> {
-								System.out.println("\t" + l + "$");
-								w.forEach(u -> {
-									System.out.println("\t\t" + u);
-								});
-					});
-				});
+		Map<ProcessName, Map<UserBasic, List<BasicValueEntity<ProcessManagement>>>> alerts = 
+				processInfoReader.getAllProcessTypeAlerts();
+		alerts.forEach((k, v) -> {
+			System.out.println(k + ":\n");
+			v.forEach((l, w) -> {
+						System.out.println("\t" + l + "$");
+						w.forEach(u -> {
+							System.out.println("\t\t" + u);
+						});
+			});
+		});
 				
 		//get users table
 		List<UserRow> usersTable = users.getUsersTable();
@@ -172,6 +182,8 @@ public class QueryTest {
 		List<ItemInventoryRow> inventoryRows = cashewReports.getCashewInventoryTable();
 		inventoryRows.forEach(r -> System.out.println(r));
 			
+		service.cleanup(po);
+
 	}
 	
 	@Test
