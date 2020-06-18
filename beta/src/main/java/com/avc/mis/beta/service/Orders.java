@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
-import com.avc.mis.beta.dto.values.PoRow;
+import com.avc.mis.beta.dto.queryRows.PoRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.repositories.PORepository;

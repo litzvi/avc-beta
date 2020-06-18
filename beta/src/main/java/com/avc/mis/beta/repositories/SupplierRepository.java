@@ -9,8 +9,8 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.queryRows.SupplierRow;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
-import com.avc.mis.beta.dto.values.SupplierRow;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.Supplier;
@@ -63,7 +63,7 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 				+ "and cc.active = true")
 	List<CompanyContact> findCompanyContactsByCompnyId(Integer id);
 	
-	@Query("select new com.avc.mis.beta.dto.values.SupplierRow(s.id, s.name, cd.id) "
+	@Query("select new com.avc.mis.beta.dto.queryRows.SupplierRow(s.id, s.name, cd.id) "
 			+ "from Supplier s "
 			+ "left join s.contactDetails cd "
 			+ "where s.active = true")

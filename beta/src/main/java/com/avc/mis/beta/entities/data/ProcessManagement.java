@@ -33,11 +33,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "PROCESS_MANAGEMENT", indexes = {
-		@Index(columnList = "processTypeId") }/*
-												 * , uniqueConstraints = { @UniqueConstraint(columnNames = {
-												 * "processTypeId", "userId" }) }
-												 */)
+@Table(name = "PROCESS_MANAGEMENT", indexes = {@Index(columnList = "processTypeId") }, 
+		uniqueConstraints = { @UniqueConstraint(columnNames = {"processTypeId", "userId", "managementType" }) })
 public class ProcessManagement extends LinkEntity implements ValueInterface {
 
 	@ManyToOne(fetch = FetchType.LAZY)

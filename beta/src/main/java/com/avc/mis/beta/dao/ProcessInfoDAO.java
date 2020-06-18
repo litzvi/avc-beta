@@ -7,7 +7,6 @@ import java.security.AccessControlException;
 import java.util.List;
 import java.util.Optional;
 
-import javax.naming.NoPermissionException;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 
@@ -192,11 +191,11 @@ public class ProcessInfoDAO extends DAO {
 	 * @param remarks
 	 * @throws IllegalArgumentException trying to approve for another user.
 	 */
-	public void setProcessDecision(int approvalId, String decisionType, 
+	public void setProcessDecision(int approvalId, DecisionType decision, 
 			String processSnapshot, String remarks) {
 		ApprovalTask approval = getEntityManager().getReference(ApprovalTask.class, approvalId);
 		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
-			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
+//			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
 			approval.setDecision(decision);
 			approval.setProcessSnapshot(processSnapshot);
 			approval.setRemarks(remarks);
@@ -250,10 +249,10 @@ public class ProcessInfoDAO extends DAO {
 	 * @param messageId
 	 * @param labelName
 	 */
-	public void setMessageLabel(int messageId, String labelName) {
+	public void setMessageLabel(int messageId, MessageLabel label) {
 		UserMessage message = getEntityManager().find(UserMessage.class, messageId);
 		if(getCurrentUserId().equals(message.getUser().getId())) {//user changes his own message label
-			MessageLabel label = Enum.valueOf(MessageLabel.class, labelName);
+//			MessageLabel label = Enum.valueOf(MessageLabel.class, labelName);
 			message.setLabel(label);
 			editEntity(message);
 		}

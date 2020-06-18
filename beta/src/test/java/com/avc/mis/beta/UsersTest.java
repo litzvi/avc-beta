@@ -16,7 +16,6 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.entities.data.Person;

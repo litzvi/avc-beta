@@ -1,13 +1,14 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.values;
+package com.avc.mis.beta.dto.queryRows;
 
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.StorageDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;

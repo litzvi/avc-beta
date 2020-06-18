@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
@@ -71,7 +72,7 @@ public class ProductionProcess extends ProcessEntity {
 	
 	@OneToOne(mappedBy = "process", cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 			fetch = FetchType.LAZY, optional = false)
-	private ProcessLifeCycle lifeCycle = new ProcessLifeCycle();
+	private ProcessLifeCycle lifeCycle;
 	
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "statusId"/*, nullable = false*/)
@@ -114,7 +115,7 @@ public class ProductionProcess extends ProcessEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return this.processType != null && lifeCycle != null;
+		return this.processType != null;
 	}
 
 //	@Override
@@ -136,7 +137,13 @@ public class ProductionProcess extends ProcessEntity {
 	@PrePersist
 	@Override
 	public void prePersist() {
-		super.prePersist();
+		this.lifeCycle = new ProcessLifeCycle();
 		lifeCycle.setReference(this);
+		super.prePersist();
+	}
+	
+	@PreUpdate
+	@Override
+	public void preUpdate() {
 	}
 }

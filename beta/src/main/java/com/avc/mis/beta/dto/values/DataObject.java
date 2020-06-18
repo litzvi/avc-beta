@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  *
  */
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class DataObject extends DataDTO {
+public class DataObject<T extends DataEntity>  extends DataDTO {
 
 	public DataObject(Integer id, Integer version) {
 		super(id, version);
@@ -22,7 +22,7 @@ public class DataObject extends DataDTO {
 	/**
 	 * @param entity
 	 */
-	public DataObject(DataEntity entity) {
+	public DataObject(T entity) {
 		super(entity.getId(), entity.getVersion());
 	}
 

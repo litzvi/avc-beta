@@ -9,8 +9,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.dto.values.ReceiptItemWithStorage;
-import com.avc.mis.beta.dto.values.ReceiptRow;
+import com.avc.mis.beta.dto.queryRows.ReceiptItemWithStorage;
+import com.avc.mis.beta.dto.queryRows.ReceiptRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.Receipt;
 
@@ -63,7 +63,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 //		+ "where p.id = :processId ")
 //	Set<ReceiptItemDTO> findReceiptItemsById(int processId);
 	
-	@Query("select new com.avc.mis.beta.dto.values.ReceiptItemWithStorage( "
+	@Query("select new com.avc.mis.beta.dto.queryRows.ReceiptItemWithStorage( "
 			+ " i.id, i.version, item.id, item.value, "
 			+ "itemPo.id, ct.code, s.name, "
 			+ "sf.id, sf.version, "
@@ -85,7 +85,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 		+ "where p.id = :processId ")
 	List<ReceiptItemWithStorage> findReceiptItemWithStorage(int processId);
 
-	@Query("select new com.avc.mis.beta.dto.values.ReceiptRow( "
+	@Query("select new com.avc.mis.beta.dto.queryRows.ReceiptRow( "
 				+ "r.id, po_code.id, ct.code, s.name, i.value, "
 				+ "units.amount, units.measureUnit, "
 				+ "r.recordedTime, "

@@ -14,12 +14,13 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
+import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.UserMessage;
-import com.avc.mis.beta.entities.values.ProcessType;
 
 /**
  * @author Zvi
@@ -92,7 +93,7 @@ public class ProcessInfoWriter {
 	 * @param remarks
 	 * @throws IllegalArgumentException trying to approve for another user.
 	 */
-	public void setProcessDecision(int approvalId, String decisionType, String processSnapshot, String remarks) {
+	public void setProcessDecision(int approvalId, DecisionType decisionType, String processSnapshot, String remarks) {
 		dao.setProcessDecision(approvalId, decisionType, processSnapshot, remarks);		
 	}
 	
@@ -110,7 +111,7 @@ public class ProcessInfoWriter {
 	 * @param messageId
 	 * @param labelName
 	 */
-	public void setMessageLabel(int messageId, String labelName) {
+	public void setMessageLabel(int messageId, MessageLabel labelName) {
 		dao.setMessageLabel(messageId, labelName);
 	}
 

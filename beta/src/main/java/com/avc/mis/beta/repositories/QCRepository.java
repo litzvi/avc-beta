@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.RawItemQualityDTO;
-import com.avc.mis.beta.dto.values.RawItemQualityWithStorage;
+import com.avc.mis.beta.dto.queryRows.RawItemQualityWithStorage;
 import com.avc.mis.beta.entities.process.QualityCheck;
 /**
  * @author Zvi
@@ -66,7 +66,7 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 		+ "where p.id = :processId ")
 	Set<RawItemQualityDTO> findCheckItemsById(int processId);
 	
-	@Query("select new com.avc.mis.beta.dto.values.RawItemQualityWithStorage( "
+	@Query("select new com.avc.mis.beta.dto.queryRows.RawItemQualityWithStorage( "
 			+ " i.id, i.version, item.id, item.value, "
 			+ "itemPo.id, ct.code, s.name, "
 			+ "sf.id, sf.version, "

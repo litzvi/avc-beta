@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.OrderItemDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
-import com.avc.mis.beta.dto.values.PoRow;
+import com.avc.mis.beta.dto.queryRows.PoRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
 
@@ -116,7 +116,7 @@ public interface PORepository extends BaseRepository<PO> {
 ////		+ "ORDER BY po.createdDate DESC ") // maybe by delivery date
 //	List<PoRow> findByOrderTypeAndStatuses(ProcessName orderType, OrderStatus[] statuses);
 
-	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code.code, ct.code, s.name, i.value, "
+	@Query("select new com.avc.mis.beta.dto.queryRows.PoRow(po.id, po_code.code, ct.code, s.name, i.value, "
 			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency) "
 		+ "from PO po "

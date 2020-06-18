@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.values;
+package com.avc.mis.beta.dto.queryRows;
 
 import java.math.BigDecimal;
 
@@ -9,6 +9,7 @@ import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.Storage;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
@@ -17,6 +18,7 @@ import lombok.Value;
  *
  */
 @Value
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class PoInventoryRowWithStorage extends ProcessItemWithStorage {
 

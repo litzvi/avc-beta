@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.queryRows;
+package com.avc.mis.beta.dto.queryRows;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

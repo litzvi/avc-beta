@@ -6,7 +6,6 @@ package com.avc.mis.beta.repositories;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.tableRows;
+package com.avc.mis.beta.dto.queryRows;
 
 import java.util.List;
 

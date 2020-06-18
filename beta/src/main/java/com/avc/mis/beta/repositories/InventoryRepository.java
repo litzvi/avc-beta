@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.tableRows.ProcessItemInventoryRow;
-import com.avc.mis.beta.dto.tableRows.StorageInventoryRow;
+import com.avc.mis.beta.dto.queryRows.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.queryRows.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PoCode;
 
@@ -38,7 +38,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 //		+ "where item.supplyGroup = ?1 ")
 //	List<PoInventoryRowWithStorage> findInventoryTable(SupplyGroup supplyGroup);
 	
-	@Query("select new com.avc.mis.beta.dto.tableRows.ProcessItemInventoryRow( "
+	@Query("select new com.avc.mis.beta.dto.queryRows.ProcessItemInventoryRow( "
 			+ "pi.id, item.id, item.value, "
 			+ "poCode.code, ct.code, s.name, "
 			+ "p.recordedTime, "
@@ -59,7 +59,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "group by pi ")
 	List<ProcessItemInventoryRow> findInventoryProcessItem(SupplyGroup supplyGroup);
 	
-	@Query("select new com.avc.mis.beta.dto.tableRows.StorageInventoryRow( "
+	@Query("select new com.avc.mis.beta.dto.queryRows.StorageInventoryRow( "
 			+ "sf.id, pi.id, unit.amount, unit.measureUnit, sf.numberUnits, "
 			+ "sto.id, sto.value) "
 		+ "from ProcessItem pi "

@@ -10,7 +10,6 @@ import java.time.OffsetDateTime;
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.values.ProductionLine;

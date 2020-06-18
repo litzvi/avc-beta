@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.dto.values.ReceiptRow;
+import com.avc.mis.beta.dto.queryRows.ReceiptRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ExtraAdded;
 import com.avc.mis.beta.entities.process.Receipt;

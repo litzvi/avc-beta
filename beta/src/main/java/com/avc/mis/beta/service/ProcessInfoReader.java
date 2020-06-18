@@ -22,7 +22,6 @@ import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 
 import lombok.AccessLevel;

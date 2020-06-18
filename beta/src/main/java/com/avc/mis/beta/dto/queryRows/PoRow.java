@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.values;
+package com.avc.mis.beta.dto.queryRows;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 import java.util.Currency;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;

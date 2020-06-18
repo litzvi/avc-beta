@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.tableRows.ItemInventoryRow;
-import com.avc.mis.beta.dto.tableRows.ProcessItemInventoryRow;
-import com.avc.mis.beta.dto.tableRows.StorageInventoryRow;
+import com.avc.mis.beta.dto.queryRows.ItemInventoryRow;
+import com.avc.mis.beta.dto.queryRows.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.queryRows.StorageInventoryRow;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
