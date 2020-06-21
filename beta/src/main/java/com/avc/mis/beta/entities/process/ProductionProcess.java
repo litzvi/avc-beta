@@ -74,16 +74,17 @@ public class ProductionProcess extends ProcessEntity {
 			fetch = FetchType.LAZY, optional = false)
 	private ProcessLifeCycle lifeCycle;
 	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "statusId"/*, nullable = false*/)
-//	private ProcessStatus status;
-	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<ProcessItem> processItems = new HashSet<>();
-		
+
+	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@OneToMany(mappedBy = "process", orphanRemoval = true, 
+		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	private Set<UsedItem> usedItems = new HashSet<>();
+
+	
 	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Set<ApprovalTask> approvals = new HashSet<>();
 		
