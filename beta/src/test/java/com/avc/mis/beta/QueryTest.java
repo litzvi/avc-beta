@@ -115,7 +115,7 @@ public class QueryTest {
 		valueTablesReader.getCashewitemsBasic().forEach(i -> System.out.println(i));
 		
 		//print received orders
-		List<ReceiptRow> receiptRows = receipts.findCashewReceipts();
+		List<ReceiptRow> receiptRows = receipts.findFinalCashewReceipts();
 		receiptRows.forEach(r -> System.out.println(r));
 		
 		
@@ -176,7 +176,7 @@ public class QueryTest {
 		}
 		
 		//cashew inventory table
-		List<ItemInventoryRow> inventoryRows = cashewReports.getCashewInventoryTable();
+		List<ItemInventoryRow> inventoryRows = cashewReports.getInventoryTable();
 		inventoryRows.forEach(r -> System.out.println(r));
 			
 		service.cleanup(po);

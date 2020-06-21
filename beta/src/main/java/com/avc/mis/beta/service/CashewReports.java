@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.queryRows.ItemInventoryRow;
+import com.avc.mis.beta.dto.queryRows.PoInventoryRow;
 import com.avc.mis.beta.dto.queryRows.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.queryRows.StorageInventoryRow;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
@@ -36,15 +38,9 @@ public class CashewReports {
 	
 	@Autowired private InventoryRepository inventoryRepository;
 	
-	public List<ItemInventoryRow> getCashewInventoryTable() {
+	public List<ItemInventoryRow> getInventoryTable() {
 		
-		List<StorageInventoryRow> storageRows = getInventoryRepository().findInventoryStorage(SupplyGroup.CASHEW);
-		Map<Integer, List<StorageInventoryRow>> storageMap = storageRows.stream()
-				.collect(Collectors.groupingBy(StorageInventoryRow::getProcessItemId, Collectors.toList()));
-		
-		List<ProcessItemInventoryRow> processItemRows = 
-				getInventoryRepository().findInventoryProcessItem(SupplyGroup.CASHEW);		
-		processItemRows.forEach(pi -> pi.setStorageForms(storageMap.get(pi.getId())));
+		List<ProcessItemInventoryRow> processItemRows = getProcessItemRows();		
 		Map<BasicValueEntity<Item>, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
 				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getItem, Collectors.toList()));
 		
@@ -58,6 +54,32 @@ public class CashewReports {
 			inventoryRows.add(inventoryRow);
 		});
 		return inventoryRows;
+	}
+	
+	public List<PoInventoryRow> getInventoryTableByPo() {
+
+		List<ProcessItemInventoryRow> processItemRows = getProcessItemRows();
+		Map<PoCodeDTO, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
+				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getPoCode, Collectors.toList()));
+		
+		List<PoInventoryRow> inventoryRows = new ArrayList<PoInventoryRow>();
+		piMap.forEach((k, v) -> {			
+			PoInventoryRow inventoryRow = new PoInventoryRow(k, v);
+			inventoryRows.add(inventoryRow);
+		});
+		return inventoryRows;
+	}
+	
+	private List<ProcessItemInventoryRow> getProcessItemRows() {
+		List<StorageInventoryRow> storageRows = getInventoryRepository().findInventoryStorage(SupplyGroup.CASHEW);
+		Map<Integer, List<StorageInventoryRow>> storageMap = storageRows.stream()
+				.collect(Collectors.groupingBy(StorageInventoryRow::getProcessItemId, Collectors.toList()));
+		
+		List<ProcessItemInventoryRow> processItemRows = 
+				getInventoryRepository().findInventoryProcessItem(SupplyGroup.CASHEW);		
+		processItemRows.forEach(pi -> pi.setStorageForms(storageMap.get(pi.getId())));
+		
+		return processItemRows;
 	}
 
 }

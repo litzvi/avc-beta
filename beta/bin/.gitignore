@@ -29,3 +29,10 @@ build/
 
 ### VS Code ###
 .vscode/
+/.gitignore
+/.mvn/
+/mvnw
+/mvnw.cmd
+/pom.xml
+/pom_prod.xml
+/src/

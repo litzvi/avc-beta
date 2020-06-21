@@ -16,6 +16,7 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.queryRows.ReceiptRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.ExtraAdded;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.ReceiptItem;
@@ -42,13 +43,27 @@ public class OrderReceipts {
 		
 	
 	/**
-	 * Gets rows for table of Cashew received orders. Contains all receipts including receipt without order.	 * 
+	 * Gets rows for table of Cashew received orders that where finalized. 
+	 * Contains all types of receipts including receipt without order.
 	 * @return List of ReceiptRow - id, PO#, supplier, item, order amount, receipt amount,
-	 * receipt date and storage - for every received item.
+	 * receipt date and storage - for every received item of finalized orders.
 	 */
-	public List<ReceiptRow> findCashewReceipts() {
+	public List<ReceiptRow> findFinalCashewReceipts() {
 		return getReceiptRepository().findAllReceiptsByType(
-				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT});
+				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
+				new RecordStatus[] {RecordStatus.FINAL});
+	}
+	
+	/**
+	 * Gets rows for table of Cashew received orders that are still pending - where not finalized. 
+	 * Contains all types of receipts including receipt without order.
+	 * @return List of ReceiptRow - id, PO#, supplier, item, order amount, receipt amount,
+	 * receipt date and storage - for every received item of a pending - non finalized - orders.
+	 */
+	public List<ReceiptRow> findPendingCashewReceipts() {
+		return getReceiptRepository().findAllReceiptsByType(
+				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
+				new RecordStatus[] {RecordStatus.EDITABLE, RecordStatus.LOCKED});
 	}
 	
 	/**
@@ -56,8 +71,10 @@ public class OrderReceipts {
 	 * @return List of ReceiptRow - id, PO#, supplier, item, order amount, receipt amount,
 	 * receipt date and storage - for every received item.
 	 */
-	public List<ReceiptRow> findGeneralReceipts() {
-		return getReceiptRepository().findAllReceiptsByType(new ProcessName[] {ProcessName.GENERAL_RECEIPT});		
+	public List<ReceiptRow> findFinalGeneralReceipts() {
+		return getReceiptRepository().findAllReceiptsByType(
+				new ProcessName[] {ProcessName.GENERAL_RECEIPT},
+				new RecordStatus[] {RecordStatus.FINAL});		
 	}
 		
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

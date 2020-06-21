@@ -12,6 +12,7 @@ import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.queryRows.ReceiptItemWithStorage;
 import com.avc.mis.beta.dto.queryRows.ReceiptRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.Receipt;
 
 /**
@@ -93,6 +94,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 				+ "function('GROUP_CONCAT', sto.value), "
 				+ "extra.amount, extra.measureUnit) "
 			+ "from Receipt r "
+				+ "join r.lifeCycle lc "
 				+ "join r.poCode po_code "
 					+ "join po_code.supplier s "
 					+ "join po_code.contractType ct "
@@ -112,8 +114,9 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "join r.processType t "
 //			+ "where type(sf) <> ExtraAdded "
 				+ "where t.processName in :processNames "
+				+ "and lc.status in :statuses "
 			+ "group by r.id, oi, pi ")
-	List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames);
+	List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames, RecordStatus[] statuses);
 
 	/**
 	 * @param processId
