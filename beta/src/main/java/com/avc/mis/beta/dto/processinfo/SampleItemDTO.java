@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.process;
+package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.SampleItem;
+import com.avc.mis.beta.entities.processinfo.SampleItem;
 import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Data;

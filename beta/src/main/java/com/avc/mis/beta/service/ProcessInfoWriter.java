@@ -19,8 +19,8 @@ import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;
-import com.avc.mis.beta.entities.process.ApprovalTask;
-import com.avc.mis.beta.entities.process.UserMessage;
+import com.avc.mis.beta.entities.processinfo.ApprovalTask;
+import com.avc.mis.beta.entities.processinfo.UserMessage;
 
 /**
  * @author Zvi

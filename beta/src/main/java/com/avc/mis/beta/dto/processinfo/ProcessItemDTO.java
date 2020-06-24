@@ -1,16 +1,22 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.process;
+package com.avc.mis.beta.dto.processinfo;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.process.PoCodeDTO;
+import com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
-import com.avc.mis.beta.entities.process.ProcessItem;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Data;
@@ -25,7 +31,7 @@ import lombok.EqualsAndHashCode;
 public class ProcessItemDTO extends ProcessDTO {
 
 	private BasicValueEntity<Item> item;
-	private PoCodeDTO itemPo;
+//	private PoCodeDTO itemPo;
 	
 //	BigDecimal unitAmount;
 //	MeasureUnit measureUnit;
@@ -37,15 +43,15 @@ public class ProcessItemDTO extends ProcessDTO {
 	private Set<StorageDTO> storageForms; //can use a SortedSet like ContactDetails to maintain order
 	
 	public ProcessItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
-			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
+			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			/*BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, Warehouse storageLocation, */
 			String description, String remarks) {
 		super(id, version);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		if(poCodeId != null)
-			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
-		else
-			this.itemPo = null;
+//		if(poCodeId != null)
+//			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
+//		else
+//			this.itemPo = null;
 //		if(itemPo != null)
 //			this.itemPo = new PoCodeBasic(itemPo);
 //		else
@@ -70,15 +76,11 @@ public class ProcessItemDTO extends ProcessDTO {
 	public ProcessItemDTO(ProcessItem processItem) {
 		super(processItem.getId(), processItem.getVersion());
 		this.item = new BasicValueEntity<Item>(processItem.getItem());
-		if(processItem.getItemPo() != null)
-			this.itemPo = new PoCodeDTO(processItem.getItemPo());
-		else
-			this.itemPo = null;
+//		if(processItem.getItemPo() != null)
+//			this.itemPo = new PoCodeDTO(processItem.getItemPo());
+//		else
+//			this.itemPo = null;
 		
-//		this.measureUnit = processItem.getMeasureUnit();
-//		this.unitAmount = processItem.getUnitAmount().setScale(3);
-//		this.numberUnits = processItem.getNumberUnits().setScale(3);
-//		this.storageLocation = processItem.getStorageLocation();
 		this.description = processItem.getDescription();
 		this.remarks = processItem.getRemarks();
 		
@@ -86,23 +88,31 @@ public class ProcessItemDTO extends ProcessDTO {
 				.map(i->{return new StorageDTO(i);}).collect(Collectors.toSet());
 
 		
-//		this.unitAmount.setScale(3);//for testing with assertEquals
-//		this.numberUnits.setScale(3);//for testing with assertEquals
-		
 	}
 
 
-	public ProcessItemDTO(Integer id, Integer version, BasicValueEntity<Item> item, PoCodeDTO itemPo,
+	public ProcessItemDTO(Integer id, Integer version,
+			BasicValueEntity<Item> item, /* PoCodeDTO itemPo, */
 			String description, String remarks) {
 		super(id, version);
 		this.item = item;
-		this.itemPo = itemPo;
+//		this.itemPo = itemPo;
 		this.description = description;
 		this.remarks = remarks;
 	}
 
 
 	
-
+	public static List<ProcessItemDTO> getProcessItems(List<ProcessItemWithStorage> storages) {
+		Map<Integer, List<ProcessItemWithStorage>> map = storages.stream()
+				.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, Collectors.toList()));
+		List<ProcessItemDTO> processItems = new ArrayList<>();
+		for(List<ProcessItemWithStorage> list: map.values()) {
+			ProcessItemDTO processItem = list.get(0).getProcessItem();
+			processItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
+			processItems.add(processItem);
+		}
+		return processItems;
+	}
 	
 }

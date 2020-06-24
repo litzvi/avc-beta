@@ -19,10 +19,10 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;
-import com.avc.mis.beta.entities.process.ApprovalTask;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProductionProcess;
-import com.avc.mis.beta.entities.process.UserMessage;
+import com.avc.mis.beta.entities.processinfo.ApprovalTask;
+import com.avc.mis.beta.entities.processinfo.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 
@@ -100,7 +100,7 @@ public class ProcessInfoDAO extends DAO {
 				processApproval.setDescription(process.getProcessType() + " process added");
 				addEntity(processApproval); //user already in the persistence context
 			case REVIEW:
-				addMessage(a.getUser(), process, "New " + process.getProcessType() + " process added");
+				addMessage(a.getUser(), process, "New " + process.getProcessTypeDescription() + " process added");
 				break;
 			default:
 				break;
@@ -125,7 +125,7 @@ public class ProcessInfoDAO extends DAO {
 		
 		List<ProcessManagement> alerts = getProcessRepository().findProcessTypeAlertsByProcess(process.getId());
 		for(ProcessManagement alert: alerts) {
-			addMessage(alert.getUser(), process, process.getProcessType() + "Old process edited");
+			addMessage(alert.getUser(), process, "Old " + process.getProcessType() + " process edited");
 		}
 	}
 	

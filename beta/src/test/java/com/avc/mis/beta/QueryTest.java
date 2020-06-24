@@ -37,7 +37,7 @@ import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.CashewReports;
 import com.avc.mis.beta.service.ObjectTablesReader;
-import com.avc.mis.beta.service.OrderReceipts;
+import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.Suppliers;
@@ -61,7 +61,7 @@ public class QueryTest {
 	@Autowired Users users;
 	@Autowired Suppliers suppliers;
 	@Autowired Orders orders;
-	@Autowired OrderReceipts receipts;
+	@Autowired Receipts receipts;
 	@Autowired CashewReports cashewReports;
 	
 //	@Disabled
@@ -79,12 +79,12 @@ public class QueryTest {
 		List<PoCodeDTO> activeCashewBasic =  objectTablesReader.findActiveCashewPoCode();
 		activeCashewBasic.forEach(row -> System.out.println(row));
 		
-		//get order by po code
+		//get active po codes - so we can add QC for them
 		activeCashewBasic =  objectTablesReader.findActiveCashewPoCode();
 		if(activeCashewBasic.isEmpty()) {
 			fail("Couldn't test fetching purchase order by po code");
 		}
-		System.out.println(orders.getOrder(activeCashewBasic.get(0).getId()));
+		activeCashewBasic.forEach(row -> System.out.println(row));
 		
 		//get order by process id
 		List<PoRow> poRows =  orders.findOpenCashewOrders();

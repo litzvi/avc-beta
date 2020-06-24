@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.process;
+package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
-import com.avc.mis.beta.entities.process.RawItemQuality;
+import com.avc.mis.beta.entities.processinfo.RawItemQuality;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -48,14 +48,14 @@ public class RawItemQualityDTO extends ProcessItemDTO {
 
 	public RawItemQualityDTO(Integer id, Integer version, 
 			Integer itemId, String itemValue, 
-			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
+			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			String description, String remarks, 
 			BigDecimal breakage, BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal decay, BigDecimal insectDamage,
 			BigDecimal count, BigDecimal smallKernels, BigDecimal defectsAfterRoasting, BigDecimal weightLoss,
 			CheckStatus colour, CheckStatus flavour) {
-		super(id, version, itemId, itemValue, poCodeId, contractTypeCode, supplierName, description, remarks);
+		super(id, version, itemId, itemValue, /* poCodeId, contractTypeCode, supplierName, */ description, remarks);
 		this.breakage = breakage;
 		this.foreignMaterial = foreignMaterial;
 		this.humidity = humidity;

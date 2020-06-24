@@ -15,25 +15,25 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.avc.mis.beta.dto.process.OrderItemDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
+import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.process.ExtraAdded;
-import com.avc.mis.beta.entities.process.OrderItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.process.ReceiptItem;
-import com.avc.mis.beta.entities.process.Storage;
+import com.avc.mis.beta.entities.processinfo.ExtraAdded;
+import com.avc.mis.beta.entities.processinfo.OrderItem;
+import com.avc.mis.beta.entities.processinfo.ReceiptItem;
+import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
-import com.avc.mis.beta.service.OrderReceipts;
+import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.ValueTablesReader;
@@ -48,7 +48,7 @@ public class TestService {
 	@Autowired private Suppliers suppliers;	
 	@Autowired ValueTablesReader valueTableReader;
 	@Autowired Orders orders;
-	@Autowired OrderReceipts receipts;
+	@Autowired Receipts receipts;
 	
 	private int randCode = LocalDateTime.now().hashCode();
 	private Random randNum = new Random();
@@ -178,7 +178,7 @@ public class TestService {
 		return items;
 	}
 	
-	private Warehouse getWarehouse() {
+	public Warehouse getWarehouse() {
 		List<Warehouse> warehouses = valueTableReader.getAllWarehouses();
 		if(warehouses.isEmpty())
 			fail("No warehouses in database for running this test");

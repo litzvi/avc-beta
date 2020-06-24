@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.process;
+package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 
@@ -9,9 +9,10 @@ import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.Storage;
+import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.values.Warehouse;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
@@ -19,16 +20,16 @@ import lombok.Value;
  * @author Zvi
  *
  */
-@Value
+@Data
 @EqualsAndHashCode(callSuper = false)
 public class StorageDTO extends ProcessDTO {
 
-	AmountWithUnit unitAmount;
+	private AmountWithUnit unitAmount;
 //	MeasureUnit measureUnit;
-	BigDecimal numberUnits;	
-	BasicValueEntity<Warehouse> warehouseLocation;
-	String remarks;
-	String className;
+	private BigDecimal numberUnits;	
+	private BasicValueEntity<Warehouse> warehouseLocation;
+	private String remarks;
+	private String className;
 //	Class<? extends Storage> clazz;
 	
 	public StorageDTO(Integer id, Integer version,

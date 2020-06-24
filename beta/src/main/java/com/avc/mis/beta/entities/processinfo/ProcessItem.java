@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.process;
+package com.avc.mis.beta.entities.processinfo;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +18,7 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
+import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -48,10 +49,10 @@ public class ProcessItem extends ProcessInfoEntity {
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	
-	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "itemPoCode", updatable = false)
-	private PoCode itemPo; //should be null for receiving, for items used in the process
+//	@ToString.Exclude
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "itemPoCode", updatable = false)
+//	private PoCode itemPo; //should be null for receiving, for items used in the process - maybe removed
 	
 	
 //	@Convert(converter = LocalDateToLong.class)

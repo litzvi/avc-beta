@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.process;
+package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -12,7 +12,7 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.OrderItem;
+import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;

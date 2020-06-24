@@ -10,7 +10,7 @@ import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.ApprovalTask;
+import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

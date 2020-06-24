@@ -5,12 +5,12 @@ package com.avc.mis.beta.dto.queryRows;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.process.RawItemQualityDTO;
-import com.avc.mis.beta.dto.process.StorageDTO;
+import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
+import com.avc.mis.beta.dto.processinfo.StorageDTO;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.Storage;
+import com.avc.mis.beta.entities.processinfo.Storage;
 
 import lombok.Data;
 
@@ -26,7 +26,7 @@ public class RawItemQualityWithStorage {
 
 	public RawItemQualityWithStorage(Integer id, Integer version, 
 			Integer itemId, String itemValue, 
-			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
+			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			Integer storageId, Integer storageVersion,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks,
@@ -38,7 +38,7 @@ public class RawItemQualityWithStorage {
 			CheckStatus colour, CheckStatus flavour) {
 		this.rawItemQuality = new RawItemQualityDTO(id, version, 
 				itemId, itemValue, 
-				poCodeId, contractTypeCode, supplierName, 
+				/* poCodeId, contractTypeCode, supplierName, */
 				description, remarks, 
 				breakage, foreignMaterial, humidity, testa,
 				scorched, deepCut, offColour, shrivel, desert,

@@ -17,6 +17,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
@@ -82,6 +83,11 @@ public class PO extends ProductionProcess {
 	public String getIllegalMessage() {
 		return "Purchase Order is not legal, "
 				+ "has to have at least one order line";
+	}
+
+	@Override
+	public String getProcessTypeDescription() {
+		return "Purchase Order";
 	}
 	
 	

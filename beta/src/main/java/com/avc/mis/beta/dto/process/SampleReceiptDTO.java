@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections4.MultiSet;
 import org.apache.commons.collections4.multiset.HashMultiSet;
 
+import com.avc.mis.beta.dto.processinfo.ItemWeightDTO;
+import com.avc.mis.beta.dto.processinfo.SampleItemDTO;
 import com.avc.mis.beta.dto.queryRows.SampleItemWithWeight;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;

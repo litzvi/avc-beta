@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.process;
+package com.avc.mis.beta.entities.processinfo;
 
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;

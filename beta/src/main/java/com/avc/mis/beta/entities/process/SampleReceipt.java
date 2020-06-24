@@ -14,6 +14,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.processinfo.SampleItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
@@ -74,5 +75,10 @@ public class SampleReceipt extends ProductionProcess {
 	@Override
 	public String getIllegalMessage() {
 		return super.getIllegalMessage() + " or no items sampled";
+	}
+
+	@Override
+	public String getProcessTypeDescription() {
+		return "Sample for receipt";
 	}
 }

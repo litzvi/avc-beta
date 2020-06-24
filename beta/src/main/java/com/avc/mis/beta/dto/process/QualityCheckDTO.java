@@ -14,12 +14,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
 import com.avc.mis.beta.dto.queryRows.RawItemQualityWithStorage;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.QualityCheck;
-import com.avc.mis.beta.entities.process.RawItemQuality;
+import com.avc.mis.beta.entities.processinfo.RawItemQuality;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;

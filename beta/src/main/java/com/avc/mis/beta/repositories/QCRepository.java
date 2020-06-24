@@ -9,7 +9,7 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
-import com.avc.mis.beta.dto.process.RawItemQualityDTO;
+import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
 import com.avc.mis.beta.dto.queryRows.RawItemQualityWithStorage;
 import com.avc.mis.beta.entities.process.QualityCheck;
 /**
@@ -46,9 +46,8 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 		+ "where r.id = :id ")
 	Optional<QualityCheckDTO> findQcDTOByProcessId(int id);
 
-	@Query("select new com.avc.mis.beta.dto.process.RawItemQualityDTO("
+	@Query("select new com.avc.mis.beta.dto.processinfo.RawItemQualityDTO("
 			+ "i.id, i.version, item.id, item.value, "
-			+ "itemPo.id, ct.code, s.name, "
 			+ "i.description, i.remarks, "
 			+ "i.breakage, i.foreignMaterial, i.humidity, i.testa, " 
 			+ "i.scorched, i.deepCut, i.offColour, i.shrivel, i.desert, " 
@@ -58,9 +57,6 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 		+ "from RawItemQuality i "
 			+ "join i.item item "
 			+ "join i.process p "
-			+ "left join i.itemPo itemPo "
-				+ "left join itemPo.contractType ct "
-				+ "left join itemPo.supplier s "
 			+ "join i.storageForms sf "
 				+ "left join sf.warehouseLocation warehouseLocation "
 		+ "where p.id = :processId ")
@@ -68,7 +64,6 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 	
 	@Query("select new com.avc.mis.beta.dto.queryRows.RawItemQualityWithStorage( "
 			+ " i.id, i.version, item.id, item.value, "
-			+ "itemPo.id, ct.code, s.name, "
 			+ "sf.id, sf.version, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, "
@@ -81,9 +76,6 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 		+ "from RawItemQuality i "
 			+ "join i.item item "
 			+ "join i.process p "
-			+ "left join i.itemPo itemPo "
-				+ "left join itemPo.contractType ct "
-				+ "left join itemPo.supplier s "
 			+ "join i.storageForms sf "
 				+ "join sf.unitAmount unit "
 				+ "left join sf.warehouseLocation warehouseLocation "

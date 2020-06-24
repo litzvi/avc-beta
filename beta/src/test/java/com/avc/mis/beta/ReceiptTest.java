@@ -19,10 +19,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.RecordStatus;
-import com.avc.mis.beta.entities.process.ExtraAdded;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.service.OrderReceipts;
+import com.avc.mis.beta.entities.processinfo.ExtraAdded;
+import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.Suppliers;
@@ -38,7 +38,7 @@ import com.avc.mis.beta.service.Suppliers;
 public class ReceiptTest {
 
 	@Autowired TestService service;	
-	@Autowired OrderReceipts receipts;	
+	@Autowired Receipts receipts;	
 	@Autowired Orders orders;	
 	@Autowired Suppliers suppliers;
 	@Autowired ProcessInfoWriter processInfoWriter;

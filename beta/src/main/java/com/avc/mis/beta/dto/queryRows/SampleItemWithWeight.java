@@ -6,8 +6,8 @@ package com.avc.mis.beta.dto.queryRows;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import com.avc.mis.beta.dto.process.ItemWeightDTO;
-import com.avc.mis.beta.dto.process.SampleItemDTO;
+import com.avc.mis.beta.dto.processinfo.ItemWeightDTO;
+import com.avc.mis.beta.dto.processinfo.SampleItemDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;

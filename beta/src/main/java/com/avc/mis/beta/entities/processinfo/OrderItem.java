@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.process;
+package com.avc.mis.beta.entities.processinfo;
 
 import java.time.LocalDate;
 
@@ -22,6 +22,7 @@ import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.utilities.LocalDateToLong;
 import com.fasterxml.jackson.annotation.JsonIgnore;

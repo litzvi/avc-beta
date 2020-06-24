@@ -9,8 +9,8 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.process.OrderItemDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
+import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
 import com.avc.mis.beta.dto.queryRows.PoRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
@@ -59,7 +59,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "where po.id = :id ")
 	Optional<PoDTO> findOrderByProcessId(Integer id);
 	
-	@Query("select new com.avc.mis.beta.dto.process.OrderItemDTO("
+	@Query("select new com.avc.mis.beta.dto.processinfo.OrderItemDTO("
 			+ "i.id, i.version, item.id, item.value, units.amount, units.measureUnit, "
 			+ "price.amount, price.currency, i.deliveryDate, i.defects, i.remarks, ri is not null) "
 		+ "from OrderItem i "

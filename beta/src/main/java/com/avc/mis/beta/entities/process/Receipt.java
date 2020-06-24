@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -41,6 +42,11 @@ public class Receipt extends ProductionProcess {
 	@Override
 	public String getIllegalMessage() {
 		return super.getIllegalMessage() + " or no items received ";
+	}
+
+	@Override
+	public String getProcessTypeDescription() {
+		return "Receipt";
 	}
 	
 }

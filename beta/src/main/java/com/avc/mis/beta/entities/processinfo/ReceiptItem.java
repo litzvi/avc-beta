@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.process;
+package com.avc.mis.beta.entities.processinfo;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -51,7 +51,15 @@ public class ReceiptItem extends ProcessItem {
 	 * @param extraAdded the extraAdded to set
 	 */
 	public void setExtraAdded(ExtraAdded[] extraAdded) {
+		this.storageForms.removeAll(this.extraAdded);
 		this.extraAdded = Insertable.setReferences(extraAdded, (t) -> {t.setReference(this);	return t;});
+		this.storageForms.addAll(this.extraAdded);
+	}
+	
+	@Override
+	public void setStorageForms(Storage[] storageForms) { 
+		super.setStorageForms(storageForms);
+		this.storageForms.addAll(this.extraAdded);
 	}
 	
 	@OneToOne(fetch = FetchType.LAZY)
@@ -77,21 +85,21 @@ public class ReceiptItem extends ProcessItem {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
-	@PrePersist
-	@Override
-	public void prePersist() {
-		prePersistAndUpdate();		
-	}
-	
-	@PreUpdate
-	@Override
-	public void preUpdate() {
-		prePersistAndUpdate();
-	}
-	
-	private void prePersistAndUpdate() {
-		if(!isLegal())
-			throw new IllegalArgumentException(this.getIllegalMessage());
-		this.storageForms.addAll(this.extraAdded);
-	}
+//	@PrePersist
+//	@Override
+//	public void prePersist() {
+//		prePersistAndUpdate();		
+//	}
+//	
+//	@PreUpdate
+//	@Override
+//	public void preUpdate() {
+//		prePersistAndUpdate();
+//	}
+//	
+//	private void prePersistAndUpdate() {
+//		if(!isLegal())
+//			throw new IllegalArgumentException(this.getIllegalMessage());
+//		
+//	}
 }

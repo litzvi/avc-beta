@@ -66,7 +66,6 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 	
 	@Query("select new com.avc.mis.beta.dto.queryRows.ReceiptItemWithStorage( "
 			+ " i.id, i.version, item.id, item.value, "
-			+ "itemPo.id, ct.code, s.name, "
 			+ "sf.id, sf.version, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
@@ -76,9 +75,6 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "left join i.orderItem oi "
 			+ "join i.item item "
 			+ "join i.process p "
-			+ "left join i.itemPo itemPo "
-				+ "left join itemPo.contractType ct "
-				+ "left join itemPo.supplier s "
 			+ "join i.storageForms sf "
 				+ "join sf.unitAmount unit "
 				+ "left join sf.warehouseLocation warehouseLocation "

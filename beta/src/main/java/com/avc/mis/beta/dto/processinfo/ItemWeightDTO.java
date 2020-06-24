@@ -1,14 +1,14 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.process;
+package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.process.ItemWeight;
+import com.avc.mis.beta.entities.processinfo.ItemWeight;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;

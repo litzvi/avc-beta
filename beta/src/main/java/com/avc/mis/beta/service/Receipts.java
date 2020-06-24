@@ -17,9 +17,9 @@ import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.queryRows.ReceiptRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;
-import com.avc.mis.beta.entities.process.ExtraAdded;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.process.ReceiptItem;
+import com.avc.mis.beta.entities.processinfo.ExtraAdded;
+import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.repositories.ReceiptRepository;
 
 import lombok.AccessLevel;
@@ -32,7 +32,7 @@ import lombok.Getter;
 @Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
-public class OrderReceipts {
+public class Receipts {
 	
 	@Autowired private ProcessInfoDAO dao;
 	
@@ -121,9 +121,12 @@ public class OrderReceipts {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Deprecated //since add extra is done even after finalize and considered in stock, shouldn't be amended after insert.
 	public void editExtra(ExtraAdded[] added) {
 		Arrays.stream(added).forEach(r -> dao.addEntity(r));
 	}
+	
+	
 		
 	//maybe has a few
 //	public ReceiptDTO getReceipt(int poCode) {

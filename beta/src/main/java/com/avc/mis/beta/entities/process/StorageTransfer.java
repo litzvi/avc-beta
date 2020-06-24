@@ -16,11 +16,26 @@ import lombok.EqualsAndHashCode;
 @PrimaryKeyJoinColumn(name = "processId")
 public class StorageTransfer extends ProductionProcess {
 
-	
-	
 	@JsonIgnore
 	@Override
 	protected boolean canEqual(Object o) {
 		return super.canEqual(o);
 	}
+	
+	@Override
+	public boolean isLegal() {
+		//perhaps check if amounts fit
+		return super.isLegal() && getProcessItems().length > 0 && getUsedItems().length > 0;
+	}
+
+	@Override
+	public String getIllegalMessage() {
+		return "Storage transfer must have in and out items";
+	}
+
+	@Override
+	public String getProcessTypeDescription() {
+		return "Storage transfer";
+	}
+
 }

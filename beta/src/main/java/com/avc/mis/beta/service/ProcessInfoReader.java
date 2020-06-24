@@ -44,7 +44,7 @@ public class ProcessInfoReader {
 	
 	@Autowired private ProcessInfoRepository processRepository;
 	@Autowired private Orders orders;
-	@Autowired private OrderReceipts orderReceipts;
+	@Autowired private Receipts orderReceipts;
 	@Autowired private QualityChecks qualityChecks;
 	@Autowired private Samples samples;
 	
@@ -65,6 +65,7 @@ public class ProcessInfoReader {
 	 */
 	public Map<ProcessName, Map<UserBasic, List<BasicValueEntity<ProcessManagement>>>> getAllProcessTypeAlerts() {
 		List<ProcessManagementDTO> processTypeAlerts = processRepository.findAllProcessManagements();
+		
 		return processTypeAlerts.stream()
 			.collect(Collectors.groupingBy(ProcessManagementDTO::getProcessName, 
 					Collectors.groupingBy(ProcessManagementDTO::getUser, 

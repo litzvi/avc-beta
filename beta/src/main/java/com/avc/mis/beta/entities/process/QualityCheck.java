@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.avc.mis.beta.entities.processinfo.RawItemQuality;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -56,6 +57,11 @@ public class QualityCheck extends ProductionProcess {
 	@Override
 	public String getIllegalMessage() {
 		return super.getIllegalMessage() + " or no items checked ";
+	}
+
+	@Override
+	public String getProcessTypeDescription() {
+		return "Quality Check";
 	}
 	
 

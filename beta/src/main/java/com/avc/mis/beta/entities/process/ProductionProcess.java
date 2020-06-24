@@ -24,6 +24,10 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessEntity;
+import com.avc.mis.beta.entities.processinfo.ApprovalTask;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.entities.processinfo.UsedItem;
+import com.avc.mis.beta.entities.processinfo.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,7 +54,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "PROCESSES")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class ProductionProcess extends ProcessEntity {	
+public abstract class ProductionProcess extends ProcessEntity {	
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(updatable = false, nullable = false)
@@ -96,7 +100,7 @@ public class ProductionProcess extends ProcessEntity {
 	 * @return the processItems
 	 */
 	public ProcessItem[] getProcessItems() {
-		return (ProcessItem[])this.processItems.toArray(new ProcessItem[this.processItems.size()]);
+		return this.processItems.toArray(new ProcessItem[this.processItems.size()]);
 	}
 
 	/**
@@ -105,8 +109,17 @@ public class ProductionProcess extends ProcessEntity {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param processItems the processItems to set
 	 */
-	void setProcessItems(ProcessItem[] processItems) {
+	public void setProcessItems(ProcessItem[] processItems) {
 		this.processItems = Insertable.setReferences(processItems, (t) -> {t.setReference(this);	return t;});
+	}
+	
+
+	public UsedItem[] getUsedItems() {
+		return this.usedItems.toArray(new UsedItem[this.usedItems.size()]);
+	}
+
+	public void setUsedItems(UsedItem[] usedItems) {
+		this.usedItems = Insertable.setReferences(usedItems, (t) -> {t.setReference(this);	return t;});;
 	}
 	
 	protected boolean canEqual(Object o) {
@@ -116,7 +129,8 @@ public class ProductionProcess extends ProcessEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return this.processType != null;
+		return true;
+//		return this.processType != null; //will cause illegal on update of a process
 	}
 
 //	@Override
@@ -138,13 +152,19 @@ public class ProductionProcess extends ProcessEntity {
 	@PrePersist
 	@Override
 	public void prePersist() {
+		super.prePersist();
+		if(this.processType == null) {
+			throw new IllegalArgumentException("No process type set");
+		}
 		this.lifeCycle = new ProcessLifeCycle();
 		lifeCycle.setReference(this);
-		super.prePersist();
 	}
+
+	public abstract String getProcessTypeDescription() ;
 	
-	@PreUpdate
-	@Override
-	public void preUpdate() {
-	}
+//	@PreUpdate
+//	@Override
+//	public void preUpdate() {
+//	}
+
 }
