@@ -86,7 +86,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 				+ "r.id, po_code.id, ct.code, s.name, i.value, "
 				+ "units.amount, units.measureUnit, "
 				+ "r.recordedTime, "
-				+ "SUM(unit.amount * sf.numberUnits * uom.multiply / uom.divide), i.measureUnit, "
+				+ "SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor), i.measureUnit, "
 				+ "function('GROUP_CONCAT', sto.value), "
 				+ "extra.amount, extra.measureUnit) "
 			+ "from Receipt r "

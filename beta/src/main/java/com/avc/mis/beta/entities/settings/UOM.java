@@ -16,6 +16,7 @@ import com.avc.mis.beta.entities.LinkEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "UOM", 
@@ -41,15 +43,15 @@ public class UOM extends LinkEntity {
 	private MeasureUnit toUnit;
 	
 	@Column(nullable = false, precision = 19, scale = 4)
-	private BigDecimal multiply = BigDecimal.ONE;
+	private BigDecimal multiplicand = BigDecimal.ONE;
 	
 	@Column(nullable = false, precision = 19, scale = 4)
-	private BigDecimal divide = BigDecimal.ONE;
+	private BigDecimal divisor = BigDecimal.ONE;
 
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return fromUnit != null && toUnit != null && multiply != null && divide != null;
+		return fromUnit != null && toUnit != null && multiplicand != null && divisor != null;
 	}
 
 	@JsonIgnore

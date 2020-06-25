@@ -47,7 +47,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "pi.id, item.id, item.value, "
 			+ "poCode.code, ct.code, s.name, "
 			+ "p.recordedTime, "
-			+ "SUM(unit.amount * sf.numberUnits * uom.multiply / uom.divide), item.measureUnit) "
+			+ "SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor), item.measureUnit) "
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
 			+ "join pi.process p "
