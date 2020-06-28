@@ -14,7 +14,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
+import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
+import com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.queryRows.RawItemQualityWithStorage;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -39,6 +42,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class QualityCheckDTO extends ProductionProcessDTO {
 
+	
+	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
 	private Set<RawItemQualityDTO> checkItems; //can use a SortedSet like ContactDetails to maintain order
 	
 	public QualityCheckDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
@@ -53,27 +58,47 @@ public class QualityCheckDTO extends ProductionProcessDTO {
 	
 	public QualityCheckDTO(@NonNull QualityCheck check) {
 		super(check);
-		this.checkItems = Arrays.stream(check.getProcessItems())
-				.map(i->{return new RawItemQualityDTO((RawItemQuality)i);}).collect(Collectors.toSet());
+		this.processItems = Arrays.stream(check.getProcessItems())
+				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
+		this.checkItems = Arrays.stream(check.getTestedItems())
+				.map(i->{return new RawItemQualityDTO(i);}).collect(Collectors.toSet());
 	}
 	
 	/**
-	 * Used for setting checkItems from a flat form produced by a join of QC items and it's storage info, 
-	 * to checkItems that each have a Set of storages.
-	 * @param checkItems collection of RawItemQualityWithStorage that contains all receipt QC items 
+	 * Used for setting processItems from a flat form produced by a join of QC process items and it's storage info, 
+	 * to processItems that each have a Set of storages.
+	 * @param processItems collection of ProcessItemWithStorage that contains all receipt QC items 
 	 * with storage detail.
 	 */
-	public void setCheckItems(Collection<RawItemQualityWithStorage> checkItems) {
-		Map<Integer, List<RawItemQualityWithStorage>> map = checkItems.stream()
-			.collect(Collectors.groupingBy(RawItemQualityWithStorage::getId, Collectors.toList()));
-		this.checkItems = new HashSet<>();
-		for(List<RawItemQualityWithStorage> list: map.values()) {
-			RawItemQualityDTO checkItem = list.get(0).getRawItemQuality();
-			checkItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
-			this.checkItems.add(checkItem);
+	public void setProcessItems(Collection<ProcessItemWithStorage> processItems) {
+		Map<Integer, List<ProcessItemWithStorage>> map = processItems.stream()
+			.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, Collectors.toList()));
+		this.processItems = new HashSet<>();
+		for(List<ProcessItemWithStorage> list: map.values()) {
+			ProcessItemDTO processItem = list.get(0).getProcessItem();
+			processItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
+			this.processItems.add(processItem);
 		}
 		
 	}
+	
+//	/**
+//	 * Used for setting checkItems from a flat form produced by a join of QC items and it's storage info, 
+//	 * to checkItems that each have a Set of storages.
+//	 * @param checkItems collection of RawItemQualityWithStorage that contains all receipt QC items 
+//	 * with storage detail.
+//	 */
+//	public void setCheckItems(Collection<RawItemQualityWithStorage> checkItems) {
+//		Map<Integer, List<RawItemQualityWithStorage>> map = checkItems.stream()
+//			.collect(Collectors.groupingBy(RawItemQualityWithStorage::getId, Collectors.toList()));
+//		this.checkItems = new HashSet<>();
+//		for(List<RawItemQualityWithStorage> list: map.values()) {
+//			RawItemQualityDTO checkItem = list.get(0).getRawItemQuality();
+//			checkItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
+//			this.checkItems.add(checkItem);
+//		}
+//		
+//	}
 
 	
 }

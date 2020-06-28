@@ -31,6 +31,7 @@ import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
@@ -39,6 +40,7 @@ import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.SampleReceipt;
 import com.avc.mis.beta.entities.processinfo.ItemWeight;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.RawItemQuality;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.SampleItem;
@@ -65,7 +67,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800087;
+	static final Integer PO_CODE = 800088;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -168,9 +170,13 @@ public class GeneralTest {
 		check.setPoCode(poCode);
 		check.setRecordedTime(OffsetDateTime.now());
 		RawItemQuality[] rawItemQualities = new RawItemQuality[NUM_PO_ITEMS];
-		for(int i=0; i < rawItemQualities.length; i++) {
+		ProcessItem[] processItems = new ProcessItem[NUM_PO_ITEMS];
+		for(int i=0; i < NUM_PO_ITEMS; i++) {
 			rawItemQualities[i] = new RawItemQuality();
 			rawItemQualities[i].setItem(orderItems[i].getItem());
+			
+			processItems[i] = new ProcessItem();
+			processItems[i].setItem(orderItems[i].getItem());
 			
 			Storage[] QCStorageForms = new Storage[1];
 			QCStorageForms[0] = new Storage();
@@ -179,11 +185,18 @@ public class GeneralTest {
 			QCStorageForms[0].setWarehouseLocation(storages.get(i));
 //			QCStorageForms[0].setMeasureUnit("OZ");
 			
-			rawItemQualities[i].setStorageForms(QCStorageForms);
+			processItems[i].setStorageForms(QCStorageForms);
 			
 		}
-		check.setCheckItems(rawItemQualities);
-		checks.addCashewReceiptCheck(check);
+		check.setProcessItems(processItems);
+		check.setTestedItems(rawItemQualities);
+		try {
+			checks.addCashewReceiptCheck(check);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		QualityCheckDTO checkDTO;
 		checkDTO = checks.getQcByProcessId(check.getId());
 //		fail("finished");
@@ -196,20 +209,22 @@ public class GeneralTest {
 		SampleItem[] sampleItems = new SampleItem[2];
 		sampleItems[0] = new SampleItem();
 		sampleItems[0].setItem(items.get(0));
-		sampleItems[0].setAmountWeighed(new AmountWithUnit(BigDecimal.valueOf(50), "KG"));
+		sampleItems[0].setMeasureUnit(MeasureUnit.KG);
 //		sampleItems[0].setMeasureUnit("KG");
 		ItemWeight[] itemWeights1 = new ItemWeight[1];
 		itemWeights1[0] = new ItemWeight();
+		itemWeights1[0].setUnitAmount(BigDecimal.valueOf(50));
 		itemWeights1[0].setNumberOfSamples(BigInteger.valueOf(30));
 		itemWeights1[0].setAvgTestedWeight(BigDecimal.valueOf(50.01));
 		sampleItems[0].setItemWeights(itemWeights1);
 		sampleItems[0].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
 		sampleItems[1] = new SampleItem();
 		sampleItems[1].setItem(items.get(0));
-		sampleItems[1].setAmountWeighed(new AmountWithUnit(BigDecimal.valueOf(26), "KG"));
+		sampleItems[1].setMeasureUnit(MeasureUnit.KG);
 //		sampleItems[1].setMeasureUnit("KG");
 		ItemWeight[] itemWeights2 = new ItemWeight[1];
 		itemWeights2[0] = new ItemWeight();
+		itemWeights2[0].setUnitAmount(BigDecimal.valueOf(26));
 		itemWeights2[0].setNumberOfSamples(BigInteger.valueOf(1));
 		itemWeights2[0].setAvgTestedWeight(BigDecimal.valueOf(26.01));
 		sampleItems[1].setItemWeights(itemWeights2);

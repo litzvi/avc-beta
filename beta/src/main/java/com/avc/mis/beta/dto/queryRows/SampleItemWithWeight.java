@@ -23,12 +23,12 @@ public class SampleItemWithWeight {
 	private ItemWeightDTO itemWeight;
 	
 	public SampleItemWithWeight(Integer id, Integer version, Integer itemId, String itemValue, 
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal emptyContainerWeight,
+			MeasureUnit measureUnit, BigDecimal emptyContainerWeight,
 			Integer itemWeightId, Integer itemWeightVersion, 
-			BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
+			BigDecimal unitAmount, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		this.sampleItem = new SampleItemDTO(id, version, itemId, itemValue, 
-			unitAmount, measureUnit, emptyContainerWeight);
-		this.itemWeight = new ItemWeightDTO(itemWeightId, itemWeightVersion, numberOfSamples, avgTestedWeight);
+			measureUnit, emptyContainerWeight);
+		this.itemWeight = new ItemWeightDTO(itemWeightId, itemWeightVersion, unitAmount, numberOfSamples, avgTestedWeight);
 	}
 	
 	/**

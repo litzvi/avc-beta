@@ -10,6 +10,7 @@ package com.avc.mis.beta.entities.enums;
 public enum RecordStatus {
 	EDITABLE,
 	LOCKED,
-	FINAL
+	FINAL,
+	CANCELLED //should also be final
 //	HISTORY //might be needed and need to update inventory queries accordingly
 }

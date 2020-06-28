@@ -49,13 +49,13 @@ public interface SampleRepository extends BaseRepository<SampleReceipt> {
 	
 	@Query("select new com.avc.mis.beta.dto.queryRows.SampleItemWithWeight( "
 			+ " i.id, i.version, item.id, item.value, "
-			+ "weighed.amount, weighed.measureUnit, i.emptyContainerWeight, "
-			+ "w.id, w.version, w.numberOfSamples, w.avgTestedWeight) "
+			+ "i.measureUnit, i.emptyContainerWeight, "
+			+ "w.id, w.version, w.unitAmount, w.numberOfSamples, w.avgTestedWeight) "
 		+ "from SampleItem i "
 			+ "join i.item item "
 			+ "join i.process p "
 			+ "join i.itemWeights w "
-			+ "join i.amountWeighed weighed "
+//			+ "join i.amountWeighed weighed "
 		+ "where p.id = :processId ")
 	List<SampleItemWithWeight> findSampleItemsWithWeight(int processId);
 }

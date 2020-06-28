@@ -19,6 +19,7 @@ import lombok.Data;
  *
  */
 @Data
+@Deprecated
 public class RawItemQualityWithStorage {
 	
 	private RawItemQualityDTO rawItemQuality;
@@ -39,7 +40,7 @@ public class RawItemQualityWithStorage {
 		this.rawItemQuality = new RawItemQualityDTO(id, version, 
 				itemId, itemValue, 
 				/* poCodeId, contractTypeCode, supplierName, */
-				description, remarks, 
+				/* description, remarks, */
 				breakage, foreignMaterial, humidity, testa,
 				scorched, deepCut, offColour, shrivel, desert,
 				deepSpot, mold, dirty, decay, insectDamage,

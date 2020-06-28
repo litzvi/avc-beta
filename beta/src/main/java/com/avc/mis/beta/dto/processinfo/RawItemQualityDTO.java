@@ -7,9 +7,12 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
+import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.processinfo.RawItemQuality;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -22,7 +25,9 @@ import lombok.Value;
 @Value
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class RawItemQualityDTO extends ProcessItemDTO {
+public class RawItemQualityDTO extends ProcessDTO {
+	
+	BasicValueEntity<Item> item;
 
 	BigDecimal breakage;
 	BigDecimal foreignMaterial;
@@ -38,7 +43,7 @@ public class RawItemQualityDTO extends ProcessItemDTO {
 	BigDecimal dirty;
 	BigDecimal decay;
 	BigDecimal insectDamage;
-	BigDecimal count;
+	BigDecimal nutCount;
 	BigDecimal smallKernels;
 	BigDecimal defectsAfterRoasting;
 	BigDecimal weightLoss;
@@ -49,13 +54,16 @@ public class RawItemQualityDTO extends ProcessItemDTO {
 	public RawItemQualityDTO(Integer id, Integer version, 
 			Integer itemId, String itemValue, 
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
-			String description, String remarks, 
+			/* String description, String remarks, */ 
 			BigDecimal breakage, BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal decay, BigDecimal insectDamage,
-			BigDecimal count, BigDecimal smallKernels, BigDecimal defectsAfterRoasting, BigDecimal weightLoss,
+			BigDecimal nutCount, BigDecimal smallKernels, BigDecimal defectsAfterRoasting, BigDecimal weightLoss,
 			CheckStatus colour, CheckStatus flavour) {
-		super(id, version, itemId, itemValue, /* poCodeId, contractTypeCode, supplierName, */ description, remarks);
+		super(id, version);
+//		super(id, version, itemId, itemValue, /* poCodeId, contractTypeCode, supplierName, */ description, remarks);
+		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+
 		this.breakage = breakage;
 		this.foreignMaterial = foreignMaterial;
 		this.humidity = humidity;
@@ -70,7 +78,7 @@ public class RawItemQualityDTO extends ProcessItemDTO {
 		this.dirty = dirty;
 		this.decay = decay;
 		this.insectDamage = insectDamage;
-		this.count = count;
+		this.nutCount = nutCount;
 		this.smallKernels = smallKernels;
 		this.defectsAfterRoasting = defectsAfterRoasting;
 		this.weightLoss = weightLoss;
@@ -79,7 +87,9 @@ public class RawItemQualityDTO extends ProcessItemDTO {
 	}
 	
 	public RawItemQualityDTO(RawItemQuality itemQuality) {
-		super(itemQuality);
+		super(itemQuality.getId(), itemQuality.getVersion());
+		this.item = new BasicValueEntity<Item>(itemQuality.getItem());
+
 		this.breakage = itemQuality.getBreakage();            
 		this.foreignMaterial = itemQuality.getForeignMaterial();
 		this.humidity = itemQuality.getHumidity();
@@ -94,7 +104,7 @@ public class RawItemQualityDTO extends ProcessItemDTO {
 		this.dirty = itemQuality.getDirty();
 		this.decay = itemQuality.getDecay();
 		this.insectDamage = itemQuality.getInsectDamage();
-		this.count = itemQuality.getCount();
+		this.nutCount = itemQuality.getNutCount();
 		this.smallKernels = getSmallKernels();        
 		this.defectsAfterRoasting = itemQuality.getDefectsAfterRoasting();
 		this.weightLoss = itemQuality.getWeightLoss();

@@ -10,13 +10,12 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
-import com.avc.mis.beta.dto.queryRows.RawItemQualityWithStorage;
 import com.avc.mis.beta.entities.process.QualityCheck;
 /**
  * @author Zvi
  *
  */
-public interface QCRepository extends BaseRepository<QualityCheck> {
+public interface QCRepository extends ProcessRepository<QualityCheck> {
 	
 //	@Query("select r "
 //		+ "from QualityCheck r "
@@ -48,38 +47,38 @@ public interface QCRepository extends BaseRepository<QualityCheck> {
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.RawItemQualityDTO("
 			+ "i.id, i.version, item.id, item.value, "
-			+ "i.description, i.remarks, "
+//			+ "i.description, i.remarks, "
 			+ "i.breakage, i.foreignMaterial, i.humidity, i.testa, " 
 			+ "i.scorched, i.deepCut, i.offColour, i.shrivel, i.desert, " 
 			+ "i.deepSpot, i.mold, i.dirty, i.decay, i.insectDamage, " 
-			+ "i.count, i.smallKernels, i.defectsAfterRoasting, i.weightLoss, " 
+			+ "i.nutCount, i.smallKernels, i.defectsAfterRoasting, i.weightLoss, " 
 			+ "i.colour, i.flavour) "
 		+ "from RawItemQuality i "
 			+ "join i.item item "
 			+ "join i.process p "
-			+ "join i.storageForms sf "
-				+ "left join sf.warehouseLocation warehouseLocation "
+//			+ "join i.storageForms sf "
+//				+ "left join sf.warehouseLocation warehouseLocation "
 		+ "where p.id = :processId ")
 	Set<RawItemQualityDTO> findCheckItemsById(int processId);
 	
-	@Query("select new com.avc.mis.beta.dto.queryRows.RawItemQualityWithStorage( "
-			+ " i.id, i.version, item.id, item.value, "
-			+ "sf.id, sf.version, "
-			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
-			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, "
-			+ "i.description, i.remarks, type(sf), "
-			+ "i.breakage, i.foreignMaterial, i.humidity, i.testa, "
-			+ "i.scorched, i.deepCut, i.offColour, i.shrivel, i.desert, "
-			+ "i.deepSpot, i.mold, i.dirty, i.decay, i.insectDamage, "
-			+ "i.count, i.smallKernels, i.defectsAfterRoasting, i.weightLoss, "
-			+ "i.colour, i.flavour) "
-		+ "from RawItemQuality i "
-			+ "join i.item item "
-			+ "join i.process p "
-			+ "join i.storageForms sf "
-				+ "join sf.unitAmount unit "
-				+ "left join sf.warehouseLocation warehouseLocation "
-		+ "where p.id = :processId ")
-	Set<RawItemQualityWithStorage> findRawItemQualityWithStorage(int processId);
+//	@Query("select new com.avc.mis.beta.dto.queryRows.RawItemQualityWithStorage( "
+//			+ " i.id, i.version, item.id, item.value, "
+//			+ "sf.id, sf.version, "
+//			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
+//			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, "
+//			+ "i.description, i.remarks, type(sf), "
+//			+ "i.breakage, i.foreignMaterial, i.humidity, i.testa, "
+//			+ "i.scorched, i.deepCut, i.offColour, i.shrivel, i.desert, "
+//			+ "i.deepSpot, i.mold, i.dirty, i.decay, i.insectDamage, "
+//			+ "i.nutCount, i.smallKernels, i.defectsAfterRoasting, i.weightLoss, "
+//			+ "i.colour, i.flavour) "
+//		+ "from RawItemQuality i "
+//			+ "join i.item item "
+//			+ "join i.process p "
+//			+ "join i.storageForms sf "
+//				+ "join sf.unitAmount unit "
+//				+ "left join sf.warehouseLocation warehouseLocation "
+//		+ "where p.id = :processId ")
+//	Set<RawItemQualityWithStorage> findRawItemQualityWithStorage(int processId);
 
 }

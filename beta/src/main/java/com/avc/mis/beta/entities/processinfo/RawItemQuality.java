@@ -11,10 +11,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.CheckStatus;
+import com.avc.mis.beta.entities.values.Item;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,9 +35,15 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "QC_RAW_ITEMS")
-@PrimaryKeyJoinColumn(name = "processItemId")
-public class RawItemQuality extends ProcessItem {
-
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+//@PrimaryKeyJoinColumn(name = "processItemId")
+public class RawItemQuality extends ProcessInfoEntity {
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "itemId", updatable = false, nullable = false)
+	private Item item;
+	
+	
 	@Column(precision = 19, scale = 3)
 	private BigDecimal breakage;
 	
@@ -73,7 +87,7 @@ public class RawItemQuality extends ProcessItem {
 	private BigDecimal insectDamage;
 	
 	@Column(precision = 19, scale = 3)
-	private BigDecimal count;
+	private BigDecimal nutCount;
 	
 	@Column(precision = 19, scale = 3)
 	private BigDecimal smallKernels;
@@ -112,4 +126,21 @@ public class RawItemQuality extends ProcessItem {
 		}
 		return sum;
 	}
+	
+	protected boolean canEqual(Object o) {
+		return Insertable.canEqualCheckNullId(this, o);
+	}
+	
+	@JsonIgnore
+	@Override
+	public boolean isLegal() {
+		return item != null;
+	}
+
+	@JsonIgnore
+	@Override
+	public String getIllegalMessage() {
+		return "Raw item QC has to reference an item";
+	}
+
 }

@@ -79,6 +79,6 @@ public class SampleReceipt extends ProductionProcess {
 
 	@Override
 	public String getProcessTypeDescription() {
-		return "Sample for receipt";
+		return "Sample Cashew Receipt";
 	}
 }

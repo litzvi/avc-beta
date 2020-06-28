@@ -6,7 +6,10 @@ package com.avc.mis.beta.entities.processinfo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -38,6 +41,9 @@ public class ItemWeight extends ProcessEntity {
 	@JoinColumn(name = "sampleItemId", nullable = false, updatable = false)
 	private SampleItem sampleItem;
 	
+	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	private BigDecimal unitAmount;
+		
 	@Column(nullable = false)
 	private BigInteger numberOfSamples;	
 	
@@ -61,13 +67,13 @@ public class ItemWeight extends ProcessEntity {
 	
 	@Override
 	public boolean isLegal() {
-		return numberOfSamples != null && avgTestedWeight != null
-						&& numberOfSamples.compareTo(BigInteger.ZERO) > 0;
+		return unitAmount != null && numberOfSamples != null && avgTestedWeight != null 
+				&& unitAmount.signum() > 0 && numberOfSamples.signum() > 0 && avgTestedWeight.signum() > 0;
 	}
 
 	@Override
 	public String getIllegalMessage() {
-		return "Item tested weight has to contain positive number of samples and avarage weight";
+		return "Item tested weight has to contain amountWeighed, positive number of samples and avarage weight";
 	}	
 
 }

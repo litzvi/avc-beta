@@ -13,6 +13,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,6 +24,7 @@ import javax.persistence.Table;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -47,22 +50,23 @@ public class SampleItem extends ProcessInfoEntity {
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	private Item item;
 	
-	@AttributeOverrides({
-        @AttributeOverride(name="amount",
-                           column=@Column(name="unitAmount", nullable = false, 
-                           	precision = 19, scale = AmountWithUnit.SCALE)),
-        @AttributeOverride(name="measureUnit",
-                           column=@Column(nullable = false))
-    })
-	@Embedded
-	private AmountWithUnit amountWeighed;
-	
+	//moved to ItemWeight
+//	@AttributeOverrides({
+//        @AttributeOverride(name="amount",
+//                           column=@Column(name="unitAmount", nullable = false, 
+//                           	precision = 19, scale = AmountWithUnit.SCALE)),
+//        @AttributeOverride(name="measureUnit",
+//                           column=@Column(nullable = false))
+//    })
+//	@Embedded
+//	private AmountWithUnit amountWeighed;
+//	
 //	@Column(nullable = false, precision = 19, scale = 3)
 //	private BigDecimal amountWeighed;
 //	
-//	@Enumerated(EnumType.STRING)
-//	@Column(nullable = false)
-//	private MeasureUnit measureUnit;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private MeasureUnit measureUnit;
 	
 	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
 	private BigDecimal emptyContainerWeight;
@@ -88,15 +92,14 @@ public class SampleItem extends ProcessInfoEntity {
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return item != null && amountWeighed.isFilled()  && emptyContainerWeight != null
-				&& amountWeighed.signum() > 0
+		return item != null && measureUnit != null  && emptyContainerWeight != null
 				&& itemWeights.size() > 0;
 	}
 
 	@JsonIgnore
 	@Override
 	public String getIllegalMessage() {
-		return "Sample weight must specify an item, unit amountWeighed, measure unit "
+		return "Sample weight must specify an item, measure unit "
 				+ "and empty container weight.";
 	}
 
