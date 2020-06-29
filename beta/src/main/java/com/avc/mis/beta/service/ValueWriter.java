@@ -11,6 +11,7 @@ import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.avc.mis.beta.entities.values.ContractType;
@@ -112,5 +113,9 @@ public class ValueWriter {
 	
 	public void addWarehouse(Warehouse warehouse) {
 		dao.addEntity(warehouse);
+	}
+	
+	public void addCashewStandard(CashewStandard standard) {
+		dao.addEntity(standard);
 	}
 }

@@ -44,7 +44,7 @@ public class QualityCheckDTO extends ProductionProcessDTO {
 
 	
 	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
-	private Set<RawItemQualityDTO> checkItems; //can use a SortedSet like ContactDetails to maintain order
+	private Set<RawItemQualityDTO> testedItems; //can use a SortedSet like ContactDetails to maintain order
 	
 	public QualityCheckDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, ContractTypeCode contractTypeCode, Integer supplierId, Integer supplierVersion, String supplierName,  
@@ -60,7 +60,7 @@ public class QualityCheckDTO extends ProductionProcessDTO {
 		super(check);
 		this.processItems = Arrays.stream(check.getProcessItems())
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
-		this.checkItems = Arrays.stream(check.getTestedItems())
+		this.testedItems = Arrays.stream(check.getTestedItems())
 				.map(i->{return new RawItemQualityDTO(i);}).collect(Collectors.toSet());
 	}
 	

@@ -17,11 +17,12 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class UserBasic extends DataDTO {
 	
 	@JsonIgnore
 	@ToString.Exclude
+	@EqualsAndHashCode.Include
 	String username;
 		
 	public UserBasic(Integer id, Integer version, String username) {

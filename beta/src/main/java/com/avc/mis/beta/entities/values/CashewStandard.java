@@ -8,6 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,7 +20,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "CASHEW_STANDARDS")
+@Table(name = "CASHEW_STANDARDS", uniqueConstraints = 
+{ @UniqueConstraint(columnNames = { "itemId", "standardOrganization" }) })
 public class CashewStandard extends ValueEntity {
 	
 	private String standardOrganization;	
@@ -101,7 +103,7 @@ public class CashewStandard extends ValueEntity {
 
 	@Override
 	public String getValue() {
-		return standardOrganization;
+		return String.format("%s-%s", this.item.getValue(), this.standardOrganization);
 	}
 
 	@Override

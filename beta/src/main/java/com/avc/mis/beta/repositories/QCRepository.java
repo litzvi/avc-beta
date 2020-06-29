@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
+import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.entities.process.QualityCheck;
 /**
  * @author Zvi
@@ -60,6 +62,20 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 //				+ "left join sf.warehouseLocation warehouseLocation "
 		+ "where p.id = :processId ")
 	Set<RawItemQualityDTO> findCheckItemsById(int processId);
+
+	//perhaps should be moved elsewhere
+	@Query("select new com.avc.mis.beta.dto.values.CashewStandardDTO("
+			+ "i.id, i.standardOrganization, item.id, item.value, "
+			+ "i.totalDefects, i.totalDamage, "
+			+ "i.breakage, i.foreignMaterial, i.humidity, i.testa, " 
+			+ "i.scorched, i.deepCut, i.offColour, i.shrivel, i.desert, " 
+			+ "i.deepSpot, i.mold, i.dirty, i.decay, i.insectDamage, " 
+			+ "i.defectsAfterRoasting, i.weightLoss) "
+		+ "from CashewStandard i "
+			+ "join i.item item "
+		+ "where item.id = :itemId and i.standardOrganization = :standardOrganization "
+			+ "and i.active = true")
+	CashewStandardDTO findCashewStandard(Integer itemId, String standardOrganization);
 	
 //	@Query("select new com.avc.mis.beta.dto.queryRows.RawItemQualityWithStorage( "
 //			+ " i.id, i.version, item.id, item.value, "

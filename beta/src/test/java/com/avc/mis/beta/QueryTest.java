@@ -40,6 +40,7 @@ import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
+import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
@@ -63,6 +64,7 @@ public class QueryTest {
 	@Autowired Orders orders;
 	@Autowired Receipts receipts;
 	@Autowired CashewReports cashewReports;
+	@Autowired QualityChecks qualityChecks;
 	
 //	@Disabled
 	@Test
@@ -147,7 +149,7 @@ public class QueryTest {
 						});
 			});
 		});
-				
+		
 		//get users table
 		List<UserRow> usersTable = users.getUsersTable();
 		usersTable.forEach(u -> System.out.println(u));
@@ -185,7 +187,7 @@ public class QueryTest {
 	
 	@Test
 	void oneQueryTest() {
-
+		
 
 	}
 }

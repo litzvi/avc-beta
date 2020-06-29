@@ -193,6 +193,11 @@ public class TestService {
 		
 	}
 	
+	public Item getItem() {
+		List<Item> items = getItems();
+		return items.get(randNum.nextInt(items.size()));
+	}
+	
 	private ContractType getContractType() {
 		List<ContractType> contractTypes = valueTableReader.getAllContractTypes();
 		if(contractTypes.isEmpty())

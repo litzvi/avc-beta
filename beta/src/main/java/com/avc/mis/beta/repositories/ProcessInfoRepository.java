@@ -119,8 +119,8 @@ public interface ProcessInfoRepository extends BaseRepository<ProductionProcess>
 	@Query("select new com.avc.mis.beta.dto.data.ProcessManagementDTO(a.id, t.processName, "
 				+ "u.id, u.version, u.username, a.managementType) "
 			+ "from ProcessManagement a "
-			+ "join a.user u "
-			+ "join a.processType t ")
+				+ "join a.user u "
+				+ "join a.processType t ")
 	List<ProcessManagementDTO> findAllProcessManagements();
 
 

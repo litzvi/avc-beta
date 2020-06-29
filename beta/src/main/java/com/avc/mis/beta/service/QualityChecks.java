@@ -12,8 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
+import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.QualityCheck;
+import com.avc.mis.beta.entities.values.CashewStandard;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.repositories.QCRepository;
 
 import lombok.AccessLevel;
@@ -68,7 +71,7 @@ public class QualityChecks {
 		QualityCheckDTO qualityCheckDTO = check.orElseThrow(
 				()->new IllegalArgumentException("No quality check with given process id"));
 		qualityCheckDTO.setProcessItems(getQcRepository().findProcessItemWithStorage(processId));
-		qualityCheckDTO.setCheckItems(getQcRepository().findCheckItemsById(processId));
+		qualityCheckDTO.setTestedItems(getQcRepository().findCheckItemsById(processId));
 		
 		return qualityCheckDTO;
 	}
@@ -82,5 +85,12 @@ public class QualityChecks {
 	@Deprecated
 	public void removeCheck(int checkId) {
 		getDeletableDAO().permenentlyRemoveEntity(QualityCheck.class, checkId);
+	}	
+
+	public CashewStandardDTO getCashewStatndard(Integer itemId, String standardOrganization) {
+		CashewStandardDTO standard = getQcRepository().findCashewStandard(itemId, standardOrganization);
+//		CashewStandardDTO standardDTO = standard
+//				.orElseThrow(()->new IllegalArgumentException("No cashew standard for given item from given organization"));
+		return standard;
 	}
 }
