@@ -43,7 +43,9 @@ public class UserMessageDTO extends DataDTO {
 		super(id, version);
 		this.title = title;
 		this.processId = processId;
-		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
+		if(poCodeId != null) {
+			this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
+		}
 		this.processName = processName;
 //		this.createdDate = LocalDateTime.ofInstant(createdDate, ZoneOffset.UTC);
 		this.userName = userName;

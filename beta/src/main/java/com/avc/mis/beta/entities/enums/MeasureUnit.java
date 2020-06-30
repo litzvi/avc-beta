@@ -4,9 +4,11 @@
 package com.avc.mis.beta.entities.enums;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.settings.UOM;
 
 /**
@@ -42,7 +44,9 @@ public enum MeasureUnit {
 	
 	public static BigDecimal convert(BigDecimal amount, MeasureUnit fromUnit, MeasureUnit toUnit) {
 		UOM convertUOM = CONVERTION_MAP.get(fromUnit).get(toUnit);
-		return amount.multiply(convertUOM.getMultiplicand()).divide(convertUOM.getDivisor());
+		return amount
+				.multiply(convertUOM.getMultiplicand())
+				.divide(convertUOM.getDivisor(), AmountWithUnit.SCALE, RoundingMode.HALF_DOWN);
 	}
 
 //	public static final int SCALE = 3;
