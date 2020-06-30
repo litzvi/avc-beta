@@ -50,6 +50,14 @@ public class AmountWithUnit implements Cloneable {
 		this.amount = (new BigDecimal(amount));
 		this.measureUnit = MeasureUnit.valueOf(measureUnit);
 	}
+	
+	public AmountWithUnit add(AmountWithUnit augend) {
+		BigDecimal augendAmount = MeasureUnit.convert(augend.getAmount(), augend.getMeasureUnit(), this.measureUnit);
+		if(augendAmount == null)
+			throw new UnsupportedOperationException(
+					"Convertion from " + augend.getMeasureUnit() + " to " + this.measureUnit + " not supported");
+		return new AmountWithUnit(augendAmount, this.measureUnit);
+	}
 		
 	@Override
 	public AmountWithUnit clone() {

@@ -21,6 +21,7 @@ import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.queryRows.ItemInventoryRow;
+import com.avc.mis.beta.dto.queryRows.PoItemRow;
 import com.avc.mis.beta.dto.queryRows.PoRow;
 import com.avc.mis.beta.dto.queryRows.ReceiptRow;
 import com.avc.mis.beta.dto.queryRows.SupplierRow;

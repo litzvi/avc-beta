@@ -3,8 +3,12 @@
  */
 package com.avc.mis.beta.service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
+import com.avc.mis.beta.dto.queryRows.PoInventoryRow;
+import com.avc.mis.beta.dto.queryRows.PoItemRow;
 import com.avc.mis.beta.dto.queryRows.PoRow;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.repositories.PORepository;
@@ -44,14 +52,25 @@ public class Orders {
 	 * @return list of PoRow for orders that are yet to be received
 	 */
 	public List<PoRow> findOpenCashewOrders() {
-		return getPoRepository().findOpenOrderByType(ProcessName.CASHEW_ORDER);
+		List<PoItemRow> itemRows = getPoRepository().findOpenOrderByType(ProcessName.CASHEW_ORDER);
+		Map<Integer, List<PoItemRow>> poMap = itemRows.stream()
+				.collect(Collectors.groupingBy(PoItemRow::getId, Collectors.toList()));
+		List<PoRow> poRows = new ArrayList<PoRow>();
+		poMap.forEach((k, v) -> {
+			AmountWithUnit totalAmount = v.stream()
+					.map(pi -> pi.getNumberUnits())
+					.reduce(new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.LOT), AmountWithUnit::add);
+			PoRow poRow = new PoRow(k, totalAmount, v);
+			poRows.add(poRow);
+		});
+		return poRows;
 	}
 	
 	/**
 	 * Get the table of all General purchase orders that are active and where not received.
 	 * @return list of PoRow for orders that are yet to be received
 	 */
-	public List<PoRow> findOpenGeneralOrders() {
+	public List<PoItemRow> findOpenGeneralOrders() {
 		return getPoRepository().findOpenOrderByType(ProcessName.GENERAL_ORDER);
 	}
 	

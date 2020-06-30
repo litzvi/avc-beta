@@ -11,6 +11,8 @@ import java.util.Map;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.settings.UOM;
 
+import lombok.NonNull;
+
 /**
  * @author Zvi
  *
@@ -42,8 +44,10 @@ public enum MeasureUnit {
 		
 	}
 	
-	public static BigDecimal convert(BigDecimal amount, MeasureUnit fromUnit, MeasureUnit toUnit) {
+	public static BigDecimal convert(@NonNull BigDecimal amount, MeasureUnit fromUnit, MeasureUnit toUnit) {
 		UOM convertUOM = CONVERTION_MAP.get(fromUnit).get(toUnit);
+		if(convertUOM == null)
+			return null;
 		return amount
 				.multiply(convertUOM.getMultiplicand())
 				.divide(convertUOM.getDivisor(), AmountWithUnit.SCALE, RoundingMode.HALF_DOWN);

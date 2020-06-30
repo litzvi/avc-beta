@@ -38,7 +38,6 @@ public class ReceiptRow extends ValueDTO {
 	AmountWithUnit extraAdded;
 //	MeasureUnit extraAddedMU;
 	
-	
 	public ReceiptRow(@NonNull Integer id, 
 			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
 			String itemName, BigDecimal orderAmount, MeasureUnit orderMU, OffsetDateTime receiptDate, 

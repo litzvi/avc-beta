@@ -20,6 +20,7 @@ import com.avc.mis.beta.dto.queryRows.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.queryRows.StorageInventoryRow;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.repositories.InventoryRepository;
@@ -63,8 +64,11 @@ public class CashewReports {
 				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getPoCode, Collectors.toList()));
 		
 		List<PoInventoryRow> inventoryRows = new ArrayList<PoInventoryRow>();
-		piMap.forEach((k, v) -> {			
-			PoInventoryRow inventoryRow = new PoInventoryRow(k, v);
+		piMap.forEach((k, v) -> {
+			AmountWithUnit totalStock = v.stream()
+					.map(pi -> pi.getTotalAmount())
+					.reduce(new AmountWithUnit(BigDecimal.ZERO, v.get(0).getTotalAmount().getMeasureUnit()), AmountWithUnit::add);
+			PoInventoryRow inventoryRow = new PoInventoryRow(k, totalStock, v);
 			inventoryRows.add(inventoryRow);
 		});
 		return inventoryRows;
