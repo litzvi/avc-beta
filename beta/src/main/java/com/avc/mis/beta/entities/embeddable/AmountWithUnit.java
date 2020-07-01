@@ -82,7 +82,8 @@ public class AmountWithUnit implements Cloneable {
 		if(!isFilled()) {
 			return null;
 		}
-		return String.format("%s %s", this.amount.setScale(SCALE, RoundingMode.HALF_DOWN), this.measureUnit);
+		return String.format("%s %s", 
+				this.amount.setScale(SCALE, RoundingMode.HALF_DOWN).stripTrailingZeros(), this.measureUnit);
 	}
 	
 	public boolean isFilled() {
