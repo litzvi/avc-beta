@@ -97,7 +97,7 @@ public class ProcessInfoDAO extends DAO {
 				ApprovalTask processApproval = new ApprovalTask();
 				processApproval.setProcess(process);
 				processApproval.setUser(a.getUser());
-				processApproval.setDescription(process.getProcessType() + " process added");
+				processApproval.setDescription(process.getProcessTypeDescription() + " process added");
 				addEntity(processApproval); //user already in the persistence context
 			case REVIEW:
 				addMessage(a.getUser(), process, "New " + process.getProcessTypeDescription() + " process added");
@@ -125,7 +125,7 @@ public class ProcessInfoDAO extends DAO {
 		
 		List<ProcessManagement> alerts = getProcessRepository().findProcessTypeAlertsByProcess(process.getId());
 		for(ProcessManagement alert: alerts) {
-			addMessage(alert.getUser(), process, "Old " + process.getProcessType() + " process edited");
+			addMessage(alert.getUser(), process, "Old " + process.getProcessTypeDescription() + " process edited");
 		}
 	}
 	
