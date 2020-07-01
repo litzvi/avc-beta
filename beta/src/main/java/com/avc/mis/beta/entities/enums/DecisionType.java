@@ -11,7 +11,7 @@ public enum DecisionType {
 	NOT_ATTENDED,
 	EDIT_NOT_ATTENDED,
 	APPROVED,
-	DECLINED,
+	DECLINED
 //	FINALIZED, //perhaps can't change - already done in ProcessLifeCycle#RecordStatus
-	SUSPENDED	
+//	SUSPENDED	
 }

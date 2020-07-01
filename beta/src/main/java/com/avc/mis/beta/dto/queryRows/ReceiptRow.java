@@ -3,14 +3,10 @@
  */
 package com.avc.mis.beta.dto.queryRows;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
+import java.util.List;
 
 import com.avc.mis.beta.dto.ValueDTO;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -25,36 +21,15 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class ReceiptRow extends ValueDTO {
-	
-	PoCodeBasic poCode;
-	String supplierName;
-	String itemName;
-	AmountWithUnit orderAmount;
-//	MeasureUnit orderMU;
-	OffsetDateTime receiptDate;
-	AmountWithUnit receiptAmount;
-//	MeasureUnit receiptMU;
-	String storage;
-	AmountWithUnit extraAdded;
-//	MeasureUnit extraAddedMU;
-	
-	public ReceiptRow(@NonNull Integer id, 
-			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
-			String itemName, BigDecimal orderAmount, MeasureUnit orderMU, OffsetDateTime receiptDate, 
-			BigDecimal receiptAmount, MeasureUnit receiptMU, String storage, 
-			BigDecimal extraAdded, MeasureUnit extraAddedMU) {
+
+	AmountWithUnit totalAmount;
+
+	List<ReceiptItemRow> receiptRows;
+
+	public ReceiptRow(@NonNull Integer id, AmountWithUnit totalAmount, List<ReceiptItemRow> receiptRows) {
 		super(id);
-		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
-		this.supplierName = supplierName;
-		this.itemName = itemName;
-		this.orderAmount = new AmountWithUnit(orderAmount, orderMU);
-//		this.orderMU = orderMU;
-		this.receiptDate = receiptDate;
-		this.receiptAmount = new AmountWithUnit(receiptAmount, receiptMU);
-//		this.receiptMU = receiptMU;
-		this.storage = storage;
-		this.extraAdded = new AmountWithUnit(extraAdded, extraAddedMU);
-//		this.extraAddedMU = extraAddedMU;
+		this.totalAmount = totalAmount;
+		this.receiptRows = receiptRows;
 	}
 	
 }

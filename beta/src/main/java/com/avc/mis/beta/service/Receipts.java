@@ -3,9 +3,13 @@
  */
 package com.avc.mis.beta.service;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +18,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
+import com.avc.mis.beta.dto.queryRows.PoItemRow;
+import com.avc.mis.beta.dto.queryRows.PoRow;
+import com.avc.mis.beta.dto.queryRows.ReceiptItemRow;
 import com.avc.mis.beta.dto.queryRows.ReceiptRow;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -45,10 +54,10 @@ public class Receipts {
 	/**
 	 * Gets rows for table of Cashew received orders that where finalized. 
 	 * Contains all types of receipts including receipt without order.
-	 * @return List of ReceiptRow - id, PO#, supplier, item, order amount, receipt amount,
+	 * @return List of ReceiptItemRow - id, PO#, supplier, item, order amount, receipt amount,
 	 * receipt date and storage - for every received item of finalized orders.
 	 */
-	public List<ReceiptRow> findFinalCashewReceipts() {
+	public List<ReceiptItemRow> findFinalCashewReceipts() {
 		return getReceiptRepository().findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
 				new RecordStatus[] {RecordStatus.FINAL});
@@ -57,21 +66,32 @@ public class Receipts {
 	/**
 	 * Gets rows for table of Cashew received orders that are still pending - where not finalized. 
 	 * Contains all types of receipts including receipt without order.
-	 * @return List of ReceiptRow - id, PO#, supplier, item, order amount, receipt amount,
+	 * @return List of ReceiptItemRow - id, PO#, supplier, item, order amount, receipt amount,
 	 * receipt date and storage - for every received item of a pending - non finalized - orders.
 	 */
 	public List<ReceiptRow> findPendingCashewReceipts() {
-		return getReceiptRepository().findAllReceiptsByType(
+		List<ReceiptItemRow> itemRows = getReceiptRepository().findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
 				new RecordStatus[] {RecordStatus.EDITABLE, RecordStatus.LOCKED});
+		Map<Integer, List<ReceiptItemRow>> receiptMap = itemRows.stream()
+				.collect(Collectors.groupingBy(ReceiptItemRow::getId, Collectors.toList()));
+		List<ReceiptRow> receiptRows = new ArrayList<ReceiptRow>();
+		receiptMap.forEach((k, v) -> {
+			AmountWithUnit totalAmount = v.stream()
+					.map(pi -> pi.getReceiptAmount())
+					.reduce(new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.LOT), AmountWithUnit::add);
+			ReceiptRow receiptRow = new ReceiptRow(k, totalAmount, v);
+			receiptRows.add(receiptRow);
+		});
+		return receiptRows;
 	}
 	
 	/**
 	 * Gets rows for table of General received orders. Contains all receipts including receipt without order.	 * 
-	 * @return List of ReceiptRow - id, PO#, supplier, item, order amount, receipt amount,
+	 * @return List of ReceiptItemRow - id, PO#, supplier, item, order amount, receipt amount,
 	 * receipt date and storage - for every received item.
 	 */
-	public List<ReceiptRow> findFinalGeneralReceipts() {
+	public List<ReceiptItemRow> findFinalGeneralReceipts() {
 		return getReceiptRepository().findAllReceiptsByType(
 				new ProcessName[] {ProcessName.GENERAL_RECEIPT},
 				new RecordStatus[] {RecordStatus.FINAL});		

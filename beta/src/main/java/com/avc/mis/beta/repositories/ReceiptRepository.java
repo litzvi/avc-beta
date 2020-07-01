@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.queryRows.ReceiptItemWithStorage;
-import com.avc.mis.beta.dto.queryRows.ReceiptRow;
+import com.avc.mis.beta.dto.queryRows.ReceiptItemRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -82,7 +82,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 		+ "where p.id = :processId ")
 	List<ReceiptItemWithStorage> findReceiptItemWithStorage(int processId);
 
-	@Query("select new com.avc.mis.beta.dto.queryRows.ReceiptRow( "
+	@Query("select new com.avc.mis.beta.dto.queryRows.ReceiptItemRow( "
 				+ "r.id, po_code.id, ct.code, s.name, i.value, "
 				+ "units.amount, units.measureUnit, "
 				+ "r.recordedTime, "
@@ -112,7 +112,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 				+ "where t.processName in :processNames "
 				+ "and lc.status in :statuses "
 			+ "group by r.id, oi, pi ")
-	List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames, RecordStatus[] statuses);
+	List<ReceiptItemRow> findAllReceiptsByType(ProcessName[] processNames, RecordStatus[] statuses);
 
 	/**
 	 * @param processId

@@ -23,7 +23,7 @@ import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.queryRows.ItemInventoryRow;
 import com.avc.mis.beta.dto.queryRows.PoItemRow;
 import com.avc.mis.beta.dto.queryRows.PoRow;
-import com.avc.mis.beta.dto.queryRows.ReceiptRow;
+import com.avc.mis.beta.dto.queryRows.ReceiptItemRow;
 import com.avc.mis.beta.dto.queryRows.SupplierRow;
 import com.avc.mis.beta.dto.queryRows.UserRow;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
@@ -118,7 +118,7 @@ public class QueryTest {
 		valueTablesReader.getCashewitemsBasic().forEach(i -> System.out.println(i));
 		
 		//print received orders
-		List<ReceiptRow> receiptRows = receipts.findFinalCashewReceipts();
+		List<ReceiptItemRow> receiptRows = receipts.findFinalCashewReceipts();
 		receiptRows.forEach(r -> System.out.println(r));
 		
 		

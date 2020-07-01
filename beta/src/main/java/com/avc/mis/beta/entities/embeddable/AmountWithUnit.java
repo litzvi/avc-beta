@@ -56,7 +56,7 @@ public class AmountWithUnit implements Cloneable {
 		if(augendAmount == null)
 			throw new UnsupportedOperationException(
 					"Convertion from " + augend.getMeasureUnit() + " to " + this.measureUnit + " not supported");
-		return new AmountWithUnit(augendAmount, this.measureUnit);
+		return new AmountWithUnit(this.amount.add(augendAmount), this.measureUnit);
 	}
 		
 	@Override
