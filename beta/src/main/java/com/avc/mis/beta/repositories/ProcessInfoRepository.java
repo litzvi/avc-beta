@@ -25,7 +25,7 @@ import com.avc.mis.beta.entities.processinfo.ApprovalTask;
  * @author Zvi
  *
  */
-public interface ProcessInfoRepository extends BaseRepository<ProductionProcess> {
+public interface ProcessInfoRepository extends ProcessRepository<ProductionProcess> {
 
 //	@Query("select a "
 //			+ "from ProcessManagement a "

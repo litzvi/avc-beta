@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
 import com.avc.mis.beta.dto.processinfo.StorageDTO;
 import com.avc.mis.beta.entities.enums.CheckStatus;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.Storage;
 

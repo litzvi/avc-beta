@@ -10,7 +10,6 @@ import java.util.List;
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.CheckStatus;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.processinfo.RawItemQuality;
 import com.avc.mis.beta.entities.values.Item;
 

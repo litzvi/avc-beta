@@ -9,8 +9,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.dto.queryRows.ReceiptItemWithStorage;
 import com.avc.mis.beta.dto.queryRows.ReceiptItemRow;
+import com.avc.mis.beta.dto.queryRows.ReceiptItemWithStorage;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.Receipt;

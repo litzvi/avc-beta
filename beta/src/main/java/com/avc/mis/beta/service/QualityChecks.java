@@ -15,8 +15,6 @@ import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.QualityCheck;
-import com.avc.mis.beta.entities.values.CashewStandard;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.repositories.QCRepository;
 
 import lombok.AccessLevel;

@@ -17,15 +17,18 @@ import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
+import com.avc.mis.beta.repositories.ProcessRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * Used for accessing and updating information notifying about processes (rather then process data itself). 
@@ -42,7 +45,8 @@ public class ProcessInfoReader {
 	
 	@Autowired private ReadOnlyDAO dao;
 	
-	@Autowired private ProcessInfoRepository processRepository;
+//	@Autowired private ProcessRepository processRepository;
+	@Autowired private ProcessInfoRepository processInfoRepository;
 	@Autowired private Orders orders;
 	@Autowired private Receipts orderReceipts;
 	@Autowired private QualityChecks qualityChecks;
@@ -56,7 +60,7 @@ public class ProcessInfoReader {
 	 * @return ProcessManagement with the given id.
 	 */
 	public ProcessManagement getProcessTypeAlert(Integer id) {
-		return processRepository.findProcessManagementById(id);
+		return processInfoRepository.findProcessManagementById(id);
 	}
 	
 	/**
@@ -64,7 +68,7 @@ public class ProcessInfoReader {
 	 * @return nested Map by Process name with List of ProcessManagementDTO, that contains user and approval type.
 	 */
 	public Map<ProcessName, Map<UserBasic, List<BasicValueEntity<ProcessManagement>>>> getAllProcessTypeAlerts() {
-		List<ProcessManagementDTO> processTypeAlerts = processRepository.findAllProcessManagements();
+		List<ProcessManagementDTO> processTypeAlerts = processInfoRepository.findAllProcessManagements();
 		
 		return processTypeAlerts.stream()
 			.collect(Collectors.groupingBy(ProcessManagementDTO::getProcessName, 
@@ -80,12 +84,12 @@ public class ProcessInfoReader {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<UserMessageDTO> getAllMessages() {		
-		return getProcessRepository().findAllMessagesByUser(dao.getCurrentUserId());
+		return getProcessInfoRepository().findAllMessagesByUser(dao.getCurrentUserId());
 	}
 	
 	@Deprecated
 	public List<UserMessageDTO> getAllUserMessages(Integer userId) {		
-		return getProcessRepository().findAllMessagesByUser(userId);
+		return getProcessInfoRepository().findAllMessagesByUser(userId);
 	}
 	
 	/**
@@ -94,7 +98,7 @@ public class ProcessInfoReader {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<UserMessageDTO> getAllNewMessages() {
-		return getProcessRepository().findAllMessagesByUserAndLable(dao.getCurrentUserId(), 
+		return getProcessInfoRepository().findAllMessagesByUserAndLable(dao.getCurrentUserId(), 
 				new MessageLabel[] {MessageLabel.NEW});
 	}
 	
@@ -104,7 +108,7 @@ public class ProcessInfoReader {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<ApprovalTaskDTO> getAllRequiredApprovals() {
-		return getProcessRepository().findAllRequiredApprovalsByUser(dao.getCurrentUserId(), 
+		return getProcessInfoRepository().findAllRequiredApprovalsByUser(dao.getCurrentUserId(), 
 				new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED});
 	}
 	
@@ -114,7 +118,7 @@ public class ProcessInfoReader {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<ApprovalTaskDTO> getAllApprovals() {
-		return getProcessRepository().findAllApprovalsByUser(dao.getCurrentUserId());
+		return getProcessInfoRepository().findAllApprovalsByUser(dao.getCurrentUserId());
 	}
 	
 	/**
@@ -124,8 +128,8 @@ public class ProcessInfoReader {
 	 * @param processTypeName
 	 * @return ProductionProcessDTO with information of the requested process.
 	 */
-	public ProductionProcessDTO getProcess(int processId, String processTypeName) {
-		ProcessName processName = Enum.valueOf(ProcessName.class, processTypeName);
+	public ProductionProcessDTO getProcess(int processId, ProcessName processName) {
+//		ProcessName processName = Enum.valueOf(ProcessName.class, processTypeName);
 		switch(processName) {
 		case CASHEW_ORDER:
 		case GENERAL_ORDER:
@@ -143,6 +147,10 @@ public class ProcessInfoReader {
 			default:
 		}
 		return null;
+	}
+	
+	public List<ProcessBasic> getAllProcessesByPo(@NonNull Integer poId) {
+		return getProcessInfoRepository().findAllProcessesByPo(poId);
 	}
 
 	

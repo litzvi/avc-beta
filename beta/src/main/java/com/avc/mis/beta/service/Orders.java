@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
-import com.avc.mis.beta.dto.queryRows.PoInventoryRow;
 import com.avc.mis.beta.dto.queryRows.PoItemRow;
 import com.avc.mis.beta.dto.queryRows.PoRow;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;

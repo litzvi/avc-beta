@@ -20,7 +20,6 @@ import com.avc.mis.beta.dto.queryRows.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.queryRows.StorageInventoryRow;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.repositories.InventoryRepository;

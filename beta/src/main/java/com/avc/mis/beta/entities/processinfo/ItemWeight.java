@@ -6,10 +6,7 @@ package com.avc.mis.beta.entities.processinfo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;

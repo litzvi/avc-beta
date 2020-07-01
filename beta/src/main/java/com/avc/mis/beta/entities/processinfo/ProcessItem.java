@@ -18,7 +18,6 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
-import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,7 +27,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 /**
  * Represents an Item that the process adds to stock. perhaps name should be changed to InItem/ImportItem/AddedItem

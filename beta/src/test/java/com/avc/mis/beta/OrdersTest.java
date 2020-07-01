@@ -95,7 +95,7 @@ public class OrdersTest {
 			fail("Should not be able to change to final before approved");
 		} catch (Exception e1) {}		
 		tasks.forEach(t -> {
-			ProductionProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessName().name());
+			ProductionProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessName());
 			String processSnapshot = null;
 			try {
 				processSnapshot = objMapper.writeValueAsString(p);

@@ -5,6 +5,7 @@ package com.avc.mis.beta;
 
 import static org.assertj.core.api.Assertions.fail;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -30,9 +31,12 @@ import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
+import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.SupplyCategory;
@@ -181,14 +185,24 @@ public class QueryTest {
 		//cashew inventory table
 		List<ItemInventoryRow> inventoryRows = cashewReports.getInventoryTable();
 		inventoryRows.forEach(r -> System.out.println(r));
+		
+		//get all processes by po code/id
+		for(UserMessageDTO message: messages) {
+			if(message.getPoCode() != null) {
+				Integer poId = message.getPoCode().getId();
+				List<ProcessBasic> processBasics = processInfoReader.getAllProcessesByPo(poId);
+				processBasics.forEach(s -> System.out.println(s));
+			}
 			
+		}
+		
+					
 		service.cleanup(po);
 
 	}
 	
 	@Test
 	void oneQueryTest() {
-		
-
+	
 	}
 }
