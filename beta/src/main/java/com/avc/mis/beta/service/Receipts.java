@@ -55,8 +55,8 @@ public class Receipts {
 	 * @return List of ReceiptItemRow - id, PO#, supplier, item, order amount, receipt amount,
 	 * receipt date and storage - for every received item of finalized orders.
 	 */
-	public List<ReceiptItemRow> findFinalCashewReceipts() {
-		return getReceiptRepository().findAllReceiptsByType(
+	public List<ReceiptRow> findFinalCashewReceipts() {
+		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
 				new RecordStatus[] {RecordStatus.FINAL});
 	}
@@ -68,9 +68,15 @@ public class Receipts {
 	 * receipt date and storage - for every received item of a pending - non finalized - orders.
 	 */
 	public List<ReceiptRow> findPendingCashewReceipts() {
-		List<ReceiptItemRow> itemRows = getReceiptRepository().findAllReceiptsByType(
+		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
 				new RecordStatus[] {RecordStatus.EDITABLE, RecordStatus.LOCKED});
+		
+	}
+	
+	private List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames, RecordStatus[] statuses) {
+		List<ReceiptItemRow> itemRows = getReceiptRepository().findAllReceiptsByType(
+				processNames, statuses);
 		Map<Integer, List<ReceiptItemRow>> receiptMap = itemRows.stream()
 				.collect(Collectors.groupingBy(ReceiptItemRow::getId, Collectors.toList()));
 		List<ReceiptRow> receiptRows = new ArrayList<ReceiptRow>();
