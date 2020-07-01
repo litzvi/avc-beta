@@ -65,6 +65,10 @@ public class Orders {
 		return poRows;
 	}
 	
+	public List<PoItemRow> findOpenCashewOrderItems() {
+		return getPoRepository().findOpenOrderByType(ProcessName.CASHEW_ORDER);
+	}
+	
 	/**
 	 * Get the table of all General purchase orders that are active and where not received.
 	 * @return list of PoRow for orders that are yet to be received
