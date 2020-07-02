@@ -28,7 +28,8 @@ public class AmountWithUnit implements Cloneable {
 	
 	public static final int SCALE = 3;
 
-	private BigDecimal amount = BigDecimal.ZERO;
+	private BigDecimal amount;
+//	private BigDecimal amount = BigDecimal.ZERO;
 	
 	@Enumerated(EnumType.STRING)
 //	@Column(nullable = false)
@@ -57,6 +58,10 @@ public class AmountWithUnit implements Cloneable {
 			throw new UnsupportedOperationException(
 					"Convertion from " + augend.getMeasureUnit() + " to " + this.measureUnit + " not supported");
 		return new AmountWithUnit(this.amount.add(augendAmount), this.measureUnit);
+	}
+	
+	public AmountWithUnit multiply(BigDecimal multiplicand) {
+		return new AmountWithUnit(this.amount.multiply(multiplicand), this.measureUnit);
 	}
 		
 	@Override
@@ -97,6 +102,8 @@ public class AmountWithUnit implements Cloneable {
 		}
 		return amount.signum();
 	}
+
+	
 
 
 }

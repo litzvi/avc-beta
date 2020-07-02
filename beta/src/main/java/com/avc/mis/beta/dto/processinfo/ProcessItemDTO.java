@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.processinfo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,6 +14,8 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Item;
 
@@ -98,6 +101,11 @@ public class ProcessItemDTO extends ProcessDTO {
 		this.remarks = remarks;
 	}
 
+	public AmountWithUnit getTotalAmount() {
+		return storageForms.stream()
+				.map(sf -> sf.getUnitAmount().multiply(sf.getNumberUnits()))
+				.reduce(new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.LOT), AmountWithUnit::add);
+	}
 
 	
 	public static List<ProcessItemDTO> getProcessItems(List<ProcessItemWithStorage> storages) {
