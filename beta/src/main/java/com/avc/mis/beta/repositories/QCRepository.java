@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -49,10 +50,11 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 	@Query("select new com.avc.mis.beta.dto.processinfo.RawItemQualityDTO("
 			+ "i.id, i.version, item.id, item.value, "
 //			+ "i.description, i.remarks, "
-			+ "i.breakage, i.foreignMaterial, i.humidity, i.testa, " 
+			+ "i.wholeCountPerLb, i.smallSize, i.ws, i.lp, i.breakage, "
+			+ "i.foreignMaterial, i.humidity, i.testa, " 
 			+ "i.scorched, i.deepCut, i.offColour, i.shrivel, i.desert, " 
 			+ "i.deepSpot, i.mold, i.dirty, i.decay, i.insectDamage, " 
-			+ "i.nutCount, i.smallKernels, i.defectsAfterRoasting, i.weightLoss, " 
+			+ "i.roastingWeightLoss, " 
 			+ "i.colour, i.flavour) "
 		+ "from RawItemQuality i "
 			+ "join i.item item "
@@ -66,10 +68,11 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 	@Query("select new com.avc.mis.beta.dto.values.CashewStandardDTO("
 			+ "i.id, i.standardOrganization, item.id, item.value, "
 			+ "i.totalDefects, i.totalDamage, "
-			+ "i.breakage, i.foreignMaterial, i.humidity, i.testa, " 
+			+ "i.wholeCountPerLb, i.smallSize, i.ws, i.lp, i.breakage, "
+			+ "i.foreignMaterial, i.humidity, i.testa, " 
 			+ "i.scorched, i.deepCut, i.offColour, i.shrivel, i.desert, " 
 			+ "i.deepSpot, i.mold, i.dirty, i.decay, i.insectDamage, " 
-			+ "i.defectsAfterRoasting, i.weightLoss) "
+			+ "i.roastingWeightLoss) "
 		+ "from CashewStandard i "
 			+ "join i.item item "
 		+ "where item.id = :itemId and i.standardOrganization = :standardOrganization "

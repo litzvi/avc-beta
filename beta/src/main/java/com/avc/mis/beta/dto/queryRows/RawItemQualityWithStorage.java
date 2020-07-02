@@ -31,19 +31,21 @@ public class RawItemQualityWithStorage {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks,
 			String description, String remarks, Class<? extends Storage> clazz,
-			BigDecimal breakage, BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
+			BigDecimal wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
+			BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal decay, BigDecimal insectDamage,
-			BigDecimal count, BigDecimal smallKernels, BigDecimal defectsAfterRoasting, BigDecimal weightLoss,
+			BigDecimal roastingWeightLoss,
 			CheckStatus colour, CheckStatus flavour) {
 		this.rawItemQuality = new RawItemQualityDTO(id, version, 
 				itemId, itemValue, 
 				/* poCodeId, contractTypeCode, supplierName, */
 				/* description, remarks, */
-				breakage, foreignMaterial, humidity, testa,
+				wholeCountPerLb, smallSize, ws, lp, breakage, 
+				foreignMaterial, humidity, testa,
 				scorched, deepCut, offColour, shrivel, desert,
 				deepSpot, mold, dirty, decay, insectDamage,
-				count, smallKernels, defectsAfterRoasting, weightLoss,
+				roastingWeightLoss,
 				colour, flavour);
 		this.storage = new StorageDTO(storageId, storageVersion, 
 				unitAmount, measureUnit, numberUnits, 

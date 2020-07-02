@@ -28,6 +28,10 @@ public class RawItemQualityDTO extends ProcessDTO {
 	
 	BasicValueEntity<Item> item;
 
+	BigDecimal wholeCountPerLb;
+	BigDecimal smallSize;
+	BigDecimal ws;
+	BigDecimal lp;
 	BigDecimal breakage;
 	BigDecimal foreignMaterial;
 	BigDecimal humidity;
@@ -42,10 +46,10 @@ public class RawItemQualityDTO extends ProcessDTO {
 	BigDecimal dirty;
 	BigDecimal decay;
 	BigDecimal insectDamage;
-	BigDecimal nutCount;
-	BigDecimal smallKernels;
-	BigDecimal defectsAfterRoasting;
-	BigDecimal weightLoss;
+//	BigDecimal nutCount;
+//	BigDecimal smallKernels;
+//	BigDecimal defectsAfterRoasting;
+	BigDecimal roastingWeightLoss;
 	CheckStatus colour; 
 	CheckStatus flavour; 
 	
@@ -54,15 +58,20 @@ public class RawItemQualityDTO extends ProcessDTO {
 			Integer itemId, String itemValue, 
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			/* String description, String remarks, */ 
-			BigDecimal breakage, BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
+			BigDecimal wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
+			BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal decay, BigDecimal insectDamage,
-			BigDecimal nutCount, BigDecimal smallKernels, BigDecimal defectsAfterRoasting, BigDecimal weightLoss,
+			BigDecimal roastingWeightLoss,
 			CheckStatus colour, CheckStatus flavour) {
 		super(id, version);
 //		super(id, version, itemId, itemValue, /* poCodeId, contractTypeCode, supplierName, */ description, remarks);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 
+		this.wholeCountPerLb = wholeCountPerLb;
+		this.smallSize = smallSize;
+		this.ws = ws;
+		this.lp = lp;
 		this.breakage = breakage;
 		this.foreignMaterial = foreignMaterial;
 		this.humidity = humidity;
@@ -77,10 +86,10 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.dirty = dirty;
 		this.decay = decay;
 		this.insectDamage = insectDamage;
-		this.nutCount = nutCount;
-		this.smallKernels = smallKernels;
-		this.defectsAfterRoasting = defectsAfterRoasting;
-		this.weightLoss = weightLoss;
+//		this.nutCount = nutCount;
+//		this.smallKernels = smallKernels;
+//		this.defectsAfterRoasting = defectsAfterRoasting;
+		this.roastingWeightLoss = roastingWeightLoss;
 		this.colour = colour;
 		this.flavour = flavour;
 	}
@@ -89,6 +98,10 @@ public class RawItemQualityDTO extends ProcessDTO {
 		super(itemQuality.getId(), itemQuality.getVersion());
 		this.item = new BasicValueEntity<Item>(itemQuality.getItem());
 
+		this.wholeCountPerLb = itemQuality.getWholeCountPerLb();
+		this.smallSize = itemQuality.getSmallSize();
+		this.ws = itemQuality.getWs();
+		this.lp = itemQuality.getLp();
 		this.breakage = itemQuality.getBreakage();            
 		this.foreignMaterial = itemQuality.getForeignMaterial();
 		this.humidity = itemQuality.getHumidity();
@@ -103,10 +116,10 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.dirty = itemQuality.getDirty();
 		this.decay = itemQuality.getDecay();
 		this.insectDamage = itemQuality.getInsectDamage();
-		this.nutCount = itemQuality.getNutCount();
-		this.smallKernels = getSmallKernels();        
-		this.defectsAfterRoasting = itemQuality.getDefectsAfterRoasting();
-		this.weightLoss = itemQuality.getWeightLoss();
+//		this.nutCount = itemQuality.getNutCount();
+//		this.smallKernels = getSmallKernels();        
+//		this.defectsAfterRoasting = itemQuality.getDefectsAfterRoasting();
+		this.roastingWeightLoss = itemQuality.getRoastingWeightLoss();
 		this.colour = itemQuality.getColour();
 		this.flavour = itemQuality.getFlavour();
 	}

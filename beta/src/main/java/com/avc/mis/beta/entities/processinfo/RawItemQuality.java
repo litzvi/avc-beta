@@ -43,6 +43,18 @@ public class RawItemQuality extends ProcessInfoEntity {
 	
 	
 	@Column(precision = 19, scale = 3)
+	private BigDecimal wholeCountPerLb;
+	
+	@Column(precision = 19, scale = 3)
+	private BigDecimal smallSize;
+	
+	@Column(precision = 19, scale = 3)
+	private BigDecimal ws;
+	
+	@Column(precision = 19, scale = 3)
+	private BigDecimal lp;
+	
+	@Column(precision = 19, scale = 3)
 	private BigDecimal breakage;
 	
 	@Column(precision = 19, scale = 3)
@@ -50,9 +62,6 @@ public class RawItemQuality extends ProcessInfoEntity {
 	
 	@Column(precision = 19, scale = 3)
 	private BigDecimal humidity;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal testa;
 	
 	@Column(precision = 19, scale = 3)
 	private BigDecimal scorched;
@@ -83,18 +92,16 @@ public class RawItemQuality extends ProcessInfoEntity {
 	
 	@Column(precision = 19, scale = 3)
 	private BigDecimal insectDamage;
-	
+
 	@Column(precision = 19, scale = 3)
-	private BigDecimal nutCount;
+	private BigDecimal testa;
 	
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal defectsAfterRoasting;
+//	
 	@Column(precision = 19, scale = 3)
-	private BigDecimal smallKernels;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal defectsAfterRoasting;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal weightLoss;
+	private BigDecimal roastingWeightLoss;
 	
 	@Enumerated(EnumType.STRING)
 	private CheckStatus colour; 
@@ -103,7 +110,7 @@ public class RawItemQuality extends ProcessInfoEntity {
 	private CheckStatus flavour; 
 	
 	public BigDecimal getTotalDefects() {
-		List<BigDecimal> list = Arrays.asList(this.testa, this.scorched, this.deepCut, 
+		List<BigDecimal> list = Arrays.asList(this.scorched, this.deepCut, 
 				this.offColour, this.shrivel, this.desert, this.deepSpot);
 		BigDecimal sum = BigDecimal.ZERO;
 		for(BigDecimal augend: list) {
@@ -115,7 +122,7 @@ public class RawItemQuality extends ProcessInfoEntity {
 	}
 	
 	public BigDecimal getTotalDamage() {
-		List<BigDecimal> list = Arrays.asList(this.mold, this.dirty, this.decay, this.insectDamage);
+		List<BigDecimal> list = Arrays.asList(this.mold, this.dirty, this.decay, this.insectDamage, this.testa);
 		BigDecimal sum = BigDecimal.ZERO;
 		for(BigDecimal augend: list) {
 			if(augend != null) {

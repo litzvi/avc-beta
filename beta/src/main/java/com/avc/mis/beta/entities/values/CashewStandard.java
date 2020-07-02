@@ -37,6 +37,18 @@ public class CashewStandard extends ValueEntity {
 	private BigDecimal totalDamage;
 	
 	@Column(precision = 19, scale = 3)
+	private BigDecimal wholeCountPerLb;
+	
+	@Column(precision = 19, scale = 3)
+	private BigDecimal smallSize;
+	
+	@Column(precision = 19, scale = 3)
+	private BigDecimal ws;
+	
+	@Column(precision = 19, scale = 3)
+	private BigDecimal lp;
+	
+	@Column(precision = 19, scale = 3)
 	private BigDecimal breakage;
 	
 	@Column(precision = 19, scale = 3)
@@ -84,11 +96,11 @@ public class CashewStandard extends ValueEntity {
 //	@Column(precision = 19, scale = 3)
 //	private BigDecimal smallKernels;
 //	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal defectsAfterRoasting;
+//	
 	@Column(precision = 19, scale = 3)
-	private BigDecimal defectsAfterRoasting;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal weightLoss;
+	private BigDecimal roastingWeightLoss;
 	
 //	@Enumerated(EnumType.STRING)
 //	private CheckStatus colour; 

@@ -2,6 +2,8 @@ package com.avc.mis.beta.dto.values;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
+
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.Item;
@@ -21,6 +23,10 @@ public class CashewStandardDTO extends ValueDTO {
 	BigDecimal totalDefects;
 	BigDecimal totalDamage;
 	
+	BigDecimal wholeCountPerLb;
+	BigDecimal smallSize;
+	BigDecimal ws;
+	BigDecimal lp;
 	BigDecimal breakage;
 	BigDecimal foreignMaterial;
 	BigDecimal humidity;
@@ -35,20 +41,25 @@ public class CashewStandardDTO extends ValueDTO {
 	BigDecimal dirty;
 	BigDecimal decay;
 	BigDecimal insectDamage;
-	BigDecimal defectsAfterRoasting;
-	BigDecimal weightLoss;
+//	BigDecimal defectsAfterRoasting;
+	BigDecimal roastingWeightLoss;
 	
 	public CashewStandardDTO(@NonNull Integer id, String standardOrganization, 
 			Integer itemId, String itemValue, 
-			BigDecimal totalDefects, BigDecimal totalDamage, BigDecimal breakage, BigDecimal foreignMaterial,
+			BigDecimal totalDefects, BigDecimal totalDamage, BigDecimal foreignMaterial,
+			BigDecimal wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
 			BigDecimal humidity, BigDecimal testa, BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour,
 			BigDecimal shrivel, BigDecimal desert, BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty,
-			BigDecimal decay, BigDecimal insectDamage, BigDecimal defectsAfterRoasting, BigDecimal weightLoss) {
+			BigDecimal decay, BigDecimal insectDamage, BigDecimal roastingWeightLoss) {
 		super(id);
 		this.standardOrganization = standardOrganization;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.totalDefects = totalDefects;
 		this.totalDamage = totalDamage;
+		this.wholeCountPerLb = wholeCountPerLb;
+		this.smallSize = smallSize;
+		this.ws = ws;
+		this.lp = lp;
 		this.breakage = breakage;
 		this.foreignMaterial = foreignMaterial;
 		this.humidity = humidity;
@@ -63,8 +74,8 @@ public class CashewStandardDTO extends ValueDTO {
 		this.dirty = dirty;
 		this.decay = decay;
 		this.insectDamage = insectDamage;
-		this.defectsAfterRoasting = defectsAfterRoasting;
-		this.weightLoss = weightLoss;
+//		this.defectsAfterRoasting = defectsAfterRoasting;
+		this.roastingWeightLoss = roastingWeightLoss;
 	}
 	
 	public CashewStandardDTO(CashewStandard standard) {
@@ -75,6 +86,10 @@ public class CashewStandardDTO extends ValueDTO {
 			this.item = new BasicValueEntity<Item>(item.getId(), item.getValue());
 		else
 			this.item = null;
+		this.wholeCountPerLb = standard.getWholeCountPerLb();
+		this.smallSize = standard.getSmallSize();
+		this.ws = standard.getWs();
+		this.lp = standard.getLp();
 		this.totalDefects = standard.getTotalDefects();
 		this.totalDamage = standard.getTotalDamage();
 		this.breakage = standard.getBreakage();
@@ -91,8 +106,8 @@ public class CashewStandardDTO extends ValueDTO {
 		this.dirty = standard.getDirty();
 		this.decay = standard.getDecay();
 		this.insectDamage = standard.getInsectDamage();
-		this.defectsAfterRoasting = standard.getDefectsAfterRoasting();
-		this.weightLoss = standard.getWeightLoss();
+//		this.defectsAfterRoasting = standard.getDefectsAfterRoasting();
+		this.roastingWeightLoss = standard.getRoastingWeightLoss();
 	}
 
 	public String getValue() {

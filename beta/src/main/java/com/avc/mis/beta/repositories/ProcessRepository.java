@@ -28,8 +28,9 @@ public interface ProcessRepository<T extends ProductionProcess> extends BaseRepo
 	@Query("select new com.avc.mis.beta.dto.values.ProcessBasic( "
 			+ "p.id, t.processName) "
 		+ "from ProductionProcess p "
+			+ "join p.poCode c "
 			+ "join p.processType t "
-		+ "where p.id = :poId ")
+		+ "where c.code = :poId ")
 	List<ProcessBasic> findAllProcessesByPo(Integer poId);
 
 }
