@@ -18,6 +18,7 @@ import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.avc.mis.beta.entities.values.ContractType;
@@ -100,5 +101,8 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 
 	@Query("select t from ProductionLine t where t.active = true")
 	List<ProductionLine> findAllProductionLines();
+	
+	@Query("select t from CashewStandard t where t.active = true")
+	List<CashewStandard> findAllCashewStandard();
 
 }

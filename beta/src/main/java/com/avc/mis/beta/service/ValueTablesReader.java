@@ -18,6 +18,7 @@ import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.avc.mis.beta.entities.values.ContractType;
@@ -97,6 +98,10 @@ public class ValueTablesReader {
 	
 	public List<ProductionLine> getAllProductionLines() {
 		return getValueTablesRepository().findAllProductionLines();
+	}
+	
+	public List<CashewStandard> getAllCashewStandards() {
+		return getValueTablesRepository().findAllCashewStandard();
 	}
 	
 //----------------------------DTO---------------------------------------------------------	

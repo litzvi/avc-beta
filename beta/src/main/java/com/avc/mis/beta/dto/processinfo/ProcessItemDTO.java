@@ -89,7 +89,6 @@ public class ProcessItemDTO extends ProcessDTO {
 		
 	}
 
-
 	public ProcessItemDTO(Integer id, Integer version,
 			BasicValueEntity<Item> item, /* PoCodeDTO itemPo, */
 			String description, String remarks) {
@@ -100,16 +99,11 @@ public class ProcessItemDTO extends ProcessDTO {
 		this.remarks = remarks;
 	}
 
-	
-	/**
-	 * @return total storage amounts
-	 */
 	public Optional<AmountWithUnit> getTotalAmount() {
 		return storageForms.stream()
 				.map(sf -> sf.getUnitAmount().multiply(sf.getNumberUnits()))
 				.reduce(AmountWithUnit::add);
 	}
-
 	
 	public static List<ProcessItemDTO> getProcessItems(List<ProcessItemWithStorage> storages) {
 		Map<Integer, List<ProcessItemWithStorage>> map = storages.stream()
