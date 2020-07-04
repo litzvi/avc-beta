@@ -136,10 +136,11 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "from ProcessItem i "
 			+ "join i.item item "
 			+ "join i.process p "
+				+ "join p.poCode poCode "
 			+ "join i.storageForms sf "
 				+ "join sf.unitAmount unit "
 				+ "left join sf.warehouseLocation warehouseLocation "
-		+ "where p.poCode = :poCode ")
-	List<ProcessItemWithStorage> findProcessItemWithStorage(PoCode poCode);
+		+ "where poCode.code = :poCodeId ")
+	List<ProcessItemWithStorage> findProcessItemWithStorageByPoCode(Integer poCodeId);
 
 }

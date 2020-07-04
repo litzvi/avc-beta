@@ -5,6 +5,7 @@ package com.avc.mis.beta.entities.embeddable;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
@@ -27,6 +28,8 @@ import lombok.NoArgsConstructor;
 public class AmountWithUnit implements Cloneable {
 	
 	public static final int SCALE = 3;
+	
+	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,###.###");
 
 	private BigDecimal amount;
 //	private BigDecimal amount = BigDecimal.ZERO;
@@ -87,8 +90,11 @@ public class AmountWithUnit implements Cloneable {
 		if(!isFilled()) {
 			return null;
 		}
+//		return String.format("%s %s", 
+//				this.amount.setScale(SCALE, RoundingMode.HALF_DOWN).stripTrailingZeros().toPlainString(), 
+//				this.measureUnit);
 		return String.format("%s %s", 
-				this.amount.setScale(SCALE, RoundingMode.HALF_DOWN).stripTrailingZeros().toPlainString(), 
+				DECIMAL_FORMAT.format(this.amount), 
 				this.measureUnit);
 	}
 	

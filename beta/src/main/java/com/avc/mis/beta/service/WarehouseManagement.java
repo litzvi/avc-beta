@@ -55,8 +55,8 @@ public class WarehouseManagement {
 		dao.editProcessEntity(transfer);
 	}
 
-	public List<ProcessItemDTO> getInventoryByPo(PoCode poCode) {
-		return ProcessItemDTO.getProcessItems(getInventoryRepository().findProcessItemWithStorage(poCode));
+	public List<ProcessItemDTO> getInventoryByPo(Integer poCodeId) {
+		return ProcessItemDTO.getProcessItems(getInventoryRepository().findProcessItemWithStorageByPoCode(poCodeId));
 	}
 	
 	

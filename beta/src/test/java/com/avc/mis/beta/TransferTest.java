@@ -36,7 +36,7 @@ public class TransferTest {
 
 
 		//get inventory storages
-		List<ProcessItemDTO> poInventory = warehouseManagement.getInventoryByPo(transfer.getPoCode());
+		List<ProcessItemDTO> poInventory = warehouseManagement.getInventoryByPo(transfer.getPoCode().getId());
 		transfer.setUsedItems(getUsedItems(poInventory));
 		transfer.setProcessItems(getProcessItems(poInventory));
 		
