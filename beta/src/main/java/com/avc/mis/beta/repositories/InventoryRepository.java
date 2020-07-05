@@ -143,4 +143,20 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "where poCode.code = :poCodeId ")
 	List<ProcessItemWithStorage> findProcessItemWithStorageByPoCode(Integer poCodeId);
 
+	@Query("select new com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage( "
+			+ " i.id, i.version, item.id, item.value, "
+			+ "sf.id, sf.version, "
+			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
+			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
+			+ "i.description, i.remarks) "
+		+ "from ProcessItem i "
+			+ "join i.item item "
+			+ "join i.process p "
+				+ "join p.poCode poCode "
+			+ "join i.storageForms sf "
+				+ "join sf.unitAmount unit "
+				+ "left join sf.warehouseLocation warehouseLocation "
+		+ "where item.id = :itemId ")
+	List<ProcessItemWithStorage> findProcessItemWithStorageByItem(Integer itemId);
+
 }

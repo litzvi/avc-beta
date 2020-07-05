@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
+import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.queryRows.ItemInventoryRow;
 import com.avc.mis.beta.dto.queryRows.PoItemRow;
 import com.avc.mis.beta.dto.queryRows.PoRow;
@@ -50,6 +52,7 @@ import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.WarehouseManagement;
 
 /**
  * @author Zvi
@@ -71,8 +74,9 @@ public class QueryTest {
 	@Autowired Receipts receipts;
 	@Autowired CashewReports cashewReports;
 	@Autowired QualityChecks qualityChecks;
+	@Autowired WarehouseManagement warehouseManagement;
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void queryTest() {
 
@@ -197,6 +201,10 @@ public class QueryTest {
 			
 		}
 		
+		//test getting inventory storages by item
+		List<ProcessItemDTO> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
+		itemInventory.forEach(i -> System.out.println(i));
+		
 					
 		service.cleanup(po);
 
@@ -204,6 +212,9 @@ public class QueryTest {
 	
 	@Test
 	void oneQueryTest() {
-	
+		//test getting inventory storages by item
+				List<ProcessItemDTO> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
+				itemInventory.forEach(i -> System.out.println(i));
+				
 	}
 }

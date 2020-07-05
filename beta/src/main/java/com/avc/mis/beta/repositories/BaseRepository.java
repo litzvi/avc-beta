@@ -102,7 +102,9 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	@Query("select t from ProductionLine t where t.active = true")
 	List<ProductionLine> findAllProductionLines();
 	
-	@Query("select t from CashewStandard t where t.active = true")
+	@Query("select t from CashewStandard t "
+			+ "join fetch t.item i "
+			+ "where t.active = true ")
 	List<CashewStandard> findAllCashewStandard();
 
 }

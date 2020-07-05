@@ -3,12 +3,23 @@
  */
 package com.avc.mis.beta;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.core.NestedRuntimeException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -74,4 +85,29 @@ public class ExceptionControler {
     public ResponseEntity<String> handleFatalException(RuntimeException e){
         return internalError(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ResponseEntity<Map<String, String>> handleValidationExceptions(
+	  MethodArgumentNotValidException ex) {
+	    Map<String, String> errors = new HashMap<>();
+	    ex.getBindingResult().getAllErrors().forEach((error) -> {
+	        String fieldName = ((FieldError) error).getField();
+	        String errorMessage = error.getDefaultMessage();
+	        errors.put(fieldName, errorMessage);
+	    });
+	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+	}
+	
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<List<String>> handleValidationExceptions(
+			ConstraintViolationException ex) {
+		List<String> errors = ex.getConstraintViolations().stream()
+				.map(v -> v.getMessage())
+				.collect(Collectors.toList());
+//	    List<String> errors = new ArrayList<>();
+//	    ex.getConstraintViolations().forEach((error) -> {
+//	        errors.add(error.getMessage());
+//	    });
+	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
+	}
 }

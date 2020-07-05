@@ -41,6 +41,10 @@ public class ReceiptItem extends ProcessItem {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@Transient
 	private Set<ExtraAdded> extraAdded = new HashSet<>();
+
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "orderItemId")
+	private OrderItem orderItem;
 	
 	/**
 	 * Setter for adding Extra Added for purchase receipts, 
@@ -59,10 +63,6 @@ public class ReceiptItem extends ProcessItem {
 		super.setStorageForms(storageForms);
 		this.storageForms.addAll(this.extraAdded);
 	}
-	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "orderItemId")
-	private OrderItem orderItem;
 	
 	@AttributeOverrides({
         @AttributeOverride(name="amount",

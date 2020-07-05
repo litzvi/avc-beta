@@ -7,12 +7,15 @@ import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.avc.mis.beta.dto.data.ContactDetailsDTO;
 import com.avc.mis.beta.dto.data.FaxDTO;
@@ -137,7 +140,7 @@ class SuppliersTest {
 		try {
 			suppliers.addSupplier(supplier);
 			fail("should trow exception for supplier with null name");
-		} catch (InvalidDataAccessApiUsageException e) {
+		} catch (ConstraintViolationException | InvalidDataAccessApiUsageException e) {
 			System.out.println(e.getMessage());
 		}
 		
@@ -146,7 +149,7 @@ class SuppliersTest {
 		try {
 			suppliers.addSupplier(supplier);
 			fail("should trow exception for supplier with blank name");
-		} catch (InvalidDataAccessApiUsageException e) {
+		} catch (ConstraintViolationException | InvalidDataAccessApiUsageException e) {
 			System.out.println(e.getMessage());
 		}
 		

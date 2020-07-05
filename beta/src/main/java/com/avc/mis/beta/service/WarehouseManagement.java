@@ -59,5 +59,7 @@ public class WarehouseManagement {
 		return ProcessItemDTO.getProcessItems(getInventoryRepository().findProcessItemWithStorageByPoCode(poCodeId));
 	}
 	
-	
+	public List<ProcessItemDTO> getInventoryByItem(Integer itemId) {
+		return ProcessItemDTO.getProcessItems(getInventoryRepository().findProcessItemWithStorageByItem(itemId));
+	}
 }

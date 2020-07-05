@@ -44,7 +44,7 @@ import lombok.Setter;
 public class ProcessItem extends ProcessInfoEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "itemId", updatable = false, nullable = false)
+	@JoinColumn(name = "itemId", nullable = false)
 	private Item item;
 	
 //	@ToString.Exclude

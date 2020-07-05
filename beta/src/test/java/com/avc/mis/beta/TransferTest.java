@@ -35,11 +35,12 @@ public class TransferTest {
 		transfer.setRecordedTime(OffsetDateTime.now());
 
 
-		//get inventory storages
-		List<ProcessItemDTO> poInventory = warehouseManagement.getInventoryByPo(transfer.getPoCode().getId());
+		//get inventory storages for transfer
+		List<ProcessItemDTO> poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
 		transfer.setUsedItems(getUsedItems(poInventory));
 		transfer.setProcessItems(getProcessItems(poInventory));
 		
+				
 //		System.out.println(transfer.getUsedItems().length);
 //		System.out.println(transfer.getProcessItems().length);
 //		for(ProcessItem processItem: transfer.getProcessItems()) {

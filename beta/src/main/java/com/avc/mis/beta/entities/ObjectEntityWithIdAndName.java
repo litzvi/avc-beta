@@ -7,9 +7,9 @@ import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotBlank;
 
-import org.apache.commons.lang3.StringUtils;
-
+import com.avc.mis.beta.entities.settings.OnPersist;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -25,16 +25,18 @@ import lombok.EqualsAndHashCode;
 public abstract class ObjectEntityWithIdAndName extends ObjectEntityWithId {
 
 	@Column(unique = true, nullable = false, updatable = false)
+	@NotBlank(message = "Name is mandetory", groups = OnPersist.class)
 	private String name;
 
 	public void setName(String name) {
-		this.name = Optional.ofNullable(name).map(s -> s.trim()).orElse(null);;
+		this.name = Optional.ofNullable(name).map(s -> s.trim()).orElse(null);
 	}
 	
 	@JsonIgnore
 	@Override
 	public boolean isLegal() {
-		return StringUtils.isNotBlank(name);
+//		return StringUtils.isNotBlank(name);
+		return true;
 	}
 	
 	@JsonIgnore
