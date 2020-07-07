@@ -140,7 +140,7 @@ class SuppliersTest {
 		try {
 			suppliers.addSupplier(supplier);
 			fail("should trow exception for supplier with null name");
-		} catch (ConstraintViolationException | InvalidDataAccessApiUsageException e) {
+		} catch (ConstraintViolationException e) {
 			System.out.println(e.getMessage());
 		}
 		
@@ -205,6 +205,7 @@ class SuppliersTest {
 		service.cleanup(supplier);
 		
 		//add supplier with full details
+		//TODO assert adding contactDetails referencing both company and person or non will fail
 		supplier = fullSupplier();
 		expected = new SupplierDTO(supplier, true);
 		suppliers.addSupplier(supplier);

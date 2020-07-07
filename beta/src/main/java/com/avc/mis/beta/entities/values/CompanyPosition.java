@@ -8,12 +8,10 @@ import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,6 +29,7 @@ import lombok.NoArgsConstructor;
 public class CompanyPosition extends ValueEntity {
 	
 	@Column(name = "name", unique = true, nullable = false)
+	@NotBlank(message = "Company position name(value) is mandatory")
 	private String value;
 
 	public void setValue(String value) {
@@ -41,15 +40,4 @@ public class CompanyPosition extends ValueEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return StringUtils.isNotBlank(getValue());
-	}
-	
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Position name can't be blank";
-	}
 }

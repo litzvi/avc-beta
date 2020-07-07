@@ -9,12 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -33,6 +31,7 @@ import lombok.NoArgsConstructor;
 public class Person extends ObjectEntityWithId {
 	
 	@Column(nullable = false, updatable = false)
+	@NotBlank(message = "Person name is mandetory")
 	private String name;
 	
 	@JsonManagedReference(value = "person_idCard")
@@ -69,18 +68,5 @@ public class Person extends ObjectEntityWithId {
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
-	
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return StringUtils.isNotBlank(name);
-	}
-		
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Person name can't be blank";
-	}
-
 	
 }

@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.processinfo.RawItemQuality;
@@ -37,23 +38,9 @@ public class QualityCheck extends ProductionProcess {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@NotEmpty(message = "Quality check has to contain at least one testsed item")
 	private Set<RawItemQuality> testedItems = new HashSet<>();
-	
-	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "itemId", updatable = false, nullable = false)
-//	private Item item;
-//	
-//	@Column(nullable = false)
-//	private Integer numOfSamples;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal sampleSize;	
-//	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "storageLocationId")
-//	private Warehouse storageLocation;
-	
+
 	/**
 	 * Gets the list of Items as an array (can be ordered).
 	 * @return the sampleItems QC info for raw cashew
@@ -78,16 +65,6 @@ public class QualityCheck extends ProductionProcess {
 		return super.canEqual(o);
 	}
 	
-	@Override
-	public boolean isLegal() {
-		return super.isLegal() && getTestedItems().length > 0;
-	}
-
-	@Override
-	public String getIllegalMessage() {
-		return super.getIllegalMessage() + " or no items tested ";
-	}
-
 	@Override
 	public String getProcessTypeDescription() {
 		return "Quality Check";

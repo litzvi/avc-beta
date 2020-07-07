@@ -12,9 +12,11 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.ProcessEntity;
+import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 
 import lombok.Data;
@@ -31,7 +33,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "ITEM_WEIGHTS")
-public class ItemWeight extends ProcessEntity {
+public class ItemWeight extends AuditedEntity {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -39,14 +41,19 @@ public class ItemWeight extends ProcessEntity {
 	private SampleItem sampleItem;
 	
 	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@NotNull(message = "Sampled item's unit amount is required")
+	@Positive(message = "Unit amount has to be positive")
 	private BigDecimal unitAmount;
 		
 	@Column(nullable = false)
+	@NotNull(message = "Number of samples is mandetory")
+	@Positive(message = "Number of samples has to be positive")
 	private BigInteger numberOfSamples;	
 	
 	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@NotNull(message = "Average tested weight is mandetory")
+	@Positive(message = "Average tested weight has to be positive")
 	private BigDecimal avgTestedWeight;
-
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
@@ -61,16 +68,5 @@ public class ItemWeight extends ProcessEntity {
 			throw new ClassCastException("Referenced object isn't a sample item");
 		}		
 	}
-	
-	@Override
-	public boolean isLegal() {
-		return unitAmount != null && numberOfSamples != null && avgTestedWeight != null 
-				&& unitAmount.signum() > 0 && numberOfSamples.signum() > 0 && avgTestedWeight.signum() > 0;
-	}
-
-	@Override
-	public String getIllegalMessage() {
-		return "Item tested weight has to contain amountWeighed, positive number of samples and avarage weight";
-	}	
 
 }

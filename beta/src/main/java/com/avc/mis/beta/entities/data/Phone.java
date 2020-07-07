@@ -8,12 +8,10 @@ import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.ContactEntity;
 import com.avc.mis.beta.entities.Insertable;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,6 +30,7 @@ import lombok.NoArgsConstructor;
 public class Phone extends ContactEntity {
 
 	@Column(name = "phone", nullable = false)
+	@NotBlank(message = "Phone number is mandatory")
 	private String value;
 	
 	protected boolean canEqual(Object o) {
@@ -42,22 +41,10 @@ public class Phone extends ContactEntity {
 		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}
 	
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return StringUtils.isNotBlank(getValue());
-	}
-	
 	@Override
 	public void setReference(Object referenced) {
 		this.setContactDetails((ContactDetails)referenced);
 		
-	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "phone number can't be blank";
 	}
 
 }

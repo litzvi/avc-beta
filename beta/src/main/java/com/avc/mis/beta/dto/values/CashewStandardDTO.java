@@ -2,8 +2,6 @@ package com.avc.mis.beta.dto.values;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.Item;

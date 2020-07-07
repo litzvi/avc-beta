@@ -6,6 +6,7 @@ package com.avc.mis.beta;
 import static org.assertj.core.api.Assertions.fail;
 
 import java.math.BigDecimal;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
 import java.util.Map;
 
@@ -202,7 +203,7 @@ public class QueryTest {
 		}
 		
 		//test getting inventory storages by item
-		List<ProcessItemDTO> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
+		List<SimpleImmutableEntry<PoCodeDTO, ProcessItemDTO>> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
 		itemInventory.forEach(i -> System.out.println(i));
 		
 					
@@ -213,7 +214,7 @@ public class QueryTest {
 	@Test
 	void oneQueryTest() {
 		//test getting inventory storages by item
-				List<ProcessItemDTO> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
+				List<SimpleImmutableEntry<PoCodeDTO, ProcessItemDTO>> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
 				itemInventory.forEach(i -> System.out.println(i));
 				
 	}

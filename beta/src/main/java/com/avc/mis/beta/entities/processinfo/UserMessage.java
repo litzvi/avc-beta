@@ -11,10 +11,13 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
+import com.avc.mis.beta.entities.GeneralInfoEntity;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.MessageLabel;
+import com.avc.mis.beta.validation.groups.OnPersist;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -31,11 +34,12 @@ import lombok.NoArgsConstructor;
 @Entity
 //@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "USER_MESSAGES")
-public class UserMessage extends ProcessInfoEntity {
+public class UserMessage extends GeneralInfoEntity {
 	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId", updatable = false)
+	@NotNull(message = "Message needs to belong to user", groups = OnPersist.class)
 	private UserEntity user;
 	
 	@Enumerated(EnumType.STRING)
@@ -45,17 +49,5 @@ public class UserMessage extends ProcessInfoEntity {
 	public String getLabel() {
 		return this.label.name();
 	}
-			
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return this.getUser() != null;
-	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Message needs to belong to user";
-	}
-
+	
 }

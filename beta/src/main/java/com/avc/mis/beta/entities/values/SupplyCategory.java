@@ -10,16 +10,13 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.NamedQuery;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -36,10 +33,12 @@ import lombok.EqualsAndHashCode;
 public class SupplyCategory extends ValueEntity {
 	
 	@Column(name = "name", unique = true, nullable = false)
+	@NotBlank(message = "Supply category name(value) can't be blank")
 	private String value;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
+	@NotNull(message = "Supply group is mandatory")
 	private SupplyGroup supplyGroup;
 	
 	public void setValue(String value) {
@@ -48,25 +47,6 @@ public class SupplyCategory extends ValueEntity {
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
-	}
-
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return StringUtils.isNotBlank(getValue());
-	}
-	
-	@PrePersist @PreUpdate
-	@Override
-	public void prePersist() {
-		if(!isLegal())
-			throw new IllegalArgumentException("Category name can't be blank");
-	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Category name can't be blank";
 	}
 	
 }

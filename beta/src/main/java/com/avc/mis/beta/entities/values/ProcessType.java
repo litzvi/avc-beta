@@ -13,6 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.data.ProcessManagement;
@@ -37,14 +38,11 @@ public class ProcessType extends ValueEntity {
 	@JsonIgnore
 	@Enumerated(EnumType.STRING)
 	@Column(name = "name", unique = true, nullable = false)
+	@NotNull(message = "Process type has to have a unique name(value)")
 	private ProcessName processName;
-	
-//	@JoinTable(name = "APPROVAL_REQUIRMENTS",
-//			joinColumns = @JoinColumn(name = "processTypeId", referencedColumnName = "id"), 
-//			inverseJoinColumns = @JoinColumn(name = "staffId", referencedColumnName = "personId"))
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "processType", fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<ProcessManagement> alertRequirments = new HashSet<>();
 	
 	public String getValue() {
@@ -55,18 +53,6 @@ public class ProcessType extends ValueEntity {
 	public String toString() {
 		return getValue();
 		
-	}
-
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return processName != null;
-	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Process type has to have a unique value";
 	}
 
 }

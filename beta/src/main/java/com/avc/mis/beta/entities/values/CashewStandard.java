@@ -9,8 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ValueEntity;
 
@@ -24,10 +24,12 @@ import lombok.EqualsAndHashCode;
 { @UniqueConstraint(columnNames = { "itemId", "standardOrganization" }) })
 public class CashewStandard extends ValueEntity {
 	
+	@NotBlank(message = "Standard organization is mandatory")
 	private String standardOrganization;	
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
+	@NotNull(message = "Cashew standard has to reference an item")
 	private Item item;
 	
 	@Column(precision = 19, scale = 3)
@@ -109,18 +111,8 @@ public class CashewStandard extends ValueEntity {
 //	private CheckStatus flavour;
 
 	@Override
-	public boolean isLegal() {
-		return item != null && StringUtils.isNotBlank(standardOrganization);
-	}
-
-	@Override
 	public String getValue() {
 		return String.format("%s-%s", this.item.getValue(), this.standardOrganization);
 	}
-
-	@Override
-	public String getIllegalMessage() {
-		return "Cashew standard has to specify a standard organization and reference an item";
-	} 
 
 }

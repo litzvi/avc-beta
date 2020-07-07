@@ -185,12 +185,12 @@ public class Suppliers {
 	public void editContactPerson(CompanyContact contact) {
 		dao.editEntity(contact);
 		Person person = contact.getPerson();
-		if(person != null && person.isLegal()) {
+		if(person != null && person.getContactDetails() != null) {
 			dao.editEntity(person);
 			dao.editEntity(person.getContactDetails());
 		}
-		else {
-			throw new IllegalArgumentException("Company contact not edited, missing or illegal information");
+		else { //perhaps can remove, in case of editing without changing person details
+			throw new IllegalArgumentException("Company contact not edited, not referencing person");
 		}
 	}
 		
@@ -224,24 +224,19 @@ public class Suppliers {
 //		Company company = getEntityManager().getReference(Company.class, companyId);
 //		contact.setCompany(company);
 		Person person = contact.getPerson();
-		if(person != null) {
-			if(person.getId() != null) {
-				//need to decide if to edit person
-				dao.setEntityReference(contact, Person.class, person.getId());
-				dao.addEntity(contact, Company.class, companyId);
-			}
-			else if(person.isLegal()) {
-				dao.addEntity(person);
-//				getEntityManager().persist(contact);
-				dao.addEntity(contact, Company.class, companyId);
-			}
-			else {
-				throw new IllegalArgumentException("Person information is illegal");
-			}
-		}
-		else {
+		if(person == null) {
 			throw new IllegalArgumentException("Company contact has to reference an existing or new person");
 		}
+		
+		if(person.getId() != null) {
+			//need to decide if to edit person
+			dao.setEntityReference(contact, Person.class, person.getId());
+		}
+		else {
+			dao.addEntity(person);
+//			getEntityManager().persist(contact);
+		}
+		dao.addEntity(contact, Company.class, companyId);
 	}
 	
 	/**

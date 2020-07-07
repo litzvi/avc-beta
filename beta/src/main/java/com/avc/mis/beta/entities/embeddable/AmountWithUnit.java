@@ -4,14 +4,18 @@
 package com.avc.mis.beta.entities.embeddable;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.validation.groups.PositiveAmount;
+import com.avc.mis.beta.validation.groups.UserInputGroup;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,11 +35,14 @@ public class AmountWithUnit implements Cloneable {
 	
 	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,###.###");
 
+	@NotNull(message = "Amount is required")
+	@Positive(message = "Amount has to be positive", groups = PositiveAmount.class)
 	private BigDecimal amount;
 //	private BigDecimal amount = BigDecimal.ZERO;
 	
 	@Enumerated(EnumType.STRING)
-//	@Column(nullable = false)
+	@Column(nullable = false)
+	@NotNull(message = "Measure unit required")
 	private MeasureUnit measureUnit;
 	
 	public AmountWithUnit(BigDecimal amount) {
@@ -90,9 +97,6 @@ public class AmountWithUnit implements Cloneable {
 		if(!isFilled()) {
 			return null;
 		}
-//		return String.format("%s %s", 
-//				this.amount.setScale(SCALE, RoundingMode.HALF_DOWN).stripTrailingZeros().toPlainString(), 
-//				this.measureUnit);
 		return String.format("%s %s", 
 				DECIMAL_FORMAT.format(this.amount), 
 				this.measureUnit);

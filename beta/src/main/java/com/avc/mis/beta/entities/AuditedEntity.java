@@ -39,7 +39,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class ProcessEntity extends DataEntity {
+public abstract class AuditedEntity extends DataEntity {
 	
 	@EqualsAndHashCode.Include
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)

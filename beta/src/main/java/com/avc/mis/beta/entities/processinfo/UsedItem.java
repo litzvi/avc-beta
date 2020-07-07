@@ -8,6 +8,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
@@ -26,25 +28,16 @@ public class UsedItem extends ProcessInfoEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "storageId")
+	@NotNull(message = "Internal error: Used item has no referance to storage")
 	private Storage storage;
 	
 	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@NotNull(message = "Number of units is required")
+	@Positive(message = "Number of units has to be positive")
 	private BigDecimal numberUnits;	
 
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
-
-	@Override
-	public boolean isLegal() {
-		return storage != null && numberUnits != null
-				&& numberUnits.signum() > 0;
-	}
-
-	@Override
-	public String getIllegalMessage() {
-		return "Used item must reference a storage and have positive number of units";
-	}
-
 }

@@ -16,13 +16,13 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.avc.mis.beta.entities.enums.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.avc.mis.beta.validation.groups.OnPersist;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,35 +35,29 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name = "USERS")
 public class UserEntity extends ObjectEntityWithId {
 	
 	@Column(unique = true, nullable = false, updatable = false)
+	@NotBlank(message = "Username is mandatory", groups = OnPersist.class)
 	private String username;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "personId", updatable = false, nullable = false)
+	@NotNull(message = "User has to reference a person", groups = OnPersist.class)
 	private Person person;
 	
 	@Column(nullable = false, updatable = false)
+	@NotBlank(message = "Password is mandatory", groups = OnPersist.class)
 	private String password;
 	
 	@CollectionTable(name = "USER_ROLES", joinColumns = @JoinColumn(name = "userId"))
 	@ElementCollection(targetClass = Role.class)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<Role> roles = new HashSet<>();
-	
-	//should be only in staff
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "positionId")
-//	private CompanyPosition position;
-	
-	
-	
+
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
@@ -73,14 +67,4 @@ public class UserEntity extends ObjectEntityWithId {
 		this.setPerson((Person)person);
 	}
 
-	@Override
-	public boolean isLegal() {
-		return this.person != null && StringUtils.isNotBlank(username);
-	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "UserEntity has to reference a person and have a username";
-	}
 }

@@ -14,13 +14,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.DataEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.values.Country;
 import com.avc.mis.beta.utilities.LocalDateToLong;
+import com.avc.mis.beta.validation.groups.OnPersist;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -47,6 +48,7 @@ public class IdCard extends DataEntity {
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "personId")
 	@MapsId
+	@NotNull(message = "Internal failure: trying to add Id card without person", groups = OnPersist.class)
 	private Person person;
 	
 	private String idNumber;
@@ -76,20 +78,9 @@ public class IdCard extends DataEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return this.id != null || this.person != null;
-	}
-	
 	@Override
 	public void setReference(Object referenced) {
 		this.setPerson((Person) referenced);
 	}
 
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Internal failure: trying to add Id card without person";
-	}
 }

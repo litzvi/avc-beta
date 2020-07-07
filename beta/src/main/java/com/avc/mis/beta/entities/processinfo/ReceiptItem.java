@@ -17,9 +17,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.Valid;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.validation.groups.PositiveAmount;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -69,6 +73,8 @@ public class ReceiptItem extends ProcessItem {
                            column=@Column(name="extraRequested", precision = 19, scale = AmountWithUnit.SCALE))
     })
 	@Embedded
+	@Valid
+	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
 	private AmountWithUnit extraRequested;
 	
 	

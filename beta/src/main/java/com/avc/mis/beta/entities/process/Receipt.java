@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.process;
 
 import javax.persistence.Entity;
+import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -34,16 +35,14 @@ public class Receipt extends ProductionProcess {
 		return super.canEqual(o);
 	}
 	
+	@PrePersist
 	@Override
-	public boolean isLegal() {
-		return super.isLegal() && getProcessItems().length > 0;
+	public void prePersist() {
+		super.prePersist();
+		if(getProcessItems().length == 0)
+			throw new IllegalArgumentException("Receipt has to containe at least one item line");
 	}
-
-	@Override
-	public String getIllegalMessage() {
-		return super.getIllegalMessage() + " or no items received ";
-	}
-
+	
 	@Override
 	public String getProcessTypeDescription() {
 		return "Receipt";

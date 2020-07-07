@@ -1,17 +1,23 @@
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.ProcessBasic;
+import com.avc.mis.beta.entities.enums.ContractTypeCode;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.processinfo.Storage;
 
 public interface ProcessRepository<T extends ProductionProcess> extends BaseRepository<T> {
 
+
 	@Query("select new com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage( "
 			+ " i.id, i.version, item.id, item.value, "
+			+ "poCode.code, ct.code, s.name, "
 			+ "sf.id, sf.version, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
@@ -19,6 +25,9 @@ public interface ProcessRepository<T extends ProductionProcess> extends BaseRepo
 		+ "from ProcessItem i "
 			+ "join i.item item "
 			+ "join i.process p "
+				+ "join p.poCode poCode "
+					+ "join poCode.contractType ct "
+					+ "join poCode.supplier s "
 			+ "join i.storageForms sf "
 				+ "join sf.unitAmount unit "
 				+ "left join sf.warehouseLocation warehouseLocation "

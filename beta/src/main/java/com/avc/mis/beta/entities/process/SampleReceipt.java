@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.processinfo.SampleItem;
@@ -40,7 +41,7 @@ public class SampleReceipt extends ProductionProcess {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
+	@NotEmpty(message = "Sample has to contain at least one sample item")
 	private Set<SampleItem> sampleItems = new HashSet<>();
 	
 	/**
@@ -67,16 +68,6 @@ public class SampleReceipt extends ProductionProcess {
 		return super.canEqual(o);
 	}
 	
-	@Override
-	public boolean isLegal() {
-		return super.isLegal() && getSampleItems().length > 0;
-	}
-
-	@Override
-	public String getIllegalMessage() {
-		return super.getIllegalMessage() + " or no items sampled";
-	}
-
 	@Override
 	public String getProcessTypeDescription() {
 		return "Sample Cashew Receipt";

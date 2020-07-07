@@ -10,10 +10,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ContactEntity;
 import com.avc.mis.beta.entities.Insertable;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,19 +38,11 @@ public class PaymentAccount extends ContactEntity {
 			joinColumns = @JoinColumn(name="paymentId", referencedColumnName="id"),
 			inverseJoinColumns = @JoinColumn(name = "accountId",referencedColumnName = "id"))
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+	@NotNull(message = "Payment account without a bank account is not soppurted")
 	private BankAccount bankAccount;
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
-	}
-	
-	/**
-	 * @return
-	 */
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return getBankAccount() != null && getBankAccount().isLegal();
 	}
 	
 	@Override
@@ -59,10 +51,4 @@ public class PaymentAccount extends ContactEntity {
 		
 	}
 
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Payment info not legal\n "
-				+ "Account has to have a legal bank account";
-	}
 }

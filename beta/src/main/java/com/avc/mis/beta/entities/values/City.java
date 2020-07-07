@@ -12,12 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,10 +34,12 @@ import lombok.NoArgsConstructor;
 public class City extends ValueEntity {
 	
 	@Column(name = "name", nullable = false)
+	@NotBlank(message = "City name(value) is mandatory")
 	private String value;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "countryId", nullable = false)
+	@NotNull(message = "City has to belong to a country")
 	private Country country;
 	
 
@@ -60,15 +61,4 @@ public class City extends ValueEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return StringUtils.isNotBlank(getValue());
-	}
-	
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "City name can't be blank";
-	}
 }

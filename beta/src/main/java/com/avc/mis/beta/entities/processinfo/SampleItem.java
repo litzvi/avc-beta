@@ -17,13 +17,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.avc.mis.beta.validation.groups.OnPersist;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -45,33 +47,22 @@ public class SampleItem extends ProcessInfoEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
+	@NotNull(message = "Item is mandatory", groups = OnPersist.class)
 	private Item item;
-	
-	//moved to ItemWeight
-//	@AttributeOverrides({
-//        @AttributeOverride(name="amount",
-//                           column=@Column(name="unitAmount", nullable = false, 
-//                           	precision = 19, scale = AmountWithUnit.SCALE)),
-//        @AttributeOverride(name="measureUnit",
-//                           column=@Column(nullable = false))
-//    })
-//	@Embedded
-//	private AmountWithUnit amountWeighed;
-//	
-//	@Column(nullable = false, precision = 19, scale = 3)
-//	private BigDecimal amountWeighed;
-//	
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
+	@NotNull(message = "Sample item measure unit is mandatory")
 	private MeasureUnit measureUnit;
 	
 	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@NotNull(message = "Empty container avarage weight is mandatory")
 	private BigDecimal emptyContainerWeight;
 		
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "sampleItem", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
+	@NotEmpty(message = "Sample item requires at least one item weight")
 	private Set<ItemWeight> itemWeights = new HashSet<>();
 	
 	public ItemWeight[] getItemWeights() {
@@ -84,20 +75,6 @@ public class SampleItem extends ProcessInfoEntity {
 		
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
-	}
-
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return item != null && measureUnit != null  && emptyContainerWeight != null
-				&& itemWeights.size() > 0;
-	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Sample weight must specify an item, measure unit "
-				+ "and empty container weight.";
 	}
 
 }

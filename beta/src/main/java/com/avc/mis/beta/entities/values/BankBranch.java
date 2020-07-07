@@ -9,12 +9,11 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,16 +26,17 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name="BANK_BRANCHES")
 public class BankBranch extends ValueEntity {
 	
 	@Column(name = "name", nullable = false)
+	@NotBlank(message = "Branch name(value) is mandatory")
 	private String value;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "bankId", nullable = false)
+	@NotNull(message = "Branch has to belong to a bank")
 	private Bank bank;
 	
 	public void setValue(String value) {
@@ -57,15 +57,4 @@ public class BankBranch extends ValueEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return StringUtils.isNotBlank(getValue()) && getBank() != null;
-	}
-	
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Branch name can't be blank and branch has to belong to a bank";
-	}
 }

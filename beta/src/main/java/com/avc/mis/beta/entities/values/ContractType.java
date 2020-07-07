@@ -8,8 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
@@ -31,11 +31,13 @@ import lombok.NoArgsConstructor;
 public class ContractType extends ValueEntity {
 
 	@Column(unique = true, nullable = false)
+	@NotBlank(message = "Contract type name is mandatory")
 	private String name;
 	
 	@JsonIgnore
 	@Enumerated(EnumType.STRING)
 	@Column(name = "code", unique = true, nullable = false)
+	@NotNull(message = "Contract type has to have a code")
 	private ContractTypeCode code;
 	
 	public void setValue(String value) {
@@ -47,15 +49,4 @@ public class ContractType extends ValueEntity {
 		return code.name();
 	}
 
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return StringUtils.isNotBlank(getName()) && getValue() != null;
-	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Contract type name and code can't be blank";
-	}
 }

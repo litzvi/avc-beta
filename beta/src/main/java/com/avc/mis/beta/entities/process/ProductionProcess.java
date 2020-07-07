@@ -20,15 +20,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.ProcessEntity;
+import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
+import com.avc.mis.beta.validation.groups.OnPersist;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
@@ -53,7 +55,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "PROCESSES")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class ProductionProcess extends ProcessEntity {	
+public abstract class ProductionProcess extends AuditedEntity {	
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(updatable = false, nullable = false)
@@ -62,6 +64,7 @@ public abstract class ProductionProcess extends ProcessEntity {
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "typeId", nullable = false, updatable = false)
+	@NotNull(message = "Internal error: no process type set", groups = OnPersist.class)
 	private ProcessType processType;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -125,45 +128,12 @@ public abstract class ProductionProcess extends ProcessEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return true;
-//		return this.processType != null; //will cause illegal on update of a process
-	}
-
-//	@Override
-//	public void setReference(Object referenced) {
-//		if(referenced instanceof PO) {
-//			this.setPo((PO)referenced);
-//		}
-//		else {
-//			throw new ClassCastException("Referenced object isn't a purchase order");
-//		}		
-//	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Process does not have a recordedTime or process type ";
-	}
-	
 	@PrePersist
-	@Override
 	public void prePersist() {
-		super.prePersist();
-		if(this.processType == null) {
-			throw new IllegalArgumentException("No process type set");
-		}
 		this.lifeCycle = new ProcessLifeCycle();
 		lifeCycle.setReference(this);
 	}
 
 	public abstract String getProcessTypeDescription() ;
 	
-//	@PreUpdate
-//	@Override
-//	public void preUpdate() {
-//	}
-
 }

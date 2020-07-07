@@ -12,8 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
@@ -31,17 +30,16 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name="BANKS")
 public class Bank extends ValueEntity {
 	
 	@Column(name = "name", nullable = false, unique = true)
+	@NotBlank(message = "Bank name(value) is mandatory")
 	private String value;
 	
 	@ToString.Exclude
 	@OneToMany(mappedBy = "bank", fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	@JsonIgnore
 	private Set<BankBranch> branches = new HashSet<>();
 	
@@ -51,18 +49,6 @@ public class Bank extends ValueEntity {
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
-	}
-	
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return StringUtils.isNotBlank(getValue());
-	}
-	
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Bank name can't be blank";
 	}
 	
 }

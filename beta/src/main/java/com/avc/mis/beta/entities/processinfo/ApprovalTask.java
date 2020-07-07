@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -39,20 +40,10 @@ public class ApprovalTask extends ProcessInfoEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
+	@NotNull(message = "Decision is mandatory")
 	private DecisionType decision = DecisionType.NOT_ATTENDED;
 	
 	@Lob
 	private String processSnapshot;
-		
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return super.isLegal() && this.decision != null;
-	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Process approval needs to reference a process and have a decision";
-	}
+	
 }

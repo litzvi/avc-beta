@@ -11,13 +11,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.avc.mis.beta.entities.values.BankBranch;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,13 +34,16 @@ import lombok.NoArgsConstructor;
 public class BankAccount extends ObjectEntityWithId {
 	
 	@Column(nullable = false)
+	@NotBlank(message = "Account number is mandetory")
 	private String accountNo;
 	
 	@Column(nullable = false)
+	@NotBlank(message = "Account owner name is mandetory")
 	private String ownerName;
 		
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="branchId", nullable = false)
+	@NotNull(message = "Bank acount has to have a bank branch")
 	private BankBranch branch;
 	
 	public void setOwnerName(String ownerName) {
@@ -55,25 +57,6 @@ public class BankAccount extends ObjectEntityWithId {
 	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
-	}
-	
-
-	/**
-	 * @return
-	 */
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return StringUtils.isNotBlank(getAccountNo()) && 
-				StringUtils.isNotBlank(getOwnerName()) && getBranch() != null;
-	}
-	
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Bank Account info not legal\n "
-				+ "account has to belong to bank branch,\n"
-				+ "account number and Owner name can't be blank";
 	}
 
 }

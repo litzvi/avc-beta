@@ -18,7 +18,6 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithIdAndName;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -33,7 +32,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name="COMPANIES", indexes = {@Index(columnList = "name", unique = true)})
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Company extends ObjectEntityWithIdAndName {
@@ -51,11 +49,10 @@ public class Company extends ObjectEntityWithIdAndName {
 	
 	@JsonManagedReference(value = "company_companyContacts")
 	@OneToMany(mappedBy = "company",cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<CompanyContact> companyContacts = new HashSet<>();
 	
 	public void setCompanyContacts(CompanyContact[] companyContacts) {
-		this.companyContacts = Insertable.filterAndSetReference(companyContacts, 
+		this.companyContacts = Insertable.setReferences(companyContacts, 
 				(t) -> {t.setReference(this);	return t;});
 	}
 	
@@ -80,22 +77,5 @@ public class Company extends ObjectEntityWithIdAndName {
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
-
-		
-	/**
-	 * @return
-	 */
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return super.isLegal();
-	}
-	
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Company name can't be blank";
-	}
-
 
 }

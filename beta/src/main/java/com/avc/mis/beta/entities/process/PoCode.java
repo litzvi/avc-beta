@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,6 +19,7 @@ import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.ContractType;
+import com.avc.mis.beta.validation.groups.OnPersist;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,6 +50,7 @@ public class PoCode extends BaseEntity {
 		
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contractTypeId", updatable = false, nullable = false)
+	@NotNull(message = "PO code is required to have a contract type", groups = OnPersist.class)
 	private ContractType contractType;
 	
 	/**
@@ -73,13 +76,4 @@ public class PoCode extends BaseEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 
-	@Override
-	public boolean isLegal() {
-		return contractType != null;
-	}
-
-	@Override
-	public String getIllegalMessage() {
-		return "PO code is required to have a contract type";
-	}
 }

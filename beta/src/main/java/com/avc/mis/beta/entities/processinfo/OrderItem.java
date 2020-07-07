@@ -17,15 +17,21 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.ProcessEntity;
+import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.utilities.LocalDateToLong;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.avc.mis.beta.validation.groups.OnPersist;
+import com.avc.mis.beta.validation.groups.PositiveAmount;
+import com.avc.mis.beta.validation.groups.PositiveOrZeroAmount;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,7 +48,7 @@ import lombok.ToString;
 @Entity
 //@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "PO_ITEMS")
-public class OrderItem extends ProcessEntity {
+public class OrderItem extends AuditedEntity {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -51,6 +57,7 @@ public class OrderItem extends ProcessEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
+	@NotNull(message = "Item is mandatory", groups = OnPersist.class)
 	private Item item;
 	
 	@AttributeOverrides({
@@ -61,72 +68,38 @@ public class OrderItem extends ProcessEntity {
                            column=@Column(nullable = false))
     })
 	@Embedded
+	@NotNull(message = "number of units is mandatory")
+	@Valid
+	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
 	private AmountWithUnit numberUnits;
-	
-//	@Column(nullable = false, precision = 19, scale = 3)
-//	private BigDecimal numberUnits;	
-//	
-//	@Enumerated(EnumType.STRING)
-//	@Column(nullable = false)
-//	private MeasureUnit measureUnit;
-	
+
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
                            column=@Column(name="unitPrice"))    })
 	@Embedded
+	@NotNull(message = "unit price is mandatory")
+	@Valid
+	@ConvertGroup(from = Default.class, to = PositiveOrZeroAmount.class)
 	private AmountWithCurrency unitPrice;
-	
-//	@Setter(value = AccessLevel.NONE)
-//	private Currency currency;
-//	
-//	@Column(precision = 19, scale = 2)
-//	private BigDecimal unitPrice;
 	
 	@Convert(converter = LocalDateToLong.class)
 	private LocalDate deliveryDate;
 	
 	private String defects;//maybe change to enum that can get percentage
 	
-//	@Enumerated(EnumType.STRING)
-//	@Column(nullable = false)
-//	private OrderItemStatus status = OrderItemStatus.OPEN;
-//	
-//	public void setCurrency(String currencyCode) {
-//		if(currencyCode != null)
-//			this.currency = Currency.getInstance(currencyCode);
-//	}
-	
 	public void setDeliveryDate(String deliveryDate) {
 		if(deliveryDate != null)
 			this.deliveryDate = LocalDate.parse(deliveryDate);
 	}
 	
-	
-//	public void setMeasureUnit(String measureUnit) {
-//		if(measureUnit != null)
-//			this.measureUnit = MeasureUnit.valueOf(measureUnit);
-//	}
-	
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return item != null && numberUnits.isFilled() && unitPrice.isFilled()
-				&& numberUnits.signum() > 0
-				&& unitPrice.signum() >= 0;
-	}
-
 	@PrePersist @PreUpdate 
-	@Override
 	public void prePersist() {
 		if(this.numberUnits.getMeasureUnit() == null) {
 			this.numberUnits.setMeasureUnit(item.getMeasureUnit());
-		}
-		if(!isLegal()) {
-			throw new IllegalArgumentException(this.getIllegalMessage());
 		}
 	}
 	
@@ -138,12 +111,6 @@ public class OrderItem extends ProcessEntity {
 		else {
 			throw new ClassCastException("Referenced object isn't a purchase order");
 		}		
-	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Order line is not legal has to reference an item";
 	}
 
 }

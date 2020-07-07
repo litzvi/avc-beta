@@ -9,8 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotBlank;
 
-import com.avc.mis.beta.entities.settings.OnPersist;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.avc.mis.beta.validation.groups.OnPersist;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,18 +30,6 @@ public abstract class ObjectEntityWithIdAndName extends ObjectEntityWithId {
 	public void setName(String name) {
 		this.name = Optional.ofNullable(name).map(s -> s.trim()).orElse(null);
 	}
-	
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-//		return StringUtils.isNotBlank(name);
-		return true;
-	}
-	
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Name can't be blank";
-	}
+
 }
 

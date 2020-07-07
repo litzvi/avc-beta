@@ -15,11 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.values.Item;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -38,33 +39,19 @@ import lombok.Setter;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "PROCESSED_ITEMS")
 @Inheritance(strategy=InheritanceType.JOINED)
 public class ProcessItem extends ProcessInfoEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "itemId", nullable = false)
+	@NotNull(message = "Item is mandatory")
 	private Item item;
-	
-//	@ToString.Exclude
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "itemPoCode", updatable = false)
-//	private PoCode itemPo; //should be null for receiving, for items used in the process - maybe removed
-	
-	
-//	@Convert(converter = LocalDateToLong.class)
-//	private LocalDate processDate;
-//	
-//	public void setDeliveryDate(String processDate) {
-//		if(processDate != null)
-//			this.processDate = LocalDate.parse(processDate);
-//	}
-	
+
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "processItem", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
+	@NotEmpty(message = "Process line has to contain at least one storage line")
 	Set<Storage> storageForms = new HashSet<>();
 	
 	/**
@@ -89,18 +76,4 @@ public class ProcessItem extends ProcessInfoEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return item != null && storageForms.size() > 0;
-//				&& unitAmount.compareTo(BigDecimal.ZERO) > 0
-//				&& numberUnits.compareTo(BigDecimal.ZERO) > 0;
-	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Process item has to contain an item and at least one storage info line";
-	}
-
 }

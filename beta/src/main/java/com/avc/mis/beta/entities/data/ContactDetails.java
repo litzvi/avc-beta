@@ -12,7 +12,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -24,7 +23,6 @@ import com.avc.mis.beta.entities.Ordinal;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Feature;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,7 +37,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "CONTACT_DETAILS", uniqueConstraints = 
 	{ @UniqueConstraint(columnNames = { "companyId", "personId" }) })
 @Check(constraints = "(company_id is null) XOR (person_id is null)")
@@ -57,36 +54,26 @@ public class ContactDetails extends LinkEntity {
 	@JoinColumn(name = "personId", updatable = false)
 	private Person person;
 
-//	@JsonManagedReference(value = "contactDetails_phones")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<Phone> phones = new HashSet<>();
 
-//	@JsonManagedReference(value = "contactDetails_faxes")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<Fax> faxes = new HashSet<>();
 
-//	@JsonManagedReference(value = "contactDetails_emails")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<Email> emails = new HashSet<>();
 
-//	@JsonManagedReference(value = "contactDetails_addresses")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JsonFormat(with = Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<Address> addresses = new HashSet<>();
 
-//	@JsonManagedReference(value = "contactDetails_paymentAccount")
 	@OneToMany(mappedBy = "contactDetails", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
 			/* orphanRemoval = true, */ fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<PaymentAccount> paymentAccounts = new HashSet<>();
 	
 	public void setPhones(Phone[] phones) {
 		Ordinal.setOrdinals(phones);
-		this.phones = Insertable.filterAndSetReference(phones, (t) -> {t.setReference(this);	return t;});
+		this.phones = Insertable.setReferences(phones, (t) -> {t.setReference(this);	return t;});
 	}
 	
 	public Phone[] getPhones() {
@@ -95,7 +82,7 @@ public class ContactDetails extends LinkEntity {
 	
 	public void setFaxes(Fax[] faxes) {
 		Ordinal.setOrdinals(faxes);
-		this.faxes = Insertable.filterAndSetReference(faxes, (t) -> {t.setReference(this);	return t;});
+		this.faxes = Insertable.setReferences(faxes, (t) -> {t.setReference(this);	return t;});
 	}
 	
 	public Fax[] getFaxes() {
@@ -104,7 +91,7 @@ public class ContactDetails extends LinkEntity {
 	
 	public void setEmails(Email[] emails) {
 		Ordinal.setOrdinals(emails);
-		this.emails = Insertable.filterAndSetReference(emails, (t) -> {t.setReference(this);	return t;});
+		this.emails = Insertable.setReferences(emails, (t) -> {t.setReference(this);	return t;});
 	}
 	
 	public Email[] getEmails() {
@@ -113,7 +100,7 @@ public class ContactDetails extends LinkEntity {
 	
 	public void setAddresses(Address[] addresses) {
 		Ordinal.setOrdinals(addresses);
-		this.addresses = Insertable.filterAndSetReference(addresses, (t) -> {t.setReference(this);	return t;});
+		this.addresses = Insertable.setReferences(addresses, (t) -> {t.setReference(this);	return t;});
 	}
 	
 	public Address[] getAddresses() {
@@ -122,7 +109,7 @@ public class ContactDetails extends LinkEntity {
 	
 	public void setPaymentAccounts(PaymentAccount[] paymentAccounts) {
 		Ordinal.setOrdinals(paymentAccounts);
-		this.paymentAccounts = Insertable.filterAndSetReference(paymentAccounts, 
+		this.paymentAccounts = Insertable.setReferences(paymentAccounts, 
 				(t) -> {t.setReference(this);	return t;});
 	}
 	
@@ -133,13 +120,7 @@ public class ContactDetails extends LinkEntity {
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
-	
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return (this.company == null ^ this.person == null);
-	}
-	
+
 	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof Company) {
@@ -152,19 +133,5 @@ public class ContactDetails extends LinkEntity {
 			throw new ClassCastException("Referenced object dosen't match ContactDetails references");
 		}		
 	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Contact details not legal\n "
-				+ "has to reference a compony or person";
-	}
 	
-	@PreUpdate
-	@Override
-	public void preUpdate() {
-//		if(!isLegal())
-//			throw new IllegalArgumentException(this.getIllegalMessage());
-	}
-		
 }

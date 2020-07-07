@@ -12,8 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.apache.commons.lang3.StringUtils;
+import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
@@ -36,6 +35,7 @@ import lombok.ToString;
 public class Country extends ValueEntity {
 	
 	@Column(name = "name", unique = true, nullable = false)
+	@NotBlank(message = "Country name can't be blank")
 	private String value;
 	
 	@JsonIgnore
@@ -51,15 +51,4 @@ public class Country extends ValueEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return StringUtils.isNotBlank(getValue());
-	}
-	
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Country name can't be blank";
-	}
 }

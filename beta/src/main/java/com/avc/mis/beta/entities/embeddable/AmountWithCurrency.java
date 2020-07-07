@@ -10,6 +10,10 @@ import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
+
+import com.avc.mis.beta.validation.groups.PositiveOrZeroAmount;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -29,10 +33,13 @@ public class AmountWithCurrency implements Cloneable {
 
 
 	@Column(precision = 19, scale = SCALE)
+	@NotNull(message = "Amount is required")
+	@PositiveOrZero(message = "Amount can't be negative", groups = PositiveOrZeroAmount.class)
 	private BigDecimal amount;
 	
 	@Setter(value = AccessLevel.NONE)
 	@Column(nullable = false)
+	@NotNull(message = "Currency is required")
 	private Currency currency;
 
 	public AmountWithCurrency(BigDecimal amount, Currency currency) {

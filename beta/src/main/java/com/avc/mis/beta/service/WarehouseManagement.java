@@ -2,6 +2,7 @@ package com.avc.mis.beta.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.repositories.InventoryRepository;
 
@@ -59,7 +60,7 @@ public class WarehouseManagement {
 		return ProcessItemDTO.getProcessItems(getInventoryRepository().findProcessItemWithStorageByPoCode(poCodeId));
 	}
 	
-	public List<ProcessItemDTO> getInventoryByItem(Integer itemId) {
-		return ProcessItemDTO.getProcessItems(getInventoryRepository().findProcessItemWithStorageByItem(itemId));
+	public List<SimpleImmutableEntry<PoCodeDTO, ProcessItemDTO>> getInventoryByItem(Integer itemId) {
+		return ProcessItemDTO.getProcessItemsWithPo(getInventoryRepository().findProcessItemWithStorageByItem(itemId));
 	}
 }

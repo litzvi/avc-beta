@@ -12,13 +12,13 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -39,15 +39,11 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "processId")
 public class PO extends ProductionProcess {
 	
-//	@Enumerated(EnumType.STRING)
-//	@Column(nullable = false)
-//	private OrderStatus orderStatus = OrderStatus.OPEN_PENDING;
-	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "po", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.ALL, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-//	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	@Fetch(FetchMode.SUBSELECT)
+	@NotEmpty(message = "Purchase Order has to have at least one order line")
 	private Set<OrderItem> orderItems = new HashSet<>();
 	
 	/**
@@ -72,19 +68,6 @@ public class PO extends ProductionProcess {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
-	@JsonIgnore
-	@Override
-	public boolean isLegal() {
-		return super.isLegal() && /* this.supplier != null && */ this.orderItems.size() > 0;
-	}
-
-	@JsonIgnore
-	@Override
-	public String getIllegalMessage() {
-		return "Purchase Order is not legal, "
-				+ "has to have at least one order line";
-	}
-
 	@Override
 	public String getProcessTypeDescription() {
 		return "Purchase Order";

@@ -16,11 +16,18 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.ProcessEntity;
+import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.validation.groups.PositiveAmount;
+import com.avc.mis.beta.validation.groups.UserInputGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,7 +44,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "STORAGE_FORMS")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Storage extends ProcessEntity {
+public class Storage extends AuditedEntity {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -52,26 +59,25 @@ public class Storage extends ProcessEntity {
                            column=@Column(nullable = false))
     })
 	@Embedded
+	@NotNull(message = "Unit amount is mandatory")
+	@Valid
+	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
+//	@ConvertGroup.List({
+//			@ConvertGroup(from = Default.class, to = PositiveAmount.class),
+//			@ConvertGroup(from = Default.class, to = UserInputGroup.class)
+//																		
+//	})
 	private AmountWithUnit unitAmount = new AmountWithUnit(BigDecimal.ONE);
-		
-//	@Column(nullable = false, precision = 19, scale = 3)
-//	private BigDecimal unitAmount = BigDecimal.ONE;
-//	
-//	@Enumerated(EnumType.STRING)
-//	@Column(nullable = false)
-//	private MeasureUnit measureUnit;
-//	
+
 	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@NotNull(message = "Number of units is required")
+	@Positive(message = "Number of units has to be positive")
 	private BigDecimal numberUnits;	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "warehouseLocationId")
 	private Warehouse warehouseLocation;
-	
-//	public void setMeasureUnit(String measureUnit) {
-//		this.measureUnit = MeasureUnit.valueOf(measureUnit);
-//	}
-	
+
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
@@ -86,16 +92,4 @@ public class Storage extends ProcessEntity {
 		}		
 	}
 	
-	@Override
-	public boolean isLegal() {
-		return unitAmount.isFilled() && numberUnits != null
-				&& numberUnits.compareTo(BigDecimal.ZERO) > 0
-				&& unitAmount.signum() > 0;
-	}
-
-	@Override
-	public String getIllegalMessage() {
-		return "Storage information must contain unit amount, measure unit and positive number of units";
-	}
-
 }

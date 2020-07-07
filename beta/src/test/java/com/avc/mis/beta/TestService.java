@@ -172,7 +172,7 @@ public class TestService {
 			oi.setId(oItem.getId());
 			oi.setVersion(oItem.getVersion());
 			items[i].setOrderItem(oi);
-			items[i].setExtraRequested(new AmountWithUnit(BigDecimal.valueOf(200)));
+			items[i].setExtraRequested(new AmountWithUnit(BigDecimal.valueOf(200), "KG"));
 			i++;
 		}
 		return items;
