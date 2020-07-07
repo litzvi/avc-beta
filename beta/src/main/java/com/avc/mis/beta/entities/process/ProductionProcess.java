@@ -22,8 +22,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.AuditedEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.UsedItem;

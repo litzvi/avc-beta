@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.GeneralInfoEntity;
-import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.validation.groups.OnPersist;

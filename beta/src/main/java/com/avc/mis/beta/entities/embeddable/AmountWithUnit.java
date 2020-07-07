@@ -15,7 +15,6 @@ import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
-import com.avc.mis.beta.validation.groups.UserInputGroup;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,14 +40,8 @@ public class AmountWithUnit implements Cloneable {
 //	private BigDecimal amount = BigDecimal.ZERO;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
 	@NotNull(message = "Measure unit required")
 	private MeasureUnit measureUnit;
-	
-	public AmountWithUnit(BigDecimal amount) {
-		super();
-		this.amount = amount;
-	}
 
 	public AmountWithUnit(BigDecimal amount, String measureUnit) {
 		super();
@@ -79,14 +72,13 @@ public class AmountWithUnit implements Cloneable {
 		return new AmountWithUnit(amount, measureUnit);
 	}
 	
-	public void setMeasureUnit(String measureUnit) {
-//		if(measureUnit != null)
-		this.measureUnit = MeasureUnit.valueOf(measureUnit);
-	}
-	
-	public void setMeasureUnit(MeasureUnit measureUnit) {
-		this.measureUnit = measureUnit;
-	}
+//	public void setMeasureUnit(String measureUnit) {
+//		this.measureUnit = MeasureUnit.valueOf(measureUnit);
+//	}
+//	
+//	public void setMeasureUnit(MeasureUnit measureUnit) {
+//		this.measureUnit = measureUnit;
+//	}
 	
 	public AmountWithUnit setScale(int newScale) {
 		this.amount = amount.setScale(newScale);

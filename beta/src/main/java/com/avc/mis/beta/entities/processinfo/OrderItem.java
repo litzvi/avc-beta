@@ -22,8 +22,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.AuditedEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.process.PO;
@@ -96,12 +96,12 @@ public class OrderItem extends AuditedEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 
-	@PrePersist @PreUpdate 
-	public void prePersist() {
-		if(this.numberUnits.getMeasureUnit() == null) {
-			this.numberUnits.setMeasureUnit(item.getMeasureUnit());
-		}
-	}
+//	@PrePersist @PreUpdate 
+//	public void prePersist() {
+//		if(this.numberUnits.getMeasureUnit() == null) {
+//			this.numberUnits.setMeasureUnit(item.getMeasureUnit());
+//		}
+//	}
 	
 	@Override
 	public void setReference(Object referenced) {

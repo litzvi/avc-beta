@@ -1,16 +1,12 @@
 package com.avc.mis.beta.repositories;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.ProcessBasic;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.ProductionProcess;
-import com.avc.mis.beta.entities.processinfo.Storage;
 
 public interface ProcessRepository<T extends ProductionProcess> extends BaseRepository<T> {
 

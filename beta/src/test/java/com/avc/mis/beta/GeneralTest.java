@@ -67,7 +67,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800092;
+	static final Integer PO_CODE = 800094;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -159,7 +159,13 @@ public class GeneralTest {
 			receiptItems[i].setStorageForms(storageForms);
 		}
 		receipt.setReceiptItems(receiptItems);
-		receipts.addCashewOrderReceipt(receipt);
+		try {
+			receipts.addCashewOrderReceipt(receipt);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			throw e2;
+		}
 		ReceiptDTO receiptDTO;
 		receiptDTO = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(new ReceiptDTO(receipt), receiptDTO, "Order Receipt not added or fetched correctly");

@@ -15,8 +15,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.AuditedEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 
 import lombok.Data;
