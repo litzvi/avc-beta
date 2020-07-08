@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dto.processinfo;
 
-import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ProcessDTO;
-import com.avc.mis.beta.dto.process.PoCodeDTO;
+import com.avc.mis.beta.dto.queryRows.PoProcessItemEntry;
 import com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -119,18 +118,20 @@ public class ProcessItemDTO extends ProcessDTO {
 		return processItems;
 	}
 	
-	public static List<SimpleImmutableEntry<PoCodeDTO, ProcessItemDTO>> getProcessItemsWithPo(List<ProcessItemWithStorage> storages) {
+	public static List<PoProcessItemEntry> getProcessItemsWithPo(List<ProcessItemWithStorage> storages) {
 		Map<Integer, List<ProcessItemWithStorage>> map = storages.stream()
 				.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, Collectors.toList()));
-		List<SimpleImmutableEntry<PoCodeDTO, ProcessItemDTO>> processItems = new ArrayList<>();
+		List<PoProcessItemEntry> processItems = new ArrayList<>();
 		for(List<ProcessItemWithStorage> list: map.values()) {
 			ProcessItemDTO processItem = list.get(0).getProcessItem();
 			processItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
-			SimpleImmutableEntry<PoCodeDTO, ProcessItemDTO> processItemEntry = 
-					new SimpleImmutableEntry<PoCodeDTO, ProcessItemDTO>(list.get(0).getPo(), processItem) ;
+			PoProcessItemEntry processItemEntry = 
+					new PoProcessItemEntry(list.get(0).getPo(), processItem);
 			processItems.add(processItemEntry);
 		}
 		return processItems;
 	}
+	
+	
 	
 }

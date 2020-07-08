@@ -5,6 +5,7 @@ package com.avc.mis.beta.entities.embeddable;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Currency;
 import java.util.Optional;
 
@@ -30,6 +31,8 @@ import lombok.Setter;
 public class AmountWithCurrency implements Cloneable {
 	
 	private static final int SCALE = 2;
+
+	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,###.##");
 
 
 	@Column(precision = 19, scale = SCALE)
@@ -77,7 +80,12 @@ public class AmountWithCurrency implements Cloneable {
 	}
 	
 	public String getValue() {
-		return String.format("%s %s", this.amount, this.currency);
+		if(!isFilled()) {
+			return null;
+		}
+		return String.format("%s %s", 
+				DECIMAL_FORMAT.format(this.amount), 
+				this.currency);
 	}
 	
 	public boolean isFilled() {

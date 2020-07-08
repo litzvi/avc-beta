@@ -74,12 +74,13 @@ public class CashewReports {
 	}
 	
 	private List<ProcessItemInventoryRow> getProcessItemRows() {
-		List<StorageInventoryRow> storageRows = getInventoryRepository().findInventoryStorage(SupplyGroup.CASHEW);
+		List<ProcessItemInventoryRow> processItemRows = 
+				getInventoryRepository().findInventoryProcessItem(SupplyGroup.CASHEW, null, null);		
+
+		List<StorageInventoryRow> storageRows = getInventoryRepository().findInventoryStorage(SupplyGroup.CASHEW, null);
 		Map<Integer, List<StorageInventoryRow>> storageMap = storageRows.stream()
 				.collect(Collectors.groupingBy(StorageInventoryRow::getProcessItemId, Collectors.toList()));
 		
-		List<ProcessItemInventoryRow> processItemRows = 
-				getInventoryRepository().findInventoryProcessItem(SupplyGroup.CASHEW);		
 		processItemRows.forEach(pi -> pi.setStorageForms(storageMap.get(pi.getId())));
 		
 		return processItemRows;

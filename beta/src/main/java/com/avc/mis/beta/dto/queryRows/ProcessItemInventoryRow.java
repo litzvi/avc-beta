@@ -40,16 +40,28 @@ public class ProcessItemInventoryRow extends ValueDTO {
 	
 	public ProcessItemInventoryRow(Integer id, Integer itemId, String itemValue,
 			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName,
-			OffsetDateTime receiptDate, BigDecimal totalAmount, MeasureUnit measureUnit) {
+			OffsetDateTime receiptDate/* , BigDecimal totalAmount, MeasureUnit measureUnit */) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
 		this.receiptDate = receiptDate;
-		this.totalAmount = new AmountWithUnit(
-				totalAmount.setScale(AmountWithUnit.SCALE, RoundingMode.HALF_DOWN), measureUnit);
-		this.totalLots = new AmountWithUnit(
-				MeasureUnit.convert(totalAmount, measureUnit, MeasureUnit.LOT)
-				.setScale(AmountWithUnit.SCALE, RoundingMode.HALF_DOWN), MeasureUnit.LOT);
+//		this.totalAmount = new AmountWithUnit(
+//				totalAmount.setScale(AmountWithUnit.SCALE, RoundingMode.HALF_DOWN), measureUnit);
+				
+	}
+	
+	public void setStorageForms(List<StorageInventoryRow> storageForms) {
+		if(storageForms.size() > 0) {
+			MeasureUnit measureUnit = storageForms.get(0).getUnitAmount().getMeasureUnit();
+			this.totalAmount = storageForms.stream()
+					.map(StorageInventoryRow::getTotalBalance)
+					.reduce(new AmountWithUnit(BigDecimal.ZERO, measureUnit), AmountWithUnit::add);
+			this.totalLots = new AmountWithUnit(
+					MeasureUnit.convert(totalAmount, MeasureUnit.LOT)
+					.setScale(AmountWithUnit.SCALE, RoundingMode.HALF_DOWN), MeasureUnit.LOT);
+
+		}
+		this.storageForms = storageForms;
 		
 	}
 	

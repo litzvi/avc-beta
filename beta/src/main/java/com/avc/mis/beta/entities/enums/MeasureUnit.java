@@ -52,6 +52,10 @@ public enum MeasureUnit {
 				.multiply(convertUOM.getMultiplicand())
 				.divide(convertUOM.getDivisor(), AmountWithUnit.SCALE, RoundingMode.HALF_DOWN);
 	}
+	
+	public static BigDecimal convert(@NonNull AmountWithUnit amount, MeasureUnit toUnit) {
+		return convert(amount.getAmount(), amount.getMeasureUnit(), toUnit);
+	}
 
 //	public static final int SCALE = 3;
 	private static final BigDecimal LBS_IN_KG = new BigDecimal("0.4536");
@@ -98,5 +102,7 @@ public enum MeasureUnit {
 			throw new IllegalArgumentException("Can't convert" + fromUnit + "to LBS");
 		}
 	}
+
+	
 	
 }

@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.avc.mis.beta.dto.data.ContactDetailsDTO;
 import com.avc.mis.beta.dto.data.FaxDTO;

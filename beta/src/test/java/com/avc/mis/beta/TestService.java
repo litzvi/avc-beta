@@ -33,8 +33,8 @@ import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
-import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Orders;
+import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.ValueTablesReader;
 

@@ -5,8 +5,6 @@ package com.avc.mis.beta;
 
 import static org.assertj.core.api.Assertions.fail;
 
-import java.math.BigDecimal;
-import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.List;
 import java.util.Map;
 
@@ -23,11 +21,9 @@ import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.queryRows.ItemInventoryRow;
-import com.avc.mis.beta.dto.queryRows.PoItemRow;
 import com.avc.mis.beta.dto.queryRows.PoRow;
-import com.avc.mis.beta.dto.queryRows.ReceiptItemRow;
+import com.avc.mis.beta.dto.queryRows.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.queryRows.ReceiptRow;
 import com.avc.mis.beta.dto.queryRows.SupplierRow;
 import com.avc.mis.beta.dto.queryRows.UserRow;
@@ -39,17 +35,15 @@ import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.CashewReports;
 import com.avc.mis.beta.service.ObjectTablesReader;
-import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.QualityChecks;
+import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
@@ -77,7 +71,7 @@ public class QueryTest {
 	@Autowired QualityChecks qualityChecks;
 	@Autowired WarehouseManagement warehouseManagement;
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void queryTest() {
 
@@ -189,8 +183,16 @@ public class QueryTest {
 		}
 		
 		//cashew inventory table
-		List<ItemInventoryRow> inventoryRows = cashewReports.getInventoryTable();
-		inventoryRows.forEach(r -> System.out.println(r));
+		List<ItemInventoryRow> inventoryRows;
+		try {
+			inventoryRows = cashewReports.getInventoryTable();
+			inventoryRows.forEach(r -> System.out.println(r));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+		
 		
 		//get all processes by po code/id
 		for(UserMessageDTO message: messages) {
@@ -203,7 +205,7 @@ public class QueryTest {
 		}
 		
 		//test getting inventory storages by item
-		List<SimpleImmutableEntry<PoCodeDTO, ProcessItemDTO>> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
+		List<ProcessItemInventoryRow> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
 		itemInventory.forEach(i -> System.out.println(i));
 		
 					
@@ -214,7 +216,7 @@ public class QueryTest {
 	@Test
 	void oneQueryTest() {
 		//test getting inventory storages by item
-				List<SimpleImmutableEntry<PoCodeDTO, ProcessItemDTO>> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
+				List<ProcessItemInventoryRow> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
 				itemInventory.forEach(i -> System.out.println(i));
 				
 	}
