@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.queryRows.UserRow;
+import com.avc.mis.beta.dto.report.UserRow;
 import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.values.UserLogin;
 import com.avc.mis.beta.dto.values.ValueObject;
@@ -56,7 +56,7 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 //			+ "where u.id := userId and u.password = :oldPassword")
 //	void changePassword(Integer userId, String oldPassword, String newPassword);
 	
-	@Query("select new com.avc.mis.beta.dto.queryRows.UserRow(u.id, p.name, u.username, u.active) "
+	@Query("select new com.avc.mis.beta.dto.report.UserRow(u.id, p.name, u.username, u.active) "
 			+ "from UserEntity u "
 				+ "join u.person p "
 			+ "where u.active = true")

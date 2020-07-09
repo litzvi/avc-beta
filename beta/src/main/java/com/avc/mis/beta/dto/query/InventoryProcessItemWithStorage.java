@@ -1,11 +1,13 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.queryRows;
+package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+import com.avc.mis.beta.dto.report.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.report.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 

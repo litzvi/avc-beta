@@ -1,4 +1,4 @@
-package com.avc.mis.beta.dto.queryRows;
+package com.avc.mis.beta.dto.report;
 
 import java.util.List;
 

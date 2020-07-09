@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.queryRows;
+package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

@@ -12,8 +12,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.avc.mis.beta.dto.queryRows.ProcessItemInventoryRow;
-import com.avc.mis.beta.dto.queryRows.StorageInventoryRow;
+import com.avc.mis.beta.dto.report.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.report.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageTransfer;

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
-import com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage;
+import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;

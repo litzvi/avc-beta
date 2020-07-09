@@ -8,10 +8,10 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
-import com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage;
+import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 
-public interface TransferRepository extends BaseRepository<StorageTransfer>{
+public interface TransferRepository extends ProcessRepository<StorageTransfer>{
 	
 
 	@Query("select new com.avc.mis.beta.dto.process.StorageTransferDTO("
@@ -30,26 +30,6 @@ public interface TransferRepository extends BaseRepository<StorageTransfer>{
 			+ "join r.lifeCycle lc "
 		+ "where r.id = :processId ")
 	Optional<StorageTransferDTO> findTransferDTOByProcessId(int processId);
-	
-	
-	@Query("select new com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage( "
-			+ " i.id, i.version, item.id, item.value, "
-			+ "poCode.code, ct.code, s.name, "
-			+ "sf.id, sf.version, "
-			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
-			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
-			+ "i.description, i.remarks) "
-		+ "from ProcessItem i "
-			+ "join i.item item "
-			+ "join i.process p "
-				+ "join p.poCode poCode "
-					+ "join poCode.contractType ct "
-					+ "join poCode.supplier s "
-			+ "join i.storageForms sf "
-				+ "join sf.unitAmount unit "
-				+ "left join sf.warehouseLocation warehouseLocation "
-		+ "where p.id = :processId ")
-	List<ProcessItemWithStorage> findProcessItemWithStorage(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.UsedItemDTO( "
 			+ "i.id, i.version, item.id, item.value, "
@@ -69,10 +49,28 @@ public interface TransferRepository extends BaseRepository<StorageTransfer>{
 					+ "left join itemPo.supplier s "
 		+ "where p.id = :processId ")
 	Set<UsedItemDTO> findUsedItems(int processId);
+	
+	//already in ProcessRepository
+//	@Query("select new com.avc.mis.beta.dto.query.ProcessItemWithStorage( "
+//			+ " i.id, i.version, item.id, item.value, "
+//			+ "poCode.code, ct.code, s.name, "
+//			+ "sf.id, sf.version, "
+//			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
+//			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
+//			+ "i.description, i.remarks) "
+//		+ "from ProcessItem i "
+//			+ "join i.item item "
+//			+ "join i.process p "
+//				+ "join p.poCode poCode "
+//					+ "join poCode.contractType ct "
+//					+ "join poCode.supplier s "
+//			+ "join i.storageForms sf "
+//				+ "join sf.unitAmount unit "
+//				+ "left join sf.warehouseLocation warehouseLocation "
+//		+ "where p.id = :processId ")
+//	List<ProcessItemWithStorage> findProcessItemWithStorage(int processId);
 
-
-
-//	@Query("select new com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage( "
+//	@Query("select new com.avc.mis.beta.dto.query.ProcessItemWithStorage( "
 //		+ " i.id, i.version, item.id, item.value, "
 //		+ "poCode.code, ct.code, s.name, "
 //		+ "sf.id, sf.version, "
@@ -91,7 +89,7 @@ public interface TransferRepository extends BaseRepository<StorageTransfer>{
 //	+ "where poCode.code = :poCodeId ")
 //	List<ProcessItemWithStorage> findProcessItemWithStorageByPoCode(Integer poCodeId);
 //	
-//	@Query("select new com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage( "
+//	@Query("select new com.avc.mis.beta.dto.query.ProcessItemWithStorage( "
 //		+ " i.id, i.version, item.id, item.value, "
 //		+ "poCode.code, ct.code, s.name, "
 //		+ "sf.id, sf.version, "

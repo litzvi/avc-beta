@@ -81,7 +81,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 			+ "and i.active = true")
 	CashewStandardDTO findCashewStandard(Integer itemId, String standardOrganization);
 	
-//	@Query("select new com.avc.mis.beta.dto.queryRows.RawItemQualityWithStorage( "
+//	@Query("select new com.avc.mis.beta.dto.query.RawItemQualityWithStorage( "
 //			+ " i.id, i.version, item.id, item.value, "
 //			+ "sf.id, sf.version, "
 //			+ "unit.amount, unit.measureUnit, sf.numberUnits, "

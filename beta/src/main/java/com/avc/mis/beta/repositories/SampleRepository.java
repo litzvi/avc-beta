@@ -9,7 +9,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
-import com.avc.mis.beta.dto.queryRows.SampleItemWithWeight;
+import com.avc.mis.beta.dto.query.SampleItemWithWeight;
 import com.avc.mis.beta.entities.process.SampleReceipt;
 
 /**
@@ -47,7 +47,7 @@ public interface SampleRepository extends BaseRepository<SampleReceipt> {
 //	List<SampleItemDTO> findSampleItemsById(int processId);
 	
 	
-	@Query("select new com.avc.mis.beta.dto.queryRows.SampleItemWithWeight( "
+	@Query("select new com.avc.mis.beta.dto.query.SampleItemWithWeight( "
 			+ " i.id, i.version, item.id, item.value, "
 			+ "i.measureUnit, i.emptyContainerWeight, "
 			+ "w.id, w.version, w.unitAmount, w.numberOfSamples, w.avgTestedWeight) "

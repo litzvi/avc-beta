@@ -12,8 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ProcessDTO;
-import com.avc.mis.beta.dto.queryRows.PoProcessItemEntry;
-import com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage;
+import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
@@ -118,19 +117,19 @@ public class ProcessItemDTO extends ProcessDTO {
 		return processItems;
 	}
 	
-	public static List<PoProcessItemEntry> getProcessItemsWithPo(List<ProcessItemWithStorage> storages) {
-		Map<Integer, List<ProcessItemWithStorage>> map = storages.stream()
-				.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, Collectors.toList()));
-		List<PoProcessItemEntry> processItems = new ArrayList<>();
-		for(List<ProcessItemWithStorage> list: map.values()) {
-			ProcessItemDTO processItem = list.get(0).getProcessItem();
-			processItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
-			PoProcessItemEntry processItemEntry = 
-					new PoProcessItemEntry(list.get(0).getPo(), processItem);
-			processItems.add(processItemEntry);
-		}
-		return processItems;
-	}
+//	public static List<PoProcessItemEntry> getProcessItemsWithPo(List<ProcessItemWithStorage> storages) {
+//		Map<Integer, List<ProcessItemWithStorage>> map = storages.stream()
+//				.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, Collectors.toList()));
+//		List<PoProcessItemEntry> processItems = new ArrayList<>();
+//		for(List<ProcessItemWithStorage> list: map.values()) {
+//			ProcessItemDTO processItem = list.get(0).getProcessItem();
+//			processItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
+//			PoProcessItemEntry processItemEntry = 
+//					new PoProcessItemEntry(list.get(0).getPo(), processItem);
+//			processItems.add(processItemEntry);
+//		}
+//		return processItems;
+//	}
 	
 	
 	

@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage;
+import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
 public interface ProcessRepository<T extends ProductionProcess> extends BaseRepository<T> {
 
 
-	@Query("select new com.avc.mis.beta.dto.queryRows.ProcessItemWithStorage( "
+	@Query("select new com.avc.mis.beta.dto.query.ProcessItemWithStorage( "
 			+ " i.id, i.version, item.id, item.value, "
 			+ "poCode.code, ct.code, s.name, "
 			+ "sf.id, sf.version, "

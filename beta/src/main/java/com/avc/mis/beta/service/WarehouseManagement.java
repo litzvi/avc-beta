@@ -1,7 +1,6 @@
 package com.avc.mis.beta.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -12,9 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.queryRows.InventoryProcessItemWithStorage;
-import com.avc.mis.beta.dto.queryRows.ProcessItemInventoryRow;
-import com.avc.mis.beta.dto.queryRows.StorageInventoryRow;
+import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
+import com.avc.mis.beta.dto.report.ProcessItemInventoryRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.StorageTransfer;

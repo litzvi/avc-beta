@@ -17,7 +17,7 @@ import org.apache.commons.collections4.multiset.HashMultiSet;
 
 import com.avc.mis.beta.dto.processinfo.ItemWeightDTO;
 import com.avc.mis.beta.dto.processinfo.SampleItemDTO;
-import com.avc.mis.beta.dto.queryRows.SampleItemWithWeight;
+import com.avc.mis.beta.dto.query.SampleItemWithWeight;
 import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;

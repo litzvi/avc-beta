@@ -14,11 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.process.PoCodeDTO;
-import com.avc.mis.beta.dto.queryRows.InventoryProcessItemWithStorage;
-import com.avc.mis.beta.dto.queryRows.ItemInventoryRow;
-import com.avc.mis.beta.dto.queryRows.PoInventoryRow;
-import com.avc.mis.beta.dto.queryRows.ProcessItemInventoryRow;
-import com.avc.mis.beta.dto.queryRows.StorageInventoryRow;
+import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
+import com.avc.mis.beta.dto.report.ItemInventoryRow;
+import com.avc.mis.beta.dto.report.PoInventoryRow;
+import com.avc.mis.beta.dto.report.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.SupplyGroup;

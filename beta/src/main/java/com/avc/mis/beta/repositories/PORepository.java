@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
-import com.avc.mis.beta.dto.queryRows.PoItemRow;
+import com.avc.mis.beta.dto.report.PoItemRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
 
@@ -71,6 +71,24 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "where po.id = :poid ")
 	Set<OrderItemDTO> findOrderItemsByPo(Integer poid);
 	
+	@Query("select new com.avc.mis.beta.dto.report.PoItemRow(po.id, po_code.code, ct.code, s.name, i.value, "
+			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
+			+ "oi.defects, price.amount, price.currency) "
+		+ "from PO po "
+		+ "join po.poCode po_code "
+			+ "join po_code.contractType ct "
+			+ "join po_code.supplier s "
+		+ "join po.processType t "
+		+ "join po.orderItems oi "
+			+ "join oi.numberUnits units "
+			+ "left join oi.unitPrice price "
+			+ "join oi.item i "
+		+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
+			+ "and t.processName = ?1 "
+		+ "ORDER BY oi.deliveryDate DESC ")
+	List<PoItemRow> findOpenOrderByType(ProcessName orderType);
+
+	
 //	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po_code, s.name, po.orderStatus) "
 //		+ "from PO po "
 //		+ "left join po.poCode po_code "
@@ -116,21 +134,5 @@ public interface PORepository extends BaseRepository<PO> {
 ////		+ "ORDER BY po.createdDate DESC ") // maybe by delivery date
 //	List<PoRow> findByOrderTypeAndStatuses(ProcessName orderType, OrderStatus[] statuses);
 
-	@Query("select new com.avc.mis.beta.dto.queryRows.PoItemRow(po.id, po_code.code, ct.code, s.name, i.value, "
-			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
-			+ "oi.defects, price.amount, price.currency) "
-		+ "from PO po "
-		+ "join po.poCode po_code "
-			+ "join po_code.contractType ct "
-			+ "join po_code.supplier s "
-		+ "join po.processType t "
-		+ "join po.orderItems oi "
-			+ "join oi.numberUnits units "
-			+ "left join oi.unitPrice price "
-			+ "join oi.item i "
-		+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
-			+ "and t.processName = ?1 "
-		+ "ORDER BY oi.deliveryDate DESC ")
-	List<PoItemRow> findOpenOrderByType(ProcessName orderType);
-
+	
 }
