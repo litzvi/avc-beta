@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.QualityCheck;
 /**
  * @author Zvi
@@ -48,6 +50,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.RawItemQualityDTO("
 			+ "i.id, i.version, item.id, item.value, "
+			+ "i.measureUnit, i.sampleWeight, "
 //			+ "i.description, i.remarks, "
 			+ "i.wholeCountPerLb, i.smallSize, i.ws, i.lp, i.breakage, "
 			+ "i.foreignMaterial, i.humidity, i.testa, " 

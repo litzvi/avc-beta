@@ -67,7 +67,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800095;
+	static final Integer PO_CODE = 800096;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -180,7 +180,9 @@ public class GeneralTest {
 		for(int i=0; i < NUM_PO_ITEMS; i++) {
 			rawItemQualities[i] = new RawItemQuality();
 			rawItemQualities[i].setItem(orderItems[i].getItem());
-			rawItemQualities[i].setSampleWeight(new AmountWithUnit(BigDecimal.valueOf(8), "OZ"));
+			rawItemQualities[i].setMeasureUnit(MeasureUnit.OZ);
+			rawItemQualities[i].setSampleWeight(BigDecimal.valueOf(8).setScale(AmountWithUnit.SCALE));
+			
 			
 			processItems[i] = new ProcessItem();
 			processItems[i].setItem(orderItems[i].getItem());

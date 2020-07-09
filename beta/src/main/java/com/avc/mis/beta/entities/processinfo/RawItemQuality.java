@@ -21,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
@@ -28,6 +29,7 @@ import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.CheckStatus;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.validation.groups.OnPersist;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
@@ -52,19 +54,14 @@ public class RawItemQuality extends ProcessInfoEntity {
 	@NotNull(message = "Item is mandatory", groups = OnPersist.class)
 	private Item item;
 	
-	@AttributeOverrides({
-        @AttributeOverride(name="amount",
-                           column=@Column(name="sampleAmount", nullable = false, 
-                           	precision = 19, scale = AmountWithUnit.SCALE)),
-        @AttributeOverride(name="measureUnit",
-                           column=@Column(nullable = false))
-    })
-	@Embedded
-	@NotNull(message = "Sample amount is mandatory")
-	@Valid
-	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
-	private AmountWithUnit sampleWeight;
-
+	@Column(nullable = false)
+	@NotNull(message = "Measure unit is mandatory")
+	private MeasureUnit measureUnit;
+	
+	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@NotNull(message = "Sample weight is mandatory")
+	@Positive(message = "Amount has to be positive")
+	private BigDecimal sampleWeight;
 	
 	@Column(precision = 19, scale = 3)
 	private BigInteger wholeCountPerLb;
