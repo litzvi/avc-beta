@@ -22,6 +22,7 @@ import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.queryRows.ItemInventoryRow;
+import com.avc.mis.beta.dto.queryRows.PoInventoryRow;
 import com.avc.mis.beta.dto.queryRows.PoRow;
 import com.avc.mis.beta.dto.queryRows.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.queryRows.ReceiptRow;
@@ -216,8 +217,11 @@ public class QueryTest {
 	@Test
 	void oneQueryTest() {
 		//test getting inventory storages by item
-				List<ProcessItemInventoryRow> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
-				itemInventory.forEach(i -> System.out.println(i));
+		List<ProcessItemInventoryRow> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
+		itemInventory.forEach(i -> System.out.println(i));
+		
+		List<PoInventoryRow> poInventoryRows =  cashewReports.getInventoryTableByPo();
+		poInventoryRows.forEach(i -> System.out.println(i));
 				
 	}
 }

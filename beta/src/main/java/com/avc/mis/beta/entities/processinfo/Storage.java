@@ -4,7 +4,6 @@
 package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -28,7 +27,6 @@ import javax.validation.groups.Default;
 import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 

@@ -6,7 +6,10 @@ package com.avc.mis.beta.dto.queryRows;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
@@ -50,6 +53,14 @@ public class ProcessItemInventoryRow extends ValueDTO {
 				
 	}
 	
+	public ProcessItemInventoryRow(Integer id, BasicValueEntity<Item> item, 
+			PoCodeDTO poCode, OffsetDateTime receiptDate) {
+		super(id);
+		this.item = item;
+		this.poCode = poCode;
+		this.receiptDate = receiptDate;
+	}
+	
 	public void setStorageForms(List<StorageInventoryRow> storageForms) {
 		if(storageForms.size() > 0) {
 			MeasureUnit measureUnit = storageForms.get(0).getUnitAmount().getMeasureUnit();
@@ -63,6 +74,24 @@ public class ProcessItemInventoryRow extends ValueDTO {
 		}
 		this.storageForms = storageForms;
 		
+	}
+	
+	public static List<ProcessItemInventoryRow> getProcessItemInventoryRows(
+			List<InventoryProcessItemWithStorage> processItemWithStorages) {
+		Map<ProcessItemInventoryRow, List<StorageInventoryRow>> processItemStorageMap = processItemWithStorages
+			.stream()
+			.collect(Collectors.groupingBy(
+					InventoryProcessItemWithStorage::getProcessItemInventoryRow, 
+					Collectors.mapping(InventoryProcessItemWithStorage::getStorageInventoryRow,
+							Collectors.toList())));
+		
+		List<ProcessItemInventoryRow> processItemInventoryRow = new ArrayList<ProcessItemInventoryRow>();
+		processItemStorageMap.forEach((k, v) -> {
+			k.setStorageForms(v);
+			processItemInventoryRow.add(k);
+		});
+		
+		return processItemInventoryRow;
 	}
 	
 }

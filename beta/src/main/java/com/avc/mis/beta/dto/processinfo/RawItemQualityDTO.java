@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 	
 	BasicValueEntity<Item> item;
 
-	BigDecimal wholeCountPerLb;
+	BigInteger wholeCountPerLb;
 	BigDecimal smallSize;
 	BigDecimal ws;
 	BigDecimal lp;
@@ -58,7 +59,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 			Integer itemId, String itemValue, 
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			/* String description, String remarks, */ 
-			BigDecimal wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
+			BigInteger wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
 			BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal decay, BigDecimal insectDamage,
