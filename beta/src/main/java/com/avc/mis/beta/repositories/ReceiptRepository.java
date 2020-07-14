@@ -23,7 +23,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 
 	@Query("select new com.avc.mis.beta.dto.process.ReceiptDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "po_code.code, t.code, s.id, s.version, s.name, "
+			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
 			+ "lc.status, r.remarks) "
@@ -58,7 +58,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 	List<ReceiptItemWithStorage> findReceiptItemWithStorage(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.report.ReceiptItemRow( "
-				+ "r.id, po_code.id, ct.code, s.name, i.value, "
+				+ "r.id, po_code.id, ct.code, ct.suffix, s.name, i.value, "
 				+ "units.amount, units.measureUnit, "
 				+ "r.recordedTime, "
 				+ "SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor), i.measureUnit, "

@@ -16,7 +16,6 @@ import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
 
@@ -43,11 +42,11 @@ public class ProcessItemInventoryRow extends ValueDTO {
 	private List<StorageInventoryRow> storageForms;
 	
 	public ProcessItemInventoryRow(Integer id, Integer itemId, String itemValue,
-			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName,
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			OffsetDateTime receiptDate/* , BigDecimal totalAmount, MeasureUnit measureUnit */) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
+		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.receiptDate = receiptDate;
 //		this.totalAmount = new AmountWithUnit(
 //				totalAmount.setScale(AmountWithUnit.SCALE, RoundingMode.HALF_DOWN), measureUnit);

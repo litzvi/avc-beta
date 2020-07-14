@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.StorageTransfer;
@@ -33,10 +32,12 @@ public class StorageTransferDTO extends ProductionProcessDTO {
 	
 	
 	public StorageTransferDTO(Integer id, Integer version, Instant createdDate, String userRecording, Integer poCodeId,
-			ContractTypeCode contractTypeCode, Integer supplierId, Integer supplierVersion, String supplierName,
+			String contractTypeCode, String contractTypeSuffix, 
+			Integer supplierId, Integer supplierVersion, String supplierName,
 			ProcessName processName, ProductionLine productionLine, OffsetDateTime recordedTime, Duration duration,
 			Integer numOfWorkers, RecordStatus status, String remarks) {
-		super(id, version, createdDate, userRecording, poCodeId, contractTypeCode, supplierId, supplierVersion, supplierName,
+		super(id, version, createdDate, userRecording, poCodeId, contractTypeCode, contractTypeSuffix,
+				supplierId, supplierVersion, supplierName,
 				processName, productionLine, recordedTime, duration, numOfWorkers, status, remarks);
 	}
 	

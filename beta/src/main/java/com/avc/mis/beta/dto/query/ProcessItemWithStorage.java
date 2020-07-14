@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.StorageDTO;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.Storage;
 
@@ -29,7 +28,7 @@ public class ProcessItemWithStorage {
 	
 	
 	public ProcessItemWithStorage(Integer id, Integer version, Integer itemId, String itemValue, 
-			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName,
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer storageVersion,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
@@ -37,7 +36,7 @@ public class ProcessItemWithStorage {
 			String description, String remarks) {
 		this.processItem = new ProcessItemDTO(id, version, itemId, itemValue, 
 				description, remarks);
-		this.po = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
+		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.storage = new StorageDTO(storageId, storageVersion, 
 				unitAmount, measureUnit, numberUnits, 
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);

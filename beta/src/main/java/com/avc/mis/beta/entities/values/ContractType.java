@@ -3,21 +3,25 @@
  */
 package com.avc.mis.beta.entities.values;
 
+import java.util.Currency;
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author Zvi
@@ -27,7 +31,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name="CONTRACT_TYPES")
+@Table(name="CONTRACT_TYPES", uniqueConstraints = 
+	{ @UniqueConstraint(columnNames = { "code", "currency" }), 
+			@UniqueConstraint(columnNames = { "code", "suffix" }) })
 public class ContractType extends ValueEntity {
 
 	@Column(unique = true, nullable = false)
@@ -35,18 +41,33 @@ public class ContractType extends ValueEntity {
 	private String name;
 	
 	@JsonIgnore
-	@Enumerated(EnumType.STRING)
-	@Column(name = "code", unique = true, nullable = false)
-	@NotNull(message = "Contract type has to have a code")
-	private ContractTypeCode code;
+	@Column(name = "code", nullable = false)
+	@NotBlank(message = "Contract type has to have a code")
+	private String code;
 	
-	public void setValue(String value) {
-		if(value != null)
-			this.code = ContractTypeCode.valueOf(value);
+	@Setter(value = AccessLevel.NONE)
+	@Column(nullable = false)
+	@NotNull(message = "Contract type has to have a currency")
+	private Currency currency; 
+	
+	@Getter(value = AccessLevel.NONE)
+	private String suffix;
+	
+	public void setCurrency(String currencyCode) {
+		this.currency = Currency.getInstance(currencyCode);
+	}
+	
+	public void setCurrency(Currency currency) {
+		this.currency = currency;
+	}
+	
+	public String getSuffix() {
+		return suffix != null ? suffix : "";
 	}
 	
 	public String getValue() {
-		return code.name();
+		return String.format("%s-%s", this.code, this.currency);
+//		return code.name();
 	}
 
 }

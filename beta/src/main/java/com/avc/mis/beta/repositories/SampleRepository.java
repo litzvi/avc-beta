@@ -20,7 +20,7 @@ public interface SampleRepository extends BaseRepository<SampleReceipt> {
 
 	@Query("select new com.avc.mis.beta.dto.process.SampleReceiptDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "po_code.code, t.code, s.id, s.version, s.name, "
+			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
 			+ "lc.status, r.remarks) "

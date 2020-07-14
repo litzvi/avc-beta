@@ -7,7 +7,6 @@ import java.time.Instant;
 
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
@@ -37,14 +36,14 @@ public class UserMessageDTO extends DataDTO {
 	private String remarks;
 	
 	public UserMessageDTO(Integer id, Integer version, 
-			Integer poCodeId, ContractTypeCode contractTypeCode, 
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix,
 			String title, Integer processId, ProcessName processName, 
 			Instant createdDate, String userName, String modifiedBy, MessageLabel label) {
 		super(id, version);
 		this.title = title;
 		this.processId = processId;
 		if(poCodeId != null) {
-			this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
+			this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		}
 		this.processName = processName;
 //		this.createdDate = LocalDateTime.ofInstant(createdDate, ZoneOffset.UTC);

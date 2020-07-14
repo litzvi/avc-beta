@@ -12,7 +12,6 @@ import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
@@ -46,12 +45,12 @@ public class PoItemRow extends ValueDTO {
 //	BigDecimal unitPrice;
 	
 	public PoItemRow(@NonNull Integer id, 
-			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemName, BigDecimal amount, MeasureUnit measureUnit, 
 			OffsetDateTime contractDate, LocalDate deliveryDate, 
 			String defects, BigDecimal unitPrice, Currency currency) {
 		super(id);
-		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
+		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.itemName = itemName;
 		this.numberUnits = new AmountWithUnit(amount.setScale(AmountWithUnit.SCALE), measureUnit);

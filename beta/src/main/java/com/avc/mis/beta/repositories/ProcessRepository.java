@@ -13,7 +13,7 @@ public interface ProcessRepository<T extends ProductionProcess> extends BaseRepo
 
 	@Query("select new com.avc.mis.beta.dto.query.ProcessItemWithStorage( "
 			+ " i.id, i.version, item.id, item.value, "
-			+ "poCode.code, ct.code, s.name, "
+			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "

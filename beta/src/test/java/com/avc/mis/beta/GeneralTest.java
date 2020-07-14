@@ -11,6 +11,7 @@ import java.math.BigInteger;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Currency;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,6 @@ import com.avc.mis.beta.dto.process.SampleReceiptDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.PO;
@@ -97,7 +97,7 @@ public class GeneralTest {
 		PO po = new PO();
 		PoCode poCode = new PoCode();
 		poCode.setId(PO_CODE);
-		poCode.setContractType(valueTablesRepository.findContractTypeByValue(ContractTypeCode.VAT));
+		poCode.setContractType(valueTablesRepository.findContractTypeByCodeAndCurrency("VAT", Currency.getInstance("VND")));
 		poCode.setSupplier(supplier);
 		po.setPoCode(poCode);
 		po.setRecordedTime(OffsetDateTime.now());

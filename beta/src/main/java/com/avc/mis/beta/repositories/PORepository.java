@@ -25,7 +25,7 @@ public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
 			+ "po.id, po.version, po.createdDate, p_user.username, "
-			+ "po_code.code, t.code, s.id, s.version, s.name, "
+			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "po.recordedTime, po.duration, po.numOfWorkers, "
 			+ "lc.status, po.remarks) "
@@ -43,7 +43,7 @@ public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
 			+ "po.id, po.version, po.createdDate, p_user.username, "
-			+ "po_code.code, t.code, s.id, s.version, s.name, "
+			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "po.recordedTime, po.duration, po.numOfWorkers, "
 			+ "lc.status, po.remarks) "
@@ -71,7 +71,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "where po.id = :poid ")
 	Set<OrderItemDTO> findOrderItemsByPo(Integer poid);
 	
-	@Query("select new com.avc.mis.beta.dto.report.PoItemRow(po.id, po_code.code, ct.code, s.name, i.value, "
+	@Query("select new com.avc.mis.beta.dto.report.PoItemRow(po.id, po_code.code, ct.code, ct.suffix, s.name, i.value, "
 			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency) "
 		+ "from PO po "

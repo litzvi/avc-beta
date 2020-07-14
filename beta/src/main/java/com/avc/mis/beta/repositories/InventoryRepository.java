@@ -21,7 +21,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	@Query("select new com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage( "
 			+ "pi.id, "
 			+ "item.id, item.value, "
-			+ "poCode.code, ct.code, s.name, "
+			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "p.recordedTime, "
 			+ "sf.id, sf.version, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, "

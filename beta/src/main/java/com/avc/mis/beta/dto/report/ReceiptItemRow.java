@@ -9,7 +9,6 @@ import java.time.OffsetDateTime;
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.EqualsAndHashCode;
@@ -39,12 +38,12 @@ public class ReceiptItemRow extends ValueDTO {
 //	MeasureUnit extraAddedMU;
 	
 	public ReceiptItemRow(@NonNull Integer id, 
-			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, 
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemName, BigDecimal orderAmount, MeasureUnit orderMU, OffsetDateTime receiptDate, 
 			BigDecimal receiptAmount, MeasureUnit receiptMU, String storage, 
 			BigDecimal extraAdded, MeasureUnit extraAddedMU) {
 		super(id);
-		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
+		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.itemName = itemName;
 		this.orderAmount = new AmountWithUnit(orderAmount, orderMU);

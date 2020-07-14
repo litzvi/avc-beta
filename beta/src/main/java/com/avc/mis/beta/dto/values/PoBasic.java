@@ -27,10 +27,11 @@ public class PoBasic extends DataDTO {
 //	SupplierBasic supplier;
 //	OrderStatus orderStatus;
 	
-	public PoBasic(@NonNull Integer id, Integer version, Integer poCodeId, ContractType contractType,
-			String supplierName, Integer supplierId, Integer supplierVersion) {
+	public PoBasic(@NonNull Integer id, Integer version, 
+			Integer poCodeId, ContractType contractType, String contractTypeSuffix, 
+			String supplierName) {
 		super(id, version);
-		this.poCode = new PoCodeDTO(poCodeId, contractType.getCode(), supplierName);
+		this.poCode = new PoCodeDTO(poCodeId, contractType.getCode(), contractTypeSuffix, supplierName);
 //		this.code  = poCode.getCode();
 //		this.value = poCode.getValue();
 //		this.supplierName = supplierName;

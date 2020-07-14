@@ -16,7 +16,7 @@ public interface TransferRepository extends ProcessRepository<StorageTransfer>{
 
 	@Query("select new com.avc.mis.beta.dto.process.StorageTransferDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "po_code.code, t.code, s.id, s.version, s.name, "
+			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
 			+ "lc.status, r.remarks) "
@@ -33,7 +33,7 @@ public interface TransferRepository extends ProcessRepository<StorageTransfer>{
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.UsedItemDTO( "
 			+ "i.id, i.version, item.id, item.value, "
-			+ "itemPo.id, ct.code, s.name, "
+			+ "itemPo.id, ct.code, ct.suffix, s.name, "
 			+ "unit.amount, unit.measureUnit, "
 			+ "warehouseLocation.id, warehouseLocation.value, "
 			+ "i.numberUnits) "

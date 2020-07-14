@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.PO;
@@ -37,12 +36,14 @@ public class PoDTO extends ProductionProcessDTO {
 	private Set<OrderItemDTO> orderItems; //can use a SortedSet like ContactDetails to maintain order
 	
 	public PoDTO(Integer id, Integer version, Instant createdDate, String staffRecording, 
-			Integer poCodeId, ContractTypeCode contractTypeCode, Integer supplierId, Integer supplierVersion, String supplierName,  
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
+			Integer supplierId, Integer supplierVersion, String supplierName,  
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, 
 			RecordStatus recordStatus, String remarks) {
 		super(id, version, createdDate, staffRecording, 
-				poCodeId, contractTypeCode, supplierId, supplierVersion, supplierName, 
+				poCodeId, contractTypeCode, contractTypeSuffix,
+				supplierId, supplierVersion, supplierName, 
 				processName, productionLine, 
 				recordedTime, duration, numOfWorkers, recordStatus, remarks);
 //		this.orderStatus = orderStatus;

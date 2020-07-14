@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,6 @@ import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
@@ -54,8 +54,8 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	Optional<ProcessType> findProcessTypeByValue(ProcessName value);
 	
 	//for inserting contract type in testing
-	@Query("select t from ContractType t where t.code = :value")
-	ContractType findContractTypeByValue(ContractTypeCode value);
+	@Query("select t from ContractType t where t.code = :code and t.currency = :currency")
+	ContractType findContractTypeByCodeAndCurrency(String code, Currency currency);
 		
 	@Query("select b from Bank b where b.active = true")
 	List<Bank> findAllBanks();

@@ -57,10 +57,9 @@ public class PoCode extends BaseEntity {
 	 * @return a string representing full PO code. e.g. VAT-900001
 	 */
 	public String getValue() {
-		return String.format("%s-%d", this.contractType.getValue(), this.code);
+		return String.format("%s-%d-%s", this.contractType.getCode(), this.code, this.contractType.getSuffix());
 	}
 
-//	@JsonIgnore
 	@Override
 	public Integer getId() {
 		return code;
@@ -68,8 +67,7 @@ public class PoCode extends BaseEntity {
 
 	@Override
 	public void setId(Integer id) {
-		this.code = id;
-		
+		this.code = id;		
 	}
 	
 	protected boolean canEqual(Object o) {

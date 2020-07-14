@@ -7,7 +7,6 @@ import java.time.Instant;
 
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
@@ -39,13 +38,13 @@ public class ApprovalTaskDTO extends DataDTO {
 	private String remarks;
 	
 	public ApprovalTaskDTO(Integer id, Integer version, 
-			Integer poCodeId, ContractTypeCode contractTypeCode, 
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix,
 			String title, Integer processId, ProcessName processName, 
 			Instant createdDate, String userName, String modifiedBy, DecisionType decision, String processSnapshot) {
 		super(id, version);
 		this.title = title;
 		this.processId = processId;
-		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode);
+		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.processName = processName;
 //		this.createdDate = LocalDateTime.ofInstant(createdDate, ZoneOffset.UTC);
 		this.userName = userName;

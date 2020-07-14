@@ -6,7 +6,6 @@ import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ContractTypeCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
@@ -30,14 +29,14 @@ public class UsedItemDTO extends ProcessDTO {
 
 	public UsedItemDTO(Integer id, Integer version, 
 			Integer itemId, String itemValue, 
-			Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName,
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			BigDecimal unitAmount, MeasureUnit measureUnit,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			BigDecimal numberUnits) {
 		super(id, version);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		if(poCodeId != null)
-			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
+			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		else
 			this.itemPo = null;
 		this.unitAmount = new AmountWithUnit(unitAmount.setScale(AmountWithUnit.SCALE), measureUnit);
