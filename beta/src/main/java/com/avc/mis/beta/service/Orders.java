@@ -4,7 +4,9 @@
 package com.avc.mis.beta.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -59,8 +61,18 @@ public class Orders {
 			AmountWithUnit totalAmount = v.stream()
 					.map(pi -> pi.getNumberUnits())
 					.reduce(new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.LOT), AmountWithUnit::add);
-			PoRow poRow = new PoRow(k, totalAmount, v);
+			LocalDate deliveryDate = v.stream().findAny().get().getDeliveryDate();
+			PoRow poRow = new PoRow(k, deliveryDate, totalAmount, v);
 			poRows.add(poRow);
+		});
+		
+		//sort by delivery date
+		poRows.sort(new Comparator<PoRow>() {
+
+			@Override
+			public int compare(PoRow o1, PoRow o2) {
+				return o1.getDeliveryDate().compareTo(o2.getDeliveryDate());
+			}
 		});
 		return poRows;
 	}

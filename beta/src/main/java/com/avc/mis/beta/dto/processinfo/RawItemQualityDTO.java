@@ -156,5 +156,9 @@ public class RawItemQualityDTO extends ProcessDTO {
 		}
 		return sum;
 	}
+	
+	public BigDecimal getTotalDefectsAndDamage() {
+		return getTotalDamage().add(getTotalDefects());
+	}
 
 }

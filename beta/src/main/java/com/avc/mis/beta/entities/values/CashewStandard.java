@@ -39,6 +39,9 @@ public class CashewStandard extends ValueEntity {
 	private BigDecimal totalDamage;
 	
 	@Column(precision = 19, scale = 3)
+	private BigDecimal totalDefectsAndDamage;
+	
+	@Column(precision = 19, scale = 3)
 	private BigDecimal wholeCountPerLb;
 	
 	@Column(precision = 19, scale = 3)
