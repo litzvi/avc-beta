@@ -49,7 +49,7 @@ public class SampleItemDTO extends ProcessDTO {
 		this.measureUnit = measureUnit;
 //		this.numberOfSamples = numberOfSamples;
 //		this.avgTestedWeight = avgTestedWeight.setScale(3);
-		this.emptyContainerWeight = emptyContainerWeight.setScale(AmountWithUnit.SCALE);
+		this.emptyContainerWeight = emptyContainerWeight.setScale(MeasureUnit.SCALE);
 	}
 
 	public SampleItemDTO(@NonNull SampleItem sampleItem) {
@@ -58,7 +58,7 @@ public class SampleItemDTO extends ProcessDTO {
 		this.measureUnit = sampleItem.getMeasureUnit();
 //		this.numberOfSamples = sampleItem.getNumberOfSamples();
 //		this.avgTestedWeight = sampleItem.getAvgTestedWeight().setScale(3);
-		this.emptyContainerWeight = sampleItem.getEmptyContainerWeight().setScale(AmountWithUnit.SCALE);
+		this.emptyContainerWeight = sampleItem.getEmptyContainerWeight().setScale(MeasureUnit.SCALE);
 		
 		this.itemWeights = Arrays.stream(sampleItem.getItemWeights())
 				.map(i->{return new ItemWeightDTO(i);})

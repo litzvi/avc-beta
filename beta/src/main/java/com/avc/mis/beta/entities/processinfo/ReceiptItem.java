@@ -23,6 +23,7 @@ import javax.validation.groups.Default;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
 import lombok.AccessLevel;
@@ -70,7 +71,7 @@ public class ReceiptItem extends ProcessItem {
 	
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
-                           column=@Column(name="extraRequested", precision = 19, scale = AmountWithUnit.SCALE))
+                           column=@Column(name="extraRequested", precision = 19, scale = MeasureUnit.SCALE))
     })
 	@Embedded
 	@Valid

@@ -11,6 +11,9 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
+ * DTO for PoCode containing only id 
+ * and fields needed for presenting the po code/id with it's initial and suffix.
+ * 
  * @author Zvi
  *
  */
@@ -24,6 +27,12 @@ public class PoCodeDTO extends BaseDTO {
 	String contractTypeSuffix;
 	String supplierName;	
 	
+	/**
+	 * @param id
+	 * @param contractTypeCode
+	 * @param contractTypeSuffix
+	 * @param supplierName
+	 */
 	public PoCodeDTO(Integer id, 
 			String contractTypeCode, String contractTypeSuffix, String supplierName) {
 		super(id);
@@ -33,6 +42,9 @@ public class PoCodeDTO extends BaseDTO {
 		this.contractTypeSuffix = contractTypeSuffix;
 	}	
 	
+	/**
+	 * @param poCode
+	 */
 	public PoCodeDTO(PoCode poCode) {
 		super(poCode.getCode());
 		this.contractTypeCode = poCode.getContractType() != null ? poCode.getContractType().getCode(): null;
@@ -41,12 +53,16 @@ public class PoCodeDTO extends BaseDTO {
 		this.contractTypeSuffix = poCode.getContractType() != null ? poCode.getContractType().getSuffix(): null;
 	}
 	
+	/**
+	 * Used as a synonymous for getting id
+	 * @return the code/id
+	 */
 	public Integer getCode() {
 		return getId();
 	}
 	
 	/**
-	 * @return a string representing full PO code. e.g. VAT-900001
+	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
 	 */
 	public String getValue() {		
 		return String.format("%s-%d%s", this.contractTypeCode, this.getId(), this.contractTypeSuffix);

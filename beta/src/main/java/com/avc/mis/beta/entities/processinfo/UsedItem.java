@@ -14,6 +14,7 @@ import javax.validation.constraints.Positive;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,7 +32,7 @@ public class UsedItem extends ProcessInfoEntity {
 	@NotNull(message = "Internal error: Used item has no referance to storage")
 	private Storage storage;
 	
-	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Number of units is required")
 	@Positive(message = "Number of units has to be positive")
 	private BigDecimal numberUnits;	

@@ -27,6 +27,7 @@ import javax.validation.groups.Default;
 import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
@@ -55,7 +56,7 @@ public class Storage extends AuditedEntity {
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
                            column=@Column(name="unitAmount", nullable = false, 
-                           	precision = 19, scale = AmountWithUnit.SCALE)),
+                           	precision = 19, scale = MeasureUnit.SCALE)),
         @AttributeOverride(name="measureUnit",
                            column=@Column(nullable = false))
     })
@@ -65,7 +66,7 @@ public class Storage extends AuditedEntity {
 	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
 	private AmountWithUnit unitAmount;
 
-	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Number of units is required")
 	@Positive(message = "Number of units has to be positive")
 	private BigDecimal numberUnits;	

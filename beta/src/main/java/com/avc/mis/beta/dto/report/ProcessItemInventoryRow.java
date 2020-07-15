@@ -24,6 +24,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
+ * DTO of inventory info needed for process item - item resulted from process.
+ * 
  * @author Zvi
  *
  */
@@ -32,7 +34,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ProcessItemInventoryRow extends ValueDTO {
 
-//	ItemDTO item; //measure unit is already in totalAmount
 	private BasicValueEntity<Item> item;
 	private PoCodeDTO poCode;
 	private OffsetDateTime receiptDate;
@@ -69,7 +70,7 @@ public class ProcessItemInventoryRow extends ValueDTO {
 					.reduce(new AmountWithUnit(BigDecimal.ZERO, measureUnit), AmountWithUnit::add);
 			this.totalLots = new AmountWithUnit(
 					MeasureUnit.convert(totalAmount, MeasureUnit.LOT)
-					.setScale(AmountWithUnit.SCALE, RoundingMode.HALF_DOWN), MeasureUnit.LOT);
+					.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN), MeasureUnit.LOT);
 
 		}
 		this.storageForms = storageForms;

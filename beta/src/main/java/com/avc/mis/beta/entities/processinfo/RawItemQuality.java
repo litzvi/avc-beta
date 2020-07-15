@@ -51,7 +51,7 @@ public class RawItemQuality extends ProcessInfoEntity {
 	@NotNull(message = "Measure unit is mandatory")
 	private MeasureUnit measureUnit;
 	
-	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Sample weight is mandatory")
 	@Positive(message = "Amount has to be positive")
 	private BigDecimal sampleWeight;

@@ -18,6 +18,7 @@ import javax.validation.constraints.Positive;
 import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,7 +41,7 @@ public class ItemWeight extends AuditedEntity {
 	@JoinColumn(name = "sampleItemId", nullable = false, updatable = false)
 	private SampleItem sampleItem;
 	
-	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Sampled item's unit amount is required")
 	@Positive(message = "Unit amount has to be positive")
 	private BigDecimal unitAmount;
@@ -50,7 +51,7 @@ public class ItemWeight extends AuditedEntity {
 	@Positive(message = "Number of samples has to be positive")
 	private BigInteger numberOfSamples;	
 	
-	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Average tested weight is mandetory")
 	@Positive(message = "Average tested weight has to be positive")
 	private BigDecimal avgTestedWeight;

@@ -37,7 +37,6 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "left join po.createdBy p_user "
 			+ "left join po.productionLine p_line "
 			+ "join po.lifeCycle lc "
-//			+ "left join po.status p_status "
 		+ "where po_code.id = :codeId ")
 	Optional<PoDTO> findOrderByPoCodeId(Integer codeId);
 	
@@ -55,7 +54,6 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "left join po.createdBy p_user "
 			+ "left join po.productionLine p_line "
 			+ "join po.lifeCycle lc "
-//			+ "left join po.status p_status "
 		+ "where po.id = :id ")
 	Optional<PoDTO> findOrderByProcessId(Integer id);
 	
@@ -84,8 +82,8 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "left join oi.unitPrice price "
 			+ "join oi.item i "
 		+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
-			+ "and t.processName = ?1 "
-		+ "ORDER BY oi.deliveryDate DESC ")
+			+ "and t.processName = ?1 ")
+//		+ "ORDER BY oi.deliveryDate DESC ") - done in the code
 	List<PoItemRow> findOpenOrderByType(ProcessName orderType);
 
 	

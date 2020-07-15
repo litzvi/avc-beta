@@ -39,7 +39,7 @@ public class UsedItemDTO extends ProcessDTO {
 			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		else
 			this.itemPo = null;
-		this.unitAmount = new AmountWithUnit(unitAmount.setScale(AmountWithUnit.SCALE), measureUnit);
+		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else
@@ -65,7 +65,7 @@ public class UsedItemDTO extends ProcessDTO {
 		ProcessItem processItem = storage.getProcessItem();
 		this.item = new BasicValueEntity<Item>(processItem.getItem());
 		this.itemPo = new PoCodeDTO(processItem.getProcess().getPoCode());
-		this.unitAmount = storage.getUnitAmount().setScale(AmountWithUnit.SCALE);
+		this.unitAmount = storage.getUnitAmount().setScale(MeasureUnit.SCALE);
 		if(storage.getWarehouseLocation() != null) {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(
 					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());

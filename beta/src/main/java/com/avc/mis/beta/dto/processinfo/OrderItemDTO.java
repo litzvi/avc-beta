@@ -49,7 +49,7 @@ public class OrderItemDTO extends ProcessDTO {
 //		this.poId = poId;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 //		this.measureUnit = measureUnit;
-		this.numberUnits = new AmountWithUnit(numberUnits.setScale(AmountWithUnit.SCALE), measureUnit);
+		this.numberUnits = new AmountWithUnit(numberUnits.setScale(MeasureUnit.SCALE), measureUnit);
 //		this.currency = currency;
 		this.unitPrice = new AmountWithCurrency(unitPrice, currency);
 		this.deliveryDate = deliveryDate;
@@ -66,7 +66,7 @@ public class OrderItemDTO extends ProcessDTO {
 //		this.poId = orderItem.getPo().getId();
 		this.item = new BasicValueEntity<Item>(orderItem.getItem());
 //		this.measureUnit = orderItem.getMeasureUnit();
-		this.numberUnits = orderItem.getNumberUnits().setScale(AmountWithUnit.SCALE);
+		this.numberUnits = orderItem.getNumberUnits().setScale(MeasureUnit.SCALE);
 //		this.currency = orderItem.getCurrency();
 		this.unitPrice = orderItem.getUnitPrice().clone();
 		this.deliveryDate = orderItem.getDeliveryDate();

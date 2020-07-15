@@ -26,13 +26,17 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Basic immutable information that serves as identification for material/s, product/s 
+ * that where usually aggregated in one purchase order and followed during processing life as a separate unit.
+ * 
+ * code and id are synonymous in this class
+ * 
  * @author Zvi
  *
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @NoArgsConstructor
-//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name = "PO_CODES")
 public class PoCode extends BaseEntity {
@@ -54,7 +58,7 @@ public class PoCode extends BaseEntity {
 	private ContractType contractType;
 	
 	/**
-	 * @return a string representing full PO code. e.g. VAT-900001
+	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
 	 */
 	public String getValue() {
 		return String.format("%s-%d%s", this.contractType.getCode(), this.code, this.contractType.getSuffix());
@@ -70,6 +74,11 @@ public class PoCode extends BaseEntity {
 		this.code = id;		
 	}
 	
+	/**
+	 * Used by Lombok so new/transient entities with null id won't be equal.
+	 * @param o
+	 * @return
+	 */
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}

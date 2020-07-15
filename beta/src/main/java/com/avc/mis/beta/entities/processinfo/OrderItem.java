@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.utilities.LocalDateToLong;
@@ -61,7 +62,7 @@ public class OrderItem extends AuditedEntity {
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
                            column=@Column(name="numberUnits", nullable = false, 
-                           	precision = 19, scale = AmountWithUnit.SCALE)),
+                           	precision = 19, scale = MeasureUnit.SCALE)),
         @AttributeOverride(name="measureUnit",
                            column=@Column(nullable = false))
     })

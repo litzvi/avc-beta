@@ -28,15 +28,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Embeddable
 public class AmountWithUnit implements Cloneable {
-	
-	public static final int SCALE = 3;
-	
-	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,###.###");
+		
+	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,###.######");
 
 	@NotNull(message = "Amount is required")
 	@Positive(message = "Amount has to be positive", groups = PositiveAmount.class)
 	private BigDecimal amount;
-//	private BigDecimal amount = BigDecimal.ZERO;
 	
 	@Enumerated(EnumType.STRING)
 	@NotNull(message = "Measure unit required")

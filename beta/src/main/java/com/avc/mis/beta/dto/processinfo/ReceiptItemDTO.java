@@ -39,7 +39,7 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 		if(orderItemId != null)
 			this.orderItem = new DataObject(orderItemId, orderItemVersion);
 		if(extraRequested != null) {
-			this.extraRequested = new AmountWithUnit(extraRequested.setScale(AmountWithUnit.SCALE), measureUnit);
+			this.extraRequested = new AmountWithUnit(extraRequested.setScale(MeasureUnit.SCALE), measureUnit);
 		}
 	}
 
@@ -49,7 +49,7 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 		if(receiptItem.getOrderItem() != null)
 			this.orderItem = new DataObject(receiptItem.getOrderItem());
 		if(receiptItem.getExtraRequested() != null) {
-			this.extraRequested = receiptItem.getExtraRequested().setScale(AmountWithUnit.SCALE);
+			this.extraRequested = receiptItem.getExtraRequested().setScale(MeasureUnit.SCALE);
 		}
 //		this.measureUnit = receiptItem.getMeasureUnit();
 	}
@@ -62,7 +62,7 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 		super(id, version, item, /* itemPo, */ description, remarks);
 		this.orderItem = orderItem;
 		if(extraRequested != null) {
-			this.extraRequested = extraRequested.setScale(AmountWithUnit.SCALE);
+			this.extraRequested = extraRequested.setScale(MeasureUnit.SCALE);
 		}
 //		this.measureUnit = measureUnit;
 	}

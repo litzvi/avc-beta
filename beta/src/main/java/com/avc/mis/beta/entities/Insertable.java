@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
  */
 public interface Insertable {
 	
+	/**
+	 * @return id for the entity
+	 */
 	public Integer getId();
 	
 	//used for setting id to null when restoring, so dosen't check if record exists for old id.
@@ -35,7 +38,7 @@ public interface Insertable {
 //	public void preUpdate();
 
 	/**
-	 * Empty implementation
+	 * Empty implementation for entities that don't have references to set.
 	 */
 	default public void setReference(Object referenced) {}
 

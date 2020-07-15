@@ -53,7 +53,7 @@ public class PoItemRow extends ValueDTO {
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.itemName = itemName;
-		this.numberUnits = new AmountWithUnit(amount.setScale(AmountWithUnit.SCALE), measureUnit);
+		this.numberUnits = new AmountWithUnit(amount.setScale(MeasureUnit.SCALE), measureUnit);
 //		this.measureUnit = measureUnit;
 		this.contractDate = contractDate;
 		this.deliveryDate = deliveryDate;

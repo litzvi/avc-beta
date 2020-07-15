@@ -182,7 +182,7 @@ public class GeneralTest {
 			rawItemQualities[i] = new RawItemQuality();
 			rawItemQualities[i].setItem(orderItems[i].getItem());
 			rawItemQualities[i].setMeasureUnit(MeasureUnit.OZ);
-			rawItemQualities[i].setSampleWeight(BigDecimal.valueOf(8).setScale(AmountWithUnit.SCALE));
+			rawItemQualities[i].setSampleWeight(BigDecimal.valueOf(8).setScale(MeasureUnit.SCALE));
 			
 			
 			processItems[i] = new ProcessItem();

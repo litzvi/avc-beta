@@ -55,7 +55,7 @@ public class SampleItem extends ProcessInfoEntity {
 	@NotNull(message = "Sample item measure unit is mandatory")
 	private MeasureUnit measureUnit;
 	
-	@Column(nullable = false, precision = 19, scale = AmountWithUnit.SCALE)
+	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Empty container avarage weight is mandatory")
 	private BigDecimal emptyContainerWeight;
 		

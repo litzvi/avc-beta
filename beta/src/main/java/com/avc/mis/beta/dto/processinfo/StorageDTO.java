@@ -36,9 +36,9 @@ public class StorageDTO extends ProcessDTO {
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
-		this.unitAmount = new AmountWithUnit(unitAmount.setScale(AmountWithUnit.SCALE), measureUnit);
+		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
 //		this.measureUnit = measureUnit;
-		this.numberUnits = numberUnits.setScale(AmountWithUnit.SCALE);
+		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else
@@ -54,8 +54,8 @@ public class StorageDTO extends ProcessDTO {
 	public StorageDTO(Storage storage) {
 		super(storage.getId(), storage.getVersion());
 //		this.measureUnit = storage.getMeasureUnit();
-		this.unitAmount = storage.getUnitAmount().setScale(AmountWithUnit.SCALE);
-		this.numberUnits = storage.getNumberUnits().setScale(AmountWithUnit.SCALE);
+		this.unitAmount = storage.getUnitAmount().setScale(MeasureUnit.SCALE);
+		this.numberUnits = storage.getNumberUnits().setScale(MeasureUnit.SCALE);
 		if(storage.getWarehouseLocation() != null) {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(
 					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
@@ -82,7 +82,7 @@ public class StorageDTO extends ProcessDTO {
 		super(id, version);
 		this.unitAmount = unitAmount;
 //		this.measureUnit = measureUnit;
-		this.numberUnits = numberUnits.setScale(AmountWithUnit.SCALE);
+		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 		this.warehouseLocation = warehouseLocation;
 		this.remarks = remarks;
 		this.className = clazz.getSimpleName();
