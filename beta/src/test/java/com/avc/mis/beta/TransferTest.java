@@ -14,7 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.report.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.report.StorageInventoryRow;
-import com.avc.mis.beta.entities.enums.RecordStatus;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
@@ -38,7 +38,7 @@ public class TransferTest {
 	@Test
 	void transferTest() {
 		Receipt receipt = service.addBasicCashewReceipt();
-		processInfoWriter.setProcessRecordStatus(RecordStatus.FINAL, receipt.getId());
+		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
 		StorageTransfer transfer = new StorageTransfer();
 		transfer.setPoCode(receipt.getPoCode());

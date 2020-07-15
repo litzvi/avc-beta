@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -12,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.QualityCheck;
 /**
  * @author Zvi
@@ -35,7 +33,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
-			+ "lc.status, r.remarks) "
+			+ "lc.processStatus, lc.editStatus, r.remarks) "
 		+ "from QualityCheck r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType t "

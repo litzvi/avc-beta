@@ -1,6 +1,5 @@
 package com.avc.mis.beta.repositories;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -8,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
-import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 
 public interface TransferRepository extends ProcessRepository<StorageTransfer>{
@@ -19,7 +17,7 @@ public interface TransferRepository extends ProcessRepository<StorageTransfer>{
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
-			+ "lc.status, r.remarks) "
+			+ "lc.processStatus, lc.editStatus, r.remarks) "
 		+ "from StorageTransfer r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType t "

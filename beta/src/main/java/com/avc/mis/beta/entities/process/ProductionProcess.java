@@ -24,6 +24,7 @@ import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
@@ -128,9 +129,13 @@ public abstract class ProductionProcess extends AuditedEntity {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
+//	@PrePersist
+//	public abstract void prePersist();
+	
 	@PrePersist
 	public void prePersist() {
 		this.lifeCycle = new ProcessLifeCycle();
+		this.lifeCycle.setProcessStatus(ProcessStatus.FINAL);
 		lifeCycle.setReference(this);
 	}
 

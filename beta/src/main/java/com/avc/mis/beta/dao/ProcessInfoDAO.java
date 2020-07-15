@@ -16,9 +16,10 @@ import org.springframework.stereotype.Repository;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.RecordStatus;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
@@ -73,15 +74,17 @@ public class ProcessInfoDAO extends DAO {
 	 * @param process ProductionProcess to be edited.
 	 */
 	public <T extends ProductionProcess> void editProcessEntity(T process) {
-		RecordStatus status = getProcessRepository().findProcessLifeCycleStatus(process.getId());
-		if(status != RecordStatus.EDITABLE) {
+		EditStatus status = getProcessRepository().findProcessEditStatus(process.getId());
+		if(status != EditStatus.EDITABLE) {
 			throw new AccessControlException("Process was closed for edit");
+		}
+		if(getProcessRepository().isProcessReferenced(process.getId())) {
+			throw new AccessControlException("Process can't be edited because it's already in use");
 		}
 		process.setModifiedDate(null);
 		editEntity(process);
 		editAlerts(process);
 	}
-	
 	
 	/**
 	 * Sets up needed approvals and messages (notifications), for adding a process of the given type.
@@ -208,11 +211,11 @@ public class ProcessInfoDAO extends DAO {
 	}
 	
 	/**
-	 * Sets the record status for the process life cycle. e.g. LOCKED - information of the process can't be edited
-	 * @param recordStatus the editing/state life cycle of the process.
+	 * Sets the record status for the process life cycle. e.g. FINAL - process items show in inventory
+	 * @param processStatus the process state life cycle of the process.
 	 * @param processId
 	 */
-	public void setProcessRecordStatus(RecordStatus recordStatus, Integer processId) {	
+	public void setProcessStatus(ProcessStatus processStatus, Integer processId) {	
 		
 		Optional<ProcessLifeCycle> optional = 
 				getProcessRepository().findProcessLifeCycleManagerByUser(processId, getCurrentUserId());
@@ -220,14 +223,19 @@ public class ProcessInfoDAO extends DAO {
 			.orElseThrow(() -> new AccessControlException("You don't have permission to manage process life cycle"));
 		
 		
-		if(processLifeCycle.getStatus().compareTo(recordStatus)  < 0) {
+		if(processLifeCycle.getProcessStatus().compareTo(processStatus)  < 0) {
 			
 			//check that for all required approvals satisfied if changed to final
-			if(recordStatus == RecordStatus.FINAL) {
+			if(processStatus == ProcessStatus.FINAL) {
 				List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(processId);
 				if(approvals.stream().anyMatch(a -> a.getDecision() != DecisionType.APPROVED)) {
 					throw new IllegalStateException("Can't finalize process before fully approved");
 				}				
+			}
+			
+			//check that process items aren't used so can be cancelled
+			if(processStatus == ProcessStatus.CANCELLED && getProcessRepository().isProcessReferenced(processId)) {
+				throw new IllegalStateException("Can't cancel process who's items are used in another process");			
 			}
 			
 //			processLifeCycle.setStatus(recordStatus); // record status is not updatable for security
@@ -235,13 +243,38 @@ public class ProcessInfoDAO extends DAO {
 		    		getEntityManager().getCriteriaBuilder().createCriteriaUpdate(ProcessLifeCycle.class);
 		    Root<ProcessLifeCycle> root = update.from(ProcessLifeCycle.class);
 		    getEntityManager().createQuery(update.
-		    		set("status", recordStatus).where(root.get("id").in(processLifeCycle.getId()))).executeUpdate();
+		    		set("processStatus", processStatus).where(root.get("id").in(processLifeCycle.getId()))).executeUpdate();
 		   
 		}
 		else {
-			throw new IllegalArgumentException("Can't change life cycle status, from: " + 
-					processLifeCycle.getStatus() + " to: " + recordStatus);
+			throw new IllegalArgumentException("Can't change life cycle process status, from: " + 
+					processLifeCycle.getProcessStatus() + " to: " + processStatus);
 		}
+	}
+	
+	/**
+	 * Sets the record status for the process life cycle. e.g. LOCKED - information of the process can't be edited
+	 * @param editStatus the editing state life cycle of the process.
+	 * @param processId
+	 */
+	public void setEditStatus(EditStatus editStatus, Integer processId) {	
+		
+		Optional<ProcessLifeCycle> optional = 
+				getProcessRepository().findProcessLifeCycleManagerByUser(processId, getCurrentUserId());
+		ProcessLifeCycle processLifeCycle = optional
+			.orElseThrow(() -> new AccessControlException("You don't have permission to manage process life cycle"));
+				
+		//check that process items aren't used so can't be edited
+		if(editStatus == EditStatus.EDITABLE && getProcessRepository().isProcessReferenced(processId)) {
+			throw new IllegalStateException("Can't edit process who's items are used in another process");			
+		}
+		
+		CriteriaUpdate<ProcessLifeCycle> update = 
+	    		getEntityManager().getCriteriaBuilder().createCriteriaUpdate(ProcessLifeCycle.class);
+	    Root<ProcessLifeCycle> root = update.from(ProcessLifeCycle.class);
+	    getEntityManager().createQuery(update.
+	    		set("editStatus", editStatus).where(root.get("id").in(processLifeCycle.getId()))).executeUpdate();
+		
 	}
 	
 	/**

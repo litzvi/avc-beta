@@ -16,8 +16,9 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.query.ReceiptItemWithStorage;
+import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.RecordStatus;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.values.ProductionLine;
@@ -44,12 +45,12 @@ public class ReceiptDTO extends ProductionProcessDTO {
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName,  
 			ProcessName processName, ProductionLine productionLine, OffsetDateTime recordedTime, Duration duration,
-			Integer numOfWorkers, RecordStatus status, String remarks) {
+			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks) {
 		super(id, version, createdDate, userRecording, 
 				poCodeId, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName, 
 				processName, productionLine, recordedTime, duration,
-				numOfWorkers, status, remarks);
+				numOfWorkers, processStatus, editStatus, remarks);
 	}
 
 	/**

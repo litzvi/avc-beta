@@ -17,8 +17,9 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
+import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.RecordStatus;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
@@ -45,12 +46,12 @@ public class QualityCheckDTO extends ProductionProcessDTO {
 	public QualityCheckDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, Integer supplierId, Integer supplierVersion, String supplierName,  
 			ProcessName processName, ProductionLine productionLine, OffsetDateTime recordedTime, Duration duration,
-			Integer numOfWorkers, RecordStatus status, String remarks) {
+			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks) {
 		super(id, version, createdDate, userRecording, 
 				poCodeId, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName, 
 				processName, productionLine, recordedTime, duration,
-				numOfWorkers, status, remarks);
+				numOfWorkers, processStatus, editStatus, remarks);
 	}
 	
 	public QualityCheckDTO(@NonNull QualityCheck check) {

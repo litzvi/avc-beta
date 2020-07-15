@@ -13,8 +13,8 @@ import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.MessageLabel;
-import com.avc.mis.beta.entities.enums.RecordStatus;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
@@ -148,10 +148,19 @@ public interface ProcessInfoRepository extends ProcessRepository<ProductionProce
 	Optional<ProcessLifeCycle> findProcessLifeCycleManagerByUser(Integer processId, Integer currentUserId);
 
 
-	@Query("select c.status "
+	@Query("select c.editStatus "
 			+ "from ProcessLifeCycle c "
 				+ "join c.process p "
 			+ "where p.id = :processId ")
-	RecordStatus findProcessLifeCycleStatus(Integer processId);
+	EditStatus findProcessEditStatus(Integer processId);
+
+	@Query("select new java.lang.Boolean(count(*) > 0) "
+			+ "from ProductionProcess p "
+				+ "join p.usedItems ui "
+					+ "join ui.process uip "
+						+ "join uip.lifeCycle c "
+			+ "where p.id = :processId and "
+				+ "c.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
+	Boolean isProcessReferenced(Integer processId);
 
 }

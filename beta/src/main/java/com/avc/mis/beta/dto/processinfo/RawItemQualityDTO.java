@@ -10,7 +10,6 @@ import java.util.List;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.RawItemQuality;

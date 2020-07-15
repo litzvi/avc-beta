@@ -18,7 +18,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.RecordStatus;
+import com.avc.mis.beta.entities.enums.EditStatus;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.processinfo.ExtraAdded;
@@ -62,7 +63,7 @@ public class ReceiptTest {
 		assertEquals(expected, actual, "failed test adding order receipt");
 		
 		//change receipt process life cycle to lock process for editing
-		processInfoWriter.setProcessRecordStatus(RecordStatus.LOCKED, po.getId());
+		processInfoWriter.setEditStatus(EditStatus.LOCKED, po.getId());
 				
 		//add extra bonus
 		ExtraAdded[] added = new ExtraAdded[1];

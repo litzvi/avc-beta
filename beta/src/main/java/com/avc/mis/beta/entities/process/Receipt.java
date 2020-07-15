@@ -8,6 +8,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -39,8 +40,10 @@ public class Receipt extends ProductionProcess {
 	@Override
 	public void prePersist() {
 		super.prePersist();
+		getLifeCycle().setProcessStatus(ProcessStatus.PENDING);
 		if(getProcessItems().length == 0)
 			throw new IllegalArgumentException("Receipt has to containe at least one item line");
+		
 	}
 	
 	@Override

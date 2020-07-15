@@ -23,7 +23,7 @@ import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.entities.enums.DecisionType;
-import com.avc.mis.beta.entities.enums.RecordStatus;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.service.Orders;
@@ -91,7 +91,7 @@ public class OrdersTest {
 		tasks = processDisplay.getAllRequiredApprovals();
 
 		try {
-			processInfoWriter.setProcessRecordStatus(RecordStatus.FINAL, po.getId());
+			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, po.getId());
 			fail("Should not be able to change to final before approved");
 		} catch (Exception e1) {}		
 		tasks.forEach(t -> {
@@ -107,7 +107,6 @@ public class OrdersTest {
 					DecisionType.APPROVED, processSnapshot, null);
 			
 		});
-		processInfoWriter.setProcessRecordStatus(RecordStatus.FINAL, po.getId());
 		
 		//cleanup
 		service.cleanup(po);

@@ -70,7 +70,7 @@ public class IdCard extends DataEntity {
 	}
 	
 	public void setDateOfIssue(String dateOfIssue) {
-		if(dob != null)
+		if(dateOfIssue != null)
 			this.dateOfIssue = LocalDate.parse(dateOfIssue);
 	}
 	

@@ -15,10 +15,11 @@ import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.RecordStatus;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 
@@ -98,12 +99,21 @@ public class ProcessInfoWriter {
 	}
 	
 	/**
-	 * Sets the record status for the process life cycle. e.g. LOCKED - information of the process can't be edited
-	 * @param recordStatus the editing/state life cycle of the process.
+	 * Sets the process status for the process life cycle. e.g. FINAL - process items show in inventory
+	 * @param processStatus the process state life cycle of the process.
 	 * @param processId
 	 */
-	public void setProcessRecordStatus(RecordStatus recordStatus, Integer processId) {
-		dao.setProcessRecordStatus(recordStatus, processId);
+	public void setProcessStatus(ProcessStatus processStatus, Integer processId) {
+		dao.setProcessStatus(processStatus, processId);
+	}
+	
+	/**
+	 * Sets the record status for the process life cycle. e.g. LOCKED - information of the process can't be edited
+	 * @param editStatus the editing state life cycle of the process.
+	 * @param processId
+	 */
+	public void setEditStatus(EditStatus editStatus, Integer processId) {
+		dao.setEditStatus(editStatus, processId);
 	}
 	
 	/**

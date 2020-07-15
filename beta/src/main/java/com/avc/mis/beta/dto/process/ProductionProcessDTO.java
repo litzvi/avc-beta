@@ -8,8 +8,9 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.RecordStatus;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
@@ -39,14 +40,15 @@ public class ProductionProcessDTO extends ProcessDTO {
 	private OffsetDateTime recordedTime;
 	private Duration duration;
 	private Integer numOfWorkers;
-	private RecordStatus status;
+	private ProcessStatus processStatus;
+	private EditStatus editStatus;
 	private String remarks;
 	
 	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName, 
 			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, RecordStatus status, 
+			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus,
 			String remarks) {
 		super(id, version);
 		this.createdDate = createdDate;
@@ -57,7 +59,8 @@ public class ProductionProcessDTO extends ProcessDTO {
 		this.recordedTime = recordedTime;
 		this.duration = duration;
 		this.numOfWorkers = numOfWorkers;
-		this.status = status;
+		this.processStatus = processStatus;
+		this.editStatus = editStatus;
 		this.remarks = remarks;
 	}
 	
@@ -73,7 +76,8 @@ public class ProductionProcessDTO extends ProcessDTO {
 		this.recordedTime = process.getRecordedTime();
 		this.duration = process.getDuration();
 		this.numOfWorkers = process.getNumOfWorkers();
-		this.status = process.getLifeCycle().getStatus();
+		this.processStatus = process.getLifeCycle().getProcessStatus();
+		this.editStatus = process.getLifeCycle().getEditStatus();
 		this.remarks = process.getRemarks();
 	}
 }

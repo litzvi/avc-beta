@@ -12,7 +12,7 @@ import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.query.ReceiptItemWithStorage;
 import com.avc.mis.beta.dto.report.ReceiptItemRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.RecordStatus;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
 
 /**
@@ -26,7 +26,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
-			+ "lc.status, r.remarks) "
+			+ "lc.processStatus, lc.editStatus, r.remarks) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType t "
@@ -85,9 +85,9 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "join r.processType t "
 //			+ "where type(sf) <> ExtraAdded "
 				+ "where t.processName in :processNames "
-				+ "and lc.status in :statuses "
+				+ "and lc.processStatus in :statuses "
 			+ "group by r.id, oi, pi ")
-	List<ReceiptItemRow> findAllReceiptsByType(ProcessName[] processNames, RecordStatus[] statuses);
+	List<ReceiptItemRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses);
 
 
 //	@Query("select r  "

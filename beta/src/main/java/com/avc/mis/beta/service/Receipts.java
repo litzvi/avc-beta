@@ -23,7 +23,7 @@ import com.avc.mis.beta.dto.report.ReceiptRow;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.RecordStatus;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.processinfo.ExtraAdded;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
@@ -58,7 +58,7 @@ public class Receipts {
 	public List<ReceiptRow> findFinalCashewReceipts() {
 		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
-				new RecordStatus[] {RecordStatus.FINAL});
+				new ProcessStatus[] {ProcessStatus.FINAL});
 	}
 	
 	/**
@@ -70,11 +70,11 @@ public class Receipts {
 	public List<ReceiptRow> findPendingCashewReceipts() {
 		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
-				new RecordStatus[] {RecordStatus.EDITABLE, RecordStatus.LOCKED});
+				new ProcessStatus[] {ProcessStatus.PENDING});
 		
 	}
 	
-	private List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames, RecordStatus[] statuses) {
+	private List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses) {
 		List<ReceiptItemRow> itemRows = getReceiptRepository().findAllReceiptsByType(
 				processNames, statuses);
 		Map<Integer, List<ReceiptItemRow>> receiptMap = itemRows.stream()
@@ -98,7 +98,7 @@ public class Receipts {
 	public List<ReceiptItemRow> findFinalGeneralReceipts() {
 		return getReceiptRepository().findAllReceiptsByType(
 				new ProcessName[] {ProcessName.GENERAL_RECEIPT},
-				new RecordStatus[] {RecordStatus.FINAL});		
+				new ProcessStatus[] {ProcessStatus.FINAL});		
 	}
 		
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

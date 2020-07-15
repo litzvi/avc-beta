@@ -42,7 +42,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
 				+ "left join sf.warehouseLocation sto "
 				+ "left join sf.usedItems ui "
-		+ "where lc.status = com.avc.mis.beta.entities.enums.RecordStatus.FINAL and "
+		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL and "
 			+ "(item.supplyGroup = :supplyGroup or :supplyGroup is null) and "
 			+ "(item.id = :itemId or :itemId is null) and "
 			+ "(poCode.code = :poCodeId or :poCodeId is null) "

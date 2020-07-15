@@ -57,7 +57,7 @@ public class PoCode extends BaseEntity {
 	 * @return a string representing full PO code. e.g. VAT-900001
 	 */
 	public String getValue() {
-		return String.format("%s-%d-%s", this.contractType.getCode(), this.code, this.contractType.getSuffix());
+		return String.format("%s-%d%s", this.contractType.getCode(), this.code, this.contractType.getSuffix());
 	}
 
 	@Override

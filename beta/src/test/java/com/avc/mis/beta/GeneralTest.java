@@ -31,8 +31,9 @@ import com.avc.mis.beta.dto.process.SampleReceiptDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.enums.RecordStatus;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.QualityCheck;
@@ -67,7 +68,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800096;
+	static final Integer PO_CODE = 800098;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -118,11 +119,11 @@ public class GeneralTest {
 		assertEquals(new PoDTO(po), poDTO, "PO not added or fetched correctly");
 		
 		//change order process life cycle to lock process for editing
-		processInfoWriter.setProcessRecordStatus(RecordStatus.LOCKED, po.getId());
+		processInfoWriter.setEditStatus(EditStatus.LOCKED, po.getId());
 		poDTO = orders.getOrderByProcessId(po.getId());
-		assertEquals(RecordStatus.LOCKED, poDTO.getStatus(), "Didn't change life cycle record status");
+		assertEquals(EditStatus.LOCKED, poDTO.getEditStatus(), "Didn't change life cycle record edit status");
 		try {
-			processInfoWriter.setProcessRecordStatus(RecordStatus.EDITABLE, po.getId());
+			processInfoWriter.setProcessStatus(ProcessStatus.PENDING, po.getId());
 			fail("Should not be able to change to previous life cycle status");
 		} catch (Exception e1) {}
 		//check that process can't be edited after it's locked

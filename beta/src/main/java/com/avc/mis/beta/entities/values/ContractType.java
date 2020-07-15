@@ -4,7 +4,6 @@
 package com.avc.mis.beta.entities.values;
 
 import java.util.Currency;
-import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -66,7 +65,8 @@ public class ContractType extends ValueEntity {
 	}
 	
 	public String getValue() {
-		return String.format("%s-%s", this.code, this.currency);
+		return name;
+//		return String.format("%s-%s", this.code, this.currency);
 //		return code.name();
 	}
 

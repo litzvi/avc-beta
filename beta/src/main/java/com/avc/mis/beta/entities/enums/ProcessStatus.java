@@ -8,8 +8,10 @@ package com.avc.mis.beta.entities.enums;
  *
  */
 public enum ProcessStatus {
-	ACTIVE,
-	CLOSED,
-	CANCELLED,
-	HISTORY
+//	EDITABLE,
+//	LOCKED,
+	PENDING,
+	FINAL,
+	CANCELLED //should also be final
+//	HISTORY //might be needed and need to update inventory queries accordingly
 }

@@ -23,7 +23,7 @@ public interface SampleRepository extends BaseRepository<SampleReceipt> {
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
-			+ "lc.status, r.remarks) "
+			+ "lc.processStatus, lc.editStatus, r.remarks) "
 		+ "from SampleReceipt r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType t "
