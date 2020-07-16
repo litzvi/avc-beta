@@ -47,7 +47,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "(item.id = :itemId or :itemId is null) and "
 			+ "(poCode.code = :poCodeId or :poCodeId is null) "
 		+ "group by sf "
-		+ "having (ui.numberUnits is null or sf.numberUnits > sum(coalesce(ui.numberUnits, 0))) ")
+		+ "having (sf.numberUnits > sum(coalesce(ui.numberUnits, 0))) ")
 	List<InventoryProcessItemWithStorage> findInventoryProcessItemWithStorage(
 			SupplyGroup supplyGroup, Integer itemId, Integer poCodeId);
 

@@ -76,11 +76,12 @@ public class OrderItem extends AuditedEntity {
         @AttributeOverride(name="amount",
                            column=@Column(name="unitPrice"))    })
 	@Embedded
-	@NotNull(message = "unit price is mandatory")
 	@Valid
 	@ConvertGroup(from = Default.class, to = PositiveOrZeroAmount.class)
 	private AmountWithCurrency unitPrice;
 	
+	@Column(nullable = false)
+	@NotNull(message = "Order item delivery date is mandatory")
 	@Convert(converter = LocalDateToLong.class)
 	private LocalDate deliveryDate;
 	

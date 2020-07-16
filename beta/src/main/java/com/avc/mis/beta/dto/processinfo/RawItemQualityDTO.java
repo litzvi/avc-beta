@@ -8,6 +8,10 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.CheckStatus;
@@ -31,7 +35,8 @@ public class RawItemQualityDTO extends ProcessDTO {
 	BasicValueEntity<Item> item;
 	MeasureUnit measureUnit;
 	BigDecimal sampleWeight;
-
+	BigInteger numberOfSamples;	
+	
 	BigInteger wholeCountPerLb;
 	BigDecimal smallSize;
 	BigDecimal ws;
@@ -60,7 +65,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 
 	public RawItemQualityDTO(Integer id, Integer version, 
 			Integer itemId, String itemValue,
-			MeasureUnit measureUnit, BigDecimal sampleWeight, 
+			MeasureUnit measureUnit, BigDecimal sampleWeight, BigInteger numberOfSamples,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			/* String description, String remarks, */ 
 			BigInteger wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
@@ -74,6 +79,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.measureUnit = measureUnit;
 		this.sampleWeight = sampleWeight;
+		this.numberOfSamples = numberOfSamples;
 
 		this.wholeCountPerLb = wholeCountPerLb;
 		this.smallSize = smallSize;
@@ -106,6 +112,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.item = new BasicValueEntity<Item>(itemQuality.getItem());
 		this.measureUnit = itemQuality.getMeasureUnit();
 		this.sampleWeight = itemQuality.getSampleWeight();
+		this.numberOfSamples = itemQuality.getNumberOfSamples();
 
 		this.wholeCountPerLb = itemQuality.getWholeCountPerLb();
 		this.smallSize = itemQuality.getSmallSize();
