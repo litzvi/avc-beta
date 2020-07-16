@@ -6,7 +6,9 @@ package com.avc.mis.beta.entities.enums;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.settings.UOM;
@@ -75,6 +77,12 @@ public enum MeasureUnit {
 	
 	public static BigDecimal convert(@NonNull AmountWithUnit amount, MeasureUnit toUnit) {
 		return convert(amount.getAmount(), amount.getMeasureUnit(), toUnit);
+	}
+	
+	public static List<UOM> getAllUOM() {
+		return CONVERTION_MAP.values().stream()
+				.flatMap(map -> map.values().stream())
+				.collect(Collectors.toList());
 	}
 
 //	private static final BigDecimal LBS_IN_KG = new BigDecimal("0.4536");

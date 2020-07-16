@@ -3,11 +3,14 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.settings.UOM;
 
 /**
@@ -22,5 +25,21 @@ public class SettingsWriter {
 	
 	public UOM editUOM(UOM uom) {
 		return dao.editEntity(uom);
+	}
+
+	/**
+	 * Persists or edits every UOM object in the list
+	 * @param uomList
+	 */
+	public void mergeAll(List<UOM> uomList) {
+		dao.addOrEdit(uomList);	
+	}
+
+	/**
+	 * Persists all entities in the list
+	 * @param entityList
+	 */
+	public <T extends BaseEntity> void addAll(List<T> entityList) {
+		dao.addAll(entityList);
 	}
 }

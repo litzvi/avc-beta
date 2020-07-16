@@ -35,11 +35,10 @@ import lombok.Setter;
 			@UniqueConstraint(columnNames = { "code", "suffix" }) })
 public class ContractType extends ValueEntity {
 
-	@Column(unique = true, nullable = false)
+	@Column(name = "name", unique = true, nullable = false)
 	@NotBlank(message = "Contract type name is mandatory")
-	private String name;
+	private String value;
 	
-	@JsonIgnore
 	@Column(name = "code", nullable = false)
 	@NotBlank(message = "Contract type has to have a code")
 	private String code;
@@ -64,10 +63,10 @@ public class ContractType extends ValueEntity {
 		return suffix != null ? suffix : "";
 	}
 	
-	public String getValue() {
-		return name;
-//		return String.format("%s-%s", this.code, this.currency);
-//		return code.name();
-	}
+//	public String getValue() {
+//		return name;
+////		return String.format("%s-%s", this.code, this.currency);
+////		return code.name();
+//	}
 
 }

@@ -144,6 +144,14 @@ public class Users {
 	}
 	
 	/**
+	 * @param string
+	 * @return
+	 */
+	public boolean contains(String username) {
+		return getUserRepository().containsUsername(username);
+	}
+	
+	/**
 	 * Sets the user as not active
 	 * @param userId of UserEntity to be set
 	 */
@@ -193,4 +201,6 @@ public class Users {
 			dao.editEntity(person);
 		
 	}
+
+	
 }

@@ -37,7 +37,7 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 			+ "where u.username = :username "
 				+ "and u.active = true")
 	Optional<UserEntity> findUserByUsername(String username);
-
+	
 	@Query("select u from UserEntity u "
 				+ "left join fetch u.person p "
 					+ "left join fetch p.idCard idCard "
@@ -74,4 +74,10 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 				+ "join u.roles r "
 			+ "where u.active = true")
 	Stream<ValueObject<Role>> findAllRolesByUsers();
+
+	@Query("select new java.lang.Boolean(count(*) > 0) "
+			+ "from UserEntity u "
+			+ "where u.username = :username "
+				+ "and u.active = true ")
+	Boolean containsUsername(String username);
 }

@@ -3,12 +3,15 @@
  */
 package com.avc.mis.beta.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.settings.UOM;
 import com.avc.mis.beta.service.Orders;
 
 import lombok.AccessLevel;
@@ -103,7 +106,25 @@ public abstract class DAO extends ReadDAO {
 //		Session session = getEntityManager().unwrap(Session.class); 
 //		session.update(entity);
 		return getEntityManager().merge(entity);
-	}	
+	}
+	
+
+	/**
+	 * Gets a list of entities and make sure they are all merged to persistence.
+	 * Whether new or edited, will be persisted or edited accordingly.
+	 * @param entityList
+	 */
+	public <T extends BaseEntity> void addOrEdit(List<T> entityList) {
+		entityList.forEach(entity -> getEntityManager().merge(entity));
+	}
+	
+	/**
+	 * Gets a list of entities to persist to database.
+	 * @param entityList
+	 */
+	public <T extends BaseEntity> void addAll(List<T> entityList) {
+		entityList.forEach(entity -> getEntityManager().persist(entity));
+	}
 	
 	/**
 	 * Search for an entity of the specified class and primary key. 
