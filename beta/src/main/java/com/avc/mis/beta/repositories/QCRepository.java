@@ -3,6 +3,10 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -10,23 +14,15 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
+import com.avc.mis.beta.dto.report.RawQcRow;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.process.QualityCheck;
 /**
  * @author Zvi
  *
  */
 public interface QCRepository extends ProcessRepository<QualityCheck> {
-	
-//	@Query("select r "
-//		+ "from QualityCheck r "
-////			+ "join r.poCode po_code "
-////			+ "join po_code.supplier s "
-////			+ "left join r.createdBy p_user "
-////			+ "left join r.productionLine p_line "
-////			+ "left join r.status p_status "
-//		+ "where r.id = :id ")
-//	Optional<QualityCheck> findQcByProcessId(int id);
 
 	@Query("select new com.avc.mis.beta.dto.process.QualityCheckDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
@@ -53,7 +49,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 			+ "i.wholeCountPerLb, i.smallSize, i.ws, i.lp, i.breakage, "
 			+ "i.foreignMaterial, i.humidity, i.testa, " 
 			+ "i.scorched, i.deepCut, i.offColour, i.shrivel, i.desert, " 
-			+ "i.deepSpot, i.mold, i.dirty, i.decay, i.insectDamage, " 
+			+ "i.deepSpot, i.mold, i.dirty, i.lightDirty, i.decay, i.insectDamage, " 
 			+ "i.roastingWeightLoss, " 
 			+ "i.colour, i.flavour) "
 		+ "from RawItemQuality i "
@@ -67,7 +63,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 	//perhaps should be moved elsewhere
 	@Query("select new com.avc.mis.beta.dto.values.CashewStandardDTO("
 			+ "i.id, i.standardOrganization, item.id, item.value, "
-			+ "i.totalDefects, i.totalDamage, "
+			+ "i.totalDefects, i.totalDamage, i.totalDefectsAndDamage, "
 			+ "i.wholeCountPerLb, i.smallSize, i.ws, i.lp, i.breakage, "
 			+ "i.foreignMaterial, i.humidity, i.testa, " 
 			+ "i.scorched, i.deepCut, i.offColour, i.shrivel, i.desert, " 
@@ -78,6 +74,34 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 		+ "where item.id = :itemId and i.standardOrganization = :standardOrganization "
 			+ "and i.active = true")
 	CashewStandardDTO findCashewStandard(Integer itemId, String standardOrganization);
+
+	@Query("select new com.avc.mis.beta.dto.report.RawQcRow( "
+			+ "qc.id, po_code.id, ct.code, ct.suffix, s.name, "
+			+ "i.value, qc.recordedTime, ti.numberOfSamples, "
+			+ "coalesce(ti.scorched, 0) + coalesce(ti.deepCut, 0) + coalesce(ti.offColour, 0) "
+				+ " + coalesce(ti.shrivel, 0) + coalesce(ti.desert, 0) + coalesce(ti.deepSpot, 0), "
+			+ "coalesce(ti.mold, 0) + coalesce(ti.dirty, 0) + coalesce(ti.lightDirty, 0) "
+				+ " + coalesce(ti.decay, 0) + coalesce(ti.insectDamage, 0) + coalesce(ti.testa, 0)) "
+		+ "from QualityCheck qc "
+			+ "join qc.testedItems ti "
+				+ "join ti.item i "
+			+ "join qc.poCode po_code "
+				+ "join po_code.supplier s "
+				+ "join po_code.contractType ct "
+		+ "")
+	List<RawQcRow> findRawQualityChecks();
+
+	
+//	@Query("select r "
+//		+ "from QualityCheck r "
+////			+ "join r.poCode po_code "
+////			+ "join po_code.supplier s "
+////			+ "left join r.createdBy p_user "
+////			+ "left join r.productionLine p_line "
+////			+ "left join r.status p_status "
+//		+ "where r.id = :id ")
+//	Optional<QualityCheck> findQcByProcessId(int id);
+
 	
 //	@Query("select new com.avc.mis.beta.dto.query.RawItemQualityWithStorage( "
 //			+ " i.id, i.version, item.id, item.value, "

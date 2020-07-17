@@ -24,6 +24,7 @@ import com.avc.mis.beta.dto.report.ItemInventoryRow;
 import com.avc.mis.beta.dto.report.PoInventoryRow;
 import com.avc.mis.beta.dto.report.PoRow;
 import com.avc.mis.beta.dto.report.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.report.RawQcRow;
 import com.avc.mis.beta.dto.report.ReceiptRow;
 import com.avc.mis.beta.dto.report.SupplierRow;
 import com.avc.mis.beta.dto.report.UserRow;
@@ -208,6 +209,10 @@ public class QueryTest {
 		List<ProcessItemInventoryRow> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
 		itemInventory.forEach(i -> System.out.println(i));
 		
+		//test QC raw tables
+		List<RawQcRow> rawQcRows = qualityChecks.getRawQualityChecks();
+		rawQcRows.forEach(i -> System.out.println(i));
+		
 					
 		service.cleanup(po);
 
@@ -215,12 +220,9 @@ public class QueryTest {
 	
 	@Test
 	void oneQueryTest() {
-		//test getting inventory storages by item
-		List<ProcessItemInventoryRow> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
-		itemInventory.forEach(i -> System.out.println(i));
+
+		List<RawQcRow> rawQcRows = qualityChecks.getRawQualityChecks();
+		rawQcRows.forEach(i -> System.out.println(i));
 		
-		List<PoInventoryRow> poInventoryRows =  cashewReports.getInventoryTableByPo();
-		poInventoryRows.forEach(i -> System.out.println(i));
-				
 	}
 }

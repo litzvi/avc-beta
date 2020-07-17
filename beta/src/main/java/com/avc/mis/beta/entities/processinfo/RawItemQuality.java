@@ -107,6 +107,9 @@ public class RawItemQuality extends ProcessInfoEntity {
 	private BigDecimal dirty;
 	
 	@Column(precision = 19, scale = 3)
+	private BigDecimal lightDirty;
+	
+	@Column(precision = 19, scale = 3)
 	private BigDecimal decay;
 	
 	@Column(precision = 19, scale = 3)
@@ -141,7 +144,8 @@ public class RawItemQuality extends ProcessInfoEntity {
 	}
 	
 	public BigDecimal getTotalDamage() {
-		List<BigDecimal> list = Arrays.asList(this.mold, this.dirty, this.decay, this.insectDamage, this.testa);
+		List<BigDecimal> list = Arrays.asList(this.mold, this.dirty, 
+				this.lightDirty, this.decay, this.insectDamage, this.testa);
 		BigDecimal sum = BigDecimal.ZERO;
 		for(BigDecimal augend: list) {
 			if(augend != null) {

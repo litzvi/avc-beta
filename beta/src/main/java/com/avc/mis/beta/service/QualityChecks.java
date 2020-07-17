@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
+import com.avc.mis.beta.dto.report.RawQcRow;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.QualityCheck;
@@ -35,6 +37,11 @@ public class QualityChecks {
 	
 	@Deprecated
 	@Autowired private DeletableDAO deletableDAO;
+	
+	
+	public List<RawQcRow> getRawQualityChecks() {
+		return getQcRepository().findRawQualityChecks();
+	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewReceiptCheck(QualityCheck check) {

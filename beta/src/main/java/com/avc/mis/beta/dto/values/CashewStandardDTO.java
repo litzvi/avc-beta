@@ -20,6 +20,7 @@ public class CashewStandardDTO extends ValueDTO {
 	
 	BigDecimal totalDefects;
 	BigDecimal totalDamage;
+	BigDecimal totalDefectsAndDamage;
 	
 	BigDecimal wholeCountPerLb;
 	BigDecimal smallSize;
@@ -44,7 +45,8 @@ public class CashewStandardDTO extends ValueDTO {
 	
 	public CashewStandardDTO(@NonNull Integer id, String standardOrganization, 
 			Integer itemId, String itemValue, 
-			BigDecimal totalDefects, BigDecimal totalDamage, BigDecimal foreignMaterial,
+			BigDecimal totalDefects, BigDecimal totalDamage, BigDecimal totalDefectsAndDamage, 
+			BigDecimal foreignMaterial,
 			BigDecimal wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
 			BigDecimal humidity, BigDecimal testa, BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour,
 			BigDecimal shrivel, BigDecimal desert, BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty,
@@ -54,6 +56,7 @@ public class CashewStandardDTO extends ValueDTO {
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.totalDefects = totalDefects;
 		this.totalDamage = totalDamage;
+		this.totalDefectsAndDamage = totalDefectsAndDamage;
 		this.wholeCountPerLb = wholeCountPerLb;
 		this.smallSize = smallSize;
 		this.ws = ws;
@@ -90,6 +93,7 @@ public class CashewStandardDTO extends ValueDTO {
 		this.lp = standard.getLp();
 		this.totalDefects = standard.getTotalDefects();
 		this.totalDamage = standard.getTotalDamage();
+		this.totalDefectsAndDamage = standard.getTotalDefectsAndDamage();
 		this.breakage = standard.getBreakage();
 		this.foreignMaterial = standard.getForeignMaterial();
 		this.humidity = standard.getHumidity();

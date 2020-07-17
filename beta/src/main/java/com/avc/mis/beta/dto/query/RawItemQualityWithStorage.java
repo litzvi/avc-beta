@@ -36,7 +36,8 @@ public class RawItemQualityWithStorage {
 			BigInteger wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
 			BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
-			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal decay, BigDecimal insectDamage,
+			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 
+			BigDecimal decay, BigDecimal insectDamage,
 			BigDecimal roastingWeightLoss,
 			CheckStatus colour, CheckStatus flavour) {
 		this.rawItemQuality = new RawItemQualityDTO(id, version, 
@@ -47,7 +48,7 @@ public class RawItemQualityWithStorage {
 				wholeCountPerLb, smallSize, ws, lp, breakage, 
 				foreignMaterial, humidity, testa,
 				scorched, deepCut, offColour, shrivel, desert,
-				deepSpot, mold, dirty, decay, insectDamage,
+				deepSpot, mold, dirty, lightDirty, decay, insectDamage,
 				roastingWeightLoss,
 				colour, flavour);
 		this.storage = new StorageDTO(storageId, storageVersion, 

@@ -88,6 +88,9 @@ public class CashewStandard extends ValueEntity {
 	
 	@Column(precision = 19, scale = 3)
 	private BigDecimal dirty;
+
+	@Column(precision = 19, scale = 3)
+	private BigDecimal lightDirty;
 	
 	@Column(precision = 19, scale = 3)
 	private BigDecimal decay;

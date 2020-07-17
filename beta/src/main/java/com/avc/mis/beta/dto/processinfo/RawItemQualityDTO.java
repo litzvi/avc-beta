@@ -8,10 +8,6 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.CheckStatus;
@@ -53,6 +49,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 	BigDecimal deepSpot;
 	BigDecimal mold;
 	BigDecimal dirty;
+	BigDecimal lightDirty;
 	BigDecimal decay;
 	BigDecimal insectDamage;
 //	BigDecimal nutCount;
@@ -71,7 +68,8 @@ public class RawItemQualityDTO extends ProcessDTO {
 			BigInteger wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
 			BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
-			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal decay, BigDecimal insectDamage,
+			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 
+			BigDecimal decay, BigDecimal insectDamage,
 			BigDecimal roastingWeightLoss,
 			CheckStatus colour, CheckStatus flavour) {
 		super(id, version);
@@ -97,6 +95,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.deepSpot = deepSpot;
 		this.mold = mold;
 		this.dirty = dirty;
+		this.lightDirty = lightDirty;
 		this.decay = decay;
 		this.insectDamage = insectDamage;
 //		this.nutCount = nutCount;
@@ -130,6 +129,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.deepSpot = itemQuality.getDeepSpot();
 		this.mold = itemQuality.getMold();
 		this.dirty = itemQuality.getDirty();
+		this.lightDirty = itemQuality.getLightDirty();
 		this.decay = itemQuality.getDecay();
 		this.insectDamage = itemQuality.getInsectDamage();
 //		this.nutCount = itemQuality.getNutCount();
@@ -154,7 +154,8 @@ public class RawItemQualityDTO extends ProcessDTO {
 	}
 	
 	public BigDecimal getTotalDamage() {
-		List<BigDecimal> list = Arrays.asList(this.mold, this.dirty, this.decay, this.insectDamage);
+		List<BigDecimal> list = Arrays.asList(this.mold, this.dirty, this.lightDirty, 
+				this.decay, this.insectDamage);
 		BigDecimal sum = BigDecimal.ZERO;
 		for(BigDecimal augend: list) {
 			if(augend != null) {
