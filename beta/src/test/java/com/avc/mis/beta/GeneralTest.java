@@ -68,7 +68,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800099;
+	static final Integer PO_CODE = 800100;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -225,6 +225,7 @@ public class GeneralTest {
 		ItemWeight[] itemWeights1 = new ItemWeight[1];
 		itemWeights1[0] = new ItemWeight();
 		itemWeights1[0].setUnitAmount(BigDecimal.valueOf(50));
+		itemWeights1[0].setNumberUnits(BigDecimal.TEN);
 		itemWeights1[0].setNumberOfSamples(BigInteger.valueOf(30));
 		itemWeights1[0].setAvgTestedWeight(BigDecimal.valueOf(50.01));
 		sampleItems[0].setItemWeights(itemWeights1);
@@ -236,6 +237,7 @@ public class GeneralTest {
 		ItemWeight[] itemWeights2 = new ItemWeight[1];
 		itemWeights2[0] = new ItemWeight();
 		itemWeights2[0].setUnitAmount(BigDecimal.valueOf(26));
+		itemWeights2[0].setNumberUnits(BigDecimal.TEN);
 		itemWeights2[0].setNumberOfSamples(BigInteger.valueOf(1));
 		itemWeights2[0].setAvgTestedWeight(BigDecimal.valueOf(26.01));
 		sampleItems[1].setItemWeights(itemWeights2);

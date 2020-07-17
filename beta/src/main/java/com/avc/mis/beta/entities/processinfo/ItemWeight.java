@@ -45,6 +45,11 @@ public class ItemWeight extends AuditedEntity {
 	@NotNull(message = "Sampled item's unit amount is required")
 	@Positive(message = "Unit amount has to be positive")
 	private BigDecimal unitAmount;
+	
+	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
+	@NotNull(message = "Number of units is required")
+	@Positive(message = "Number of units has to be positive")
+	private BigDecimal numberUnits;
 		
 	@Column(nullable = false)
 	@NotNull(message = "Number of samples is mandetory")
