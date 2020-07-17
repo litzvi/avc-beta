@@ -10,6 +10,8 @@ import java.util.List;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.embeddable.RawDamage;
+import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.RawItemQuality;
@@ -31,7 +33,10 @@ public class RawItemQualityDTO extends ProcessDTO {
 	BasicValueEntity<Item> item;
 	MeasureUnit measureUnit;
 	BigDecimal sampleWeight;
-	BigInteger numberOfSamples;	
+	BigInteger numberOfSamples;
+	
+	RawDefects rawDefects;
+	RawDamage rawDamage;
 	
 	BigInteger wholeCountPerLb;
 	BigDecimal smallSize;
@@ -40,18 +45,19 @@ public class RawItemQualityDTO extends ProcessDTO {
 	BigDecimal breakage;
 	BigDecimal foreignMaterial;
 	BigDecimal humidity;
-	BigDecimal testa;
-	BigDecimal scorched;
-	BigDecimal deepCut;
-	BigDecimal offColour;
-	BigDecimal shrivel;
-	BigDecimal desert;
-	BigDecimal deepSpot;
-	BigDecimal mold;
-	BigDecimal dirty;
-	BigDecimal lightDirty;
-	BigDecimal decay;
-	BigDecimal insectDamage;
+	
+//	BigDecimal testa;
+//	BigDecimal scorched;
+//	BigDecimal deepCut;
+//	BigDecimal offColour;
+//	BigDecimal shrivel;
+//	BigDecimal desert;
+//	BigDecimal deepSpot;
+//	BigDecimal mold;
+//	BigDecimal dirty;
+//	BigDecimal lightDirty;
+//	BigDecimal decay;
+//	BigDecimal insectDamage;
 //	BigDecimal nutCount;
 //	BigDecimal smallKernels;
 //	BigDecimal defectsAfterRoasting;
@@ -66,10 +72,10 @@ public class RawItemQualityDTO extends ProcessDTO {
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			/* String description, String remarks, */ 
 			BigInteger wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
-			BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
+			BigDecimal foreignMaterial, BigDecimal humidity, 
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 
-			BigDecimal decay, BigDecimal insectDamage,
+			BigDecimal decay, BigDecimal insectDamage, BigDecimal testa,
 			BigDecimal roastingWeightLoss,
 			CheckStatus colour, CheckStatus flavour) {
 		super(id, version);
@@ -86,18 +92,22 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.breakage = breakage;
 		this.foreignMaterial = foreignMaterial;
 		this.humidity = humidity;
-		this.testa = testa;
-		this.scorched = scorched;
-		this.deepCut = deepCut;
-		this.offColour = offColour;
-		this.shrivel = shrivel;
-		this.desert = desert;
-		this.deepSpot = deepSpot;
-		this.mold = mold;
-		this.dirty = dirty;
-		this.lightDirty = lightDirty;
-		this.decay = decay;
-		this.insectDamage = insectDamage;
+		
+		this.rawDamage = new RawDamage(mold, dirty, lightDirty, decay, insectDamage, testa);
+		this.rawDefects = new RawDefects(scorched, deepCut, offColour, shrivel, desert, deepSpot);
+		
+//		this.scorched = scorched;
+//		this.deepCut = deepCut;
+//		this.offColour = offColour;
+//		this.shrivel = shrivel;
+//		this.desert = desert;
+//		this.deepSpot = deepSpot;
+//		this.testa = testa;
+//		this.mold = mold;
+//		this.dirty = dirty;
+//		this.lightDirty = lightDirty;
+//		this.decay = decay;
+//		this.insectDamage = insectDamage;
 //		this.nutCount = nutCount;
 //		this.smallKernels = smallKernels;
 //		this.defectsAfterRoasting = defectsAfterRoasting;
@@ -120,18 +130,21 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.breakage = itemQuality.getBreakage();            
 		this.foreignMaterial = itemQuality.getForeignMaterial();
 		this.humidity = itemQuality.getHumidity();
-		this.testa = itemQuality.getTesta();
-		this.scorched = itemQuality.getScorched();
-		this.deepCut = itemQuality.getDeepCut();
-		this.offColour = itemQuality.getOffColour();
-		this.shrivel = itemQuality.getShrivel();
-		this.desert = itemQuality.getDesert();
-		this.deepSpot = itemQuality.getDeepSpot();
-		this.mold = itemQuality.getMold();
-		this.dirty = itemQuality.getDirty();
-		this.lightDirty = itemQuality.getLightDirty();
-		this.decay = itemQuality.getDecay();
-		this.insectDamage = itemQuality.getInsectDamage();
+		
+		this.rawDefects = itemQuality.getDefects();
+//		this.scorched = rawDefects.getScorched();
+//		this.deepCut = rawDefects.getDeepCut();
+//		this.offColour = rawDefects.getOffColour();
+//		this.shrivel = rawDefects.getShrivel();
+//		this.desert = rawDefects.getDesert();
+//		this.deepSpot = rawDefects.getDeepSpot();
+		this.rawDamage = itemQuality.getDamage();
+//		this.testa = rawDamage.getTesta();
+//		this.mold = rawDamage.getMold();
+//		this.dirty = rawDamage.getDirty();
+//		this.lightDirty = rawDamage.getLightDirty();
+//		this.decay = rawDamage.getDecay();
+//		this.insectDamage = rawDamage.getInsectDamage();
 //		this.nutCount = itemQuality.getNutCount();
 //		this.smallKernels = getSmallKernels();        
 //		this.defectsAfterRoasting = itemQuality.getDefectsAfterRoasting();
@@ -141,32 +154,32 @@ public class RawItemQualityDTO extends ProcessDTO {
 	}
 
 	
-	public BigDecimal getTotalDefects() {
-		List<BigDecimal> list = Arrays.asList(this.testa, this.scorched, this.deepCut, 
-				this.offColour, this.shrivel, this.desert, this.deepSpot);
-		BigDecimal sum = BigDecimal.ZERO;
-		for(BigDecimal augend: list) {
-			if(augend != null) {
-				sum = sum.add(augend);
-			}
-		}
-		return sum;
-	}
+//	public BigDecimal getTotalDefects() {
+//		List<BigDecimal> list = Arrays.asList(this.scorched, this.deepCut, 
+//				this.offColour, this.shrivel, this.desert, this.deepSpot);
+//		BigDecimal sum = BigDecimal.ZERO;
+//		for(BigDecimal augend: list) {
+//			if(augend != null) {
+//				sum = sum.add(augend);
+//			}
+//		}
+//		return sum;
+//	}
+//	
+//	public BigDecimal getTotalDamage() {
+//		List<BigDecimal> list = Arrays.asList(this.testa, this.mold, this.dirty, this.lightDirty, 
+//				this.decay, this.insectDamage);
+//		BigDecimal sum = BigDecimal.ZERO;
+//		for(BigDecimal augend: list) {
+//			if(augend != null) {
+//				sum = sum.add(augend);
+//			}
+//		}
+//		return sum;
+//	}
 	
-	public BigDecimal getTotalDamage() {
-		List<BigDecimal> list = Arrays.asList(this.mold, this.dirty, this.lightDirty, 
-				this.decay, this.insectDamage);
-		BigDecimal sum = BigDecimal.ZERO;
-		for(BigDecimal augend: list) {
-			if(augend != null) {
-				sum = sum.add(augend);
-			}
-		}
-		return sum;
-	}
-	
-	public BigDecimal getTotalDefectsAndDamage() {
-		return getTotalDamage().add(getTotalDefects());
-	}
+//	public BigDecimal getTotalDefectsAndDamage() {
+////		return getTotalDamage().add(getTotalDefects());
+//	}
 
 }

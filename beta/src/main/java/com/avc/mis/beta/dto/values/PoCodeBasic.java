@@ -28,7 +28,7 @@ public class PoCodeBasic extends BaseDTO {
 		super(id);
 		this.contractTypeCode = contractTypeCode;
 //		this.currency = currency;
-		this.contractTypeSuffix = contractTypeSuffix;
+		this.contractTypeSuffix = contractTypeSuffix != null ? contractTypeSuffix : "";
 	}
 	
 	

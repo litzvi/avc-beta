@@ -31,6 +31,8 @@ import com.avc.mis.beta.dto.process.SampleReceiptDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.embeddable.RawDamage;
+import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -68,7 +70,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800100;
+	static final Integer PO_CODE = 800101;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -184,7 +186,8 @@ public class GeneralTest {
 			rawItemQualities[i].setMeasureUnit(MeasureUnit.OZ);
 			rawItemQualities[i].setSampleWeight(BigDecimal.valueOf(8).setScale(MeasureUnit.SCALE));
 			rawItemQualities[i].setNumberOfSamples(BigInteger.TEN);
-			
+			rawItemQualities[i].setDefects(new RawDefects());
+			rawItemQualities[i].setDamage(new RawDamage());
 			
 			processItems[i] = new ProcessItem();
 			processItems[i].setItem(orderItems[i].getItem());

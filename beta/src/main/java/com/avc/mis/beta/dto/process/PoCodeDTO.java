@@ -50,7 +50,7 @@ public class PoCodeDTO extends BaseDTO {
 		this.contractTypeCode = poCode.getContractType() != null ? poCode.getContractType().getCode(): null;
 		this.supplierName = poCode.getSupplier() != null ? poCode.getSupplier().getName(): null;
 //		this.currency = poCode.getContractType() != null ? poCode.getContractType().getCurrency(): null;
-		this.contractTypeSuffix = poCode.getContractType() != null ? poCode.getContractType().getSuffix(): null;
+		this.contractTypeSuffix = poCode.getContractType() != null ? poCode.getContractType().getSuffix(): "";
 	}
 	
 	/**

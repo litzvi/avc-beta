@@ -3,6 +3,7 @@ package com.avc.mis.beta.entities.values;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -13,6 +14,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ValueEntity;
+import com.avc.mis.beta.entities.embeddable.RawDamage;
+import com.avc.mis.beta.entities.embeddable.RawDefects;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,6 +35,14 @@ public class CashewStandard extends ValueEntity {
 	@NotNull(message = "Cashew standard has to reference an item")
 	private Item item;
 	
+	@NotNull
+	@Embedded
+	private RawDefects defects;
+
+	@NotNull
+	@Embedded
+	private RawDamage damage;
+		
 	@Column(precision = 19, scale = 3)
 	private BigDecimal totalDefects;
 	
@@ -62,41 +73,41 @@ public class CashewStandard extends ValueEntity {
 	@Column(precision = 19, scale = 3)
 	private BigDecimal humidity;
 	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal testa;
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal testa;
 	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal scorched;
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal scorched;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal deepCut;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal offColour;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal shrivel;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal desert;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal deepSpot;
 	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal deepCut;
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal mold;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal dirty;
+//
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal lightDirty;
 	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal offColour;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal shrivel;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal desert;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal deepSpot;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal mold;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal dirty;
-
-	@Column(precision = 19, scale = 3)
-	private BigDecimal lightDirty;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal decay;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal insectDamage;
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal decay;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal insectDamage;
 	
 //	@Column(precision = 19, scale = 3)
 //	private BigDecimal nutCount;

@@ -8,7 +8,10 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -16,16 +19,22 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.embeddable.RawDamage;
+import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.validation.groups.OnPersist;
+import com.avc.mis.beta.validation.groups.PositiveAmount;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -82,41 +91,49 @@ public class RawItemQuality extends ProcessInfoEntity {
 	@Column(precision = 19, scale = 3)
 	private BigDecimal humidity;
 	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal scorched;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal deepCut;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal offColour;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal shrivel;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal desert;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal deepSpot;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal mold;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal dirty;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal lightDirty;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal decay;
-	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal insectDamage;
+	@NotNull
+	@Embedded
+	private RawDefects defects;
 
-	@Column(precision = 19, scale = 3)
-	private BigDecimal testa;
+	@NotNull
+	@Embedded
+	private RawDamage damage;
+	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal scorched;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal deepCut;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal offColour;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal shrivel;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal desert;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal deepSpot;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal mold;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal dirty;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal lightDirty;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal decay;
+//	
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal insectDamage;
+//
+//	@Column(precision = 19, scale = 3)
+//	private BigDecimal testa;
 	
 //	
 //	@Column(precision = 19, scale = 3)
@@ -132,27 +149,29 @@ public class RawItemQuality extends ProcessInfoEntity {
 	private CheckStatus flavour; 
 	
 	public BigDecimal getTotalDefects() {
-		List<BigDecimal> list = Arrays.asList(this.scorched, this.deepCut, 
-				this.offColour, this.shrivel, this.desert, this.deepSpot);
-		BigDecimal sum = BigDecimal.ZERO;
-		for(BigDecimal augend: list) {
-			if(augend != null) {
-				sum = sum.add(augend);
-			}
-		}
-		return sum;
+		return this.defects.getTotal();
+//		List<BigDecimal> list = Arrays.asList(this.scorched, this.deepCut, 
+//				this.offColour, this.shrivel, this.desert, this.deepSpot);
+//		BigDecimal sum = BigDecimal.ZERO;
+//		for(BigDecimal augend: list) {
+//			if(augend != null) {
+//				sum = sum.add(augend);
+//			}
+//		}
+//		return sum;
 	}
 	
 	public BigDecimal getTotalDamage() {
-		List<BigDecimal> list = Arrays.asList(this.mold, this.dirty, 
-				this.lightDirty, this.decay, this.insectDamage, this.testa);
-		BigDecimal sum = BigDecimal.ZERO;
-		for(BigDecimal augend: list) {
-			if(augend != null) {
-				sum = sum.add(augend);
-			}
-		}
-		return sum;
+		return this.damage.getTotal();
+//		List<BigDecimal> list = Arrays.asList(this.mold, this.dirty, 
+//				this.lightDirty, this.decay, this.insectDamage, this.testa);
+//		BigDecimal sum = BigDecimal.ZERO;
+//		for(BigDecimal augend: list) {
+//			if(augend != null) {
+//				sum = sum.add(augend);
+//			}
+//		}
+//		return sum;
 	}
 	
 	protected boolean canEqual(Object o) {
