@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.embeddable;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 
 import javax.persistence.Embeddable;
@@ -43,6 +44,12 @@ public class AmountWithUnit implements Cloneable {
 		super();
 		this.amount = amount;
 		this.measureUnit = MeasureUnit.valueOf(measureUnit);
+	}
+	
+	public AmountWithUnit(BigInteger amount, MeasureUnit measureUnit) {
+		super();
+		this.amount = new BigDecimal(amount);
+		this.measureUnit = measureUnit;
 	}
 	
 	public AmountWithUnit(String amount, String measureUnit) {

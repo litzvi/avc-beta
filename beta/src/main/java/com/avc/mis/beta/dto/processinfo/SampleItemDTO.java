@@ -6,10 +6,12 @@ package com.avc.mis.beta.dto.processinfo;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.MultiSet;
 import org.apache.commons.collections4.multiset.HashMultiSet;
+import org.springframework.data.mapping.AccessOptions.GetOptions.GetNulls;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
@@ -70,5 +72,20 @@ public class SampleItemDTO extends ProcessDTO {
 		this.itemWeights = new HashMultiSet<ItemWeightDTO>(itemWeights);
 	}
 	
+	public Optional<AmountWithUnit> getSampleEstimate() {
+		return itemWeights.stream()
+			.map(iw -> iw.getAvgTestedWeight().subtract(this.emptyContainerWeight)
+					.multiply(iw.getNumberUnits()))
+			.reduce(BigDecimal::add)
+			.map(s -> new AmountWithUnit(s, this.measureUnit));
+	}
+	
+	public Optional<AmountWithUnit> getRecordedSum() {
+		return itemWeights.stream()
+			.map(iw -> iw.getUnitAmount()
+					.multiply(iw.getNumberUnits()))
+			.reduce(BigDecimal::add)
+			.map(s -> new AmountWithUnit(s, this.measureUnit));
+	}
 	
 }
