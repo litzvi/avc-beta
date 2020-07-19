@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.values.Bank;
@@ -36,6 +37,9 @@ public class ValueWriter {
 	
 	@Autowired private SoftDeletableDAO dao;
 	
+	@Deprecated
+	@Autowired private DeletableDAO deletableDAO;
+	
 	/**
 	 * Edit the existing entity to it's new set values. 
 	 * Only edits editable values, ignores if non editable values are changed.
@@ -54,6 +58,15 @@ public class ValueWriter {
 	public <T extends ValueEntity> void remove(T entity) {
 		//check if it's one of the permitted classes
 		dao.removeEntity(entity, (Class<T>)entity.getClass());
+	}
+	
+	/**
+	 * For testing only, needed because calling DAO directly has no transaction
+	 * @param entity to be permanently removed.
+	 */
+	@Deprecated
+	public <T extends ValueEntity> void permenentlyRemoveEntity(T entity) {
+		deletableDAO.permenentlyRemoveEntity(entity);
 	}
 	
 	/**

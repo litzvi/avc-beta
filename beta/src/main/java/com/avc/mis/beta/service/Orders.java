@@ -49,12 +49,21 @@ public class Orders {
 	@Autowired private PORepository poRepository;	
 	
 	/**
-	 * Gat all cashew orders with the order status - pending, received, rescheduled or cancelled.
-	 * @return  list of PoRow for all orders
+	 * Gat all cashew orders with the order status - pending, received, rejected or cancelled.
+	 * @return list of PoRow for all orders
 	 */
-	public List<PoItemRow> findAllCashewOrders() {
+	public List<PoRow> findAllCashewOrders() {
 		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER);
-		return itemRows;
+		return getPoRows(itemRows);
+	}
+	
+	/**
+	 * Gat all General orders with the order status - pending, received, rejected or cancelled.
+	 * @return list of PoRow for all orders
+	 */
+	public List<PoRow> findAllGeneralOrders() {
+		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER);
+		return getPoRows(itemRows);
 	}
 	
 	/**
@@ -63,6 +72,21 @@ public class Orders {
 	 */
 	public List<PoRow> findOpenCashewOrders() {
 		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
+		
+		return getPoRows(itemRows);
+	}
+	
+	/**
+	 * Get the table of all General purchase orders that are active and where not received.
+	 * @return list of PoRow for orders that are yet to be received
+	 */
+	public List<PoRow> findOpenGeneralOrders() {
+		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
+		
+		return getPoRows(itemRows);
+	}
+	
+	private List<PoRow> getPoRows(List<PoItemRow> itemRows) {
 		Map<Integer, List<PoItemRow>> poMap = itemRows.stream()
 				.collect(Collectors.groupingBy(PoItemRow::getId, Collectors.toList()));
 		List<PoRow> poRows = new ArrayList<PoRow>();
@@ -94,7 +118,7 @@ public class Orders {
 	 * Get the table of all General purchase orders that are active and where not received.
 	 * @return list of PoRow for orders that are yet to be received
 	 */
-	public List<PoItemRow> findOpenGeneralOrders() {
+	public List<PoItemRow> findOpenGeneralOrderItems() {
 		return getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
 	}
 	

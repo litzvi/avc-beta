@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
+import com.avc.mis.beta.entities.embeddable.RawDamage;
+import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.service.QualityChecks;
@@ -22,16 +24,16 @@ public class QcTest {
 		CashewStandard standard = new CashewStandard();
 		String standardOrganization = "VinaControl";
 		standard.setStandardOrganization(standardOrganization);
+		standard.setDamage(new RawDamage());
+		standard.setDefects(new RawDefects());
 		Item item = service.getItem();
 		standard.setItem(item);
-		
-		CashewStandardDTO standardDTO = qualityChecks.getCashewStatndard(item.getId(), standardOrganization);
-		if(standardDTO == null) {
-			valueWriter.addCashewStandard(standard);
-			standardDTO = qualityChecks.getCashewStatndard(item.getId(), standardOrganization);
-		}
-		System.out.println(standardDTO);
 
+		valueWriter.addCashewStandard(standard);
+		CashewStandardDTO standardDTO = qualityChecks.getCashewStatndard(item.getId(), standardOrganization);
+
+		System.out.println(standardDTO);
+		valueWriter.permenentlyRemoveEntity(standard);
 	}
 
 }
