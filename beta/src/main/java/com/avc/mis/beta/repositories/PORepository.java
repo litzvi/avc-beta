@@ -37,25 +37,9 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "left join po.createdBy p_user "
 			+ "left join po.productionLine p_line "
 			+ "join po.lifeCycle lc "
-		+ "where po_code.id = :codeId ")
-	Optional<PoDTO> findOrderByPoCodeId(Integer codeId);
-	
-	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
-			+ "po.id, po.version, po.createdDate, p_user.username, "
-			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
-			+ "pt.processName, p_line, "
-			+ "po.recordedTime, po.duration, po.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, po.remarks, po.personInCharge) "
-		+ "from PO po "
-			+ "join po.poCode po_code "
-				+ "join po_code.contractType t "
-				+ "join po_code.supplier s "
-			+ "join po.processType pt "
-			+ "left join po.createdBy p_user "
-			+ "left join po.productionLine p_line "
-			+ "join po.lifeCycle lc "
-		+ "where po.id = :id ")
-	Optional<PoDTO> findOrderByProcessId(Integer id);
+		+ "where po.id = :processId or po_code.id = :poCodeId "
+			+ "and (:processId is null or :poCodeId is null)")
+	Optional<PoDTO> findOrderById(Integer processId, Integer poCodeId);
 	
 	@Query("select new com.avc.mis.beta.dto.processinfo.OrderItemDTO("
 			+ "i.id, i.version, item.id, item.value, units.amount, units.measureUnit, "
@@ -63,6 +47,7 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) ) "
 //			+ "ri is not null) "
 		+ "from OrderItem i "
+			+ "join i.po po "
 			+ "join i.numberUnits units "
 				+ "left join i.receiptItems ri "
 					+ "left join ri.process r "
@@ -74,33 +59,44 @@ public interface PORepository extends BaseRepository<PO> {
 //				+ "left join ReceiptItem ri on ri.orderItem = i "
 			+ "left join i.unitPrice price "
 			+ "join i.item item "
-			+ "join i.po po "
-		+ "where po.id = :poid and "
+		+ "where po.id = :processId and "
 			+ "(rlc is null or rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
-			+ "group by i ")
-	Set<OrderItemDTO> findOrderItemsByPo(Integer poid);
+		+ "group by i ")
+	Set<OrderItemDTO> findPoOrderItemsById(Integer processId);
 	
 	@Query("select new com.avc.mis.beta.dto.report.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, i.value, "
 			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency, 'PENDING') "
 		+ "from PO po "
-		+ "join po.lifeCycle lc "
-		+ "join po.poCode po_code "
-			+ "join po_code.contractType ct "
-			+ "join po_code.supplier s "
-		+ "join po.processType t "
-		+ "join po.orderItems oi "
-			+ "join oi.numberUnits units "
-			+ "left join oi.unitPrice price "
-			+ "join oi.item i "
-			//check for sum
-			+ "where not exists (select ri from ReceiptItem ri "
-								+ "join ri.process r "
-									+ "join r.lifeCycle rlc "
-							+ "where ri.orderItem = oi and "
-								+ "rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
-			+ "and t.processName = ?1 "
-			+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
+			+ "join po.lifeCycle lc "
+			+ "join po.poCode po_code "
+				+ "join po_code.contractType ct "
+				+ "join po_code.supplier s "
+			+ "join po.processType t "
+			+ "join po.orderItems oi "
+				+ "join oi.numberUnits units "
+				+ "left join oi.unitPrice price "
+				+ "join oi.item i "
+				//instead of previous not exists
+				+ "left join oi.receiptItems ri "
+				+ "left join ri.process r "
+					+ "left join r.lifeCycle rlc "		
+				+ "left join ri.storageForms sf "
+					+ "left join sf.unitAmount unit "
+						+ "left join UOM uom "
+							+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = units.measureUnit "
+			+ "where "
+//				+ "not exists (select ri from ReceiptItem ri "
+//									+ "join ri.process r "
+//										+ "join r.lifeCycle rlc "
+//								+ "where ri.orderItem = oi and "
+//									+ "rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
+				+ "t.processName = ?1 "
+				+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+				+ "and (rlc is null or rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
+//				+ "and (ri is null or SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) < units.amount) "
+			+ "group by oi "
+			+ "having coalesce(SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor), 0) < units.amount ")
 //		+ "ORDER BY oi.deliveryDate DESC ") - done in the java code
 	List<PoItemRow> findOpenOrdersByType(ProcessName orderType);
 
@@ -114,28 +110,62 @@ public interface PORepository extends BaseRepository<PO> {
 				+ "ELSE 'RECEIVED'"
 				+ "END) "
 		+ "from PO po "
-		+ "join po.lifeCycle lc "
-		+ "join po.poCode po_code "
-			+ "join po_code.contractType ct "
-			+ "join po_code.supplier s "
-		+ "join po.processType t "
-		+ "join po.orderItems oi "
-			+ "join oi.numberUnits units "
-			+ "left join oi.unitPrice price "
-			+ "join oi.item i "
-			+ "left join oi.receiptItems ri "
-				+ "left join ri.process r "
-					+ "left join r.lifeCycle rlc "		
-				+ "left join ri.storageForms sf "
-					+ "left join sf.unitAmount unit "
-						+ "left join UOM uom "
-							+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = units.measureUnit "
+			+ "join po.lifeCycle lc "
+			+ "join po.poCode po_code "
+				+ "join po_code.contractType ct "
+				+ "join po_code.supplier s "
+			+ "join po.processType t "
+			+ "join po.orderItems oi "
+				+ "join oi.numberUnits units "
+				+ "left join oi.unitPrice price "
+				+ "join oi.item i "
+				+ "left join oi.receiptItems ri "
+					+ "left join ri.process r "
+						+ "left join r.lifeCycle rlc "		
+					+ "left join ri.storageForms sf "
+						+ "left join sf.unitAmount unit "
+							+ "left join UOM uom "
+								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = units.measureUnit "
 		+ "where t.processName = ?1 and "
 			+ "(rlc is null or rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
 		+ "group by oi ")
-//			+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
 	List<PoItemRow> findAllOrdersByType(ProcessName orderType);
 
+
+//	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
+//			+ "po.id, po.version, po.createdDate, p_user.username, "
+//			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
+//			+ "pt.processName, p_line, "
+//			+ "po.recordedTime, po.duration, po.numOfWorkers, "
+//			+ "lc.processStatus, lc.editStatus, po.remarks, po.personInCharge) "
+//		+ "from PO po "
+//			+ "join po.poCode po_code "
+//				+ "join po_code.contractType t "
+//				+ "join po_code.supplier s "
+//			+ "join po.processType pt "
+//			+ "left join po.createdBy p_user "
+//			+ "left join po.productionLine p_line "
+//			+ "join po.lifeCycle lc "
+//		+ "where po_code.id = :codeId ")
+//	Optional<PoDTO> findOrderByPoCodeId(Integer codeId);
+//	
+//	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
+//			+ "po.id, po.version, po.createdDate, p_user.username, "
+//			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
+//			+ "pt.processName, p_line, "
+//			+ "po.recordedTime, po.duration, po.numOfWorkers, "
+//			+ "lc.processStatus, lc.editStatus, po.remarks, po.personInCharge) "
+//		+ "from PO po "
+//			+ "join po.poCode po_code "
+//				+ "join po_code.contractType t "
+//				+ "join po_code.supplier s "
+//			+ "join po.processType pt "
+//			+ "left join po.createdBy p_user "
+//			+ "left join po.productionLine p_line "
+//			+ "join po.lifeCycle lc "
+//		+ "where po.id = :id ")
+//	Optional<PoDTO> findOrderByProcessId(Integer id);
+	
 	
 //	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po_code, s.name, po.orderStatus) "
 //		+ "from PO po "

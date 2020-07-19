@@ -33,7 +33,6 @@ import lombok.ToString;
 @NoArgsConstructor
 public class PoDTO extends ProductionProcessDTO {
 	
-//	private OrderStatus orderStatus;
 	private Set<OrderItemDTO> orderItems; //can use a SortedSet like ContactDetails to maintain order
 	
 	private String personInCharge;
@@ -51,13 +50,11 @@ public class PoDTO extends ProductionProcessDTO {
 				processName, productionLine, 
 				recordedTime, duration, numOfWorkers, processStatus, editStatus, remarks);
 		this.personInCharge = personInCharge;
-//		this.orderStatus = orderStatus;
 
 	}
 	
 	public PoDTO(@NonNull PO po) {
 		super(po);
-//		this.orderStatus = po.getOrderStatus();
 		this.personInCharge = po.getPersonInCharge();
 		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toSet());
 
