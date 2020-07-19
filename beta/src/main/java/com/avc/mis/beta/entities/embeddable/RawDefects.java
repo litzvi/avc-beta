@@ -10,6 +10,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,6 +44,7 @@ public class RawDefects {
 	@Column(precision = 19, scale = 3)
 	private BigDecimal deepSpot;
 	
+	@JsonIgnore
 	public BigDecimal getTotal() {
 		List<BigDecimal> list = Arrays.asList(this.scorched, this.deepCut, 
 				this.offColour, this.shrivel, this.desert, this.deepSpot);

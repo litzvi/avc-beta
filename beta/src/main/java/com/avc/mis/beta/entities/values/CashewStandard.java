@@ -30,7 +30,7 @@ public class CashewStandard extends ValueEntity {
 	@NotBlank(message = "Standard organization is mandatory")
 	private String standardOrganization;	
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	@NotNull(message = "Cashew standard has to reference an item")
 	private Item item;

@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 
 import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
@@ -51,13 +52,13 @@ public class ItemWeight extends AuditedEntity {
 	@Positive(message = "Number of units has to be positive")
 	private BigDecimal numberUnits;
 		
-	@Column(nullable = false)
-	@NotNull(message = "Number of samples is mandetory")
-	@Positive(message = "Number of samples has to be positive")
+//	@Column(nullable = false)
+//	@NotNull(message = "Number of samples is mandetory")
+	@PositiveOrZero(message = "Number of samples has to be positive or zero")
 	private BigInteger numberOfSamples;	
 	
-	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
-	@NotNull(message = "Average tested weight is mandetory")
+	@Column(precision = 19, scale = MeasureUnit.SCALE)
+//	@NotNull(message = "Average tested weight is mandetory")
 	@Positive(message = "Average tested weight has to be positive")
 	private BigDecimal avgTestedWeight;
 	

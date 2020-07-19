@@ -31,6 +31,7 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class PoItemRow extends ValueDTO {
 	
+	String personInCharge;
 	PoCodeBasic poCode;
 	String supplierName;
 	String itemName;
@@ -41,15 +42,18 @@ public class PoItemRow extends ValueDTO {
 //	OrderStatus orderStatus;
 	String defects;
 	AmountWithCurrency unitPrice;
+	
+
 //	Currency currency;
 //	BigDecimal unitPrice;
 	
-	public PoItemRow(@NonNull Integer id, 
+	public PoItemRow(@NonNull Integer id, String personInCharge,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemName, BigDecimal amount, MeasureUnit measureUnit, 
 			OffsetDateTime contractDate, LocalDate deliveryDate, 
 			String defects, BigDecimal unitPrice, Currency currency) {
 		super(id);
+		this.personInCharge = personInCharge;
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.itemName = itemName;
@@ -71,6 +75,7 @@ public class PoItemRow extends ValueDTO {
 	public PoItemRow(PO po, OrderItem orderItem) {
 
 		super(po.getId());
+		this.personInCharge = po.getPersonInCharge();
 		PoCode poCode = po.getPoCode();
 		this.poCode = new PoCodeBasic(poCode);
 		this.supplierName = poCode.getSupplier().getName();

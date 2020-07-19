@@ -28,7 +28,7 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "po.recordedTime, po.duration, po.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, po.remarks) "
+			+ "lc.processStatus, lc.editStatus, po.remarks, po.personInCharge) "
 		+ "from PO po "
 			+ "join po.poCode po_code "
 				+ "join po_code.contractType t "
@@ -45,7 +45,7 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "po.recordedTime, po.duration, po.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, po.remarks) "
+			+ "lc.processStatus, lc.editStatus, po.remarks, po.personInCharge) "
 		+ "from PO po "
 			+ "join po.poCode po_code "
 				+ "join po_code.contractType t "
@@ -69,10 +69,11 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "where po.id = :poid ")
 	Set<OrderItemDTO> findOrderItemsByPo(Integer poid);
 	
-	@Query("select new com.avc.mis.beta.dto.report.PoItemRow(po.id, po_code.code, ct.code, ct.suffix, s.name, i.value, "
+	@Query("select new com.avc.mis.beta.dto.report.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, i.value, "
 			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency) "
 		+ "from PO po "
+		+ "join po.lifeCycle lc "
 		+ "join po.poCode po_code "
 			+ "join po_code.contractType ct "
 			+ "join po_code.supplier s "
@@ -81,9 +82,14 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "join oi.numberUnits units "
 			+ "left join oi.unitPrice price "
 			+ "join oi.item i "
-		+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
-			+ "and t.processName = ?1 ")
-//		+ "ORDER BY oi.deliveryDate DESC ") - done in the code
+		+ "where not exists (select ri from ReceiptItem ri "
+								+ "join ri.process r "
+									+ "join r.lifeCycle rlc "
+							+ "where ri.orderItem = oi and "
+								+ "rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
+			+ "and t.processName = ?1 "
+			+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
+//		+ "ORDER BY oi.deliveryDate DESC ") - done in the java code
 	List<PoItemRow> findOpenOrderByType(ProcessName orderType);
 
 	

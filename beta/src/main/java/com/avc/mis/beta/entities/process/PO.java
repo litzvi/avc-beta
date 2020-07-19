@@ -46,6 +46,8 @@ public class PO extends ProductionProcess {
 	@NotEmpty(message = "Purchase Order has to have at least one order line")
 	private Set<OrderItem> orderItems = new HashSet<>();
 	
+	private String personInCharge;
+	
 	/**
 	 * Gets the list of Items as an array (can be ordered).
 	 * @return the orderItems

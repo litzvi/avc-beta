@@ -38,6 +38,9 @@ public class RawItemQualityDTO extends ProcessDTO {
 	RawDefects rawDefects;
 	RawDamage rawDamage;
 	
+	BigDecimal totalDefects;
+	BigDecimal totalDamage;
+	
 	BigInteger wholeCountPerLb;
 	BigDecimal smallSize;
 	BigDecimal ws;
@@ -96,6 +99,9 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.rawDamage = new RawDamage(mold, dirty, lightDirty, decay, insectDamage, testa);
 		this.rawDefects = new RawDefects(scorched, deepCut, offColour, shrivel, desert, deepSpot);
 		
+		this.totalDamage = this.rawDamage.getTotal();
+		this.totalDefects = this.rawDefects.getTotal();
+		
 //		this.scorched = scorched;
 //		this.deepCut = deepCut;
 //		this.offColour = offColour;
@@ -148,38 +154,26 @@ public class RawItemQualityDTO extends ProcessDTO {
 //		this.nutCount = itemQuality.getNutCount();
 //		this.smallKernels = getSmallKernels();        
 //		this.defectsAfterRoasting = itemQuality.getDefectsAfterRoasting();
+		
+		this.totalDamage = this.rawDamage.getTotal();
+		this.totalDefects = this.rawDefects.getTotal();
+		
 		this.roastingWeightLoss = itemQuality.getRoastingWeightLoss();
 		this.colour = itemQuality.getColour();
 		this.flavour = itemQuality.getFlavour();
 	}
 
-	
+//	
 //	public BigDecimal getTotalDefects() {
-//		List<BigDecimal> list = Arrays.asList(this.scorched, this.deepCut, 
-//				this.offColour, this.shrivel, this.desert, this.deepSpot);
-//		BigDecimal sum = BigDecimal.ZERO;
-//		for(BigDecimal augend: list) {
-//			if(augend != null) {
-//				sum = sum.add(augend);
-//			}
-//		}
-//		return sum;
+//		return this.rawDefects.getTotal();
 //	}
 //	
 //	public BigDecimal getTotalDamage() {
-//		List<BigDecimal> list = Arrays.asList(this.testa, this.mold, this.dirty, this.lightDirty, 
-//				this.decay, this.insectDamage);
-//		BigDecimal sum = BigDecimal.ZERO;
-//		for(BigDecimal augend: list) {
-//			if(augend != null) {
-//				sum = sum.add(augend);
-//			}
-//		}
-//		return sum;
+//		return this.rawDamage.getTotal();
 //	}
-	
-//	public BigDecimal getTotalDefectsAndDamage() {
-////		return getTotalDamage().add(getTotalDefects());
-//	}
+
+	public BigDecimal getTotalDefectsAndDamage() {
+		return getTotalDamage().add(getTotalDefects());
+	}
 
 }

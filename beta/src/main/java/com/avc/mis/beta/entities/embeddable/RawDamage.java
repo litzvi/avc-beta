@@ -10,6 +10,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,6 +44,7 @@ public class RawDamage {
 	@Column(precision = 19, scale = 3)
 	private BigDecimal testa;
 	
+	@JsonIgnore
 	public BigDecimal getTotal() {
 		List<BigDecimal> list = Arrays.asList(this.mold, this.dirty, 
 				this.lightDirty, this.decay, this.insectDamage, this.testa);

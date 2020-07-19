@@ -36,17 +36,21 @@ public class PoDTO extends ProductionProcessDTO {
 //	private OrderStatus orderStatus;
 	private Set<OrderItemDTO> orderItems; //can use a SortedSet like ContactDetails to maintain order
 	
+	private String personInCharge;
+	
 	public PoDTO(Integer id, Integer version, Instant createdDate, String staffRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName,  
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, 
-			ProcessStatus processStatus, EditStatus editStatus, String remarks) {
+			ProcessStatus processStatus, EditStatus editStatus, String remarks, 
+			String personInCharge) {
 		super(id, version, createdDate, staffRecording, 
 				poCodeId, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName, 
 				processName, productionLine, 
 				recordedTime, duration, numOfWorkers, processStatus, editStatus, remarks);
+		this.personInCharge = personInCharge;
 //		this.orderStatus = orderStatus;
 
 	}
@@ -54,6 +58,7 @@ public class PoDTO extends ProductionProcessDTO {
 	public PoDTO(@NonNull PO po) {
 		super(po);
 //		this.orderStatus = po.getOrderStatus();
+		this.personInCharge = po.getPersonInCharge();
 		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toSet());
 
 	}

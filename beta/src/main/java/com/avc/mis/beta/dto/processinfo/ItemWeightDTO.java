@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Optional;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -44,6 +45,10 @@ public class ItemWeightDTO extends ProcessDTO {
 		this.numberUnits = itemWeight.getNumberUnits().setScale(MeasureUnit.SCALE);
 		this.numberOfSamples = itemWeight.getNumberOfSamples();
 		this.avgTestedWeight = itemWeight.getAvgTestedWeight().setScale(MeasureUnit.SCALE);
+	}
+	
+	public BigDecimal getAvgTestedWeight() {
+		return Optional.ofNullable(this.avgTestedWeight).orElse(this.unitAmount);
 	}
 	
 	
