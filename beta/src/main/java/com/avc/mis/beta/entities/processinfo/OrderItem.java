@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.processinfo;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -14,6 +15,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -86,6 +89,9 @@ public class OrderItem extends AuditedEntity {
 	private LocalDate deliveryDate;
 	
 	private String defects;//maybe change to enum that can get percentage
+	
+	@OneToMany(mappedBy = "orderItem", fetch = FetchType.LAZY)
+	private Set<ReceiptItem> receiptItems;
 	
 	public void setDeliveryDate(String deliveryDate) {
 		if(deliveryDate != null)

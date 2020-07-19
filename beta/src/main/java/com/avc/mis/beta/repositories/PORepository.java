@@ -59,19 +59,30 @@ public interface PORepository extends BaseRepository<PO> {
 	
 	@Query("select new com.avc.mis.beta.dto.processinfo.OrderItemDTO("
 			+ "i.id, i.version, item.id, item.value, units.amount, units.measureUnit, "
-			+ "price.amount, price.currency, i.deliveryDate, i.defects, i.remarks, ri is not null) "
+			+ "price.amount, price.currency, i.deliveryDate, i.defects, i.remarks, "
+			+ "SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) ) "
+//			+ "ri is not null) "
 		+ "from OrderItem i "
 			+ "join i.numberUnits units "
-				+ "left join ReceiptItem ri on ri.orderItem = i "
+				+ "left join i.receiptItems ri "
+					+ "left join ri.process r "
+						+ "left join r.lifeCycle rlc "		
+					+ "left join ri.storageForms sf "
+						+ "left join sf.unitAmount unit "
+							+ "left join UOM uom "
+								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = units.measureUnit "
+//				+ "left join ReceiptItem ri on ri.orderItem = i "
 			+ "left join i.unitPrice price "
 			+ "join i.item item "
 			+ "join i.po po "
-		+ "where po.id = :poid ")
+		+ "where po.id = :poid and "
+			+ "(rlc is null or rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
+			+ "group by i ")
 	Set<OrderItemDTO> findOrderItemsByPo(Integer poid);
 	
 	@Query("select new com.avc.mis.beta.dto.report.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, i.value, "
 			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
-			+ "oi.defects, price.amount, price.currency) "
+			+ "oi.defects, price.amount, price.currency, 'PENDING') "
 		+ "from PO po "
 		+ "join po.lifeCycle lc "
 		+ "join po.poCode po_code "
@@ -82,7 +93,8 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "join oi.numberUnits units "
 			+ "left join oi.unitPrice price "
 			+ "join oi.item i "
-		+ "where not exists (select ri from ReceiptItem ri "
+			//check for sum
+			+ "where not exists (select ri from ReceiptItem ri "
 								+ "join ri.process r "
 									+ "join r.lifeCycle rlc "
 							+ "where ri.orderItem = oi and "
@@ -90,7 +102,34 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "and t.processName = ?1 "
 			+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
 //		+ "ORDER BY oi.deliveryDate DESC ") - done in the java code
-	List<PoItemRow> findOpenOrderByType(ProcessName orderType);
+	List<PoItemRow> findOpenOrdersByType(ProcessName orderType);
+
+	@Query("select new com.avc.mis.beta.dto.report.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, i.value, "
+			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
+			+ "oi.defects, price.amount, price.currency, "
+			+ "CASE WHEN lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN 'CANCELLED'"
+				+ "WHEN oi.receiptItems is empty THEN 'PENDING'"
+				+ "WHEN ri is null THEN 'REJECTED'"
+				+ "ELSE 'RECEIVED'"
+				+ "END) "
+		+ "from PO po "
+		+ "join po.lifeCycle lc "
+		+ "join po.poCode po_code "
+			+ "join po_code.contractType ct "
+			+ "join po_code.supplier s "
+		+ "join po.processType t "
+		+ "join po.orderItems oi "
+			+ "join oi.numberUnits units "
+			+ "left join oi.unitPrice price "
+			+ "join oi.item i "
+			+ "left join oi.receiptItems ri "
+				+ "left join ri.process r "
+					+ "left join r.lifeCycle rlc "		
+		+ "where t.processName = ?1 and "
+			+ "(rlc is null or rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
+		+ "group by oi ")
+//			+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
+	List<PoItemRow> findAllOrdersByType(ProcessName orderType);
 
 	
 //	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po_code, s.name, po.orderStatus) "

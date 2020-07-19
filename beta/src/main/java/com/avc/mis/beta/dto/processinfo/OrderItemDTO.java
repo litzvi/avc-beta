@@ -39,12 +39,13 @@ public class OrderItemDTO extends ProcessDTO {
 	LocalDate deliveryDate;
 	String defects;
 	String remarks;
-	Boolean received;
+//	Boolean received;
+	BigDecimal amountReceived;
 	
 	
 	public OrderItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
 			BigDecimal numberUnits, MeasureUnit measureUnit, BigDecimal unitPrice, Currency currency,
-			LocalDate deliveryDate, String defects, String remarks, Boolean received) {
+			LocalDate deliveryDate, String defects, String remarks, BigDecimal amountReceived) {
 		super(id, version);
 //		this.poId = poId;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
@@ -55,7 +56,7 @@ public class OrderItemDTO extends ProcessDTO {
 		this.deliveryDate = deliveryDate;
 		this.defects = defects;
 		this.remarks = remarks;
-		this.received = received;
+		this.amountReceived = amountReceived;
 
 //		this.numberUnits.setScale(3);//for testing with assertEquals
 //		this.unitPrice.setScale(2);//for testing with assertEquals
@@ -72,7 +73,13 @@ public class OrderItemDTO extends ProcessDTO {
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.defects = orderItem.getDefects();
 		this.remarks = orderItem.getRemarks();
-		this.received = false; //should be null - set as false for testing for a newly created order
+		
+		if(orderItem.getReceiptItems() != null) {
+			this.amountReceived = null; // should be calculated, temporary set to null
+		}
+		else {
+			this.amountReceived = null; //old comment: should be null - set as false for testing for a newly created order			
+		}
 		
 //		this.numberUnits.setScale(3);//for testing with assertEquals
 //		this.unitPrice.setScale(2);//for testing with assertEquals

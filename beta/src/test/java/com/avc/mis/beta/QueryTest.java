@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.fail;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.report.ItemInventoryRow;
 import com.avc.mis.beta.dto.report.PoInventoryRow;
+import com.avc.mis.beta.dto.report.PoItemRow;
 import com.avc.mis.beta.dto.report.PoRow;
 import com.avc.mis.beta.dto.report.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.report.RawQcRow;
@@ -72,7 +74,7 @@ public class QueryTest {
 	@Autowired QualityChecks qualityChecks;
 	@Autowired WarehouseManagement warehouseManagement;
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void queryTest() {
 
@@ -221,8 +223,8 @@ public class QueryTest {
 	@Test
 	void oneQueryTest() {
 
-		List<RawQcRow> rawQcRows = qualityChecks.getRawQualityChecks();
-		rawQcRows.forEach(i -> System.out.println(i));
-		
+		//find table of all cashew orders with order status (history)
+		orders.findAllCashewOrders().forEach(i -> System.out.println(i));
+				
 	}
 }

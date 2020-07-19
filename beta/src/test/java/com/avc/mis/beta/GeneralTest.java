@@ -70,7 +70,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800101;
+	static final Integer PO_CODE = 800102;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	

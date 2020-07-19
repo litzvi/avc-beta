@@ -13,6 +13,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -47,7 +48,7 @@ public class ReceiptItem extends ProcessItem {
 	@Transient
 	private Set<ExtraAdded> extraAdded = new HashSet<>();
 
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "orderItemId")
 	private OrderItem orderItem;
 	

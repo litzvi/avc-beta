@@ -49,11 +49,20 @@ public class Orders {
 	@Autowired private PORepository poRepository;	
 	
 	/**
+	 * Gat all cashew orders with the order status - pending, received, rescheduled or cancelled.
+	 * @return  list of PoRow for all orders
+	 */
+	public List<PoItemRow> findAllCashewOrders() {
+		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER);
+		return itemRows;
+	}
+	
+	/**
 	 * Get the table of all Cashew purchase orders that are active and where not received.
 	 * @return list of PoRow for orders that are yet to be received
 	 */
 	public List<PoRow> findOpenCashewOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findOpenOrderByType(ProcessName.CASHEW_ORDER);
+		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
 		Map<Integer, List<PoItemRow>> poMap = itemRows.stream()
 				.collect(Collectors.groupingBy(PoItemRow::getId, Collectors.toList()));
 		List<PoRow> poRows = new ArrayList<PoRow>();
@@ -78,7 +87,7 @@ public class Orders {
 	}
 	
 	public List<PoItemRow> findOpenCashewOrderItems() {
-		return getPoRepository().findOpenOrderByType(ProcessName.CASHEW_ORDER);
+		return getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
 	}
 	
 	/**
@@ -86,7 +95,7 @@ public class Orders {
 	 * @return list of PoRow for orders that are yet to be received
 	 */
 	public List<PoItemRow> findOpenGeneralOrders() {
-		return getPoRepository().findOpenOrderByType(ProcessName.GENERAL_ORDER);
+		return getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
 	}
 	
 	

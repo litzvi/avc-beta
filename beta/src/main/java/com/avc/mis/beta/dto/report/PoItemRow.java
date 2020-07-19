@@ -42,6 +42,7 @@ public class PoItemRow extends ValueDTO {
 //	OrderStatus orderStatus;
 	String defects;
 	AmountWithCurrency unitPrice;
+	String orderStatus;
 	
 
 //	Currency currency;
@@ -51,7 +52,7 @@ public class PoItemRow extends ValueDTO {
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemName, BigDecimal amount, MeasureUnit measureUnit, 
 			OffsetDateTime contractDate, LocalDate deliveryDate, 
-			String defects, BigDecimal unitPrice, Currency currency) {
+			String defects, BigDecimal unitPrice, Currency currency, String orderStatus) {
 		super(id);
 		this.personInCharge = personInCharge;
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
@@ -65,31 +66,31 @@ public class PoItemRow extends ValueDTO {
 		this.defects = defects;
 //		this.currency = currency;
 		this.unitPrice = new AmountWithCurrency(unitPrice, currency);
-	
+		this.orderStatus = orderStatus;
 	}
 	
 	/**
 	 * @param po
 	 * @param orderItem
 	 */
-	public PoItemRow(PO po, OrderItem orderItem) {
-
-		super(po.getId());
-		this.personInCharge = po.getPersonInCharge();
-		PoCode poCode = po.getPoCode();
-		this.poCode = new PoCodeBasic(poCode);
-		this.supplierName = poCode.getSupplier().getName();
-		this.itemName = orderItem.getItem().getValue();
-		this.numberUnits = orderItem.getNumberUnits().clone();
-//		this.measureUnit = orderItem.getMeasureUnit();
-		this.contractDate = po.getRecordedTime();
-		this.deliveryDate = orderItem.getDeliveryDate();
-//		this.orderStatus = po.getOrderStatus();
-		this.defects = orderItem.getDefects();
-//		this.currency = orderItem.getCurrency();
-		this.unitPrice = orderItem.getUnitPrice().clone();
-		
-	}
+//	public PoItemRow(PO po, OrderItem orderItem) {
+//
+//		super(po.getId());
+//		this.personInCharge = po.getPersonInCharge();
+//		PoCode poCode = po.getPoCode();
+//		this.poCode = new PoCodeBasic(poCode);
+//		this.supplierName = poCode.getSupplier().getName();
+//		this.itemName = orderItem.getItem().getValue();
+//		this.numberUnits = orderItem.getNumberUnits().clone();
+////		this.measureUnit = orderItem.getMeasureUnit();
+//		this.contractDate = po.getRecordedTime();
+//		this.deliveryDate = orderItem.getDeliveryDate();
+////		this.orderStatus = po.getOrderStatus();
+//		this.defects = orderItem.getDefects();
+////		this.currency = orderItem.getCurrency();
+//		this.unitPrice = orderItem.getUnitPrice().clone();
+//		
+//	}
 	
 	/**
 	 * @return a string representing full PO code. e.g. VAT-900001
