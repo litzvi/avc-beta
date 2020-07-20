@@ -74,7 +74,7 @@ public class QueryTest {
 	@Autowired QualityChecks qualityChecks;
 	@Autowired WarehouseManagement warehouseManagement;
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void queryTest() {
 

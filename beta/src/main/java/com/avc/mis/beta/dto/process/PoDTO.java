@@ -24,6 +24,11 @@ import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * Data transfer object for PO class, 
+ * used to query database using select constructor (projection)
+ * and for presenting relevant information to user.
+ * Contains all fields of PO class needed by user for creation or presentation.
+ * 
  * @author Zvi
  *
  */
@@ -37,6 +42,10 @@ public class PoDTO extends ProductionProcessDTO {
 	
 	private String personInCharge;
 	
+	/**
+	 * All arguments (besides for order items) Constructor ,
+	 * used to project directly from database without nested fetching.
+	 */
 	public PoDTO(Integer id, Integer version, Instant createdDate, String staffRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName,  
@@ -53,6 +62,10 @@ public class PoDTO extends ProductionProcessDTO {
 
 	}
 	
+	/**
+	 * Constructor from PO object, used for testing.
+	 * @param po the PO object
+	 */
 	public PoDTO(@NonNull PO po) {
 		super(po);
 		this.personInCharge = po.getPersonInCharge();

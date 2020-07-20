@@ -12,7 +12,10 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
+import com.avc.mis.beta.entities.processinfo.ReceiptItem;
+import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;
@@ -20,6 +23,11 @@ import lombok.NonNull;
 import lombok.Value;
 
 /**
+ * Data transfer object for OrderItem class, 
+ * used to query database using select constructor (projection)
+ * and for presenting relevant information to user.
+ * Contains all fields of OrderItem class needed by user for creation or presentation.
+ * 
  * @author Zvi
  *
  */
@@ -27,65 +35,59 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = false)
 public class OrderItemDTO extends ProcessDTO {
 
-//	@EqualsAndHashCode.Exclude // for testing 
-//	private Integer poId; //perhaps not needed, and if yes maybe get the whole PoCode
 	BasicValueEntity<Item> item;
 	AmountWithUnit numberUnits;
-//	MeasureUnit measureUnit;
-//	BigDecimal numberUnits;
 	AmountWithCurrency unitPrice;
-//	Currency currency;
-//	BigDecimal unitPrice;
 	LocalDate deliveryDate;
 	String defects;
 	String remarks;
-//	Boolean received;
 	BigDecimal amountReceived;
 	
 	
+	/**
+	 * All arguments Constructor ,
+	 * used to project directly from database without nested fetching.
+	 */
 	public OrderItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
 			BigDecimal numberUnits, MeasureUnit measureUnit, BigDecimal unitPrice, Currency currency,
 			LocalDate deliveryDate, String defects, String remarks, BigDecimal amountReceived) {
 		super(id, version);
-//		this.poId = poId;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-//		this.measureUnit = measureUnit;
 		this.numberUnits = new AmountWithUnit(numberUnits.setScale(MeasureUnit.SCALE), measureUnit);
-//		this.currency = currency;
 		this.unitPrice = new AmountWithCurrency(unitPrice, currency);
 		this.deliveryDate = deliveryDate;
 		this.defects = defects;
 		this.remarks = remarks;
 		this.amountReceived = amountReceived;
-
-//		this.numberUnits.setScale(3);//for testing with assertEquals
-//		this.unitPrice.setScale(2);//for testing with assertEquals
 	}
 	
+	/**
+	 * Constructor from OrderItem object, used for testing.
+	 * @param orderItem the OrderItem object
+	 */
 	public OrderItemDTO(@NonNull OrderItem orderItem) {
 		super(orderItem.getId(), orderItem.getVersion());
-//		this.poId = orderItem.getPo().getId();
 		this.item = new BasicValueEntity<Item>(orderItem.getItem());
-//		this.measureUnit = orderItem.getMeasureUnit();
 		this.numberUnits = orderItem.getNumberUnits().setScale(MeasureUnit.SCALE);
-//		this.currency = orderItem.getCurrency();
 		this.unitPrice = orderItem.getUnitPrice().clone();
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.defects = orderItem.getDefects();
 		this.remarks = orderItem.getRemarks();
 		
 		if(orderItem.getReceiptItems() != null) {
-			this.amountReceived = null; // should be calculated, temporary set to null
+			AmountWithUnit sum = new AmountWithUnit(BigDecimal.ZERO, this.numberUnits.getMeasureUnit());
+			for(ReceiptItem i: orderItem.getReceiptItems()) {
+				if(i.getProcess().getLifeCycle().getProcessStatus() != ProcessStatus.CANCELLED) {
+					for(Storage s: i.getStorageForms()) {
+						sum.add(s.getUnitAmount().multiply(s.getNumberUnits()));
+					}
+				}
+			}
+			this.amountReceived = sum.getAmount();
 		}
 		else {
-			this.amountReceived = null; //old comment: should be null - set as false for testing for a newly created order			
+			this.amountReceived = null;		
 		}
-		
-//		this.numberUnits.setScale(3);//for testing with assertEquals
-//		this.unitPrice.setScale(2);//for testing with assertEquals
 	}
 	
-//	public String getCurrency() {
-//		return Optional.ofNullable(this.currency).map(c -> c.getCurrencyCode()).orElse(null);
-//	}
 }
