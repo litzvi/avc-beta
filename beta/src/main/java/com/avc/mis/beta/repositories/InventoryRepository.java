@@ -4,12 +4,15 @@
 package com.avc.mis.beta.repositories;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
+import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PoCode;
+import com.avc.mis.beta.entities.processinfo.Storage;
 
 /**
  * @author Zvi
@@ -18,6 +21,16 @@ import com.avc.mis.beta.entities.process.PoCode;
 public interface InventoryRepository extends BaseRepository<PoCode> {
 
 
+	/**
+	 * Gets all information of items in the inventory, for provided supply group, item or po code.
+	 * If one of the parameters are null than will ignore that constraint.
+	 * For each stored item in inventory, provides information on the process item, storage and amounts used.
+	 * Items are considered in inventory if process status is final and it's not completely used.
+	 * @param supplyGroup constrain to only this supply group, if null than any.
+	 * @param itemId constrain to only this item, if null than any.
+	 * @param poCodeId constrain to only this po, if null than any.
+	 * @return List of InventoryProcessItemWithStorage
+	 */
 	@Query("select new com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage( "
 			+ "pi.id, "
 			+ "item.id, item.value, "
@@ -50,6 +63,20 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "having (sf.numberUnits > sum(coalesce(ui.numberUnits, 0))) ")
 	List<InventoryProcessItemWithStorage> findInventoryProcessItemWithStorage(
 			SupplyGroup supplyGroup, Integer itemId, Integer poCodeId);
+
+	
+	/**
+	 * Gets the storage balance for the given array of storage entity objects.
+	 * @param storages array of storages ids
+	 * @return Stream of StorageBalance
+	 */
+	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
+			+ "s.id, s.numberUnits, sum(ui.numberUnits) ) "
+			+ "from Storage s "
+				+ "left join s.usedItems ui "
+			+ "where s.id in :storageIds "
+			+ "group by s ")
+	Stream<StorageBalance> findStorageBalances(Integer[] storageIds);
 
 //	@Query("select new com.avc.mis.beta.dto.values.PoInventoryRowWithStorage( "
 //			+ "pi.id, pi.version, item.id, item.value, "

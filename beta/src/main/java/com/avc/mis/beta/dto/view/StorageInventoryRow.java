@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.report;
+package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
 
@@ -16,6 +16,9 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
+ * DTO used as the list of storages for ProcessItemInventoryRow.
+ * Contains id (for reference) of process item and storage amount, location and amounts used.
+ * 
  * @author Zvi
  *
  */
@@ -31,6 +34,9 @@ public class StorageInventoryRow  extends ProcessDTO {
 	BigDecimal usedUnits;
 	AmountWithUnit totalBalance;
 	
+	/**
+	 * All database fields (the fields in the form they are fetched from the db) arguments constructor.
+	 */
 	public StorageInventoryRow(Integer id, Integer version, Integer processItemId,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
 			Integer warehouseLocationId,  String warehouseLocationValue,
@@ -48,6 +54,9 @@ public class StorageInventoryRow  extends ProcessDTO {
 		this.totalBalance = new AmountWithUnit(totalBalance, totalBalanceMU);
 	}
 	
+	/**
+	 * All class arguments constructor
+	 */
 	public StorageInventoryRow(Integer id, Integer version, Integer processItemId, AmountWithUnit unitAmount,
 			BigDecimal numberUnits, BasicValueEntity<Warehouse> warehouseLocation, 
 			BigDecimal usedUnits, AmountWithUnit totalBalance) {

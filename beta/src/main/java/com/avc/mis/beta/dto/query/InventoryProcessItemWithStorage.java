@@ -6,13 +6,16 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-import com.avc.mis.beta.dto.report.ProcessItemInventoryRow;
-import com.avc.mis.beta.dto.report.StorageInventoryRow;
+import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Value;
 
 /**
+ * DTO used to fetch inventory information from database with a select constructor query.
+ * Contains process item inventory information and storage details that includes the used amounts.
+ * 
  * @author Zvi
  *
  */
@@ -20,21 +23,14 @@ import lombok.Value;
 public class InventoryProcessItemWithStorage {
 
 	ProcessItemInventoryRow processItemInventoryRow;
-	//for ProcessItemInventoryRow
-//	Integer processItemId;
-//	BasicValueEntity<Item> item;
-//	PoCodeDTO poCode;
-//	OffsetDateTime receiptDate;
-	
 	StorageInventoryRow storageInventoryRow;
-	//for StorageInventoryRow
-//	DataObject<Storage> storage;
-//	AmountWithUnit unitAmount;
-//	BigDecimal numberUnits;	
-//	BasicValueEntity<Warehouse> warehouseLocation;
-//	BigDecimal usedUnits;
-//	AmountWithUnit totalBalance;
 	
+	/**
+	 * Constructor that receives all arguments of process item and storage information
+	 * including amounts used and balance, for one storage row. 
+	 * All arguments are the fields the way they are stored in db, 
+	 * with some aggregate result fetched directly from query.
+	 */
 	public InventoryProcessItemWithStorage(
 			Integer processItemId, 
 			Integer itemId, String itemValue,
@@ -50,39 +46,12 @@ public class InventoryProcessItemWithStorage {
 				processItemId, itemId, itemValue,
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				receiptDate);
-//		this.processItemId = processItemId;
-//		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-//		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
-//		this.receiptDate = receiptDate;
-		
 		this.storageInventoryRow = new StorageInventoryRow(
 				storageId, storageVersion, processItemId,
 				unitAmount, measureUnit, numberUnits, 
 				warehouseLocationId, warehouseLocationValue,
 				usedUnits, 
 				totalBalance, totalBalanceMU); 
-//				this.unitAmount, this.numberUnits, this.warehouseLocation, 
-//				this.usedUnits, this.totalBalance);
-//		this.storage = new DataObject<Storage>(storageId, storageVersion);
-//		this.processItemId = processItemId;
-//		this.unitAmount = new AmountWithUnit(unitAmount, measureUnit);;
-//		this.numberUnits = numberUnits;
-//		if(warehouseLocationId != null && warehouseLocationValue != null)
-//			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
-//		else
-//			this.warehouseLocation = null;
-//		this.usedUnits = usedUnits;
-//		this.totalBalance = new AmountWithUnit(totalBalance, totalBalanceMU);
-		
 	}
-	
-//	public ProcessItemInventoryRow getProcessItemInventoryRow() {
-//		return new ProcessItemInventoryRow(this.processItemId, item, poCode, receiptDate);
-//	}
-//	
-//	public StorageInventoryRow getStorageInventoryRow() {
-//		return new StorageInventoryRow(storage.getId(), storage.getVersion(), this.processItemId, 
-//				this.unitAmount, this.numberUnits, this.warehouseLocation, 
-//				this.usedUnits, this.totalBalance);
-//	}
+
 }

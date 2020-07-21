@@ -8,9 +8,18 @@ import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
+/**
+ * @author Zvi
+ *
+ */
 public interface ProcessRepository<T extends ProductionProcess> extends BaseRepository<T> {
 
 
+	/**
+	 * Gets the join of process item, process and storage information for the given process.
+	 * @param processId id of the process
+	 * @return List of ProcessItemWithStorage
+	 */
 	@Query("select new com.avc.mis.beta.dto.query.ProcessItemWithStorage( "
 			+ " i.id, i.version, item.id, item.value, "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
@@ -30,12 +39,17 @@ public interface ProcessRepository<T extends ProductionProcess> extends BaseRepo
 		+ "where p.id = :processId ")
 	List<ProcessItemWithStorage> findProcessItemWithStorage(int processId);
 
+	/**
+	 * Gets all processes done for given PoCode
+	 * @param poCodeId id of PoCode
+	 * @return List of ProcessBasic
+	 */
 	@Query("select new com.avc.mis.beta.dto.values.ProcessBasic( "
 			+ "p.id, t.processName) "
 		+ "from ProductionProcess p "
 			+ "join p.poCode c "
 			+ "join p.processType t "
-		+ "where c.code = :poId ")
-	List<ProcessBasic> findAllProcessesByPo(Integer poId);
+		+ "where c.code = :poCodeId ")
+	List<ProcessBasic> findAllProcessesByPo(Integer poCodeId);
 
 }

@@ -24,11 +24,10 @@ import lombok.EqualsAndHashCode;
 public class StorageDTO extends ProcessDTO {
 
 	private AmountWithUnit unitAmount;
-//	MeasureUnit measureUnit;
 	private BigDecimal numberUnits;	
 	private BasicValueEntity<Warehouse> warehouseLocation;
 	private String remarks;
-	private String className;
+	private String className; //to differentiate between storage to ExtraAdded
 //	Class<? extends Storage> clazz;
 	
 	public StorageDTO(Integer id, Integer version,
@@ -37,7 +36,6 @@ public class StorageDTO extends ProcessDTO {
 			String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
 		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
-//		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
@@ -53,7 +51,6 @@ public class StorageDTO extends ProcessDTO {
 	 */
 	public StorageDTO(Storage storage) {
 		super(storage.getId(), storage.getVersion());
-//		this.measureUnit = storage.getMeasureUnit();
 		this.unitAmount = storage.getUnitAmount().setScale(MeasureUnit.SCALE);
 		this.numberUnits = storage.getNumberUnits().setScale(MeasureUnit.SCALE);
 		if(storage.getWarehouseLocation() != null) {

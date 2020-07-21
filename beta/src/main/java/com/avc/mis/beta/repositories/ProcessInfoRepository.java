@@ -26,12 +26,6 @@ import com.avc.mis.beta.entities.processinfo.ApprovalTask;
  *
  */
 public interface ProcessInfoRepository extends ProcessRepository<ProductionProcess> {
-
-//	@Query("select a "
-//			+ "from ProcessManagement a "
-//			+ "join fetch a.user "
-//			+ "where a.processType = ?1")
-//	List<ProcessManagement> findProcessTypeAlerts(ProcessType processType);
 	
 	@Query("select a "
 			+ "from ProcessManagement a "
@@ -111,8 +105,6 @@ public interface ProcessInfoRepository extends ProcessRepository<ProductionProce
 
 	@Query("select a "
 			+ "from ProcessManagement a "
-//				+ "join fetch a.user "
-//				+ "join fetch a.processType "
 			+ "where a.id = :id")
 	ProcessManagement findProcessManagementById(Integer id);
 
@@ -123,19 +115,6 @@ public interface ProcessInfoRepository extends ProcessRepository<ProductionProce
 				+ "join a.processType t ")
 	List<ProcessManagementDTO> findAllProcessManagements();
 
-
-//	@Modifying
-//	@Query("update ProcessLifeCycle c "
-//			+ "join c.process p "
-//			+ "join ProcessManagement m "
-//					+ "on p.processType = m.processType "
-//				+ "join m.user u "
-//			+ "set c.status = :status "
-//			+ "where p.id = :processId and "
-//				+ "u.id = :currentUserId and "
-//				+ "m.managementType = com.avc.mis.beta.entities.enums.ManagementType.MANAGER ")
-//	int updateLifeCycleStatus(RecordStatus status, Integer processId, Integer currentUserId);
-	
 	@Query("select c "
 			+ "from ProcessLifeCycle c "
 				+ "join c.process p "
@@ -162,5 +141,26 @@ public interface ProcessInfoRepository extends ProcessRepository<ProductionProce
 			+ "where p.id = :processId and "
 				+ "c.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
 	Boolean isProcessReferenced(Integer processId);
+
+
+
+//	@Modifying
+//	@Query("update ProcessLifeCycle c "
+//			+ "join c.process p "
+//			+ "join ProcessManagement m "
+//					+ "on p.processType = m.processType "
+//				+ "join m.user u "
+//			+ "set c.status = :status "
+//			+ "where p.id = :processId and "
+//				+ "u.id = :currentUserId and "
+//				+ "m.managementType = com.avc.mis.beta.entities.enums.ManagementType.MANAGER ")
+//	int updateLifeCycleStatus(RecordStatus status, Integer processId, Integer currentUserId);
+	
+
+//	@Query("select a "
+//			+ "from ProcessManagement a "
+//			+ "join fetch a.user "
+//			+ "where a.processType = ?1")
+//	List<ProcessManagement> findProcessTypeAlerts(ProcessType processType);
 
 }

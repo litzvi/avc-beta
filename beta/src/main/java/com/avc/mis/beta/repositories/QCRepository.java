@@ -3,9 +3,6 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -14,9 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
-import com.avc.mis.beta.dto.report.RawQcRow;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.view.RawQcRow;
 import com.avc.mis.beta.entities.process.QualityCheck;
 /**
  * @author Zvi
@@ -79,7 +75,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 			+ "and i.active = true")
 	CashewStandardDTO findCashewStandard(Integer itemId, String standardOrganization);
 
-	@Query("select new com.avc.mis.beta.dto.report.RawQcRow( "
+	@Query("select new com.avc.mis.beta.dto.view.RawQcRow( "
 			+ "qc.id, po_code.id, ct.code, ct.suffix, s.name, "
 			+ "i.value, qc.recordedTime, ti.numberOfSamples, ti.sampleWeight, "
 				+ "def.scorched, def.deepCut, def.offColour, "

@@ -1,16 +1,18 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.report;
+package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -54,8 +56,8 @@ public class RawQcRow extends ValueDTO {
 		
 		RawDefects rawDefects = new RawDefects(scorched, deepCut, offColour, shrivel, desert, deepSpot);		
 		RawDamage rawDamage = new RawDamage(mold, dirty, lightDirty, decay, insectDamage, testa);
-		this.totalDefects = rawDefects.getTotal().divide(sampleWeight);
-		this.totalDamage = rawDamage.getTotal().divide(sampleWeight);
+		this.totalDefects = rawDefects.getTotal().divide(sampleWeight, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
+		this.totalDamage = rawDamage.getTotal().divide(sampleWeight, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
 		
 		
 		

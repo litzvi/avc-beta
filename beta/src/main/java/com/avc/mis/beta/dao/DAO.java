@@ -11,7 +11,6 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.settings.UOM;
 import com.avc.mis.beta.service.Orders;
 
 import lombok.AccessLevel;

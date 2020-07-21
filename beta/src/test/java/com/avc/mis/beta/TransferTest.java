@@ -12,8 +12,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.avc.mis.beta.dto.report.ProcessItemInventoryRow;
-import com.avc.mis.beta.dto.report.StorageInventoryRow;
+import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageTransfer;
@@ -70,6 +70,8 @@ public class TransferTest {
 //		}
 
 		warehouseManagement.addStorageTransfer(transfer);
+		
+		//TODO check if usedItems exceeds inventory should fail
 	}
 
 	private UsedItem[] getUsedItems(List<ProcessItemInventoryRow> poInventory) {

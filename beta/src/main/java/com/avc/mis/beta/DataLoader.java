@@ -5,11 +5,7 @@ package com.avc.mis.beta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.Functions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -19,9 +15,7 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.Role;
-import com.avc.mis.beta.entities.settings.UOM;
 import com.avc.mis.beta.entities.values.ProcessType;
-import com.avc.mis.beta.service.SettingsTableReader;
 import com.avc.mis.beta.service.SettingsWriter;
 import com.avc.mis.beta.service.Users;
 

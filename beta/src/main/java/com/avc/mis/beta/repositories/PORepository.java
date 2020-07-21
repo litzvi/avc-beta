@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
-import com.avc.mis.beta.dto.report.PoItemRow;
+import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
 
@@ -83,7 +83,7 @@ public interface PORepository extends BaseRepository<PO> {
 	 * @param orderType e.g. GENERAL_ORDER, CASHEW_ORDER
 	 * @return List of PoItemRow for all open orders sorted by delivery date.
 	 */
-	@Query("select new com.avc.mis.beta.dto.report.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, i.value, "
+	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, i.value, "
 			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency, "
 			+ "SUM( "
@@ -118,7 +118,8 @@ public interface PORepository extends BaseRepository<PO> {
 								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = units.measureUnit "
 			+ "where "
 				+ "t.processName = ?1 "
-				+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+				+ "and (lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.PENDING "
+					+ "or lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
 			+ "group by oi "
 			+ "having coalesce("
 				+ "SUM("
@@ -135,7 +136,7 @@ public interface PORepository extends BaseRepository<PO> {
 	 * @param orderType e.g. GENERAL_ORDER, CASHEW_ORDER
 	 * @return List of PoItemRow for all orders.
 	 */
-	@Query("select new com.avc.mis.beta.dto.report.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, i.value, "
+	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, i.value, "
 			+ "units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency, "
 			+ "SUM( "
@@ -151,20 +152,6 @@ public interface PORepository extends BaseRepository<PO> {
 				+ "END "
 			+ ") "
 		+ ") "
-//			+ "CASE WHEN lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN 'CANCELLED' "
-//				+ "WHEN oi.receiptItems is empty THEN 'OPEN' "
-//				+ "WHEN SUM("
-//					+ "CASE "
-//						+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN null  "
-//						+ "ELSE (unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) "
-//					+ "END) >= units.amount THEN 'RECEIVED' "
-//				+ "WHEN SUM("
-//					+ "CASE "
-//						+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN null  "
-//						+ "ELSE (unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) "
-//					+ "END) > 0 THEN 'PARTLY RECEIVED' "
-//				+ "ELSE 'REJECTED'"
-//			+ "END) "
 		+ "from PO po "
 			+ "join po.lifeCycle lc "
 			+ "join po.poCode po_code "

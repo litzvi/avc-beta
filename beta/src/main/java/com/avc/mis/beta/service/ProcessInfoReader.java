@@ -44,7 +44,6 @@ public class ProcessInfoReader {
 	
 	@Autowired private ReadOnlyDAO dao;
 	
-//	@Autowired private ProcessRepository processRepository;
 	@Autowired private ProcessInfoRepository processInfoRepository;
 	@Autowired private Orders orders;
 	@Autowired private Receipts orderReceipts;
@@ -148,8 +147,13 @@ public class ProcessInfoReader {
 		return null;
 	}
 	
-	public List<ProcessBasic> getAllProcessesByPo(@NonNull Integer poId) {
-		return getProcessInfoRepository().findAllProcessesByPo(poId);
+	/**
+	 * Gets a list of processes done for the given po code
+	 * @param poCodeId id of PoCode
+	 * @return List of ProcessBasic
+	 */
+	public List<ProcessBasic> getAllProcessesByPo(@NonNull Integer poCodeId) {
+		return getProcessInfoRepository().findAllProcessesByPo(poCodeId);
 	}
 
 	

@@ -12,7 +12,7 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
-import com.avc.mis.beta.dto.report.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.StorageTransfer;
@@ -22,6 +22,12 @@ import com.avc.mis.beta.repositories.TransferRepository;
 import lombok.AccessLevel;
 import lombok.Getter;
 
+/**
+ * Service for recording and receiving Warehouse activity and information
+ * 
+ * @author Zvi
+ *
+ */
 @Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
@@ -33,13 +39,21 @@ public class WarehouseManagement {
 	@Autowired private TransferRepository transferRepository;
 
 
+	/**
+	 * Adding a record about a storage transfer process
+	 * @param transfer StorageTransfer entity object
+	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addStorageTransfer(StorageTransfer transfer) {
 		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
-		//check used items amounts don't exceed the storage amounts
 		dao.addProcessEntity(transfer);
 	}
 	
+	/**
+	 * Get a full storage transfer process information
+	 * @param processId id of the StorageTransfer process
+	 * @return StorageTransferDTO
+	 */
 	public StorageTransferDTO getStorageTransfer(int processId) {
 		Optional<StorageTransferDTO> transfer = getTransferRepository().findTransferDTOByProcessId(processId);
 		StorageTransferDTO transferDTO = transfer.orElseThrow(
@@ -80,23 +94,19 @@ public class WarehouseManagement {
 	}
 	
 	/**
-	 * CashewReports has the same method
-	 * @param supplyGroup
-	 * @param itemId
-	 * @param poCodeId
-	 * @return
+	 * Gets all information of items in the inventory, for provided supply group, item or po code.
+	 * If one of the parameters are null than will ignore that constraint.
+	 * For each stored item in inventory, provides information on the process item and balances,
+	 * with list of storages that contain amounts used and totals.
+	 * Items are considered in inventory if process status is final and it's not completely used.
+	 * @param supplyGroup constrain to only this supply group, if null than any.
+	 * @param itemId constrain to only this item, if null than any.
+	 * @param poCodeId constrain to only this po, if null than any.
+	 * @return List of ProcessItemInventoryRow
 	 */
 	public List<ProcessItemInventoryRow> getInventory(SupplyGroup supplyGroup, Integer itemId, Integer poCodeId) {
 		List<InventoryProcessItemWithStorage> processItemWithStorages =
 				getInventoryRepository().findInventoryProcessItemWithStorage(supplyGroup, itemId, poCodeId);	
-		
-//		List<StorageInventoryRow> storageRows = getInventoryRepository()
-//				.findInventoryStorage(null, processItemRows.stream().map(ProcessItemInventoryRow::getId).collect(Collectors.toList()));
-//		
-//		Map<Integer, List<StorageInventoryRow>> storageMap = storageRows.stream()
-//				.collect(Collectors.groupingBy(StorageInventoryRow::getProcessItemId, Collectors.toList()));	
-//		
-//		processItemRows.forEach(pi -> pi.setStorageForms(storageMap.get(pi.getId())));
 		
 		return ProcessItemInventoryRow.getProcessItemInventoryRows(processItemWithStorages);
 		

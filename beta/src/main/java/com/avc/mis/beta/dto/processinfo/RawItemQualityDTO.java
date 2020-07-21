@@ -5,8 +5,6 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.List;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
@@ -35,8 +33,8 @@ public class RawItemQualityDTO extends ProcessDTO {
 	BigDecimal sampleWeight;
 	BigInteger numberOfSamples;
 	
-	RawDefects rawDefects;
-	RawDamage rawDamage;
+	RawDefects defects;
+	RawDamage damage;
 	
 	BigDecimal totalDefects;
 	BigDecimal totalDamage;
@@ -96,11 +94,11 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.foreignMaterial = foreignMaterial;
 		this.humidity = humidity;
 		
-		this.rawDamage = new RawDamage(mold, dirty, lightDirty, decay, insectDamage, testa);
-		this.rawDefects = new RawDefects(scorched, deepCut, offColour, shrivel, desert, deepSpot);
+		this.damage = new RawDamage(mold, dirty, lightDirty, decay, insectDamage, testa);
+		this.defects = new RawDefects(scorched, deepCut, offColour, shrivel, desert, deepSpot);
 		
-		this.totalDamage = this.rawDamage.getTotal();
-		this.totalDefects = this.rawDefects.getTotal();
+		this.totalDamage = this.damage.getTotal();
+		this.totalDefects = this.defects.getTotal();
 		
 //		this.scorched = scorched;
 //		this.deepCut = deepCut;
@@ -137,14 +135,14 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.foreignMaterial = itemQuality.getForeignMaterial();
 		this.humidity = itemQuality.getHumidity();
 		
-		this.rawDefects = itemQuality.getDefects();
+		this.defects = itemQuality.getDefects();
 //		this.scorched = rawDefects.getScorched();
 //		this.deepCut = rawDefects.getDeepCut();
 //		this.offColour = rawDefects.getOffColour();
 //		this.shrivel = rawDefects.getShrivel();
 //		this.desert = rawDefects.getDesert();
 //		this.deepSpot = rawDefects.getDeepSpot();
-		this.rawDamage = itemQuality.getDamage();
+		this.damage = itemQuality.getDamage();
 //		this.testa = rawDamage.getTesta();
 //		this.mold = rawDamage.getMold();
 //		this.dirty = rawDamage.getDirty();
@@ -155,8 +153,8 @@ public class RawItemQualityDTO extends ProcessDTO {
 //		this.smallKernels = getSmallKernels();        
 //		this.defectsAfterRoasting = itemQuality.getDefectsAfterRoasting();
 		
-		this.totalDamage = this.rawDamage.getTotal();
-		this.totalDefects = this.rawDefects.getTotal();
+		this.totalDamage = this.damage.getTotal();
+		this.totalDefects = this.defects.getTotal();
 		
 		this.roastingWeightLoss = itemQuality.getRoastingWeightLoss();
 		this.colour = itemQuality.getColour();

@@ -18,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.dto.report.ReceiptItemRow;
-import com.avc.mis.beta.dto.report.ReceiptRow;
+import com.avc.mis.beta.dto.view.ReceiptItemRow;
+import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -60,16 +60,41 @@ public class Receipts {
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
 				new ProcessStatus[] {ProcessStatus.FINAL});
 	}
+
+	/**
+	 * Gets rows for table of General received orders. Contains all receipts including receipt without order.	 * 
+	 * @return List of ReceiptItemRow - id, PO#, supplier, item, order amount, receipt amount,
+	 * receipt date and storage - for every received item.
+	 */
+	public List<ReceiptItemRow> findFinalGeneralReceipts() {
+		return getReceiptRepository().findAllReceiptsByType(
+				new ProcessName[] {ProcessName.GENERAL_RECEIPT},
+				new ProcessStatus[] {ProcessStatus.FINAL});		
+	}
 	
 	/**
 	 * Gets rows for table of Cashew received orders that are still pending - where not finalized. 
 	 * Contains all types of receipts including receipt without order.
-	 * @return List of ReceiptItemRow - id, PO#, supplier, item, order amount, receipt amount,
-	 * receipt date and storage - for every received item of a pending - non finalized - orders.
+	 * @return List of ReceiptRows that each contains a list of 
+	 * ReceiptItemRow - id, PO#, supplier, item, order amount, receipt amount,
+	 * receipt date and storage - for every received item of a pending - non finalized - order.
 	 */
 	public List<ReceiptRow> findPendingCashewReceipts() {
 		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
+				new ProcessStatus[] {ProcessStatus.PENDING});
+		
+	}
+	
+	/**
+	 * Gets rows for table of General received orders that are still pending - where not finalized. 
+	 * @return List of ReceiptRows that each contains a list of 
+	 * ReceiptItemRow - id, PO#, supplier, item, order amount, receipt amount,
+	 * receipt date and storage - for every received item of a pending - non finalized - order.
+	 */
+	public List<ReceiptRow> findPendingGeneralReceipts() {
+		return findAllReceiptsByType(
+				new ProcessName[] {ProcessName.GENERAL_RECEIPT}, 
 				new ProcessStatus[] {ProcessStatus.PENDING});
 		
 	}
@@ -89,18 +114,7 @@ public class Receipts {
 		});
 		return receiptRows;
 	}
-	
-	/**
-	 * Gets rows for table of General received orders. Contains all receipts including receipt without order.	 * 
-	 * @return List of ReceiptItemRow - id, PO#, supplier, item, order amount, receipt amount,
-	 * receipt date and storage - for every received item.
-	 */
-	public List<ReceiptItemRow> findFinalGeneralReceipts() {
-		return getReceiptRepository().findAllReceiptsByType(
-				new ProcessName[] {ProcessName.GENERAL_RECEIPT},
-				new ProcessStatus[] {ProcessStatus.FINAL});		
-	}
-		
+			
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addOrderReceipt(Receipt receipt) {
 		dao.addProcessEntity(receipt);

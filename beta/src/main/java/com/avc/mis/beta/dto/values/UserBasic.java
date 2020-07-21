@@ -17,7 +17,7 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class UserBasic extends DataDTO {
 	
 	@JsonIgnore

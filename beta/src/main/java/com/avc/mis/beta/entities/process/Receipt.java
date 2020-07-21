@@ -40,6 +40,7 @@ public class Receipt extends ProductionProcess {
 	@Override
 	public void prePersist() {
 		super.prePersist();
+		//perhaps general order should be final
 		getLifeCycle().setProcessStatus(ProcessStatus.PENDING);
 		if(getProcessItems().length == 0)
 			throw new IllegalArgumentException("Receipt has to containe at least one item line");

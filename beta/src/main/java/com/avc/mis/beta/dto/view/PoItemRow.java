@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.report;
+package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -75,7 +75,9 @@ public class PoItemRow extends ValueDTO {
 			switch(receivedAmount.compareTo(numberUnits.getAmount())) {
 			case -1:
 				this.orderStatus.add("OPEN");
-				this.orderStatus.add("PARTLY RECEIVED");
+				if(receivedAmount.signum() > 0) {
+					this.orderStatus.add("PARTLY RECEIVED");
+				}
 				break;
 			case 0:
 			case 1:

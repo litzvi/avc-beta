@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
-import com.avc.mis.beta.dto.report.PoItemRow;
-import com.avc.mis.beta.dto.report.PoRow;
+import com.avc.mis.beta.dto.view.PoItemRow;
+import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -110,55 +110,22 @@ public class Orders {
 		return poRows;
 	}
 	
+	/**
+	 * Get the table of all Cashew purchase orders that are active(not cancelled or archived) and where not received.
+	 * @return list of PoRow for orders that are yet to be received
+	 */
 	public List<PoItemRow> findOpenCashewOrderItems() {
 		return getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
 	}
 	
 	/**
-	 * Get the table of all General purchase orders that are active and where not received.
+	 * Get the table of all General purchase orders that are active(not cancelled or archived) and where not received.
 	 * @return list of PoRow for orders that are yet to be received
 	 */
 	public List<PoItemRow> findOpenGeneralOrderItems() {
 		return getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
 	}
 	
-	
-	
-//	/**
-//	 * Gets the table of all Cashew Orders with given OrderStatus
-//	 * @param statuses OrderItemStatus of the requested order items (lines)
-//	 * @return List of PoRow for all orders the are in one of the given statuses.
-//	 */
-//	public List<PoRow> findCashewOrders(OrderItemStatus[] statuses) {
-//		return getPoRepository().findByOrderTypeAndItemStatuses(ProcessName.CASHEW_ORDER, statuses);
-//	}
-//	
-//	/**
-//	 * Gets the table of all General Orders with given OrderStatus
-//	 * @param statuses OrderStatuses of the requested orders
-//	 * @return List of PoRow for all orders the are in one of the given statuses.
-//	 */
-//	public List<PoRow> findGeneralOrders(OrderStatus[] statuses) {
-//		return getPoRepository().findByOrderTypeAndStatuses(ProcessName.GENERAL_ORDER, statuses);
-//	}
-//	
-//	/**
-//	 * Gets the basic information of all Cashew Orders with given OrderStatus - id, poCode, supplier and orderStatus.
-//	 * @param statuses OrderItemStatus of the requested order items
-//	 * @return List of PoRow for all orders the are in one of the given statuses.
-//	 */
-//	public List<PoBasic> findCashewOrdersBasic(OrderItemStatus[] statuses) {
-//		return getPoRepository().findByOrderTypeAndItemStatusesBasic(ProcessName.CASHEW_ORDER, statuses);		
-//	}
-//	
-//	/**
-//	 * Gets the basic information of all General Orders with given OrderStatus - id, poCode, supplier and orderStatus.
-//	 * @param statuses OrderStatuses of the requested orders
-//	 * @return List of PoRow for all orders the are in one of the given statuses.
-//	 */
-//	public List<PoBasic> findGeneralOrdersBasic(OrderStatus[] statuses) {
-//		return getPoRepository().findByOrderTypeAndStatusesBasic(ProcessName.GENERAL_ORDER, statuses);
-//	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addOrder(PO po) {
@@ -222,7 +189,7 @@ public class Orders {
 	}
 	
 	/**
-	 * Update the given PO with the set data - OrderStatus, ProcessStatus, PO items and remarks.
+	 * Update the given PO with the set data - Process information, PO items and remarks.
 	 * Ignores changed non editable fields.
 	 * @param po PO updated with edited state
 	 */

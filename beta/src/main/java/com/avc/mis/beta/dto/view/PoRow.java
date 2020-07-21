@@ -1,4 +1,4 @@
-package com.avc.mis.beta.dto.report;
+package com.avc.mis.beta.dto.view;
 
 import java.time.LocalDate;
 import java.util.List;

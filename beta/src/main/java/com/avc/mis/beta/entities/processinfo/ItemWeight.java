@@ -18,7 +18,6 @@ import javax.validation.constraints.PositiveOrZero;
 
 import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;

@@ -4,8 +4,12 @@
 package com.avc.mis.beta.dao;
 
 import java.security.AccessControlException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
@@ -13,6 +17,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -23,8 +28,11 @@ import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
+import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
+import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 
 import lombok.AccessLevel;
@@ -44,7 +52,7 @@ import lombok.Getter;
 public class ProcessInfoDAO extends DAO {
 	
 	@Autowired private ProcessInfoRepository processRepository;
-	
+	@Autowired private InventoryRepository inventoryRepository;
 	
 	/**
 	 * Gets the ProcessType by it's unique name. 
@@ -64,10 +72,34 @@ public class ProcessInfoDAO extends DAO {
 	 * @param process ProductionProcess to be added.
 	 */
 	public void addProcessEntity(ProductionProcess process) {
+		//check used items amounts don't exceed the storage amounts
+		if(!isInventorySufficiant(process.getUsedItems())) {
+			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+		}
 		addEntity(process);
 		addAlerts(process);
 	}
 	
+	/**
+	 * Checks if given array used items don't exceed existing inventory amounts
+	 * @param usedItems array of UsedItem
+	 * @return true if all amounts are equal or less than inventory balance, false otherwise
+	 */
+	private boolean isInventorySufficiant(UsedItem[] usedItems) {
+		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageBalances(
+				Stream.of(usedItems).map(i -> i.getStorage().getId()).toArray(Integer[]::new));
+		Map<Integer, StorageBalance> storageBalanceMap = storageBalances.collect(Collectors.toMap(StorageBalance::getId, o -> o));
+		System.out.println(storageBalanceMap.isEmpty());
+		storageBalanceMap.forEach((k, v) -> System.out.println(k + ", " + v));
+		for(UsedItem i: usedItems) {
+			if(i.getNumberUnits().compareTo(storageBalanceMap.get(i.getStorage().getId()).getBalance()) > 0) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+
 	/**
 	 * editing (merging) a process or process information. 
 	 * Edits the process and adds required notifications.

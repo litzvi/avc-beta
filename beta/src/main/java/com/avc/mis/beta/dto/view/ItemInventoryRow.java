@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.report;
+package com.avc.mis.beta.dto.view;
 
 import java.util.List;
 
@@ -16,6 +16,10 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
+ * DTO of inventory for one item. 
+ * Contains total stock in inventory for this item, it's storages
+ * and information of the originating process, process item and used amounts.
+ * 
  * @author Zvi
  *
  */

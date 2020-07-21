@@ -1,9 +1,8 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.report;
+package com.avc.mis.beta.dto.view;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -24,36 +23,41 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * DTO of inventory info needed for process item - item resulted from process.
+ * DTO of inventory info needed for display of process item - item resulted from process.
+ * Includes information about process item , process and list of StorageInventoryRow
+ * that contains storage information of the processed item.
  * 
  * @author Zvi
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class ProcessItemInventoryRow extends ValueDTO {
 
 	private BasicValueEntity<Item> item;
 	private PoCodeDTO poCode;
 	private OffsetDateTime receiptDate;
-	private AmountWithUnit totalAmount;
-	private AmountWithUnit totalLots; //total amount in lots
+	private AmountWithUnit totalBalanceAmount; //not calculated in method so won't be calculated repeatedly for totalLots
 	
 	private List<StorageInventoryRow> storageForms;
 	
+	/**
+	 * All database fields (the fields in the form they are fetched from the db) arguments constructor, 
+	 * excluding list of storage forms and calculated totals.
+	 */
 	public ProcessItemInventoryRow(Integer id, Integer itemId, String itemValue,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
-			OffsetDateTime receiptDate/* , BigDecimal totalAmount, MeasureUnit measureUnit */) {
+			OffsetDateTime receiptDate) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.receiptDate = receiptDate;
-//		this.totalAmount = new AmountWithUnit(
-//				totalAmount.setScale(AmountWithUnit.SCALE, RoundingMode.HALF_DOWN), measureUnit);
-				
 	}
 	
+	/**
+	 * All class arguments constructor, excluding list of storage forms and calculated totals
+	 */
 	public ProcessItemInventoryRow(Integer id, BasicValueEntity<Item> item, 
 			PoCodeDTO poCode, OffsetDateTime receiptDate) {
 		super(id);
@@ -62,21 +66,43 @@ public class ProcessItemInventoryRow extends ValueDTO {
 		this.receiptDate = receiptDate;
 	}
 	
+	/**
+	 * Setter for storageForms, sets the storages for this process item 
+	 * and updates total balance accordingly.
+	 * @param storageForms List of StorageInventoryRow
+	 */
 	public void setStorageForms(List<StorageInventoryRow> storageForms) {
 		if(storageForms.size() > 0) {
-			MeasureUnit measureUnit = storageForms.get(0).getUnitAmount().getMeasureUnit();
-			this.totalAmount = storageForms.stream()
+			this.totalBalanceAmount = storageForms.stream()
 					.map(StorageInventoryRow::getTotalBalance)
-					.reduce(new AmountWithUnit(BigDecimal.ZERO, measureUnit), AmountWithUnit::add);
-			this.totalLots = new AmountWithUnit(
-					MeasureUnit.convert(totalAmount, MeasureUnit.LOT)
-					.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN), MeasureUnit.LOT);
-
+					.reduce(AmountWithUnit::add).get();
+		}
+		else {
+			this.totalBalanceAmount = null;
 		}
 		this.storageForms = storageForms;
 		
 	}
 	
+	/**
+	 * @return the total balance in lots (lot = 35,000lbs)
+	 */
+	public AmountWithUnit getTotalLots() {
+		AmountWithUnit totalBalanceAmount = getTotalBalanceAmount();
+		if(totalBalanceAmount == null) {
+			return null;
+		}
+		return new AmountWithUnit(
+				MeasureUnit.convert(totalBalanceAmount, MeasureUnit.LOT)
+				.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN), MeasureUnit.LOT);
+	}
+	
+	/**
+	 * Transforms List of InventoryProcessItemWithStorage as fetched from db,
+	 * to List of ProcessItemInventoryRows as used for view
+	 * @param processItemWithStorages
+	 * @return
+	 */
 	public static List<ProcessItemInventoryRow> getProcessItemInventoryRows(
 			List<InventoryProcessItemWithStorage> processItemWithStorages) {
 		Map<ProcessItemInventoryRow, List<StorageInventoryRow>> processItemStorageMap = processItemWithStorages
@@ -94,5 +120,6 @@ public class ProcessItemInventoryRow extends ValueDTO {
 		
 		return processItemInventoryRow;
 	}
+	
 	
 }

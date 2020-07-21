@@ -21,21 +21,21 @@ import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
-import com.avc.mis.beta.dto.report.ItemInventoryRow;
-import com.avc.mis.beta.dto.report.PoInventoryRow;
-import com.avc.mis.beta.dto.report.PoItemRow;
-import com.avc.mis.beta.dto.report.PoRow;
-import com.avc.mis.beta.dto.report.ProcessItemInventoryRow;
-import com.avc.mis.beta.dto.report.RawQcRow;
-import com.avc.mis.beta.dto.report.ReceiptRow;
-import com.avc.mis.beta.dto.report.SupplierRow;
-import com.avc.mis.beta.dto.report.UserRow;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.values.UserBasic;
+import com.avc.mis.beta.dto.view.ItemInventoryRow;
+import com.avc.mis.beta.dto.view.PoInventoryRow;
+import com.avc.mis.beta.dto.view.PoItemRow;
+import com.avc.mis.beta.dto.view.PoRow;
+import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.view.RawQcRow;
+import com.avc.mis.beta.dto.view.ReceiptRow;
+import com.avc.mis.beta.dto.view.SupplierRow;
+import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -188,7 +188,7 @@ public class QueryTest {
 		//cashew inventory table
 		List<ItemInventoryRow> inventoryRows;
 		try {
-			inventoryRows = cashewReports.getInventoryTable();
+			inventoryRows = cashewReports.getInventoryTableByItem();
 			inventoryRows.forEach(r -> System.out.println(r));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
