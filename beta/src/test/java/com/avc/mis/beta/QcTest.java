@@ -29,7 +29,13 @@ public class QcTest {
 		Item item = service.getItem();
 		standard.setItem(item);
 
-		valueWriter.addCashewStandard(standard);
+		try {
+			valueWriter.addCashewStandard(standard);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		CashewStandardDTO standardDTO = qualityChecks.getCashewStatndard(item.getId(), standardOrganization);
 
 		System.out.println(standardDTO);

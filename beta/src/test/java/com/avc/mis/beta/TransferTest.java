@@ -1,5 +1,7 @@
 package com.avc.mis.beta;
 
+import static org.assertj.core.api.Assertions.fail;
+
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -47,13 +50,8 @@ public class TransferTest {
 
 		//get inventory storages for transfer
 		List<ProcessItemInventoryRow> poInventory;
-		try {
-			poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
+		poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
+		
 //		List<ProcessItemDTO> poInventory = warehouseManagement
 //				.getProcessItemsWithPoByPo(receipt.getPoCode().getId())
 //				.stream()
@@ -72,6 +70,16 @@ public class TransferTest {
 		warehouseManagement.addStorageTransfer(transfer);
 		
 		//TODO check if usedItems exceeds inventory should fail
+		transfer = new StorageTransfer();
+		transfer.setPoCode(receipt.getPoCode());
+		transfer.setRecordedTime(OffsetDateTime.now());
+		transfer.setUsedItems(getUsedItems(poInventory));
+		transfer.setProcessItems(getProcessItems(poInventory));
+		
+		try {
+			warehouseManagement.addStorageTransfer(transfer);
+			fail("should fail on using items that are already used");
+		} catch (IllegalArgumentException|InvalidDataAccessApiUsageException e) {}
 	}
 
 	private UsedItem[] getUsedItems(List<ProcessItemInventoryRow> poInventory) {

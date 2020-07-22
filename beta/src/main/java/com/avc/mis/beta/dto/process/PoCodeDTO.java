@@ -39,7 +39,7 @@ public class PoCodeDTO extends BaseDTO {
 		this.contractTypeCode = contractTypeCode;
 		this.supplierName = supplierName;
 //		this.currency = currency;
-		this.contractTypeSuffix = contractTypeSuffix;
+		this.contractTypeSuffix = contractTypeSuffix != null ? contractTypeSuffix : "";
 	}	
 	
 	/**

@@ -89,8 +89,6 @@ public class ProcessInfoDAO extends DAO {
 		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageBalances(
 				Stream.of(usedItems).map(i -> i.getStorage().getId()).toArray(Integer[]::new));
 		Map<Integer, StorageBalance> storageBalanceMap = storageBalances.collect(Collectors.toMap(StorageBalance::getId, o -> o));
-		System.out.println(storageBalanceMap.isEmpty());
-		storageBalanceMap.forEach((k, v) -> System.out.println(k + ", " + v));
 		for(UsedItem i: usedItems) {
 			if(i.getNumberUnits().compareTo(storageBalanceMap.get(i.getStorage().getId()).getBalance()) > 0) {
 				return false;

@@ -43,6 +43,8 @@ public class ExceptionControler {
 	 * @throws NullPointerException if no such process type.
 	 * @throws AccessControlException if no permission
 	 * 
+	 * ProcessInfoDAO
+	 * @throws InvalidDataAccessApiUsageException
 	 */
 	
 	//IllegalStateException - ProcessInfoReader
