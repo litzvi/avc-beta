@@ -72,4 +72,9 @@ public class PoDTO extends ProductionProcessDTO {
 		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toSet());
 
 	}
+	
+	@Override
+	public String getProcessTypeDescription() {
+		return "Purchase Order";
+	}
 }

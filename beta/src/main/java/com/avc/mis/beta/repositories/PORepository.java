@@ -128,7 +128,7 @@ public interface PORepository extends BaseRepository<PO> {
 						+ "ELSE (unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) "
 					+ "END), "
 				+ "0) < units.amount "
-			+ "ORDER BY oi.deliveryDate DESC ") // done in the java code if aggregated
+			+ "ORDER BY oi.deliveryDate ") // done in the java code if aggregated
 	List<PoItemRow> findOpenOrdersByType(ProcessName orderType);
 
 	/**
@@ -170,7 +170,8 @@ public interface PORepository extends BaseRepository<PO> {
 							+ "left join UOM uom "
 								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = units.measureUnit "
 		+ "where t.processName = ?1 "
-		+ "group by oi ")
+		+ "group by oi "
+		+ "ORDER BY oi.deliveryDate ")
 	List<PoItemRow> findAllOrdersByType(ProcessName orderType);
 
 

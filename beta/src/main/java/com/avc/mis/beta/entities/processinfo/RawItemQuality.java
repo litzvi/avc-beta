@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.validation.groups.OnPersist;
 
@@ -51,7 +52,7 @@ public class RawItemQuality extends ProcessInfoEntity {
 	@NotNull(message = "Measure unit is mandatory")
 	private MeasureUnit measureUnit;
 	
-	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
+	@Column(nullable = false, precision = 19, scale = QualityCheck.SCALE)
 	@NotNull(message = "Sample weight is mandatory")
 	@Positive(message = "Amount has to be positive")
 	private BigDecimal sampleWeight;
@@ -61,25 +62,24 @@ public class RawItemQuality extends ProcessInfoEntity {
 	@Positive(message = "Number of samples has to be positive")
 	private BigInteger numberOfSamples;	
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigInteger wholeCountPerLb;
 	
-	@Column(precision = 19, scale = 3)
-	private BigDecimal smallSize;
+	private BigInteger smallSize;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal ws;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal lp;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal breakage;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal foreignMaterial;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal humidity;
 	
 	@NotNull
@@ -130,7 +130,7 @@ public class RawItemQuality extends ProcessInfoEntity {
 //	@Column(precision = 19, scale = 3)
 //	private BigDecimal defectsAfterRoasting;
 //	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal roastingWeightLoss;
 	
 	@Enumerated(EnumType.STRING)

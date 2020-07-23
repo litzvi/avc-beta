@@ -50,6 +50,13 @@ public class StorageTransferDTO extends ProductionProcessDTO {
 		this.usedItems = Arrays.stream(transfer.getUsedItems())
 				.map(i->{return new UsedItemDTO((UsedItem)i);}).collect(Collectors.toSet());
 	}
+	
+
+	@Override
+	public String getProcessTypeDescription() {
+		return "Storage transfer";
+	}
+
 
 
 //	public void setProcessItems(List<ProcessItemWithStorage> processItems) {

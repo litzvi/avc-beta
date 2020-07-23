@@ -79,6 +79,13 @@ public class QualityCheckDTO extends ProductionProcessDTO {
 		}
 		
 	}
+
+	@Override
+	public String getProcessTypeDescription() {
+		return "Quality Check";
+	}
+	
+
 	
 //	/**
 //	 * Used for setting checkItems from a flat form produced by a join of QC items and it's storage info, 

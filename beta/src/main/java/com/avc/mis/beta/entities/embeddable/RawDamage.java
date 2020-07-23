@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import com.avc.mis.beta.entities.process.QualityCheck;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -26,22 +27,22 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class RawDamage {
 
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal mold;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal dirty;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal lightDirty;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal decay;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal insectDamage;
 
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal testa;
 	
 	@JsonIgnore

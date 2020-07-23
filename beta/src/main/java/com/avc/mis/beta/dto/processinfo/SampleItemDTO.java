@@ -18,6 +18,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.SampleItem;
 import com.avc.mis.beta.entities.values.Item;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -71,9 +72,11 @@ public class SampleItemDTO extends ProcessDTO {
 		this.itemWeights = new HashMultiSet<ItemWeightDTO>(itemWeights);
 	}
 	
+	@JsonIgnore
 	public Optional<AmountWithUnit> getSampleEstimate() {
 		return itemWeights.stream()
-			.map(iw -> iw.getAvgTestedWeight().subtract(this.emptyContainerWeight)
+			.map(iw -> Optional.ofNullable(iw.getAvgTestedWeight()).orElse(iw.getUnitAmount())
+					.subtract(this.emptyContainerWeight)
 					.multiply(iw.getNumberUnits()))
 			.reduce(BigDecimal::add)
 			.map(s -> new AmountWithUnit(s, this.measureUnit));
@@ -85,6 +88,16 @@ public class SampleItemDTO extends ProcessDTO {
 					.multiply(iw.getNumberUnits()))
 			.reduce(BigDecimal::add)
 			.map(s -> new AmountWithUnit(s, this.measureUnit));
+	}
+	
+	public Optional<AmountWithUnit> getWeighedDifferance() {
+		return itemWeights.stream()
+				.map(iw -> Optional.ofNullable(iw.getAvgTestedWeight()).orElse(iw.getUnitAmount())
+						.subtract(iw.getUnitAmount())
+						.subtract(this.emptyContainerWeight)
+						.multiply(iw.getNumberUnits()))
+				.reduce(BigDecimal::add)
+				.map(s -> new AmountWithUnit(s, this.measureUnit));
 	}
 	
 }

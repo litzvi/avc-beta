@@ -41,7 +41,6 @@ public class AmountWithCurrency implements Cloneable {
 	private BigDecimal amount;
 	
 	@Setter(value = AccessLevel.NONE)
-	@Column(nullable = false)
 	@NotNull(message = "Currency is required")
 	private Currency currency;
 

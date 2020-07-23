@@ -40,7 +40,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 	BigDecimal totalDamage;
 	
 	BigInteger wholeCountPerLb;
-	BigDecimal smallSize;
+	BigInteger smallSize;
 	BigDecimal ws;
 	BigDecimal lp;
 	BigDecimal breakage;
@@ -72,7 +72,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 			MeasureUnit measureUnit, BigDecimal sampleWeight, BigInteger numberOfSamples,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			/* String description, String remarks, */ 
-			BigInteger wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
+			BigInteger wholeCountPerLb, BigInteger smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
 			BigDecimal foreignMaterial, BigDecimal humidity, 
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 

@@ -26,7 +26,7 @@ import lombok.NonNull;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @NoArgsConstructor
-public class ProductionProcessDTO extends ProcessDTO {
+public abstract class ProductionProcessDTO extends ProcessDTO {
 	
 	@EqualsAndHashCode.Exclude // no need to compare for testing
 	private Instant createdDate;
@@ -80,4 +80,6 @@ public class ProductionProcessDTO extends ProcessDTO {
 		this.editStatus = process.getLifeCycle().getEditStatus();
 		this.remarks = process.getRemarks();
 	}
+	
+	public abstract String getProcessTypeDescription();
 }

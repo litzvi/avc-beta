@@ -81,6 +81,10 @@ public class ReceiptDTO extends ProductionProcessDTO {
 		
 	}
 	
-	
+
+	@Override
+	public String getProcessTypeDescription() {
+		return "Receipt";
+	}
 
 }

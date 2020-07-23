@@ -78,4 +78,9 @@ public class SampleReceiptDTO extends ProductionProcessDTO {
 			}
 	}
 
+	@Override
+	public String getProcessTypeDescription() {
+		return "Sample Cashew Receipt";
+	}
+
 }

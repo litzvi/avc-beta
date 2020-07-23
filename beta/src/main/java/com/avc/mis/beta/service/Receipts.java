@@ -117,6 +117,7 @@ public class Receipts {
 			
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addOrderReceipt(Receipt receipt) {
+		//should check if order item was already fully received(even if pending)
 		dao.addProcessEntity(receipt);
 	}
 	

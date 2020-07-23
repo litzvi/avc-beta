@@ -33,7 +33,7 @@ public class RawItemQualityWithStorage {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks,
 			String description, String remarks, Class<? extends Storage> clazz,
-			BigInteger wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
+			BigInteger wholeCountPerLb, BigInteger smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
 			BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 

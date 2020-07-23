@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import com.avc.mis.beta.entities.process.QualityCheck;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
@@ -26,22 +27,22 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class RawDefects {
 
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal scorched;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal deepCut;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal offColour;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal shrivel;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal desert;
 	
-	@Column(precision = 19, scale = 3)
+	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal deepSpot;
 	
 	@JsonIgnore
