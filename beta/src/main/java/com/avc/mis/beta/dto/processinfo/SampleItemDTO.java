@@ -92,7 +92,8 @@ public class SampleItemDTO extends ProcessDTO {
 	
 	public Optional<AmountWithUnit> getWeighedDifferance() {
 		return itemWeights.stream()
-				.map(iw -> Optional.ofNullable(iw.getAvgTestedWeight()).orElse(iw.getUnitAmount())
+				.map(iw -> Optional.ofNullable(iw.getAvgTestedWeight())
+						.orElse(iw.getUnitAmount().add(this.emptyContainerWeight)) //give recorded plus bag
 						.subtract(iw.getUnitAmount())
 						.subtract(this.emptyContainerWeight)
 						.multiply(iw.getNumberUnits()))

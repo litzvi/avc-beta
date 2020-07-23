@@ -62,7 +62,6 @@ public class RawItemQuality extends ProcessInfoEntity {
 	@Positive(message = "Number of samples has to be positive")
 	private BigInteger numberOfSamples;	
 	
-	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigInteger wholeCountPerLb;
 	
 	private BigInteger smallSize;
