@@ -70,7 +70,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800102;
+	static final Integer PO_CODE = 800117;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -162,13 +162,7 @@ public class GeneralTest {
 			receiptItems[i].setStorageForms(storageForms);
 		}
 		receipt.setReceiptItems(receiptItems);
-		try {
-			receipts.addCashewOrderReceipt(receipt);
-		} catch (Exception e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-			throw e2;
-		}
+		receipts.addCashewOrderReceipt(receipt);
 		ReceiptDTO receiptDTO;
 		receiptDTO = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(new ReceiptDTO(receipt), receiptDTO, "Order Receipt not added or fetched correctly");
@@ -184,7 +178,7 @@ public class GeneralTest {
 			rawItemQualities[i] = new RawItemQuality();
 			rawItemQualities[i].setItem(orderItems[i].getItem());
 			rawItemQualities[i].setMeasureUnit(MeasureUnit.OZ);
-			rawItemQualities[i].setSampleWeight(BigDecimal.valueOf(8).setScale(MeasureUnit.SCALE));
+			rawItemQualities[i].setSampleWeight(BigDecimal.valueOf(8).setScale(QualityCheck.SCALE));
 			rawItemQualities[i].setNumberOfSamples(BigInteger.TEN);
 			rawItemQualities[i].setDefects(new RawDefects());
 			rawItemQualities[i].setDamage(new RawDamage());
@@ -204,13 +198,7 @@ public class GeneralTest {
 		}
 		check.setProcessItems(processItems);
 		check.setTestedItems(rawItemQualities);
-		try {
-			checks.addCashewReceiptCheck(check);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw e1;
-		}
+		checks.addCashewReceiptCheck(check);
 		QualityCheckDTO checkDTO;
 		checkDTO = checks.getQcByProcessId(check.getId());
 //		fail("finished");

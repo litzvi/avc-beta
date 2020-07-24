@@ -86,6 +86,9 @@ public class ProcessInfoDAO extends DAO {
 	 * @return true if all amounts are equal or less than inventory balance, false otherwise
 	 */
 	private boolean isInventorySufficiant(UsedItem[] usedItems) {
+		if(usedItems == null || usedItems.length == 0) {
+			return true;
+		}
 		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageBalances(
 				Stream.of(usedItems).map(i -> i.getStorage().getId()).toArray(Integer[]::new));
 		Map<Integer, StorageBalance> storageBalanceMap = storageBalances.collect(Collectors.toMap(StorageBalance::getId, o -> o));

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,10 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.processinfo.ExtraAdded;
+import com.avc.mis.beta.entities.processinfo.OrderItem;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
+import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.repositories.ReceiptRepository;
 
 import lombok.AccessLevel;
@@ -44,6 +48,7 @@ public class Receipts {
 	@Autowired private ProcessInfoDAO dao;
 	
 	@Autowired private ReceiptRepository receiptRepository;	
+	@Autowired private PORepository poRepository;
 	
 	@Deprecated
 	@Autowired private DeletableDAO deletableDAO;
@@ -118,9 +123,32 @@ public class Receipts {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addOrderReceipt(Receipt receipt) {
 		//TODO should check if order item was already fully received(even if pending)
+		if(!isOrderOpen(receipt.getReceiptItems())) {
+			throw new IllegalArgumentException("Order items where already fully received");
+		}
 		dao.addProcessEntity(receipt);
 	}
 	
+	
+	/**
+	 * @param receiptItems
+	 * @return
+	 */
+	private boolean isOrderOpen(ReceiptItem[] receiptItems) {
+		if(receiptItems == null || receiptItems.length == 0) {
+			return true;
+		}
+		// TODO Auto-generated method stub
+		List<OrderItem> orderItems = getPoRepository().findNonOpenOrderItemsById(
+				Stream.of(receiptItems)
+				.filter(i -> i.getOrderItem() != null)
+				.map(i -> i.getOrderItem().getId())
+				.toArray(Integer[]::new));
+		
+		return orderItems.isEmpty();
+		
+	}
+
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addReceipt(Receipt receipt) {
 		//using save rather than persist in case POid was assigned by user

@@ -14,6 +14,7 @@ import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
+import com.avc.mis.beta.entities.processinfo.OrderItem;
 
 /**
  * Spring repository for accessing purchase order information.
@@ -173,6 +174,22 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "group by oi "
 		+ "ORDER BY oi.deliveryDate ")
 	List<PoItemRow> findAllOrdersByType(ProcessName orderType);
+
+	@Query("select oi "
+			+ "from OrderItem oi "
+				+ "join oi.numberUnits nu "
+				+ "join oi.receiptItems ri "
+					+ "join ri.process r "
+						+ "join r.lifeCycle rlc "		
+					+ "join ri.storageForms sf "
+						+ "join sf.unitAmount unit "
+							+ "join UOM uom "
+								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = nu.measureUnit "
+			+ "where oi.id in :orderItemIds "
+				+ "and rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+			+ "group by oi "
+			+ "having nu.amount <= sum(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) ")
+	List<OrderItem> findNonOpenOrderItemsById(Integer[] orderItemIds);
 
 
 //	@Query("select new com.avc.mis.beta.dto.process.PoDTO("

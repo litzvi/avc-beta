@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.fail;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -82,15 +83,21 @@ public class QueryTest {
 
 		
 		//get list of cashew orders
-		List<PoCodeDTO> openCashewOrdersBasic =  objectTablesReader.findOpenCashewOrdersPoCode();
+		Set<PoCodeDTO> openCashewOrdersBasic;
+		openCashewOrdersBasic = objectTablesReader.findOpenCashewOrdersPoCodes();
 		openCashewOrdersBasic.forEach(row -> System.out.println(row));
 		
+		Set<PoCodeDTO> inventoryCashewBasic = objectTablesReader.findCashewInventoryPoCodes();
+		inventoryCashewBasic.forEach(row -> System.out.println(row));
+		
+		objectTablesReader.findOpenAndPendingCashewOrdersPoCodes().forEach(row -> System.out.println(row));
+		
 		//get list of cashew orders and receipts
-		List<PoCodeDTO> activeCashewBasic =  objectTablesReader.findActiveCashewPoCode();
+		Set<PoCodeDTO> activeCashewBasic =  objectTablesReader.findAllPoCodes();
 		activeCashewBasic.forEach(row -> System.out.println(row));
 		
 		//get active po codes - so we can add QC for them
-		activeCashewBasic =  objectTablesReader.findActiveCashewPoCode();
+		activeCashewBasic =  objectTablesReader.findOpenAndPendingCashewOrdersPoCodes();
 		if(activeCashewBasic.isEmpty()) {
 			fail("Couldn't test fetching purchase order by po code");
 		}
