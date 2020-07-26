@@ -43,5 +43,7 @@ public class Item extends ValueEntity implements ValueInterface {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private SupplyGroup supplyGroup;
+	
+	//TODO should add item category for choosing items that are cleaned, roasted etc.
 
 }

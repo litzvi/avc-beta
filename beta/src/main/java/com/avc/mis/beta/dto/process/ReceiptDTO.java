@@ -14,8 +14,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.multiset.HashMultiSet;
+
+import com.avc.mis.beta.dto.processinfo.ItemWeightDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
+import com.avc.mis.beta.dto.processinfo.SampleItemDTO;
 import com.avc.mis.beta.dto.query.ReceiptItemWithStorage;
+import com.avc.mis.beta.dto.query.SampleItemWithWeight;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -41,6 +47,9 @@ public class ReceiptDTO extends ProductionProcessDTO {
 
 	private Set<ReceiptItemDTO> receiptItems; //can use a SortedSet like ContactDetails to maintain order
 	
+	//not set because we can have doubles, order should be unimportant for testing - so bag needed
+	private MultiSet<SampleItemDTO> sampleItems; 	
+		
 	public ReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName,  
@@ -60,7 +69,9 @@ public class ReceiptDTO extends ProductionProcessDTO {
 		super(receipt);
 		this.receiptItems = Arrays.stream(receipt.getProcessItems())
 				.map(i->{return new ReceiptItemDTO((ReceiptItem) i);}).collect(Collectors.toSet());
-
+		this.sampleItems = Arrays.stream(receipt.getSampleItems())
+				.map(i->{return new SampleItemDTO(i);})
+				.collect(Collectors.toCollection(() -> {return new HashMultiSet<SampleItemDTO>();}));
 	}
 	
 	/**
@@ -79,6 +90,22 @@ public class ReceiptDTO extends ProductionProcessDTO {
 			this.receiptItems.add(receiptItem);
 		}
 		
+	}
+	
+	public void setSampleItems(Collection<SampleItemDTO> sampleItems) {
+		this.sampleItems = new HashMultiSet<SampleItemDTO>(sampleItems);
+	}
+	
+	public void setSampleItems(List<SampleItemWithWeight> sampleItems) {
+		Map<Integer, List<SampleItemWithWeight>> map = sampleItems.stream()
+				.collect(Collectors.groupingBy(SampleItemWithWeight::getId, Collectors.toList()));
+			this.sampleItems = new HashMultiSet<>();
+			for(List<SampleItemWithWeight> list: map.values()) {
+				SampleItemDTO sampleItem = list.get(0).getSampleItem();
+				sampleItem.setItemWeights(list.stream().map(i -> i.getItemWeight())
+						.collect(Collectors.toCollection(() -> {return new HashMultiSet<ItemWeightDTO>();})));
+				this.sampleItems.add(sampleItem);
+			}
 	}
 	
 

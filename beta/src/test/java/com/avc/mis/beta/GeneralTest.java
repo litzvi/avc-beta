@@ -27,7 +27,6 @@ import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.dto.process.SampleReceiptDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -40,7 +39,6 @@ import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.process.SampleReceipt;
 import com.avc.mis.beta.entities.processinfo.ItemWeight;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
@@ -55,7 +53,6 @@ import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.Receipts;
-import com.avc.mis.beta.service.Samples;
 import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.ValueWriter;
@@ -81,7 +78,6 @@ public class GeneralTest {
 	@Autowired Orders orders;
 	@Autowired Receipts receipts;
 	@Autowired QualityChecks checks;
-	@Autowired Samples samples;
 	
 	@Autowired ValueWriter valueWriter;
 	@Autowired ProcessInfoWriter processInfoWriter;
@@ -162,6 +158,35 @@ public class GeneralTest {
 			receiptItems[i].setStorageForms(storageForms);
 		}
 		receipt.setReceiptItems(receiptItems);
+		
+		//add receipt sample check for received orders
+		SampleItem[] sampleItems = new SampleItem[2];
+		sampleItems[0] = new SampleItem();
+		sampleItems[0].setItem(items.get(0));
+		sampleItems[0].setMeasureUnit(MeasureUnit.KG);
+//		sampleItems[0].setMeasureUnit("KG");
+		ItemWeight[] itemWeights1 = new ItemWeight[1];
+		itemWeights1[0] = new ItemWeight();
+		itemWeights1[0].setUnitAmount(BigDecimal.valueOf(50));
+		itemWeights1[0].setNumberUnits(BigDecimal.TEN);
+		itemWeights1[0].setNumberOfSamples(BigInteger.valueOf(30));
+		itemWeights1[0].setAvgTestedWeight(BigDecimal.valueOf(50.01));
+		sampleItems[0].setItemWeights(itemWeights1);
+		sampleItems[0].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
+		sampleItems[1] = new SampleItem();
+		sampleItems[1].setItem(items.get(0));
+		sampleItems[1].setMeasureUnit(MeasureUnit.KG);
+//		sampleItems[1].setMeasureUnit("KG");
+		ItemWeight[] itemWeights2 = new ItemWeight[1];
+		itemWeights2[0] = new ItemWeight();
+		itemWeights2[0].setUnitAmount(BigDecimal.valueOf(26));
+		itemWeights2[0].setNumberUnits(BigDecimal.TEN);
+		itemWeights2[0].setNumberOfSamples(BigInteger.valueOf(1));
+		itemWeights2[0].setAvgTestedWeight(BigDecimal.valueOf(26.01));
+		sampleItems[1].setItemWeights(itemWeights2);
+		sampleItems[1].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
+		receipt.setSampleItems(sampleItems);
+				
 		receipts.addCashewOrderReceipt(receipt);
 		ReceiptDTO receiptDTO;
 		receiptDTO = receipts.getReceiptByProcessId(receipt.getId());
@@ -204,47 +229,6 @@ public class GeneralTest {
 //		fail("finished");
 		assertEquals(new QualityCheckDTO(check), checkDTO, "QC not added or fetched correctly");
 
-		//add receipt sample check for received orders
-		SampleReceipt sampleReceipt = new SampleReceipt();
-		sampleReceipt.setPoCode(poCode);
-		sampleReceipt.setRecordedTime(OffsetDateTime.now());
-		SampleItem[] sampleItems = new SampleItem[2];
-		sampleItems[0] = new SampleItem();
-		sampleItems[0].setItem(items.get(0));
-		sampleItems[0].setMeasureUnit(MeasureUnit.KG);
-//		sampleItems[0].setMeasureUnit("KG");
-		ItemWeight[] itemWeights1 = new ItemWeight[1];
-		itemWeights1[0] = new ItemWeight();
-		itemWeights1[0].setUnitAmount(BigDecimal.valueOf(50));
-		itemWeights1[0].setNumberUnits(BigDecimal.TEN);
-		itemWeights1[0].setNumberOfSamples(BigInteger.valueOf(30));
-		itemWeights1[0].setAvgTestedWeight(BigDecimal.valueOf(50.01));
-		sampleItems[0].setItemWeights(itemWeights1);
-		sampleItems[0].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
-		sampleItems[1] = new SampleItem();
-		sampleItems[1].setItem(items.get(0));
-		sampleItems[1].setMeasureUnit(MeasureUnit.KG);
-//		sampleItems[1].setMeasureUnit("KG");
-		ItemWeight[] itemWeights2 = new ItemWeight[1];
-		itemWeights2[0] = new ItemWeight();
-		itemWeights2[0].setUnitAmount(BigDecimal.valueOf(26));
-		itemWeights2[0].setNumberUnits(BigDecimal.TEN);
-		itemWeights2[0].setNumberOfSamples(BigInteger.valueOf(1));
-		itemWeights2[0].setAvgTestedWeight(BigDecimal.valueOf(26.01));
-		sampleItems[1].setItemWeights(itemWeights2);
-		sampleItems[1].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
-		sampleReceipt.setSampleItems(sampleItems);
-		try {
-			samples.addSampleReceipt(sampleReceipt);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
-		SampleReceiptDTO sampleReceiptDTO;
-		System.out.println("line 202");
-		sampleReceiptDTO = samples.getSampleReceiptByProcessId(sampleReceipt.getId());
-		assertEquals(new SampleReceiptDTO(sampleReceipt), sampleReceiptDTO, "Receipt sample not added or fetched correctly");
 		
 		
 		
@@ -253,11 +237,9 @@ public class GeneralTest {
 		System.out.println("Purchase Order: " + poDTO);
 		System.out.println("Order receipt: " + receiptDTO);
 		System.out.println("QC test: " + checkDTO);
-		System.out.println("Receipt sample: " + sampleReceiptDTO);
 		
 		
 		//remove all
-		samples.removeSampleReceipt(sampleReceipt.getId());
 		checks.removeCheck(check.getId());
 		receipts.removeReceipt(receiptDTO.getId());
 		orders.removeOrder(poDTO.getId());

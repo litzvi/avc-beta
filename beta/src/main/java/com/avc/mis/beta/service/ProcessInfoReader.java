@@ -48,7 +48,6 @@ public class ProcessInfoReader {
 	@Autowired private Orders orders;
 	@Autowired private Receipts orderReceipts;
 	@Autowired private QualityChecks qualityChecks;
-	@Autowired private Samples samples;
 	
 	
 	/**
@@ -140,8 +139,6 @@ public class ProcessInfoReader {
 		case VINA_CONTROL_QC:
 		case SAMPLE_QC:
 			return qualityChecks.getQcByProcessId(processId);
-		case SAMPLE_RECEIPET:
-			return samples.getSampleReceiptByProcessId(processId);
 			default:
 		}
 		return null;

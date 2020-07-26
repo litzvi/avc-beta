@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.query.ReceiptItemWithStorage;
+import com.avc.mis.beta.dto.query.SampleItemWithWeight;
 import com.avc.mis.beta.dto.view.ReceiptItemRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -88,6 +89,18 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 				+ "and lc.processStatus in :statuses "
 			+ "group by r.id, oi, pi ")
 	List<ReceiptItemRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses);
+
+	@Query("select new com.avc.mis.beta.dto.query.SampleItemWithWeight( "
+			+ " i.id, i.version, item.id, item.value, "
+			+ "i.measureUnit, i.emptyContainerWeight, "
+			+ "w.id, w.version, w.unitAmount, w.numberUnits, w.numberOfSamples, w.avgTestedWeight) "
+		+ "from SampleItem i "
+			+ "join i.item item "
+			+ "join i.process p "
+			+ "join i.itemWeights w "
+//			+ "join i.amountWeighed weighed "
+		+ "where p.id = :processId ")
+	List<SampleItemWithWeight> findSampleItemsWithWeight(int processId);
 
 
 //	@Query("select r  "

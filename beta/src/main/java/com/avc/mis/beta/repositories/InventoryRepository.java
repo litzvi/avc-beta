@@ -12,7 +12,6 @@ import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PoCode;
-import com.avc.mis.beta.entities.processinfo.Storage;
 
 /**
  * @author Zvi
