@@ -163,6 +163,15 @@ public interface ProcessInfoRepository extends ProcessRepository<ProductionProce
 	Optional<ApprovalTask> findProcessApprovalByProcessAndUser(int processId, Integer currentUserId);
 
 
+	@Query("select new com.avc.mis.beta.dto.data.ProcessManagementDTO(a.id, t.processName, "
+			+ "u.id, u.version, u.username, a.managementType) "
+		+ "from ProcessManagement a "
+			+ "join a.user u "
+			+ "join a.processType t "
+		+ "where u.id = :currentUserId ")
+	List<ProcessManagementDTO> findAllUserProcessPrivilige(Integer currentUserId);
+
+
 
 //	@Modifying
 //	@Query("update ProcessLifeCycle c "

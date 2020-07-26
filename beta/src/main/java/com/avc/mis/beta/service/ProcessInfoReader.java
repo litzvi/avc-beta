@@ -130,6 +130,16 @@ public class ProcessInfoReader {
 	}
 	
 	/**
+	 * Gets current user's management privileges for all processType
+	 * @return Map with List of ManagementType enums for every ProcessName
+	 */
+	public Map<ProcessName, List<ManagementType>> getAllUserManagementTypes() {
+		List<ProcessManagementDTO> processManagements = getProcessInfoRepository().findAllUserProcessPrivilige(dao.getCurrentUserId());
+		return processManagements.stream().collect(Collectors.groupingBy(ProcessManagementDTO::getProcessName, 
+				Collectors.mapping(ProcessManagementDTO::getManagementType, Collectors.toList())));
+	}
+	
+	/**
 	 * Generic method for getting any type of process without needing to find the specific method 
 	 * created for that special process type. e.g. order, receiving etc.
 	 * @param processId
