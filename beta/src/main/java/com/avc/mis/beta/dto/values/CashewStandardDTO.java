@@ -1,6 +1,8 @@
 package com.avc.mis.beta.dto.values;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
@@ -8,17 +10,18 @@ import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.Item;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
 
-@Value
+@Data
 @EqualsAndHashCode(callSuper = true)
 public class CashewStandardDTO extends ValueDTO {
 
-	String standardOrganization;	
+	private Set<BasicValueEntity<Item>> items;
 
-	BasicValueEntity<Item> item;
+	String standardOrganization;	
 	
 	RawDefects defects;
 	RawDamage damage;
@@ -48,7 +51,6 @@ public class CashewStandardDTO extends ValueDTO {
 	BigDecimal roastingWeightLoss;
 	
 	public CashewStandardDTO(@NonNull Integer id, String standardOrganization, 
-			Integer itemId, String itemValue, 
 			BigDecimal totalDefects, BigDecimal totalDamage, BigDecimal totalDefectsAndDamage, 
 			BigDecimal foreignMaterial,
 			BigDecimal wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
@@ -59,7 +61,6 @@ public class CashewStandardDTO extends ValueDTO {
 			BigDecimal decay, BigDecimal insectDamage, BigDecimal testa, BigDecimal roastingWeightLoss) {
 		super(id);
 		this.standardOrganization = standardOrganization;
-		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.damage = new RawDamage(mold, dirty, lightDirty, decay, insectDamage, testa);
 		this.defects = new RawDefects(scorched, deepCut, offColour, shrivel, desert, deepSpot);
 		this.totalDefects = totalDefects;
@@ -89,12 +90,11 @@ public class CashewStandardDTO extends ValueDTO {
 	
 	public CashewStandardDTO(CashewStandard standard) {
 		super(standard.getId());
+		this.items = new HashSet<BasicValueEntity<Item>>();
+		for(Item i: standard.getItems()) {
+			this.items.add(new BasicValueEntity<Item>(i.getId(), i.getValue()));
+		}
 		this.standardOrganization = standard.getStandardOrganization();
-		Item item = standard.getItem();
-		if(item != null)
-			this.item = new BasicValueEntity<Item>(item.getId(), item.getValue());
-		else
-			this.item = null;
 		this.wholeCountPerLb = standard.getWholeCountPerLb();
 		this.smallSize = standard.getSmallSize();
 		this.ws = standard.getWs();
@@ -123,6 +123,6 @@ public class CashewStandardDTO extends ValueDTO {
 	}
 
 	public String getValue() {
-		return String.format("%s-%s", this.item.getValue(), this.standardOrganization);
+		return String.format("%s", this.standardOrganization);
 	}
 }

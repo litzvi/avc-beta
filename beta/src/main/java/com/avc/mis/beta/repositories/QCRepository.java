@@ -6,14 +6,19 @@ package com.avc.mis.beta.repositories;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
+import com.avc.mis.beta.dto.values.ValueEntityObject;
+import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.dto.view.RawQcRow;
 import com.avc.mis.beta.entities.process.QualityCheck;
+import com.avc.mis.beta.entities.values.Item;
 /**
  * @author Zvi
  *
@@ -60,7 +65,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 
 	//perhaps should be moved elsewhere
 	@Query("select new com.avc.mis.beta.dto.values.CashewStandardDTO("
-			+ "i.id, i.standardOrganization, item.id, item.value, "
+			+ "i.id, i.standardOrganization, "
 			+ "i.totalDefects, i.totalDamage, i.totalDefectsAndDamage, "
 			+ "i.wholeCountPerLb, i.smallSize, i.ws, i.lp, i.breakage, "
 			+ "i.foreignMaterial, i.humidity, " 
@@ -68,12 +73,34 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 			+ "dam.mold, dam.dirty, dam.lightDirty, dam.decay, dam.insectDamage, dam.testa, " 
 			+ "i.roastingWeightLoss) "
 		+ "from CashewStandard i "
-			+ "join i.item item "
+			+ "join i.items item "
 			+ "join i.defects def "
 			+ "join i.damage dam "
 		+ "where item.id = :itemId and i.standardOrganization = :standardOrganization "
 			+ "and i.active = true")
 	CashewStandardDTO findCashewStandard(Integer itemId, String standardOrganization);
+	
+	@Query("select new com.avc.mis.beta.dto.values.CashewStandardDTO("
+			+ "i.id, i.standardOrganization, "
+			+ "i.totalDefects, i.totalDamage, i.totalDefectsAndDamage, "
+			+ "i.wholeCountPerLb, i.smallSize, i.ws, i.lp, i.breakage, "
+			+ "i.foreignMaterial, i.humidity, " 
+			+ "def.scorched, def.deepCut, def.offColour, def.shrivel, def.desert, def.deepSpot, "
+			+ "dam.mold, dam.dirty, dam.lightDirty, dam.decay, dam.insectDamage, dam.testa, " 
+			+ "i.roastingWeightLoss) "
+		+ "from CashewStandard i "
+			+ "join i.items item "
+			+ "join i.defects def "
+			+ "join i.damage dam "
+		+ "where i.active = true")
+	List<CashewStandardDTO> findAllCashewStandardDTO();
+	
+	@Query("select new com.avc.mis.beta.dto.values.ValueEntityObject(i.id, item.id, item.value) "
+		+ "from CashewStandard i "
+			+ "join i.items item "
+		+ "where i.active = true")
+	Stream<ValueEntityObject<Item>> findAllStandardItems();
+
 
 	@Query("select new com.avc.mis.beta.dto.view.RawQcRow( "
 			+ "qc.id, po_code.id, ct.code, ct.suffix, s.name, "
@@ -93,6 +120,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 		+ "")
 	List<RawQcRow> findRawQualityChecks();
 
+	
 	
 //	@Query("select r "
 //		+ "from QualityCheck r "

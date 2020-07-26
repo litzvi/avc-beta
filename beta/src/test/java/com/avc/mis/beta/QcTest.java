@@ -1,5 +1,10 @@
 package com.avc.mis.beta;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +32,9 @@ public class QcTest {
 		standard.setDamage(new RawDamage());
 		standard.setDefects(new RawDefects());
 		Item item = service.getItem();
-		standard.setItem(item);
+		Set<Item> items = new HashSet<Item>();
+		items.add(item);
+		standard.setItems(items);
 
 		try {
 			valueWriter.addCashewStandard(standard);

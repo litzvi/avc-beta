@@ -23,6 +23,7 @@ import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.ProcessBasic;
@@ -36,6 +37,7 @@ import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.SupplyCategory;
@@ -162,6 +164,10 @@ public class QueryTest {
 			});
 		});
 		
+		//map of all management for the different processes for current user
+		Map<ProcessName, List<ManagementType>> processManagementMap = processInfoReader.getAllUserManagementTypes();
+		processManagementMap.forEach((k,v) -> System.out.println("(" + k + ", " + v + ")"));
+		
 		//get users table
 		List<UserRow> usersTable = users.getUsersTable();
 		usersTable.forEach(u -> System.out.println(u));
@@ -219,6 +225,10 @@ public class QueryTest {
 		List<RawQcRow> rawQcRows = qualityChecks.getRawQualityChecks();
 		rawQcRows.forEach(i -> System.out.println(i));
 		
+		//get cashew standards in DTOs
+		List<CashewStandardDTO> cashewStandards = valueTablesReader.getAllCashewStandardsDTO();
+		cashewStandards.forEach(i -> System.out.println(i));
+				
 					
 		service.cleanup(po);
 
@@ -227,8 +237,13 @@ public class QueryTest {
 	@Test
 	void oneQueryTest() {
 
-		//find table of all cashew orders with order status (history)
-		orders.findAllCashewOrders().forEach(i -> System.out.println(i));
-				
+		//map of all management for the different processes for current user
+		Map<ProcessName, List<ManagementType>> processManagementMap = processInfoReader.getAllUserManagementTypes();
+		processManagementMap.forEach((k,v) -> System.out.println("(" + k + ", " + v + ")"));
+		
+		//get cashew standards in DTOs
+		List<CashewStandardDTO> cashewStandards = valueTablesReader.getAllCashewStandardsDTO();
+		cashewStandards.forEach(i -> System.out.println(i));
+						
 	}
 }

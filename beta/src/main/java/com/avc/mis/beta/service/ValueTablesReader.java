@@ -5,7 +5,9 @@ package com.avc.mis.beta.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,8 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
+import com.avc.mis.beta.dto.values.ValueEntityObject;
+import com.avc.mis.beta.dto.values.ValueObject;
+import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
@@ -28,6 +34,7 @@ import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.repositories.QCRepository;
 import com.avc.mis.beta.repositories.SupplierRepository;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
 
@@ -51,6 +58,7 @@ public class ValueTablesReader {
 	
 	@Autowired private SupplierRepository supplierRepository;
 	@Autowired private ValueTablesRepository valueTablesRepository;
+	@Autowired private QCRepository qcRepository;
 	
 	public List<Warehouse> getAllWarehouses() {
 		return getValueTablesRepository().findAllWarehouses();		
@@ -105,6 +113,15 @@ public class ValueTablesReader {
 	}
 	
 //----------------------------DTO---------------------------------------------------------	
+	
+	public List<CashewStandardDTO> getAllCashewStandardsDTO() {
+		List<CashewStandardDTO> cashewStandards = getQcRepository().findAllCashewStandardDTO();
+		Map<Integer, Set<BasicValueEntity<Item>>> items = getQcRepository().findAllStandardItems()
+				.collect(Collectors.groupingBy(ValueEntityObject::getId, 
+						Collectors.mapping(ValueEntityObject::getValue, Collectors.toSet())));
+		cashewStandards.forEach(s -> s.setItems(items.get(s.getId())));
+		return cashewStandards;
+	}
 	
 	public List<BasicValueEntity<Warehouse>> getAllWarehousesDTO() {
 		return getValueTablesRepository().findAllWarehousesDTO();		

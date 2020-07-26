@@ -13,7 +13,7 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = false, callSuper = true)
 public class ValueObject<T> extends ValueDTO {
 
 	T value;

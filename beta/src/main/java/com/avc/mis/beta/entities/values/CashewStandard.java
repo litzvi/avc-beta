@@ -1,16 +1,20 @@
 package com.avc.mis.beta.entities.values;
 
 import java.math.BigDecimal;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ValueEntity;
@@ -23,17 +27,20 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "CASHEW_STANDARDS", uniqueConstraints = 
-{ @UniqueConstraint(columnNames = { "itemId", "standardOrganization" }) })
+@Table(name = "CASHEW_STANDARDS")
 public class CashewStandard extends ValueEntity {
 	
 	@NotBlank(message = "Standard organization is mandatory")
 	private String standardOrganization;	
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "itemId", updatable = false, nullable = false)
-	@NotNull(message = "Cashew standard has to reference an item")
-	private Item item;
+	@JoinTable(name = "STANDARD_ITEMS",
+			joinColumns = @JoinColumn(name = "standardId", referencedColumnName = "id"), 
+			inverseJoinColumns = @JoinColumn(name = "itemId", referencedColumnName = "id"))
+	@ManyToMany(fetch = FetchType.LAZY)
+//	@ManyToOne(fetch = FetchType.EAGER)
+//	@JoinColumn(name = "itemId", updatable = false, nullable = false)
+	@NotEmpty(message = "Cashew standard has to reference at least one item")
+	private Set<Item> items;
 	
 	@NotNull
 	@Embedded
@@ -129,7 +136,7 @@ public class CashewStandard extends ValueEntity {
 
 	@Override
 	public String getValue() {
-		return String.format("%s-%s", this.item.getValue(), this.standardOrganization);
+		return String.format("%s", this.standardOrganization);
 	}
 
 }
