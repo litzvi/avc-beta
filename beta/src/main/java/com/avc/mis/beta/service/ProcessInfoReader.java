@@ -21,6 +21,7 @@ import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
@@ -117,6 +118,15 @@ public class ProcessInfoReader {
 	 */
 	public List<ApprovalTaskDTO> getAllApprovals() {
 		return getProcessInfoRepository().findAllApprovalsByUser(dao.getCurrentUserId());
+	}
+		
+	/**
+	 * Gets current user's management privileges for given processType
+	 * @param processName the processName for the process type
+	 * @return List of ManagementType enums
+	 */
+	public List<ManagementType> getUserManagementTypes(ProcessName processName) {
+		return getProcessInfoRepository().findUserProcessPrivilige(processName, dao.getCurrentUserId());
 	}
 	
 	/**

@@ -103,7 +103,7 @@ public class OrdersTest {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			processInfoWriter.setProcessDecision(t.getId(), 
+			processInfoWriter.setApprovalDecision(t.getId(), 
 					DecisionType.APPROVED, processSnapshot, null);
 			
 		});

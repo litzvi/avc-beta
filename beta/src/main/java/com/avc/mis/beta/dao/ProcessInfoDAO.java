@@ -244,6 +244,28 @@ public class ProcessInfoDAO extends DAO {
 	}
 	
 	/**
+	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.
+	 * The AprovealTask is implied by the process and user, 
+	 * @param processId the process id.
+	 * @param decisionType the decision made.
+	 * @param processSnapshot snapshot of the process as seen by the approver.
+	 * @param remarks
+	 * @throws IllegalArgumentException trying to approve for another user.
+	 */
+	public void setUserProcessDecision(int processId, DecisionType decision, 
+			String processSnapshot, String remarks) {
+		
+		Optional<ApprovalTask> optional = getProcessRepository().findProcessApprovalByProcessAndUser(processId, getCurrentUserId());
+		ApprovalTask approval = optional.orElseThrow(() -> new AccessControlException("No approval task for current user"));
+		approval.setDecision(decision);
+		approval.setProcessSnapshot(processSnapshot);
+		approval.setRemarks(remarks);
+		editEntity(approval);
+		approvalAlerts(approval);
+			
+	}
+	
+	/**
 	 * Sets the record status for the process life cycle. e.g. FINAL - process items show in inventory
 	 * @param processStatus the process state life cycle of the process.
 	 * @param processId
@@ -326,5 +348,7 @@ public class ProcessInfoDAO extends DAO {
 			throw new AccessControlException("Can't change message label for another user");
 		}
 	}
+
+	
 
 }

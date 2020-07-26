@@ -14,7 +14,9 @@ import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.EditStatus;
+import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
@@ -141,6 +143,24 @@ public interface ProcessInfoRepository extends ProcessRepository<ProductionProce
 			+ "where p.id = :processId and "
 				+ "c.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
 	Boolean isProcessReferenced(Integer processId);
+
+
+	@Query("select a.managementType "
+		+ "from ProcessManagement a "
+			+ "join a.user u "
+			+ "join a.processType t "
+		+ "where t.processName = :processName "
+			+ "and u.id = :currentUserId ")
+	List<ManagementType> findUserProcessPrivilige(ProcessName processName, Integer currentUserId);
+
+
+	@Query("select a "
+		+ "from ApprovalTask a "
+			+ "join a.process p "
+			+ "join a.user u "
+		+ "where p.id = :processId "
+			+ "and u.id = :currentUserId ")
+	Optional<ApprovalTask> findProcessApprovalByProcessAndUser(int processId, Integer currentUserId);
 
 
 

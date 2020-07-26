@@ -94,8 +94,20 @@ public class ProcessInfoWriter {
 	 * @param remarks
 	 * @throws IllegalArgumentException trying to approve for another user.
 	 */
-	public void setProcessDecision(int approvalId, DecisionType decisionType, String processSnapshot, String remarks) {
+	public void setApprovalDecision(int approvalId, DecisionType decisionType, String processSnapshot, String remarks) {
 		dao.setProcessDecision(approvalId, decisionType, processSnapshot, remarks);		
+	}
+	
+	/**
+	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.
+	 * @param processId the process id.
+	 * @param decisionType the decision made.
+	 * @param processSnapshot snapshot of the process as seen by the approver.
+	 * @param remarks
+	 * @throws IllegalArgumentException trying to approve for another user.
+	 */
+	public void setUserProcessDecision(int processId, DecisionType decisionType, String processSnapshot, String remarks) {
+		dao.setUserProcessDecision(processId, decisionType, processSnapshot, remarks);		
 	}
 	
 	/**
