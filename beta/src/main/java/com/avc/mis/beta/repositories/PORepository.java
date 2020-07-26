@@ -35,7 +35,8 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "po.recordedTime, po.duration, po.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, po.remarks, po.personInCharge) "
+			+ "lc.processStatus, lc.editStatus, po.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
+			+ "po.personInCharge) "
 		+ "from PO po "
 			+ "join po.poCode po_code "
 				+ "join po_code.contractType t "
@@ -44,6 +45,8 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "left join po.createdBy p_user "
 			+ "left join po.productionLine p_line "
 			+ "join po.lifeCycle lc "
+			+ "left join po.approvals approval "
+				+ "left join approval.user u "
 		+ "where po.id = :processId or po_code.id = :poCodeId "
 			+ "and (:processId is null or :poCodeId is null)")
 	Optional<PoDTO> findOrderById(Integer processId, Integer poCodeId);

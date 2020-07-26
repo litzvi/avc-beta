@@ -36,10 +36,10 @@ public class StorageTransferDTO extends ProductionProcessDTO {
 			String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName,
 			ProcessName processName, ProductionLine productionLine, OffsetDateTime recordedTime, Duration duration,
-			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks) {
+			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
 		super(id, version, createdDate, userRecording, poCodeId, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName,
-				processName, productionLine, recordedTime, duration, numOfWorkers, processStatus, editStatus, remarks);
+				processName, productionLine, recordedTime, duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
 	}
 	
 	

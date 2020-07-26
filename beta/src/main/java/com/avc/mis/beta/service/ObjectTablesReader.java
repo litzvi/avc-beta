@@ -114,7 +114,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO for all open or pending Cashew orders.
 	 */
 	public Set<PoCodeDTO> findOpenAndPendingCashewOrdersPoCodes() {
-		Set<PoCodeDTO> poCodes = getObjectTablesRepository().findAllPoCodeByType(new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
+		Set<PoCodeDTO> poCodes = getObjectTablesRepository().findAllPoCodeByType(new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
 				new ProcessStatus[] {ProcessStatus.PENDING});
 		poCodes.addAll(getObjectTablesRepository().findOpenPoCodeByType(ProcessName.CASHEW_ORDER));
 

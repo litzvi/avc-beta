@@ -61,7 +61,7 @@ public class Receipts {
 	 */
 	public List<ReceiptRow> findFinalCashewReceipts() {
 		return findAllReceiptsByType(
-				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
+				new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
 				new ProcessStatus[] {ProcessStatus.FINAL});
 	}
 
@@ -85,7 +85,7 @@ public class Receipts {
 	 */
 	public List<ReceiptRow> findPendingCashewReceipts() {
 		return findAllReceiptsByType(
-				new ProcessName[] {ProcessName.CASHEW_RECEIPT, ProcessName.CASHEW_ORDER_RECEIPT}, 
+				new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
 				new ProcessStatus[] {ProcessStatus.PENDING});
 		
 	}
@@ -163,7 +163,7 @@ public class Receipts {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewOrderReceipt(Receipt receipt) {
-		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_ORDER_RECEIPT));
+		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT));
 		addOrderReceipt(receipt);
 	}
 	

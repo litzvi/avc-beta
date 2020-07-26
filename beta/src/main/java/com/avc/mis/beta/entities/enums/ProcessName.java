@@ -10,7 +10,6 @@ package com.avc.mis.beta.entities.enums;
 public enum ProcessName {
 	CASHEW_ORDER,
 	GENERAL_ORDER,
-	CASHEW_ORDER_RECEIPT,
 	CASHEW_RECEIPT,
 	GENERAL_RECEIPT,
 	CASHEW_RECEIPT_QC,

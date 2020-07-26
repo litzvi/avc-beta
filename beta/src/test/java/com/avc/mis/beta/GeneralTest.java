@@ -70,7 +70,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800118;
+	static final Integer PO_CODE = 800123;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -201,6 +201,7 @@ public class GeneralTest {
 		checks.addCashewReceiptCheck(check);
 		QualityCheckDTO checkDTO;
 		checkDTO = checks.getQcByProcessId(check.getId());
+//		System.out.println(checkDTO);
 //		fail("finished");
 		assertEquals(new QualityCheckDTO(check), checkDTO, "QC not added or fetched correctly");
 

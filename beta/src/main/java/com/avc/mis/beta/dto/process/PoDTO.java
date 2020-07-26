@@ -51,13 +51,13 @@ public class PoDTO extends ProductionProcessDTO {
 			Integer supplierId, Integer supplierVersion, String supplierName,  
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, 
-			ProcessStatus processStatus, EditStatus editStatus, String remarks, 
+			ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
 			String personInCharge) {
 		super(id, version, createdDate, staffRecording, 
 				poCodeId, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName, 
 				processName, productionLine, 
-				recordedTime, duration, numOfWorkers, processStatus, editStatus, remarks);
+				recordedTime, duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
 		this.personInCharge = personInCharge;
 
 	}

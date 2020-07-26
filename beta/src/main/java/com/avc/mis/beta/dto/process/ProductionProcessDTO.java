@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.process;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -43,13 +44,16 @@ public abstract class ProductionProcessDTO extends ProcessDTO {
 	private ProcessStatus processStatus;
 	private EditStatus editStatus;
 	private String remarks;
+	@EqualsAndHashCode.Exclude // don't compare for testing
+	private String approvals;
+
 	
 	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName, 
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus,
-			String remarks) {
+			String remarks , String approvals) {
 		super(id, version);
 		this.createdDate = createdDate;
 		this.userRecording = userRecording;
@@ -62,6 +66,8 @@ public abstract class ProductionProcessDTO extends ProcessDTO {
 		this.processStatus = processStatus;
 		this.editStatus = editStatus;
 		this.remarks = remarks;
+		this.approvals = approvals;
+
 	}
 	
 	public ProductionProcessDTO(@NonNull ProductionProcess process) {
@@ -79,6 +85,8 @@ public abstract class ProductionProcessDTO extends ProcessDTO {
 		this.processStatus = process.getLifeCycle().getProcessStatus();
 		this.editStatus = process.getLifeCycle().getEditStatus();
 		this.remarks = process.getRemarks();
+		this.approvals = process.getApprovals().stream().map(t -> t.getUser().getUsername()).collect(Collectors.joining());
+
 	}
 	
 	public abstract String getProcessTypeDescription();

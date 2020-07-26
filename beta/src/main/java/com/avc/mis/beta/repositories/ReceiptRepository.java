@@ -26,7 +26,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.duration, r.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, r.remarks) "
+			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType t "
@@ -35,7 +35,8 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "left join r.createdBy p_user "
 			+ "left join r.productionLine p_line "
 			+ "join r.lifeCycle lc "
-//			+ "left join r.status p_status "
+			+ "left join r.approvals approval "
+				+ "left join approval.user u "
 		+ "where r.id = :id ")
 	Optional<ReceiptDTO> findReceiptDTOByProcessId(int id);
 	
