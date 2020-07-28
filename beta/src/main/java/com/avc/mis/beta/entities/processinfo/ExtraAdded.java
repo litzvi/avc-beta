@@ -21,7 +21,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "EXTRA_ADDED")
 @PrimaryKeyJoinColumn(name = "storageId")
-public class ExtraAdded extends Storage {
+public class ExtraAdded extends StorageWithSample {
 	
 //	public ExtraAdded() {
 //		super();

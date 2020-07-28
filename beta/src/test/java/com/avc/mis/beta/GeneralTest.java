@@ -48,6 +48,7 @@ import com.avc.mis.beta.entities.processinfo.RawItemQuality;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.SampleItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.processinfo.StorageWithSample;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
@@ -70,7 +71,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800123;
+	static final Integer PO_CODE = 800126;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -146,14 +147,14 @@ public class GeneralTest {
 			receiptItems[i].setItem(orderItems[i].getItem());
 			receiptItems[i].setOrderItem(orderItems[i]);
 			
-			Storage[] storageForms = new Storage[2];
-			storageForms[0] = new Storage();
+			StorageWithSample[] storageForms = new StorageWithSample[2];
+			storageForms[0] = new StorageWithSample();
 			storageForms[0].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(50), "KG"));
 			storageForms[0].setNumberUnits(BigDecimal.valueOf(326));
 			storageForms[0].setWarehouseLocation(storages.get(i));
 //			storageForms[0].setMeasureUnit("KG");
 			
-			storageForms[1] = new Storage();
+			storageForms[1] = new StorageWithSample();
 			storageForms[1].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(26), "KG"));
 			storageForms[1].setNumberUnits(BigDecimal.valueOf(1));
 			storageForms[1].setWarehouseLocation(storages.get(i));

@@ -4,9 +4,11 @@
 package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.processinfo.StorageDTO;
+import com.avc.mis.beta.dto.processinfo.StorageWithSampleDTO;
 import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
@@ -22,7 +24,7 @@ import lombok.Data;
 public class ReceiptItemWithStorage {
 
 	private ReceiptItemDTO receiptItem;
-	private StorageDTO storage;
+	private StorageWithSampleDTO storage;
 	
 	private DataObject<OrderItem> orderItem;
 	
@@ -33,14 +35,16 @@ public class ReceiptItemWithStorage {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
+			BigDecimal emptyContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight,
 			String description, String remarks, 
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
 		this.receiptItem = new ReceiptItemDTO(id, version, itemId, itemValue, 
 				/* poCodeId, contractTypeCode, supplierName, */
 				description, remarks, orderItemId, orderItemVersion, extraRequested, extraMU);
-		this.storage = new StorageDTO(storageId, storageVersion, 
+		this.storage = new StorageWithSampleDTO(storageId, storageVersion, 
 				unitAmount, measureUnit, numberUnits, 
-				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
+				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
+				emptyContainerWeight, numberOfSamples, avgTestedWeight);
 		this.orderItem = new DataObject<OrderItem>(orderItemId, orderItemVersion);
 	}
 	

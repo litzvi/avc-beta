@@ -54,7 +54,12 @@ public class OrderItemDTO extends ProcessDTO {
 		super(id, version);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.numberUnits = new AmountWithUnit(numberUnits.setScale(MeasureUnit.SCALE), measureUnit);
-		this.unitPrice = new AmountWithCurrency(unitPrice, currency);
+		if(unitPrice != null) {
+			this.unitPrice = new AmountWithCurrency(unitPrice, currency);
+		}
+		else {
+			this.unitPrice = null;
+		}
 		this.deliveryDate = deliveryDate;
 		this.defects = defects;
 		this.remarks = remarks;
@@ -69,7 +74,12 @@ public class OrderItemDTO extends ProcessDTO {
 		super(orderItem.getId(), orderItem.getVersion());
 		this.item = new BasicValueEntity<Item>(orderItem.getItem());
 		this.numberUnits = orderItem.getNumberUnits().setScale(MeasureUnit.SCALE);
-		this.unitPrice = orderItem.getUnitPrice().clone();
+		if(orderItem.getUnitPrice() != null) {
+			this.unitPrice = orderItem.getUnitPrice().clone();
+		}
+		else {
+			this.unitPrice = null;
+		}
 		this.deliveryDate = orderItem.getDeliveryDate();
 		this.defects = orderItem.getDefects();
 		this.remarks = orderItem.getRemarks();

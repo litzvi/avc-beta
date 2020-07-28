@@ -4,12 +4,15 @@
 package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
+import com.avc.mis.beta.entities.processinfo.StorageWithSample;
 import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Data;
@@ -45,7 +48,13 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 
 	
 	public ReceiptItemDTO(ReceiptItem receiptItem) {
-		super(receiptItem);
+		super(receiptItem.getId(), receiptItem.getVersion(),
+				new BasicValueEntity<Item>(receiptItem.getItem()),
+				receiptItem.getDescription(), receiptItem.getRemarks());
+		
+		setStorageForms(Arrays.stream(receiptItem.getStorageForms())
+				.map(i->{return new StorageWithSampleDTO((StorageWithSample) i);}).collect(Collectors.toSet()));
+
 		if(receiptItem.getOrderItem() != null)
 			this.orderItem = new DataObject(receiptItem.getOrderItem());
 		if(receiptItem.getExtraRequested() != null) {

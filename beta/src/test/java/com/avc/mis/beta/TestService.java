@@ -6,6 +6,7 @@ package com.avc.mis.beta;
 import static org.assertj.core.api.Assertions.fail;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -27,6 +28,7 @@ import com.avc.mis.beta.entities.processinfo.ExtraAdded;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.processinfo.StorageWithSample;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.ContractType;
@@ -114,15 +116,18 @@ public class TestService {
 
 	private ReceiptItem[] getReceiptItems(int numOfItems) {
 		ReceiptItem[] receiptItems = new ReceiptItem[numOfItems];
-		Storage[] storageForms = new Storage[receiptItems.length];
+		StorageWithSample[] storageForms = new StorageWithSample[receiptItems.length];
 		ExtraAdded[] added = new ExtraAdded[receiptItems.length];
 		List<Item> items = getItems();
 		Warehouse storage = getWarehouse();
 		for(int i=0; i<receiptItems.length; i++) {
-			storageForms[i] = new Storage();
+			storageForms[i] = new StorageWithSample();
 			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
 			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
 			storageForms[i].setWarehouseLocation(storage);
+			storageForms[i].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
+			storageForms[i].setNumberOfSamples(BigInteger.valueOf(30));
+			storageForms[i].setAvgTestedWeight(BigDecimal.valueOf(50.01));
 			//build receipt item
 			receiptItems[i] = new ReceiptItem();
 			receiptItems[i].setItem(items.get(randNum.nextInt(items.size())));
@@ -154,20 +159,23 @@ public class TestService {
 	private ReceiptItem[] getOrderReceiptItems(PoDTO poDTO) {
 		Set<OrderItemDTO> orderItems = poDTO.getOrderItems();
 		ReceiptItem[] items = new ReceiptItem[orderItems.size()];
-		Storage[] storageForms = new Storage[items.length];
+		StorageWithSample[] storageForms = new StorageWithSample[items.length];
 		Warehouse storage = getWarehouse();
 		OrderItem oi;
 		int i=0;
 		for(OrderItemDTO oItem: orderItems) {
 			items[i] = new ReceiptItem();
-			storageForms[i] = new Storage();
+			storageForms[i] = new StorageWithSample();
 			Item item = new Item();
 			item.setId(oItem.getItem().getId());
 			items[i].setItem(item);
 			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
 			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
 			storageForms[i].setWarehouseLocation(storage);
-			items[i].setStorageForms(new Storage[] {storageForms[i]});
+			storageForms[i].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
+			storageForms[i].setNumberOfSamples(BigInteger.valueOf(30));
+			storageForms[i].setAvgTestedWeight(BigDecimal.valueOf(50.01));
+			items[i].setStorageForms(new StorageWithSample[] {storageForms[i]});
 			oi  = new OrderItem();
 			oi.setId(oItem.getId());
 			oi.setVersion(oItem.getVersion());

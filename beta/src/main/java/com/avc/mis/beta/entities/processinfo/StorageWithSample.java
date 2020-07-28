@@ -8,6 +8,8 @@ import java.math.BigInteger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Positive;
@@ -27,21 +29,17 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "STORAGE_SAMPLE")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @PrimaryKeyJoinColumn(name = "storageId")
 public class StorageWithSample extends Storage {
 
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
-//	@NotNull(message = "Empty container avarage weight is mandatory")
-	private BigDecimal emptyContainerWeight;
+	private BigDecimal emptyContainerWeight;	
 	
-	
-//	@Column(nullable = false)
-//	@NotNull(message = "Number of samples is mandetory")
 	@Positive(message = "Number of samples has to be positive")
 	private BigInteger numberOfSamples;	
 	
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
-//	@NotNull(message = "Average tested weight is mandetory")
 	@Positive(message = "Average tested weight has to be positive")
 	private BigDecimal avgTestedWeight;
 
