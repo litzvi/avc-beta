@@ -63,7 +63,12 @@ public class PoItemRow extends ValueDTO {
 		this.contractDate = contractDate;
 		this.deliveryDate = deliveryDate;
 		this.defects = defects;
-		this.unitPrice = new AmountWithCurrency(unitPrice, currency);
+		if(unitPrice != null) {
+			this.unitPrice = new AmountWithCurrency(unitPrice, currency);
+		}
+		else {
+			this.unitPrice = null;
+		}
 		this.receivedAmount = receivedAmount;
 		
 		this.orderStatus = new ArrayList<String>();
@@ -97,5 +102,6 @@ public class PoItemRow extends ValueDTO {
 	public String getValue() {
 		return this.poCode.getValue();
 	}
-		
+	
+	
 }
