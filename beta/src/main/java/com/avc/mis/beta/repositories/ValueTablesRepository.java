@@ -8,7 +8,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.values.Item;

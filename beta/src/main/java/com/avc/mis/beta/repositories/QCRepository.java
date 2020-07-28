@@ -12,10 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.ValueEntityObject;
-import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.dto.view.RawQcRow;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.values.Item;
