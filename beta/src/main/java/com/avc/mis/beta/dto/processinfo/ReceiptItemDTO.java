@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
@@ -76,5 +77,10 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 //		this.measureUnit = measureUnit;
 	}
 	
-	
+	public Optional<AmountWithUnit> getTotalDifferance() {
+		return getStorageForms().stream()
+				.map(s -> ((StorageWithSampleDTO)s).getWeighedDifferance())
+				.filter(d -> d != null)
+				.reduce(AmountWithUnit::add);
+	}
 }

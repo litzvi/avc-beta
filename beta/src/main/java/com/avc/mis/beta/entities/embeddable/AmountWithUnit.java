@@ -69,7 +69,7 @@ public class AmountWithUnit implements Cloneable {
 	public AmountWithUnit multiply(BigDecimal multiplicand) {
 		return new AmountWithUnit(this.amount.multiply(multiplicand), this.measureUnit);
 	}
-		
+			
 	@Override
 	public AmountWithUnit clone() {
 		return new AmountWithUnit(amount, measureUnit);
@@ -107,6 +107,8 @@ public class AmountWithUnit implements Cloneable {
 		}
 		return amount.signum();
 	}
+
+	
 
 	
 

@@ -66,5 +66,23 @@ public class StorageWithSampleDTO extends StorageDTO {
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
 	}
+	
+	
+	public AmountWithUnit getWeighedDifferance() {
+		if(avgTestedWeight == null) {
+			return null;
+		}
+		
+		BigDecimal acumelatedAvg;
+		if(emptyContainerWeight == null) {
+			acumelatedAvg = avgTestedWeight;
+		}
+		else {
+			acumelatedAvg = avgTestedWeight.subtract(emptyContainerWeight);
+		}
+		return new AmountWithUnit(acumelatedAvg
+				.subtract(getUnitAmount().getAmount())
+				.multiply(getNumberUnits()), getUnitAmount().getMeasureUnit());
+	}
 
 }

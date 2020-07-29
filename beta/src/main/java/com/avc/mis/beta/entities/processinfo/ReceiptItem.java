@@ -63,8 +63,8 @@ public class ReceiptItem extends ProcessItem {
 		this.storageForms.addAll(this.extraAdded);
 	}
 	
-	@Override
-	public void setStorageForms(Storage[] storageForms) { 
+//	@Override
+	public void setStorageForms(StorageWithSample[] storageForms) { 
 		super.setStorageForms(storageForms);
 		this.storageForms.addAll(this.extraAdded);
 	}

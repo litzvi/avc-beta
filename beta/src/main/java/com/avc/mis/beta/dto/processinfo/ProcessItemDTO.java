@@ -106,6 +106,8 @@ public class ProcessItemDTO extends ProcessDTO {
 				.reduce(AmountWithUnit::add);
 	}
 	
+	
+	
 	public static List<ProcessItemDTO> getProcessItems(List<ProcessItemWithStorage> storages) {
 		Map<Integer, List<ProcessItemWithStorage>> map = storages.stream()
 				.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, Collectors.toList()));
