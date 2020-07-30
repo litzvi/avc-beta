@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.process.GeneralProcess;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,14 +28,14 @@ public abstract class GeneralInfoEntity extends AuditedEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processId", updatable = false)
-	private ProductionProcess process;
+	private GeneralProcess process;
 	
 	private String description;
 	
 	@Override
 	public void setReference(Object referenced) {
-		if(referenced instanceof ProductionProcess) {
-			this.setProcess((ProductionProcess)referenced);
+		if(referenced instanceof GeneralProcess) {
+			this.setProcess((GeneralProcess)referenced);
 		}
 		else {
 			throw new ClassCastException("Referenced object isn't a production process");

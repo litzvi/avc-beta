@@ -75,6 +75,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "left join s.usedItems ui "
 			+ "where s.id in :storageIds "
 			+ "group by s ")
+	//for edit needs to take into account current amounts, also if there are 2 rows using same item..
 	Stream<StorageBalance> findStorageBalances(Integer[] storageIds);
 
 //	@Query("select new com.avc.mis.beta.dto.values.PoInventoryRowWithStorage( "

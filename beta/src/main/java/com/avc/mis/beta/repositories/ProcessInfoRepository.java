@@ -17,8 +17,8 @@ import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
-import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 
 /**
@@ -27,18 +27,18 @@ import com.avc.mis.beta.entities.processinfo.ApprovalTask;
  * @author Zvi
  *
  */
-public interface ProcessInfoRepository extends ProcessRepository<ProductionProcess> {
+public interface ProcessInfoRepository extends ProcessRepository<GeneralProcess> {
 	
 	@Query("select a "
 			+ "from ProcessManagement a "
 			+ "join fetch a.user "
-			+ "join ProductionProcess p "
+			+ "join GeneralProcess p "
 				+ "on p.processType = a.processType "
 			+ "where p.id = ?1")
 	List<ProcessManagement> findProcessTypeAlertsByProcess(Integer processId);
 
 
-	@Query("select p.approvals from ProductionProcess p where p.id = ?1")
+	@Query("select p.approvals from GeneralProcess p where p.id = ?1")
 	List<ApprovalTask> findProcessApprovals(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
@@ -136,7 +136,7 @@ public interface ProcessInfoRepository extends ProcessRepository<ProductionProce
 	EditStatus findProcessEditStatus(Integer processId);
 
 	@Query("select new java.lang.Boolean(count(*) > 0) "
-			+ "from ProductionProcess p "
+			+ "from GeneralProcess p "
 				+ "join p.usedItems ui "
 					+ "join ui.process uip "
 						+ "join uip.lifeCycle c "

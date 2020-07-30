@@ -38,7 +38,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class SampleReceiptDTO extends ProductionProcessDTO {
+public class SampleReceiptDTO extends GeneralProcessDTO {
 
 	//not set because we can have doubles, order should be unimportant for testing - so bag needed
 	private MultiSet<SampleItemDTO> sampleItems; 	

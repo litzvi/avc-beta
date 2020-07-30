@@ -36,7 +36,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class PoDTO extends ProductionProcessDTO {
+public class PoDTO extends GeneralProcessDTO {
 	
 	private Set<OrderItemDTO> orderItems; //can use a SortedSet like ContactDetails to maintain order
 	

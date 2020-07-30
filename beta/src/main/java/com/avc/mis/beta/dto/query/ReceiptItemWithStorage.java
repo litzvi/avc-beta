@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
-import com.avc.mis.beta.dto.processinfo.StorageDTO;
 import com.avc.mis.beta.dto.processinfo.StorageWithSampleDTO;
 import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.entities.enums.MeasureUnit;

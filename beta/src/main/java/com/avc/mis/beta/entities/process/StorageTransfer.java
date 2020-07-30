@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "STORAGE_TRANSFERS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class StorageTransfer extends ProductionProcess {
+public class StorageTransfer extends GeneralProcess {
 
 	@JsonIgnore
 	@Override

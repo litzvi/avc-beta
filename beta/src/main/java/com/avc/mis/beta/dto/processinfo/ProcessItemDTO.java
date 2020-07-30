@@ -20,7 +20,6 @@ import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
 /**
  * @author Zvi

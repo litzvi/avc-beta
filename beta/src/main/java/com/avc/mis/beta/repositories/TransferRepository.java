@@ -1,12 +1,10 @@
 package com.avc.mis.beta.repositories;
 
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 
 public interface TransferRepository extends ProcessRepository<StorageTransfer>{
@@ -31,24 +29,7 @@ public interface TransferRepository extends ProcessRepository<StorageTransfer>{
 		+ "where r.id = :processId ")
 	Optional<StorageTransferDTO> findTransferDTOByProcessId(int processId);
 
-	@Query("select new com.avc.mis.beta.dto.processinfo.UsedItemDTO( "
-			+ "i.id, i.version, item.id, item.value, "
-			+ "itemPo.id, ct.code, ct.suffix, s.name, "
-			+ "unit.amount, unit.measureUnit, "
-			+ "warehouseLocation.id, warehouseLocation.value, "
-			+ "i.numberUnits) "
-		+ "from UsedItem i "
-			+ "join i.storage s "
-				+ "join s.unitAmount unit "
-				+ "left join s.warehouseLocation warehouseLocation "
-				+ "join s.processItem pi "
-					+ "join pi.item item "
-			+ "join i.process p "
-				+ "join p.poCode itemPo "
-					+ "left join itemPo.contractType ct "
-					+ "left join itemPo.supplier s "
-		+ "where p.id = :processId ")
-	Set<UsedItemDTO> findUsedItems(int processId);
+	
 	
 	//already in ProcessRepository
 //	@Query("select new com.avc.mis.beta.dto.query.ProcessItemWithStorage( "

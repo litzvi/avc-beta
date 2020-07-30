@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.validation.groups.OnPersist;
 
 import lombok.Data;
@@ -31,7 +31,7 @@ public abstract class ProcessInfoEntity extends GeneralInfoEntity {
 	
 	@NotNull(message = "System error: Process not referenced", groups = OnPersist.class)
 	@Override
-	public ProductionProcess getProcess() {
+	public GeneralProcess getProcess() {
 		return super.getProcess();
 	}
 	

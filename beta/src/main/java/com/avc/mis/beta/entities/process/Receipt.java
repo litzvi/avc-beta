@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "ORDER_RECEIPTS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class Receipt extends ProductionProcess {
+public class Receipt extends GeneralProcess {
 	
 	public void setReceiptItems(ReceiptItem[] receiptItems) {
 		super.setProcessItems(receiptItems);

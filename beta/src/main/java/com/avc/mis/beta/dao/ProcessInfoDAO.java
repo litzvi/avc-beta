@@ -24,8 +24,8 @@ import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
-import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
@@ -67,9 +67,9 @@ public class ProcessInfoDAO extends DAO {
 	/**
 	 * Adding (persisting) a process. 
 	 * Adds the process and adds required notifications.
-	 * @param process ProductionProcess to be added.
+	 * @param process GeneralProcess to be added.
 	 */
-	public void addProcessEntity(ProductionProcess process) {
+	public void addProcessEntity(GeneralProcess process) {
 		//check used items amounts don't exceed the storage amounts
 		if(!isInventorySufficiant(process.getUsedItems())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
@@ -102,9 +102,10 @@ public class ProcessInfoDAO extends DAO {
 	/**
 	 * editing (merging) a process or process information. 
 	 * Edits the process and adds required notifications.
-	 * @param process ProductionProcess to be edited.
+	 * @param process GeneralProcess to be edited.
 	 */
-	public <T extends ProductionProcess> void editProcessEntity(T process) {
+	public <T extends GeneralProcess> void editProcessEntity(T process) {
+		//check used items amounts don't exceed the storage amounts
 		EditStatus status = getProcessRepository().findProcessEditStatus(process.getId());
 		if(status != EditStatus.EDITABLE) {
 			throw new AccessControlException("Process was closed for edit");
@@ -119,9 +120,9 @@ public class ProcessInfoDAO extends DAO {
 	
 	/**
 	 * Sets up needed approvals and messages (notifications), for adding a process of the given type.
-	 * @param process the new ProductionProcess
+	 * @param process the new GeneralProcess
 	 */
-	private void addAlerts(ProductionProcess process) {
+	private void addAlerts(GeneralProcess process) {
 
 		List<ProcessManagement> alerts = getProcessRepository().findProcessTypeAlertsByProcess(process.getId());
 
@@ -144,9 +145,9 @@ public class ProcessInfoDAO extends DAO {
 	
 	/**
 	 * Sets up needed approvals and messages (notifications), for editing the given process.
-	 * @param process the edited ProductionProcess
+	 * @param process the edited GeneralProcess
 	 */
-	private void editAlerts(ProductionProcess process) {
+	private void editAlerts(GeneralProcess process) {
 
 		List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(process.getId());
 
@@ -169,7 +170,7 @@ public class ProcessInfoDAO extends DAO {
 	 * @param approval full approval that includes the process, user and decision.
 	 */
 	private void approvalAlerts(ApprovalTask approval) {
-		ProductionProcess process = approval.getProcess();
+		GeneralProcess process = approval.getProcess();
 
 		List<ProcessManagement> alerts = getProcessRepository()
 				.findProcessTypeAlertsByProcess(process.getId());
@@ -184,10 +185,10 @@ public class ProcessInfoDAO extends DAO {
 	/**
 	 * Adds a new message (notification) for a given user about a given process.
 	 * @param user the recipient of the message, assumes user is already in the persistence context.
-	 * @param process ProductionProcess that's the subject of the message.
+	 * @param process GeneralProcess that's the subject of the message.
 	 * @param title the message title
 	 */
-	public void addMessage(UserEntity user, ProductionProcess process, String title) {
+	public void addMessage(UserEntity user, GeneralProcess process, String title) {
 		UserMessage userMessage = new UserMessage();
 		userMessage.setProcess(process);
 		userMessage.setUser(user);

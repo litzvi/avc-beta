@@ -37,7 +37,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "PURCHASE_ORDERS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class PO extends ProductionProcess {
+public class PO extends GeneralProcess {
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "po", orphanRemoval = true, 

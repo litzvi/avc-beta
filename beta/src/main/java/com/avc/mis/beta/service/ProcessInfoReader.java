@@ -15,7 +15,7 @@ import com.avc.mis.beta.dao.ReadOnlyDAO;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
-import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.process.GeneralProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.values.UserBasic;
@@ -144,9 +144,9 @@ public class ProcessInfoReader {
 	 * created for that special process type. e.g. order, receiving etc.
 	 * @param processId
 	 * @param processTypeName
-	 * @return ProductionProcessDTO with information of the requested process.
+	 * @return GeneralProcessDTO with information of the requested process.
 	 */
-	public ProductionProcessDTO getProcess(int processId, ProcessName processName) {
+	public GeneralProcessDTO getProcess(int processId, ProcessName processName) {
 //		ProcessName processName = Enum.valueOf(ProcessName.class, processTypeName);
 		switch(processName) {
 		case CASHEW_ORDER:

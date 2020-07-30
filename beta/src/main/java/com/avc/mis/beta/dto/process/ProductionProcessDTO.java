@@ -1,93 +1,62 @@
-/**
- * 
- */
 package com.avc.mis.beta.dto.process;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
+import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.process.StorageTransfer;
+import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.ToString;
 
-/**
- * @author Zvi
- *
- */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
-public abstract class ProductionProcessDTO extends ProcessDTO {
-	
-	@EqualsAndHashCode.Exclude // no need to compare for testing
-	private Instant createdDate;
-//	private Instant modifiedDate;
-	@EqualsAndHashCode.Exclude // no need to compare for testing
-	private String userRecording; //perhaps only user name
-	private PoCodeDTO poCode;
-	@EqualsAndHashCode.Exclude //if poCode is the same than it's enough, because might be null when testing.
-	private ProcessName processName; // use string instead of object or enum
-	private ProductionLine productionLine;
-	private OffsetDateTime recordedTime;
-	private Duration duration;
-	private Integer numOfWorkers;
-	private ProcessStatus processStatus;
-	private EditStatus editStatus;
-	private String remarks;
-	@EqualsAndHashCode.Exclude // don't compare for testing
-	private String approvals;
+//similar to StorageTransferDTO - perhaps should inherit from this
+public class ProductionProcessDTO extends GeneralProcessDTO {
 
+	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
+	private Set<UsedItemDTO> usedItems; //can use a SortedSet like ContactDetails to maintain order
 	
-	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
-			Integer supplierId, Integer supplierVersion, String supplierName, 
-			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus,
-			String remarks , String approvals) {
-		super(id, version);
-		this.createdDate = createdDate;
-		this.userRecording = userRecording;
-		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
-		this.processName = processName;
-		this.productionLine = productionLine;
-		this.recordedTime = recordedTime;
-		this.duration = duration;
-		this.numOfWorkers = numOfWorkers;
-		this.processStatus = processStatus;
-		this.editStatus = editStatus;
-		this.remarks = remarks;
-		this.approvals = approvals;
-
+	
+	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, Integer poCodeId,
+			String contractTypeCode, String contractTypeSuffix, 
+			Integer supplierId, Integer supplierVersion, String supplierName,
+			ProcessName processName, ProductionLine productionLine, OffsetDateTime recordedTime, Duration duration,
+			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
+		super(id, version, createdDate, userRecording, poCodeId, contractTypeCode, contractTypeSuffix,
+				supplierId, supplierVersion, supplierName,
+				processName, productionLine, recordedTime, duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
 	}
 	
-	public ProductionProcessDTO(@NonNull ProductionProcess process) {
-		super(process.getId(), process.getVersion());
-		this.createdDate = process.getCreatedDate();
-		if(process.getCreatedBy() != null)
-			this.userRecording = process.getCreatedBy().getUsername();
-		this.poCode = new PoCodeDTO(process.getPoCode());
-		if(process.getProcessType() != null)
-			this.processName = process.getProcessType().getProcessName();
-		this.productionLine = process.getProductionLine();
-		this.recordedTime = process.getRecordedTime();
-		this.duration = process.getDuration();
-		this.numOfWorkers = process.getNumOfWorkers();
-		this.processStatus = process.getLifeCycle().getProcessStatus();
-		this.editStatus = process.getLifeCycle().getEditStatus();
-		this.remarks = process.getRemarks();
-		this.approvals = process.getApprovals().stream().map(t -> t.getUser().getUsername()).collect(Collectors.joining());
-
+	
+	public ProductionProcessDTO(@NonNull StorageTransfer transfer) {
+		super(transfer);
+		this.processItems = Arrays.stream(transfer.getProcessItems())
+				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
+		this.usedItems = Arrays.stream(transfer.getUsedItems())
+				.map(i->{return new UsedItemDTO((UsedItem)i);}).collect(Collectors.toSet());
 	}
 	
-	public abstract String getProcessTypeDescription();
+
+	@Override
+	public String getProcessTypeDescription() {
+		return getProcessName().toString();	
+	}
+	
+
 }

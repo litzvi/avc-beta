@@ -174,8 +174,8 @@ public class Orders {
 	}
 	
 	/**
-	 * Gets full details of purchase order with given ProductionProcess id. 
-	 * @param processId the id of ProductionProcess requested
+	 * Gets full details of purchase order with given GeneralProcess id. 
+	 * @param processId the id of GeneralProcess requested
 	 * @return PoDTO object with purchase order details
 	 * @throws IllegalArgumentException if purchase order for given process id dosen't exist.
 	 */

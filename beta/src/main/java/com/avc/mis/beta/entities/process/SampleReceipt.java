@@ -35,7 +35,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "SAMPLE_RECEIPTS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class SampleReceipt extends ProductionProcess {
+public class SampleReceipt extends GeneralProcess {
 	
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)

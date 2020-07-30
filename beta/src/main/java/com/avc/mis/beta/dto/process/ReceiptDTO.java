@@ -37,7 +37,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class ReceiptDTO extends ProductionProcessDTO {
+public class ReceiptDTO extends GeneralProcessDTO {
 
 	private Set<ReceiptItemDTO> receiptItems; //can use a SortedSet like ContactDetails to maintain order
 	

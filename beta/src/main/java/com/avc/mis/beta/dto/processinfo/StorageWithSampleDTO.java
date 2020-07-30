@@ -5,10 +5,6 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Optional;
-
-import javax.persistence.Column;
-import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
