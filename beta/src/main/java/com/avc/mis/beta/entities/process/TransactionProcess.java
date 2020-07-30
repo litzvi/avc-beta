@@ -3,9 +3,11 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.lang.reflect.Array;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,6 +18,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
@@ -40,12 +43,12 @@ import lombok.Setter;
 @Entity
 @Table(name = "TRANSACTION_PROCESSES")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class TransactionProcess extends GeneralProcess {
-
+public abstract class TransactionProcess<T extends ProcessItem> extends GeneralProcess {
+	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	private Set<ProcessItem> processItems = new HashSet<>();
+	private Set<T> processItems = new HashSet<>();
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
@@ -56,8 +59,9 @@ public abstract class TransactionProcess extends GeneralProcess {
 	 * Gets the list of Items as an array (can be ordered).
 	 * @return the processItems
 	 */
-	public ProcessItem[] getProcessItems() {
-		return this.processItems.toArray(new ProcessItem[this.processItems.size()]);
+	protected Object[] getProcessItems() {
+		return this.processItems.toArray();
+//		return (T[]) this.processItems.toArray(Array.newInstance(c, this.processItems.size()));
 	}
 
 	/**
@@ -66,7 +70,7 @@ public abstract class TransactionProcess extends GeneralProcess {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param processItems the processItems to set
 	 */
-	public void setProcessItems(ProcessItem[] processItems) {
+	public void setProcessItems(T[] processItems) {
 		this.processItems = Insertable.setReferences(processItems, (t) -> {t.setReference(this);	return t;});
 	}
 	

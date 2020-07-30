@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.RawItemQuality;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -33,9 +35,15 @@ import lombok.Setter;
 @Entity
 @Table(name = "QC_TESTS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class QualityCheck extends TransactionProcess {
+public class QualityCheck extends TransactionProcess<ProcessItem> {
 	
 	public static final int SCALE = 4;
+	
+	@Override
+	public ProcessItem[] getProcessItems() {
+		Object[] processItems = super.getProcessItems();
+		return Arrays.copyOf(processItems, processItems.length, ProcessItem[].class);
+	}
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 

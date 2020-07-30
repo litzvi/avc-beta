@@ -27,15 +27,17 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "ORDER_RECEIPTS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class Receipt extends TransactionProcess {
+public class Receipt extends TransactionProcess<ReceiptItem> {
 	
 	public void setReceiptItems(ReceiptItem[] receiptItems) {
 		super.setProcessItems(receiptItems);
 	}
 	
 	public ReceiptItem[] getReceiptItems() {
-		ProcessItem[] processItems = getProcessItems();
+		Object[] processItems = super.getProcessItems();
 		return Arrays.copyOf(processItems, processItems.length, ReceiptItem[].class);
+//		ProcessItem[] processItems = getProcessItems();
+//		return Arrays.copyOf(processItems, processItems.length, ReceiptItem[].class);
 	}
 	
 	@JsonIgnore

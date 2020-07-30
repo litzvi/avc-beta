@@ -58,7 +58,7 @@ public class ReceiptDTO extends GeneralProcessDTO {
 	 */
 	public ReceiptDTO(@NonNull Receipt receipt) {
 		super(receipt);
-		this.receiptItems = Arrays.stream(receipt.getProcessItems())
+		this.receiptItems = Arrays.stream(receipt.getReceiptItems())
 				.map(i->{return new ReceiptItemDTO((ReceiptItem) i);}).collect(Collectors.toSet());
 
 	}
