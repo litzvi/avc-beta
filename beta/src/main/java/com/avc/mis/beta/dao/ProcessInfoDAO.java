@@ -83,7 +83,7 @@ public class ProcessInfoDAO extends DAO {
 	public void addTransactionProcessEntity(TransactionProcess process) {
 		addGeneralProcessEntity(process);
 		//check used items amounts () don't exceed the storage amounts
-		if(!isInventorySufficiant(process.getUsedItems())) {
+		if(!isInventorySufficiant(process.getId())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
 	}
@@ -94,12 +94,9 @@ public class ProcessInfoDAO extends DAO {
 	 * @param usedItems array of UsedItem
 	 * @return true if for all storages, used amounts are equal or less than storage amount, false otherwise
 	 */
-	private boolean isInventorySufficiant(UsedItem[] usedItems) {
-		if(usedItems == null || usedItems.length == 0) {
-			return true;
-		}
-		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageBalances(
-				Stream.of(usedItems).map(i -> i.getStorage().getId()).toArray(Integer[]::new));
+	private boolean isInventorySufficiant(Integer processId) {
+		
+		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageBalances(processId);
 		return storageBalances.allMatch(b -> b.isLegal());
 //		Map<Integer, StorageBalance> storageBalanceMap = storageBalances.collect(Collectors.toMap(StorageBalance::getId, o -> o));
 //		for(UsedItem i: usedItems) {
@@ -138,7 +135,7 @@ public class ProcessInfoDAO extends DAO {
 	public <T extends TransactionProcess> void editTransactionProcessEntity(T process) {
 		editGeneralProcessEntity(process);
 		//check used items amounts (after edit) don't exceed the storage amounts
-		if(!isInventorySufficiant(process.getUsedItems())) {
+		if(!isInventorySufficiant(process.getId())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
 	}

@@ -71,12 +71,13 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	 */
 	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
 			+ "s.id, s.numberUnits, sum(ui.numberUnits) ) "
-			+ "from Storage s "
-				+ "left join s.usedItems ui "
-			+ "where s.id in :storageIds "
+			+ "from TransactionProcess p "
+				+ "join p.usedItems i "
+					+ "join i.storage s "
+						+ "left join s.usedItems ui "
+			+ "where p.id = :processId "
 			+ "group by s ")
-	//for edit needs to take into account current amounts, also if there are 2 rows using same item..
-	Stream<StorageBalance> findStorageBalances(Integer[] storageIds);
+	Stream<StorageBalance> findStorageBalances(Integer processId);
 
 //	@Query("select new com.avc.mis.beta.dto.values.PoInventoryRowWithStorage( "
 //			+ "pi.id, pi.version, item.id, item.value, "
