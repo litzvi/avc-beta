@@ -47,10 +47,10 @@ public class UOM extends LinkEntity {
 	
 	@Column(nullable = false, precision = 19, scale = 4)
 	@NotNull(message = "Multiplicand value is mandatory")
-	private BigDecimal multiplicand = BigDecimal.ONE;
+	private BigDecimal multiplicand;
 	
 	@Column(nullable = false, precision = 19, scale = 4)
 	@NotNull(message = "Divisor value is mandatory")
-	private BigDecimal divisor = BigDecimal.ONE;
+	private BigDecimal divisor;
 
 }

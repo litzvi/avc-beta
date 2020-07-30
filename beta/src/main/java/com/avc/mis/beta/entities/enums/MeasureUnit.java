@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.enums;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
@@ -42,27 +43,50 @@ public enum MeasureUnit {
 	 * Default scale when returning result from conversion
 	 */
 	public static final int SCALE = 3;
+	public static final int CALCULATION_SCALE = 16;
 	
 	static {
 		CONVERTION_MAP = new HashMap<MeasureUnit, Map<MeasureUnit, UOM>>();
 		
 		Map<MeasureUnit, UOM> kgMap = new HashMap<MeasureUnit, UOM>();
 		kgMap.put(KG, new UOM(KG, KG, BigDecimal.ONE, BigDecimal.ONE));
+		kgMap.put(GRAM, new UOM(KG, GRAM, new BigDecimal("1000"), BigDecimal.ONE));
 		kgMap.put(LBS, new UOM(KG, LBS, BigDecimal.ONE, new BigDecimal("0.4536")));
 		kgMap.put(LOT, new UOM(KG, LOT, BigDecimal.ONE, new BigDecimal("15876")));
+		kgMap.put(OZ, new UOM(KG, OZ, new BigDecimal("16"), new BigDecimal("0.4536")));
 		CONVERTION_MAP.put(KG, kgMap);
+		
+		Map<MeasureUnit, UOM> gramMap = new HashMap<MeasureUnit, UOM>();
+		gramMap.put(KG, new UOM(GRAM, KG, new BigDecimal("0.001"), BigDecimal.ONE));
+		gramMap.put(GRAM, new UOM(GRAM, GRAM, BigDecimal.ONE, BigDecimal.ONE));
+		gramMap.put(LBS, new UOM(GRAM, LBS, BigDecimal.ONE, new BigDecimal("453.6")));
+		gramMap.put(LOT, new UOM(GRAM, LOT, new BigDecimal("0.001"), new BigDecimal("15876")));
+		gramMap.put(OZ, new UOM(GRAM, OZ, new BigDecimal("16"), new BigDecimal("453.6")));
+		CONVERTION_MAP.put(GRAM, gramMap);
 		
 		Map<MeasureUnit, UOM> lbsMap = new HashMap<MeasureUnit, UOM>();
 		lbsMap.put(KG, new UOM(LBS, KG, new BigDecimal("0.4536"), BigDecimal.ONE));
+		lbsMap.put(GRAM, new UOM(LBS, GRAM, new BigDecimal("453.6"), BigDecimal.ONE));
 		lbsMap.put(LBS, new UOM(LBS, LBS, BigDecimal.ONE, BigDecimal.ONE));
 		lbsMap.put(LOT, new UOM(LBS, LOT, BigDecimal.ONE, new BigDecimal("35000")));
+		lbsMap.put(OZ, new UOM(LBS, OZ, new BigDecimal("16"), BigDecimal.ONE));
 		CONVERTION_MAP.put(LBS, lbsMap);
 		
 		Map<MeasureUnit, UOM> lotMap = new HashMap<MeasureUnit, UOM>();
 		lotMap.put(KG, new UOM(LOT, KG, new BigDecimal("15876"), BigDecimal.ONE));
+		lotMap.put(GRAM, new UOM(LOT, GRAM, new BigDecimal("15876000"), BigDecimal.ONE));
 		lotMap.put(LBS, new UOM(LOT, LBS, new BigDecimal("35000"), BigDecimal.ONE));
 		lotMap.put(LOT, new UOM(LOT, LOT, BigDecimal.ONE, BigDecimal.ONE));
+		lotMap.put(OZ, new UOM(LOT, OZ, new BigDecimal("560000"), BigDecimal.ONE));
 		CONVERTION_MAP.put(LOT, lotMap);
+		
+		Map<MeasureUnit, UOM> ozMap = new HashMap<MeasureUnit, UOM>();
+		ozMap.put(KG, new UOM(OZ, KG, new BigDecimal("0.4536"), new BigDecimal("16")));
+		ozMap.put(GRAM, new UOM(OZ, GRAM, new BigDecimal("453.6"), new BigDecimal("16")));
+		ozMap.put(LBS, new UOM(OZ, LBS, BigDecimal.ONE, new BigDecimal("16")));
+		ozMap.put(LOT, new UOM(OZ, LOT, BigDecimal.ONE, new BigDecimal("560000")));
+		ozMap.put(OZ, new UOM(OZ, OZ, BigDecimal.ONE, BigDecimal.ONE));
+		CONVERTION_MAP.put(OZ, ozMap);
 		
 	}
 	
@@ -72,7 +96,7 @@ public enum MeasureUnit {
 			return null;
 		return amount
 				.multiply(convertUOM.getMultiplicand())
-				.divide(convertUOM.getDivisor(), MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
+				.divide(convertUOM.getDivisor(), MathContext.DECIMAL64);
 	}
 	
 	public static BigDecimal convert(@NonNull AmountWithUnit amount, MeasureUnit toUnit) {
