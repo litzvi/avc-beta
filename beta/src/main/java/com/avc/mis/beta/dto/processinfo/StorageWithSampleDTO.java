@@ -36,11 +36,12 @@ public class StorageWithSampleDTO extends StorageDTO {
 	
 	
 	public StorageWithSampleDTO(Integer id, Integer version, 
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
+			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, 
 			String remarks, Class<? extends Storage> clazz, 
 			BigDecimal emptyContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
-		super(id, version, unitAmount, measureUnit, numberUnits, warehouseLocationId, warehouseLocationValue, remarks,
+		super(id, version, unitAmount, measureUnit, numberUnits, containerWeight, 
+				warehouseLocationId, warehouseLocationValue, remarks,
 				clazz);
 		this.emptyContainerWeight = emptyContainerWeight;
 		this.numberOfSamples = numberOfSamples;
@@ -58,16 +59,15 @@ public class StorageWithSampleDTO extends StorageDTO {
 	}
 	
 	public StorageWithSampleDTO(Integer id, Integer version,
-			AmountWithUnit unitAmount, BigDecimal numberUnits, 
+			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz, 
 			BigDecimal emptyContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
-		super(id, version, unitAmount, numberUnits, warehouseLocation, remarks, clazz);
+		super(id, version, unitAmount, numberUnits, containerWeight, warehouseLocation, remarks, clazz);
 		this.emptyContainerWeight = emptyContainerWeight;
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
 	}
-	
-	
+		
 	public AmountWithUnit getWeighedDifferance() {
 		if(avgTestedWeight == null) {
 			return null;

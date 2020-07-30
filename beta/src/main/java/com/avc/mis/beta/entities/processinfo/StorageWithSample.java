@@ -14,6 +14,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Positive;
 
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;
@@ -43,4 +44,7 @@ public class StorageWithSample extends Storage {
 	@Positive(message = "Average tested weight has to be positive")
 	private BigDecimal avgTestedWeight;
 
+	protected boolean canEqual(Object o) {
+		return Insertable.canEqualCheckNullId(this, o);
+	}
 }

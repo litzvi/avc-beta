@@ -25,18 +25,20 @@ public class StorageDTO extends ProcessDTO {
 
 	private AmountWithUnit unitAmount;
 	private BigDecimal numberUnits;	
+	private BigDecimal containerWeight;	
 	private BasicValueEntity<Warehouse> warehouseLocation;
 	private String remarks;
 	private String className; //to differentiate between storage to ExtraAdded
 //	Class<? extends Storage> clazz;
 	
 	public StorageDTO(Integer id, Integer version,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
+			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
 		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
+		this.containerWeight = containerWeight;
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else
@@ -53,6 +55,7 @@ public class StorageDTO extends ProcessDTO {
 		super(storage.getId(), storage.getVersion());
 		this.unitAmount = storage.getUnitAmount().setScale(MeasureUnit.SCALE);
 		this.numberUnits = storage.getNumberUnits().setScale(MeasureUnit.SCALE);
+		this.containerWeight = storage.getContainerWeight();
 		if(storage.getWarehouseLocation() != null) {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(
 					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
@@ -74,12 +77,13 @@ public class StorageDTO extends ProcessDTO {
 	 * @param description
 	 */
 	public StorageDTO(Integer id, Integer version,
-			AmountWithUnit unitAmount, BigDecimal numberUnits, 
+			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
 		this.unitAmount = unitAmount;
 //		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
+		this.containerWeight = containerWeight.setScale(MeasureUnit.SCALE);
 		this.warehouseLocation = warehouseLocation;
 		this.remarks = remarks;
 		this.className = clazz.getSimpleName();

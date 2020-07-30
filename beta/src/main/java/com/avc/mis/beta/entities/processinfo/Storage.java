@@ -71,6 +71,9 @@ public class Storage extends AuditedEntity {
 	@Positive(message = "Number of units has to be positive")
 	private BigDecimal numberUnits;	
 	
+	@Column(precision = 19, scale = MeasureUnit.SCALE)
+	private BigDecimal containerWeight;	
+		
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "warehouseLocationId")
 	private Warehouse warehouseLocation;
