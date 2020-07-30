@@ -125,7 +125,7 @@ public class Receipts {
 		if(!isOrderOpen(receipt.getReceiptItems())) {
 			throw new IllegalArgumentException("Order items where already fully received");
 		}
-		dao.addProcessEntity(receipt);
+		dao.addGeneralProcessEntity(receipt);
 	}
 	
 	
@@ -215,7 +215,7 @@ public class Receipts {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editReceipt(Receipt receipt) {
 		//can't edit if finalised - should be checked by process status, perhaps in  table
-		dao.editProcessEntity(receipt);
+		dao.editGeneralProcessEntity(receipt);
 	}
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

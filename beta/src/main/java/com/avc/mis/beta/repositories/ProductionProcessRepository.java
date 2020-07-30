@@ -1,10 +1,9 @@
 /**
  * 
  */
-package com.avc.mis.beta.service;
+package com.avc.mis.beta.repositories;
 
 import com.avc.mis.beta.entities.process.ProductionProcess;
-import com.avc.mis.beta.repositories.ProcessRepository;
 
 /**
  * @author zvi

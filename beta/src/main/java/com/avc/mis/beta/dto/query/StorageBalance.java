@@ -37,6 +37,12 @@ public class StorageBalance extends ValueDTO {
 		return numberUnits.subtract(usedAmount);
 	}
 	
+	public Boolean isLegal() {
+		if(usedAmount == null)
+			return true;
+		return this.usedAmount.compareTo(this.numberUnits) <= 0;
+	}
+	
 	
 
 }

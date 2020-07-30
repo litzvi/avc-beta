@@ -15,6 +15,7 @@ import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.repositories.ProductionProcessRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class ProductionProcesses {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addProductionProcess(ProductionProcess process, ProcessName processName) {
 		process.setProcessType(dao.getProcessTypeByValue(processName));
-		dao.addProcessEntity(process);
+		dao.addTransactionProcessEntity(process);
 	}
 	
 	/**
@@ -59,6 +60,6 @@ public class ProductionProcesses {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editProductionProcess(ProductionProcess process) {
 		//check used items amounts don't exceed the storage amounts
-		dao.editProcessEntity(process);
+		dao.editTransactionProcessEntity(process);
 	}
 }

@@ -133,7 +133,7 @@ public class Orders {
 		dao.addEntityWithFlexibleGenerator(po.getPoCode());
 //		Session session = getEntityManager().unwrap(Session.class);
 //		session.save(po.getPoCode());
-		dao.addProcessEntity(po);			
+		dao.addGeneralProcessEntity(po);			
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class Orders {
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editOrder(PO po) {
-		dao.editProcessEntity(po);
+		dao.editGeneralProcessEntity(po);
 	}
 	
 	

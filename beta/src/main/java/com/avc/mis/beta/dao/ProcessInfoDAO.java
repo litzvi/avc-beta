@@ -26,6 +26,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
+import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
@@ -69,19 +70,29 @@ public class ProcessInfoDAO extends DAO {
 	 * Adds the process and adds required notifications.
 	 * @param process GeneralProcess to be added.
 	 */
-	public void addProcessEntity(GeneralProcess process) {
-		//check used items amounts don't exceed the storage amounts
-		if(!isInventorySufficiant(process.getUsedItems())) {
-			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
-		}
+	public void addGeneralProcessEntity(GeneralProcess process) {
 		addEntity(process);
 		addAlerts(process);
 	}
 	
 	/**
-	 * Checks if given array used items don't exceed existing inventory amounts
+	 * Adding (persisting) a transaction process (may have used and stored items). 
+	 * Adds the process and adds required notifications.
+	 * @param process GeneralProcess to be added.
+	 */
+	public void addTransactionProcessEntity(TransactionProcess process) {
+		addGeneralProcessEntity(process);
+		//check used items amounts () don't exceed the storage amounts
+		if(!isInventorySufficiant(process.getUsedItems())) {
+			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+		}
+	}
+	
+	/**
+	 * Checks if for given array used items, used item storages total don't exceed storage amounts.
+	 * Checks only for storages that where used by given UsedItems.
 	 * @param usedItems array of UsedItem
-	 * @return true if all amounts are equal or less than inventory balance, false otherwise
+	 * @return true if for all storages, used amounts are equal or less than storage amount, false otherwise
 	 */
 	private boolean isInventorySufficiant(UsedItem[] usedItems) {
 		if(usedItems == null || usedItems.length == 0) {
@@ -89,14 +100,15 @@ public class ProcessInfoDAO extends DAO {
 		}
 		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageBalances(
 				Stream.of(usedItems).map(i -> i.getStorage().getId()).toArray(Integer[]::new));
-		Map<Integer, StorageBalance> storageBalanceMap = storageBalances.collect(Collectors.toMap(StorageBalance::getId, o -> o));
-		for(UsedItem i: usedItems) {
-			if(i.getNumberUnits().compareTo(storageBalanceMap.get(i.getStorage().getId()).getBalance()) > 0) {
-				return false;
-			}
-		}
-		
-		return true;
+		return storageBalances.allMatch(b -> b.isLegal());
+//		Map<Integer, StorageBalance> storageBalanceMap = storageBalances.collect(Collectors.toMap(StorageBalance::getId, o -> o));
+//		for(UsedItem i: usedItems) {
+//			if(i.getNumberUnits().compareTo(storageBalanceMap.get(i.getStorage().getId()).getBalance()) > 0) {
+//				return false;
+//			}
+//		}
+//		
+//		return true;
 	}
 
 	/**
@@ -104,7 +116,7 @@ public class ProcessInfoDAO extends DAO {
 	 * Edits the process and adds required notifications.
 	 * @param process GeneralProcess to be edited.
 	 */
-	public <T extends GeneralProcess> void editProcessEntity(T process) {
+	public <T extends GeneralProcess> void editGeneralProcessEntity(T process) {
 		//check used items amounts don't exceed the storage amounts
 		EditStatus status = getProcessRepository().findProcessEditStatus(process.getId());
 		if(status != EditStatus.EDITABLE) {
@@ -116,6 +128,19 @@ public class ProcessInfoDAO extends DAO {
 		process.setModifiedDate(null);
 		editEntity(process);
 		editAlerts(process);
+	}
+	
+	/**
+	 * editing (merging) a transaction process or process information(may have used and stored items). 
+	 * Edits the process and adds required notifications.
+	 * @param process GeneralProcess to be edited.
+	 */
+	public <T extends TransactionProcess> void editTransactionProcessEntity(T process) {
+		editGeneralProcessEntity(process);
+		//check used items amounts (after edit) don't exceed the storage amounts
+		if(!isInventorySufficiant(process.getUsedItems())) {
+			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+		}
 	}
 	
 	/**

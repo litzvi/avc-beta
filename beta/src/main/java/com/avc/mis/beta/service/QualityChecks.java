@@ -46,25 +46,25 @@ public class QualityChecks {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewReceiptCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT_QC));
-		dao.addProcessEntity(check);
+		dao.addGeneralProcessEntity(check);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewSampleCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.SAMPLE_QC));
-		dao.addProcessEntity(check);
+		dao.addGeneralProcessEntity(check);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewSupplierCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.SUPPLIER_QC));
-		dao.addProcessEntity(check);
+		dao.addGeneralProcessEntity(check);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewVinaControlCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.VINA_CONTROL_QC));
-		dao.addProcessEntity(check);
+		dao.addGeneralProcessEntity(check);
 	}
 	
 	public QualityCheckDTO getQcByProcessId(int processId) {
@@ -83,7 +83,7 @@ public class QualityChecks {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editCheck(QualityCheck check) {
-		dao.editProcessEntity(check);
+		dao.editGeneralProcessEntity(check);
 	}
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

@@ -33,7 +33,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "QC_TESTS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class QualityCheck extends GeneralProcess {
+public class QualityCheck extends TransactionProcess {
 	
 	public static final int SCALE = 4;
 	

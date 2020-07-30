@@ -46,7 +46,7 @@ public class WarehouseManagement {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addStorageTransfer(StorageTransfer transfer) {
 		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
-		dao.addProcessEntity(transfer);
+		dao.addTransactionProcessEntity(transfer);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class WarehouseManagement {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editStorageTransfer(StorageTransfer transfer) {
 		//check used items amounts don't exceed the storage amounts
-		dao.editProcessEntity(transfer);
+		dao.editTransactionProcessEntity(transfer);
 	}
 	
 //	//need to make sure currently in inventory - used for test

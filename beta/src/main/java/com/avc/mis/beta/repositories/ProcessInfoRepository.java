@@ -136,7 +136,7 @@ public interface ProcessInfoRepository extends ProcessRepository<GeneralProcess>
 	EditStatus findProcessEditStatus(Integer processId);
 
 	@Query("select new java.lang.Boolean(count(*) > 0) "
-			+ "from GeneralProcess p "
+			+ "from TransactionProcess p "
 				+ "join p.usedItems ui "
 					+ "join ui.process uip "
 						+ "join uip.lifeCycle c "
