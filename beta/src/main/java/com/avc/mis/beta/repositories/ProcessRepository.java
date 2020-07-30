@@ -24,7 +24,7 @@ public interface ProcessRepository<T extends ProductionProcess> extends BaseRepo
 			+ " i.id, i.version, item.id, item.value, "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, "
-			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
+			+ "unit.amount, unit.measureUnit, sf.numberUnits, sf.containerWeight, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
 			+ "i.description, i.remarks) "
 		+ "from ProcessItem i "

@@ -33,8 +33,7 @@ public class StorageWithSampleDTO extends StorageDTO {
 	private BigDecimal emptyContainerWeight;	
 	private BigInteger numberOfSamples;	
 	private BigDecimal avgTestedWeight;
-	
-	
+		
 	public StorageWithSampleDTO(Integer id, Integer version, 
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, 

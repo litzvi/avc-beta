@@ -43,7 +43,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 	@Query("select new com.avc.mis.beta.dto.query.ReceiptItemWithStorage( "
 			+ " i.id, i.version, item.id, item.value, "
 			+ "sf.id, sf.version, "
-			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
+			+ "unit.amount, unit.measureUnit, sf.numberUnits, sf.containerWeight, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
 			+ "sf.emptyContainerWeight, sf.numberOfSamples, sf.avgTestedWeight, "
 //			+ "CASE "
