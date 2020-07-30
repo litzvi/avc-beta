@@ -48,6 +48,8 @@ import lombok.ToString;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Storage extends AuditedEntity {
 	
+	private String name;
+	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processItemId", nullable = false, updatable = false)
