@@ -18,7 +18,7 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class StorageBalance extends ValueDTO {
 
 	BigDecimal numberUnits;

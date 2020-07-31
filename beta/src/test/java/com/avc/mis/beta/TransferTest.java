@@ -67,7 +67,13 @@ public class TransferTest {
 //			System.out.println(processItem.getItem() + ", " + processItem.getStorageForms().length);
 //		}
 
-		warehouseManagement.addStorageTransfer(transfer);
+		try {
+			warehouseManagement.addStorageTransfer(transfer);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		
 		//TODO check if usedItems exceeds inventory should fail
 		transfer = new StorageTransfer();

@@ -1,7 +1,10 @@
 package com.avc.mis.beta.service;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +15,13 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
+import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.StorageTransfer;
+import com.avc.mis.beta.entities.processinfo.UsedItem;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
 
@@ -47,8 +53,27 @@ public class WarehouseManagement {
 	public void addStorageTransfer(StorageTransfer transfer) {
 		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
 		dao.addTransactionProcessEntity(transfer);
+		//check if process items match the used item (items are equal, perhaps also check amounts difference and send warning)
+		checkTransferBalance(transfer);
 	}
 	
+	/**
+	 * @param id
+	 */
+	private void checkTransferBalance(StorageTransfer transfer) {
+		List<ItemTransactionDifference> differences = getTransferRepository().findTransferDifferences(transfer.getId());
+		
+		for(ItemTransactionDifference d: differences) {
+			BigDecimal producedAmount = d.getProducedAmount().getAmount();
+			if (producedAmount == null /* || producedAmount.compareTo(BigDecimal.ZERO) == 0 */) {
+				throw new IllegalArgumentException("Storage transfer can't change item");
+			}
+			if(d.getDifference().signum() < 0) {
+				dao.sendMessageAlerts(transfer, "Transffered items don't have matching amounts");
+			}
+		}
+	}
+
 	/**
 	 * Get a full storage transfer process information
 	 * @param processId id of the StorageTransfer process

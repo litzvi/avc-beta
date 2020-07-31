@@ -5,6 +5,7 @@ package com.avc.mis.beta.repositories;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,6 +13,7 @@ import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.entities.data.ProcessManagement;
+import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ManagementType;
@@ -37,7 +39,14 @@ public interface ProcessInfoRepository extends ProcessRepository<GeneralProcess>
 			+ "where p.id = ?1")
 	List<ProcessManagement> findProcessTypeAlertsByProcess(Integer processId);
 
-
+	@Query("select user "
+			+ "from ProcessManagement a "
+			+ "join a.user user "
+			+ "join GeneralProcess p "
+				+ "on p.processType = a.processType "
+			+ "where p.id = ?1")
+	Set<UserEntity> findProcessTypeAlertsUsersByProcess(Integer processId);
+	
 	@Query("select p.approvals from GeneralProcess p where p.id = ?1")
 	List<ApprovalTask> findProcessApprovals(Integer processId);
 

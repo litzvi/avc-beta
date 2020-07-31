@@ -6,8 +6,10 @@ import javax.persistence.Entity;
 import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -38,8 +40,8 @@ public class StorageTransfer extends TransactionProcess<ProcessItem> {
 		super.prePersist();
 		if(getUsedItems().length == 0)
 			throw new IllegalArgumentException("Has to containe at least one origion storage item");
-		if(getProcessItems().length == 0)
-			throw new IllegalArgumentException("Has to containe at least one destination storage item");
+//		if(getProcessItems().length == 0)
+//			throw new IllegalArgumentException("Has to containe at least one destination storage item");
 	}
 	
 	@Override

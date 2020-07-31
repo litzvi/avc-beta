@@ -7,6 +7,7 @@ import java.security.AccessControlException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -180,9 +181,14 @@ public class ProcessInfoDAO extends DAO {
 			approval.setDescription(process.getProcessType() + "process added and edited");
 		}
 		
-		List<ProcessManagement> alerts = getProcessRepository().findProcessTypeAlertsByProcess(process.getId());
-		for(ProcessManagement alert: alerts) {
-			addMessage(alert.getUser(), process, "Old " + process.getProcessTypeDescription() + " process edited");
+		sendMessageAlerts(process, "Old " + process.getProcessTypeDescription() + " process edited");
+		
+	}
+	
+	public void sendMessageAlerts(GeneralProcess process, String title) {
+		Set<UserEntity> users = getProcessRepository().findProcessTypeAlertsUsersByProcess(process.getId());
+		for(UserEntity user: users) {
+			addMessage(user, process, title);
 		}
 	}
 	
