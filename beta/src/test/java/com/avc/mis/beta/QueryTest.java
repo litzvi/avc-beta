@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.RawQcRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.dto.view.SupplierRow;
@@ -45,6 +47,7 @@ import com.avc.mis.beta.service.CashewReports;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
+import com.avc.mis.beta.service.ProductionProcesses;
 import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Suppliers;
@@ -73,6 +76,7 @@ public class QueryTest {
 	@Autowired CashewReports cashewReports;
 	@Autowired QualityChecks qualityChecks;
 	@Autowired WarehouseManagement warehouseManagement;
+	@Autowired ProductionProcesses productionProcesses;
 	
 //	@Disabled
 	@Test
@@ -228,7 +232,12 @@ public class QueryTest {
 		//get cashew standards in DTOs
 		List<CashewStandardDTO> cashewStandards = valueTablesReader.getAllCashewStandardsDTO();
 		cashewStandards.forEach(i -> System.out.println(i));
-				
+		
+		//get report of cleaning and roasting processes
+		List<ProcessRow> processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_CLEANING);
+		processReport.forEach(i -> System.out.println(i));
+		processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_ROASTING);
+		processReport.forEach(i -> System.out.println(i));
 					
 		service.cleanup(po);
 
@@ -244,6 +253,12 @@ public class QueryTest {
 		//get cashew standards in DTOs
 		List<CashewStandardDTO> cashewStandards = valueTablesReader.getAllCashewStandardsDTO();
 		cashewStandards.forEach(i -> System.out.println(i));
+		
+		List<ProcessRow> processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_CLEANING);
+		processReport.forEach(i -> System.out.println(i));
+		processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_ROASTING);
+		processReport.forEach(i -> System.out.println(i));
+		
 						
 	}
 }

@@ -36,7 +36,7 @@ public interface TransferRepository extends ProcessRepository<StorageTransfer>{
 				+ "SUM(used_unit.amount * used_sf.numberUnits * uom_used.multiplicand / uom_used.divisor), "
 				+ "usedItem.measureUnit, "
 				+ "SUM(producedUnit.amount * sf.numberUnits * uom_produced.multiplicand / uom_produced.divisor), "
-				+ "producedItem.measureUnit) "
+				+ "usedItem.measureUnit) "
 			+ "from TransactionProcess p "
 				+ "join p.usedItems ui "
 					+ "join ui.storage used_sf "
@@ -45,14 +45,14 @@ public interface TransferRepository extends ProcessRepository<StorageTransfer>{
 							+ "join used_sf.unitAmount used_unit "
 							+ "join UOM uom_used "
 								+ "on uom_used.fromUnit = used_unit.measureUnit and uom_used.toUnit = usedItem.measureUnit "						
-				+ "left join p.processItems pi "
-					+ "left join pi.item producedItem "
+				+ "left join p.processItems pi on pi.item = usedItem "
+//					+ "left join pi.item producedItem "
 					+ "left join pi.storageForms sf "
 						+ "left join sf.unitAmount producedUnit "
 						+ "left join UOM uom_produced "
-							+ "on uom_produced.fromUnit = producedUnit.measureUnit and uom_produced.toUnit = producedItem.measureUnit "
+							+ "on uom_produced.fromUnit = pi.item.measureUnit and uom_produced.toUnit = usedItem.measureUnit "
 			+ "where p.id = :processId "
-				+ "and (producedItem is null or usedItem = producedItem) "
+//				+ "and (pi is null or usedItem = producedItem) "
 			+ "group by usedItem ")
 	List<ItemTransactionDifference> findTransferDifferences(Integer processId);
 

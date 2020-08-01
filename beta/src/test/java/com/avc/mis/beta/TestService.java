@@ -96,6 +96,23 @@ public class TestService {
 		return orderItems;
 	}
 	
+	public Receipt addOneItemCashewReceipt() {
+		//build order receipt
+		Receipt receipt = new Receipt();
+		PoCode poCode = new PoCode();
+		poCode.setCode(randCode++);
+		Supplier supplier = addBasicSupplier();
+		poCode.setSupplier(supplier);
+		poCode.setContractType(getContractType());
+		receipt.setPoCode(poCode);
+		//build process
+		receipt.setRecordedTime(OffsetDateTime.now());
+		//add order items
+		receipt.setReceiptItems(getReceiptItems(1));
+		receipts.addCashewReceipt(receipt);
+		return receipt;
+	}
+	
 	public Receipt addBasicCashewReceipt() {
 		//build order receipt
 		Receipt receipt = new Receipt();
@@ -193,7 +210,7 @@ public class TestService {
 		return warehouses.get(randNum.nextInt(warehouses.size()));
 	}
 
-	private List<Item> getItems() {
+	public List<Item> getItems() {
 		List<Item> items = valueTableReader.getAllItems();
 		if(items.isEmpty())
 			fail("No items in database for running this test");

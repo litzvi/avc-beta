@@ -3,8 +3,11 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
+import com.avc.mis.beta.dto.view.ProcessRow;
+import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
@@ -32,6 +37,22 @@ public class ProductionProcesses {
 	@Autowired private ProcessInfoDAO dao;
 
 	@Autowired private ProductionProcessRepository processRepository;
+	
+	public List<ProcessRow> getProductionProcessesByType(ProcessName processName) {
+		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName);
+		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getProcessRepository()
+				.findAllUsedItemsByProcessType(processName)
+				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		Map<Integer, List<ProductionProcessWithItemAmount>> producedMap = getProcessRepository()
+				.findAllProducedItemsByProcessType(processName)
+				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		for(ProcessRow row: processRows) {
+			row.setUsedItems(usedMap.get(row.getId()));
+			row.setProducedItems(producedMap.get(row.getId()));
+		}		
+		
+		return processRows;
+	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addProductionProcess(ProductionProcess process, ProcessName processName) {

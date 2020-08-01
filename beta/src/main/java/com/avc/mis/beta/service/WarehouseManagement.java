@@ -17,6 +17,7 @@ import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.StorageTransfer;
@@ -64,7 +65,7 @@ public class WarehouseManagement {
 		List<ItemTransactionDifference> differences = getTransferRepository().findTransferDifferences(transfer.getId());
 		
 		for(ItemTransactionDifference d: differences) {
-			BigDecimal producedAmount = d.getProducedAmount().getAmount();
+			AmountWithUnit producedAmount = d.getProducedAmount();
 			if (producedAmount == null /* || producedAmount.compareTo(BigDecimal.ZERO) == 0 */) {
 				throw new IllegalArgumentException("Storage transfer can't change item");
 			}

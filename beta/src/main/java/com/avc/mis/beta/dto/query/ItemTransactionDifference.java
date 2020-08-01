@@ -23,7 +23,7 @@ import lombok.Value;
 public class ItemTransactionDifference extends ValueDTO {
 
 	String itemName;
-	AmountWithUnit amountUsed;
+	AmountWithUnit usedAmount;
 	AmountWithUnit producedAmount;
 	
 	public ItemTransactionDifference(@NonNull Integer itemId, String itemName, 
@@ -31,12 +31,18 @@ public class ItemTransactionDifference extends ValueDTO {
 			BigDecimal producedAmount, MeasureUnit producedMU) {
 		super(itemId);
 		this.itemName = itemName;
-		this.amountUsed = new AmountWithUnit(usedAmount, usedMU);
-		this.producedAmount = new AmountWithUnit(producedAmount, producedMU);
+		if(producedAmount != null)
+			this.producedAmount = new AmountWithUnit(producedAmount, producedMU);
+		else
+			this.producedAmount = null;
+		if(usedAmount != null)
+			this.usedAmount = new AmountWithUnit(usedAmount, usedMU);
+		else
+			this.usedAmount = null;
 	}
 	
 	public AmountWithUnit getDifference() {
 		return Optional.ofNullable(producedAmount).orElse(AmountWithUnit.ZERO)
-				.substract(Optional.ofNullable(amountUsed).orElse(AmountWithUnit.ZERO));
+				.substract(Optional.ofNullable(usedAmount).orElse(AmountWithUnit.ZERO));
 	}
 }

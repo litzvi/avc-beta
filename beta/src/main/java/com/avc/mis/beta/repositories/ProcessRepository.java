@@ -1,5 +1,7 @@
 package com.avc.mis.beta.repositories;
 
+import java.time.Duration;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -9,7 +11,10 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.values.ProcessBasic;
+import com.avc.mis.beta.dto.view.ProcessRow;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 
 /**
@@ -18,26 +23,17 @@ import com.avc.mis.beta.entities.process.GeneralProcess;
  */
 public interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> {
 
-	
-	@Query("select new com.avc.mis.beta.dto.process.ProductionProcessDTO("
-			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
-			+ "pt.processName, p_line, "
-			+ "r.recordedTime, r.duration, r.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
-		+ "from ProductionProcess r "
-			+ "join r.poCode po_code "
+	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
+			+ "p.id, po_code.code, t.code, t.suffix, "
+			+ "p.recordedTime, p.duration) "
+		+ "from GeneralProcess p "
+			+ "join p.poCode po_code "
 				+ "join po_code.contractType t "
-				+ "join po_code.supplier s "
-			+ "join r.processType pt "
-			+ "left join r.createdBy p_user "
-			+ "left join r.productionLine p_line "
-			+ "join r.lifeCycle lc "
-			+ "left join r.approvals approval "
-				+ "left join approval.user u "
-		+ "where r.id = :processId ")
-	Optional<ProductionProcessDTO> findProductionProcessDTOById(int processId);
+			+ "join p.processType pt "
+		+ "where pt.processName = :processName ")
+	List<ProcessRow> findProcessByType(ProcessName processName);
 
+	
 	@Query("select new com.avc.mis.beta.dto.processinfo.UsedItemDTO( "
 			+ "i.id, i.version, item.id, item.value, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "
