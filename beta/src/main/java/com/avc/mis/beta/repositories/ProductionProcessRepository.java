@@ -3,16 +3,13 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
@@ -46,15 +43,19 @@ public interface ProductionProcessRepository extends ProcessRepository<Productio
 			+ "SUM(unit.amount * ui.numberUnits * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit) "
 		+ "from TransactionProcess p "
+			+ "join p.poCode po_code "
 			+ "join p.usedItems ui "
 				+ "join ui.storage sf "
 					+ "join sf.processItem pi "
 						+ "join pi.item item "
+						+ "join pi.process p_used_item "
+							+ "join p_used_item.poCode po_code_used_item "
 					+ "join sf.unitAmount unit "
 					+ "join UOM uom "
 						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
 			+ "join p.processType pt "
 		+ "where pt.processName = :processName "
+			+ "and po_code_used_item.code = po_code.code "
 		+ "group by p, item ")
 	Stream<ProductionProcessWithItemAmount> findAllUsedItemsByProcessType(ProcessName processName);
 

@@ -47,7 +47,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "PO_ITEMS")
 public class OrderItem extends AuditedEntity {
 	
