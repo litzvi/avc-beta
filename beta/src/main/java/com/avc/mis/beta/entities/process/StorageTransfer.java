@@ -20,7 +20,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "STORAGE_TRANSFERS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class StorageTransfer extends TransactionProcess<ProcessItem> {
+public class StorageTransfer extends PoTransactionProcess<ProcessItem> {
 
 	@Override
 	public ProcessItem[] getProcessItems() {

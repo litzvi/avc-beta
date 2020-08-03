@@ -35,7 +35,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "QC_TESTS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class QualityCheck extends TransactionProcess<ProcessItem> {
+public class QualityCheck extends PoTransactionProcess<ProcessItem> {
 	
 	public static final int SCALE = 4;
 	

@@ -6,12 +6,15 @@ package com.avc.mis.beta.entities.process;
 import java.util.Arrays;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.ReceiptItem;
+import com.avc.mis.beta.entities.processinfo.LoadedItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -24,14 +27,22 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "PRODUCTION_PROCESS")
+@Table(name = "CONTAINER_LOADINGS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class ProductionProcess extends PoTransactionProcess<ProcessItem> {
-
-	@Override
-	public ProcessItem[] getProcessItems() {
+public class ContainerLoading extends TransactionProcess<LoadedItem> {
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "containerArrivalId", nullable = false)
+	@NotNull(message = "Container loading has to reference container arrival")
+	private ContainerArrival containerArrival;
+	
+	public void setLoadedItems(LoadedItem[] loadedItems) {
+		super.setProcessItems(loadedItems);
+	}
+	
+	public LoadedItem[] getLoadedItems() {
 		Object[] processItems = super.getProcessItems();
-		return Arrays.copyOf(processItems, processItems.length, ProcessItem[].class);
+		return Arrays.copyOf(processItems, processItems.length, LoadedItem[].class);
 	}
 	
 	@JsonIgnore
@@ -47,13 +58,12 @@ public class ProductionProcess extends PoTransactionProcess<ProcessItem> {
 		if(getUsedItems().length == 0)
 			throw new IllegalArgumentException("Has to containe at least one origion storage item");
 		if(getProcessItems().length == 0)
-			throw new IllegalArgumentException("Has to containe at least one destination storage item");
+			throw new IllegalArgumentException("Has to containe at least one loaded item");
+
 	}
 	
 	@Override
 	public String getProcessTypeDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Container Loading";
 	}
-
 }

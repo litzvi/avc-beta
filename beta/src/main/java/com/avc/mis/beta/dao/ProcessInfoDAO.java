@@ -28,7 +28,7 @@ import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
-import com.avc.mis.beta.entities.process.TransactionProcess;
+import com.avc.mis.beta.entities.process.PoTransactionProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
@@ -82,7 +82,7 @@ public class ProcessInfoDAO extends DAO {
 	 * Adds the process and adds required notifications.
 	 * @param process GeneralProcess to be added.
 	 */
-	public void addTransactionProcessEntity(TransactionProcess process) {
+	public void addTransactionProcessEntity(PoTransactionProcess process) {
 		addGeneralProcessEntity(process);
 		//check used items amounts () don't exceed the storage amounts
 		if(!isInventorySufficiant(process.getId())) {
@@ -134,7 +134,7 @@ public class ProcessInfoDAO extends DAO {
 	 * Edits the process and adds required notifications.
 	 * @param process GeneralProcess to be edited.
 	 */
-	public <T extends TransactionProcess> void editTransactionProcessEntity(T process) {
+	public <T extends PoTransactionProcess> void editTransactionProcessEntity(T process) {
 		editGeneralProcessEntity(process);
 		//check used items amounts (after edit) don't exceed the storage amounts
 		if(!isInventorySufficiant(process.getId())) {

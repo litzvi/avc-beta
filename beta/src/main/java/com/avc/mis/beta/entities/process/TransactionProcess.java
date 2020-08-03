@@ -3,11 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
-import java.lang.reflect.Array;
-import java.time.Duration;
-import java.time.OffsetDateTime;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,18 +11,12 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
-import com.avc.mis.beta.entities.processinfo.UserMessage;
-import com.avc.mis.beta.entities.values.ProcessType;
-import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -43,8 +33,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "TRANSACTION_PROCESSES")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class TransactionProcess<T extends ProcessItem> extends PoProcess {
-	
+public abstract class TransactionProcess<T extends ProcessItem> extends GeneralProcess {
+
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
@@ -82,5 +72,5 @@ public abstract class TransactionProcess<T extends ProcessItem> extends PoProces
 	public void setUsedItems(UsedItem[] usedItems) {
 		this.usedItems = Insertable.setReferences(usedItems, (t) -> {t.setReference(this);	return t;});
 	}
-	
+
 }

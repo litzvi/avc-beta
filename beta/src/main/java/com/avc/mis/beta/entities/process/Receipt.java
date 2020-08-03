@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "ORDER_RECEIPTS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class Receipt extends TransactionProcess<ReceiptItem> {
+public class Receipt extends PoTransactionProcess<ReceiptItem> {
 	
 	public void setReceiptItems(ReceiptItem[] receiptItems) {
 		super.setProcessItems(receiptItems);
@@ -54,6 +54,8 @@ public class Receipt extends TransactionProcess<ReceiptItem> {
 		getLifeCycle().setProcessStatus(ProcessStatus.PENDING);
 		if(getProcessItems().length == 0)
 			throw new IllegalArgumentException("Receipt has to containe at least one item line");
+		if(getUsedItems() != null && getUsedItems().length > 0)
+			throw new IllegalArgumentException("Receipt has no used items");
 		
 	}
 	

@@ -19,6 +19,7 @@ import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Country;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProductionLine;
+import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
 
@@ -130,5 +131,9 @@ public class ValueWriter {
 	
 	public void addCashewStandard(CashewStandard standard) {
 		dao.addEntity(standard);
+	}
+	
+	public void addShippingPort(ShippingPort port) {
+		dao.addEntity(port);
 	}
 }
