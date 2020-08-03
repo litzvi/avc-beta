@@ -15,18 +15,18 @@ import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.PoProcess;
 
 /**
  * @author Zvi
  *
  */
-public interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> {
+public interface ProcessRepository<T extends PoProcess> extends BaseRepository<T> {
 
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
 			+ "p.id, po_code.code, t.code, t.suffix, "
 			+ "p.recordedTime, p.duration) "
-		+ "from GeneralProcess p "
+		+ "from PoProcess p "
 			+ "join p.poCode po_code "
 				+ "join po_code.contractType t "
 			+ "join p.processType pt "
@@ -84,7 +84,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	 */
 	@Query("select new com.avc.mis.beta.dto.values.ProcessBasic( "
 			+ "p.id, t.processName) "
-		+ "from GeneralProcess p "
+		+ "from PoProcess p "
 			+ "join p.poCode c "
 			+ "join p.processType t "
 		+ "where c.code = :poCodeId ")

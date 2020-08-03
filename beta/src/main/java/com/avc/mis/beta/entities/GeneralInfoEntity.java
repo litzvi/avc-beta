@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.PoProcess;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,8 +35,8 @@ public abstract class GeneralInfoEntity extends AuditedEntity {
 	
 	@Override
 	public void setReference(Object referenced) {
-		if(referenced instanceof GeneralProcess) {
-			this.setProcess((GeneralProcess)referenced);
+		if(referenced instanceof PoProcess) {
+			this.setProcess((PoProcess)referenced);
 		}
 		else {
 			throw new ClassCastException("Referenced object isn't a production process");

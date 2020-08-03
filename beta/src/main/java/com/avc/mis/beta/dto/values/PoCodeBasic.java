@@ -7,6 +7,7 @@ import com.avc.mis.beta.dto.BaseDTO;
 import com.avc.mis.beta.entities.process.PoCode;
 
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.Value;
 
 /**
@@ -24,7 +25,7 @@ public class PoCodeBasic extends BaseDTO {
 //	Currency currency;
 
 
-	public PoCodeBasic(Integer id, String contractTypeCode, String contractTypeSuffix) {
+	public PoCodeBasic(@NonNull Integer id, String contractTypeCode, String contractTypeSuffix) {
 		super(id);
 		this.contractTypeCode = contractTypeCode;
 //		this.currency = currency;
@@ -32,7 +33,7 @@ public class PoCodeBasic extends BaseDTO {
 	}
 	
 	
-	public PoCodeBasic(PoCode poCode) {
+	public PoCodeBasic(@NonNull PoCode poCode) {
 		super(poCode.getCode());
 		this.contractTypeCode = poCode.getContractType().getCode();
 //		this.currency = poCode.getContractType().getCurrency();

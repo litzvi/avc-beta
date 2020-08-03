@@ -27,7 +27,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @NoArgsConstructor
 //similar to StorageTransferDTO - perhaps should inherit from this
-public class ProductionProcessDTO extends GeneralProcessDTO {
+public class ProductionProcessDTO extends PoProcessDTO {
 
 	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
 	private Set<UsedItemDTO> usedItems; //can use a SortedSet like ContactDetails to maintain order

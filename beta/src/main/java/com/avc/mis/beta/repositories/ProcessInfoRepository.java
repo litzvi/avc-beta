@@ -19,7 +19,7 @@ import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 
@@ -29,7 +29,7 @@ import com.avc.mis.beta.entities.processinfo.ApprovalTask;
  * @author Zvi
  *
  */
-public interface ProcessInfoRepository extends ProcessRepository<GeneralProcess> {
+public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	
 	@Query("select a "
 			+ "from ProcessManagement a "

@@ -26,19 +26,14 @@ import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.validation.groups.OnPersist;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  * 
@@ -48,20 +43,16 @@ import lombok.Setter;
  * production line (if have multiple), user recorded time, duration,
  * number of workers and the process status(cancelled, finalised etc.)
  * 
- * @author Zvi
- * 
+ * @author zvi
+ *
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PROCESSES")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class GeneralProcess extends AuditedEntity {	
+public abstract class GeneralProcess extends AuditedEntity {
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(updatable = false, nullable = false)
-	private PoCode poCode;
-	
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "typeId", nullable = false, updatable = false)
@@ -105,5 +96,4 @@ public abstract class GeneralProcess extends AuditedEntity {
 	}
 
 	public abstract String getProcessTypeDescription() ;
-	
 }

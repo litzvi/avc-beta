@@ -9,6 +9,7 @@ import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 
 import lombok.Data;
@@ -44,7 +45,8 @@ public class ApprovalTaskDTO extends DataDTO {
 		super(id, version);
 		this.title = title;
 		this.processId = processId;
-		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
+		if(poCodeId != null)
+			this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.processName = processName;
 //		this.createdDate = LocalDateTime.ofInstant(createdDate, ZoneOffset.UTC);
 		this.userName = userName;
@@ -58,7 +60,8 @@ public class ApprovalTaskDTO extends DataDTO {
 		super(approval.getId(), approval.getVersion());
 		this.title = approval.getDescription();
 		this.processId = approval.getProcess().getId();
-		this.poCode = new PoCodeBasic(approval.getProcess().getPoCode());
+		if(approval.getProcess() instanceof PoProcess)
+			this.poCode = new PoCodeBasic(((PoProcess)approval.getProcess()).getPoCode());
 		this.processName = approval.getProcess().getProcessType().getProcessName();
 //		this.createdDate = LocalDateTime.ofInstant(approval.getCreatedDate(), ZoneOffset.UTC);
 		this.userName = approval.getUser().getPerson().getName();

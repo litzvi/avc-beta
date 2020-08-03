@@ -9,6 +9,7 @@ import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 
 import lombok.Data;
@@ -57,7 +58,8 @@ public class UserMessageDTO extends DataDTO {
 		super(message.getId(), message.getVersion());
 		this.title = message.getDescription();
 		this.processId = message.getProcess().getId();
-		this.poCode = new PoCodeBasic(message.getProcess().getPoCode());
+		if(message.getProcess() instanceof PoProcess)
+			this.poCode = new PoCodeBasic(((PoProcess)message.getProcess()).getPoCode());
 		this.processName = message.getProcess().getProcessType().getProcessName();
 //		this.createdDate = LocalDateTime.ofInstant(message.getCreatedDate(), ZoneOffset.UTC);
 		this.userName = message.getUser().getPerson().getName();

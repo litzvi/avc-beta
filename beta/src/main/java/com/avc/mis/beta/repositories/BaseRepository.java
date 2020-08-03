@@ -26,6 +26,7 @@ import com.avc.mis.beta.entities.values.Country;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
+import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
 
@@ -45,7 +46,7 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(s.id, s.value) "
 			+ "from Warehouse s where s.active = true")
 	List<BasicValueEntity<Warehouse>> findAllWarehousesDTO();
-
+	
 	@Query("select s "
 			+ "from Warehouse s where s.active = true")
 	List<Warehouse> findAllWarehouses();
@@ -89,6 +90,10 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	
 	@Query("select i from Item i where i.active = true")
 	List<Item> findAllItems();
+	
+	@Query("select i from ShippingPort i where i.active = true")
+	List<ShippingPort> findAllShippingPorts();
+
 	
 	@Query("select t from ContractType t where t.active = true")
 	List<ContractType> findAllContractTypes();

@@ -26,7 +26,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class StorageTransferDTO extends GeneralProcessDTO {
+public class StorageTransferDTO extends PoProcessDTO {
 
 	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
 	private Set<UsedItemDTO> usedItems; //can use a SortedSet like ContactDetails to maintain order

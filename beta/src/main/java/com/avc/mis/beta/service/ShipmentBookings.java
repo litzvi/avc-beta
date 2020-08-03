@@ -50,7 +50,7 @@ public class ShipmentBookings {
 	}
 	
 	/**
-	 * Gets full details of shipment booking with given GeneralProcess id. 
+	 * Gets full details of shipment booking with given ShipmentBooking id. 
 	 * @param processId the id of GeneralProcess requested
 	 * @return ShipmentBookingDTO object with shipment booking details
 	 * @throws IllegalArgumentException if shipment booking for given process id dosen't exist.

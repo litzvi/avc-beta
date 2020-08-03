@@ -7,6 +7,7 @@ import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
@@ -64,7 +65,7 @@ public class UsedItemDTO extends ProcessDTO {
 		Storage storage = usedItem.getStorage();
 		ProcessItem processItem = storage.getProcessItem();
 		this.item = new BasicValueEntity<Item>(processItem.getItem());
-		this.itemPo = new PoCodeDTO(processItem.getProcess().getPoCode());
+		this.itemPo = new PoCodeDTO(((PoProcess)processItem.getProcess()).getPoCode());
 		this.unitAmount = storage.getUnitAmount().setScale(MeasureUnit.SCALE);
 		if(storage.getWarehouseLocation() != null) {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(

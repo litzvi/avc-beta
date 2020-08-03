@@ -20,7 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.process.GeneralProcessDTO;
+import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -95,7 +95,7 @@ public class OrdersTest {
 			fail("Should not be able to change to final before approved");
 		} catch (Exception e1) {}		
 		tasks.forEach(t -> {
-			GeneralProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessName());
+			PoProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessName());
 			String processSnapshot = null;
 			try {
 				processSnapshot = objMapper.writeValueAsString(p);

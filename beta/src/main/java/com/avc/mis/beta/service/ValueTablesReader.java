@@ -29,6 +29,7 @@ import com.avc.mis.beta.entities.values.Country;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
+import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.repositories.QCRepository;
@@ -107,6 +108,10 @@ public class ValueTablesReader {
 	
 	public List<CashewStandard> getAllCashewStandards() {
 		return getValueTablesRepository().findAllCashewStandard();
+	}
+	
+	public List<ShippingPort> getAllShippingPorts() {
+		return getValueTablesRepository().findAllShippingPorts();
 	}
 	
 //----------------------------DTO---------------------------------------------------------	
