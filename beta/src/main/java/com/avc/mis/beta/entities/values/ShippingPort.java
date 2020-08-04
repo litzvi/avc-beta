@@ -34,6 +34,10 @@ public class ShippingPort extends ValueEntity implements ValueInterface {
 	@NotBlank(message = "Port name(value) is mandatory")
 	private String value;
 	
+	@Column(name = "code", nullable = false)
+	@NotBlank(message = "Contract type has to have a code")
+	private String code;
+		
 	public void setValue(String value) {
 		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}

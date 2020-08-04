@@ -54,13 +54,13 @@ public class Loading {
 	 * @throws IllegalArgumentException if container loading for given process id
 	 *                                  dosen't exist.
 	 */
-	public ContainerLoadingDTO getLoading(int processId) {
-		Optional<ContainerLoadingDTO> loading = getContainerLoadingRepository().findLoadingById(processId);
-		ContainerLoadingDTO loadingDTO = loading.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id"));
-		loadingDTO.setBookedContainers(getShipmentBookingRepository().findBookedContainersByProcessId(processId));
-
-		return loadingDTO; 
-	}
+//	public ContainerLoadingDTO getLoading(int processId) {
+//		Optional<ContainerLoadingDTO> loading = getContainerLoadingRepository().findLoadingById(processId);
+//		ContainerLoadingDTO loadingDTO = loading.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id"));
+//		loadingDTO.setBookedContainers(getShipmentBookingRepository().findBookedContainersByProcessId(processId));
+//
+//		return loadingDTO; 
+//	}
 
 	/**
 	 * Update the given ContainerLoading with the set data - Process information and

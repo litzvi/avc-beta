@@ -12,6 +12,7 @@ import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.values.ProductionLine;
@@ -44,11 +45,11 @@ public class ProductionProcessDTO extends PoProcessDTO {
 	}
 	
 	
-	public ProductionProcessDTO(@NonNull StorageTransfer transfer) {
-		super(transfer);
-		this.processItems = Arrays.stream(transfer.getProcessItems())
+	public ProductionProcessDTO(@NonNull ProductionProcess process) {
+		super(process);
+		this.processItems = Arrays.stream(process.getProcessItems())
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
-		this.usedItems = Arrays.stream(transfer.getUsedItems())
+		this.usedItems = Arrays.stream(process.getUsedItems())
 				.map(i->{return new UsedItemDTO((UsedItem)i);}).collect(Collectors.toSet());
 	}
 	

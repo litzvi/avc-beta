@@ -38,7 +38,7 @@ public abstract class TransactionProcess<T extends ProcessItem> extends GeneralP
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	private Set<T> processItems = new HashSet<>();
+	private Set<ProcessItem> processItems = new HashSet<>();
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 

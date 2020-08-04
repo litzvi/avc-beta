@@ -13,6 +13,8 @@ import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PoProcess;
+import com.avc.mis.beta.entities.process.PoTransactionProcess;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
@@ -47,6 +49,11 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 	}
 	
 	public PoProcessDTO(@NonNull PoProcess process) {
+		super(process);
+		this.poCode = new PoCodeDTO(process.getPoCode());
+	}
+	
+	public PoProcessDTO(@NonNull PoTransactionProcess<?> process) {
 		super(process);
 		this.poCode = new PoCodeDTO(process.getPoCode());
 	}

@@ -15,13 +15,14 @@ import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
 
 /**
  * @author Zvi
  *
  */
-public interface ProcessRepository<T extends PoProcess> extends BaseRepository<T> {
+public interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> {
 
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
 			+ "p.id, po_code.code, t.code, t.suffix, "

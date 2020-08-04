@@ -51,7 +51,7 @@ public class ShipmentBooking extends GeneralProcess {
 	private Set<BookedContainer> bookedContainers = new HashSet<>();
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "logisticsCompanyId", updatable = false, nullable = false)
+	@JoinColumn(name = "logisticsCompanyId")
 	private Supplier logisticsCompany;
 		
 	private String personInCharge;
