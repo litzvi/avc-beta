@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.avc.mis.beta.entities.GeneralInfoEntity;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -31,7 +32,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 //@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "PROCESS_APPROVALS")
-public class ApprovalTask extends ProcessInfoEntity {	
+public class ApprovalTask extends GeneralInfoEntity {	
 
 	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)

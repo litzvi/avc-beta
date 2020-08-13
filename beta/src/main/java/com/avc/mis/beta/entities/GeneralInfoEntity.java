@@ -35,11 +35,11 @@ public abstract class GeneralInfoEntity extends AuditedEntity {
 	
 	@Override
 	public void setReference(Object referenced) {
-		if(referenced instanceof PoProcess) {
-			this.setProcess((PoProcess)referenced);
+		if(referenced instanceof GeneralProcess) {
+			this.setProcess((GeneralProcess)referenced);
 		}
 		else {
-			throw new ClassCastException("Referenced object isn't a production process");
+			throw new ClassCastException("Referenced object isn't a process");
 		}		
 	}
 	

@@ -47,7 +47,14 @@ public class ReceiptTest {
 	@Test
 	void receiptTest() {
 		//insert order receipt without order
-		Receipt receipt = service.addBasicCashewReceipt();
+		Receipt receipt;
+		try {
+			receipt = service.addBasicCashewReceipt();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		ReceiptDTO expected;
 		expected = new ReceiptDTO(receipt);
 		ReceiptDTO actual = receipts.getReceiptByProcessId(receipt.getId());

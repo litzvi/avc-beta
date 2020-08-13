@@ -65,7 +65,7 @@ public class UsedItemDTO extends ProcessDTO {
 		Storage storage = usedItem.getStorage();
 		ProcessItem processItem = storage.getProcessItem();
 		this.item = new BasicValueEntity<Item>(processItem.getItem());
-		this.itemPo = new PoCodeDTO(((PoProcess)processItem.getProcess()).getPoCode());
+		this.itemPo = new PoCodeDTO((processItem.getProcess()).getPoCode());
 		this.unitAmount = storage.getUnitAmount().setScale(MeasureUnit.SCALE);
 		if(storage.getWarehouseLocation() != null) {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(
