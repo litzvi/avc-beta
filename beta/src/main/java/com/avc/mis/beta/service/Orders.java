@@ -94,19 +94,10 @@ public class Orders {
 			AmountWithUnit totalAmount = v.stream()
 					.map(pi -> pi.getNumberUnits())
 					.reduce(new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.LOT), AmountWithUnit::add);
-			LocalDate deliveryDate = v.stream().findAny().get().getDeliveryDate();
-			PoRow poRow = new PoRow(k, deliveryDate, totalAmount, v);
+			PoRow poRow = new PoRow(k, totalAmount, v);
 			poRows.add(poRow);
 		});
 		
-		//sort by delivery date
-		poRows.sort(new Comparator<PoRow>() {
-
-			@Override
-			public int compare(PoRow o1, PoRow o2) {
-				return o1.getDeliveryDate().compareTo(o2.getDeliveryDate());
-			}
-		});
 		return poRows;
 	}
 	
@@ -115,7 +106,31 @@ public class Orders {
 	 * @return list of PoRow for orders that are yet to be received
 	 */
 	public List<PoItemRow> findOpenCashewOrderItems() {
-		return getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
+		List<PoItemRow> poItemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
+		poItemRows.sort(new Comparator<PoItemRow>() {
+
+			@Override
+			public int compare(PoItemRow o1, PoItemRow o2) {
+				return o1.getDeliveryDate().compareTo(o2.getDeliveryDate());
+			}
+		});
+		return poItemRows;
+	}
+	
+	/**
+	 * Get the table of all Cashew purchase orders.
+	 * @return list of PoRow for all orders
+	 */
+	public List<PoItemRow> findAllCashewOrderItems() {
+		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER);
+		poItemRows.sort(new Comparator<PoItemRow>() {
+
+			@Override
+			public int compare(PoItemRow o1, PoItemRow o2) {
+				return o1.getDeliveryDate().compareTo(o2.getDeliveryDate());
+			}
+		});
+		return poItemRows;
 	}
 	
 	/**

@@ -17,15 +17,15 @@ import lombok.Value;
 public class PoRow extends ValueDTO {
 
 //	PoCodeBasic poCode;
-	LocalDate deliveryDate; //for sorting
+//	LocalDate deliveryDate; //for sorting
 	AmountWithUnit totalAmount;
 
 	List<PoItemRow> poRows;
 
-	public PoRow(@NonNull Integer id, LocalDate deliveryDate, AmountWithUnit totalAmount, List<PoItemRow> poRows) {
+	public PoRow(@NonNull Integer id, AmountWithUnit totalAmount, List<PoItemRow> poRows) {
 		super(id);
 //		this.poCode = poCode;
-		this.deliveryDate = deliveryDate;
+//		this.deliveryDate = deliveryDate;
 		this.totalAmount = totalAmount;
 		this.poRows = poRows;
 	}
