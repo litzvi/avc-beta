@@ -3,29 +3,13 @@
  */
 package com.avc.mis.beta.dto.processinfo;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-
-import javax.persistence.Column;
-import javax.persistence.Convert;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
-import com.avc.mis.beta.entities.process.ShipmentBooking;
 import com.avc.mis.beta.entities.processinfo.BookedContainer;
-import com.avc.mis.beta.entities.processinfo.OrderItem;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ShippingPort;
-import com.avc.mis.beta.utilities.LocalDateToLong;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;

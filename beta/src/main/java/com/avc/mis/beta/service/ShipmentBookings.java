@@ -13,7 +13,6 @@ import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ShipmentBookingDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.ShipmentBooking;
 import com.avc.mis.beta.repositories.ShipmentBookingRepository;
 

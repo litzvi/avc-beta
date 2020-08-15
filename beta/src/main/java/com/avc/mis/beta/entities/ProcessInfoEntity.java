@@ -3,16 +3,12 @@
  */
 package com.avc.mis.beta.entities;
 
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.validation.groups.OnPersist;
@@ -37,14 +33,14 @@ public abstract class ProcessInfoEntity extends AuditedEntity {
 	@NotNull(message = "System error: Process not referenced", groups = OnPersist.class)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processId", updatable = false)
-	private ProductionProcess process;
+	private PoProcess process;
 	
 	private String description;
 	
 	@Override
 	public void setReference(Object referenced) {
-		if(referenced instanceof ProductionProcess) {
-			this.setProcess((ProductionProcess)referenced);
+		if(referenced instanceof PoProcess) {
+			this.setProcess((PoProcess)referenced);
 		}
 		else {
 			throw new ClassCastException("Referenced object isn't a production process");

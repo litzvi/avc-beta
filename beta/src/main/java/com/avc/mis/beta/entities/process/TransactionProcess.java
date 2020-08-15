@@ -33,7 +33,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "TRANSACTION_PROCESSES")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class TransactionProcess<T extends ProcessItem> extends GeneralProcess {
+public abstract class TransactionProcess<T extends ProcessItem> extends PoProcess {
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 

@@ -9,7 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 import com.avc.mis.beta.entities.process.GeneralProcess;
-import com.avc.mis.beta.entities.process.PoProcess;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

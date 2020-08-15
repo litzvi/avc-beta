@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.utilities.LocalDateToLong;
 

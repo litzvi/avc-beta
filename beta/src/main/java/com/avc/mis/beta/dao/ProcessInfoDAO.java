@@ -5,10 +5,8 @@ package com.avc.mis.beta.dao;
 
 import java.security.AccessControlException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.persistence.criteria.CriteriaUpdate;
@@ -26,12 +24,9 @@ import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.GeneralProcess;
-import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.TransactionProcess;
-import com.avc.mis.beta.entities.process.PoTransactionProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
-import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.InventoryRepository;

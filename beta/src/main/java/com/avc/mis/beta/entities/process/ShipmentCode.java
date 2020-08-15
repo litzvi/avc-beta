@@ -17,10 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.ShippingPort;
-import com.avc.mis.beta.validation.groups.OnPersist;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

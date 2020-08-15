@@ -10,9 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ShipmentBookingDTO;
 import com.avc.mis.beta.dto.processinfo.BookedContainerDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.process.ShipmentBooking;
-import com.avc.mis.beta.entities.values.ShippingPort;
 
 /**
  * @author zvi

@@ -11,7 +11,6 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,7 +26,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "ORDER_RECEIPTS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class Receipt extends PoTransactionProcess<ReceiptItem> {
+public class Receipt extends TransactionProcess<ReceiptItem> {
 	
 	public void setReceiptItems(ReceiptItem[] receiptItems) {
 		super.setProcessItems(receiptItems);

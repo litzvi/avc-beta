@@ -4,21 +4,17 @@
 
 package com.avc.mis.beta.service;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired; 
-import org.springframework.stereotype.Service; 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.DeletableDAO; 
-import com.avc.mis.beta.dao.ProcessInfoDAO; 
-import com.avc.mis.beta.dto.process.ShipmentBookingDTO; 
+import com.avc.mis.beta.dao.DeletableDAO;
+import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ContainerLoading;
-import com.avc.mis.beta.entities.process.ShipmentBooking; 
-import com.avc.mis.beta.repositories.ShipmentBookingRepository;
 
-import lombok.AccessLevel; import lombok.Getter;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 /**
  * @author zvi

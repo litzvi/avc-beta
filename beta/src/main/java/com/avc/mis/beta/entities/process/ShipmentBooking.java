@@ -22,7 +22,6 @@ import org.hibernate.annotations.FetchMode;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.processinfo.BookedContainer;
-import com.avc.mis.beta.entities.processinfo.OrderItem;
 
 import lombok.AccessLevel;
 import lombok.Data;

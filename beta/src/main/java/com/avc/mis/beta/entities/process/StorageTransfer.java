@@ -6,10 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -20,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "STORAGE_TRANSFERS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class StorageTransfer extends PoTransactionProcess<ProcessItem> {
+public class StorageTransfer extends TransactionProcess<ProcessItem> {
 
 	@Override
 	public ProcessItem[] getProcessItems() {
