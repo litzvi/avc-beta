@@ -107,13 +107,6 @@ public class Orders {
 	 */
 	public List<PoItemRow> findOpenCashewOrderItems() {
 		List<PoItemRow> poItemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
-		poItemRows.sort(new Comparator<PoItemRow>() {
-
-			@Override
-			public int compare(PoItemRow o1, PoItemRow o2) {
-				return o1.getDeliveryDate().compareTo(o2.getDeliveryDate());
-			}
-		});
 		return poItemRows;
 	}
 	
@@ -123,13 +116,6 @@ public class Orders {
 	 */
 	public List<PoItemRow> findAllCashewOrderItems() {
 		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER);
-		poItemRows.sort(new Comparator<PoItemRow>() {
-
-			@Override
-			public int compare(PoItemRow o1, PoItemRow o2) {
-				return o1.getDeliveryDate().compareTo(o2.getDeliveryDate());
-			}
-		});
 		return poItemRows;
 	}
 	
