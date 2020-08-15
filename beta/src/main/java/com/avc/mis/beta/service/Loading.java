@@ -65,7 +65,7 @@ public class Loading {
 	 * @param loading ContainerLoading updated with edited state
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false) 
-	public void editBooking(ContainerLoading loading) {
+	public void editLoading(ContainerLoading loading) {
 		dao.editTransactionProcessEntity(loading); 
 	}
 
