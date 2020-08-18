@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.StorageBalance;
+import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PoCode;
 
@@ -54,14 +55,15 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
 				+ "left join sf.warehouseLocation sto "
 				+ "left join sf.usedItems ui "
-		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL and "
-			+ "(item.supplyGroup = :supplyGroup or :supplyGroup is null) and "
-			+ "(item.id = :itemId or :itemId is null) and "
-			+ "(poCode.code = :poCodeId or :poCodeId is null) "
+		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (item.supplyGroup = :supplyGroup or :supplyGroup is null) "
+			+ "and (item.category = :itemCategory or :itemCategory is null) "
+			+ "and (item.id = :itemId or :itemId is null) "
+			+ "and (poCode.code = :poCodeId or :poCodeId is null) "
 		+ "group by sf "
 		+ "having (sf.numberUnits > sum(coalesce(ui.numberUnits, 0))) ")
 	List<InventoryProcessItemWithStorage> findInventoryProcessItemWithStorage(
-			SupplyGroup supplyGroup, Integer itemId, Integer poCodeId);
+			SupplyGroup supplyGroup, ItemCategory itemCategory, Integer itemId, Integer poCodeId);
 
 	
 	/**

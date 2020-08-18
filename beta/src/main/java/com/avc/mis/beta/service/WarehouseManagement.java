@@ -15,6 +15,7 @@ import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.StorageTransfer;
@@ -107,11 +108,15 @@ public class WarehouseManagement {
 //	}
 
 	public List<ProcessItemInventoryRow> getInventoryByPo(Integer poCodeId) {		
-		return getInventory(null, null, poCodeId);		
+		return getInventory(null, null, null, poCodeId);		
 	}
 	
 	public List<ProcessItemInventoryRow> getInventoryByItem(Integer itemId) {		
-		return getInventory(null, itemId, null);
+		return getInventory(null, null, itemId, null);
+	}
+	
+	public List<ProcessItemInventoryRow> getInventoryByItemCategory(ItemCategory itemCategory) {		
+		return getInventory(null, itemCategory, null, null);
 	}
 	
 	/**
@@ -121,13 +126,14 @@ public class WarehouseManagement {
 	 * with list of storages that contain amounts used and totals.
 	 * Items are considered in inventory if process status is final and it's not completely used.
 	 * @param supplyGroup constrain to only this supply group, if null than any.
+	 * @param itemCategory constrain to only items from given category, if null than any.
 	 * @param itemId constrain to only this item, if null than any.
 	 * @param poCodeId constrain to only this po, if null than any.
 	 * @return List of ProcessItemInventoryRow
 	 */
-	public List<ProcessItemInventoryRow> getInventory(SupplyGroup supplyGroup, Integer itemId, Integer poCodeId) {
+	public List<ProcessItemInventoryRow> getInventory(SupplyGroup supplyGroup, ItemCategory itemCategory, Integer itemId, Integer poCodeId) {
 		List<InventoryProcessItemWithStorage> processItemWithStorages =
-				getInventoryRepository().findInventoryProcessItemWithStorage(supplyGroup, itemId, poCodeId);	
+				getInventoryRepository().findInventoryProcessItemWithStorage(supplyGroup, itemCategory, itemId, poCodeId);	
 		
 		return ProcessItemInventoryRow.getProcessItemInventoryRows(processItemWithStorages);
 		

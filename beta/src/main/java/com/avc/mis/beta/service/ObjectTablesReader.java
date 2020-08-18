@@ -18,6 +18,7 @@ import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
@@ -128,7 +129,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO for all inventory Cashew.
 	 */
 	public Set<PoCodeDTO> findCashewInventoryPoCodes() {
-		return getObjectTablesRepository().findInventoryPoCodeByType(SupplyGroup.CASHEW, null);		
+		return getObjectTablesRepository().findInventoryPoCodeByType(SupplyGroup.CASHEW, null, null);		
 	}
 	
 	/**
@@ -138,7 +139,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO for all General inventory.
 	 */
 	public Set<PoCodeDTO> findGeneralInventoryPoCodes() {
-		return getObjectTablesRepository().findInventoryPoCodeByType(SupplyGroup.GENERAL, null);		
+		return getObjectTablesRepository().findInventoryPoCodeByType(SupplyGroup.GENERAL, null, null);		
 	}
 	
 	/**
@@ -148,7 +149,17 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO
 	 */
 	public Set<PoCodeDTO> findInventoryPoCodes(Integer itemId) {
-		return getObjectTablesRepository().findInventoryPoCodeByType(null, itemId);		
+		return getObjectTablesRepository().findInventoryPoCodeByType(null, null, itemId);		
+	}
+	
+	/**
+	 * Gets the basic information of all po codes for the given item category in inventory - id, poCode and supplier.
+	 * Can be used for choosing a po for factory processing at a certian process type.
+	 * @param itemCategory
+	 * @return Set of PoCodeDTO
+	 */
+	public Set<PoCodeDTO> findInventoryPoCodes(ItemCategory itemCategory) {
+		return getObjectTablesRepository().findInventoryPoCodeByType(null, itemCategory, null);		
 	}
 	
 	/**

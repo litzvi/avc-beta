@@ -46,7 +46,7 @@ public class CashewReports {
 	 */
 	public List<ItemInventoryRow> getInventoryTableByItem() {
 
-		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventory(SupplyGroup.CASHEW, null, null);
+		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventory(SupplyGroup.CASHEW, null, null, null);
 		
 		Map<BasicValueEntity<Item>, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
 				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getItem, Collectors.toList()));
@@ -69,7 +69,7 @@ public class CashewReports {
 	 */
 	public List<PoInventoryRow> getInventoryTableByPo() {
 		
-		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventory(SupplyGroup.CASHEW, null, null);
+		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventory(SupplyGroup.CASHEW, null, null, null);
 
 		Map<PoCodeDTO, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
 				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getPoCode, Collectors.toList()));

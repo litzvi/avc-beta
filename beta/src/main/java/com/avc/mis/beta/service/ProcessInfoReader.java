@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 
 import lombok.AccessLevel;
@@ -50,6 +51,8 @@ public class ProcessInfoReader {
 	@Autowired private Receipts orderReceipts;
 	@Autowired private QualityChecks qualityChecks;
 	@Autowired private Samples samples;
+	@Autowired private WarehouseManagement warehouseManagement;
+	@Autowired private ProductionProcesses productionProcesses;
 	
 	
 	/**
@@ -161,6 +164,12 @@ public class ProcessInfoReader {
 			return qualityChecks.getQcByProcessId(processId);
 		case SAMPLE_RECEIPET:
 			return samples.getSampleReceiptByProcessId(processId);
+		case STORAGE_TRANSFER:
+			return warehouseManagement.getStorageTransfer(processId);
+		case CASHEW_CLEANING:
+		case CASHEW_ROASTING:
+		case PACKING:
+			return productionProcesses.getProductionProcess(processId);
 			default:
 		}
 		return null;

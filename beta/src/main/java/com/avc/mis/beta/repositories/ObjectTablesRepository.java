@@ -17,6 +17,7 @@ import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
@@ -161,10 +162,11 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 				+ "left join sf.usedItems ui "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (item.supplyGroup = :supplyGroup or :supplyGroup is null)  "
+			+ "and (item.category = :itemCategory or :itemCategory is null)  "
 			+ "and (item.id = :itemId or :itemId is null)  "
 		+ "group by sf, sf.numberUnits "
 		+ "having (sf.numberUnits > sum(coalesce(ui.numberUnits, 0))) ")
-	Set<PoCodeDTO> findInventoryPoCodeByType(SupplyGroup supplyGroup, Integer itemId);
+	Set<PoCodeDTO> findInventoryPoCodeByType(SupplyGroup supplyGroup, ItemCategory itemCategory, Integer itemId);
 
 	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("
 			+ "po_code.code, c.code, c.suffix, s.name) "
