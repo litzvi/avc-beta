@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.ValueInterface;
+import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 
@@ -42,6 +43,12 @@ public class Item extends ValueEntity implements ValueInterface {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
+	@NotNull(message = "Item supply group is mandatory")
 	private SupplyGroup supplyGroup;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	@NotNull(message = "Item category is mandatory")
+	private ItemCategory category;
 
 }

@@ -10,7 +10,6 @@ import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.process.PoProcess;
-import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.validation.groups.OnPersist;
 
 import lombok.Data;

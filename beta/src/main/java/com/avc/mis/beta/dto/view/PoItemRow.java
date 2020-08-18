@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class PoItemRow extends ValueDTO {
 	AmountWithCurrency unitPrice;
 	BigDecimal receivedAmount;
 	List<String> orderStatus;
+	AmountWithUnit lots;
 	
 	/**
 	 * All arguments Constructor ,
@@ -60,6 +62,9 @@ public class PoItemRow extends ValueDTO {
 		this.supplierName = supplierName;
 		this.itemName = itemName;
 		this.numberUnits = new AmountWithUnit(amount.setScale(MeasureUnit.SCALE), measureUnit);
+		this.lots = new AmountWithUnit(
+				MeasureUnit.convert(this.numberUnits, MeasureUnit.LOT)
+				.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN), MeasureUnit.LOT);		
 		this.contractDate = contractDate;
 		this.deliveryDate = deliveryDate;
 		this.defects = defects;

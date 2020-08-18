@@ -18,6 +18,7 @@ import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.ValueEntityObject;
+import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
@@ -187,7 +188,7 @@ public class ValueTablesReader {
 	 * @return List of BasicValueEntity of all CASHEW items.
 	 */
 //	@Transactional(readOnly = true)
-	public List<BasicValueEntity<Item>> getCashewitemsBasic() {
+	public List<BasicValueEntity<Item>> getCashewItemsBasic() {
 		return getValueTablesRepository().findItemsByGroupBasic(SupplyGroup.CASHEW);
 	}
 	
@@ -198,6 +199,16 @@ public class ValueTablesReader {
 //	@Transactional(readOnly = true)
 	public List<BasicValueEntity<Item>> getGeneralItemsBasic() {
 		return getValueTablesRepository().findItemsByGroupBasic(SupplyGroup.GENERAL);
+	}
+	
+	/**
+	 * Get a list of CASHEW items from given category -  id and value.
+	 * @param category ItemCategory
+	 * @return List of BasicValueEntity of CASHEW items that belong to given category.
+	 */
+//	@Transactional(readOnly = true)
+	public List<BasicValueEntity<Item>> getItemsByCategry(ItemCategory category) {
+		return getValueTablesRepository().findItemsByCategry(category);
 	}
 	
 }
