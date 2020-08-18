@@ -37,7 +37,7 @@ public class ContainerLoading extends TransactionProcess<LoadedItem> {
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, updatable = false)
-	private ShipmentCode ShipmentCode;
+	private ShipmentCode shipmentCode;
 	
 	@Valid
 	@Embedded

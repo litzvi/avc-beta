@@ -4,14 +4,24 @@
 
 package com.avc.mis.beta.service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
+import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
+import com.avc.mis.beta.dto.view.LoadingRow;
+import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ContainerLoading;
+import com.avc.mis.beta.repositories.ContainerLoadingRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,9 +36,27 @@ import lombok.Getter;
 public class Loading {
 
 	@Autowired private ProcessInfoDAO dao;
+	
+	@Autowired private ContainerLoadingRepository containerLoadingRepository;
 
 	@Deprecated
 	@Autowired private DeletableDAO deletableDAO;
+	
+	public List<LoadingRow> getLoadings() {
+		List<LoadingRow> loadingRows = getContainerLoadingRepository().findContainerLoadings();
+		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getContainerLoadingRepository()
+				.findAllUsedItems()
+				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		Map<Integer, List<ProductionProcessWithItemAmount>> loadedMap = getContainerLoadingRepository()
+				.findAllLoadedItems()
+				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		for(LoadingRow row: loadingRows) {
+			row.setUsedItems(usedMap.get(row.getId()));
+			row.setLoadedItems(loadedMap.get(row.getId()));
+		}		
+		
+		return loadingRows;
+	}
 
 	/**
 	 * Adds a new container loading
@@ -50,13 +78,17 @@ public class Loading {
 	 * @throws IllegalArgumentException if container loading for given process id
 	 *                                  dosen't exist.
 	 */
-//	public ContainerLoadingDTO getLoading(int processId) {
-//		Optional<ContainerLoadingDTO> loading = getContainerLoadingRepository().findLoadingById(processId);
-//		ContainerLoadingDTO loadingDTO = loading.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id"));
-//		loadingDTO.setBookedContainers(getShipmentBookingRepository().findBookedContainersByProcessId(processId));
-//
-//		return loadingDTO; 
-//	}
+	public ContainerLoadingDTO getLoading(int processId) {
+		Optional<ContainerLoadingDTO> loading = getContainerLoadingRepository().findContainerLoadingDTOById(processId);
+		ContainerLoadingDTO loadingDTO = loading.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id"));
+		loadingDTO.setLoadedItems(LoadedItemDTO
+				.getLoadedItems(getContainerLoadingRepository()
+						.findLoadedItemWithStorage(processId))
+				.stream().collect(Collectors.toSet()));
+		loadingDTO.setUsedItems(getContainerLoadingRepository().findUsedItems(processId));
+
+		return loadingDTO; 
+	}
 
 	/**
 	 * Update the given ContainerLoading with the set data - Process information and

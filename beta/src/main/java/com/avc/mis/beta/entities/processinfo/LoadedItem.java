@@ -7,9 +7,12 @@ import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
@@ -21,10 +24,18 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 /**
  * @author zvi
  *
  */
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@Entity
+@Table(name = "LOADED_ITEMS")
+@PrimaryKeyJoinColumn(name = "processItemId")
 public class LoadedItem extends ProcessItem {
 
 	@ManyToOne(fetch = FetchType.LAZY)
