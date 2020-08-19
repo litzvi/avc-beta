@@ -29,6 +29,7 @@ import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
+import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessRow;
@@ -43,6 +44,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.CashewReports;
+import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
@@ -76,6 +78,7 @@ public class QueryTest {
 	@Autowired QualityChecks qualityChecks;
 	@Autowired WarehouseManagement warehouseManagement;
 	@Autowired ProductionProcesses productionProcesses;
+	@Autowired Loading loading;
 	
 //	@Disabled
 	@Test
@@ -238,6 +241,10 @@ public class QueryTest {
 		processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_ROASTING);
 		processReport.forEach(i -> System.out.println(i));
 					
+		//loading table
+		List<LoadingRow> loadings = loading.getLoadings();
+		loadings.forEach(i -> System.out.println(i));
+				
 		service.cleanup(po);
 
 	}
@@ -258,6 +265,9 @@ public class QueryTest {
 		processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_ROASTING);
 		processReport.forEach(i -> System.out.println(i));
 		
+		//loading table
+		List<LoadingRow> loadings = loading.getLoadings();
+		loadings.forEach(i -> System.out.println(i));
 						
 	}
 }
