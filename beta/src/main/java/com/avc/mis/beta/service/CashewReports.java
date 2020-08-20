@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
@@ -48,7 +49,7 @@ public class CashewReports {
 
 		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventory(SupplyGroup.CASHEW, null, null, null);
 		
-		Map<BasicValueEntity<Item>, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
+		Map<ItemDTO, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
 				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getItem, Collectors.toList()));
 		
 		List<ItemInventoryRow> inventoryRows = new ArrayList<ItemInventoryRow>(piMap.size());

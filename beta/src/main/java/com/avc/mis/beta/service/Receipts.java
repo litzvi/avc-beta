@@ -103,6 +103,18 @@ public class Receipts {
 		
 	}
 	
+	/**
+	 * Gets rows for table of Cashew received orders that where cancelled. 
+	 * Contains all types of receipts including receipt without order.
+	 * @return List of ReceiptItemRow - id, PO#, supplier, item, order amount, receipt amount,
+	 * receipt date and storage - for every received item of cancelled orders.
+	 */
+	public List<ReceiptRow> findCancelledCashewReceipts() {
+		return findAllReceiptsByType(
+				new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
+				new ProcessStatus[] {ProcessStatus.CANCELLED});
+	}
+	
 	private List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses) {
 		List<ReceiptItemRow> itemRows = getReceiptRepository().findAllReceiptsByType(
 				processNames, statuses);

@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.values.Item;
 
@@ -28,12 +29,12 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class ItemInventoryRow extends ValueDTO {
 	
-	BasicValueEntity<Item> item;
+	ItemDTO item;
 	AmountWithUnit totalStock;
 	
 	List<ProcessItemInventoryRow> poInventoryRows;
 
-	public ItemInventoryRow(@NonNull BasicValueEntity<Item> item, AmountWithUnit totalStock,
+	public ItemInventoryRow(@NonNull ItemDTO item, AmountWithUnit totalStock,
 			List<ProcessItemInventoryRow> poInventoryRows) {
 		super(item.getId());
 		this.item = item;

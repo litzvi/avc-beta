@@ -33,7 +33,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	 */
 	@Query("select new com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage( "
 			+ "pi.id, "
-			+ "item.id, item.value, "
+			+ "item.id, item.value, item.category, "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "p.recordedTime, "
 			+ "sf.id, sf.version, "

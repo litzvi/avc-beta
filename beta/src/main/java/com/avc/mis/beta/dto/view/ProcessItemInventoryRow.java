@@ -14,7 +14,9 @@ import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
 
@@ -35,7 +37,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ProcessItemInventoryRow extends ValueDTO {
 
-	private BasicValueEntity<Item> item;
+	private ItemDTO item;
 	private PoCodeDTO poCode;
 	private OffsetDateTime receiptDate;
 	private AmountWithUnit totalBalanceAmount; //not calculated in method so won't be calculated repeatedly for totalLots
@@ -46,11 +48,11 @@ public class ProcessItemInventoryRow extends ValueDTO {
 	 * All database fields (the fields in the form they are fetched from the db) arguments constructor, 
 	 * excluding list of storage forms and calculated totals.
 	 */
-	public ProcessItemInventoryRow(Integer id, Integer itemId, String itemValue,
+	public ProcessItemInventoryRow(Integer id, Integer itemId, String itemValue, ItemCategory itemCategory,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			OffsetDateTime receiptDate) {
 		super(id);
-		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.receiptDate = receiptDate;
 	}
@@ -58,7 +60,7 @@ public class ProcessItemInventoryRow extends ValueDTO {
 	/**
 	 * All class arguments constructor, excluding list of storage forms and calculated totals
 	 */
-	public ProcessItemInventoryRow(Integer id, BasicValueEntity<Item> item, 
+	public ProcessItemInventoryRow(Integer id, ItemDTO item, 
 			PoCodeDTO poCode, OffsetDateTime receiptDate) {
 		super(id);
 		this.item = item;
