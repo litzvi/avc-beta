@@ -40,7 +40,7 @@ public class ProcessItemInventoryRow extends ValueDTO {
 	private ItemDTO item;
 	private PoCodeDTO poCode;
 	private OffsetDateTime receiptDate;
-	private AmountWithUnit totalBalanceAmount; //not calculated in method so won't be calculated repeatedly for totalLots
+	private AmountWithUnit[] totalBalanceAmount; //not calculated in method so won't be calculated repeatedly for totalLots
 	
 	private List<StorageInventoryRow> storageForms;
 	
@@ -75,9 +75,11 @@ public class ProcessItemInventoryRow extends ValueDTO {
 	 */
 	public void setStorageForms(List<StorageInventoryRow> storageForms) {
 		if(storageForms.size() > 0) {
-			this.totalBalanceAmount = storageForms.stream()
+			this.totalBalanceAmount = new AmountWithUnit[2];
+			this.totalBalanceAmount[0] = storageForms.stream()
 					.map(StorageInventoryRow::getTotalBalance)
 					.reduce(AmountWithUnit::add).get();
+			this.totalBalanceAmount[1] = totalBalanceAmount[0].convert(MeasureUnit.LOT);
 		}
 		else {
 			this.totalBalanceAmount = null;
@@ -86,18 +88,18 @@ public class ProcessItemInventoryRow extends ValueDTO {
 		
 	}
 	
-	/**
-	 * @return the total balance in lots (lot = 35,000lbs)
-	 */
-	public AmountWithUnit getTotalLots() {
-		AmountWithUnit totalBalanceAmount = getTotalBalanceAmount();
-		if(totalBalanceAmount == null) {
-			return null;
-		}
-		return new AmountWithUnit(
-				MeasureUnit.convert(totalBalanceAmount, MeasureUnit.LOT)
-				.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN), MeasureUnit.LOT);
-	}
+//	/**
+//	 * @return the total balance in lots (lot = 35,000lbs)
+//	 */
+//	public AmountWithUnit getTotalLots() {
+//		AmountWithUnit totalBalanceAmount = getTotalBalanceAmount();
+//		if(totalBalanceAmount == null) {
+//			return null;
+//		}
+//		return new AmountWithUnit(
+//				MeasureUnit.convert(totalBalanceAmount, MeasureUnit.LOT)
+//				.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN), MeasureUnit.LOT);
+//	}
 	
 	/**
 	 * Transforms List of InventoryProcessItemWithStorage as fetched from db,

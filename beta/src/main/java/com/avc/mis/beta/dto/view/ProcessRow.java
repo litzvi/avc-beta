@@ -48,10 +48,10 @@ public class ProcessRow extends ValueDTO {
 	public AmountWithUnit getProcessGain() {
 		AmountWithUnit usedAmounts = getUsedItems().stream()
 				.map(ProductionProcessWithItemAmount::getAmountWithUnit)
-				.reduce(AmountWithUnit.ZERO, AmountWithUnit::add);
+				.reduce(AmountWithUnit.ZERO_KG, AmountWithUnit::add);
 		AmountWithUnit producedAmounts = getProducedItems().stream()
 				.map(ProductionProcessWithItemAmount::getAmountWithUnit)
-				.reduce(AmountWithUnit.ZERO, AmountWithUnit::add);
+				.reduce(AmountWithUnit.ZERO_KG, AmountWithUnit::add);
 		return producedAmounts.substract(usedAmounts);
 	}
 }

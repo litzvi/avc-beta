@@ -9,6 +9,7 @@ import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;
@@ -30,15 +31,17 @@ import lombok.Value;
 public class ItemInventoryRow extends ValueDTO {
 	
 	ItemDTO item;
-	AmountWithUnit totalStock;
+	AmountWithUnit[] totalStock;
 	
 	List<ProcessItemInventoryRow> poInventoryRows;
 
-	public ItemInventoryRow(@NonNull ItemDTO item, AmountWithUnit totalStock,
+	public ItemInventoryRow(@NonNull ItemDTO item, @NonNull AmountWithUnit totalStock,
 			List<ProcessItemInventoryRow> poInventoryRows) {
 		super(item.getId());
 		this.item = item;
-		this.totalStock = totalStock;
+		this.totalStock = new AmountWithUnit[2];
+		this.totalStock[0] = totalStock;
+		this.totalStock[1] = totalStock.convert(MeasureUnit.LOT);
 		this.poInventoryRows = poInventoryRows;
 	}
 	

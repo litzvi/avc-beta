@@ -32,7 +32,8 @@ public class AmountWithUnit implements Cloneable {
 		
 	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,###.######");
 
-	public static final AmountWithUnit ZERO = new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.KG);
+	public static final AmountWithUnit ZERO_KG = new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.KG);
+	public static final AmountWithUnit ZERO_LOT = new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.LOT);
 
 	@NotNull(message = "Amount is required")
 	@Positive(message = "Amount has to be positive", groups = PositiveAmount.class)
@@ -74,6 +75,14 @@ public class AmountWithUnit implements Cloneable {
 			throw new UnsupportedOperationException(
 					"Convertion from " + subtrahend.getMeasureUnit() + " to " + this.measureUnit + " not supported");
 		return new AmountWithUnit(this.amount.subtract(subtrahendAmount), this.measureUnit);
+	}
+	
+	public AmountWithUnit convert(MeasureUnit measureUnit) {
+		BigDecimal convertedAmount = MeasureUnit.convert(this.amount, this.measureUnit, measureUnit);
+		if(convertedAmount == null)
+			throw new UnsupportedOperationException(
+					"Convertion from " + this.measureUnit + " to " + measureUnit + " not supported");
+		return new AmountWithUnit(convertedAmount, measureUnit);
 	}
 	
 	public AmountWithUnit multiply(BigDecimal multiplicand) {

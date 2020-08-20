@@ -42,7 +42,7 @@ public class ItemTransactionDifference extends ValueDTO {
 	}
 	
 	public AmountWithUnit getDifference() {
-		return Optional.ofNullable(producedAmount).orElse(AmountWithUnit.ZERO)
-				.substract(Optional.ofNullable(usedAmount).orElse(AmountWithUnit.ZERO));
+		return Optional.ofNullable(producedAmount).orElse(AmountWithUnit.ZERO_KG)
+				.substract(Optional.ofNullable(usedAmount).orElse(AmountWithUnit.ZERO_KG));
 	}
 }

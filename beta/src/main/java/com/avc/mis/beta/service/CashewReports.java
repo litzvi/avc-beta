@@ -55,7 +55,7 @@ public class CashewReports {
 		List<ItemInventoryRow> inventoryRows = new ArrayList<ItemInventoryRow>(piMap.size());
 		piMap.forEach((k, v) -> {
 			AmountWithUnit totalStock = v.stream()
-					.map(pi -> pi.getTotalBalanceAmount())
+					.map(pi -> pi.getTotalBalanceAmount()[0])
 					.reduce(AmountWithUnit::add).get();
 //			AmountWithUnit totalStock = new AmountWithUnit(amount, v.get(0).getTotalBalanceAmount().getMeasureUnit());
 			ItemInventoryRow inventoryRow = new ItemInventoryRow(k, totalStock, v);
@@ -78,7 +78,7 @@ public class CashewReports {
 		List<PoInventoryRow> inventoryRows = new ArrayList<PoInventoryRow>();
 		piMap.forEach((k, v) -> {
 			AmountWithUnit totalStock = v.stream()
-					.map(pi -> pi.getTotalBalanceAmount())
+					.map(pi -> pi.getTotalBalanceAmount()[0])
 					.reduce(AmountWithUnit::add).get();
 			PoInventoryRow inventoryRow = new PoInventoryRow(k, totalStock, v);
 			inventoryRows.add(inventoryRow);
