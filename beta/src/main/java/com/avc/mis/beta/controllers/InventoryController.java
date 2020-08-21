@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
@@ -98,12 +99,12 @@ public class InventoryController {
 	}
 	
 	@RequestMapping("/getCashewItems")
-	public List<BasicValueEntity<Item>> getCashewItems() {
+	public List<ItemDTO> getCashewItems() {
 		return refeDao.getCashewItemsBasic();
 	}
 	
 	@RequestMapping("/getGeneralItems")
-	public List<BasicValueEntity<Item>> getGeneralItems() {
+	public List<ItemDTO> getGeneralItems() {
 		return refeDao.getGeneralItemsBasic();
 	}
 	

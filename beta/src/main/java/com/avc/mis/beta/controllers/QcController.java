@@ -18,6 +18,7 @@ import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.dto.view.RawQcRow;
 import com.avc.mis.beta.entities.process.PO;
@@ -86,7 +87,7 @@ public class QcController {
 	}
 	
 	@RequestMapping("/getCashewItems")
-	public List<BasicValueEntity<Item>> getCashewItems() {
+	public List<ItemDTO> getCashewItems() {
 		return refeDao.getCashewItemsBasic();
 	}
 	

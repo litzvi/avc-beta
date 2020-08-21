@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.ValueEntity;
@@ -311,7 +312,7 @@ public class ManagmentControler {
 	}
 	
 	@RequestMapping("/getCashewItems")
-	public List<BasicValueEntity<Item>> getCashewItems() {
+	public List<ItemDTO> getCashewItems() {
 		return refeDao.getCashewItemsBasic();
 	}
 	

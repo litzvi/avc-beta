@@ -27,6 +27,7 @@ import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -110,10 +111,10 @@ public class Controller {
 		List<BasicValueEntity<Warehouse>> Storageholder = refeDao.getAllWarehousesDTO();
 		result.add(Storageholder);
 		
-		List<BasicValueEntity<Item>> CashewItemsholder = refeDao.getCashewItemsBasic();
+		List<ItemDTO> CashewItemsholder = refeDao.getCashewItemsBasic();
 		result.add(CashewItemsholder);
 		
-		List<BasicValueEntity<Item>> GeneralItemsholder = refeDao.getGeneralItemsBasic();
+		List<ItemDTO> GeneralItemsholder = refeDao.getGeneralItemsBasic();
 		result.add(GeneralItemsholder);
 		
 		List<SupplyCategory> Suplyholder = refeDao.getAllSupplyCategories();
