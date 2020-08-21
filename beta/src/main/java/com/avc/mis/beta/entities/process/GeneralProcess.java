@@ -60,10 +60,11 @@ public abstract class GeneralProcess extends AuditedEntity {
 	private ProcessType processType;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "productionLineId", updatable = false)
+	@JoinColumn(name = "productionLineId")
 	private ProductionLine productionLine;
 	
-	@Column(nullable = false, updatable = false)
+	@Column(nullable = false)
+	@NotNull(message = "process recorded date and time is mandetory")
 	private OffsetDateTime recordedTime;
 	private Duration duration;//seconds
 	private Integer numOfWorkers;

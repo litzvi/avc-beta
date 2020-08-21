@@ -26,6 +26,7 @@ import javax.validation.groups.Default;
 
 import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -46,9 +47,12 @@ import lombok.ToString;
 @Entity
 @Table(name = "STORAGE_FORMS")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Storage extends AuditedEntity {
+public class Storage extends AuditedEntity implements Ordinal {
 	
-	private String name;
+	@Column(nullable = false, updatable = false)
+	private Integer ordinal = -1;
+	
+	private String name; //perhaps should be removed because we have ordinal
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)

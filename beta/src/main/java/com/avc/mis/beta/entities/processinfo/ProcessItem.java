@@ -19,6 +19,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.values.Item;
 
@@ -69,6 +70,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	 * @param storageForms the storageForms to set
 	 */
 	public void setStorageForms(Storage[] storageForms) {
+//		Ordinal.setOrdinals(storageForms); //should be set by user
 		this.storageForms = Insertable.setReferences(storageForms, (t) -> {t.setReference(this);	return t;});
 	}
 	

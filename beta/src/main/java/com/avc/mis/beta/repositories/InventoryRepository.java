@@ -36,7 +36,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "item.id, item.value, item.category, "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "p.recordedTime, "
-			+ "sf.id, sf.version, "
+			+ "sf.id, sf.version, sf.ordinal, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
 			+ "sto.id, sto.value, "
 			+ "ui.numberUnits, "
