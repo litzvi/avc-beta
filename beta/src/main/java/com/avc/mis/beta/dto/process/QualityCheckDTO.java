@@ -12,11 +12,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
+import com.avc.mis.beta.dto.processinfo.StorageDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -74,7 +77,8 @@ public class QualityCheckDTO extends PoProcessDTO {
 		this.processItems = new HashSet<>();
 		for(List<ProcessItemWithStorage> list: map.values()) {
 			ProcessItemDTO processItem = list.get(0).getProcessItem();
-			processItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
+			processItem.setStorageForms(list.stream().map(i -> i.getStorage())
+					.collect(Collectors.toCollection(() -> new TreeSet<StorageDTO>(Ordinal.ordinalComparator()))));
 			this.processItems.add(processItem);
 		}
 		

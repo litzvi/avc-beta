@@ -29,8 +29,9 @@ public class LoadedItemWithStorage extends ValueDTO {
 	private StorageDTO storage;
 	
 	public LoadedItemWithStorage(Integer id, Integer version, Integer itemId, String itemValue, Integer poCodeId,
-			String contractTypeCode, String contractTypeSuffix, String supplierName, Integer storageId,
-			Integer storageVersion, BigDecimal unitAmount, MeasureUnit measureUnit,
+			String contractTypeCode, String contractTypeSuffix, String supplierName, 
+			Integer storageId, Integer storageVersion, Integer ordinal,
+			BigDecimal unitAmount, MeasureUnit measureUnit,
 			BigDecimal numberUnits, BigDecimal containerWeight, Integer warehouseLocationId,
 			String warehouseLocationValue, String storageRemarks, Class<? extends Storage> clazz, String description,
 			String remarks, boolean tableView,
@@ -40,7 +41,7 @@ public class LoadedItemWithStorage extends ValueDTO {
 				description, remarks, tableView,
 				itemPoCodeId, itemContractTypeCode, itemContractTypeSuffix, itemSupplierName);
 		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
-		this.storage = new StorageDTO(storageId, storageVersion,
+		this.storage = new StorageDTO(storageId, storageVersion, ordinal, 
 				unitAmount, measureUnit, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 	}

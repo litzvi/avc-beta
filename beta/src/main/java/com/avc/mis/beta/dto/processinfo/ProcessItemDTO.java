@@ -10,14 +10,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.data.EmailDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Item;
@@ -45,7 +49,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	private String remarks;
 	
 	private boolean tableView;
-	private Set<StorageDTO> storageForms; //can use a SortedSet like ContactDetails to maintain order
+	private SortedSet<StorageDTO> storageForms; //can use a SortedSet like ContactDetails to maintain order
 	
 	public ProcessItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
@@ -90,7 +94,8 @@ public class ProcessItemDTO extends ProcessDTO {
 		this.remarks = processItem.getRemarks();
 		
 		this.storageForms = Arrays.stream(processItem.getStorageForms())
-				.map(i->{return new StorageDTO(i);}).collect(Collectors.toSet());
+				.map(i->{return new StorageDTO(i);})
+				.collect(Collectors.toCollection(() -> new TreeSet<StorageDTO>(Ordinal.ordinalComparator())));
 
 		
 	}
@@ -144,7 +149,8 @@ public class ProcessItemDTO extends ProcessDTO {
 		List<ProcessItemDTO> processItems = new ArrayList<>();
 		for(List<ProcessItemWithStorage> list: map.values()) {
 			ProcessItemDTO processItem = list.get(0).getProcessItem();
-			processItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
+			processItem.setStorageForms(list.stream().map(i -> i.getStorage())
+					.collect(Collectors.toCollection(() -> new TreeSet<StorageDTO>(Ordinal.ordinalComparator()))));
 			processItems.add(processItem);
 		}
 		return processItems;

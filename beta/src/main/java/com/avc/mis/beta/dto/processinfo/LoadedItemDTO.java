@@ -8,12 +8,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.query.LoadedItemWithStorage;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.LoadedItem;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Item;
@@ -59,7 +61,8 @@ public class LoadedItemDTO extends ProcessItemDTO {
 		List<LoadedItemDTO> loadedItems = new ArrayList<>();
 		for(List<LoadedItemWithStorage> list: map.values()) {
 			LoadedItemDTO loadedItem = list.get(0).getLoadedItem();
-			loadedItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
+			loadedItem.setStorageForms(list.stream().map(i -> i.getStorage())
+					.collect(Collectors.toCollection(() -> new TreeSet<StorageDTO>(Ordinal.ordinalComparator()))));
 			loadedItems.add(loadedItem);
 		}
 		return loadedItems;

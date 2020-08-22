@@ -6,10 +6,12 @@ package com.avc.mis.beta.dto.processinfo;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.DataObject;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
@@ -54,7 +56,8 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 				receiptItem.getDescription(), receiptItem.getRemarks());
 		
 		setStorageForms(Arrays.stream(receiptItem.getStorageForms())
-				.map(i->{return new StorageWithSampleDTO((StorageWithSample) i);}).collect(Collectors.toSet()));
+				.map(i->{return new StorageWithSampleDTO((StorageWithSample) i);})
+				.collect(Collectors.toCollection(() -> new TreeSet<StorageDTO>(Ordinal.ordinalComparator()))));
 
 		if(receiptItem.getOrderItem() != null)
 			this.orderItem = new DataObject(receiptItem.getOrderItem());

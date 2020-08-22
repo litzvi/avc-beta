@@ -94,19 +94,25 @@ public class OrdersTest {
 			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, po.getId());
 			fail("Should not be able to change to final before approved");
 		} catch (Exception e1) {}		
-		tasks.forEach(t -> {
-			PoProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessName());
-			String processSnapshot = null;
-			try {
-				processSnapshot = objMapper.writeValueAsString(p);
-			} catch (JsonProcessingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			processInfoWriter.setApprovalDecision(t.getId(), 
-					DecisionType.APPROVED, processSnapshot, null);
-			
-		});
+		try {
+			tasks.forEach(t -> {
+				PoProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessName());
+				String processSnapshot = null;
+				try {
+					processSnapshot = objMapper.writeValueAsString(p);
+				} catch (JsonProcessingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				processInfoWriter.setApprovalDecision(t.getId(), 
+						DecisionType.APPROVED, processSnapshot, null);
+				
+			});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		
 		//cleanup
 		service.cleanup(po);

@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.Storage;
@@ -24,7 +25,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class StorageDTO extends ProcessDTO {
+public class StorageDTO extends ProcessDTO implements Ordinal {
 
 	private Integer ordinal;
 //	private String name;
@@ -36,11 +37,12 @@ public class StorageDTO extends ProcessDTO {
 	private String className; //to differentiate between storage to ExtraAdded
 //	Class<? extends Storage> clazz;
 	
-	public StorageDTO(Integer id, Integer version,
+	public StorageDTO(Integer id, Integer version, Integer ordinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
+		this.ordinal = ordinal;
 //		this.name = name;
 		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
@@ -59,6 +61,7 @@ public class StorageDTO extends ProcessDTO {
 	 */
 	public StorageDTO(Storage storage) {
 		super(storage.getId(), storage.getVersion());
+		this.ordinal = storage.getOrdinal();
 //		this.name = storage.getName();
 		this.unitAmount = storage.getUnitAmount().setScale(MeasureUnit.SCALE);
 		this.numberUnits = storage.getNumberUnits().setScale(MeasureUnit.SCALE);
@@ -83,10 +86,11 @@ public class StorageDTO extends ProcessDTO {
 	 * @param warehouseLocation2
 	 * @param description
 	 */
-	public StorageDTO(Integer id, Integer version,
+	public StorageDTO(Integer id, Integer version, Integer ordinal,
 			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
+		this.ordinal = ordinal;
 //		this.name = name;
 		this.unitAmount = unitAmount;
 //		this.measureUnit = measureUnit;
