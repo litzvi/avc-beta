@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.processinfo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,12 +12,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,7 +34,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class ProcessItemDTO extends ProcessDTO {
 
-	private BasicValueEntity<Item> item;
+	private BasicValueEntity<Item> item; //change to itemDTO in order to get category
 //	private PoCodeDTO itemPo;
 	
 //	BigDecimal unitAmount;
@@ -39,6 +44,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	private String description;
 	private String remarks;
 	
+	private boolean tableView;
 	private Set<StorageDTO> storageForms; //can use a SortedSet like ContactDetails to maintain order
 	
 	public ProcessItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
@@ -97,6 +103,31 @@ public class ProcessItemDTO extends ProcessDTO {
 //		this.itemPo = itemPo;
 		this.description = description;
 		this.remarks = remarks;
+	}
+	
+	public Set<StorageDTO> getStorageForms() {
+		if(tableView) {
+			return null;
+		}
+		return this.storageForms;
+	}
+	
+	public StorageTableDTO getStorage() {
+		if(tableView && this.storageForms != null && !this.storageForms.isEmpty()) {
+			StorageTableDTO storageTable = new StorageTableDTO();
+			this.storageForms.stream().findAny().ifPresent(s -> {
+				storageTable.setMeasureUnit(s.getUnitAmount().getMeasureUnit());
+				storageTable.setContainerWeight(s.getContainerWeight());
+				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
+				storageTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+			});
+			List<BasicStorageDTO> amounts = this.storageForms.stream().map((s) -> {
+				return new BasicStorageDTO(s.getId(), s.getVersion(), s.getOrdinal(), s.getUnitAmount().getAmount());
+			}).collect(Collectors.toList());
+			storageTable.setAmounts(amounts);
+			return storageTable;
+		}
+		return null;
 	}
 
 	public Optional<AmountWithUnit> getTotalAmount() {

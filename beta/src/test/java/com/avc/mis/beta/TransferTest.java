@@ -18,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
+import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageTransfer;
@@ -42,6 +43,7 @@ public class TransferTest {
 	@Test
 	void transferTest() {
 		Receipt receipt = service.addBasicCashewReceipt();
+		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
 		StorageTransfer transfer = new StorageTransfer();
@@ -83,6 +85,7 @@ public class TransferTest {
 		
 		//check fail on changing items
 		receipt = service.addOneItemCashewReceipt();
+		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 				
 		transfer = new StorageTransfer();
@@ -111,6 +114,7 @@ public class TransferTest {
 		
 		//check fail on changing items
 		receipt = service.addOneItemCashewReceipt();
+		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 				
 		transfer = new StorageTransfer();

@@ -23,7 +23,7 @@ import com.avc.mis.beta.entities.values.Item;
  */
 public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 
-	@Query("select new com.avc.mis.beta.dto.values.ItemDTO(i.id, i.value, null, i.supplyGroup, i.category) "
+	@Query("select new com.avc.mis.beta.dto.values.ItemDTO(i.id, i.value, i.measureUnit, i.supplyGroup, i.category) "
 			+ "from Item i "
 			+ "where i.supplyGroup = :supplyGroup "
 				+ "and i.active = true")

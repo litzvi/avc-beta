@@ -37,6 +37,12 @@ public class Warehouse extends ValueEntity implements ValueInterface {
 	
 	private BigDecimal volumeSpaceM3;
 	
+	public Warehouse(Integer id, String value) {
+		super();
+		setId(id);
+		this.value = value;
+	}
+	
 	public void setValue(String value) {
 		this.value = value.trim();
 	}

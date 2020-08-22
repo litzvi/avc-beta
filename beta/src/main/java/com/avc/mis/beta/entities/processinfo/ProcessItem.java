@@ -3,7 +3,10 @@
  */
 package com.avc.mis.beta.entities.processinfo;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,10 +21,18 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.avc.mis.beta.dto.processinfo.BasicStorageDTO;
+import com.avc.mis.beta.dto.processinfo.StorageTableDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.values.Warehouse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -55,6 +66,9 @@ public class ProcessItem extends ProcessInfoEntity {
 	@NotEmpty(message = "Process line has to contain at least one storage line")
 	Set<Storage> storageForms = new HashSet<>();
 	
+	@Setter @JsonIgnore
+	private boolean tableView = false;
+	
 	/**
 	 * Gets the list of Storage forms as an array (can be ordered).
 	 * @return the storageForms
@@ -72,6 +86,33 @@ public class ProcessItem extends ProcessInfoEntity {
 	public void setStorageForms(Storage[] storageForms) {
 //		Ordinal.setOrdinals(storageForms); //should be set by user
 		this.storageForms = Insertable.setReferences(storageForms, (t) -> {t.setReference(this);	return t;});
+	}
+	
+	
+	/**
+	 * Setter for adding list of Storage forms that share the same common measure unit, 
+	 * empty container weight and each only have one unit.
+	 * Usefully presented in a table or list of only ordinal (number) and amount,
+	 * since they all share all other parameters.
+	 * @param storageTable
+	 */
+	public void setStorage(StorageTableDTO storageTable) {
+		this.tableView = true;
+		
+		MeasureUnit measureUnit = storageTable.getMeasureUnit();
+		BigDecimal containerWeight = storageTable.getContainerWeight();
+		Warehouse warehouse = storageTable.getWarehouseLocation();
+		List<BasicStorageDTO> amounts = storageTable.getAmounts();
+		this.storageForms = new HashSet<>();
+		amounts.forEach((amount) ->  {
+					Storage storage = new Storage();
+					storage.setOrdinal(amount.getOrdinal());
+					storage.setUnitAmount(new AmountWithUnit(amount.getAmount(), measureUnit));
+					storage.setContainerWeight(containerWeight);
+					storage.setWarehouseLocation(warehouse);
+					storage.setReference(this);
+					this.storageForms.add(storage);
+				});
 	}
 	
 	protected boolean canEqual(Object o) {

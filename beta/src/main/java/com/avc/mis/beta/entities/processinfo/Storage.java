@@ -75,7 +75,7 @@ public class Storage extends AuditedEntity implements Ordinal {
 	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Number of units is required")
 	@Positive(message = "Number of units has to be positive")
-	private BigDecimal numberUnits;	
+	private BigDecimal numberUnits = BigDecimal.ONE;	
 	
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
 	private BigDecimal containerWeight;	
