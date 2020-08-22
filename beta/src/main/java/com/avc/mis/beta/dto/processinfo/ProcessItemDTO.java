@@ -21,8 +21,12 @@ import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.data.EmailDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ItemCategory;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -38,7 +42,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class ProcessItemDTO extends ProcessDTO {
 
-	private BasicValueEntity<Item> item; //change to itemDTO in order to get category
+	private ItemDTO item; //change to itemDTO in order to get category
 //	private PoCodeDTO itemPo;
 	
 //	BigDecimal unitAmount;
@@ -52,11 +56,12 @@ public class ProcessItemDTO extends ProcessDTO {
 	private SortedSet<StorageDTO> storageForms; //can use a SortedSet like ContactDetails to maintain order
 	
 	public ProcessItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
+			ItemCategory itemCategory,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			/*BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, Warehouse storageLocation, */
 			String description, String remarks, boolean tableView) {
 		super(id, version);
-		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
 //		if(poCodeId != null)
 //			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
 //		else
@@ -84,7 +89,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	 */
 	public ProcessItemDTO(ProcessItem processItem) {
 		super(processItem.getId(), processItem.getVersion());
-		this.item = new BasicValueEntity<Item>(processItem.getItem());
+		this.item = new ItemDTO(processItem.getItem());
 //		if(processItem.getItemPo() != null)
 //			this.itemPo = new PoCodeDTO(processItem.getItemPo());
 //		else
@@ -101,7 +106,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	}
 
 	public ProcessItemDTO(Integer id, Integer version,
-			BasicValueEntity<Item> item, /* PoCodeDTO itemPo, */
+			ItemDTO item, /* PoCodeDTO itemPo, */
 			String description, String remarks) {
 		super(id, version);
 		this.item = item;

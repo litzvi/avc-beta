@@ -48,7 +48,8 @@ public interface ContainerLoadingRepository  extends ProcessRepository<Container
 	 * @return List of LoadedItemWithStorage
 	 */
 	@Query("select new com.avc.mis.beta.dto.query.LoadedItemWithStorage( "
-			+ " i.id, i.version, item.id, item.value, "
+			+ " i.id, i.version, "
+			+ "item.id, item.value, item.category, "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, sf.containerWeight, "

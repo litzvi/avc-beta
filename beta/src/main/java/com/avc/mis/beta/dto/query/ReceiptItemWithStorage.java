@@ -9,7 +9,9 @@ import java.math.BigInteger;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.processinfo.StorageWithSampleDTO;
 import com.avc.mis.beta.dto.values.DataObject;
+import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
 
@@ -29,7 +31,7 @@ public class ReceiptItemWithStorage {
 	
 	
 	public ReceiptItemWithStorage(Integer id, Integer version,
-			Integer itemId, String itemValue, 
+			Integer itemId, String itemValue, ItemCategory itemCategory,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			Integer storageId, Integer storageVersion, Integer ordinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
@@ -38,7 +40,8 @@ public class ReceiptItemWithStorage {
 			BigDecimal emptyContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight,
 			String description, String remarks, boolean tableView,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
-		this.receiptItem = new ReceiptItemDTO(id, version, itemId, itemValue, 
+		this.receiptItem = new ReceiptItemDTO(id, version, 
+				itemId, itemValue, itemCategory,
 				/* poCodeId, contractTypeCode, supplierName, */
 				description, remarks, tableView,
 				orderItemId, orderItemVersion, extraRequested, extraMU);

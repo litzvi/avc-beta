@@ -23,7 +23,7 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ItemDTO extends ValueDTO {
 
 	String value;

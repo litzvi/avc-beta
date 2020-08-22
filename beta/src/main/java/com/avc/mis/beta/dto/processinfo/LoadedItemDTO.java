@@ -15,7 +15,11 @@ import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.query.LoadedItemWithStorage;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.enums.ItemCategory;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.processinfo.LoadedItem;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Item;
@@ -33,10 +37,11 @@ public class LoadedItemDTO extends ProcessItemDTO {
 	
 	private PoCodeDTO poCode;
 		
-	public LoadedItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
+	public LoadedItemDTO(Integer id, Integer version, 
+			Integer itemId, String itemValue, ItemCategory itemCategory,
 			String description, String remarks, boolean tableView,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName) {
-		super(id, version, itemId, itemValue, description, remarks, tableView);
+		super(id, version, itemId, itemValue, itemCategory, description, remarks, tableView);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);		
 	}	
 	
@@ -49,7 +54,7 @@ public class LoadedItemDTO extends ProcessItemDTO {
 	}
 
 	public LoadedItemDTO(Integer id, Integer version,
-			BasicValueEntity<Item> item, PoCodeDTO poCode,
+			ItemDTO item, PoCodeDTO poCode,
 			String description, String remarks) {
 		super(id, version, item, description, remarks);
 		this.poCode = poCode;

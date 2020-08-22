@@ -8,9 +8,10 @@ import java.math.BigDecimal;
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.StorageDTO;
+import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.processinfo.Storage;
 
 import lombok.Data;
@@ -28,8 +29,9 @@ public class LoadedItemWithStorage extends ValueDTO {
 	private PoCodeDTO po;
 	private StorageDTO storage;
 	
-	public LoadedItemWithStorage(Integer id, Integer version, Integer itemId, String itemValue, Integer poCodeId,
-			String contractTypeCode, String contractTypeSuffix, String supplierName, 
+	public LoadedItemWithStorage(Integer id, Integer version, 
+			Integer itemId, String itemValue, ItemCategory itemCategory,
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			Integer storageId, Integer storageVersion, Integer ordinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit,
 			BigDecimal numberUnits, BigDecimal containerWeight, Integer warehouseLocationId,
@@ -37,7 +39,8 @@ public class LoadedItemWithStorage extends ValueDTO {
 			String remarks, boolean tableView,
 			Integer itemPoCodeId, String itemContractTypeCode, String itemContractTypeSuffix, String itemSupplierName) {
 		super(id);
-		this.loadedItem = new LoadedItemDTO(id, version, itemId, itemValue, 
+		this.loadedItem = new LoadedItemDTO(id, version, 
+				itemId, itemValue, itemCategory,
 				description, remarks, tableView,
 				itemPoCodeId, itemContractTypeCode, itemContractTypeSuffix, itemSupplierName);
 		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);

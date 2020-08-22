@@ -11,9 +11,12 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.DataObject;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.StorageWithSample;
 import com.avc.mis.beta.entities.values.Item;
@@ -37,11 +40,13 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 
 //	private Set<StorageDTO> extraAdded; //can use a SortedSet like ContactDetails to maintain order	
 	
-	public ReceiptItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
+	public ReceiptItemDTO(Integer id, Integer version, 
+			Integer itemId, String itemValue, ItemCategory itemCategory,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			String description, String remarks, boolean tableView,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit measureUnit) {
-		super(id, version, itemId, itemValue, /* poCodeId, contractTypeCode, supplierName, */description, remarks, tableView);
+		super(id, version, itemId, itemValue, itemCategory,
+				/* poCodeId, contractTypeCode, supplierName, */description, remarks, tableView);
 		if(orderItemId != null)
 			this.orderItem = new DataObject(orderItemId, orderItemVersion);
 		if(extraRequested != null) {
@@ -52,7 +57,7 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 	
 	public ReceiptItemDTO(ReceiptItem receiptItem) {
 		super(receiptItem.getId(), receiptItem.getVersion(),
-				new BasicValueEntity<Item>(receiptItem.getItem()),
+				new ItemDTO(receiptItem.getItem()),
 				receiptItem.getDescription(), receiptItem.getRemarks());
 		
 		setStorageForms(Arrays.stream(receiptItem.getStorageForms())
@@ -69,7 +74,7 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 
 
 	public ReceiptItemDTO(Integer id, Integer version,
-			BasicValueEntity<Item> item, /* PoCodeDTO itemPo, */ 
+			ItemDTO item, /* PoCodeDTO itemPo, */ 
 			String description, String remarks, 
 			DataObject orderItem, AmountWithUnit extraRequested) {
 		super(id, version, item, /* itemPo, */ description, remarks);
