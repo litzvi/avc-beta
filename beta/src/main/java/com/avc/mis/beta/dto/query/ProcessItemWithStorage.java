@@ -36,7 +36,7 @@ public class ProcessItemWithStorage extends ValueDTO {
 	 */
 	public ProcessItemWithStorage(Integer id, Integer version, Integer itemId, String itemValue, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
-			Integer storageId, Integer storageVersion, String storageName,
+			Integer storageId, Integer storageVersion,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
@@ -45,7 +45,7 @@ public class ProcessItemWithStorage extends ValueDTO {
 		this.processItem = new ProcessItemDTO(id, version, itemId, itemValue, 
 				description, remarks, tableView);
 		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
-		this.storage = new StorageDTO(storageId, storageVersion, storageName,
+		this.storage = new StorageDTO(storageId, storageVersion,
 				unitAmount, measureUnit, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 		

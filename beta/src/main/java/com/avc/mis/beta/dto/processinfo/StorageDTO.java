@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 public class StorageDTO extends ProcessDTO {
 
 	private Integer ordinal;
-	private String name;
+//	private String name;
 	private AmountWithUnit unitAmount;
 	private BigDecimal numberUnits;	
 	private BigDecimal containerWeight;	
@@ -36,12 +36,12 @@ public class StorageDTO extends ProcessDTO {
 	private String className; //to differentiate between storage to ExtraAdded
 //	Class<? extends Storage> clazz;
 	
-	public StorageDTO(Integer id, Integer version, String name,
+	public StorageDTO(Integer id, Integer version,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
-		this.name = name;
+//		this.name = name;
 		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 		this.containerWeight = containerWeight;
@@ -59,7 +59,7 @@ public class StorageDTO extends ProcessDTO {
 	 */
 	public StorageDTO(Storage storage) {
 		super(storage.getId(), storage.getVersion());
-		this.name = storage.getName();
+//		this.name = storage.getName();
 		this.unitAmount = storage.getUnitAmount().setScale(MeasureUnit.SCALE);
 		this.numberUnits = storage.getNumberUnits().setScale(MeasureUnit.SCALE);
 		this.containerWeight = storage.getContainerWeight();
@@ -83,11 +83,11 @@ public class StorageDTO extends ProcessDTO {
 	 * @param warehouseLocation2
 	 * @param description
 	 */
-	public StorageDTO(Integer id, Integer version, String name,
+	public StorageDTO(Integer id, Integer version,
 			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz) {
 		super(id, version);
-		this.name = name;
+//		this.name = name;
 		this.unitAmount = unitAmount;
 //		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);

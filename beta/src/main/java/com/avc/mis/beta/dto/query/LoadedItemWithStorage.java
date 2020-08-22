@@ -30,7 +30,7 @@ public class LoadedItemWithStorage extends ValueDTO {
 	
 	public LoadedItemWithStorage(Integer id, Integer version, Integer itemId, String itemValue, Integer poCodeId,
 			String contractTypeCode, String contractTypeSuffix, String supplierName, Integer storageId,
-			Integer storageVersion, String storageName, BigDecimal unitAmount, MeasureUnit measureUnit,
+			Integer storageVersion, BigDecimal unitAmount, MeasureUnit measureUnit,
 			BigDecimal numberUnits, BigDecimal containerWeight, Integer warehouseLocationId,
 			String warehouseLocationValue, String storageRemarks, Class<? extends Storage> clazz, String description,
 			String remarks, boolean tableView,
@@ -40,7 +40,7 @@ public class LoadedItemWithStorage extends ValueDTO {
 				description, remarks, tableView,
 				itemPoCodeId, itemContractTypeCode, itemContractTypeSuffix, itemSupplierName);
 		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
-		this.storage = new StorageDTO(storageId, storageVersion, storageName,
+		this.storage = new StorageDTO(storageId, storageVersion,
 				unitAmount, measureUnit, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 	}

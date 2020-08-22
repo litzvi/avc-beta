@@ -52,7 +52,7 @@ public class Storage extends AuditedEntity implements Ordinal {
 	@Column(nullable = false, updatable = false)
 	private Integer ordinal = -1;
 	
-	private String name; //perhaps should be removed because we have ordinal
+//	private String name; //perhaps should be removed because we have ordinal
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)

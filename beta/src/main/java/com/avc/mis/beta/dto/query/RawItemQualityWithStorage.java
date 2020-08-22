@@ -29,7 +29,7 @@ public class RawItemQualityWithStorage {
 			Integer itemId, String itemValue, 
 			MeasureUnit testMU, BigDecimal sampleWeight, BigInteger numberOfSamples,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
-			Integer storageId, Integer storageVersion, String storageName,
+			Integer storageId, Integer storageVersion,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks,
 			String description, String remarks, Class<? extends Storage> clazz,
@@ -51,7 +51,7 @@ public class RawItemQualityWithStorage {
 				deepSpot, mold, dirty, lightDirty, decay, insectDamage,
 				roastingWeightLoss,
 				colour, flavour);
-		this.storage = new StorageDTO(storageId, storageVersion, storageName,
+		this.storage = new StorageDTO(storageId, storageVersion,
 				unitAmount, measureUnit, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 	}
