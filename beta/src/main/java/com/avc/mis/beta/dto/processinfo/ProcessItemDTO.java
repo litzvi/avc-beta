@@ -50,7 +50,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	public ProcessItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			/*BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, Warehouse storageLocation, */
-			String description, String remarks) {
+			String description, String remarks, boolean tableView) {
 		super(id, version);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 //		if(poCodeId != null)

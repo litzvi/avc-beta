@@ -36,11 +36,12 @@ public class ReceiptItemWithStorage {
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
 			BigDecimal emptyContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight,
-			String description, String remarks, 
+			String description, String remarks, boolean tableView,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
 		this.receiptItem = new ReceiptItemDTO(id, version, itemId, itemValue, 
 				/* poCodeId, contractTypeCode, supplierName, */
-				description, remarks, orderItemId, orderItemVersion, extraRequested, extraMU);
+				description, remarks, tableView,
+				orderItemId, orderItemVersion, extraRequested, extraMU);
 		this.storage = new StorageWithSampleDTO(storageId, storageVersion, storageName,
 				unitAmount, measureUnit, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,

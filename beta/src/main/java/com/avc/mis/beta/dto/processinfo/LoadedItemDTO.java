@@ -32,9 +32,9 @@ public class LoadedItemDTO extends ProcessItemDTO {
 	private PoCodeDTO poCode;
 		
 	public LoadedItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
-			String description, String remarks, 
+			String description, String remarks, boolean tableView,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName) {
-		super(id, version, itemId, itemValue, description, remarks);
+		super(id, version, itemId, itemValue, description, remarks, tableView);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);		
 	}	
 	

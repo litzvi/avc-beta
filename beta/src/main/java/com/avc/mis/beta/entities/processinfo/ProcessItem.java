@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
@@ -67,6 +68,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	Set<Storage> storageForms = new HashSet<>();
 	
 	@Setter @JsonIgnore
+	@Column(nullable = false)
 	private boolean tableView = false;
 	
 	/**

@@ -37,9 +37,9 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 	
 	public ReceiptItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
-			String description, String remarks, 
+			String description, String remarks, boolean tableView,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit measureUnit) {
-		super(id, version, itemId, itemValue, /* poCodeId, contractTypeCode, supplierName, */description, remarks);
+		super(id, version, itemId, itemValue, /* poCodeId, contractTypeCode, supplierName, */description, remarks, tableView);
 		if(orderItemId != null)
 			this.orderItem = new DataObject(orderItemId, orderItemVersion);
 		if(extraRequested != null) {
