@@ -132,12 +132,12 @@ public class TestService {
 	
 
 	private ReceiptItem[] getReceiptItems(int numOfItems) {
-		ReceiptItem[] receiptItems = new ReceiptItem[numOfItems];
+		ReceiptItem[] receiptItems = new ReceiptItem[2*numOfItems];
 		StorageWithSample[] storageForms = new StorageWithSample[receiptItems.length];
 		ExtraAdded[] added = new ExtraAdded[receiptItems.length];
 		List<Item> items = getItems();
 		Warehouse storage = getWarehouse();
-		for(int i=0; i<receiptItems.length; i++) {
+		for(int i=0; i<numOfItems; i++) {
 			storageForms[i] = new StorageWithSample();
 			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
 			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
@@ -153,7 +153,9 @@ public class TestService {
 			added[i] = new ExtraAdded();
 			added[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "KG"));//because database is set to scale 2
 			added[i].setNumberUnits(new BigDecimal(4).setScale(2));
-			receiptItems[i].setExtraAdded(new ExtraAdded[] {added[i]});
+			receiptItems[numOfItems + i] = new ReceiptItem();
+			receiptItems[numOfItems + i].setItem(receiptItems[i].getItem());
+			receiptItems[numOfItems + i].setStorageForms(new ExtraAdded[] {added[i]});
 		}
 		return receiptItems;
 	}

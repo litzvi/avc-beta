@@ -43,9 +43,9 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "processItemId")
 public class ReceiptItem extends ProcessItem {
 	
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@Transient
-	private Set<ExtraAdded> extraAdded = new HashSet<>();
+//	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+//	@Transient
+//	private Set<ExtraAdded> extraAdded = new HashSet<>();
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "orderItemId")
@@ -57,16 +57,16 @@ public class ReceiptItem extends ProcessItem {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param extraAdded the extraAdded to set
 	 */
-	public void setExtraAdded(ExtraAdded[] extraAdded) {
-		this.storageForms.removeAll(this.extraAdded);
-		this.extraAdded = Insertable.setReferences(extraAdded, (t) -> {t.setReference(this);	return t;});
-		this.storageForms.addAll(this.extraAdded);
-	}
+//	public void setExtraAdded(ExtraAdded[] extraAdded) {
+//		this.storageForms.removeAll(this.extraAdded);
+//		this.extraAdded = Insertable.setReferences(extraAdded, (t) -> {t.setReference(this);	return t;});
+//		this.storageForms.addAll(this.extraAdded);
+//	}
 	
 //	@Override
 	public void setStorageForms(StorageWithSample[] storageForms) { 
 		super.setStorageForms(storageForms);
-		this.storageForms.addAll(this.extraAdded);
+//		this.storageForms.addAll(this.extraAdded);
 	}
 	
 	@AttributeOverrides({
