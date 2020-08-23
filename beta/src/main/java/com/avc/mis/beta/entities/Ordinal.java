@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 /**
@@ -32,8 +33,11 @@ public interface Ordinal {
 	}
 	
 	public static void setOrdinals(Ordinal[] array) {
-		for(int i=0; i<array.length; i++) {
-			array[i].setOrdinal(i);
-		}
+		long distinctAmount = Arrays.stream(array).map(Ordinal::getOrdinal).filter(o -> o != null).distinct().count();
+		if(distinctAmount < array.length) {
+			for(int i=0; i<array.length; i++) {
+				array[i].setOrdinal(i);
+			}
+		}		
 	}
 }

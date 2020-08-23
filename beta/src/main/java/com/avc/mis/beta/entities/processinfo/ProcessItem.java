@@ -87,7 +87,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	 * @param storageForms the storageForms to set
 	 */
 	public void setStorageForms(Storage[] storageForms) {
-//		Ordinal.setOrdinals(storageForms); //should be set by user
+		Ordinal.setOrdinals(storageForms);
 		this.storageForms = Insertable.setReferences(storageForms, (t) -> {t.setReference(this);	return t;});
 	}
 	
