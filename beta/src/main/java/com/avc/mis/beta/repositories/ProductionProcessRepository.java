@@ -40,7 +40,7 @@ public interface ProductionProcessRepository extends ProcessRepository<Productio
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
-			+ "SUM(unit.amount * ui.numberUnits * uom.multiplicand / uom.divisor), "
+			+ "SUM((unit.amount * ui.numberUnits - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit) "
 		+ "from TransactionProcess p "
 			+ "join p.poCode po_code "
@@ -61,7 +61,7 @@ public interface ProductionProcessRepository extends ProcessRepository<Productio
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
-			+ "SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor), "
+			+ "SUM((unit.amount * sf.numberUnits - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit) "
 		+ "from TransactionProcess p "
 			+ "join p.processItems pi "

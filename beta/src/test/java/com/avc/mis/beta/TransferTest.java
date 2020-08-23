@@ -16,7 +16,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -52,7 +52,7 @@ public class TransferTest {
 
 
 		//get inventory storages for transfer
-		List<ProcessItemInventoryRow> poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
 		
 //		List<ProcessItemDTO> poInventory = warehouseManagement
 //				.getProcessItemsWithPoByPo(receipt.getPoCode().getId())
@@ -135,9 +135,9 @@ public class TransferTest {
 				
 	}
 
-	private UsedItem[] getUsedItems(List<ProcessItemInventoryRow> poInventory) {
+	private UsedItem[] getUsedItems(List<ProcessItemInventory> poInventory) {
 		List<UsedItem> usedItems = new ArrayList<UsedItem>();
-		for(ProcessItemInventoryRow processItemRow: poInventory) {
+		for(ProcessItemInventory processItemRow: poInventory) {
 			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
 				UsedItem usedItem = new UsedItem();
 				Storage storage = new Storage();
@@ -151,12 +151,12 @@ public class TransferTest {
 		return usedItems.toArray(new UsedItem[usedItems.size()]);
 	}
 
-	private ProcessItem[] getProcessItems(List<ProcessItemInventoryRow> poInventory) {
+	private ProcessItem[] getProcessItems(List<ProcessItemInventory> poInventory) {
 		ProcessItem[] processItems = new ProcessItem[poInventory.size()];
 		Storage[] storageForms;
 		for(int i=0; i<processItems.length; i++) {
 			//build process item
-			ProcessItemInventoryRow processItemRow = poInventory.get(i);
+			ProcessItemInventory processItemRow = poInventory.get(i);
 			processItems[i] = new ProcessItem();
 			Item item = new Item();
 			item.setId(processItemRow.getItem().getId());

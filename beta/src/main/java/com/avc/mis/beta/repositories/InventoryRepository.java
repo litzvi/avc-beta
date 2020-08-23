@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.StorageBalance;
+import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PoCode;
@@ -40,7 +41,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
 			+ "sto.id, sto.value, "
 			+ "ui.numberUnits, "
-			+ "SUM(unit.amount * (sf.numberUnits - coalesce(ui.numberUnits, 0)) * uom.multiplicand / uom.divisor), "
+			+ "(unit.amount * (sf.numberUnits - SUM(coalesce(ui.numberUnits, 0))) * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit) "
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
@@ -67,6 +68,45 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			SupplyGroup supplyGroup, ItemCategory itemCategory, Integer itemId, Integer poCodeId);
 
 	
+	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventoryRow( "
+			+ "pi.id, "
+			+ "item.id, item.value, item.category, "
+			+ "poCode.code, ct.code, ct.suffix, s.name, "
+			+ "p.recordedTime, "
+			+ "SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor), "
+			+ "SUM(unit.amount * coalesce(ui.numberUnits, 0) * uom.multiplicand / uom.divisor), "
+			+ "item.measureUnit, "
+			+ "function('GROUP_CONCAT', sto.value)) "
+		+ "from ProcessItem pi "
+			+ "join pi.item item "
+			+ "join pi.process p "
+				+ "join p.poCode poCode "
+					+ "join poCode.contractType ct "
+					+ "join poCode.supplier s "
+			+ "join p.lifeCycle lc "
+			+ "join pi.storageForms sf "
+				+ "join sf.unitAmount unit "
+					+ "join UOM uom "
+						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
+				+ "left join sf.warehouseLocation sto "
+				+ "left join sf.usedItems ui "
+		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (item.supplyGroup = :supplyGroup or :supplyGroup is null) "
+			+ "and (item.category = :itemCategory or :itemCategory is null) "
+			+ "and (item.id = :itemId or :itemId is null) "
+			+ "and (poCode.code = :poCodeId or :poCodeId is null) "
+			+ "and (sf.numberUnits > "
+				+ "(select sum(coalesce(used.numberUnits, 0)) "
+				+ "from UsedItem used "
+				+ "where sf = used.storage)) "
+		+ "group by pi "
+//		+ "having (SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) "
+//			+ "> SUM(unit.amount * coalesce(ui.numberUnits, 0) * uom.multiplicand / uom.divisor)) "
+		+ "order by pi.id ")
+	List<ProcessItemInventoryRow> findInventoryProcessItemRows(
+			SupplyGroup supplyGroup, ItemCategory itemCategory, Integer itemId, Integer poCodeId);
+
+	
 	/**
 	 * Gets the storage balance for the given array of storage entity objects.
 	 * @param storages array of storages ids
@@ -82,6 +122,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "group by s ")
 	Stream<StorageBalance> findStorageBalances(Integer processId);
 
+
+	
 //	@Query("select new com.avc.mis.beta.dto.values.PoInventoryRowWithStorage( "
 //			+ "pi.id, pi.version, item.id, item.value, "
 //			+ "poCode.code, ct.code, s.name, "

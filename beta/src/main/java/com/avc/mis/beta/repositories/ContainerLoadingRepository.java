@@ -73,7 +73,7 @@ public interface ContainerLoadingRepository  extends ProcessRepository<Container
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
-			+ "SUM(unit.amount * ui.numberUnits * uom.multiplicand / uom.divisor), "
+			+ "SUM((unit.amount * ui.numberUnits - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit) "
 		+ "from ContainerLoading p "
 //			+ "left join p.poCode po_code "
@@ -94,7 +94,7 @@ public interface ContainerLoadingRepository  extends ProcessRepository<Container
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
-			+ "SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor), "
+			+ "SUM((unit.amount * sf.numberUnits - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit) "
 		+ "from ContainerLoading p "
 			+ "join p.processItems pi "

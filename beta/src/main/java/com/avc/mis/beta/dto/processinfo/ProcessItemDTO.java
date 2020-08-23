@@ -77,6 +77,7 @@ public class ProcessItemDTO extends ProcessDTO {
 //		this.storageLocation = storageLocation;
 		this.description = description;
 		this.remarks = remarks;
+		this.tableView = tableView;
 		
 //		this.unitAmount.setScale(3);//for testing with assertEquals
 //		this.numberUnits.setScale(3);//for testing with assertEquals
@@ -97,6 +98,7 @@ public class ProcessItemDTO extends ProcessDTO {
 		
 		this.description = processItem.getDescription();
 		this.remarks = processItem.getRemarks();
+		this.tableView = processItem.isTableView();
 		
 		this.storageForms = Arrays.stream(processItem.getStorageForms())
 				.map(i->{return new StorageDTO(i);})

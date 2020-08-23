@@ -6,7 +6,7 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -23,7 +23,7 @@ import lombok.Value;
 @Value
 public class InventoryProcessItemWithStorage {
 
-	ProcessItemInventoryRow processItemInventoryRow;
+	ProcessItemInventory processItemInventoryRow;
 	StorageInventoryRow storageInventoryRow;
 	
 	/**
@@ -43,7 +43,7 @@ public class InventoryProcessItemWithStorage {
 			BigDecimal usedUnits, 
 			BigDecimal totalBalance, MeasureUnit totalBalanceMU) {
 
-		this.processItemInventoryRow = new ProcessItemInventoryRow(
+		this.processItemInventoryRow = new ProcessItemInventory(
 				processItemId, itemId, itemValue, itemCategory,
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				receiptDate);

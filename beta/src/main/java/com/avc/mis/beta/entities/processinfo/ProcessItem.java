@@ -67,7 +67,8 @@ public class ProcessItem extends ProcessInfoEntity {
 	@NotEmpty(message = "Process line has to contain at least one storage line")
 	Set<Storage> storageForms = new HashSet<>();
 	
-	@Setter @JsonIgnore
+	@Setter(value = AccessLevel.NONE) 
+	@JsonIgnore
 	@Column(nullable = false)
 	private boolean tableView = false;
 	

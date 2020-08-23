@@ -31,7 +31,7 @@ import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.PoRow;
-import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.RawQcRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
@@ -224,7 +224,7 @@ public class QueryTest {
 		}
 		
 		//test getting inventory storages by item
-		List<ProcessItemInventoryRow> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
+		List<ProcessItemInventory> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
 		itemInventory.forEach(i -> System.out.println(i));
 		
 		//test QC raw tables
