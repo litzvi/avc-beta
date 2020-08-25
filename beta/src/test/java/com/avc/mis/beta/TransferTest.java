@@ -25,6 +25,7 @@ import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
+import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
@@ -59,7 +60,7 @@ public class TransferTest {
 //				.stream()
 //				.map(PoProcessItemEntry::getProcessItem)
 //				.collect(Collectors.toList());
-		transfer.setUsedItems(getUsedItems(poInventory));
+		transfer.setUsedItemGroups(getUsedItemsGroups(poInventory));
 		transfer.setProcessItems(getProcessItems(poInventory));
 		
 				
@@ -75,7 +76,7 @@ public class TransferTest {
 		transfer = new StorageTransfer();
 		transfer.setPoCode(receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
-		transfer.setUsedItems(getUsedItems(poInventory));
+		transfer.setUsedItemGroups(getUsedItemsGroups(poInventory));
 		transfer.setProcessItems(getProcessItems(poInventory));
 		
 		try {
@@ -93,7 +94,7 @@ public class TransferTest {
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
 		poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
-		transfer.setUsedItems(getUsedItems(poInventory));
+		transfer.setUsedItemGroups(getUsedItemsGroups(poInventory));
 		ProcessItem[] processItems = getProcessItems(poInventory);
 		List<Item> items = service.getItems();
 		if(items.size() < 2) {
@@ -122,7 +123,7 @@ public class TransferTest {
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
 		poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
-		transfer.setUsedItems(getUsedItems(poInventory));
+		transfer.setUsedItemGroups(getUsedItemsGroups(poInventory));
 		processItems = getProcessItems(poInventory);
 		for(ProcessItem i: processItems) {
 			Storage[] storages = i.getStorageForms();
@@ -135,20 +136,27 @@ public class TransferTest {
 				
 	}
 
-	private UsedItem[] getUsedItems(List<ProcessItemInventory> poInventory) {
-		List<UsedItem> usedItems = new ArrayList<UsedItem>();
+	private UsedItemsGroup[] getUsedItemsGroups(List<ProcessItemInventory> poInventory) {
+		UsedItemsGroup[] usedItemsGroups = new UsedItemsGroup[poInventory.size()];
+		int i = 0;
 		for(ProcessItemInventory processItemRow: poInventory) {
+			UsedItem[] usedItems = new UsedItem[processItemRow.getStorageForms().size()];
+			int j = 0;
 			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
-				UsedItem usedItem = new UsedItem();
+				usedItems[j] = new UsedItem();
 				Storage storage = new Storage();
-				usedItem.setStorage(storage);
+				usedItems[j].setStorage(storage);
 				storage.setId(storagesRow.getId());
 				storage.setVersion(storagesRow.getVersion());
-				usedItem.setNumberUnits(storagesRow.getNumberUnits());
-				usedItems.add(usedItem);
+				usedItems[j].setNumberUnits(storagesRow.getNumberUnits());
+				j++;
 			}
+			usedItemsGroups[i] = new UsedItemsGroup();
+			usedItemsGroups[i].setUsedItems(usedItems);
+			i++;
+
 		}
-		return usedItems.toArray(new UsedItem[usedItems.size()]);
+		return usedItemsGroups;
 	}
 
 	private ProcessItem[] getProcessItems(List<ProcessItemInventory> poInventory) {

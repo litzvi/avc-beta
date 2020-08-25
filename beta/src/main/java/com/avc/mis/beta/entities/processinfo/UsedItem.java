@@ -15,6 +15,7 @@ import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.PoProcess;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,6 +49,16 @@ public class UsedItem extends AuditedEntity {
 
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
+	}
+	
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof UsedItemsGroup) {
+			this.setGroup((UsedItemsGroup)referenced);
+		}
+		else {
+			throw new ClassCastException("Referenced object isn't a used item group");
+		}		
 	}
 	
 }

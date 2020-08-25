@@ -42,8 +42,8 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<UsedItem> usedItems = new HashSet<>();
 	
-	@Column(nullable = false)
-	@NotBlank(message = "Group name is mandetory")
+//	@Column(nullable = false)
+//	@NotBlank(message = "Group name is mandetory")
 	private String groupName;
 
 	public void setGroupName(String groupName) {

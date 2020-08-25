@@ -88,7 +88,8 @@ public class Loading {
 				.stream().collect(Collectors.toSet()));
 		loadingDTO.setUsedItemGroups(
 				UsedItemsGroupDTO.getUsedItemsGroups(
-						getContainerLoadingRepository().findUsedItemsWithGroup(processId)));
+						getContainerLoadingRepository().findUsedItemsWithGroup(processId))
+				.stream().collect(Collectors.toSet()));
 
 		return loadingDTO; 
 	}

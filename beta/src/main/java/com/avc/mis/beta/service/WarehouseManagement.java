@@ -88,7 +88,8 @@ public class WarehouseManagement {
 				.stream().collect(Collectors.toSet()));
 		transferDTO.setUsedItemGroups(
 				UsedItemsGroupDTO.getUsedItemsGroups(
-						getTransferRepository().findUsedItemsWithGroup(processId)));
+						getTransferRepository().findUsedItemsWithGroup(processId))
+		.stream().collect(Collectors.toSet()));
 		
 		return transferDTO;
 	}

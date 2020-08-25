@@ -65,12 +65,6 @@ public class ContainerLoadingDTO extends PoProcessDTO {
 	}
 	
 
-	public void setUsedItemGroups(Collection<UsedItemsGroupDTO> usedItemGroups) {
-		this.usedItemGroups.addAll(usedItemGroups);
-	}
-	
-	
-
 	@Override
 	public String getProcessTypeDescription() {
 		return getProcessName().toString();	

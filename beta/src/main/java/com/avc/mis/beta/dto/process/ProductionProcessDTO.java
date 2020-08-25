@@ -58,10 +58,6 @@ public class ProductionProcessDTO extends PoProcessDTO {
 				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toSet());
 	}
 	
-	public void setUsedItemGroups(Collection<UsedItemsGroupDTO> usedItemGroups) {
-		this.usedItemGroups.addAll(usedItemGroups);
-	}
-	
 
 	@Override
 	public String getProcessTypeDescription() {

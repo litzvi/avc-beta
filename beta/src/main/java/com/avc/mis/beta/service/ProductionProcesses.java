@@ -75,7 +75,8 @@ public class ProductionProcesses {
 				.stream().collect(Collectors.toSet()));
 		processDTO.setUsedItemGroups(
 				UsedItemsGroupDTO.getUsedItemsGroups(
-						getProcessRepository().findUsedItemsWithGroup(processId)));
+						getProcessRepository().findUsedItemsWithGroup(processId))
+		.stream().collect(Collectors.toSet()));
 		
 		return processDTO;
 	}
