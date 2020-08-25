@@ -11,6 +11,7 @@ import com.avc.mis.beta.entities.processinfo.Storage;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
 /**
  * @author zvi
@@ -29,7 +30,7 @@ public class BasicStorageDTO extends ProcessDTO {
 		this.amount = amount;
 	}
 
-	public BasicStorageDTO(Storage storage) {
+	public BasicStorageDTO(@NonNull Storage storage) {
 		super(storage.getId(), storage.getVersion());
 		this.ordinal = storage.getOrdinal();
 		this.amount = storage.getUnitAmount().getAmount().setScale(MeasureUnit.SCALE);;

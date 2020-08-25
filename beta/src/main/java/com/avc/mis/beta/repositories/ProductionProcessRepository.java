@@ -3,12 +3,14 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ProductionProcess;
@@ -44,15 +46,16 @@ public interface ProductionProcessRepository extends ProcessRepository<Productio
 			+ "item.measureUnit) "
 		+ "from TransactionProcess p "
 			+ "join p.poCode po_code "
-			+ "join p.usedItems ui "
-				+ "join ui.storage sf "
-					+ "join sf.processItem pi "
-						+ "join pi.item item "
-						+ "join pi.process p_used_item "
-							+ "join p_used_item.poCode po_code_used_item "
-					+ "join sf.unitAmount unit "
-					+ "join UOM uom "
-						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
+			+ "join p.usedItemGroups grp "
+				+ "join grp.usedItems ui "
+					+ "join ui.storage sf "
+						+ "join sf.processItem pi "
+							+ "join pi.item item "
+							+ "join pi.process p_used_item "
+								+ "join p_used_item.poCode po_code_used_item "
+						+ "join sf.unitAmount unit "
+						+ "join UOM uom "
+							+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
 			+ "join p.processType pt "
 		+ "where pt.processName = :processName "
 			+ "and po_code_used_item.code = po_code.code "
@@ -74,5 +77,6 @@ public interface ProductionProcessRepository extends ProcessRepository<Productio
 		+ "where pt.processName = :processName "
 		+ "group by p, item ")
 	Stream<ProductionProcessWithItemAmount> findAllProducedItemsByProcessType(ProcessName processName);
+
 	
 }

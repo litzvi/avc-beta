@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
+import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -30,23 +31,46 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 
 	
 	@Query("select new com.avc.mis.beta.dto.processinfo.UsedItemDTO( "
-			+ "i.id, i.version, item.id, item.value, "
+			+ "i.id, i.version, sf.ordinal, item.id, item.value, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "
 			+ "unit.amount, unit.measureUnit, "
 			+ "warehouseLocation.id, warehouseLocation.value, "
-			+ "i.numberUnits) "
+			+ "i.numberUnits, sf.containerWeight) "
 		+ "from UsedItem i "
-			+ "join i.storage s "
-				+ "join s.unitAmount unit "
-				+ "left join s.warehouseLocation warehouseLocation "
-				+ "join s.processItem pi "
+			+ "join i.storage sf "
+				+ "join sf.unitAmount unit "
+				+ "left join sf.warehouseLocation warehouseLocation "
+				+ "join sf.processItem pi "
 					+ "join pi.item item "
-			+ "join i.process p "
-				+ "join p.poCode itemPo "
-					+ "left join itemPo.contractType ct "
-					+ "left join itemPo.supplier s "
+			+ "join i.group grp "
+				+ "join grp.process p "
+					+ "join p.poCode itemPo "
+						+ "left join itemPo.contractType ct "
+						+ "left join itemPo.supplier s "
 		+ "where p.id = :processId ")
 	Set<UsedItemDTO> findUsedItems(int processId);
+	
+	@Query("select new com.avc.mis.beta.dto.query.UsedItemWithGroup( "
+			+ "grp.id, grp.version, grp.groupName, grp.tableView, "
+			+ "i.id, i.version, sf.ordinal, item.id, item.value, "
+			+ "itemPo.id, ct.code, ct.suffix, s.name, "
+			+ "unit.amount, unit.measureUnit, "
+			+ "warehouseLocation.id, warehouseLocation.value, "
+			+ "i.numberUnits, sf.containerWeight) "
+		+ "from UsedItem i "
+			+ "join i.storage sf "
+				+ "join sf.unitAmount unit "
+				+ "left join sf.warehouseLocation warehouseLocation "
+				+ "join sf.processItem pi "
+					+ "join pi.item item "
+			+ "join i.group grp "
+				+ "join grp.process p "
+					+ "join p.poCode itemPo "
+						+ "left join itemPo.contractType ct "
+						+ "left join itemPo.supplier s "
+		+ "where p.id = :processId ")
+	List<UsedItemWithGroup> findUsedItemsWithGroup(int processId);
+	
 
 	/**
 	 * Gets the join of process item, process and storage information for the given process.

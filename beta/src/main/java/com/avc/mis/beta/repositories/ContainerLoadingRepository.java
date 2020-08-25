@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.query.LoadedItemWithStorage;
+import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.process.ContainerLoading;
@@ -77,15 +78,16 @@ public interface ContainerLoadingRepository  extends ProcessRepository<Container
 			+ "item.measureUnit) "
 		+ "from ContainerLoading p "
 //			+ "left join p.poCode po_code "
-			+ "join p.usedItems ui "
-				+ "join ui.storage sf "
-					+ "join sf.processItem pi "
-						+ "join pi.item item "
-//						+ "join pi.process p_used_item "
-//							+ "join p_used_item.poCode po_code_used_item "
-					+ "join sf.unitAmount unit "
-					+ "join UOM uom "
-						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
+			+ "join p.usedItemGroups grp "
+				+ "join grp.usedItems ui "
+					+ "join ui.storage sf "
+						+ "join sf.processItem pi "
+							+ "join pi.item item "
+//								+ "join pi.process p_used_item "
+//									+ "join p_used_item.poCode po_code_used_item "
+						+ "join sf.unitAmount unit "
+						+ "join UOM uom "
+							+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
 //			+ "join p.processType pt "
 //		+ "where pt.processName = :processName "
 //			+ "and po_code_used_item.code = po_code.code "

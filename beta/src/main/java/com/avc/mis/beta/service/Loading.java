@@ -17,6 +17,7 @@ import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
+import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -85,7 +86,9 @@ public class Loading {
 				.getLoadedItems(getContainerLoadingRepository()
 						.findLoadedItemWithStorage(processId))
 				.stream().collect(Collectors.toSet()));
-		loadingDTO.setUsedItems(getContainerLoadingRepository().findUsedItems(processId));
+		loadingDTO.setUsedItemGroups(
+				UsedItemsGroupDTO.getUsedItemsGroups(
+						getContainerLoadingRepository().findUsedItemsWithGroup(processId)));
 
 		return loadingDTO; 
 	}

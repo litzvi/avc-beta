@@ -36,7 +36,7 @@ public class StorageTransfer extends TransactionProcess<ProcessItem> {
 	@Override
 	public void prePersist() {
 		super.prePersist();
-		if(getUsedItems().length == 0)
+		if(getUsedItemGroups().length == 0)
 			throw new IllegalArgumentException("Has to containe at least one origion storage item");
 //		if(getProcessItems().length == 0)
 //			throw new IllegalArgumentException("Has to containe at least one destination storage item");

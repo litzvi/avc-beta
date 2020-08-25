@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
+import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
@@ -85,7 +86,9 @@ public class WarehouseManagement {
 				.getProcessItems(getTransferRepository()
 						.findProcessItemWithStorage(processId))
 				.stream().collect(Collectors.toSet()));
-		transferDTO.setUsedItems(getTransferRepository().findUsedItems(processId));
+		transferDTO.setUsedItemGroups(
+				UsedItemsGroupDTO.getUsedItemsGroups(
+						getTransferRepository().findUsedItemsWithGroup(processId)));
 		
 		return transferDTO;
 	}

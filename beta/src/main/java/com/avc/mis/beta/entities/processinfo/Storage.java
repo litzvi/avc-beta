@@ -50,7 +50,7 @@ import lombok.ToString;
 public class Storage extends AuditedEntity implements Ordinal {
 	
 	@Column(nullable = false, updatable = false)
-	private Integer ordinal = -1;
+	private Integer ordinal;
 	
 //	private String name; //perhaps should be removed because we have ordinal
 	

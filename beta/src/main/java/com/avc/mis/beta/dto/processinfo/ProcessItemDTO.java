@@ -32,6 +32,7 @@ import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -54,6 +55,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	private String description;
 	private String remarks;
 	
+	@JsonIgnore
 	private boolean tableView;
 	private SortedSet<StorageDTO> storageForms = new TreeSet<>(Ordinal.ordinalComparator());
 	

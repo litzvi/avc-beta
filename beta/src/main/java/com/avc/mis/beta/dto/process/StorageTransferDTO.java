@@ -4,16 +4,19 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
+import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
+import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
@@ -29,7 +32,7 @@ import lombok.ToString;
 public class StorageTransferDTO extends PoProcessDTO {
 
 	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
-	private Set<UsedItemDTO> usedItems; //can use a SortedSet like ContactDetails to maintain order
+	private Set<UsedItemsGroupDTO> usedItemGroups; //can use a SortedSet like ContactDetails to maintain order
 	
 	
 	public StorageTransferDTO(Integer id, Integer version, Instant createdDate, String userRecording, Integer poCodeId,
@@ -47,8 +50,12 @@ public class StorageTransferDTO extends PoProcessDTO {
 		super(transfer);
 		this.processItems = Arrays.stream(transfer.getProcessItems())
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
-		this.usedItems = Arrays.stream(transfer.getUsedItems())
-				.map(i->{return new UsedItemDTO((UsedItem)i);}).collect(Collectors.toSet());
+		this.usedItemGroups = Arrays.stream(transfer.getUsedItemGroups())
+				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toSet());
+	}
+	
+	public void setUsedItemGroups(Collection<UsedItemsGroupDTO> usedItemGroups) {
+		this.usedItemGroups.addAll(usedItemGroups);
 	}
 	
 

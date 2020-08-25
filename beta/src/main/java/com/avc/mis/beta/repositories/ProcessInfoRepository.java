@@ -146,10 +146,13 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 
 	@Query("select new java.lang.Boolean(count(*) > 0) "
 			+ "from TransactionProcess p "
-				+ "join p.usedItems ui "
-					+ "join ui.process uip "
-						+ "join uip.lifeCycle c "
-			+ "where uip.id = :processId and "
+				+ "join p.usedItemGroups grp "
+					+ "join grp.usedItems ui "
+						+ "join ui.storage s "
+							+ "join s.processItem pi "
+								+ "join pi.process ui_origion_p "
+									+ "join ui_origion_p.lifeCycle c "
+			+ "where ui_origion_p.id = :processId and "
 				+ "c.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
 	Boolean isProcessReferenced(Integer processId);
 

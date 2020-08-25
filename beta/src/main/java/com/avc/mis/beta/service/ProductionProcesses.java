@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
+import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -72,7 +73,9 @@ public class ProductionProcesses {
 				.getProcessItems(getProcessRepository()
 						.findProcessItemWithStorage(processId))
 				.stream().collect(Collectors.toSet()));
-		processDTO.setUsedItems(getProcessRepository().findUsedItems(processId));
+		processDTO.setUsedItemGroups(
+				UsedItemsGroupDTO.getUsedItemsGroups(
+						getProcessRepository().findUsedItemsWithGroup(processId)));
 		
 		return processDTO;
 	}

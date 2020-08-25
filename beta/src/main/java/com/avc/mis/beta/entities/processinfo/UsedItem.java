@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -28,7 +29,12 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "USED_ITEMS")
-public class UsedItem extends ProcessInfoEntity {
+public class UsedItem extends AuditedEntity {
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "groupId")
+	@NotNull(message = "Used items have to belong to a group categery")
+	private UsedItemsGroup group;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "storageId")
@@ -38,7 +44,7 @@ public class UsedItem extends ProcessInfoEntity {
 	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Number of units is required")
 	@Positive(message = "Number of units has to be positive")
-	private BigDecimal numberUnits;	
+	private BigDecimal numberUnits = BigDecimal.ONE;	
 
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
