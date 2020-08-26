@@ -77,7 +77,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	 * @return the storageForms
 	 */
 	public Storage[] getStorageForms() {
-		return (Storage[])this.storageForms.toArray(new Storage[this.storageForms.size()]);
+		return this.storageForms.toArray(new Storage[this.storageForms.size()]);
 	}
 
 	/**

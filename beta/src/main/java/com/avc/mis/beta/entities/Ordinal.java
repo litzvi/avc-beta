@@ -27,6 +27,9 @@ public interface Ordinal {
 
 			@Override
 			public int compare(T o1, T o2) {
+				if(!o1.getClass().equals(o2.getClass())) {
+					return o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName());
+				}
 				return o1.getOrdinal()-o2.getOrdinal();
 			}};
 		

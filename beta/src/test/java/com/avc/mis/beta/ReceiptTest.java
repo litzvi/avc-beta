@@ -77,8 +77,9 @@ public class ReceiptTest {
 		added[0].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(500), "KG"));//because database is set to scale 2
 		added[0].setNumberUnits(new BigDecimal(4).setScale(2));
 		receipts.addExtra(added, receipt.getReceiptItems()[0].getId());
-		receipt.getReceiptItems()[0]
-				.setStorageForms(ArrayUtils.addAll(receipt.getReceiptItems()[0].getStorageForms(), added));
+		receipt.getReceiptItems()[0].setExtraAdded(added);;
+//		receipt.getReceiptItems()[0]
+//				.setStorageForms(ArrayUtils.addAll(receipt.getReceiptItems()[0].getStorageForms(), added));
 		expected = new ReceiptDTO(receipt);
 		actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding extra bonus");

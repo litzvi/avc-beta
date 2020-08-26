@@ -6,12 +6,14 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import com.avc.mis.beta.dto.processinfo.ExtraAddedDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.processinfo.StorageWithSampleDTO;
 import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.processinfo.ExtraAdded;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
 
@@ -45,10 +47,18 @@ public class ReceiptItemWithStorage {
 				/* poCodeId, contractTypeCode, supplierName, */
 				description, remarks, tableView,
 				orderItemId, orderItemVersion, extraRequested, extraMU);
-		this.storage = new StorageWithSampleDTO(storageId, storageVersion, ordinal, 
-				unitAmount, measureUnit, numberUnits, containerWeight,
-				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
-				emptyContainerWeight, numberOfSamples, avgTestedWeight);
+		if(ExtraAdded.class.equals(clazz)) {
+			this.storage = new ExtraAddedDTO(storageId, storageVersion, ordinal, 
+					unitAmount, measureUnit, numberUnits, containerWeight,
+					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
+					emptyContainerWeight, numberOfSamples, avgTestedWeight);
+		}
+		else {
+			this.storage = new StorageWithSampleDTO(storageId, storageVersion, ordinal, 
+					unitAmount, measureUnit, numberUnits, containerWeight,
+					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
+					emptyContainerWeight, numberOfSamples, avgTestedWeight);
+		}		
 		this.orderItem = new DataObject<OrderItem>(orderItemId, orderItemVersion);
 	}
 	

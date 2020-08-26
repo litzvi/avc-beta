@@ -21,6 +21,7 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.view.ReceiptItemRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -195,12 +196,14 @@ public class Receipts {
 	public void addExtra(ExtraAdded[] added, Integer receiptItemId) {
 //		ReceiptItem receiptItem = new ReceiptItem();
 //		receiptItem.setId(receiptItemId);
+		Ordinal.setOrdinals(added);
 		Arrays.stream(added).forEach(r -> dao.addEntity(r, ReceiptItem.class, receiptItemId));
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	@Deprecated //since add extra is done even after finalize and considered in stock, shouldn't be amended after insert.
 	public void editExtra(ExtraAdded[] added) {
+		Ordinal.setOrdinals(added);
 		Arrays.stream(added).forEach(r -> dao.addEntity(r));
 	}
 	

@@ -17,6 +17,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.processinfo.ExtraAdded;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.StorageWithSample;
 import com.avc.mis.beta.entities.values.Item;
@@ -61,7 +62,13 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 				receiptItem.getDescription(), receiptItem.getRemarks());
 		
 		setStorageForms(Arrays.stream(receiptItem.getStorageForms())
-				.map(i->{return new StorageWithSampleDTO((StorageWithSample) i);})
+				.map(i->{
+					if(i instanceof ExtraAdded) {
+						return new ExtraAddedDTO((ExtraAdded)i);
+					}
+					else {						
+						return new StorageWithSampleDTO((StorageWithSample) i);
+					}})
 				.collect(Collectors.toCollection(() -> new TreeSet<StorageDTO>(Ordinal.ordinalComparator()))));
 
 		if(receiptItem.getOrderItem() != null)
