@@ -86,7 +86,4 @@ public class ReceiptTest {
 		service.cleanup(receipt);		
 		service.cleanup(po);		
 	}
-
-
-
 }

@@ -15,6 +15,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Abstract class representing entities that represent a real world interacting object, 
+ * with a generated id and an identifying name (unique name). 
+ * Usually referenced by other data entities, therefore should only be soft deleted. 
+ * 
  * @author Zvi
  *
  */

@@ -21,6 +21,6 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public abstract class SubjectDataEntity extends DataEntity implements Ordinal{
 
-	private Integer ordinal = -1; 
+	private Integer ordinal; 
 		
 }

@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 /**
  * Abstract class representing entities that represent a real world interacting object. 
  * Usually referenced by other data entities, therefore should only be soft deleted. 
+ * Contains a flag to set as not active - soft deleted.
  * 
  * @author Zvi
  *

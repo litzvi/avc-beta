@@ -14,8 +14,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * Abstract class for entities representing information notifying about processes -
- * for specific process entity see ProcessInfoEntity class.
+ * Abstract class for entities representing information notifying about general processes -
+ * processes that aren't bound to a specific po code.
+ * (For information about processes of a po see ProcessInfoEntity class)
  * e.g. message about a process transaction or management info. 
  * 
  * @author Zvi

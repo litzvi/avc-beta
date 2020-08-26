@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @MappedSuperclass
 public abstract class DataEntity extends BaseEntity {
+	
 	@Version
 	private Integer version;
 }

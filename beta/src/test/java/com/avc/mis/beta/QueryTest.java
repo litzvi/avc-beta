@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PO;
@@ -80,7 +82,7 @@ public class QueryTest {
 	@Autowired ProductionProcesses productionProcesses;
 	@Autowired Loading loading;
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void queryTest() {
 
@@ -202,16 +204,8 @@ public class QueryTest {
 		}
 		
 		//cashew inventory table
-		List<ItemInventoryRow> inventoryRows;
-		try {
-			inventoryRows = cashewReports.getInventoryTableByItem();
-			inventoryRows.forEach(r -> System.out.println(r));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
-		
+		List<ItemInventoryRow> inventoryRows  = cashewReports.getInventoryTableByItem();
+		inventoryRows.forEach(r -> System.out.println(r));
 		
 		//get all processes by po code/id
 		for(UserMessageDTO message: messages) {
@@ -244,30 +238,23 @@ public class QueryTest {
 		//loading table
 		List<LoadingRow> loadings = loading.getLoadings();
 		loadings.forEach(i -> System.out.println(i));
-				
+		
+
+		Set<PoCodeDTO> rawInventoryPos = objectTablesReader.findInventoryPoCodes(ItemCategory.RAW);
+		rawInventoryPos.forEach(r -> System.out.println(r));
+						
 		service.cleanup(po);
 
 	}
 	
 	@Test
 	void oneQueryTest() {
-
-		//map of all management for the different processes for current user
-		Map<ProcessName, List<ManagementType>> processManagementMap = processInfoReader.getAllUserManagementTypes();
-		processManagementMap.forEach((k,v) -> System.out.println("(" + k + ", " + v + ")"));
+		//cashew inventory table
+		List<ItemInventoryRow> inventoryRows  = cashewReports.getInventoryTableByItem();
+		inventoryRows.forEach(r -> System.out.println(r));
 		
-		//get cashew standards in DTOs
-		List<CashewStandardDTO> cashewStandards = valueTablesReader.getAllCashewStandardsDTO();
-		cashewStandards.forEach(i -> System.out.println(i));
-		
-		List<ProcessRow> processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_CLEANING);
-		processReport.forEach(i -> System.out.println(i));
-		processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_ROASTING);
-		processReport.forEach(i -> System.out.println(i));
-		
-		//loading table
-		List<LoadingRow> loadings = loading.getLoadings();
-		loadings.forEach(i -> System.out.println(i));
-						
+		Set<PoCodeDTO> rawInventoryPos = objectTablesReader.findInventoryPoCodes(ItemCategory.RAW);
+		rawInventoryPos.forEach(r -> System.out.println(r));
+					
 	}
 }
