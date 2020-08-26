@@ -36,9 +36,9 @@ public class InventoryProcessItemWithStorage {
 			Integer processItemId, 
 			Integer itemId, String itemValue, ItemCategory itemCategory,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
-			OffsetDateTime receiptDate,
+			OffsetDateTime receiptDate, boolean tableView,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, 
+			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			BigDecimal usedUnits, 
 			BigDecimal totalBalance, MeasureUnit totalBalanceMU) {
@@ -46,11 +46,11 @@ public class InventoryProcessItemWithStorage {
 		this.processItemInventoryRow = new ProcessItemInventory(
 				processItemId, itemId, itemValue, itemCategory,
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
-				receiptDate);
+				receiptDate, tableView);
 		this.storageInventoryRow = new StorageInventoryRow(
 				storageId, storageVersion, storageOrdinal,
 				processItemId,
-				unitAmount, measureUnit, numberUnits, 
+				unitAmount, measureUnit, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue,
 				usedUnits, 
 				totalBalance, totalBalanceMU); 

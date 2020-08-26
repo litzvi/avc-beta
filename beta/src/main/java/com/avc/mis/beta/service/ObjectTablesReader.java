@@ -162,6 +162,10 @@ public class ObjectTablesReader {
 		return getObjectTablesRepository().findInventoryPoCodeByType(null, itemCategory, null);		
 	}
 	
+	public Set<PoCodeDTO> findInventoryPoCodes(SupplyGroup supplyGroup) {
+		return getObjectTablesRepository().findInventoryPoCodeByType(supplyGroup, null, null);		
+	}
+	
 	/**
 	 * Get the table of all po codes.
 	 * Can be used for searching reports for any PO.

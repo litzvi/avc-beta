@@ -8,10 +8,14 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
+import com.avc.mis.beta.dto.processinfo.BasicStorageDTO;
+import com.avc.mis.beta.dto.processinfo.StorageDTO;
+import com.avc.mis.beta.dto.processinfo.StorageTableDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
@@ -19,6 +23,8 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.values.Warehouse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,6 +48,8 @@ public class ProcessItemInventory extends ValueDTO {
 	private OffsetDateTime receiptDate;
 	private AmountWithUnit[] totalBalanceAmount; //not calculated in method so won't be calculated repeatedly for totalLots
 	
+	@JsonIgnore
+	private boolean tableView;
 	private List<StorageInventoryRow> storageForms;
 	
 	/**
@@ -50,23 +58,27 @@ public class ProcessItemInventory extends ValueDTO {
 	 */
 	public ProcessItemInventory(Integer id, Integer itemId, String itemValue, ItemCategory itemCategory,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
-			OffsetDateTime receiptDate) {
+			OffsetDateTime receiptDate, boolean tableView) {
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.receiptDate = receiptDate;
+		this.tableView = tableView;
 	}
 	
 	/**
 	 * All class arguments constructor, excluding list of storage forms and calculated totals
 	 */
 	public ProcessItemInventory(Integer id, ItemDTO item, 
-			PoCodeDTO poCode, OffsetDateTime receiptDate) {
+			PoCodeDTO poCode, OffsetDateTime receiptDate, boolean tableView) {
 		super(id);
 		this.item = item;
 		this.poCode = poCode;
 		this.receiptDate = receiptDate;
+		this.tableView = tableView;
 	}
+	
+	
 	
 	/**
 	 * Setter for storageForms, sets the storages for this process item 
@@ -86,6 +98,32 @@ public class ProcessItemInventory extends ValueDTO {
 		}
 		this.storageForms = storageForms;
 		
+	}
+	
+	public List<StorageInventoryRow> getStorageForms() {
+		if(tableView) {
+			return null;
+		}
+		return this.storageForms;
+	}
+	
+	public StorageTableDTO getStorage() {
+		if(tableView && this.storageForms != null && !this.storageForms.isEmpty()) {
+			StorageTableDTO storageTable = new StorageTableDTO();
+			this.storageForms.stream().findAny().ifPresent(s -> {
+				storageTable.setMeasureUnit(s.getUnitAmount().getMeasureUnit());
+				storageTable.setContainerWeight(s.getContainerWeight());
+				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
+				if(warehouse != null)
+					storageTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+			});
+			List<BasicStorageDTO> amounts = this.storageForms.stream().map((s) -> {
+				return new BasicStorageDTO(s.getId(), s.getVersion(), s.getOrdinal(), s.getUnitAmount().getAmount());
+			}).collect(Collectors.toList());
+			storageTable.setAmounts(amounts);
+			return storageTable;
+		}
+		return null;
 	}
 	
 //	/**

@@ -4,6 +4,7 @@
 package com.avc.mis.beta;
 
 import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
+import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
@@ -43,6 +45,7 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.CashewReports;
@@ -82,7 +85,7 @@ public class QueryTest {
 	@Autowired ProductionProcesses productionProcesses;
 	@Autowired Loading loading;
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void queryTest() {
 
@@ -203,9 +206,20 @@ public class QueryTest {
 			suppliersByCategory.forEach(s -> System.out.println(s));
 		}
 		
-		//cashew inventory table
+		//cashew inventory table by item
 		List<ItemInventoryRow> inventoryRows  = cashewReports.getInventoryTableByItem();
 		inventoryRows.forEach(r -> System.out.println(r));
+		
+		
+		//cashew inventory table by po
+		List<PoInventoryRow> poInventoryRows = cashewReports. getInventoryTableByPo();
+		poInventoryRows.forEach(r -> System.out.println(r));		
+		Set<PoCodeDTO> rawInventoryPos = objectTablesReader.findInventoryPoCodes(SupplyGroup.CASHEW);
+		rawInventoryPos.forEach(r -> System.out.println(r));
+		assertTrue(rawInventoryPos.size() == rawInventoryPos.size(), "po codes and po inventory row for cashew aren't consistent");
+		
+		
+		
 		
 		//get all processes by po code/id
 		for(UserMessageDTO message: messages) {
@@ -240,8 +254,6 @@ public class QueryTest {
 		loadings.forEach(i -> System.out.println(i));
 		
 
-		Set<PoCodeDTO> rawInventoryPos = objectTablesReader.findInventoryPoCodes(ItemCategory.RAW);
-		rawInventoryPos.forEach(r -> System.out.println(r));
 						
 		service.cleanup(po);
 
@@ -249,12 +261,6 @@ public class QueryTest {
 	
 	@Test
 	void oneQueryTest() {
-		//cashew inventory table
-		List<ItemInventoryRow> inventoryRows  = cashewReports.getInventoryTableByItem();
-		inventoryRows.forEach(r -> System.out.println(r));
-		
-		Set<PoCodeDTO> rawInventoryPos = objectTablesReader.findInventoryPoCodes(ItemCategory.RAW);
-		rawInventoryPos.forEach(r -> System.out.println(r));
 					
 	}
 }

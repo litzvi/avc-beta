@@ -139,7 +139,8 @@ public class ProcessItemDTO extends ProcessDTO {
 				storageTable.setMeasureUnit(s.getUnitAmount().getMeasureUnit());
 				storageTable.setContainerWeight(s.getContainerWeight());
 				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
-				storageTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+				if(warehouse != null)
+					storageTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 			});
 			List<BasicStorageDTO> amounts = this.storageForms.stream().map((s) -> {
 				return new BasicStorageDTO(s.getId(), s.getVersion(), s.getOrdinal(), s.getUnitAmount().getAmount());
