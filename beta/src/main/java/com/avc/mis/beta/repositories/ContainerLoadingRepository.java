@@ -55,7 +55,7 @@ public interface ContainerLoadingRepository  extends ProcessRepository<Container
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, sf.containerWeight, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
-			+ "i.description, i.remarks, i.tableView, "
+			+ "i.groupName, i.description, i.remarks, i.tableView, "
 			+ "itemPoCode.code, ctItem.code, ctItem.suffix, sItem.name) "
 		+ "from LoadedItem i "
 			+ "join i.item item "

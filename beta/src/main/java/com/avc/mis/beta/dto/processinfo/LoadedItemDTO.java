@@ -39,9 +39,9 @@ public class LoadedItemDTO extends ProcessItemDTO {
 		
 	public LoadedItemDTO(Integer id, Integer version, 
 			Integer itemId, String itemValue, ItemCategory itemCategory,
-			String description, String remarks, boolean tableView,
+			String groupName, String description, String remarks, boolean tableView,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName) {
-		super(id, version, itemId, itemValue, itemCategory, description, remarks, tableView);
+		super(id, version, itemId, itemValue, itemCategory, groupName, description, remarks, tableView);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);		
 	}	
 	
@@ -55,8 +55,8 @@ public class LoadedItemDTO extends ProcessItemDTO {
 
 	public LoadedItemDTO(Integer id, Integer version,
 			ItemDTO item, PoCodeDTO poCode,
-			String description, String remarks) {
-		super(id, version, item, description, remarks);
+			String groupName, String description, String remarks) {
+		super(id, version, item, groupName, description, remarks);
 		this.poCode = poCode;
 	}
 

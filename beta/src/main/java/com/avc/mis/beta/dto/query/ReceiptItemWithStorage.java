@@ -40,12 +40,12 @@ public class ReceiptItemWithStorage {
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
 			BigDecimal emptyContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight,
-			String description, String remarks, boolean tableView,
+			String groupName, String description, String remarks, boolean tableView,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
 		this.receiptItem = new ReceiptItemDTO(id, version, 
 				itemId, itemValue, itemCategory,
 				/* poCodeId, contractTypeCode, supplierName, */
-				description, remarks, tableView,
+				groupName, description, remarks, tableView,
 				orderItemId, orderItemVersion, extraRequested, extraMU);
 		if(ExtraAdded.class.equals(clazz)) {
 			this.storage = new ExtraAddedDTO(storageId, storageVersion, ordinal, 

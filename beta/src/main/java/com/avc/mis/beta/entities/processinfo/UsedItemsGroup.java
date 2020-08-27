@@ -50,15 +50,7 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 	@OneToMany(mappedBy = "group", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<UsedItem> usedItems = new HashSet<>();
-	
-//	@Column(nullable = false)
-//	@NotBlank(message = "Group name is mandetory")
-	private String groupName;
-
-	public void setGroupName(String groupName) {
-		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
-	}
-		
+			
 //	@Enumerated(EnumType.STRING)
 //	@Column(nullable = false)
 //	@NotNull(message = "Group category is mandatory")
@@ -68,6 +60,12 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 	@JsonIgnore
 	@Column(nullable = false)
 	private boolean tableView = false;
+	
+	private String groupName;
+
+	public void setGroupName(String groupName) {
+		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
+	}
 	
 	public UsedItem[] getUsedItems() {
 		return this.usedItems.toArray(new UsedItem[this.usedItems.size()]);

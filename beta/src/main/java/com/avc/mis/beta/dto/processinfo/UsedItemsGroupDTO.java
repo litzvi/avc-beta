@@ -63,7 +63,6 @@ public class UsedItemsGroupDTO extends ProcessDTO {
 	public UsedItemTableDTO getUsedItem() {
 		if(tableView && this.usedItems != null && !this.usedItems.isEmpty()) {
 			UsedItemTableDTO usedItemTable = new UsedItemTableDTO();
-			usedItemTable.setGroupName(this.groupName);
 			this.usedItems.stream().findAny().ifPresent(s -> {
 				usedItemTable.setItem(s.getItem());
 				usedItemTable.setItemPo(s.getItemPo());

@@ -58,7 +58,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 //				+ "WHEN type(sf) = Storage THEN sf.avgTestedWeight  "
 //				+ "ELSE null "
 //			+ "END , "
-			+ "i.description, i.remarks, i.tableView, "
+			+ "i.groupName, i.description, i.remarks, i.tableView, "
 			+ "oi.id, oi.version, extra.amount, extra.measureUnit) "
 		+ "from ReceiptItem i "
 			+ "left join i.orderItem oi "

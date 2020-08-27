@@ -44,10 +44,10 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 	public ReceiptItemDTO(Integer id, Integer version, 
 			Integer itemId, String itemValue, ItemCategory itemCategory,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
-			String description, String remarks, boolean tableView,
+			String groupName, String description, String remarks, boolean tableView,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit measureUnit) {
 		super(id, version, itemId, itemValue, itemCategory,
-				/* poCodeId, contractTypeCode, supplierName, */description, remarks, tableView);
+				/* poCodeId, contractTypeCode, supplierName, */groupName, description, remarks, tableView);
 		if(orderItemId != null)
 			this.orderItem = new DataObject(orderItemId, orderItemVersion);
 		if(extraRequested != null) {
@@ -58,7 +58,7 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 	
 	public ReceiptItemDTO(ReceiptItem receiptItem) {
 		super(receiptItem.getId(), receiptItem.getVersion(),
-				new ItemDTO(receiptItem.getItem()),
+				new ItemDTO(receiptItem.getItem()), receiptItem.getGroupName(),
 				receiptItem.getDescription(), receiptItem.getRemarks());
 		
 		setStorageForms(Arrays.stream(receiptItem.getStorageForms())
@@ -82,9 +82,9 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 
 	public ReceiptItemDTO(Integer id, Integer version,
 			ItemDTO item, /* PoCodeDTO itemPo, */ 
-			String description, String remarks, 
+			String groupName, String description, String remarks, 
 			DataObject orderItem, AmountWithUnit extraRequested) {
-		super(id, version, item, /* itemPo, */ description, remarks);
+		super(id, version, item, /* itemPo, */ groupName, description, remarks);
 		this.orderItem = orderItem;
 		if(extraRequested != null) {
 			this.extraRequested = extraRequested.setScale(MeasureUnit.SCALE);

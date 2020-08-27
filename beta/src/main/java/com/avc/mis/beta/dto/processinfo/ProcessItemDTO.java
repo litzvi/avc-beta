@@ -52,6 +52,7 @@ public class ProcessItemDTO extends ProcessDTO {
 //	MeasureUnit measureUnit;
 //	BigDecimal numberUnits;	
 //	Warehouse storageLocation;
+	private String groupName;
 	private String description;
 	private String remarks;
 	
@@ -63,7 +64,7 @@ public class ProcessItemDTO extends ProcessDTO {
 			ItemCategory itemCategory,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			/*BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, Warehouse storageLocation, */
-			String description, String remarks, boolean tableView) {
+			String groupName, String description, String remarks, boolean tableView) {
 		super(id, version);
 		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
 //		if(poCodeId != null)
@@ -79,6 +80,7 @@ public class ProcessItemDTO extends ProcessDTO {
 //		this.measureUnit = measureUnit;
 //		this.numberUnits = numberUnits.setScale(3);
 //		this.storageLocation = storageLocation;
+		this.groupName = groupName;
 		this.description = description;
 		this.remarks = remarks;
 		this.tableView = tableView;
@@ -100,6 +102,7 @@ public class ProcessItemDTO extends ProcessDTO {
 //		else
 //			this.itemPo = null;
 		
+		this.groupName = processItem.getGroupName();
 		this.description = processItem.getDescription();
 		this.remarks = processItem.getRemarks();
 		this.tableView = processItem.isTableView();
@@ -113,10 +116,11 @@ public class ProcessItemDTO extends ProcessDTO {
 
 	public ProcessItemDTO(Integer id, Integer version,
 			ItemDTO item, /* PoCodeDTO itemPo, */
-			String description, String remarks) {
+			String groupName, String description, String remarks) {
 		super(id, version);
 		this.item = item;
 //		this.itemPo = itemPo;
+		this.groupName = groupName;
 		this.description = description;
 		this.remarks = remarks;
 	}

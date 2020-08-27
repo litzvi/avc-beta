@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -71,6 +72,12 @@ public class ProcessItem extends ProcessInfoEntity {
 	@JsonIgnore
 	@Column(nullable = false)
 	private boolean tableView = false;
+	
+	private String groupName;
+
+	public void setGroupName(String groupName) {
+		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
+	}
 	
 	/**
 	 * Gets the list of Storage forms as an array (can be ordered).

@@ -24,8 +24,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 public class UsedItemTableDTO {
-
-	private String groupName;
 	
 	private BasicValueEntity<Item> item;
 	private PoCodeDTO itemPo;
