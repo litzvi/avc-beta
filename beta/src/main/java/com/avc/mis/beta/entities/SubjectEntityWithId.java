@@ -14,7 +14,8 @@ import lombok.EqualsAndHashCode;
 /**
  * Abstract class representing entities with ID, that provide information of another object 
  * and not referenced by other objects.
- * Has an ordinal value indicating priority between multiple entities of the same class, owned by the same object.
+ * Has an ordinal value indicating priority between multiple entities 
+ * of the same class that are owned by the same object.
  * 
  * @author Zvi
  *

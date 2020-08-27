@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 
+import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
 
@@ -18,14 +19,29 @@ import lombok.NonNull;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class BasicUsedStorageDTO extends BasicStorageDTO {
+public class BasicUsedStorageDTO extends ProcessDTO {
 	
-	public BasicUsedStorageDTO(Integer id, Integer version, Integer ordinal, BigDecimal amount) {
-		super(id, version, ordinal, amount);
+
+	private Integer ordinal;
+	private BigDecimal amount;
+	
+	private Storage storage;
+	
+	public BasicUsedStorageDTO(Integer id, Integer version, 
+			Integer ordinal, BigDecimal amount) {
+		super(id, version);
+		this.ordinal = ordinal;
+		this.amount = amount;
 	}
+	
+//	public BasicUsedStorageDTO(Integer id, Integer version, Integer storageId, Integer storageVersion) {
+//		super(id, version);
+//		this.storage = new BasicStorageDTO(storageId, storageVersion);
+//	}
 
 	public BasicUsedStorageDTO(@NonNull UsedItem usedItem) {
-		super(usedItem.getStorage());
+		super(usedItem.getId(), usedItem.getVersion());
+		this.storage = usedItem.getStorage();
 	}
 
 	

@@ -49,7 +49,7 @@ import lombok.ToString;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Storage extends AuditedEntity implements Ordinal {
 	
-	@Column(nullable = false, updatable = false)
+	@Column(nullable = false)
 	private Integer ordinal;
 	
 //	private String name; //perhaps should be removed because we have ordinal

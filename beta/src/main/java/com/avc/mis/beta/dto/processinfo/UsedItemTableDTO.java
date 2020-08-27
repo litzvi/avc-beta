@@ -30,7 +30,7 @@ public class UsedItemTableDTO {
 	private BasicValueEntity<Item> item;
 	private PoCodeDTO itemPo;
 	
-	private List<BasicUsedStorageDTO> amounts;
+	private List<BasicUsedStorageDTO> used;
 	
 	private MeasureUnit measureUnit;
 	private BigDecimal containerWeight;	

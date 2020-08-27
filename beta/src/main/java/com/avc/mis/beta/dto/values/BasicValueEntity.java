@@ -19,7 +19,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class BasicValueEntity<T extends ValueInterface> extends ValueDTO {
+public class BasicValueEntity<T extends ValueInterface> extends ValueDTO implements ValueInterface {
 	
 	String value;
 

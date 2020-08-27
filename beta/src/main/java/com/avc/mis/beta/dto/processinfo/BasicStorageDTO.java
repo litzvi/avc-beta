@@ -11,6 +11,7 @@ import com.avc.mis.beta.entities.processinfo.Storage;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
@@ -18,6 +19,7 @@ import lombok.NonNull;
  *
  */
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class BasicStorageDTO extends ProcessDTO {
 
@@ -28,6 +30,10 @@ public class BasicStorageDTO extends ProcessDTO {
 		super(id, version);
 		this.ordinal = ordinal;
 		this.amount = amount;
+	}
+	
+	public BasicStorageDTO(Integer id, Integer version) {
+		super(id, version);
 	}
 
 	public BasicStorageDTO(@NonNull Storage storage) {

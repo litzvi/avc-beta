@@ -16,9 +16,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * Abstract class for entities representing information notifying about a specific process entity.
- * e.g. task required for process, process item etc. 
- * References a process (required and can't be changed) and has a title.
+ * Abstract class for entities representing information about a process of a specific po.
+ * e.g. process item (only for po process - process for single po), process life cycle etc. 
+ * References a po process (required and can't be changed) and has a description.
  * 
  * @author Zvi
  *

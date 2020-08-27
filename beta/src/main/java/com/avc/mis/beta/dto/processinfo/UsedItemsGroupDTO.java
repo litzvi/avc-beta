@@ -72,10 +72,10 @@ public class UsedItemsGroupDTO extends ProcessDTO {
 				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
 				usedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 			});
-			List<BasicUsedStorageDTO> amounts = this.usedItems.stream().map((s) -> {
+			List<BasicUsedStorageDTO> used = this.usedItems.stream().map((s) -> {
 				return new BasicUsedStorageDTO(s.getId(), s.getVersion(), s.getOrdinal(), s.getUnitAmount().getAmount());
 			}).collect(Collectors.toList());
-			usedItemTable.setAmounts(amounts);
+			usedItemTable.setUsed(used);
 			return usedItemTable;
 		}
 		return null;
