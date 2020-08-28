@@ -38,21 +38,10 @@ public class ProductionProcess extends TransactionProcess<ProcessItem> {
 	protected boolean canEqual(Object o) {
 		return super.canEqual(o);
 	}
-	
-	@PrePersist
-	@Override
-	public void prePersist() {
-		super.prePersist();
-		if(getUsedItemGroups().length == 0)
-			throw new IllegalArgumentException("Has to containe at least one origion storage item");
-		if(getProcessItems().length == 0)
-			throw new IllegalArgumentException("Has to containe at least one destination storage item");
-	}
-	
+		
 	@Override
 	public String getProcessTypeDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Production";
 	}
 
 }

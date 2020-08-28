@@ -41,7 +41,7 @@ import lombok.EqualsAndHashCode;
  * PO code, 
  * type of process (Cashew order, receive order, roasting etc.),
  * production line (if have multiple), user recorded time, duration,
- * number of workers and the process status(cancelled, finalised etc.)
+ * number of workers and process life cycle.
  * 
  * @author zvi
  *
@@ -66,7 +66,7 @@ public abstract class GeneralProcess extends AuditedEntity {
 	@Column(nullable = false)
 	@NotNull(message = "process recorded date and time is mandetory")
 	private OffsetDateTime recordedTime;
-	private Duration duration;//seconds
+	private Duration duration;
 	private Integer numOfWorkers;
 	
 	@OneToOne(mappedBy = "process", cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
@@ -80,15 +80,20 @@ public abstract class GeneralProcess extends AuditedEntity {
 	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Set<UserMessage> messages = new HashSet<>();
 	
-	
-	
+	/**
+	 * Used by Lombok so new/transient entities with null id won't be equal.
+	 * @param o
+	 * @return false if both this object's and given object's id is null 
+	 * or given object is not of the same class, otherwise returns true.
+	 */
+	@JsonIgnore
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
-	
-//	@PrePersist
-//	public abstract void prePersist();
-	
+		
+	/**
+	 * Creates the life cycle information
+	 */
 	@PrePersist
 	public void prePersist() {
 		this.lifeCycle = new ProcessLifeCycle();
@@ -96,5 +101,9 @@ public abstract class GeneralProcess extends AuditedEntity {
 		lifeCycle.setReference(this);
 	}
 
+	/**
+	 * @return a description for objects of this class.
+	 */
+	//TODO: may be static if no specific information added
 	public abstract String getProcessTypeDescription() ;
 }

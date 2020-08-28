@@ -20,6 +20,7 @@ import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.validation.groups.OnPersist;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -77,8 +78,10 @@ public class PoCode extends BaseEntity {
 	/**
 	 * Used by Lombok so new/transient entities with null id won't be equal.
 	 * @param o
-	 * @return
+	 * @return false if both this object's and given object's id is null 
+	 * or given object is not of the same class, otherwise returns true.
 	 */
+	@JsonIgnore
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}

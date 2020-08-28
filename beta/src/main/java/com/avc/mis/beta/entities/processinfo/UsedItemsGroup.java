@@ -16,6 +16,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.dto.processinfo.BasicStorageDTO;
 import com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO;
@@ -49,6 +50,7 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "group", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@NotEmpty(message = "Has to containe at least one used storage item")
 	private Set<UsedItem> usedItems = new HashSet<>();
 			
 //	@Enumerated(EnumType.STRING)

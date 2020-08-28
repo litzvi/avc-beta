@@ -70,17 +70,6 @@ public class ContainerLoading extends TransactionProcess<LoadedItem> {
 		return super.canEqual(o);
 	}
 	
-	@PrePersist
-	@Override
-	public void prePersist() {
-		super.prePersist();
-		if(getUsedItemGroups().length == 0)
-			throw new IllegalArgumentException("Has to containe at least one origion storage item");
-		if(getProcessItems().length == 0)
-			throw new IllegalArgumentException("Has to containe at least one loaded item");
-
-	}
-	
 	@Override
 	public String getProcessTypeDescription() {
 		return "Container Loading";

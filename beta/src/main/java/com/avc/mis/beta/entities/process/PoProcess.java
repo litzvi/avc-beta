@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * Process that refers to a certain PO#
+ * Process that also refers to a specific single PO#
  * 
  * @author Zvi
  * 

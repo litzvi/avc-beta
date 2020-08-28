@@ -19,6 +19,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Owend by a process, in order to follow it's life cycle.
+ * e.g. if editable, locked or the confirmation state of the process - pending, final etc.
+ * 
+ * 
  * @author Zvi
  *
  */

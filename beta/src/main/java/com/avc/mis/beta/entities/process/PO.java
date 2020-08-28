@@ -19,6 +19,7 @@ import org.hibernate.annotations.FetchMode;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -28,6 +29,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * Purchase Order with order items.
+ * 
  * @author Zvi
  *
  */
@@ -66,6 +69,14 @@ public class PO extends PoProcess {
 		this.orderItems = Insertable.setReferences(orderItems, (t) -> {t.setReference(this);	return t;});
 	}
 
+	/**
+	 * Used by Lombok so new/transient entities with null id won't be equal.
+	 * @param o
+	 * @return false if both this object's and given object's id is null 
+	 * or given object is not of the same class, otherwise returns true.
+	 */
+	@JsonIgnore
+	@Override
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}

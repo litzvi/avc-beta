@@ -17,8 +17,6 @@ import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.UsedItem;
-import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -33,22 +31,33 @@ import lombok.Setter;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "TRANSACTION_PROCESSES")
+@Table(name = "PROCESSES_WITH_PRODUCT")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class TransactionProcess<T extends ProcessItem> extends ProcessWithProduct<T> {
+public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProcess {
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@NotEmpty(message = "Has to containe at least one used/origion storage item")
-	private Set<UsedItemsGroup> usedItemGroups = new HashSet<>();
+	@NotEmpty(message = "Has to containe at least one destination-storage-item (process item)")
+	private Set<ProcessItem> processItems = new HashSet<>();
 
-	public UsedItemsGroup[] getUsedItemGroups() {
-		return this.usedItemGroups.toArray(new UsedItemsGroup[this.usedItemGroups.size()]);
+
+	/**
+	 * Gets the list of Items as an array (can be ordered).
+	 * @return the processItems
+	 */
+	protected Object[] getProcessItems() {
+		return this.processItems.toArray();
+//		return (T[]) this.processItems.toArray(Array.newInstance(c, this.processItems.size()));
 	}
 
-	public void setUsedItemGroups(UsedItemsGroup[] usedItemGroups) {
-		this.usedItemGroups = Insertable.setReferences(usedItemGroups, (t) -> {t.setReference(this);	return t;});
+	/**
+	 * Setter for adding items that are processed, 
+	 * receives an array (which can be ordered, for later use to add an order to the items).
+	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
+	 * @param processItems the processItems to set
+	 */
+	public void setProcessItems(T[] processItems) {
+		this.processItems = Insertable.setReferences(processItems, (t) -> {t.setReference(this);	return t;});
 	}
-
 }
