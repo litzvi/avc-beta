@@ -19,12 +19,15 @@ import javax.validation.constraints.NotNull;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.processinfo.LoadedItem;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Process of loading a container for export.
+ * 
  * @author zvi
  *
  */
@@ -48,19 +51,19 @@ public class ContainerLoading extends TransactionProcess<LoadedItem> {
 	@Embedded
 	@NotNull(message = "Shipping details is mandatory")
 	private ShipingDetails shipingDetails;
-	
 		
-//	@OneToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "containerArrivalId", nullable = false)
-//	@NotNull(message = "Container loading has to reference container arrival")
-//	private ContainerArrival containerArrival;
-	
+	/**
+	 * @param loadedItems array of loaded items in order
+	 */
 	public void setLoadedItems(LoadedItem[] loadedItems) {
 		super.setProcessItems(loadedItems);
 	}
 	
+	/**
+	 * @return array of loaded items in given order
+	 */
 	public LoadedItem[] getLoadedItems() {
-		Object[] processItems = super.getProcessItems();
+		ProcessItem[] processItems = super.getProcessItems();
 		return Arrays.copyOf(processItems, processItems.length, LoadedItem[].class);
 	}
 	

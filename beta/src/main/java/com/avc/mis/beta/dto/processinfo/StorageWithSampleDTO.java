@@ -26,7 +26,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 public class StorageWithSampleDTO extends StorageDTO {
 
-	private BigDecimal emptyContainerWeight;	
+	private BigDecimal sampleContainerWeight;	
 	private BigInteger numberOfSamples;	
 	private BigDecimal avgTestedWeight;
 		
@@ -34,19 +34,19 @@ public class StorageWithSampleDTO extends StorageDTO {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, 
 			String remarks, Class<? extends Storage> clazz, 
-			BigDecimal emptyContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
+			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, measureUnit, numberUnits, containerWeight, 
 				warehouseLocationId, warehouseLocationValue, remarks,
 				clazz);
-		this.emptyContainerWeight = emptyContainerWeight;
+		this.sampleContainerWeight = sampleContainerWeight;
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
 	}
 	
 	public StorageWithSampleDTO(StorageWithSample storage) {
 		super(storage);
-		if(storage.getEmptyContainerWeight() != null)
-			this.emptyContainerWeight = storage.getEmptyContainerWeight().setScale(MeasureUnit.SCALE);
+		if(storage.getSampleContainerWeight() != null)
+			this.sampleContainerWeight = storage.getSampleContainerWeight().setScale(MeasureUnit.SCALE);
 		if(storage.getNumberOfSamples() != null)
 			this.numberOfSamples = storage.getNumberOfSamples();
 		if(storage.getAvgTestedWeight() != null)
@@ -56,9 +56,9 @@ public class StorageWithSampleDTO extends StorageDTO {
 	public StorageWithSampleDTO(Integer id, Integer version, Integer ordinal,
 			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz, 
-			BigDecimal emptyContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
+			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, numberUnits, containerWeight, warehouseLocation, remarks, clazz);
-		this.emptyContainerWeight = emptyContainerWeight;
+		this.sampleContainerWeight = sampleContainerWeight;
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
 	}
@@ -69,11 +69,11 @@ public class StorageWithSampleDTO extends StorageDTO {
 		}
 		
 		BigDecimal acumelatedAvg;
-		if(emptyContainerWeight == null) {
+		if(sampleContainerWeight == null) {
 			acumelatedAvg = avgTestedWeight;
 		}
 		else {
-			acumelatedAvg = avgTestedWeight.subtract(emptyContainerWeight);
+			acumelatedAvg = avgTestedWeight.subtract(sampleContainerWeight);
 		}
 		return new AmountWithUnit(acumelatedAvg
 				.subtract(getUnitAmount().getAmount())

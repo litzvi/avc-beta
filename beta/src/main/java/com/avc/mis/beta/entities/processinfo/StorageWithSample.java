@@ -35,7 +35,7 @@ import lombok.ToString;
 public class StorageWithSample extends Storage {
 
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
-	private BigDecimal emptyContainerWeight;	
+	private BigDecimal sampleContainerWeight;	
 	
 	@Positive(message = "Number of samples has to be positive")
 	private BigInteger numberOfSamples;	

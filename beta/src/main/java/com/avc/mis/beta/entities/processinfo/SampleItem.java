@@ -56,7 +56,7 @@ public class SampleItem extends ProcessInfoEntity {
 	
 	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Empty container avarage weight is mandatory")
-	private BigDecimal emptyContainerWeight;
+	private BigDecimal sampleContainerWeight;
 		
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "sampleItem", orphanRemoval = true, 

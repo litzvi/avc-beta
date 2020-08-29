@@ -17,6 +17,7 @@ import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -25,6 +26,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * An abstract po process that produces items - has process items.
+ * 
  * @author zvi
  *
  */
@@ -46,9 +49,8 @@ public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProces
 	 * Gets the list of Items as an array (can be ordered).
 	 * @return the processItems
 	 */
-	protected Object[] getProcessItems() {
-		return this.processItems.toArray();
-//		return (T[]) this.processItems.toArray(Array.newInstance(c, this.processItems.size()));
+	public ProcessItem[] getProcessItems() {
+		return this.processItems.toArray(new ProcessItem[this.processItems.size()]);
 	}
 
 	/**

@@ -37,21 +37,21 @@ public class SampleItemDTO extends ProcessDTO {
 	private MeasureUnit measureUnit;
 //	private BigInteger numberOfSamples;	
 //	private BigDecimal avgTestedWeight;
-	private BigDecimal emptyContainerWeight;
+	private BigDecimal sampleContainerWeight;
 	
 	private MultiSet<ItemWeightDTO> itemWeights;
 
 
 	public SampleItemDTO(Integer id, Integer version, 
 			Integer itemId, String itemValue, 
-			MeasureUnit measureUnit, BigDecimal emptyContainerWeight) {
+			MeasureUnit measureUnit, BigDecimal sampleContainerWeight) {
 		super(id, version);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 //		this.unitAmount = amountWeighed.setScale(3);
 		this.measureUnit = measureUnit;
 //		this.numberOfSamples = numberOfSamples;
 //		this.avgTestedWeight = avgTestedWeight.setScale(3);
-		this.emptyContainerWeight = emptyContainerWeight.setScale(MeasureUnit.SCALE);
+		this.sampleContainerWeight = sampleContainerWeight.setScale(MeasureUnit.SCALE);
 	}
 
 	public SampleItemDTO(@NonNull SampleItem sampleItem) {
@@ -60,7 +60,7 @@ public class SampleItemDTO extends ProcessDTO {
 		this.measureUnit = sampleItem.getMeasureUnit();
 //		this.numberOfSamples = sampleItem.getNumberOfSamples();
 //		this.avgTestedWeight = sampleItem.getAvgTestedWeight().setScale(3);
-		this.emptyContainerWeight = sampleItem.getEmptyContainerWeight().setScale(MeasureUnit.SCALE);
+		this.sampleContainerWeight = sampleItem.getSampleContainerWeight().setScale(MeasureUnit.SCALE);
 		
 		this.itemWeights = Arrays.stream(sampleItem.getItemWeights())
 				.map(i->{return new ItemWeightDTO(i);})
@@ -76,7 +76,7 @@ public class SampleItemDTO extends ProcessDTO {
 	public Optional<AmountWithUnit> getSampleEstimate() {
 		return itemWeights.stream()
 			.map(iw -> Optional.ofNullable(iw.getAvgTestedWeight()).orElse(iw.getUnitAmount())
-					.subtract(this.emptyContainerWeight)
+					.subtract(this.sampleContainerWeight)
 					.multiply(iw.getNumberUnits()))
 			.reduce(BigDecimal::add)
 			.map(s -> new AmountWithUnit(s, this.measureUnit));
@@ -93,9 +93,9 @@ public class SampleItemDTO extends ProcessDTO {
 	public Optional<AmountWithUnit> getWeighedDifferance() {
 		return itemWeights.stream()
 				.map(iw -> Optional.ofNullable(iw.getAvgTestedWeight())
-						.orElse(iw.getUnitAmount().add(this.emptyContainerWeight)) //give recorded plus bag
+						.orElse(iw.getUnitAmount().add(this.sampleContainerWeight)) //give recorded plus bag
 						.subtract(iw.getUnitAmount())
-						.subtract(this.emptyContainerWeight)
+						.subtract(this.sampleContainerWeight)
 						.multiply(iw.getNumberUnits()))
 				.reduce(BigDecimal::add)
 				.map(s -> new AmountWithUnit(s, this.measureUnit));

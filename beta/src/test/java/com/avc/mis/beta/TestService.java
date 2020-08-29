@@ -142,7 +142,7 @@ public class TestService {
 			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
 			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
 			storageForms[i].setWarehouseLocation(storage);
-			storageForms[i].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
+			storageForms[i].setSampleContainerWeight(BigDecimal.valueOf(0.002));
 			storageForms[i].setNumberOfSamples(BigInteger.valueOf(30));
 			storageForms[i].setAvgTestedWeight(BigDecimal.valueOf(50.01));
 			//build receipt item
@@ -189,7 +189,7 @@ public class TestService {
 			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
 			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
 			storageForms[i].setWarehouseLocation(storage);
-			storageForms[i].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
+			storageForms[i].setSampleContainerWeight(BigDecimal.valueOf(0.002));
 			storageForms[i].setNumberOfSamples(BigInteger.valueOf(30));
 			storageForms[i].setAvgTestedWeight(BigDecimal.valueOf(50.01));
 			items[i].setStorageForms(new StorageWithSample[] {storageForms[i]});

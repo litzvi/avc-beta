@@ -52,12 +52,7 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@NotEmpty(message = "Has to containe at least one used storage item")
 	private Set<UsedItem> usedItems = new HashSet<>();
-			
-//	@Enumerated(EnumType.STRING)
-//	@Column(nullable = false)
-//	@NotNull(message = "Group category is mandatory")
-//	private GroupCategory category;
-	
+		
 	@Setter(value = AccessLevel.NONE) 
 	@JsonIgnore
 	@Column(nullable = false)

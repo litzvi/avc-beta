@@ -222,7 +222,7 @@ public class GeneralTest {
 		itemWeights1[0].setNumberOfSamples(BigInteger.valueOf(30));
 		itemWeights1[0].setAvgTestedWeight(BigDecimal.valueOf(50.01));
 		sampleItems[0].setItemWeights(itemWeights1);
-		sampleItems[0].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
+		sampleItems[0].setSampleContainerWeight(BigDecimal.valueOf(0.002));
 		sampleItems[1] = new SampleItem();
 		sampleItems[1].setItem(items.get(0));
 		sampleItems[1].setMeasureUnit(MeasureUnit.KG);
@@ -234,7 +234,7 @@ public class GeneralTest {
 		itemWeights2[0].setNumberOfSamples(BigInteger.valueOf(1));
 		itemWeights2[0].setAvgTestedWeight(BigDecimal.valueOf(26.01));
 		sampleItems[1].setItemWeights(itemWeights2);
-		sampleItems[1].setEmptyContainerWeight(BigDecimal.valueOf(0.002));
+		sampleItems[1].setSampleContainerWeight(BigDecimal.valueOf(0.002));
 		sampleReceipt.setSampleItems(sampleItems);
 		try {
 			samples.addSampleReceipt(sampleReceipt);

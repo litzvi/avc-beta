@@ -17,6 +17,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Po Process for production processing. e.g. cashew cleaning, roasting, packing.
+ * 
  * @author zvi
  *
  */
@@ -27,12 +29,6 @@ import lombok.EqualsAndHashCode;
 @PrimaryKeyJoinColumn(name = "processId")
 public class ProductionProcess extends TransactionProcess<ProcessItem> {
 
-	@Override
-	public ProcessItem[] getProcessItems() {
-		Object[] processItems = super.getProcessItems();
-		return Arrays.copyOf(processItems, processItems.length, ProcessItem[].class);
-	}
-	
 	@JsonIgnore
 	@Override
 	protected boolean canEqual(Object o) {

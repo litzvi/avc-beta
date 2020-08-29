@@ -50,7 +50,7 @@ public interface SampleRepository extends BaseRepository<SampleReceipt> {
 	
 	@Query("select new com.avc.mis.beta.dto.query.SampleItemWithWeight( "
 			+ " i.id, i.version, item.id, item.value, "
-			+ "i.measureUnit, i.emptyContainerWeight, "
+			+ "i.measureUnit, i.sampleContainerWeight, "
 			+ "w.id, w.version, w.unitAmount, w.numberUnits, w.numberOfSamples, w.avgTestedWeight) "
 		+ "from SampleItem i "
 			+ "join i.item item "

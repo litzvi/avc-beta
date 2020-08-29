@@ -24,6 +24,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Basic immutable information that serves as identification for container shipment.
+ * Includes a code and destination.
+ * 
+ * code and id are synonymous in this class
+ * 
  * @author Zvi
  *
  */

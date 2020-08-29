@@ -27,6 +27,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * An abstract po process that uses items from inventory in order to for producing items.
+ * Has used items and process items.
+ * 
  * @author zvi
  *
  */
@@ -43,10 +46,16 @@ public abstract class TransactionProcess<T extends ProcessItem> extends ProcessW
 	@NotEmpty(message = "Has to containe at least one used/origion storage item")
 	private Set<UsedItemsGroup> usedItemGroups = new HashSet<>();
 
+	/**
+	 * @return array of UsedItemsGroup in order
+	 */
 	public UsedItemsGroup[] getUsedItemGroups() {
 		return this.usedItemGroups.toArray(new UsedItemsGroup[this.usedItemGroups.size()]);
 	}
 
+	/**
+	 * @param usedItemGroups array of UsedItemsGroup in order, if required.
+	 */
 	public void setUsedItemGroups(UsedItemsGroup[] usedItemGroups) {
 		this.usedItemGroups = Insertable.setReferences(usedItemGroups, (t) -> {t.setReference(this);	return t;});
 	}
