@@ -57,8 +57,6 @@ public class RawItemQuality extends ProcessInfoEntity {
 	@Positive(message = "Amount has to be positive")
 	private BigDecimal sampleWeight;
 
-	@Column(nullable = false)
-	@NotNull(message = "Number of samples is mandetory")
 	@Positive(message = "Number of samples has to be positive")
 	private BigInteger numberOfSamples;	
 	

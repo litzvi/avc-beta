@@ -3,11 +3,13 @@
  */
 package com.avc.mis.beta.dto.processinfo;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,6 +17,7 @@ import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -82,6 +85,14 @@ public class UsedItemsGroupDTO extends ProcessDTO {
 			return usedItemTable;
 		}
 		return null;
+	}
+	
+	public Optional<AmountWithUnit> getTotalAmount() {
+		return usedItems.stream()
+				.map(ui -> ui.getStorage().getUnitAmount()
+						.substract(Optional.ofNullable(ui.getStorage().getContainerWeight()).orElse(BigDecimal.ZERO))
+						.multiply(ui.getNumberUnits()))
+				.reduce(AmountWithUnit::add);
 	}
 	
 	public static List<UsedItemsGroupDTO> getUsedItemsGroups(List<UsedItemWithGroup> usedItems) {

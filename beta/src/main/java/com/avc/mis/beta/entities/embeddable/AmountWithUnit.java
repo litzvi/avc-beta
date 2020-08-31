@@ -77,6 +77,10 @@ public class AmountWithUnit implements Cloneable {
 		return new AmountWithUnit(this.amount.subtract(subtrahendAmount), this.measureUnit);
 	}
 	
+	public AmountWithUnit substract(BigDecimal subtrahend) {
+		return new AmountWithUnit(this.amount.subtract(subtrahend), this.measureUnit);
+	}
+	
 	public AmountWithUnit convert(MeasureUnit measureUnit) {
 		BigDecimal convertedAmount = MeasureUnit.convert(this.amount, this.measureUnit, measureUnit);
 		if(convertedAmount == null)
@@ -126,6 +130,8 @@ public class AmountWithUnit implements Cloneable {
 		}
 		return amount.signum();
 	}
+
+	
 
 	
 

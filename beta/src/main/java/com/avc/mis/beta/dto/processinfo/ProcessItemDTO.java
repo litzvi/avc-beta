@@ -157,7 +157,9 @@ public class ProcessItemDTO extends ProcessDTO {
 
 	public Optional<AmountWithUnit> getTotalAmount() {
 		return storageForms.stream()
-				.map(sf -> sf.getUnitAmount().multiply(sf.getNumberUnits()))
+				.map(sf -> sf.getUnitAmount()
+						.substract(Optional.ofNullable(sf.getContainerWeight()).orElse(BigDecimal.ZERO))
+						.multiply(sf.getNumberUnits()))
 				.reduce(AmountWithUnit::add);
 	}
 	

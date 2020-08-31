@@ -9,5 +9,6 @@ package com.avc.mis.beta.entities.enums;
  */
 public enum SupplyGroup {
 	CASHEW,
-	GENERAL
+	GENERAL,
+	NONE
 }
