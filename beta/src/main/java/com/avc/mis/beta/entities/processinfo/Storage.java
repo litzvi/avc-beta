@@ -38,6 +38,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
+ * Represents the way 
+ * 
  * @author Zvi
  *
  */
@@ -51,9 +53,7 @@ public class Storage extends AuditedEntity implements Ordinal {
 	
 	@Column(nullable = false)
 	private Integer ordinal;
-	
-//	private String name; //perhaps should be removed because we have ordinal
-	
+		
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processItemId", nullable = false, updatable = false)
@@ -88,6 +88,12 @@ public class Storage extends AuditedEntity implements Ordinal {
 	@OneToMany(mappedBy = "storage", fetch = FetchType.LAZY)
 	private Set<UsedItem> usedItems;
 
+	/**
+	 * Used by Lombok so new/transient entities with null id won't be equal.
+	 * @param o
+	 * @return false if both this object's and given object's id is null 
+	 * or given object is not of the same class, otherwise returns true.
+	 */
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}

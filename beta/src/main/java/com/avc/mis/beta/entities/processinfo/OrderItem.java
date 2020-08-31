@@ -40,6 +40,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
+ * Represents an order line in a purchase order.
+ * Specifies the item, ordered amounts, price, 
+ * delivery date and contract agreement regarding max defects.
+ * 
  * @author Zvi
  *
  */
@@ -96,17 +100,16 @@ public class OrderItem extends AuditedEntity {
 			this.deliveryDate = LocalDate.parse(deliveryDate);
 	}
 	
+	/**
+	 * Used by Lombok so new/transient entities with null id won't be equal.
+	 * @param o
+	 * @return false if both this object's and given object's id is null 
+	 * or given object is not of the same class, otherwise returns true.
+	 */
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 
-//	@PrePersist @PreUpdate 
-//	public void prePersist() {
-//		if(this.numberUnits.getMeasureUnit() == null) {
-//			this.numberUnits.setMeasureUnit(item.getMeasureUnit());
-//		}
-//	}
-	
 	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof PO) {

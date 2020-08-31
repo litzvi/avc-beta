@@ -35,6 +35,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
+ * Represents a line in a receipt of a purchased item.
+ * Contains amounts received, the way they are stored and reference to the order item if existing.
+ * 
  * @author Zvi
  *
  */
@@ -66,7 +69,6 @@ public class ReceiptItem extends ProcessItem {
 		this.storageForms.addAll(this.extraAdded);
 	}
 		
-//	@Override
 	public void setStorageForms(StorageWithSample[] storageForms) { 
 		super.setStorageForms(storageForms);
 		this.storageForms.addAll(this.extraAdded);
@@ -80,34 +82,15 @@ public class ReceiptItem extends ProcessItem {
 	@Valid
 	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
 	private AmountWithUnit extraRequested;
-	
-	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal extraRequested;
-//	
-//	@Enumerated(EnumType.STRING)
-////	@Column(nullable = false)
-//	private MeasureUnit measureUnit;
-	
+
+	/**
+	 * Used by Lombok so new/transient entities with null id won't be equal.
+	 * @param o
+	 * @return false if both this object's and given object's id is null 
+	 * or given object is not of the same class, otherwise returns true.
+	 */
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
 	
-//	@PrePersist
-//	@Override
-//	public void prePersist() {
-//		prePersistAndUpdate();		
-//	}
-//	
-//	@PreUpdate
-//	@Override
-//	public void preUpdate() {
-//		prePersistAndUpdate();
-//	}
-//	
-//	private void prePersistAndUpdate() {
-//		if(!isLegal())
-//			throw new IllegalArgumentException(this.getIllegalMessage());
-//		
-//	}
 }

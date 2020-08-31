@@ -113,18 +113,26 @@ public class ProcessItem extends ProcessInfoEntity {
 		BigDecimal containerWeight = storageTable.getContainerWeight();
 		Warehouse warehouse = storageTable.getWarehouseLocation();
 		List<BasicStorageDTO> amounts = storageTable.getAmounts();
-		this.storageForms = new HashSet<>();
-		amounts.forEach((amount) ->  {
-					Storage storage = new Storage();
-					storage.setOrdinal(amount.getOrdinal());
-					storage.setUnitAmount(new AmountWithUnit(amount.getAmount(), measureUnit));
-					storage.setContainerWeight(containerWeight);
-					storage.setWarehouseLocation(warehouse);
-					storage.setReference(this);
-					this.storageForms.add(storage);
-				});
+		Storage[] storageForms = new Storage[amounts.size()];
+		for(int i=0; i<storageForms.length; i++) {
+			BasicStorageDTO amount = amounts.get(i);
+			storageForms[i] = new Storage();
+			storageForms[i].setOrdinal(amount.getOrdinal());
+			storageForms[i].setUnitAmount(new AmountWithUnit(amount.getAmount(), measureUnit));
+			storageForms[i].setContainerWeight(containerWeight);
+			storageForms[i].setWarehouseLocation(warehouse);
+			storageForms[i].setReference(this);
+		}
+		setStorageForms(storageForms);
+		
 	}
 	
+	/**
+	 * Used by Lombok so new/transient entities with null id won't be equal.
+	 * @param o
+	 * @return false if both this object's and given object's id is null 
+	 * or given object is not of the same class, otherwise returns true.
+	 */
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}

@@ -52,7 +52,8 @@ public class StorageDTO extends ProcessDTO implements Ordinal {
 		else
 			this.warehouseLocation = null;
 		this.remarks = remarks;
-		this.className = clazz.getSimpleName();
+		if(clazz != null)
+			this.className = clazz.getSimpleName();
 	}
 	
 	/**

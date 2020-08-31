@@ -32,6 +32,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Quality Check measurements taken when receiving raw kernel cashew.
+ * 
  * @author Zvi
  *
  */
@@ -39,8 +41,6 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "QC_RAW_ITEMS")
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-//@PrimaryKeyJoinColumn(name = "processItemId")
 public class RawItemQuality extends ProcessInfoEntity {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -88,47 +88,7 @@ public class RawItemQuality extends ProcessInfoEntity {
 	@NotNull
 	@Embedded
 	private RawDamage damage;
-	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal scorched;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal deepCut;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal offColour;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal shrivel;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal desert;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal deepSpot;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal mold;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal dirty;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal lightDirty;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal decay;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal insectDamage;
-//
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal testa;
-	
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal defectsAfterRoasting;
-//	
+		
 	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal roastingWeightLoss;
 	
@@ -138,32 +98,26 @@ public class RawItemQuality extends ProcessInfoEntity {
 	@Enumerated(EnumType.STRING)
 	private CheckStatus flavour; 
 	
+	/**
+	 * @return total of raw defects
+	 */
 	public BigDecimal getTotalDefects() {
 		return this.defects.getTotal();
-//		List<BigDecimal> list = Arrays.asList(this.scorched, this.deepCut, 
-//				this.offColour, this.shrivel, this.desert, this.deepSpot);
-//		BigDecimal sum = BigDecimal.ZERO;
-//		for(BigDecimal augend: list) {
-//			if(augend != null) {
-//				sum = sum.add(augend);
-//			}
-//		}
-//		return sum;
 	}
 	
+	/**
+	 * @return total of raw damage
+	 */
 	public BigDecimal getTotalDamage() {
 		return this.damage.getTotal();
-//		List<BigDecimal> list = Arrays.asList(this.mold, this.dirty, 
-//				this.lightDirty, this.decay, this.insectDamage, this.testa);
-//		BigDecimal sum = BigDecimal.ZERO;
-//		for(BigDecimal augend: list) {
-//			if(augend != null) {
-//				sum = sum.add(augend);
-//			}
-//		}
-//		return sum;
 	}
 	
+	/**
+	 * Used by Lombok so new/transient entities with null id won't be equal.
+	 * @param o
+	 * @return false if both this object's and given object's id is null 
+	 * or given object is not of the same class, otherwise returns true.
+	 */
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}

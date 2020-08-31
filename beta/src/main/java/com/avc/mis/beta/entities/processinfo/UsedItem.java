@@ -22,6 +22,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Represents items used for processing (input items of a process). 
+ * Used items refer to existing stored inventory.
+ * e.g. raw cashew, sugar, oil, bags etc.
+ * 
  * @author zvi
  *
  */
