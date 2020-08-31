@@ -24,6 +24,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * A message sent to a user, which could be about an action made on a process.
+ * 
  * @author Zvi
  *
  */
@@ -31,7 +33,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "USER_MESSAGES")
 public class UserMessage extends GeneralInfoEntity {
 	

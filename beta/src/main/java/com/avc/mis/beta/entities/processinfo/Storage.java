@@ -38,7 +38,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * Represents the way 
+ * Represents the form and place an item is stored.
+ * e.g. unit/bag amount, location, empty bag/container weight etc.
  * 
  * @author Zvi
  *

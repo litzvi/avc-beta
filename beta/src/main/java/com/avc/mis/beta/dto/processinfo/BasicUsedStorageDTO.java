@@ -21,19 +21,35 @@ import lombok.NonNull;
 @EqualsAndHashCode(callSuper = false)
 public class BasicUsedStorageDTO extends ProcessDTO {
 	
-//	private Integer ordinal;
-//	private BigDecimal amount;
+	private Integer storageId;
+	private Integer storageVersion;
+	private Integer ordinal; //the storage ordinal
+	private BigDecimal amount;
 	
-	private StorageDTO storage;
+//	private StorageDTO storage;
 	
-	public BasicUsedStorageDTO(Integer id, Integer version, StorageDTO storage) {
+//	public BasicUsedStorageDTO(Integer id, Integer version, StorageDTO storage) {
+//		super(id, version);
+//		this.storage = storage;
+//	}
+	
+	public BasicUsedStorageDTO(Integer id, Integer version, 
+			Integer storageId, Integer storageVersion, Integer ordinal, BigDecimal amount) {
 		super(id, version);
-		this.storage = storage;
+		this.storageId = storageId;
+		this.storageVersion = storageVersion;
+		this.ordinal = ordinal;
+		this.amount = amount;
+			
 	}
 
 	public BasicUsedStorageDTO(@NonNull UsedItem usedItem) {
 		super(usedItem.getId(), usedItem.getVersion());
-		this.storage = new StorageDTO(usedItem.getStorage());
+		Storage storage = usedItem.getStorage();
+		this.storageId = storage.getId();
+		this.storageVersion = storage.getVersion();
+		this.ordinal = storage.getOrdinal();
+		this.amount = storage.getUnitAmount().getAmount();
 	}
 
 }

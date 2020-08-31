@@ -23,13 +23,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * A Management approval (or disapproval - perhaps should be decision task) for a process. 
+ * Includes the user who approved (or needs to approve)
+ * and the decision made.
+ * 
  * @author Zvi
  *
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Table(name = "PROCESS_APPROVALS")
 public class ApprovalTask extends GeneralInfoEntity {	
 

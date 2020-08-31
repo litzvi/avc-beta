@@ -12,6 +12,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
+ * Used to differentiate extra added(bonus) items 
+ * versus the amounts received as part of the order.
+ * 
  * @author Zvi
  *
  */
@@ -22,23 +25,5 @@ import lombok.ToString;
 @Table(name = "EXTRA_ADDED")
 @PrimaryKeyJoinColumn(name = "storageId")
 public class ExtraAdded extends StorageWithSample {
-	
-//	public ExtraAdded() {
-//		super();
-//		setNumberUnits(BigDecimal.ZERO);
-//	}
-//
-//	@Column(nullable = false, precision = 19, scale = 3)
-//	private BigDecimal amount;	
-//	
-//	@Override
-//	public boolean isLegal() {
-//		return getMeasureUnit() != null && amount != null
-//				&& amount.compareTo(BigDecimal.ZERO) > 0;
-//	}
-//
-//	@Override
-//	public String getIllegalMessage() {
-//		return "Extra added must contain measure unit and amount";
-//	}
+
 }

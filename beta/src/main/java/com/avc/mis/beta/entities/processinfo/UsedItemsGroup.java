@@ -100,10 +100,9 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 		UsedItem[] usedItems = new UsedItem[basicUsedStorages.size()];
 		for(int i=0; i<usedItems.length; i++) {
 			usedItems[i] = new UsedItem();
-			StorageDTO storageDTO = basicUsedStorages.get(i).getStorage();
 			Storage storage = new Storage();
-			storage.setId(storageDTO.getId());
-			storage.setVersion(storageDTO.getVersion());
+			storage.setId(basicUsedStorages.get(i).getStorageId());
+			storage.setVersion(basicUsedStorages.get(i).getStorageVersion());
 			usedItems[i].setStorage(storage);
 		}
 		setUsedItems(usedItems);
