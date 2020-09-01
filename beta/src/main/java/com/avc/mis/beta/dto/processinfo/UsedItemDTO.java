@@ -20,18 +20,17 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class UsedItemDTO extends ProcessDTO {
 
-//	private Integer ordinal;
 	private BasicValueEntity<Item> item;
 	private PoCodeDTO itemPo;
-	
-//	private AmountWithUnit unitAmount;
-//	private BasicValueEntity<Warehouse> warehouseLocation;
 	private BigDecimal numberUnits;
-//	private BigDecimal containerWeight;	
-	
+
 	private StorageDTO storage;
 
-
+	private Integer ordinal;	
+	private AmountWithUnit unitAmount;
+	private BasicValueEntity<Warehouse> warehouseLocation;
+	private BigDecimal containerWeight;	
+	
 	public UsedItemDTO(Integer id, Integer version, BigDecimal numberUnits,
 			Integer itemId, String itemValue, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
@@ -43,21 +42,23 @@ public class UsedItemDTO extends ProcessDTO {
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
 		super(id, version);
 		this.numberUnits = numberUnits;
-//		this.ordinal = ordinal;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		if(poCodeId != null)
 			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		else
 			this.itemPo = null;
-//		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
-//		if(warehouseLocationId != null && warehouseLocationValue != null)
-//			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
-//		else
-//			this.warehouseLocation = null;
-//		this.containerWeight = containerWeight;
 		this.storage = new StorageDTO(storageId, stoageVersion, storageOrdinal, 
 				unitAmount, measureUnit, storageNumberUnits, containerWeight, warehouseLocationId, warehouseLocationValue, 
 				storageRemarks, null);
+
+		this.ordinal = storageOrdinal;
+		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
+		if(warehouseLocationId != null && warehouseLocationValue != null)
+			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
+		else
+			this.warehouseLocation = null;
+		this.containerWeight = containerWeight;
+	
 	}
 
 	public UsedItemDTO(UsedItem usedItem) {
@@ -65,20 +66,21 @@ public class UsedItemDTO extends ProcessDTO {
 		this.numberUnits = usedItem.getNumberUnits();
 		Storage storage = usedItem.getStorage();
 		ProcessItem processItem = storage.getProcessItem();
-//		this.ordinal = storage.getOrdinal();
 		this.item = new BasicValueEntity<Item>(processItem.getItem());
 		this.itemPo = new PoCodeDTO((processItem.getProcess()).getPoCode());
-//		this.unitAmount = storage.getUnitAmount().setScale(MeasureUnit.SCALE);
-//		if(storage.getWarehouseLocation() != null) {
-//			this.warehouseLocation = new BasicValueEntity<Warehouse>(
-//					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
-//		}
-//		else {
-//			this.warehouseLocation = null;
-//		}
-//		this.containerWeight = storage.getContainerWeight();
 		this.storage = new StorageDTO(storage);
-		
+
+		this.ordinal = storage.getOrdinal();
+		this.unitAmount = storage.getUnitAmount().setScale(MeasureUnit.SCALE);
+		if(storage.getWarehouseLocation() != null) {
+			this.warehouseLocation = new BasicValueEntity<Warehouse>(
+					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
+		}
+		else {
+			this.warehouseLocation = null;
+		}
+		this.containerWeight = storage.getContainerWeight();
+
 	}
 
 	
