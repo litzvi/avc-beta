@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * DTO(Data Access Object) for sending or displaying PaymentAccount entity data.
+ * 
  * @author Zvi
  *
  */

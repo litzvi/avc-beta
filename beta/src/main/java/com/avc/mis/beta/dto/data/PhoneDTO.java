@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * DTO(Data Access Object) for sending or displaying Phone entity data.
+ * 
  * @author Zvi
  *
  */
@@ -27,11 +29,7 @@ public class PhoneDTO extends SubjectDataDTO {
 		this.value = phone.getValue();
 	}
 
-	/**
-	 * @param id
-	 * @param version
-	 * @param value
-	 */
+
 	public PhoneDTO(Integer id, Integer version, String value, int ordinal) {
 		super(id, version, ordinal);
 		this.value = value;

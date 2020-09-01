@@ -33,6 +33,8 @@ import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * DTO(Data Access Object) for sending or displaying Receipt entity data.
+ * 
  * @author Zvi
  *
  */
@@ -56,9 +58,6 @@ public class ReceiptDTO extends PoProcessDTO {
 				numOfWorkers, processStatus, editStatus, remarks, approvals);
 	}
 
-	/**
-	 * @param process
-	 */
 	public ReceiptDTO(@NonNull Receipt receipt) {
 		super(receipt);
 		this.receiptItems = Arrays.stream(receipt.getReceiptItems())
@@ -83,8 +82,7 @@ public class ReceiptDTO extends PoProcessDTO {
 			this.receiptItems.add(receiptItem);
 		}
 		
-	}
-	
+	}	
 
 	@Override
 	public String getProcessTypeDescription() {

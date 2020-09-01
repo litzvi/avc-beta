@@ -19,6 +19,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * DTO(Data Access Object) for sending or displaying PoProcess entity data.
+ * 
  * @author Zvi
  *
  */
@@ -36,8 +38,6 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus,
 			String remarks , String approvals) {
 		super(id, version, createdDate, staffRecording, 
-//				poCodeId, contractTypeCode, contractTypeSuffix,
-//				supplierId, supplierVersion, supplierName, 
 				processName, productionLine, 
 				recordedTime, duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);

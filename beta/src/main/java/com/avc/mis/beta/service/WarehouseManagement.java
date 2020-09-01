@@ -120,8 +120,8 @@ public class WarehouseManagement {
 		return getInventory(null, null, itemId, null);
 	}
 	
-	public List<ProcessItemInventory> getInventoryByItemCategory(ItemCategory itemCategory) {		
-		return getInventory(null, itemCategory, null, null);
+	public List<ProcessItemInventory> getInventoryByItemCategories(ItemCategory[] itemCategories) {		
+		return getInventory(null, itemCategories, null, null);
 	}
 	
 	/**
@@ -131,14 +131,14 @@ public class WarehouseManagement {
 	 * with list of storages that contain amounts used and totals.
 	 * Items are considered in inventory if process status is final and it's not completely used.
 	 * @param supplyGroup constrain to only this supply group, if null than any.
-	 * @param itemCategory constrain to only items from given category, if null than any.
+	 * @param itemCategories constrain to only items from given category, if null than any.
 	 * @param itemId constrain to only this item, if null than any.
 	 * @param poCodeId constrain to only this po, if null than any.
 	 * @return List of ProcessItemInventory
 	 */
-	public List<ProcessItemInventory> getInventory(SupplyGroup supplyGroup, ItemCategory itemCategory, Integer itemId, Integer poCodeId) {
+	public List<ProcessItemInventory> getInventory(SupplyGroup supplyGroup, ItemCategory[] itemCategories, Integer itemId, Integer poCodeId) {
 		List<InventoryProcessItemWithStorage> processItemWithStorages =
-				getInventoryRepository().findInventoryProcessItemWithStorage(supplyGroup, itemCategory, itemId, poCodeId);	
+				getInventoryRepository().findInventoryProcessItemWithStorage(supplyGroup, itemCategories, itemId, poCodeId);	
 		
 		return ProcessItemInventory.getProcessItemInventoryRows(processItemWithStorages);
 		

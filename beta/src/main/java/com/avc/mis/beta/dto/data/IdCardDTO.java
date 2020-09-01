@@ -15,6 +15,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * DTO(Data Access Object) for sending or displaying IdCard entity data.
+ * 
  * @author Zvi
  *
  */

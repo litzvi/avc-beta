@@ -155,11 +155,11 @@ public class ObjectTablesReader {
 	/**
 	 * Gets the basic information of all po codes for the given item category in inventory - id, poCode and supplier.
 	 * Can be used for choosing a po for factory processing at a certian process type.
-	 * @param itemCategory
+	 * @param itemCategories
 	 * @return Set of PoCodeDTO
 	 */
-	public Set<PoCodeDTO> findInventoryPoCodes(ItemCategory itemCategory) {
-		return getObjectTablesRepository().findInventoryPoCodeByType(null, itemCategory, null);		
+	public Set<PoCodeDTO> findInventoryPoCodes(ItemCategory[] itemCategories) {
+		return getObjectTablesRepository().findInventoryPoCodeByType(null, itemCategories, null);		
 	}
 	
 	public Set<PoCodeDTO> findInventoryPoCodes(SupplyGroup supplyGroup) {

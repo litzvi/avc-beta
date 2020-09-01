@@ -16,6 +16,8 @@ import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * DTO(Data Access Object) for sending or displaying Supplier entity data.
+ * 
  * @author Zvi
  *
  */
@@ -27,9 +29,6 @@ public class SupplierDTO extends CompanyDTO {
 	
 	private Set<SupplyCategory> supplyCategories = new HashSet<>();
 	
-	/**
-	 * @param supplier
-	 */
 	public SupplierDTO(@NonNull Supplier supplier, boolean hasContacts) {
 		super(supplier, hasContacts);
 		this.supplyCategories.addAll(supplier.getSupplyCategories());

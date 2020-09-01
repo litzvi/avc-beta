@@ -6,7 +6,6 @@ package com.avc.mis.beta.entities.processinfo;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -22,8 +21,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import org.apache.commons.lang3.tuple.Pair;
 
 import com.avc.mis.beta.dto.processinfo.BasicStorageDTO;
 import com.avc.mis.beta.dto.processinfo.StorageTableDTO;

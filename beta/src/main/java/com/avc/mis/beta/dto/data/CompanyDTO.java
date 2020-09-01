@@ -17,6 +17,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * DTO(Data Access Object) for sending or displaying Company entity data.
+ * 
  * @author Zvi
  *
  */
@@ -35,7 +37,7 @@ public class CompanyDTO extends DataDTO {
 	private Set<CompanyContactDTO> companyContacts = new HashSet<>();
 	
 	/**
-	 * @param company
+	 * @param company Company entity object
 	 */
 	public CompanyDTO(@NonNull Company company, boolean hasContacts) {
 		super(company.getId(), company.getVersion());
@@ -47,6 +49,7 @@ public class CompanyDTO extends DataDTO {
 		this.registrationLocation = company.getRegistrationLocation();
 		if(company.getContactDetails() != null)
 			this.contactDetails = new ContactDetailsDTO(company.getContactDetails());
+		
 		/*
 		 * causing chaotic load of company contacts when getting from db 
 		 * but needed for creating DTO from detached object
@@ -56,6 +59,10 @@ public class CompanyDTO extends DataDTO {
 				.forEach((contact) -> this.companyContacts.add(new CompanyContactDTO(contact)));
 	}
 	
+	/**
+	 * Adds a company contact - without altering already added contacts.
+	 * @param contact CompanyContact entity object
+	 */
 	public void addCompanyContact(@NonNull CompanyContact contact) {
 		this.companyContacts.add(new CompanyContactDTO(contact));
 	}

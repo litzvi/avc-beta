@@ -3,10 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
-import java.util.Arrays;
-
 import javax.persistence.Entity;
-import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 

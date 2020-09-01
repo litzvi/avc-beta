@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * DTO(Data Access Object) for sending or displaying CompanyContact entity data.
+ * 
  * @author Zvi
  *
  */
@@ -25,7 +27,7 @@ public class CompanyContactDTO extends DataDTO {
 	private CompanyPosition position;
 	
 	/**
-	 * @param contact
+	 * @param contact CompanyContact entity
 	 */
 	public CompanyContactDTO(@NonNull CompanyContact contact) {
 		super(contact.getId(), contact.getVersion());		

@@ -4,7 +4,6 @@
 package com.avc.mis.beta.entities.processinfo;
 
 import java.util.HashSet;
-import java.util.OptionalInt;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;

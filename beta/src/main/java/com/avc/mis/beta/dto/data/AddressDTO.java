@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.data.Address;
@@ -14,6 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * DTO(Data Access Object) for sending or displaying Address entity data.
+ * 
  * @author Zvi
  *
  */

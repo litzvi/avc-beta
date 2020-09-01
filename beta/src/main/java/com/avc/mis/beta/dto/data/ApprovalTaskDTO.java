@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * DTO(Data Access Object) for sending or displaying ApprovalTask entity data.
+ * 
  * @author Zvi
  *
  */
@@ -34,39 +36,35 @@ public class ApprovalTaskDTO extends DataDTO {
 	private String userName;
 	private String modifiedBy;
 	private String decisionType;
-	//might be wrong to initialise before fetching
 	private String processSnapshot;
-	private String remarks;
 	
 	public ApprovalTaskDTO(Integer id, Integer version, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix,
 			String title, Integer processId, ProcessName processName, 
 			Instant createdDate, String userName, String modifiedBy, DecisionType decision, String processSnapshot) {
 		super(id, version);
-		this.title = title;
-		this.processId = processId;
 		if(poCodeId != null)
 			this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
+		this.title = title;
+		this.processId = processId;
 		this.processName = processName;
-//		this.createdDate = LocalDateTime.ofInstant(createdDate, ZoneOffset.UTC);
+		this.createdDate = createdDate;
 		this.userName = userName;
 		this.modifiedBy = modifiedBy;
-		this.createdDate = createdDate;
 		this.decisionType = decision.name();
 		this.processSnapshot = processSnapshot;
 	}
 	
 	public ApprovalTaskDTO(@NonNull ApprovalTask approval) {
 		super(approval.getId(), approval.getVersion());
-		this.title = approval.getDescription();
-		this.processId = approval.getProcess().getId();
 		if(approval.getProcess() instanceof PoProcess)
 			this.poCode = new PoCodeBasic(((PoProcess)approval.getProcess()).getPoCode());
+		this.title = approval.getDescription();
+		this.processId = approval.getProcess().getId();
 		this.processName = approval.getProcess().getProcessType().getProcessName();
-//		this.createdDate = LocalDateTime.ofInstant(approval.getCreatedDate(), ZoneOffset.UTC);
+		this.createdDate = approval.getCreatedDate();
 		this.userName = approval.getUser().getPerson().getName();
 		this.modifiedBy = approval.getModifiedBy().getPerson().getName();
-		this.createdDate = approval.getCreatedDate();
 		this.decisionType = approval.getDecision().name();
 		this.processSnapshot = approval.getProcessSnapshot();
 	}

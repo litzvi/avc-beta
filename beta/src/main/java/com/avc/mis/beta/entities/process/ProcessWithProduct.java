@@ -17,7 +17,6 @@ import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 
 import lombok.AccessLevel;
 import lombok.Data;

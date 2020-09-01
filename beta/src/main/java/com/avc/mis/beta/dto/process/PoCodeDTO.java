@@ -11,8 +11,8 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
- * DTO for PoCode containing only id 
- * and fields needed for presenting the po code/id with it's initial and suffix.
+ * DTO for PoCode containing id and the fields needed 
+ * for presenting the po code/id with it's initial and suffix.
  * 
  * @author Zvi
  *

@@ -16,6 +16,8 @@ import lombok.NonNull;
 import lombok.Value;
 
 /**
+ * DTO(Data Access Object) for sending or displaying ProcessManagement entity data.
+ * 
  * @author Zvi
  *
  */
@@ -27,12 +29,6 @@ public class ProcessManagementDTO extends LinkDTO {
 	UserBasic user;
 	ManagementType managementType;
 	
-	/**
-	 * @param id
-	 * @param processType
-	 * @param user
-	 * @param approvalType
-	 */
 	public ProcessManagementDTO(Integer id, ProcessName processName, 
 			Integer userId, Integer userVersion, String username, 
 			ManagementType managementType) {

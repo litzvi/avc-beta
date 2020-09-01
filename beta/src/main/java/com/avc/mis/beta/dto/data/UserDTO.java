@@ -18,6 +18,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * DTO(Data Access Object) for sending or displaying UserEntity entity data.
+ * 
  * @author Zvi
  *
  */
@@ -28,7 +30,7 @@ public class UserDTO extends DataDTO {
 	
 	private PersonDTO person;
 	private String username;
-	//needed for filling in the password - never sending
+	//needed for filling in the password on display - never sending
 	private String password = null; 
 	private Set<String> authorities;
 	

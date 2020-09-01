@@ -33,6 +33,8 @@ import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * DTO(Data Access Object) for sending or displaying QualityCheck entity data.
+ * 
  * @author Zvi
  *
  */
@@ -88,26 +90,5 @@ public class QualityCheckDTO extends PoProcessDTO {
 	public String getProcessTypeDescription() {
 		return "Quality Check";
 	}
-	
-
-	
-//	/**
-//	 * Used for setting checkItems from a flat form produced by a join of QC items and it's storage info, 
-//	 * to checkItems that each have a Set of storages.
-//	 * @param checkItems collection of RawItemQualityWithStorage that contains all receipt QC items 
-//	 * with storage detail.
-//	 */
-//	public void setCheckItems(Collection<RawItemQualityWithStorage> checkItems) {
-//		Map<Integer, List<RawItemQualityWithStorage>> map = checkItems.stream()
-//			.collect(Collectors.groupingBy(RawItemQualityWithStorage::getId, Collectors.toList()));
-//		this.checkItems = new HashSet<>();
-//		for(List<RawItemQualityWithStorage> list: map.values()) {
-//			RawItemQualityDTO checkItem = list.get(0).getRawItemQuality();
-//			checkItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
-//			this.checkItems.add(checkItem);
-//		}
-//		
-//	}
-
 	
 }

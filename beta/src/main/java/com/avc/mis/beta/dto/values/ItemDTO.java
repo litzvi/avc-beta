@@ -3,11 +3,6 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
-
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;

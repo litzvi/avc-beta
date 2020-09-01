@@ -58,14 +58,14 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "left join sf.usedItems ui "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (item.supplyGroup = :supplyGroup or :supplyGroup is null) "
-			+ "and (item.category = :itemCategory or :itemCategory is null) "
+			+ "and (:itemCategories is null or item.category in :itemCategories) "
 			+ "and (item.id = :itemId or :itemId is null) "
 			+ "and (poCode.code = :poCodeId or :poCodeId is null) "
 		+ "group by sf "
 		+ "having (sf.numberUnits > sum(coalesce(ui.numberUnits, 0))) "
 		+ "order by pi.id, sf.ordinal ")
 	List<InventoryProcessItemWithStorage> findInventoryProcessItemWithStorage(
-			SupplyGroup supplyGroup, ItemCategory itemCategory, Integer itemId, Integer poCodeId);
+			SupplyGroup supplyGroup, ItemCategory[] itemCategories, Integer itemId, Integer poCodeId);
 
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventoryRow( "

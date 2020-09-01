@@ -21,6 +21,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * DTO(Data Access Object) for sending or displaying GeneralProcess entity data.
+ * 
  * @author zvi
  *
  */
@@ -33,9 +35,9 @@ public abstract class GeneralProcessDTO extends ProcessDTO {
 	private Instant createdDate;
 //	private Instant modifiedDate;
 	@EqualsAndHashCode.Exclude // no need to compare for testing
-	private String userRecording; //perhaps only user name
+	private String userRecording;
 	@EqualsAndHashCode.Exclude //if poCode is the same than it's enough, because might be null when testing.
-	private ProcessName processName; // use string instead of object or enum
+	private ProcessName processName;
 	private ProductionLine productionLine;
 	private OffsetDateTime recordedTime;
 	private Duration duration;
@@ -48,15 +50,12 @@ public abstract class GeneralProcessDTO extends ProcessDTO {
 
 	
 	public GeneralProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-//			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
-//			Integer supplierId, Integer supplierVersion, String supplierName, 
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus,
-			String remarks , String approvals) {
+			String remarks, String approvals) {
 		super(id, version);
 		this.createdDate = createdDate;
 		this.userRecording = userRecording;
-//		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.processName = processName;
 		this.productionLine = productionLine;
 		this.recordedTime = recordedTime;
@@ -74,7 +73,6 @@ public abstract class GeneralProcessDTO extends ProcessDTO {
 		this.createdDate = process.getCreatedDate();
 		if(process.getCreatedBy() != null)
 			this.userRecording = process.getCreatedBy().getUsername();
-//		this.poCode = new PoCodeDTO(process.getPoCode());
 		if(process.getProcessType() != null)
 			this.processName = process.getProcessType().getProcessName();
 		this.productionLine = process.getProductionLine();

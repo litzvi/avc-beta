@@ -4,9 +4,6 @@
 package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
-import java.util.List;
-
-import org.apache.commons.lang3.tuple.Pair;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;

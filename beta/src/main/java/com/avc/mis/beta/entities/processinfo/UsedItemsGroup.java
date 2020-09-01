@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.entities.processinfo;
 
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -15,19 +14,12 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
-import com.avc.mis.beta.dto.processinfo.BasicStorageDTO;
 import com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO;
-import com.avc.mis.beta.dto.processinfo.StorageDTO;
-import com.avc.mis.beta.dto.processinfo.StorageTableDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemTableDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
