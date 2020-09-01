@@ -23,6 +23,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Formula for converting between units of measure.
+ * 
  * @author Zvi
  *
  */

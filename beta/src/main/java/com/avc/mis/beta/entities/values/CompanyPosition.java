@@ -18,6 +18,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Company position entity - has a name-value for different types of positions.
+ * e.g. manager, accountant etc.
+ * 
  * @author Zvi
  *
  */
@@ -36,6 +39,12 @@ public class CompanyPosition extends ValueEntity {
 		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}
 	
+	/**
+	 * Used by Lombok so new/transient entities with null id won't be equal.
+	 * @param o
+	 * @return false if both this object's and given object's id is null 
+	 * or given object is not of the same class, otherwise returns true.
+	 */
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}

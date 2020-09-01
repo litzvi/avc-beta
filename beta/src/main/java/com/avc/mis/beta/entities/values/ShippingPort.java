@@ -19,6 +19,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Shipping port entity - has a value for representation and a code
+ * 
  * @author zvi
  *
  */
@@ -33,14 +35,20 @@ public class ShippingPort extends ValueEntity implements ValueInterface {
 	@NotBlank(message = "Port name(value) is mandatory")
 	private String value;
 	
-	@Column(name = "code", nullable = false)
-	@NotBlank(message = "Contract type has to have a code")
+	@Column(name = "code", unique = true, nullable = false)
+	@NotBlank(message = "Shipping port has to have a code")
 	private String code;
 		
 	public void setValue(String value) {
 		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}
 	
+	/**
+	 * Used by Lombok so new/transient entities with null id won't be equal.
+	 * @param o
+	 * @return false if both this object's and given object's id is null 
+	 * or given object is not of the same class, otherwise returns true.
+	 */
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}

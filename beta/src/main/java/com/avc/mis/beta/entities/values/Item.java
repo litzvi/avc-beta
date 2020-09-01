@@ -22,6 +22,10 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Item entity, has a name-value, item's default measure unit, 
+ * supply group to figure what suppliers can supply it 
+ * and item category in order to infer what items can be used in various processes.
+ * 
  * @author Zvi
  *
  */

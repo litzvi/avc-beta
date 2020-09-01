@@ -25,6 +25,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Process type entity, used to distinguish between different types of process 
+ * and record their specific requirements.
+ * 
  * @author Zvi
  *
  */
@@ -45,6 +48,9 @@ public class ProcessType extends ValueEntity {
 	@OneToMany(mappedBy = "processType", fetch = FetchType.LAZY)
 	private Set<ProcessManagement> alertRequirments = new HashSet<>();
 	
+	/**
+	 * @return the value of the process name (usefully used for representation e.g. drop down)
+	 */
 	public String getValue() {
 		return processName.name();
 	}

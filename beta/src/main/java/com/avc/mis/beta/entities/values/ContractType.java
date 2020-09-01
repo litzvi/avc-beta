@@ -22,6 +22,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * Represents a type of purchase order contract with its representation.
+ * e.g. can have different code by currency, supplier or anything else for easy differentiation.
+ * 
  * @author Zvi
  *
  */
@@ -62,10 +65,5 @@ public class ContractType extends ValueEntity {
 		return suffix != null ? suffix : "";
 	}
 	
-//	public String getValue() {
-//		return name;
-////		return String.format("%s-%s", this.code, this.currency);
-////		return code.name();
-//	}
 
 }

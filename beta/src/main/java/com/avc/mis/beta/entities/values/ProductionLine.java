@@ -15,6 +15,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Production line entity - includes a unique name for every production line.
+ * 
  * @author Zvi
  *
  */

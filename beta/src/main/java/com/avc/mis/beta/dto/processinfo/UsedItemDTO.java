@@ -34,9 +34,6 @@ public class UsedItemDTO extends ProcessDTO {
 	public UsedItemDTO(Integer id, Integer version, BigDecimal numberUnits,
 			Integer itemId, String itemValue, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
-//			BigDecimal unitAmount, MeasureUnit measureUnit,
-//			Integer warehouseLocationId,  String warehouseLocationValue,
-//			 BigDecimal containerWeight,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {

@@ -22,6 +22,13 @@ import com.avc.mis.beta.entities.embeddable.RawDefects;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Cashew standard entity - records standards for raw kernel of cashew nuts of organizations.
+ * e.g. Vina control standard, AVC standard etc.
+ * 
+ * @author zvi
+ *
+ */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
@@ -35,8 +42,6 @@ public class CashewStandard extends ValueEntity {
 			joinColumns = @JoinColumn(name = "standardId", referencedColumnName = "id"), 
 			inverseJoinColumns = @JoinColumn(name = "itemId", referencedColumnName = "id"))
 	@ManyToMany(fetch = FetchType.LAZY)
-//	@ManyToOne(fetch = FetchType.EAGER)
-//	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	@NotEmpty(message = "Cashew standard has to reference at least one item")
 	private Set<Item> items;
 	
@@ -78,59 +83,8 @@ public class CashewStandard extends ValueEntity {
 	@Column(precision = 19, scale = 3)
 	private BigDecimal humidity;
 	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal testa;
-	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal scorched;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal deepCut;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal offColour;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal shrivel;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal desert;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal deepSpot;
-	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal mold;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal dirty;
-//
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal lightDirty;
-	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal decay;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal insectDamage;
-	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal nutCount;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal smallKernels;
-//	
-//	@Column(precision = 19, scale = 3)
-//	private BigDecimal defectsAfterRoasting;
-//	
 	@Column(precision = 19, scale = 3)
 	private BigDecimal roastingWeightLoss;
-	
-//	@Enumerated(EnumType.STRING)
-//	private CheckStatus colour; 
-//	
-//	@Enumerated(EnumType.STRING)
-//	private CheckStatus flavour;
 
 	@Override
 	public String getValue() {

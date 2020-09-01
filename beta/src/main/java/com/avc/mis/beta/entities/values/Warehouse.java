@@ -18,13 +18,15 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Warehouse entity - used for saving the warehouses in the plant.
+ * Could also include virtual warehouses. e.g. loaded/ocean etc.
+ * 
  * @author Zvi
  *
  */
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-//@BatchSize(size = BaseEntity.BATCH_SIZE)
 @Entity
 @Table(name="WAREHOUSE_LOCATIONS")
 public class Warehouse extends ValueEntity implements ValueInterface {
