@@ -45,8 +45,9 @@ public class ProcessItemInventoryRow extends ValueDTO {
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.receiptDate = receiptDate;
 		this.totalBalance = new AmountWithUnit[2];
-		this.totalBalance[0] = new AmountWithUnit(totalStoredAmount.subtract(totalUsedAmount), measureUnit);
-		this.totalBalance[1] = this.totalBalance[0].convert(MeasureUnit.LOT);
+		AmountWithUnit totalBalance = new AmountWithUnit(totalStoredAmount.subtract(totalUsedAmount), measureUnit);
+		this.totalBalance[0] = totalBalance.setScale(MeasureUnit.SCALE);
+		this.totalBalance[1] = totalBalance.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 		this.storages = storages;
 	}
 }

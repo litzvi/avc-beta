@@ -38,8 +38,8 @@ public class ItemInventoryRow extends ValueDTO {
 		super(item.getId());
 		this.item = item;
 		this.totalStock = new AmountWithUnit[2];
-		this.totalStock[0] = totalStock;
-		this.totalStock[1] = totalStock.convert(MeasureUnit.LOT);
+		this.totalStock[0] = totalStock.setScale(MeasureUnit.SCALE);
+		this.totalStock[1] = totalStock.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 		this.poInventoryRows = poInventoryRows;
 	}
 	

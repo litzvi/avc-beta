@@ -52,8 +52,9 @@ public class ProcessRow extends ValueDTO {
 				.map(i -> i.getAmountWithUnit()[0])
 				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
 		AmountWithUnit[] processGain = new AmountWithUnit[2];
-		processGain[0] = producedAmounts.substract(usedAmounts).setScale(MeasureUnit.SCALE);
-		processGain[1] = processGain[0].convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
+		AmountWithUnit diff = producedAmounts.substract(usedAmounts);
+		processGain[0] = diff.setScale(MeasureUnit.SCALE);
+		processGain[1] = diff.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 		return processGain;
 	}
 }

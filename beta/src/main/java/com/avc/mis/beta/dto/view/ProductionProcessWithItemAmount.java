@@ -32,8 +32,9 @@ public class ProductionProcessWithItemAmount extends ValueDTO {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.amountWithUnit = new AmountWithUnit[2];
-		this.amountWithUnit[0] = new AmountWithUnit(amount, measureUnit).setScale(MeasureUnit.SCALE);
-		this.amountWithUnit[1] = this.amountWithUnit[0].convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
+		AmountWithUnit amountWithUnit = new AmountWithUnit(amount, measureUnit);
+		this.amountWithUnit[0] = amountWithUnit.setScale(MeasureUnit.SCALE);
+		this.amountWithUnit[1] = amountWithUnit.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 	}
 	
 	public ProductionProcessWithItemAmount(@NonNull Integer id, 
@@ -42,7 +43,7 @@ public class ProductionProcessWithItemAmount extends ValueDTO {
 		this.item = item;
 		this.amountWithUnit = new AmountWithUnit[2];
 		this.amountWithUnit[0] = amountWithUnit.setScale(MeasureUnit.SCALE);
-		this.amountWithUnit[1] = this.amountWithUnit[0].convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
+		this.amountWithUnit[1] = amountWithUnit.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 	}
 	
 	
