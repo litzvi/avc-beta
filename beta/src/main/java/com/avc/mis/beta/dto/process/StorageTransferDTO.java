@@ -33,10 +33,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class StorageTransferDTO extends TransactionProcessDTO {
-
-//	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
-//	private Set<UsedItemsGroupDTO> usedItemGroups; //can use a SortedSet like ContactDetails to maintain order
-	
 	
 	public StorageTransferDTO(Integer id, Integer version, Instant createdDate, String userRecording, Integer poCodeId,
 			String contractTypeCode, String contractTypeSuffix, 
@@ -51,10 +47,6 @@ public class StorageTransferDTO extends TransactionProcessDTO {
 	
 	public StorageTransferDTO(@NonNull StorageTransfer transfer) {
 		super(transfer);
-//		this.processItems = Arrays.stream(transfer.getProcessItems())
-//				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
-//		this.usedItemGroups = Arrays.stream(transfer.getUsedItemGroups())
-//				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toSet());
 	}
 	
 	@Override

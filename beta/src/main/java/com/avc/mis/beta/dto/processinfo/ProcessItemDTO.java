@@ -22,6 +22,7 @@ import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ItemCategory;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -38,47 +39,25 @@ import lombok.EqualsAndHashCode;
 public class ProcessItemDTO extends ProcessDTO {
 
 	private ItemDTO item; //change to itemDTO in order to get category
-//	private PoCodeDTO itemPo;
-	
-//	BigDecimal unitAmount;
-//	MeasureUnit measureUnit;
-//	BigDecimal numberUnits;	
-//	Warehouse storageLocation;
 	private String groupName;
 	private String description;
 	private String remarks;
 	
 	@JsonIgnore
 	private boolean tableView;
-	private SortedSet<StorageDTO> storageForms = new TreeSet<>(Ordinal.ordinalComparator());
+	private SortedSet<StorageDTO> storageForms;
+	
+	private AmountWithUnit[] totalAmount;
 	
 	public ProcessItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
 			ItemCategory itemCategory,
-			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
-			/*BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, Warehouse storageLocation, */
 			String groupName, String description, String remarks, boolean tableView) {
 		super(id, version);
 		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
-//		if(poCodeId != null)
-//			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, supplierName);
-//		else
-//			this.itemPo = null;
-//		if(itemPo != null)
-//			this.itemPo = new PoCodeBasic(itemPo);
-//		else
-//			this.itemPo = null;
-		
-//		this.unitAmount = unitAmount.setScale(3);
-//		this.measureUnit = measureUnit;
-//		this.numberUnits = numberUnits.setScale(3);
-//		this.storageLocation = storageLocation;
 		this.groupName = groupName;
 		this.description = description;
 		this.remarks = remarks;
 		this.tableView = tableView;
-		
-//		this.unitAmount.setScale(3);//for testing with assertEquals
-//		this.numberUnits.setScale(3);//for testing with assertEquals
 		
 	}
 	
@@ -89,36 +68,39 @@ public class ProcessItemDTO extends ProcessDTO {
 	public ProcessItemDTO(ProcessItem processItem) {
 		super(processItem.getId(), processItem.getVersion());
 		this.item = new ItemDTO(processItem.getItem());
-//		if(processItem.getItemPo() != null)
-//			this.itemPo = new PoCodeDTO(processItem.getItemPo());
-//		else
-//			this.itemPo = null;
 		
 		this.groupName = processItem.getGroupName();
 		this.description = processItem.getDescription();
 		this.remarks = processItem.getRemarks();
 		this.tableView = processItem.isTableView();
 		
-		this.storageForms.addAll(Arrays.stream(processItem.getStorageForms())
+		setStorageForms(Arrays.stream(processItem.getStorageForms())
 				.map(i->{return new StorageDTO(i);})
-				.collect(Collectors.toSet()));
+				.collect(Collectors.toList()));
 
 		
 	}
 
 	public ProcessItemDTO(Integer id, Integer version,
-			ItemDTO item, /* PoCodeDTO itemPo, */
+			ItemDTO item,
 			String groupName, String description, String remarks) {
 		super(id, version);
 		this.item = item;
-//		this.itemPo = itemPo;
 		this.groupName = groupName;
 		this.description = description;
 		this.remarks = remarks;
 	}
 	
 	public void setStorageForms(Collection<StorageDTO> storageForms) {
+		this.storageForms = new TreeSet<>(Ordinal.ordinalComparator());
 		this.storageForms.addAll(storageForms);
+		this.totalAmount = new AmountWithUnit[2];
+		this.totalAmount[0] = this.storageForms.stream()
+				.map(sf -> sf.getUnitAmount()
+						.substract(Optional.ofNullable(sf.getContainerWeight()).orElse(BigDecimal.ZERO))
+						.multiply(sf.getNumberUnits()))
+				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+		this.totalAmount[1] = this.totalAmount[0].convert(MeasureUnit.LOT);
 	}
 	
 	public Set<StorageDTO> getStorageForms() {
@@ -147,14 +129,6 @@ public class ProcessItemDTO extends ProcessDTO {
 		return null;
 	}
 
-	public Optional<AmountWithUnit> getTotalAmount() {
-		return storageForms.stream()
-				.map(sf -> sf.getUnitAmount()
-						.substract(Optional.ofNullable(sf.getContainerWeight()).orElse(BigDecimal.ZERO))
-						.multiply(sf.getNumberUnits()))
-				.reduce(AmountWithUnit::add);
-	}
-	
 	
 	
 	public static List<ProcessItemDTO> getProcessItems(List<ProcessItemWithStorage> storages) {
@@ -169,21 +143,5 @@ public class ProcessItemDTO extends ProcessDTO {
 		}
 		return processItems;
 	}
-	
-//	public static List<PoProcessItemEntry> getProcessItemsWithPo(List<ProcessItemWithStorage> storages) {
-//		Map<Integer, List<ProcessItemWithStorage>> map = storages.stream()
-//				.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, Collectors.toList()));
-//		List<PoProcessItemEntry> processItems = new ArrayList<>();
-//		for(List<ProcessItemWithStorage> list: map.values()) {
-//			ProcessItemDTO processItem = list.get(0).getProcessItem();
-//			processItem.setStorageForms(list.stream().map(i -> i.getStorage()).collect(Collectors.toSet()));
-//			PoProcessItemEntry processItemEntry = 
-//					new PoProcessItemEntry(list.get(0).getPo(), processItem);
-//			processItems.add(processItemEntry);
-//		}
-//		return processItems;
-//	}
-	
-	
-	
+		
 }

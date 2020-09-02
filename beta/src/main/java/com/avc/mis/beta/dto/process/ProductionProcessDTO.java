@@ -27,10 +27,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class ProductionProcessDTO extends TransactionProcessDTO {
-
-//	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
-//	private Set<UsedItemsGroupDTO> usedItemGroups; //can use a SortedSet like ContactDetails to maintain order
-	
 	
 	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, Integer poCodeId,
 			String contractTypeCode, String contractTypeSuffix, 
@@ -45,10 +41,6 @@ public class ProductionProcessDTO extends TransactionProcessDTO {
 	
 	public ProductionProcessDTO(@NonNull ProductionProcess process) {
 		super(process);
-//		this.processItems = Arrays.stream(process.getProcessItems())
-//				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
-//		this.usedItemGroups = Arrays.stream(process.getUsedItemGroups())
-//				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toSet());
 	}
 	
 
