@@ -10,6 +10,7 @@ import java.util.List;
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,13 +44,16 @@ public class ProcessRow extends ValueDTO {
 		
 	}
 	
-	public AmountWithUnit getProcessGain() {
+	public AmountWithUnit[] getProcessGain() {
 		AmountWithUnit usedAmounts = getUsedItems().stream()
-				.map(ProductionProcessWithItemAmount::getAmountWithUnit)
-				.reduce(AmountWithUnit.ZERO_KG, AmountWithUnit::add);
+				.map(i -> i.getAmountWithUnit()[0])
+				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
 		AmountWithUnit producedAmounts = getProducedItems().stream()
-				.map(ProductionProcessWithItemAmount::getAmountWithUnit)
-				.reduce(AmountWithUnit.ZERO_KG, AmountWithUnit::add);
-		return producedAmounts.substract(usedAmounts);
+				.map(i -> i.getAmountWithUnit()[0])
+				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+		AmountWithUnit[] processGain = new AmountWithUnit[2];
+		processGain[0] = producedAmounts.substract(usedAmounts).setScale(MeasureUnit.SCALE);
+		processGain[1] = processGain[0].convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
+		return processGain;
 	}
 }

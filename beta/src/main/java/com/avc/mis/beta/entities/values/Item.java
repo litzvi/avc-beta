@@ -41,7 +41,7 @@ public class Item extends ValueEntity implements ValueInterface {
 	private String value;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(updatable = false, nullable = false)
+	@Column(nullable = false)
 	@NotNull(message = "Item has to have a default measure unit")
 	private MeasureUnit measureUnit;
 

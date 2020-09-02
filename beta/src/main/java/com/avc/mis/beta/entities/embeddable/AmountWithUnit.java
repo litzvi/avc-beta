@@ -5,6 +5,7 @@ package com.avc.mis.beta.entities.embeddable;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 import javax.persistence.Embeddable;
@@ -107,7 +108,7 @@ public class AmountWithUnit implements Cloneable {
 //	}
 	
 	public AmountWithUnit setScale(int newScale) {
-		this.amount = amount.setScale(newScale);
+		this.amount = amount.setScale(newScale, RoundingMode.HALF_DOWN);
 		return this;
 	}
 	
