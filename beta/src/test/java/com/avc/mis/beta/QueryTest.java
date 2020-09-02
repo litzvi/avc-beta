@@ -6,6 +6,7 @@ package com.avc.mis.beta;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -253,7 +254,8 @@ public class QueryTest {
 		List<LoadingRow> loadings = loading.getLoadings();
 		loadings.forEach(i -> System.out.println(i));
 		
-
+		Set<PoCodeDTO> inventoryPoCodes = objectTablesReader.findInventoryPoCodes(Arrays.asList(ItemCategory.RAW));
+		inventoryPoCodes.forEach(i -> System.out.println(i));
 						
 		service.cleanup(po);
 
@@ -262,5 +264,15 @@ public class QueryTest {
 	@Test
 	void oneQueryTest() {
 					
+		Set<PoCodeDTO> inventoryPoCodes;
+		try {
+			inventoryPoCodes = objectTablesReader.findInventoryPoCodes(Arrays.asList(ItemCategory.RAW));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+		inventoryPoCodes.forEach(i -> System.out.println(i));
+
 	}
 }

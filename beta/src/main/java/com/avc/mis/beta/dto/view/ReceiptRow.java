@@ -30,8 +30,8 @@ public class ReceiptRow extends ValueDTO {
 	public ReceiptRow(@NonNull Integer id, AmountWithUnit totalAmount, List<ReceiptItemRow> receiptRows) {
 		super(id);
 		this.totalAmount = new AmountWithUnit[2];
-		this.totalAmount[0] = totalAmount;
-		this.totalAmount[0] = totalAmount.convert(MeasureUnit.LOT);
+		this.totalAmount[0] = totalAmount.setScale(MeasureUnit.SCALE);
+		this.totalAmount[1] = totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 		this.receiptRows = receiptRows;
 	}
 	

@@ -95,12 +95,13 @@ public class ProcessItemDTO extends ProcessDTO {
 		this.storageForms = new TreeSet<>(Ordinal.ordinalComparator());
 		this.storageForms.addAll(storageForms);
 		this.totalAmount = new AmountWithUnit[2];
-		this.totalAmount[0] = this.storageForms.stream()
+		AmountWithUnit totalAmount = this.storageForms.stream()
 				.map(sf -> sf.getUnitAmount()
 						.substract(Optional.ofNullable(sf.getContainerWeight()).orElse(BigDecimal.ZERO))
 						.multiply(sf.getNumberUnits()))
 				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
-		this.totalAmount[1] = this.totalAmount[0].convert(MeasureUnit.LOT);
+		this.totalAmount[0] = totalAmount.setScale(MeasureUnit.SCALE);
+		this.totalAmount[1] = totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 	}
 	
 	public Set<StorageDTO> getStorageForms() {

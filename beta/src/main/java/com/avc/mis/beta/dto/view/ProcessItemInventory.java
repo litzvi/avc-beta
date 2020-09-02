@@ -84,10 +84,11 @@ public class ProcessItemInventory extends ValueDTO {
 	public void setStorageForms(List<StorageInventoryRow> storageForms) {
 		if(storageForms.size() > 0) {
 			this.totalBalanceAmount = new AmountWithUnit[2];
-			this.totalBalanceAmount[0] = storageForms.stream()
+			AmountWithUnit totalBalanceAmount = storageForms.stream()
 					.map(StorageInventoryRow::getTotalBalance)
 					.reduce(AmountWithUnit::add).get();
-			this.totalBalanceAmount[1] = totalBalanceAmount[0].convert(MeasureUnit.LOT);
+			this.totalBalanceAmount[0] = totalBalanceAmount.setScale(MeasureUnit.SCALE);
+			this.totalBalanceAmount[1] = totalBalanceAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 		}
 		else {
 			this.totalBalanceAmount = null;

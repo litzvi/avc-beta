@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -158,7 +159,7 @@ public class ObjectTablesReader {
 	 * @param itemCategories
 	 * @return Set of PoCodeDTO
 	 */
-	public Set<PoCodeDTO> findInventoryPoCodes(ItemCategory[] itemCategories) {
+	public Set<PoCodeDTO> findInventoryPoCodes(List<ItemCategory> itemCategories) {
 		return getObjectTablesRepository().findInventoryPoCodeByType(null, itemCategories, null);		
 	}
 	
