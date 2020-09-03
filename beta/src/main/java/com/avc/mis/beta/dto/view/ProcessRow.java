@@ -32,7 +32,7 @@ public class ProcessRow extends ValueDTO {
 	 
 	private List<ProductionProcessWithItemAmount> usedItems;
 	private List<ProductionProcessWithItemAmount> producedItems;
-	
+		
 	
 	public ProcessRow(@NonNull Integer id, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 

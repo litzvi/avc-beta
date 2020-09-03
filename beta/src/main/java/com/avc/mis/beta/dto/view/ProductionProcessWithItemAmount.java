@@ -25,10 +25,12 @@ public class ProductionProcessWithItemAmount extends ValueDTO {
 
 	BasicValueEntity<Item> item;
 	AmountWithUnit[] amountWithUnit;
+	String warehouses;
 	
 	public ProductionProcessWithItemAmount(@NonNull Integer id, 
 			Integer itemId, String itemValue, 
-			BigDecimal amount, MeasureUnit measureUnit) {
+			BigDecimal amount, MeasureUnit measureUnit,
+			String warehouses) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		AmountWithUnit amountWithUnit = new AmountWithUnit(amount, measureUnit);
@@ -36,18 +38,20 @@ public class ProductionProcessWithItemAmount extends ValueDTO {
 				amountWithUnit,
 				amountWithUnit.convert(MeasureUnit.LOT)};
 		AmountWithUnit.setScales(this.amountWithUnit, MeasureUnit.SCALE);
+		this.warehouses = warehouses;
 		
 	}
 	
 	public ProductionProcessWithItemAmount(@NonNull Integer id, 
-			BasicValueEntity<Item> item, AmountWithUnit amountWithUnit) {
+			BasicValueEntity<Item> item, AmountWithUnit amountWithUnit,
+			String warehouses) {
 		super(id);
 		this.item = item;
 		this.amountWithUnit = new AmountWithUnit[] {
 				amountWithUnit,
 				amountWithUnit.convert(MeasureUnit.LOT)};
-		AmountWithUnit.setScales(this.amountWithUnit, MeasureUnit.SCALE);
-		
+		AmountWithUnit.setScales(this.amountWithUnit, MeasureUnit.SCALE);		
+		this.warehouses = warehouses;
 	}
 	
 	

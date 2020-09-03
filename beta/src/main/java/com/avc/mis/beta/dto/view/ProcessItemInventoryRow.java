@@ -30,7 +30,7 @@ public class ProcessItemInventoryRow extends ValueDTO {
 	private PoCodeDTO poCode;
 	private OffsetDateTime receiptDate;
 	private AmountWithUnit[] totalBalance;
-	private String storages;
+	private String warehouses;
 
 	/**
 	 * All database fields (the fields in the form they are fetched from the db) arguments constructor.
@@ -39,7 +39,7 @@ public class ProcessItemInventoryRow extends ValueDTO {
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			OffsetDateTime receiptDate,
 			BigDecimal totalStoredAmount, BigDecimal totalUsedAmount, MeasureUnit measureUnit,
-			String storages) {
+			String warehouses) {
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
@@ -48,6 +48,6 @@ public class ProcessItemInventoryRow extends ValueDTO {
 		AmountWithUnit totalBalance = new AmountWithUnit(totalStoredAmount.subtract(totalUsedAmount), measureUnit);
 		this.totalBalance[0] = totalBalance.setScale(MeasureUnit.SCALE);
 		this.totalBalance[1] = totalBalance.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
-		this.storages = storages;
+		this.warehouses = warehouses;
 	}
 }
