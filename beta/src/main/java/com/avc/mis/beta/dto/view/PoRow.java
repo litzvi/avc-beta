@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -17,7 +18,7 @@ public class PoRow extends ValueDTO {
 
 //	PoCodeBasic poCode;
 //	LocalDate deliveryDate; //for sorting
-	AmountWithUnit totalAmount;
+	AmountWithUnit[] totalAmount;
 
 	List<PoItemRow> poRows;
 
@@ -25,7 +26,9 @@ public class PoRow extends ValueDTO {
 		super(id);
 //		this.poCode = poCode;
 //		this.deliveryDate = deliveryDate;
-		this.totalAmount = totalAmount;
+		this.totalAmount = new AmountWithUnit[] {
+				totalAmount.setScale(MeasureUnit.SCALE),
+				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 		this.poRows = poRows;
 	}
 	

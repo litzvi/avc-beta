@@ -45,6 +45,8 @@ public class ProcessRow extends ValueDTO {
 	}
 	
 	public AmountWithUnit[] getProcessGain() {
+//		if(getUsedItems() == null)
+//			return null;
 		AmountWithUnit usedAmounts = getUsedItems().stream()
 				.map(i -> i.getAmountWithUnit()[0])
 				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);

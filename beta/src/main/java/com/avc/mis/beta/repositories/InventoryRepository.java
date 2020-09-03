@@ -65,7 +65,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "having (sf.numberUnits > sum(coalesce(ui.numberUnits, 0))) "
 		+ "order by pi.id, sf.ordinal ")
 	List<InventoryProcessItemWithStorage> findInventoryProcessItemWithStorage(
-			SupplyGroup supplyGroup, ItemCategory[] itemCategories, Integer itemId, Integer poCodeId);
+			SupplyGroup supplyGroup, List<ItemCategory> itemCategories, Integer itemId, Integer poCodeId);
 
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventoryRow( "

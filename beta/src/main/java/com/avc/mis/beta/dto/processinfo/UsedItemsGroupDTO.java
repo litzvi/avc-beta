@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -85,12 +86,14 @@ public class UsedItemsGroupDTO extends ProcessDTO {
 		return null;
 	}
 	
-	public Optional<AmountWithUnit> getTotalAmount() {
-		return usedItems.stream()
+	public AmountWithUnit[] getTotalAmount() {
+		AmountWithUnit totalAmount = usedItems.stream()
 				.map(ui -> ui.getStorage().getUnitAmount()
 						.substract(Optional.ofNullable(ui.getStorage().getContainerWeight()).orElse(BigDecimal.ZERO))
 						.multiply(ui.getNumberUnits()))
-				.reduce(AmountWithUnit::add);
+				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
+				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 	}
 	
 	public static List<UsedItemsGroupDTO> getUsedItemsGroups(List<UsedItemWithGroup> usedItems) {

@@ -43,6 +43,9 @@ import lombok.EqualsAndHashCode;
 @Table(name = "QC_RAW_ITEMS")
 public class RawItemQuality extends ProcessInfoEntity {
 	
+	@Column(nullable = false, updatable = false)
+	private boolean precentage = false;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "itemId", updatable = false, nullable = false)
 	@NotNull(message = "Item is mandatory", groups = OnPersist.class)

@@ -20,6 +20,7 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
 
 import lombok.AccessLevel;

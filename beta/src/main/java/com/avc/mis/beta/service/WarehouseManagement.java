@@ -120,7 +120,7 @@ public class WarehouseManagement {
 		return getInventory(null, null, itemId, null);
 	}
 	
-	public List<ProcessItemInventory> getInventoryByItemCategories(ItemCategory[] itemCategories) {		
+	public List<ProcessItemInventory> getInventoryByItemCategories(List<ItemCategory> itemCategories) {		
 		return getInventory(null, itemCategories, null, null);
 	}
 	
@@ -136,7 +136,7 @@ public class WarehouseManagement {
 	 * @param poCodeId constrain to only this po, if null than any.
 	 * @return List of ProcessItemInventory
 	 */
-	public List<ProcessItemInventory> getInventory(SupplyGroup supplyGroup, ItemCategory[] itemCategories, Integer itemId, Integer poCodeId) {
+	public List<ProcessItemInventory> getInventory(SupplyGroup supplyGroup, List<ItemCategory> itemCategories, Integer itemId, Integer poCodeId) {
 		List<InventoryProcessItemWithStorage> processItemWithStorages =
 				getInventoryRepository().findInventoryProcessItemWithStorage(supplyGroup, itemCategories, itemId, poCodeId);	
 		

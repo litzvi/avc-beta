@@ -28,6 +28,9 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 public class RawItemQualityDTO extends ProcessDTO {
 	
+	Boolean precentage;
+
+	
 	BasicValueEntity<Item> item;
 	MeasureUnit measureUnit;
 	BigDecimal sampleWeight;
@@ -52,7 +55,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 	CheckStatus flavour; 
 	
 
-	public RawItemQualityDTO(Integer id, Integer version, 
+	public RawItemQualityDTO(Integer id, Integer version, boolean precentage,
 			Integer itemId, String itemValue,
 			MeasureUnit measureUnit, BigDecimal sampleWeight, BigInteger numberOfSamples,
 			BigInteger wholeCountPerLb, BigInteger smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
@@ -63,6 +66,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 			BigDecimal roastingWeightLoss,
 			CheckStatus colour, CheckStatus flavour) {
 		super(id, version);
+		this.precentage = precentage;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.measureUnit = measureUnit;
 		this.sampleWeight = sampleWeight;
@@ -88,6 +92,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 	
 	public RawItemQualityDTO(RawItemQuality itemQuality) {
 		super(itemQuality.getId(), itemQuality.getVersion());
+		this.precentage = itemQuality.isPrecentage();
 		this.item = new BasicValueEntity<Item>(itemQuality.getItem());
 		this.measureUnit = itemQuality.getMeasureUnit();
 		this.sampleWeight = itemQuality.getSampleWeight();

@@ -38,14 +38,13 @@ public class PoItemRow extends ValueDTO {
 	PoCodeBasic poCode;
 	String supplierName;
 	String itemName;
-	AmountWithUnit numberUnits;
+	AmountWithUnit[] numberUnits;
 	OffsetDateTime contractDate;
 	LocalDate deliveryDate;
 	String defects;
 	AmountWithCurrency unitPrice;
 	BigDecimal receivedAmount;
 	List<String> orderStatus;
-	AmountWithUnit lots;
 	
 	/**
 	 * All arguments Constructor ,
@@ -61,10 +60,10 @@ public class PoItemRow extends ValueDTO {
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.itemName = itemName;
-		this.numberUnits = new AmountWithUnit(amount.setScale(MeasureUnit.SCALE), measureUnit);
-		this.lots = new AmountWithUnit(
-				MeasureUnit.convert(this.numberUnits, MeasureUnit.LOT)
-				.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN), MeasureUnit.LOT);		
+		AmountWithUnit numberUnits = new AmountWithUnit(amount, measureUnit);
+		this.numberUnits = new AmountWithUnit[] {
+				numberUnits.setScale(MeasureUnit.SCALE), 
+				numberUnits.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 		this.contractDate = contractDate;
 		this.deliveryDate = deliveryDate;
 		this.defects = defects;

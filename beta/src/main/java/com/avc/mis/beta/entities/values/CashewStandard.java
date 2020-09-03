@@ -41,7 +41,7 @@ public class CashewStandard extends ValueEntity {
 	@JoinTable(name = "STANDARD_ITEMS",
 			joinColumns = @JoinColumn(name = "standardId", referencedColumnName = "id"), 
 			inverseJoinColumns = @JoinColumn(name = "itemId", referencedColumnName = "id"))
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@NotEmpty(message = "Cashew standard has to reference at least one item")
 	private Set<Item> items;
 	

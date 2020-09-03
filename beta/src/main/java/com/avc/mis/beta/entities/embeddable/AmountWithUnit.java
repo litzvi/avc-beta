@@ -132,6 +132,17 @@ public class AmountWithUnit implements Cloneable {
 		return amount.signum();
 	}
 
+	/**
+	 * @param amountsWithUnit
+	 * @param scale
+	 */
+	public static void setScales(AmountWithUnit[] amountsWithUnit, int newScale) {
+		for(int i=0; i< amountsWithUnit.length; i++) {
+			amountsWithUnit[i].setScale(newScale);
+		}
+		
+	}
+
 	
 
 	

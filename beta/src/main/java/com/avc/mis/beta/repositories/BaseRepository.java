@@ -108,7 +108,6 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	List<ProductionLine> findAllProductionLines();
 	
 	@Query("select t from CashewStandard t "
-			+ "join fetch t.items i "
 			+ "where t.active = true ")
 	List<CashewStandard> findAllCashewStandard();
 

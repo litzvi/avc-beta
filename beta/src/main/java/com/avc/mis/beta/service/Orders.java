@@ -90,8 +90,8 @@ public class Orders {
 		List<PoRow> poRows = new ArrayList<PoRow>();
 		poMap.forEach((k, v) -> {
 			AmountWithUnit totalAmount = v.stream()
-					.map(pi -> pi.getNumberUnits())
-					.reduce(new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.LOT), AmountWithUnit::add);
+					.map(pi -> pi.getNumberUnits()[0])
+					.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
 			PoRow poRow = new PoRow(k, totalAmount, v);
 			poRows.add(poRow);
 		});

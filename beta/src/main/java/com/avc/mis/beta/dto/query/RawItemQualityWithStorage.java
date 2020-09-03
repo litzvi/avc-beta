@@ -25,7 +25,7 @@ public class RawItemQualityWithStorage {
 	private RawItemQualityDTO rawItemQuality;
 	private StorageDTO storage;
 
-	public RawItemQualityWithStorage(Integer id, Integer version,
+	public RawItemQualityWithStorage(Integer id, Integer version, boolean presentage,
 			Integer itemId, String itemValue, 
 			MeasureUnit testMU, BigDecimal sampleWeight, BigInteger numberOfSamples,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
@@ -40,7 +40,7 @@ public class RawItemQualityWithStorage {
 			BigDecimal decay, BigDecimal insectDamage,
 			BigDecimal roastingWeightLoss,
 			CheckStatus colour, CheckStatus flavour) {
-		this.rawItemQuality = new RawItemQualityDTO(id, version, 
+		this.rawItemQuality = new RawItemQualityDTO(id, version, presentage,
 				itemId, itemValue,
 				testMU, sampleWeight, numberOfSamples,
 				/* poCodeId, contractTypeCode, supplierName, */

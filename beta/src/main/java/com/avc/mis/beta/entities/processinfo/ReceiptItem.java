@@ -62,15 +62,15 @@ public class ReceiptItem extends ProcessItem {
 	 * @param extraAdded the extraAdded to set
 	 */
 	public void setExtraAdded(ExtraAdded[] extraAdded) {
-		this.storageForms.removeAll(this.extraAdded);
+		getStorageFormsField().removeAll(this.extraAdded);
 		Ordinal.setOrdinals(extraAdded);
 		this.extraAdded = Insertable.setReferences(extraAdded, (t) -> {t.setReference(this);	return t;});
-		this.storageForms.addAll(this.extraAdded);
+		getStorageFormsField().addAll(this.extraAdded);
 	}
 		
-	public void setStorageForms(StorageWithSample[] storageForms) { 
+	public void setStorageForms(StorageWithSample[] storageForms) { 		
 		super.setStorageForms(storageForms);
-		this.storageForms.addAll(this.extraAdded);
+		getStorageFormsField().addAll(this.extraAdded);
 	}
 	
 	@AttributeOverrides({

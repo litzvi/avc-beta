@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +19,12 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.avc.mis.beta.dto.processinfo.BasicStorageDTO;
 import com.avc.mis.beta.dto.processinfo.StorageTableDTO;
@@ -62,8 +66,8 @@ public class ProcessItem extends ProcessInfoEntity {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "processItem", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@NotEmpty(message = "Process line has to contain at least one storage line")
-	Set<Storage> storageForms = new HashSet<>();
+	@NotEmpty(message = "Process line has to contain at least one storage line") //made a bug when using merge for persisting ProcessItem
+	private Set<Storage> storageForms;
 	
 	@Setter(value = AccessLevel.NONE) 
 	@JsonIgnore
@@ -83,6 +87,11 @@ public class ProcessItem extends ProcessInfoEntity {
 	public Storage[] getStorageForms() {
 		return this.storageForms.toArray(new Storage[this.storageForms.size()]);
 	}
+	
+	@JsonIgnore
+	Set<Storage> getStorageFormsField() {
+		return this.storageForms;
+	}
 
 	/**
 	 * Setter for adding Storage forms for items that are processed, 
@@ -94,7 +103,6 @@ public class ProcessItem extends ProcessInfoEntity {
 		Ordinal.setOrdinals(storageForms);
 		this.storageForms = Insertable.setReferences(storageForms, (t) -> {t.setReference(this);	return t;});
 	}
-	
 	
 	/**
 	 * Setter for adding list of Storage forms that share the same common measure unit, 

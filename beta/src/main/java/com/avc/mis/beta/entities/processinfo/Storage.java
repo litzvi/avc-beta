@@ -58,6 +58,7 @@ public class Storage extends AuditedEntity implements Ordinal {
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processItemId", nullable = false, updatable = false)
+	@NotNull
 	private ProcessItem processItem;
 	
 	@AttributeOverrides({

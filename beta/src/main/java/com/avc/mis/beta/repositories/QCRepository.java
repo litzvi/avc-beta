@@ -44,7 +44,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 	Optional<QualityCheckDTO> findQcDTOByProcessId(int id);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.RawItemQualityDTO("
-			+ "i.id, i.version, item.id, item.value, "
+			+ "i.id, i.version, i.precentage, item.id, item.value, "
 			+ "i.measureUnit, i.sampleWeight, i.numberOfSamples, "
 //			+ "i.description, i.remarks, "
 			+ "i.wholeCountPerLb, i.smallSize, i.ws, i.lp, i.breakage, "
