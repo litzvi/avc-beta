@@ -22,6 +22,7 @@ import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.repositories.PORepository;
 
@@ -47,20 +48,31 @@ public class Orders {
 	@Autowired private PORepository poRepository;	
 	
 	/**
-	 * Gat all cashew orders with the order status - pending, received, rejected or cancelled.
+	 * Get all cashew orders with the order status - pending, received, rejected but not cancelled.
 	 * @return list of PoRow for all orders
 	 */
 	public List<PoRow> findAllCashewOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER);
+		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER,
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
 		return getPoRows(itemRows);
 	}
 	
 	/**
-	 * Gat all General orders with the order status - pending, received, rejected or cancelled.
+	 * Get all cashew orders with the order status - pending, received, rejected or cancelled.
+	 * @return list of PoRow for all orders
+	 */
+	public List<PoRow> findAllCashewOrdersHistory() {
+		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values());
+		return getPoRows(itemRows);
+	}
+	
+	/**
+	 * Gat all General orders with the order status - pending, received, rejected but not cancelled.
 	 * @return list of PoRow for all orders
 	 */
 	public List<PoRow> findAllGeneralOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER);
+		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER,
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
 		return getPoRows(itemRows);
 	}
 	
@@ -109,11 +121,21 @@ public class Orders {
 	}
 	
 	/**
-	 * Get the table of all Cashew purchase orders.
-	 * @return list of PoRow for all orders
+	 * Get the table of all Cashew purchase orders that are not cancelled.
+	 * @return list of PoRow for all orders (not cancelled)
 	 */
 	public List<PoItemRow> findAllCashewOrderItems() {
-		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER);
+		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
+		return poItemRows;
+	}
+	
+	/**
+	 * Get the table of all Cashew purchase orders including cancelled orders.
+	 * @return list of PoRow for all orders
+	 */
+	public List<PoItemRow> findAllCashewOrderItemsHistory() {
+		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values());
 		return poItemRows;
 	}
 	
