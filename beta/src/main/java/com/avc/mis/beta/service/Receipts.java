@@ -125,7 +125,7 @@ public class Receipts {
 		receiptMap.forEach((k, v) -> {
 			AmountWithUnit totalAmount = v.stream()
 					.map(pi -> pi.getReceiptAmount()[0])
-					.reduce(new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.LOT), AmountWithUnit::add);
+					.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
 			ReceiptRow receiptRow = new ReceiptRow(k, totalAmount, v);
 			receiptRows.add(receiptRow);
 		});

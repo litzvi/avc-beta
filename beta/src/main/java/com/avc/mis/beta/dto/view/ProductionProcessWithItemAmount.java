@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
+import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
@@ -25,7 +26,7 @@ public class ProductionProcessWithItemAmount extends ValueDTO {
 
 	BasicValueEntity<Item> item;
 	AmountWithUnit[] amountWithUnit;
-	String warehouses;
+	String[] warehouses;
 	
 	public ProductionProcessWithItemAmount(@NonNull Integer id, 
 			Integer itemId, String itemValue, 
@@ -38,7 +39,12 @@ public class ProductionProcessWithItemAmount extends ValueDTO {
 				amountWithUnit,
 				amountWithUnit.convert(MeasureUnit.LOT)};
 		AmountWithUnit.setScales(this.amountWithUnit, MeasureUnit.SCALE);
-		this.warehouses = warehouses;
+		if(warehouses != null) {
+			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
+		}
+		else {
+			this.warehouses = null;
+		}
 		
 	}
 	
@@ -51,7 +57,12 @@ public class ProductionProcessWithItemAmount extends ValueDTO {
 				amountWithUnit,
 				amountWithUnit.convert(MeasureUnit.LOT)};
 		AmountWithUnit.setScales(this.amountWithUnit, MeasureUnit.SCALE);		
-		this.warehouses = warehouses;
+		if(warehouses != null) {
+			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
+		}
+		else {
+			this.warehouses = null;
+		}
 	}
 	
 	

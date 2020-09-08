@@ -148,6 +148,8 @@ public class TestService {
 			//build receipt item
 			receiptItems[i] = new ReceiptItem();
 			receiptItems[i].setItem(items.get(randNum.nextInt(items.size())));
+			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), "LBS"));
+			receiptItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			receiptItems[i].setStorageForms(new Storage[] {storageForms[i]});
 			//add extra bonus
 			added[i] = new ExtraAdded();
@@ -186,6 +188,8 @@ public class TestService {
 			Item item = new Item();
 			item.setId(oItem.getItem().getId());
 			items[i].setItem(item);
+			items[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), "LBS"));
+			items[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
 			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
 			storageForms[i].setWarehouseLocation(storage);

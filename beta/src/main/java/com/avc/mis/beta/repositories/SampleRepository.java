@@ -22,7 +22,7 @@ public interface SampleRepository extends BaseRepository<SampleReceipt> {
 			+ "r.id, r.version, r.createdDate, p_user.username, "
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
-			+ "r.recordedTime, r.duration, r.numOfWorkers, "
+			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
 		+ "from SampleReceipt r "
 			+ "join r.poCode po_code "

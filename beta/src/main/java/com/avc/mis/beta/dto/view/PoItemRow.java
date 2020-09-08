@@ -10,12 +10,14 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -36,6 +38,7 @@ public class PoItemRow extends ValueDTO {
 	
 	String personInCharge;
 	PoCodeBasic poCode;
+	String[] approvals;
 	String supplierName;
 	String itemName;
 	AmountWithUnit[] numberUnits;
@@ -52,12 +55,19 @@ public class PoItemRow extends ValueDTO {
 	 */
 	public PoItemRow(@NonNull Integer id, String personInCharge,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
+			String approvals,
 			String itemName, BigDecimal amount, MeasureUnit measureUnit, 
 			OffsetDateTime contractDate, LocalDate deliveryDate, 
-			String defects, BigDecimal unitPrice, Currency currency, BigDecimal receivedAmount, long receiptsCancelled) {
+			String defects, BigDecimal unitPrice, Currency currency, BigDecimal receivedAmount, ProcessStatus status, long receiptsCancelled) {
 		super(id);
 		this.personInCharge = personInCharge;
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
+		if(approvals != null) {
+			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
+		}
+		else {
+			this.approvals = null;
+		}
 		this.supplierName = supplierName;
 		this.itemName = itemName;
 		AmountWithUnit numberUnits = new AmountWithUnit(amount, measureUnit);
@@ -77,7 +87,10 @@ public class PoItemRow extends ValueDTO {
 		
 		this.orderStatus = new ArrayList<String>();
 		
-		if(receivedAmount == null) {
+		if(status == ProcessStatus.CANCELLED) {
+			this.orderStatus.add("CANCELLED");
+		}
+		else if(receivedAmount == null) {
 			this.orderStatus.add("OPEN");
 		}
 		else {
@@ -94,7 +107,7 @@ public class PoItemRow extends ValueDTO {
 				break;
 			}
 		}
-		
+				
 		if(receiptsCancelled > 0) {
 			this.orderStatus.add("REJECTED");
 		}

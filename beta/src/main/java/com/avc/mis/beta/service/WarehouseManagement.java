@@ -155,7 +155,7 @@ public class WarehouseManagement {
 	 * @param poCodeId constrain to only this po, if null than any.
 	 * @return List of ProcessItemInventoryRow
 	 */
-	public List<ProcessItemInventoryRow> getInventoryRows(SupplyGroup supplyGroup, ItemCategory itemCategory, Integer itemId, Integer poCodeId) {
-		return getInventoryRepository().findInventoryProcessItemRows(supplyGroup, itemCategory, itemId, poCodeId);	
+	public List<ProcessItemInventoryRow> getInventoryRows(SupplyGroup supplyGroup, List<ItemCategory> itemCategories, Integer itemId, Integer poCodeId) {
+		return getInventoryRepository().findInventoryProcessItemRows(supplyGroup, itemCategories, itemId, poCodeId);	
 	}
 }

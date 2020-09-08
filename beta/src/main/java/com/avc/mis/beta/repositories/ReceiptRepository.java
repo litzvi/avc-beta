@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
+import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.query.ReceiptItemWithStorage;
 import com.avc.mis.beta.dto.view.ReceiptItemRow;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -25,7 +28,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "r.id, r.version, r.createdDate, p_user.username, "
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
-			+ "r.recordedTime, r.duration, r.numOfWorkers, "
+			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
@@ -59,10 +62,13 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 //				+ "ELSE null "
 //			+ "END , "
 			+ "i.groupName, i.description, i.remarks, i.tableView, "
+			+ "ru.amount, ru.measureUnit, up.amount, up.currency, "
 			+ "oi.id, oi.version, extra.amount, extra.measureUnit) "
 		+ "from ReceiptItem i "
 			+ "left join i.orderItem oi "
 			+ "join i.item item "
+			+ "left join i.receivedOrderUnits ru "
+			+ "left join i.unitPrice up "
 			+ "join i.process p "
 			+ "join i.storageForms sf "
 				+ "join sf.unitAmount unit "

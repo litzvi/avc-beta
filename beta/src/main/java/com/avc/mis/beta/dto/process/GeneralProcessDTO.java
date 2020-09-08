@@ -40,6 +40,10 @@ public abstract class GeneralProcessDTO extends ProcessDTO {
 	private ProcessName processName;
 	private ProductionLine productionLine;
 	private OffsetDateTime recordedTime;
+
+	private OffsetDateTime startTime;
+	private OffsetDateTime endTime;
+
 	private Duration duration;
 	private Integer numOfWorkers;
 	private ProcessStatus processStatus;
@@ -51,7 +55,8 @@ public abstract class GeneralProcessDTO extends ProcessDTO {
 	
 	public GeneralProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus,
+			OffsetDateTime recordedTime, OffsetDateTime startTime, OffsetDateTime endTime, Duration duration, Integer numOfWorkers, 
+			ProcessStatus processStatus, EditStatus editStatus,
 			String remarks, String approvals) {
 		super(id, version);
 		this.createdDate = createdDate;
@@ -59,6 +64,8 @@ public abstract class GeneralProcessDTO extends ProcessDTO {
 		this.processName = processName;
 		this.productionLine = productionLine;
 		this.recordedTime = recordedTime;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.duration = duration;
 		this.numOfWorkers = numOfWorkers;
 		this.processStatus = processStatus;
@@ -77,6 +84,8 @@ public abstract class GeneralProcessDTO extends ProcessDTO {
 			this.processName = process.getProcessType().getProcessName();
 		this.productionLine = process.getProductionLine();
 		this.recordedTime = process.getRecordedTime();
+		this.startTime = process.getStartTime();
+		this.endTime = process.getEndTime();
 		this.duration = process.getDuration();
 		this.numOfWorkers = process.getNumOfWorkers();
 		this.processStatus = process.getLifeCycle().getProcessStatus();

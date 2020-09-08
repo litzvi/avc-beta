@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Currency;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -12,10 +13,12 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ExtraAdded;
+import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.StorageWithSample;
 
@@ -32,7 +35,9 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ReceiptItemDTO extends ProcessItemDTO {
 	
-	private DataObject orderItem;
+	private AmountWithUnit receivedOrderUnits;
+	private AmountWithCurrency unitPrice;
+	private DataObject<OrderItem> orderItem;
 	private AmountWithUnit extraRequested;
 //	private MeasureUnit measureUnit;
 
@@ -42,11 +47,19 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 			Integer itemId, String itemValue, ItemCategory itemCategory,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			String groupName, String description, String remarks, boolean tableView,
+			BigDecimal orderUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit measureUnit) {
 		super(id, version, itemId, itemValue, itemCategory,
 				/* poCodeId, contractTypeCode, supplierName, */groupName, description, remarks, tableView);
+		this.receivedOrderUnits = new AmountWithUnit(orderUnits.setScale(MeasureUnit.SCALE), orderMU);
+		if(unitPrice != null) {
+			this.unitPrice = new AmountWithCurrency(unitPrice, currency);
+		}
+		else {
+			this.unitPrice = null;
+		}
 		if(orderItemId != null)
-			this.orderItem = new DataObject(orderItemId, orderItemVersion);
+			this.orderItem = new DataObject<OrderItem>(orderItemId, orderItemVersion);
 		if(extraRequested != null) {
 			this.extraRequested = new AmountWithUnit(extraRequested.setScale(MeasureUnit.SCALE), measureUnit);
 		}
@@ -68,8 +81,15 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 					}})
 				.collect(Collectors.toCollection(() -> new TreeSet<StorageDTO>(Ordinal.ordinalComparator()))));
 
+		this.receivedOrderUnits = receiptItem.getReceivedOrderUnits().setScale(MeasureUnit.SCALE);
+		if(receiptItem.getUnitPrice() != null) {
+			this.unitPrice = receiptItem.getUnitPrice().clone();
+		}
+		else {
+			this.unitPrice = null;
+		}
 		if(receiptItem.getOrderItem() != null)
-			this.orderItem = new DataObject(receiptItem.getOrderItem());
+			this.orderItem = new DataObject<OrderItem>(receiptItem.getOrderItem());
 		if(receiptItem.getExtraRequested() != null) {
 			this.extraRequested = receiptItem.getExtraRequested().setScale(MeasureUnit.SCALE);
 		}
@@ -80,8 +100,11 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 	public ReceiptItemDTO(Integer id, Integer version,
 			ItemDTO item, /* PoCodeDTO itemPo, */ 
 			String groupName, String description, String remarks, 
-			DataObject orderItem, AmountWithUnit extraRequested) {
+			AmountWithUnit receivedOrderUnits, AmountWithCurrency unitPrice,
+			DataObject<OrderItem> orderItem, AmountWithUnit extraRequested) {
 		super(id, version, item, /* itemPo, */ groupName, description, remarks);
+		this.receivedOrderUnits = receivedOrderUnits;
+		this.unitPrice = unitPrice;
 		this.orderItem = orderItem;
 		if(extraRequested != null) {
 			this.extraRequested = extraRequested.setScale(MeasureUnit.SCALE);

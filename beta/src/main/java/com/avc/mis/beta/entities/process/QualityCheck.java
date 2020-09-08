@@ -43,6 +43,9 @@ public class QualityCheck extends PoProcess {
 	 */
 	public static final int SCALE = 4;	
 	
+	private String inspector;
+	private String sampleTaker;
+	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)

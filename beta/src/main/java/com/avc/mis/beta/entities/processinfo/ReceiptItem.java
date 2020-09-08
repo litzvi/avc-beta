@@ -18,14 +18,17 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
+import com.avc.mis.beta.validation.groups.PositiveOrZeroAmount;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -47,6 +50,28 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "processItemId")
 public class ReceiptItem extends ProcessItem {
 	
+	@AttributeOverrides({
+        @AttributeOverride(name="amount",
+                           column=@Column(name="receivedOrderAmount", nullable = false, 
+                           	precision = 19, scale = MeasureUnit.SCALE)),
+        @AttributeOverride(name="measureUnit",
+                           column=@Column(name = "orderMeasureUnit", nullable = false))
+    })
+	@Embedded
+	@NotNull(message = "received number of units is mandatory")
+	@Valid
+	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
+	private AmountWithUnit receivedOrderUnits;
+
+	@AttributeOverrides({
+        @AttributeOverride(name="amount",
+                           column=@Column(name="unitPrice"))    })
+	@Embedded
+	@Valid
+	@ConvertGroup(from = Default.class, to = PositiveOrZeroAmount.class)
+	private AmountWithCurrency unitPrice;
+	
+	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@Transient
 	private Set<ExtraAdded> extraAdded = new HashSet<>();
@@ -54,6 +79,17 @@ public class ReceiptItem extends ProcessItem {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "orderItemId")
 	private OrderItem orderItem;
+	
+	@AttributeOverrides({
+        @AttributeOverride(name="amount",
+                           column=@Column(name="extraRequested", precision = 19, scale = MeasureUnit.SCALE)),
+        @AttributeOverride(name="measureUnit", 
+    						column=@Column(name = "extraMeasureUnit"))
+    })
+	@Embedded
+	@Valid
+	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
+	private AmountWithUnit extraRequested;
 	
 	/**
 	 * Setter for adding Extra Added for purchase receipts, 
@@ -73,15 +109,6 @@ public class ReceiptItem extends ProcessItem {
 		getStorageFormsField().addAll(this.extraAdded);
 	}
 	
-	@AttributeOverrides({
-        @AttributeOverride(name="amount",
-                           column=@Column(name="extraRequested", precision = 19, scale = MeasureUnit.SCALE))
-    })
-	@Embedded
-	@Valid
-	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
-	private AmountWithUnit extraRequested;
-
 	/**
 	 * Used by Lombok so new/transient entities with null id won't be equal.
 	 * @param o
@@ -91,5 +118,7 @@ public class ReceiptItem extends ProcessItem {
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
+	
+	
 	
 }

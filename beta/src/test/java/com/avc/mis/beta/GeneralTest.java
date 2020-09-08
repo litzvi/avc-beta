@@ -71,7 +71,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800161;
+	static final Integer PO_CODE = 800163;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -145,6 +145,8 @@ public class GeneralTest {
 		for(int i=0; i < receiptItems.length; i++) {
 			receiptItems[i] = new ReceiptItem();
 			receiptItems[i].setItem(orderItems[i].getItem());
+			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), "LBS"));
+			receiptItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			receiptItems[i].setOrderItem(orderItems[i]);
 			
 			StorageWithSample[] storageForms = new StorageWithSample[2];

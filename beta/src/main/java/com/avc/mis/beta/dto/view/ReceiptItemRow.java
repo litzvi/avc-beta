@@ -43,7 +43,12 @@ public class ReceiptItemRow extends ValueDTO {
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.itemName = itemName;
-		this.orderAmount = new AmountWithUnit(orderAmount, orderMU);
+		if(orderAmount != null) {
+			this.orderAmount = new AmountWithUnit(orderAmount, orderMU);
+		}
+		else {
+			this.orderAmount = null;
+		}
 		this.receiptDate = receiptDate;
 		
 		this.receiptAmount = new AmountWithUnit[2];
@@ -51,7 +56,12 @@ public class ReceiptItemRow extends ValueDTO {
 		this.receiptAmount[1] = this.receiptAmount[0].convert(MeasureUnit.LOT);
 
 		this.storage = storage;
-		this.extraAdded = new AmountWithUnit(extraAdded, extraAddedMU);
+		if(extraAdded != null) {
+			this.extraAdded = new AmountWithUnit(extraAdded, extraAddedMU);
+		}
+		else {
+			this.extraAdded = null;
+		}
 	}
 	
 }

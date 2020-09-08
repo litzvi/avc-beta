@@ -5,6 +5,8 @@ package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
@@ -30,7 +32,7 @@ public class ProcessItemInventoryRow extends ValueDTO {
 	private PoCodeDTO poCode;
 	private OffsetDateTime receiptDate;
 	private AmountWithUnit[] totalBalance;
-	private String warehouses;
+	private String[] warehouses;
 
 	/**
 	 * All database fields (the fields in the form they are fetched from the db) arguments constructor.
@@ -48,6 +50,11 @@ public class ProcessItemInventoryRow extends ValueDTO {
 		AmountWithUnit totalBalance = new AmountWithUnit(totalStoredAmount.subtract(totalUsedAmount), measureUnit);
 		this.totalBalance[0] = totalBalance.setScale(MeasureUnit.SCALE);
 		this.totalBalance[1] = totalBalance.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
-		this.warehouses = warehouses;
+		if(warehouses != null) {
+			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
+		}
+		else {
+			this.warehouses = null;
+		}
 	}
 }

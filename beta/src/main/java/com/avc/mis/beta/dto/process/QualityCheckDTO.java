@@ -44,23 +44,31 @@ import lombok.ToString;
 @NoArgsConstructor
 public class QualityCheckDTO extends PoProcessDTO {
 
-	
+	private String inspector;
+	private String sampleTaker;
+		
 	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
 	private Set<RawItemQualityDTO> testedItems; //can use a SortedSet like ContactDetails to maintain order
 	
-	public QualityCheckDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
+	public QualityCheckDTO(Integer id, Integer version, String inspector, String sampleTaker,
+			Instant createdDate, String userRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, Integer supplierId, Integer supplierVersion, String supplierName,  
-			ProcessName processName, ProductionLine productionLine, OffsetDateTime recordedTime, Duration duration,
+			ProcessName processName, ProductionLine productionLine, 
+			OffsetDateTime recordedTime, OffsetDateTime startTime, OffsetDateTime endTime, Duration duration,
 			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
 		super(id, version, createdDate, userRecording, 
 				poCodeId, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName, 
-				processName, productionLine, recordedTime, duration,
+				processName, productionLine, recordedTime, startTime, endTime, duration,
 				numOfWorkers, processStatus, editStatus, remarks, approvals);
+		this.inspector = inspector;
+		this.sampleTaker = sampleTaker;
 	}
 	
 	public QualityCheckDTO(@NonNull QualityCheck check) {
 		super(check);
+		this.inspector = check.getInspector();
+		this.sampleTaker = check.getSampleTaker();
 		this.processItems = Arrays.stream(check.getProcessItems())
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
 		this.testedItems = Arrays.stream(check.getTestedItems())

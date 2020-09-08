@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Currency;
 
 import com.avc.mis.beta.dto.processinfo.ExtraAddedDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
@@ -40,11 +41,13 @@ public class ReceiptItemWithStorage {
 			Class<? extends Storage> clazz,
 			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight,
 			String groupName, String description, String remarks, boolean tableView,
+			BigDecimal receivedUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
 		this.receiptItem = new ReceiptItemDTO(id, version, 
 				itemId, itemValue, itemCategory,
 				/* poCodeId, contractTypeCode, supplierName, */
 				groupName, description, remarks, tableView,
+				receivedUnits, orderMU, unitPrice, currency,
 				orderItemId, orderItemVersion, extraRequested, extraMU);
 		if(ExtraAdded.class.equals(clazz)) {
 			this.storage = new ExtraAddedDTO(storageId, storageVersion, ordinal, 

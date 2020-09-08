@@ -35,6 +35,9 @@ import lombok.Getter;
 @Transactional(readOnly = true)
 public class CashewReports {
 	
+//	private static ItemCategory[] itemCategoies = new ItemCategory[] {ItemCategory.CLEAN, ItemCategory.PACKED, ItemCategory.RAW, ItemCategory.ROAST};
+
+	
 	@Autowired private InventoryRepository inventoryRepository;
 	
 	@Autowired private WarehouseManagement warehouseManagement;

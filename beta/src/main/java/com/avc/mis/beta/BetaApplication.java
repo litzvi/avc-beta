@@ -9,6 +9,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
+/**
+ * Version: 0
+ * 
+ * @author zvi
+ *
+ */
 @SpringBootApplication
 //@EnableJpaRepositories
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")

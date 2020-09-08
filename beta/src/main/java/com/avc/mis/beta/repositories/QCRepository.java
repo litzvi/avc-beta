@@ -24,10 +24,11 @@ import com.avc.mis.beta.entities.values.Item;
 public interface QCRepository extends ProcessRepository<QualityCheck> {
 
 	@Query("select new com.avc.mis.beta.dto.process.QualityCheckDTO("
-			+ "r.id, r.version, r.createdDate, p_user.username, "
+			+ "r.id, r.version, r.inspector, r.sampleTaker, "
+			+ "r.createdDate, p_user.username, "
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
-			+ "r.recordedTime, r.duration, r.numOfWorkers, "
+			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
 		+ "from QualityCheck r "
 			+ "join r.poCode po_code "

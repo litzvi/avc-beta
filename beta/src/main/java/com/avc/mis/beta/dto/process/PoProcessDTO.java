@@ -35,11 +35,13 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName, 
 			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, Duration duration, Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus,
+			OffsetDateTime recordedTime, OffsetDateTime startTime, OffsetDateTime endTime, 
+			Duration duration, Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus,
 			String remarks , String approvals) {
 		super(id, version, createdDate, staffRecording, 
 				processName, productionLine, 
-				recordedTime, duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
+				recordedTime, startTime, endTime, 
+				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		
 	}

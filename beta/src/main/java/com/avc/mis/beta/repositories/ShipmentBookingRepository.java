@@ -22,7 +22,7 @@ public interface ShipmentBookingRepository extends BaseRepository<ShipmentBookin
 			+ "booking.id, booking.version, booking.createdDate, p_user.username, "
 //			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
-			+ "booking.recordedTime, booking.duration, booking.numOfWorkers, "
+			+ "booking.recordedTime, booking.startTime, booking.endTime, booking.duration, booking.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, booking.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
 			+ "booking.personInCharge) "
 		+ "from ShipmentBooking booking "

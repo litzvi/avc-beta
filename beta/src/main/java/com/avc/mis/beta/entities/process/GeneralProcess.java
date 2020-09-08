@@ -66,6 +66,9 @@ public abstract class GeneralProcess extends AuditedEntity {
 	@Column(nullable = false)
 	@NotNull(message = "process recorded date and time is mandetory")
 	private OffsetDateTime recordedTime;
+	
+	private OffsetDateTime startTime;
+	private OffsetDateTime endTime;
 	private Duration duration;
 	private Integer numOfWorkers;
 	
