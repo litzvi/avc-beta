@@ -45,8 +45,8 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 	Optional<QualityCheckDTO> findQcDTOByProcessId(int id);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.RawItemQualityDTO("
-			+ "i.id, i.version, i.precentage, item.id, item.value, "
-			+ "i.measureUnit, i.sampleWeight, i.numberOfSamples, "
+			+ "i.id, i.version, item.id, item.value, "
+			+ "i.measureUnit, i.sampleWeight, i.numberOfSamples, i.precentage, "
 //			+ "i.description, i.remarks, "
 			+ "i.wholeCountPerLb, i.smallSize, i.ws, i.lp, i.breakage, "
 			+ "i.foreignMaterial, i.humidity, "
@@ -105,7 +105,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 
 	@Query("select new com.avc.mis.beta.dto.view.RawQcRow( "
 			+ "qc.id, po_code.id, ct.code, ct.suffix, s.name, "
-			+ "i.value, qc.recordedTime, ti.numberOfSamples, ti.sampleWeight, "
+			+ "i.value, qc.recordedTime, ti.numberOfSamples, ti.sampleWeight, ti.precentage, "
 				+ "def.scorched, def.deepCut, def.offColour, "
 				+ "def.shrivel, def.desert, def.deepSpot, "
 				+ "dam.mold, dam.dirty, dam.lightDirty, "

@@ -28,13 +28,14 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 public class RawItemQualityDTO extends ProcessDTO {
 	
-	Boolean precentage;
 
 	
 	BasicValueEntity<Item> item;
 	MeasureUnit measureUnit;
 	BigDecimal sampleWeight;
 	BigInteger numberOfSamples;
+
+	Boolean precentage;
 	
 	RawDefects defects;
 	RawDamage damage;
@@ -55,9 +56,9 @@ public class RawItemQualityDTO extends ProcessDTO {
 	CheckStatus flavour; 
 	
 
-	public RawItemQualityDTO(Integer id, Integer version, boolean precentage,
+	public RawItemQualityDTO(Integer id, Integer version,
 			Integer itemId, String itemValue,
-			MeasureUnit measureUnit, BigDecimal sampleWeight, BigInteger numberOfSamples,
+			MeasureUnit measureUnit, BigDecimal sampleWeight, BigInteger numberOfSamples, boolean precentage,
 			BigInteger wholeCountPerLb, BigInteger smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
 			BigDecimal foreignMaterial, BigDecimal humidity, 
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
@@ -66,11 +67,11 @@ public class RawItemQualityDTO extends ProcessDTO {
 			BigDecimal roastingWeightLoss,
 			CheckStatus colour, CheckStatus flavour) {
 		super(id, version);
-		this.precentage = precentage;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.measureUnit = measureUnit;
 		this.sampleWeight = sampleWeight;
 		this.numberOfSamples = numberOfSamples;
+		this.precentage = precentage;
 
 		this.wholeCountPerLb = wholeCountPerLb;
 		this.smallSize = smallSize;
@@ -92,11 +93,11 @@ public class RawItemQualityDTO extends ProcessDTO {
 	
 	public RawItemQualityDTO(RawItemQuality itemQuality) {
 		super(itemQuality.getId(), itemQuality.getVersion());
-		this.precentage = itemQuality.isPrecentage();
 		this.item = new BasicValueEntity<Item>(itemQuality.getItem());
 		this.measureUnit = itemQuality.getMeasureUnit();
 		this.sampleWeight = itemQuality.getSampleWeight();
 		this.numberOfSamples = itemQuality.getNumberOfSamples();
+		this.precentage = itemQuality.isPrecentage();
 
 		this.wholeCountPerLb = itemQuality.getWholeCountPerLb();
 		this.smallSize = itemQuality.getSmallSize();

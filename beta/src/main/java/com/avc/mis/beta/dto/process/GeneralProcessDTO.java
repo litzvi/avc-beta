@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.process;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.util.stream.Collectors;
@@ -42,8 +43,8 @@ public abstract class GeneralProcessDTO extends ProcessDTO {
 	private ProductionLine productionLine;
 	private OffsetDateTime recordedTime;
 
-	private OffsetTime startTime;
-	private OffsetTime endTime;
+	private LocalTime startTime;
+	private LocalTime endTime;
 
 	private Duration duration;
 	private Integer numOfWorkers;
@@ -56,7 +57,7 @@ public abstract class GeneralProcessDTO extends ProcessDTO {
 	
 	public GeneralProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, OffsetTime startTime, OffsetTime endTime, Duration duration, Integer numOfWorkers, 
+			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, EditStatus editStatus,
 			String remarks, String approvals) {
 		super(id, version);

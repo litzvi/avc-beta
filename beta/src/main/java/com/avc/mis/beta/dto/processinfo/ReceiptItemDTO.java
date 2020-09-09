@@ -51,12 +51,11 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit measureUnit) {
 		super(id, version, itemId, itemValue, itemCategory,
 				/* poCodeId, contractTypeCode, supplierName, */groupName, description, remarks, tableView);
-		this.receivedOrderUnits = new AmountWithUnit(orderUnits.setScale(MeasureUnit.SCALE), orderMU);
+		if(orderUnits != null) {
+			this.receivedOrderUnits = new AmountWithUnit(orderUnits.setScale(MeasureUnit.SCALE), orderMU);
+		}
 		if(unitPrice != null) {
 			this.unitPrice = new AmountWithCurrency(unitPrice, currency);
-		}
-		else {
-			this.unitPrice = null;
 		}
 		if(orderItemId != null)
 			this.orderItem = new DataObject<OrderItem>(orderItemId, orderItemVersion);

@@ -41,7 +41,7 @@ public class RawQcRow extends ValueDTO {
 	public RawQcRow(@NonNull Integer id, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemName, OffsetDateTime checkDate, 
-			BigInteger numberOfSamples, BigDecimal sampleWeight,
+			BigInteger numberOfSamples, BigDecimal sampleWeight, boolean precentage,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, 
 			BigDecimal shrivel, BigDecimal desert, BigDecimal deepSpot, 
 			BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 
@@ -56,9 +56,16 @@ public class RawQcRow extends ValueDTO {
 		
 		RawDefects rawDefects = new RawDefects(scorched, deepCut, offColour, shrivel, desert, deepSpot);		
 		RawDamage rawDamage = new RawDamage(mold, dirty, lightDirty, decay, insectDamage, testa);
-		this.totalDefects = rawDefects.getTotal().divide(sampleWeight, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
-		this.totalDamage = rawDamage.getTotal().divide(sampleWeight, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
 		
+		BigDecimal divisor;
+		if(precentage) {
+			divisor = BigDecimal.valueOf(100L);
+		}
+		else{		
+			divisor = sampleWeight;
+		}
+		this.totalDefects = rawDefects.getTotal().divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
+		this.totalDamage = rawDamage.getTotal().divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
 		
 		
 	}

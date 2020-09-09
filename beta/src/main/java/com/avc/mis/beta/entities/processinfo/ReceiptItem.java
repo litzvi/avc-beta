@@ -52,10 +52,10 @@ public class ReceiptItem extends ProcessItem {
 	
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
-                           column=@Column(name="receivedOrderAmount", nullable = false, 
+                           column=@Column(name="receivedOrderAmount", 
                            	precision = 19, scale = MeasureUnit.SCALE)),
         @AttributeOverride(name="measureUnit",
-                           column=@Column(name = "orderMeasureUnit", nullable = false))
+                           column=@Column(name = "orderMeasureUnit"))
     })
 	@Embedded
 	@Valid
