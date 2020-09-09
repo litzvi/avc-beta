@@ -49,7 +49,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.SupplyCategory;
-import com.avc.mis.beta.service.CashewReports;
+import com.avc.mis.beta.service.InventoryReports;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
@@ -80,7 +80,7 @@ public class QueryTest {
 	@Autowired Suppliers suppliers;
 	@Autowired Orders orders;
 	@Autowired Receipts receipts;
-	@Autowired CashewReports cashewReports;
+	@Autowired InventoryReports cashewReports;
 	@Autowired QualityChecks qualityChecks;
 	@Autowired WarehouseManagement warehouseManagement;
 	@Autowired ProductionProcesses productionProcesses;
@@ -208,12 +208,12 @@ public class QueryTest {
 		}
 		
 		//cashew inventory table by item
-		List<ItemInventoryRow> inventoryRows  = cashewReports.getInventoryTableByItem();
+		List<ItemInventoryRow> inventoryRows  = cashewReports.getInventoryTableByItem(SupplyGroup.CASHEW);
 		inventoryRows.forEach(r -> System.out.println(r));
 		
 		
 		//cashew inventory table by po
-		List<PoInventoryRow> poInventoryRows = cashewReports. getInventoryTableByPo();
+		List<PoInventoryRow> poInventoryRows = cashewReports. getInventoryTableByPo(SupplyGroup.CASHEW);
 		poInventoryRows.forEach(r -> System.out.println(r));		
 		Set<PoCodeDTO> rawInventoryPos = objectTablesReader.findInventoryPoCodes(SupplyGroup.CASHEW);
 		rawInventoryPos.forEach(r -> System.out.println(r));

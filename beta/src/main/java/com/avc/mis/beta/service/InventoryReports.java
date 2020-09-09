@@ -33,7 +33,7 @@ import lombok.Getter;
 @Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
-public class CashewReports {
+public class InventoryReports {
 	
 //	private static ItemCategory[] itemCategoies = new ItemCategory[] {ItemCategory.CLEAN, ItemCategory.PACKED, ItemCategory.RAW, ItemCategory.ROAST};
 
@@ -46,9 +46,9 @@ public class CashewReports {
 	 * Gets report of all items that are currently in the inventory with full information needed for report display.
 	 * @return List of ItemInventoryRow that have a balance in inventory
 	 */
-	public List<ItemInventoryRow> getInventoryTableByItem() {
+	public List<ItemInventoryRow> getInventoryTableByItem(SupplyGroup supplyGroup) {
 
-		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(SupplyGroup.CASHEW, null, null, null);
+		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(supplyGroup, null, null, null);
 		
 		Map<ItemDTO, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
 				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getItem, Collectors.toList()));
@@ -69,9 +69,9 @@ public class CashewReports {
 	 * Gets report of all po code that currently have balance in inventory with full information needed for report display.
 	 * @return List of PoInventoryRow that have a balance in inventory
 	 */
-	public List<PoInventoryRow> getInventoryTableByPo() {
+	public List<PoInventoryRow> getInventoryTableByPo(SupplyGroup supplyGroup) {
 		
-		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(SupplyGroup.CASHEW, null, null, null);
+		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(supplyGroup, null, null, null);
 
 		Map<PoCodeDTO, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
 				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getPoCode, Collectors.toList()));
