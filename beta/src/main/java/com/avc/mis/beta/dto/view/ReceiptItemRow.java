@@ -29,6 +29,7 @@ public class ReceiptItemRow extends ValueDTO {
 	String supplierName;
 	String itemName;
 	AmountWithUnit orderAmount;
+	AmountWithUnit orderBalance;
 	OffsetDateTime receiptDate;
 	AmountWithUnit receiptAmount[];
 	String storage;
@@ -43,18 +44,24 @@ public class ReceiptItemRow extends ValueDTO {
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.itemName = itemName;
+
+		AmountWithUnit receiptAmt = new AmountWithUnit(receiptAmount, receiptMU);
 		if(orderAmount != null) {
 			this.orderAmount = new AmountWithUnit(orderAmount, orderMU);
+			this.orderBalance = receiptAmt.substract(this.orderAmount);
 		}
 		else {
 			this.orderAmount = null;
+			this.orderBalance = null;
 		}
 		this.receiptDate = receiptDate;
 		
-		this.receiptAmount = new AmountWithUnit[2];
-		this.receiptAmount[0] = new AmountWithUnit(receiptAmount, receiptMU);
-		this.receiptAmount[1] = this.receiptAmount[0].convert(MeasureUnit.LOT);
-
+		
+		this.receiptAmount = new AmountWithUnit[] {
+				receiptAmt,
+				receiptAmt.convert(MeasureUnit.LOT)
+		};
+		
 		this.storage = storage;
 		if(extraAdded != null) {
 			this.extraAdded = new AmountWithUnit(extraAdded, extraAddedMU);
