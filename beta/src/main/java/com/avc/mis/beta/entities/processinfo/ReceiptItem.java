@@ -58,7 +58,6 @@ public class ReceiptItem extends ProcessItem {
                            column=@Column(name = "orderMeasureUnit", nullable = false))
     })
 	@Embedded
-	@NotNull(message = "received number of units is mandatory")
 	@Valid
 	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
 	private AmountWithUnit receivedOrderUnits;

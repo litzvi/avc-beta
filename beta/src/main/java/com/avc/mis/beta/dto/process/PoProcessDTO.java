@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.process;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -35,7 +36,7 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName, 
 			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, OffsetDateTime startTime, OffsetDateTime endTime, 
+			OffsetDateTime recordedTime, OffsetTime startTime, OffsetTime endTime, 
 			Duration duration, Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus,
 			String remarks , String approvals) {
 		super(id, version, createdDate, staffRecording, 

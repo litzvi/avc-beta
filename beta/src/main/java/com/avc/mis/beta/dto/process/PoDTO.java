@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.process;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -50,7 +51,7 @@ public class PoDTO extends PoProcessDTO {
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName,  
 			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, OffsetDateTime startTime, OffsetDateTime endTime, 
+			OffsetDateTime recordedTime, OffsetTime startTime, OffsetTime endTime, 
 			Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
 			String personInCharge) {

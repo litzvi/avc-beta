@@ -5,6 +5,7 @@ package com.avc.mis.beta.entities.process;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.time.OffsetTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -67,8 +68,8 @@ public abstract class GeneralProcess extends AuditedEntity {
 	@NotNull(message = "process recorded date and time is mandetory")
 	private OffsetDateTime recordedTime;
 	
-	private OffsetDateTime startTime;
-	private OffsetDateTime endTime;
+	private OffsetTime startTime;
+	private OffsetTime endTime;
 	private Duration duration;
 	private Integer numOfWorkers;
 	
