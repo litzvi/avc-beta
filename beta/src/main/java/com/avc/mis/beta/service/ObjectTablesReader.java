@@ -28,6 +28,7 @@ import com.avc.mis.beta.repositories.ObjectTablesRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * Used to access full lists (tables) of active Object entities - {@link com.avc.mis.beta.entities.ObjectDataEntity}
@@ -130,7 +131,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO for all inventory Cashew.
 	 */
 	public Set<PoCodeDTO> findCashewInventoryPoCodes() {
-		return getObjectTablesRepository().findInventoryPoCodeByType(SupplyGroup.CASHEW, null, null);		
+		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, SupplyGroup.GENERAL, null);		
 	}
 	
 	/**
@@ -140,7 +141,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO for all General inventory.
 	 */
 	public Set<PoCodeDTO> findGeneralInventoryPoCodes() {
-		return getObjectTablesRepository().findInventoryPoCodeByType(SupplyGroup.GENERAL, null, null);		
+		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, SupplyGroup.GENERAL, null);		
 	}
 	
 	/**
@@ -150,7 +151,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO
 	 */
 	public Set<PoCodeDTO> findInventoryPoCodes(Integer itemId) {
-		return getObjectTablesRepository().findInventoryPoCodeByType(null, null, itemId);		
+		return getObjectTablesRepository().findInventoryPoCodeByType(false, null, null, itemId);		
 	}
 	
 	/**
@@ -159,12 +160,12 @@ public class ObjectTablesReader {
 	 * @param itemCategories
 	 * @return Set of PoCodeDTO
 	 */
-	public Set<PoCodeDTO> findInventoryPoCodes(List<ItemCategory> itemCategories) {
-		return getObjectTablesRepository().findInventoryPoCodeByType(null, itemCategories, null);		
+	public Set<PoCodeDTO> findInventoryPoCodes(@NonNull ItemCategory[] itemCategories) {
+		return getObjectTablesRepository().findInventoryPoCodeByType(true, itemCategories, null, null);		
 	}
 	
 	public Set<PoCodeDTO> findInventoryPoCodes(SupplyGroup supplyGroup) {
-		return getObjectTablesRepository().findInventoryPoCodeByType(supplyGroup, null, null);		
+		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, supplyGroup, null);		
 	}
 	
 	/**

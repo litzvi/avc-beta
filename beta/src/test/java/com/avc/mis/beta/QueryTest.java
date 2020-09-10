@@ -254,9 +254,16 @@ public class QueryTest {
 		List<LoadingRow> loadings = loading.getLoadings();
 		loadings.forEach(i -> System.out.println(i));
 		
-		Set<PoCodeDTO> inventoryPoCodes = objectTablesReader.findInventoryPoCodes(Arrays.asList(ItemCategory.RAW));
+		Set<PoCodeDTO> inventoryPoCodes;
+		try {
+			inventoryPoCodes = objectTablesReader.findInventoryPoCodes(new ItemCategory[]{ItemCategory.RAW, ItemCategory.CLEAN});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		inventoryPoCodes.forEach(i -> System.out.println(i));
-		
+
 		List<PoRow> allCashewOrders = orders.findAllCashewOrders();
 		allCashewOrders.forEach(i -> System.out.println(i));
 						
@@ -266,9 +273,6 @@ public class QueryTest {
 	
 	@Test
 	void oneQueryTest() {
-					
-		List<PoRow> allCashewOrders = orders.findAllCashewOrders();
-		allCashewOrders.forEach(i -> System.out.println(i));
-
+		
 	}
 }
