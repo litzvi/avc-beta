@@ -58,14 +58,15 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "left join sf.usedItems ui "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (item.supplyGroup = :supplyGroup or :supplyGroup is null) "
-			+ "and (:itemCategories is null or item.category in :itemCategories) "
+			+ "and (:checkCategories = false or item.category in :itemCategories) "
 			+ "and (item.id = :itemId or :itemId is null) "
 			+ "and (poCode.code = :poCodeId or :poCodeId is null) "
 		+ "group by sf "
 		+ "having (sf.numberUnits > sum(coalesce(ui.numberUnits, 0))) "
 		+ "order by pi.id, sf.ordinal ")
 	List<InventoryProcessItemWithStorage> findInventoryProcessItemWithStorage(
-			SupplyGroup supplyGroup, List<ItemCategory> itemCategories, Integer itemId, Integer poCodeId);
+			boolean checkCategories, ItemCategory[] itemCategories, 
+			SupplyGroup supplyGroup, Integer itemId, Integer poCodeId);
 
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventoryRow( "
@@ -92,7 +93,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "left join sf.usedItems ui "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (item.supplyGroup = :supplyGroup or :supplyGroup is null) "
-			+ "and (:itemCategories is null or item.category in :itemCategories) "
+			+ "and (:checkCategories = false or item.category in :itemCategories) "
 			+ "and (item.id = :itemId or :itemId is null) "
 			+ "and (poCode.code = :poCodeId or :poCodeId is null) "
 			+ "and (not exists "
@@ -105,9 +106,9 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "group by pi "
 //		+ "having (SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) "
 //			+ "> SUM(unit.amount * coalesce(ui.numberUnits, 0) * uom.multiplicand / uom.divisor)) "
-		+ "order by pi.id ")
+		+ "order by poCode, item ")
 	List<ProcessItemInventoryRow> findInventoryProcessItemRows(
-			SupplyGroup supplyGroup, List<ItemCategory> itemCategories, Integer itemId, Integer poCodeId);
+			boolean checkCategories, ItemCategory[] itemCategories, SupplyGroup supplyGroup, Integer itemId, Integer poCodeId);
 
 	
 	/**

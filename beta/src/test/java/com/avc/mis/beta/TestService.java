@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.fail;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Random;
@@ -124,6 +125,7 @@ public class TestService {
 		receipt.setPoCode(poCode);
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());
+		receipt.setStartTime(LocalTime.parse("02:15"));
 		//add order items
 		receipt.setReceiptItems(getReceiptItems(OrdersTest.NUM_ITEMS));
 		receipts.addCashewReceipt(receipt);

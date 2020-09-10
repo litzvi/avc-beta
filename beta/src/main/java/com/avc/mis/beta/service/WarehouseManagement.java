@@ -26,6 +26,7 @@ import com.avc.mis.beta.repositories.TransferRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * Service for recording and receiving Warehouse activity and information
@@ -120,7 +121,7 @@ public class WarehouseManagement {
 		return getInventory(null, null, itemId, null);
 	}
 	
-	public List<ProcessItemInventory> getInventoryByItemCategories(List<ItemCategory> itemCategories) {		
+	public List<ProcessItemInventory> getInventoryByItemCategories(@NonNull ItemCategory[] itemCategories) {		
 		return getInventory(null, itemCategories, null, null);
 	}
 	
@@ -136,9 +137,10 @@ public class WarehouseManagement {
 	 * @param poCodeId constrain to only this po, if null than any.
 	 * @return List of ProcessItemInventory
 	 */
-	public List<ProcessItemInventory> getInventory(SupplyGroup supplyGroup, List<ItemCategory> itemCategories, Integer itemId, Integer poCodeId) {
+	public List<ProcessItemInventory> getInventory(SupplyGroup supplyGroup, ItemCategory[] itemCategories, Integer itemId, Integer poCodeId) {
+		boolean checkCategories = (itemCategories != null);
 		List<InventoryProcessItemWithStorage> processItemWithStorages =
-				getInventoryRepository().findInventoryProcessItemWithStorage(supplyGroup, itemCategories, itemId, poCodeId);	
+				getInventoryRepository().findInventoryProcessItemWithStorage(checkCategories, itemCategories, supplyGroup, itemId, poCodeId);	
 		
 		return ProcessItemInventory.getProcessItemInventoryRows(processItemWithStorages);
 		
@@ -155,7 +157,8 @@ public class WarehouseManagement {
 	 * @param poCodeId constrain to only this po, if null than any.
 	 * @return List of ProcessItemInventoryRow
 	 */
-	public List<ProcessItemInventoryRow> getInventoryRows(SupplyGroup supplyGroup, List<ItemCategory> itemCategories, Integer itemId, Integer poCodeId) {
-		return getInventoryRepository().findInventoryProcessItemRows(supplyGroup, itemCategories, itemId, poCodeId);	
+	public List<ProcessItemInventoryRow> getInventoryRows(SupplyGroup supplyGroup, ItemCategory[] itemCategories, Integer itemId, Integer poCodeId) {
+		boolean checkCategories = (itemCategories != null);
+		return getInventoryRepository().findInventoryProcessItemRows(checkCategories, itemCategories, supplyGroup, itemId, poCodeId);	
 	}
 }
