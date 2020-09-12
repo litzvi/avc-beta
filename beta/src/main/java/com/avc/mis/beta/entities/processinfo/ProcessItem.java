@@ -19,6 +19,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -74,8 +75,12 @@ public class ProcessItem extends ProcessInfoEntity {
 	@Column(nullable = false)
 	private boolean tableView = false;
 	
+	@OneToOne(mappedBy = "processItem", orphanRemoval = true, 
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	private Sample sample;
+	
 	private String groupName;
-
+	
 	public void setGroupName(String groupName) {
 		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
 	}
