@@ -125,7 +125,7 @@ public class TestService {
 		receipt.setPoCode(poCode);
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());
-		receipt.setStartTime(LocalTime.parse("02:15"));
+		receipt.setStartTime(LocalTime.parse("20:15"));
 		//add order items
 		receipt.setReceiptItems(getReceiptItems(OrdersTest.NUM_ITEMS));
 		receipts.addCashewReceipt(receipt);

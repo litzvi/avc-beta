@@ -19,7 +19,7 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class UsedItemWithGroup  extends ValueDTO {
 	
 	UsedItemsGroupDTO usedItemsGroup;

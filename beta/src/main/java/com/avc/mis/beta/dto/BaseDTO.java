@@ -3,10 +3,14 @@
  */
 package com.avc.mis.beta.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * DTO's represent the information of the entities, to be presented and used.
@@ -28,10 +32,28 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class BaseDTO {
 	
+	@JsonIgnore
+	@Setter(AccessLevel.NONE)
 	@EqualsAndHashCode.Include
-	private Integer id;
+	private DtoId dtoId = new DtoId();
+	
+	public BaseDTO(Integer id) {
+		super();
+		this.dtoId.setValue(id);	
+	}
+
+	public Integer getId() {
+		return this.dtoId.getValue();
+	}
+
+	public void setId(Integer id) {
+		this.dtoId.setValue(id);
+	}
+
+
+	
+
 
 }

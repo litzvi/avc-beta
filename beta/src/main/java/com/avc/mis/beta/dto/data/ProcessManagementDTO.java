@@ -22,7 +22,7 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class ProcessManagementDTO extends LinkDTO {
 	
 	ProcessName processName;

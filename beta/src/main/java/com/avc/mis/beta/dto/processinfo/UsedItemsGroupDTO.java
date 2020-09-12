@@ -106,6 +106,8 @@ public class UsedItemsGroupDTO extends ProcessDTO {
 					.collect(Collectors.toSet()));
 			usedItemsGroups.add(usedItemsGroup);
 		}
+		usedItemsGroups.forEach(i -> System.out.println(i));
+
 		return usedItemsGroups;
 	}
 }

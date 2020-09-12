@@ -35,7 +35,7 @@ import lombok.EqualsAndHashCode;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class ProcessItemDTO extends ProcessDTO {
 
 	private ItemDTO item; //change to itemDTO in order to get category

@@ -15,7 +15,7 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ShipmentCodeBasic extends BaseDTO {
 
 	String portOfDischargeCode;

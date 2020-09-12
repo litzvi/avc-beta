@@ -19,7 +19,7 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class ItemWeightDTO extends ProcessDTO {
 
 	BigDecimal unitAmount;

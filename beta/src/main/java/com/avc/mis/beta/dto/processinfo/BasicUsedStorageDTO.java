@@ -18,7 +18,7 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class BasicUsedStorageDTO extends ProcessDTO {
 	
 	private Integer storageId;

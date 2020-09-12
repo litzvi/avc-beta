@@ -29,7 +29,7 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 public abstract class GeneralProcessDTO extends ProcessDTO {
 	

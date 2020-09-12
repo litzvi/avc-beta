@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * DTO for entities that can be edited by multiple users.
@@ -16,11 +17,13 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class DataDTO extends BaseDTO {
 	
+	@EqualsAndHashCode.Exclude
 	private Integer version;
 	
 	public DataDTO(Integer id, Integer version) {

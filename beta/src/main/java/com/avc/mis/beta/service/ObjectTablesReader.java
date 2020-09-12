@@ -131,7 +131,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO for all inventory Cashew.
 	 */
 	public Set<PoCodeDTO> findCashewInventoryPoCodes() {
-		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, SupplyGroup.GENERAL, null);		
+		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, SupplyGroup.CASHEW, null);		
 	}
 	
 	/**

@@ -30,4 +30,6 @@ public abstract class ContactEntity extends SubjectEntityWithId {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contactId", updatable = false)
 	private ContactDetails contactDetails;
+	
+	
 }

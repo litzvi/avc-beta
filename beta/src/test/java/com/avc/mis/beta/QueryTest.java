@@ -48,6 +48,7 @@ import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PO;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.InventoryReports;
 import com.avc.mis.beta.service.Loading;
@@ -273,6 +274,7 @@ public class QueryTest {
 	
 	@Test
 	void oneQueryTest() {
-		
+		List<BasicValueEntity<Item>> wasteItems = valueTablesReader.getItemsByCategry(ItemCategory.WASTE);
+		wasteItems.forEach(i->System.out.println(i));
 	}
 }

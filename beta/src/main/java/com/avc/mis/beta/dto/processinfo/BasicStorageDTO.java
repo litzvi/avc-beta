@@ -20,7 +20,7 @@ import lombok.NonNull;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class BasicStorageDTO extends ProcessDTO {
 
 	private Integer ordinal;

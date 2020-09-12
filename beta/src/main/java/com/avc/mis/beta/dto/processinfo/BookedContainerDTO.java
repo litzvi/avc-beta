@@ -20,7 +20,7 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class BookedContainerDTO extends ProcessDTO {
 	
 	String billNumber;

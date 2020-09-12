@@ -22,8 +22,8 @@ import lombok.ToString;
  *
  */
 @Data
-@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class ExtraAddedDTO extends StorageWithSampleDTO {
 	
 	public ExtraAddedDTO(Integer id, Integer version, Integer ordinal, AmountWithUnit unitAmount,

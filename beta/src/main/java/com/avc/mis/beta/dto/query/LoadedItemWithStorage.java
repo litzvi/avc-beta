@@ -21,7 +21,7 @@ import lombok.EqualsAndHashCode;
  *
  */
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class LoadedItemWithStorage extends ValueDTO {
 
 	private LoadedItemDTO loadedItem;

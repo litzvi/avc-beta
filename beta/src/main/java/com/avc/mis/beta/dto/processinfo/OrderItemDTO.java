@@ -32,7 +32,7 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class OrderItemDTO extends ProcessDTO {
 
 	BasicValueEntity<Item> item;

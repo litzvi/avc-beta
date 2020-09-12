@@ -29,7 +29,7 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class SampleItemDTO extends ProcessDTO {
 	
 	private BasicValueEntity<Item> item;

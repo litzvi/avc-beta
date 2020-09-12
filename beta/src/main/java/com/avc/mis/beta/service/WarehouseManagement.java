@@ -91,7 +91,9 @@ public class WarehouseManagement {
 				UsedItemsGroupDTO.getUsedItemsGroups(
 						getTransferRepository().findUsedItemsWithGroup(processId))
 				.stream().collect(Collectors.toSet()));
-		
+		//TODO
+		transferDTO.getUsedItemGroups().forEach(i -> System.out.println(i));
+
 		return transferDTO;
 	}
 	

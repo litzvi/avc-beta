@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
  *
  */
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ProcessItemWithStorage extends ValueDTO {
 	
 	private ProcessItemDTO processItem;
