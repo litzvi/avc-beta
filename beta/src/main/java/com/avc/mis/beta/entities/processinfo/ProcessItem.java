@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +29,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.avc.mis.beta.dto.processinfo.BasicStorageDTO;
+import com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO;
+import com.avc.mis.beta.dto.processinfo.StorageDTO;
 import com.avc.mis.beta.dto.processinfo.StorageTableDTO;
+import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
+import com.avc.mis.beta.dto.processinfo.UsedItemTableDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
@@ -77,7 +82,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	
 	@OneToOne(mappedBy = "processItem", orphanRemoval = true, 
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	private ItemCount sample;
+	private ItemCount itemCount;
 	
 	private String groupName;
 	
@@ -102,12 +107,63 @@ public class ProcessItem extends ProcessInfoEntity {
 	 * Setter for adding Storage forms for items that are processed, 
 	 * receives an array (which can be ordered, for later use to add an order to the items).
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
-	 * @param storageForms the storageForms to set
+	 * @param storageForms array of Storages to set
 	 */
 	public void setStorageForms(Storage[] storageForms) {
 		Ordinal.setOrdinals(storageForms);
 		this.storageForms = Insertable.setReferences(storageForms, (t) -> {t.setReference(this);	return t;});
 	}
+	
+	/**
+	 * Setter for adding Storage forms for items that are processed, 
+	 * receives an array (which can be ordered, for later use to add an order to the items).
+	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
+	 * @param storageForms array of StorageDTOs to set
+	 */
+	public void setStorageForms(UsedItemDTO[] usedItems) {
+		try {
+			setStorageForms((Storage[]) Arrays.stream(usedItems)
+					.map(i -> i.getStorage().getNewStorage(i.getNumberUnits(), i.getNewLocation()))
+					.toArray());
+		} catch (NullPointerException e) {
+			throw new NullPointerException("Used item storage is null");
+		}		
+	}
+	
+//	public void setStorage(UsedItemTableDTO usedItemTable) {
+//		this.tableView = true;
+//		
+//		List<BasicUsedStorageDTO> basicUsedStorages = usedItemTable.getAmounts();
+//		UsedItemDTO[] usedItems = new UsedItemDTO[basicUsedStorages.size()];
+//		
+//		for(int i=0; i<usedItems.length; i++) {
+//			BasicUsedStorageDTO basicUsedStorage = basicUsedStorages.get(i);
+//			usedItems[i] = new UsedItemDTO();
+//			usedItems[i].setId(basicUsedStorage.getId());
+//			usedItems[i].setVersion(basicUsedStorage.getVersion());
+//			Storage storage = new Storage();
+//			storage.setId(basicUsedStorage.getStorageId());
+//			storage.setVersion(basicUsedStorage.getStorageVersion());
+//			usedItems[i].setStorage(storage);
+//		}
+//
+//		MeasureUnit measureUnit = storageTable.getMeasureUnit();
+//		BigDecimal containerWeight = storageTable.getContainerWeight();
+//		Warehouse warehouse = storageTable.getWarehouseLocation();
+//		List<BasicStorageDTO> amounts = storageTable.getAmounts();
+//		Storage[] storageForms = new Storage[amounts.size()];
+//		for(int i=0; i<storageForms.length; i++) {
+//			BasicStorageDTO amount = amounts.get(i);
+//			storageForms[i] = new Storage();
+//			storageForms[i].setOrdinal(amount.getOrdinal());
+//			storageForms[i].setUnitAmount(new AmountWithUnit(amount.getAmount(), measureUnit));
+//			storageForms[i].setContainerWeight(containerWeight);
+//			storageForms[i].setWarehouseLocation(warehouse);
+//			storageForms[i].setReference(this);
+//		}
+//		setStorageForms(usedItems);
+//		
+//	}
 	
 	/**
 	 * Setter for adding list of Storage forms that share the same common measure unit, 

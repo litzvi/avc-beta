@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 @Table(name = "STORAGE_TRANSFERS")
 @PrimaryKeyJoinColumn(name = "processId")
 public class StorageTransfer extends TransactionProcess<ProcessItem> {
-
+	
 	@JsonIgnore
 	@Override
 	protected boolean canEqual(Object o) {

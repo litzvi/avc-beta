@@ -45,6 +45,11 @@ public class Warehouse extends ValueEntity implements ValueInterface {
 		this.value = value;
 	}
 	
+	public Warehouse(Integer id) {
+		super();
+		setId(id);
+	}
+	
 	public void setValue(String value) {
 		this.value = value.trim();
 	}

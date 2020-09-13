@@ -34,7 +34,7 @@ public class StorageDTO extends ProcessDTO implements Ordinal {
 	private String remarks;
 	private String className; //to differentiate between storage to ExtraAdded
 //	Class<? extends Storage> clazz;
-	
+		
 	public StorageDTO(Integer id, Integer version, Integer ordinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
@@ -99,6 +99,35 @@ public class StorageDTO extends ProcessDTO implements Ordinal {
 		this.remarks = remarks;
 		this.className = clazz.getSimpleName();
 	}
+	
+	/**
+	 * Gets a new Storage with all user set fields in the DTO (excluding id, version) 
+	 * with given numerUnits and new warehouse location.
+	 * @param numberUnits new storage number of units
+	 * @param newLocation the new warehouse location
+	 * @return Storage with all fields besides for the ones managed by the persistence context. 
+	 */
+	public Storage getNewStorage(BigDecimal numberUnits, Warehouse newLocation) {
+		Storage storage = new Storage();
+		setNewStorageFields(storage, numberUnits, newLocation);
+		return storage;
+	}
+	
+	/**
+	 * Receives a Storage and fills in all user set fields of this StorageDto
+	 * @param storage Storage to set with this dto's data
+	 * @param numberUnits new storage number of units
+	 * @param newLocation the new warehouse location
+	 */
+	protected void setNewStorageFields(Storage storage, BigDecimal numberUnits, Warehouse newLocation) {
+		storage.setOrdinal(this.ordinal);
+		storage.setUnitAmount(this.unitAmount);
+		storage.setContainerWeight(this.containerWeight);
+		storage.setNumberUnits(numberUnits);
+		storage.setWarehouseLocation(newLocation);
+	}
+
+	
 	
 	
 }

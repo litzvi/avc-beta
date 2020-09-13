@@ -79,5 +79,36 @@ public class StorageWithSampleDTO extends StorageDTO {
 				.subtract(getUnitAmount().getAmount())
 				.multiply(getNumberUnits()), getUnitAmount().getMeasureUnit());
 	}
+	
+	/**
+	 * Gets a new StorageWithSample with all user set fields in the DTO (excluding id, version)
+	 * @return StorageWithSample with all fields besides for the ones managed by the persistence context. 
+	 */
+	/**
+	 * Gets a new StorageWithSample with all user set fields in the DTO (excluding id, version) 
+	 * with given numerUnits and new warehouse location.
+	 * @param numberUnits new storage number of units
+	 * @param newLocation the new warehouse location
+	 * @return StorageWithSample with all fields besides for the ones managed by the persistence context. 
+	 */
+	@Override
+	public Storage getNewStorage(BigDecimal numberUnits, Warehouse newLocation) {
+		StorageWithSample storage = new StorageWithSample();
+		setNewStorageFields(storage, numberUnits, newLocation);
+		return storage;
+	}
+	
+	/**
+	 * Receives a StorageWithSample and fills in all user set fields of this StorageWithSampleDTO
+	 * @param storage StorageWithSample to set with this dto's data
+	 * @param numberUnits new storage number of units
+	 * @param newLocation the new warehouse location
+	 */
+	protected void setNewStorageFields(StorageWithSample storage, BigDecimal numberUnits, Warehouse newLocation) {
+		super.setNewStorageFields(storage, numberUnits, newLocation);
+		storage.setSampleContainerWeight(this.sampleContainerWeight);
+		storage.setNumberOfSamples(this.numberOfSamples);
+		storage.setAvgTestedWeight(this.avgTestedWeight);		
+	}
 
 }

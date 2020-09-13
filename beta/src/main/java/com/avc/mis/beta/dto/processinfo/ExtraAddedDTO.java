@@ -11,6 +11,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ExtraAdded;
 import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.processinfo.ExtraAdded;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
@@ -44,6 +45,20 @@ public class ExtraAddedDTO extends StorageWithSampleDTO {
 
 	public ExtraAddedDTO(ExtraAdded extraAdded) {
 		super(extraAdded);
+	}
+	
+	/**
+	 * Gets a new ExtraAdded with all user set fields in the DTO (excluding id, version) 
+	 * with given numerUnits and new warehouse location.
+	 * @param numberUnits new storage number of units
+	 * @param newLocation the new warehouse location
+	 * @return ExtraAdded with all fields besides for the ones managed by the persistence context. 
+	 */
+	@Override
+	public Storage getNewStorage(BigDecimal numberUnits, Warehouse newLocation) {
+		ExtraAdded storage = new ExtraAdded();
+		setNewStorageFields(storage, numberUnits, newLocation);
+		return storage;
 	}
 
 	

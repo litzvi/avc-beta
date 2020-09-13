@@ -96,7 +96,7 @@ public class AmountWithUnit implements Cloneable {
 			
 	@Override
 	public AmountWithUnit clone() {
-		return new AmountWithUnit(amount, measureUnit);
+		return new AmountWithUnit(this.amount, this.measureUnit);
 	}
 	
 //	public void setMeasureUnit(String measureUnit) {
@@ -143,6 +143,7 @@ public class AmountWithUnit implements Cloneable {
 		
 	}
 
+	
 	
 
 	

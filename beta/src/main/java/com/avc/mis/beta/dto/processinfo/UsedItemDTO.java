@@ -31,6 +31,8 @@ public class UsedItemDTO extends ProcessDTO {
 	private BasicValueEntity<Warehouse> warehouseLocation;
 	private BigDecimal containerWeight;	
 	
+	private Warehouse newLocation;
+	
 	public UsedItemDTO(Integer id, Integer version, BigDecimal numberUnits,
 			Integer itemId, String itemValue, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
