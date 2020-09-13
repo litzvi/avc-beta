@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class StorageDTO extends ProcessDTO implements Ordinal {
 

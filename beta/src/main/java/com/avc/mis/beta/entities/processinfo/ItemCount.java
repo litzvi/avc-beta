@@ -42,9 +42,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "SAMPLES")
+@Table(name = "ITEM_COUNTS")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Sample extends AuditedEntity {
+public class ItemCount extends AuditedEntity {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -60,16 +60,16 @@ public class Sample extends AuditedEntity {
 	private BigDecimal containerWeight;	
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "sample", orphanRemoval = true, 
+	@OneToMany(mappedBy = "itemCount", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@NotEmpty(message = "Sample has to contain at least one sampled amount")
-	private Set<SampledAmount> amounts;
+	private Set<CountAmount> amounts;
 	
-	public SampledAmount[] getAmounts() {
-		return this.amounts.toArray(new SampledAmount[this.amounts.size()]);
+	public CountAmount[] getAmounts() {
+		return this.amounts.toArray(new CountAmount[this.amounts.size()]);
 	}
 	
-	public void setAmounts(SampledAmount[] amounts) {
+	public void setAmounts(CountAmount[] amounts) {
 		Ordinal.setOrdinals(amounts);
 		this.amounts = Insertable.setReferences(amounts, (t) -> {t.setReference(this);	return t;});
 	}

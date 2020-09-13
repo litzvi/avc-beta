@@ -77,7 +77,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	
 	@OneToOne(mappedBy = "processItem", orphanRemoval = true, 
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	private Sample sample;
+	private ItemCount sample;
 	
 	private String groupName;
 	

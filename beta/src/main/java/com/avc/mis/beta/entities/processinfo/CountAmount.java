@@ -33,15 +33,15 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "SAMPLE_AMOUNTS")
+@Table(name = "COUNT_AMOUNTS")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class SampledAmount extends AuditedEntity implements Ordinal {
+public class CountAmount extends AuditedEntity implements Ordinal {
 
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "sampleId", nullable = false, updatable = false)
+	@JoinColumn(name = "itemCountId", nullable = false, updatable = false)
 	@NotNull
-	private Sample sample;
+	private ItemCount itemCount;
 	
 	@Column(nullable = false)
 	private Integer ordinal;
@@ -53,11 +53,11 @@ public class SampledAmount extends AuditedEntity implements Ordinal {
 	
 	@Override
 	public void setReference(Object referenced) {
-		if(referenced instanceof Sample) {
-			this.setSample((Sample)referenced);
+		if(referenced instanceof ItemCount) {
+			this.setItemCount((ItemCount)referenced);
 		}
 		else {
-			throw new ClassCastException("Referenced object isn't a sample");
+			throw new ClassCastException("Referenced object isn't an item count");
 		}		
 	}
 }
