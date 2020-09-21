@@ -120,7 +120,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param storageForms array of StorageDTOs to set
 	 */
-	public void setStorageForms(UsedItemDTO[] usedItems) {
+	public void setUsedItems(UsedItemDTO[] usedItems) {
 		try {
 			setStorageForms((Storage[]) Arrays.stream(usedItems)
 					.map(i -> i.getStorage().getNewStorage(i.getNumberUnits(), i.getNewLocation()))
