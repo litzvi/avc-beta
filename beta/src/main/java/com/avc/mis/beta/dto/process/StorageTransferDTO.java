@@ -16,6 +16,7 @@ import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.StorageTransfer;
+import com.avc.mis.beta.entities.processinfo.ItemCount;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
@@ -54,8 +55,10 @@ public class StorageTransferDTO extends TransactionProcessDTO {
 	
 	public StorageTransferDTO(@NonNull StorageTransfer transfer) {
 		super(transfer);
-		this.itemCounts = Arrays.stream(transfer.getItemCounts())
-				.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toSet());
+		ItemCount[] itemCounts = transfer.getItemCounts();
+		if(itemCounts != null)
+			this.itemCounts = Arrays.stream(itemCounts)
+					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toSet());
 
 	}
 	

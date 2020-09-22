@@ -1,11 +1,13 @@
 package com.avc.mis.beta;
 
 import static org.assertj.core.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +17,15 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageTransfer;
+import com.avc.mis.beta.entities.processinfo.CountAmount;
+import com.avc.mis.beta.entities.processinfo.ItemCount;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
@@ -40,6 +45,7 @@ public class TransferTest {
 	@Autowired WarehouseManagement warehouseManagement;
 	@Autowired ProcessInfoWriter processInfoWriter;
 	
+//	@Disabled
 	@Test
 	void transferTest() {
 		Receipt receipt = service.addBasicCashewReceipt();
@@ -69,7 +75,13 @@ public class TransferTest {
 //			System.out.println(processItem.getItem() + ", " + processItem.getStorageForms().length);
 //		}
 
-		warehouseManagement.addStorageTransfer(transfer);
+		try {
+			warehouseManagement.addStorageTransfer(transfer);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 				
 		//TODO check if usedItems exceeds inventory should fail
 		transfer = new StorageTransfer();
@@ -132,7 +144,86 @@ public class TransferTest {
 		}
 		transfer.setProcessItems(processItems);
 		warehouseManagement.addStorageTransfer(transfer);
+		
+		StorageTransferDTO expected;
+		try {
+			expected = new StorageTransferDTO(transfer);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+		StorageTransferDTO actual = warehouseManagement.getStorageTransfer(transfer.getId());
+		
+		assertEquals(expected, actual, "Failed test adding storageTransfer");
+		
+	}
+	
+//	@Disabled
+	@Test
+	void transferWithCountTest() {
+		Receipt receipt = service.addBasicCashewReceipt();
+		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
+		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
+		
+		StorageTransfer transfer = new StorageTransfer();
+		transfer.setPoCode(receipt.getPoCode());
+		transfer.setRecordedTime(OffsetDateTime.now());
+
+
+		//get inventory storages for transfer
+		List<ProcessItemInventory> poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
+		transfer.setUsedItemGroups(getUsedItemsGroups(poInventory));
+		transfer.setProcessItems(getProcessItems(poInventory));
+		transfer.setItemCounts(getItemCounts(poInventory));
+
+		warehouseManagement.addStorageTransfer(transfer);
+		
+		StorageTransferDTO expected;
+		try {
+			expected = new StorageTransferDTO(transfer);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+		StorageTransferDTO actual = warehouseManagement.getStorageTransfer(transfer.getId());
+		
+		assertEquals(expected, actual, "Failed test adding storageTransfer with counts");
 				
+	}
+
+	/**
+	 * @param poInventory
+	 * @return
+	 */
+	private ItemCount[] getItemCounts(List<ProcessItemInventory> poInventory) {
+		ItemCount[] itemCounts = new ItemCount[poInventory.size()];
+		CountAmount[] countAmounts;
+		for(int i=0; i<itemCounts.length; i++) {
+			//build item count
+			ProcessItemInventory processItemRow = poInventory.get(i);
+			itemCounts[i] = new ItemCount();
+			Item item = new Item();
+			item.setId(processItemRow.getItem().getId());
+			itemCounts[i].setItem(item);
+			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
+			StorageInventoryRow randStorage = storagesRows.get(0);
+			itemCounts[i].setMeasureUnit(randStorage.getUnitAmount().getMeasureUnit());
+			itemCounts[i].setContainerWeight(randStorage.getContainerWeight());
+			countAmounts = new CountAmount[storagesRows.size()];
+			int j=0;
+			for(StorageInventoryRow storageRow: storagesRows) {
+				countAmounts[j] = new CountAmount();
+				countAmounts[j].setAmount(storageRow.getUnitAmount().getAmount());
+				countAmounts[j].setOrdinal((storageRow.getOrdinal()));
+				
+				j++;
+			}
+			
+			itemCounts[i].setAmounts(countAmounts);
+		}
+		return itemCounts;
 	}
 
 	private UsedItemsGroup[] getUsedItemsGroups(List<ProcessItemInventory> poInventory) {

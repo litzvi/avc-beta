@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
@@ -62,8 +63,8 @@ public class StorageDTO extends ProcessDTO implements Ordinal {
 		super(storage.getId(), storage.getVersion());
 		this.ordinal = storage.getOrdinal();
 //		this.name = storage.getName();
-		this.unitAmount = storage.getUnitAmount().setScale(MeasureUnit.SCALE);
-		this.numberUnits = storage.getNumberUnits().setScale(MeasureUnit.SCALE);
+		this.unitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
+		this.numberUnits = Optional.ofNullable(storage.getNumberUnits()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		this.containerWeight = storage.getContainerWeight();
 		if(storage.getWarehouseLocation() != null) {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(

@@ -36,8 +36,10 @@ public class CountAmountDTO extends ProcessDTO implements Ordinal {
 	/**
 	 * @param i
 	 */
-	public CountAmountDTO(CountAmount i) {
-		// TODO Auto-generated constructor stub
+	public CountAmountDTO(CountAmount countAmount) {
+		super(countAmount.getId(), countAmount.getVersion());
+		this.ordinal = countAmount.getOrdinal();
+		this.amount = countAmount.getAmount();
 	}
 
 }
