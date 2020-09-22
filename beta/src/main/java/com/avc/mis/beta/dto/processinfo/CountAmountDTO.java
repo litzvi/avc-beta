@@ -9,6 +9,7 @@ import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.processinfo.CountAmount;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
@@ -30,6 +31,13 @@ public class CountAmountDTO extends ProcessDTO implements Ordinal {
 		super(id, version);
 		this.ordinal = ordinal;
 		this.amount = amount;
+	}
+
+	/**
+	 * @param i
+	 */
+	public CountAmountDTO(CountAmount i) {
+		// TODO Auto-generated constructor stub
 	}
 
 }

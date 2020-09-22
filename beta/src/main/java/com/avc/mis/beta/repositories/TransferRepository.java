@@ -1,12 +1,16 @@
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
+import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
+import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 
 public interface TransferRepository extends ProcessRepository<StorageTransfer>{
@@ -56,6 +60,22 @@ public interface TransferRepository extends ProcessRepository<StorageTransfer>{
 //				+ "and (pi is null or usedItem = producedItem) "
 			+ "group by usedItem ")
 	List<ItemTransactionDifference> findTransferDifferences(Integer processId);
+
+	@Query("select new com.avc.mis.beta.dto.query.ItemCountWithAmount( "
+			+ " i.id, i.version, "
+			+ "item.id, item.value, item.category, "
+			+ "i.measureUnit, i.containerWeight,"
+			+ "poCode.code, ct.code, ct.suffix, s.name, "
+			+ "count_amount.id, count_amount.version, count_amount.ordinal, count_amount.amount) "
+		+ "from ItemCount i "
+			+ "join i.item item "
+			+ "join i.process p "
+				+ "join p.poCode poCode "
+					+ "join poCode.contractType ct "
+					+ "join poCode.supplier s "
+			+ "join i.amounts count_amount "
+		+ "where p.id = :processId ")
+	List<ItemCountWithAmount> findItemCountWithAmount(int processId);
 
 	
 	//already in ProcessRepository

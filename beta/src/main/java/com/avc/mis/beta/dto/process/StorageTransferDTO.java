@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -36,6 +37,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class StorageTransferDTO extends TransactionProcessDTO {
 	
+	private Set<ItemCountDTO> itemCounts; //can use a SortedSet like ContactDetails to maintain order
+	
 	public StorageTransferDTO(Integer id, Integer version, Instant createdDate, String userRecording, Integer poCodeId,
 			String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName,
@@ -51,6 +54,9 @@ public class StorageTransferDTO extends TransactionProcessDTO {
 	
 	public StorageTransferDTO(@NonNull StorageTransfer transfer) {
 		super(transfer);
+		this.itemCounts = Arrays.stream(transfer.getItemCounts())
+				.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toSet());
+
 	}
 	
 	@Override

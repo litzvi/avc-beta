@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
+import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
@@ -91,9 +92,10 @@ public class WarehouseManagement {
 				UsedItemsGroupDTO.getUsedItemsGroups(
 						getTransferRepository().findUsedItemsWithGroup(processId))
 				.stream().collect(Collectors.toSet()));
-		//TODO
-		transferDTO.getUsedItemGroups().forEach(i -> System.out.println(i));
-
+		transferDTO.setItemCounts(
+				ItemCountDTO.getItemCounts(
+						getTransferRepository().findItemCountWithAmount(processId))
+				.stream().collect(Collectors.toSet()));
 		return transferDTO;
 	}
 	

@@ -80,10 +80,6 @@ public class ProcessItem extends ProcessInfoEntity {
 	@Column(nullable = false)
 	private boolean tableView = false;
 	
-	@OneToOne(mappedBy = "processItem", orphanRemoval = true, 
-			cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	private ItemCount itemCount;
-	
 	private String groupName;
 	
 	public void setGroupName(String groupName) {

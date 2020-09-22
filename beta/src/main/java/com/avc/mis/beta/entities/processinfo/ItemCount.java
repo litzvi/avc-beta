@@ -24,7 +24,9 @@ import javax.validation.constraints.NotNull;
 import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -44,13 +46,12 @@ import lombok.ToString;
 @Entity
 @Table(name = "ITEM_COUNTS")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class ItemCount extends AuditedEntity {
+public class ItemCount extends ProcessInfoEntity {
 	
-	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "processItemId", nullable = false, updatable = false)
-	@NotNull
-	private ProcessItem processItem;
+	@JoinColumn(name = "itemId", nullable = false)
+	@NotNull(message = "Item is mandatory")
+	private Item item;
 		
 	@Enumerated(EnumType.STRING)
 	@NotNull(message = "Measure unit required")
@@ -77,15 +78,5 @@ public class ItemCount extends AuditedEntity {
 	protected boolean canEqual(Object o) {
 		return Insertable.canEqualCheckNullId(this, o);
 	}
-	
-	@Override
-	public void setReference(Object referenced) {
-		if(referenced instanceof ProcessItem) {
-			this.setProcessItem((ProcessItem)referenced);
-		}
-		else {
-			throw new ClassCastException("Referenced object isn't a process item");
-		}		
-	}
-
+		
 }
