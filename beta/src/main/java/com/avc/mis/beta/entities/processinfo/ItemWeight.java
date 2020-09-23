@@ -17,7 +17,6 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
 import com.avc.mis.beta.entities.AuditedEntity;
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;
@@ -61,9 +60,9 @@ public class ItemWeight extends AuditedEntity {
 	@Positive(message = "Average tested weight has to be positive")
 	private BigDecimal avgTestedWeight;
 	
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 	
 	@Override
 	public void setReference(Object referenced) {

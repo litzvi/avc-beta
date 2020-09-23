@@ -15,7 +15,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ContactEntity;
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.values.City;
 
 import lombok.Data;
@@ -47,9 +46,9 @@ public class Address extends ContactEntity {
 		this.streetAddress = Optional.ofNullable(streetAddress).map(s -> s.trim()).orElse(null);
 	}
 	
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 	
 	
 	@Override

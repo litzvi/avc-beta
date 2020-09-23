@@ -11,7 +11,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.ContactEntity;
-import com.avc.mis.beta.entities.Insertable;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,9 +32,9 @@ public class Phone extends ContactEntity {
 	@NotBlank(message = "Phone number is mandatory")
 	private String value;
 	
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 	
 	public void setValue(String value) {
 		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);

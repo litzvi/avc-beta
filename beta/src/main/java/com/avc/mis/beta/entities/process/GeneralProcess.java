@@ -6,7 +6,6 @@ package com.avc.mis.beta.entities.process;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
-import java.time.OffsetTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +24,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.AuditedEntity;
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
@@ -91,10 +89,10 @@ public abstract class GeneralProcess extends AuditedEntity {
 	 * @return false if both this object's and given object's id is null 
 	 * or given object is not of the same class, otherwise returns true.
 	 */
-	@JsonIgnore
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	@JsonIgnore
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 		
 	/**
 	 * Creates the life cycle information

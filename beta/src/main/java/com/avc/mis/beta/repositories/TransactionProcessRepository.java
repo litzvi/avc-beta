@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.process.TransactionProcess;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
 
 /**
  * @author zvi

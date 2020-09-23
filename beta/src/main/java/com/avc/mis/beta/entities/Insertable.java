@@ -54,13 +54,13 @@ public interface Insertable {
 	 * @param o
 	 * @return false if o isn't an instance of T, or Id's aren't set for both entities.
 	 */
-	static <T extends Insertable> boolean canEqualCheckNullId(T t, Object o) {		
-		if(t.getClass().isInstance(o)) {
-			Insertable other = (Insertable) o;
-			return !(t.getId() == null && other.getId() == null);
-		}
-		return false;
-		
-	}
+//	static <T extends Insertable> boolean canEqualCheckNullId(T t, Object o) {		
+//		if(t.getClass().isInstance(o)) {
+//			Insertable other = (Insertable) o;
+//			return !(t.getId() == null && other.getId() == null);
+//		}
+//		return false;
+//		
+//	}
 	
 }

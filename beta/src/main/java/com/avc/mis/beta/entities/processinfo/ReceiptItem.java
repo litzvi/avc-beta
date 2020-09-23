@@ -18,7 +18,6 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
@@ -114,9 +113,9 @@ public class ReceiptItem extends ProcessItem {
 	 * @return false if both this object's and given object's id is null 
 	 * or given object is not of the same class, otherwise returns true.
 	 */
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 	
 	
 	

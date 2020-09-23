@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ValueEntity;
 
 import lombok.Data;
@@ -45,8 +44,8 @@ public class CompanyPosition extends ValueEntity {
 	 * @return false if both this object's and given object's id is null 
 	 * or given object is not of the same class, otherwise returns true.
 	 */
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 
 }

@@ -11,7 +11,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.ContactEntity;
-import com.avc.mis.beta.entities.Insertable;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,9 +36,9 @@ public class Email extends ContactEntity {
 		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
 	}
 	
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 	
 	@Override
 	public void setReference(Object referenced) {

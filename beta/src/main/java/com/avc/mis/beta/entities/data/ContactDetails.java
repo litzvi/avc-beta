@@ -117,9 +117,9 @@ public class ContactDetails extends LinkEntity {
 		return (PaymentAccount[])this.paymentAccounts.toArray(new PaymentAccount[this.paymentAccounts.size()]);
 	}
 
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 
 	@Override
 	public void setReference(Object referenced) {

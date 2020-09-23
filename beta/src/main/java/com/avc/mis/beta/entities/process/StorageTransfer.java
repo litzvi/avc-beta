@@ -40,7 +40,22 @@ public class StorageTransfer extends TransactionProcess<ProcessItem> {
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<ItemCount> itemCounts = new HashSet<>();
 
-
+	/**
+	 * Setter for adding items that are processed, 
+	 * receives an array (which can be ordered, for later use to add an order to the items).
+	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
+	 * @param processItems the processItems to set
+	 */
+	public void setProcessItems(ProcessItem[] processItems) {
+		super.setProcessItems(processItems);
+	}
+	
+	@NotEmpty(message = "Has to containe at least one destination-storage-item (process item)")
+	@Override
+	public ProcessItem[] getProcessItems() {
+		return super.getProcessItems();
+	}
+	
 	/**
 	 * Gets the list of Item counts as an array (can be ordered).
 	 * @return the itemCounts
@@ -59,11 +74,13 @@ public class StorageTransfer extends TransactionProcess<ProcessItem> {
 		this.itemCounts = Insertable.setReferences(itemCounts, (t) -> {t.setReference(this);	return t;});
 	}
 	
-	@JsonIgnore
-	@Override
-	protected boolean canEqual(Object o) {
-		return super.canEqual(o);
-	}
+	
+	
+//	@JsonIgnore
+//	@Override
+//	protected boolean canEqual(Object o) {
+//		return super.canEqual(o);
+//	}
 	
 	@Override
 	public String getProcessTypeDescription() {

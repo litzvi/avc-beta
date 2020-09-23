@@ -14,7 +14,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.entities.AuditedEntity;
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;
@@ -52,9 +51,9 @@ public class UsedItem extends AuditedEntity {
 	@Positive(message = "Number of units has to be positive")
 	private BigDecimal numberUnits = BigDecimal.ONE;	
 
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 	
 	@Override
 	public void setReference(Object referenced) {

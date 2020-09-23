@@ -10,7 +10,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.avc.mis.beta.validation.groups.OnPersist;
@@ -47,9 +46,9 @@ public class CompanyContact extends ObjectEntityWithId {
 	@JoinColumn(name = "positionId")
 	private CompanyPosition position;
 	
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 
 	/**
 	 * Sets the company reference

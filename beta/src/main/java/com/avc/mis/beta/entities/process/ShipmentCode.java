@@ -16,7 +16,6 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.values.ShippingPort;
 
 import lombok.Data;
@@ -33,7 +32,7 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
 @Entity
 @Table(name = "SHIPMENT_CODES")
@@ -73,7 +72,7 @@ public class ShipmentCode extends BaseEntity {
 	 * @param o
 	 * @return
 	 */
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 }

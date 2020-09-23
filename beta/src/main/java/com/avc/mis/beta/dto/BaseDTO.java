@@ -3,14 +3,12 @@
  */
 package com.avc.mis.beta.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * DTO's represent the information of the entities, to be presented and used.
@@ -30,30 +28,51 @@ import lombok.Setter;
  * @author Zvi
  *
  */
-@Data
+@Getter @Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class BaseDTO {
 	
-	@JsonIgnore
-	@Setter(AccessLevel.NONE)
 	@EqualsAndHashCode.Include
-	private DtoId dtoId = new DtoId();
-	
-	public BaseDTO(Integer id) {
-		super();
-		this.dtoId.setValue(id);	
+	private Integer id;
+
+	/**
+	 * When comparing two DTO objects of the same class: 
+	 * If they both have an ID, compares the id value with equals otherwise returns false.
+	 * Needed for testing; so when comparing a non persistent entity's dto (that dosen't have an id),
+	 * with the persisted dto (which contains an id) they could still be equal.
+	 * When both objects id's are null - both represent a non persistent entity - then returns true,
+	 * comparing the rest of the objects regularly.
+	 */
+	@Override 
+	public boolean equals(Object o) {
+	    if (o == this) return true;
+	    if (!(o instanceof BaseDTO)) return false;
+	    BaseDTO other = (BaseDTO) o;
+	    
+	    //Exclusively one is null so they are equal (objects with this id can equal)
+	    if(this.getId() == null ^ other.getId() == null) 
+	    	return true;
+	    
+	    if(this.getId() != null) { //both not null compare with id
+	    	return this.getId().equals(other.getId());
+	    }
+	    else { //both are null
+	    	return true;
+	    }
 	}
-
-	public Integer getId() {
-		return this.dtoId.getValue();
+	  
+	/**
+	 * Hash code can't depend on the field,
+	 * because any Object who's value is set, 
+	 * will be equal to an Object with null value.
+	 */
+	@Override 
+	public int hashCode() {
+	    final int PRIME = 59;
+		return PRIME;
 	}
-
-	public void setId(Integer id) {
-		this.dtoId.setValue(id);
-	}
-
-
-	
 
 
 }

@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.DataEntity;
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.values.Country;
 import com.avc.mis.beta.utilities.LocalDateToLong;
 import com.avc.mis.beta.validation.groups.OnPersist;
@@ -34,7 +33,7 @@ import lombok.ToString;
  */
 @Data
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="ID_INFORMATION")
 public class IdCard extends DataEntity {
@@ -74,9 +73,9 @@ public class IdCard extends DataEntity {
 			this.dateOfIssue = LocalDate.parse(dateOfIssue);
 	}
 	
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 	
 	@Override
 	public void setReference(Object referenced) {

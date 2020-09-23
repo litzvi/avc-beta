@@ -5,8 +5,6 @@ package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -20,20 +18,12 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import com.avc.mis.beta.dto.processinfo.BasicStorageDTO;
-import com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO;
-import com.avc.mis.beta.dto.processinfo.StorageDTO;
 import com.avc.mis.beta.dto.processinfo.StorageTableDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemTableDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
@@ -195,8 +185,8 @@ public class ProcessItem extends ProcessInfoEntity {
 	 * @return false if both this object's and given object's id is null 
 	 * or given object is not of the same class, otherwise returns true.
 	 */
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 	
 }

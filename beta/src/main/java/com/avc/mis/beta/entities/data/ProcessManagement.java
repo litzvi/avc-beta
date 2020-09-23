@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.LinkEntity;
 import com.avc.mis.beta.entities.ValueInterface;
 import com.avc.mis.beta.entities.enums.ManagementType;
@@ -58,9 +57,9 @@ public class ProcessManagement extends LinkEntity implements ValueInterface {
 		return managementType.toString();
 	}
 	
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 	
 	@Override
 	public void setReference(Object user) {

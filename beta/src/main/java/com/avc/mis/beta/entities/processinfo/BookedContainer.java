@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.AuditedEntity;
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.ShipmentBooking;
@@ -79,9 +78,9 @@ public class BookedContainer extends AuditedEntity {
 		return this.containerType.toString();
 	}
 	
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 	
 	@Override
 	public void setReference(Object referenced) {

@@ -40,15 +40,16 @@ public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProces
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@NotEmpty(message = "Has to containe at least one destination-storage-item (process item)")
-	private Set<ProcessItem> processItems = new HashSet<>();
-
+//	@NotEmpty(message = "Has to containe at least one destination-storage-item (process item)")
+	private Set<ProcessItem> processItems;
 
 	/**
 	 * Gets the list of Items as an array (can be ordered).
 	 * @return the processItems
 	 */
 	public ProcessItem[] getProcessItems() {
+		if(processItems == null)
+			return null;
 		return this.processItems.toArray(new ProcessItem[this.processItems.size()]);
 	}
 
@@ -58,7 +59,7 @@ public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProces
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param processItems the processItems to set
 	 */
-	public void setProcessItems(T[] processItems) {
+	protected void setProcessItems(T[] processItems) {
 		this.processItems = Insertable.setReferences(processItems, (t) -> {t.setReference(this);	return t;});
 	}
 }

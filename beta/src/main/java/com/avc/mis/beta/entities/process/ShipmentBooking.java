@@ -73,9 +73,9 @@ public class ShipmentBooking extends GeneralProcess {
 		this.bookedContainers = Insertable.setReferences(bookedContainers, (t) -> {t.setReference(this);	return t;});
 	}
 
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 	
 	@Override
 	public String getProcessTypeDescription() {

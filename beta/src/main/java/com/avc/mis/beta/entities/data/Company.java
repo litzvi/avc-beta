@@ -74,8 +74,8 @@ public class Company extends ObjectEntityWithIdAndName {
 		return this.contactDetails;
 	}
 		
-	protected boolean canEqual(Object o) {
-		return Insertable.canEqualCheckNullId(this, o);
-	}
+//	protected boolean canEqual(Object o) {
+//		return Insertable.canEqualCheckNullId(this, o);
+//	}
 
 }

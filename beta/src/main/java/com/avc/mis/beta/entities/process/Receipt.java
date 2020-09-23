@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
@@ -41,6 +42,7 @@ public class Receipt extends ProcessWithProduct<ReceiptItem> {
 	/**
 	 * @return array of ReceiptItem in desired order
 	 */
+	@NotEmpty(message = "Has to containe at least one received item")
 	public ReceiptItem[] getReceiptItems() {
 		ProcessItem[] processItems = super.getProcessItems();
 		return Arrays.copyOf(processItems, processItems.length, ReceiptItem[].class);
