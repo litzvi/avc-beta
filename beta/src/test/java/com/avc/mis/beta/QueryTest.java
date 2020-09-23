@@ -267,14 +267,20 @@ public class QueryTest {
 
 		List<PoRow> allCashewOrders = orders.findAllCashewOrders();
 		allCashewOrders.forEach(i -> System.out.println(i));
+		
+		List<BasicValueEntity<Item>> wasteItems = valueTablesReader.getItemsByCategry(ItemCategory.WASTE);
+		wasteItems.forEach(i->System.out.println(i));
+		
+		List<ProcessRow> transferRows = warehouseManagement.getStorageTransfersTable();
+		transferRows.forEach(i -> System.out.println(i));
 						
 		service.cleanup(po);
 
 	}
 	
 	@Test
-	void oneQueryTest() {
-		List<BasicValueEntity<Item>> wasteItems = valueTablesReader.getItemsByCategry(ItemCategory.WASTE);
-		wasteItems.forEach(i->System.out.println(i));
+	void oneQueryTest() {		
+		List<ProcessRow> transferRows = warehouseManagement.getStorageTransfersTable();
+		transferRows.forEach(i -> System.out.println(i.getCountDifference()!=null? i.getCountDifference()[0]:null));
 	}
 }

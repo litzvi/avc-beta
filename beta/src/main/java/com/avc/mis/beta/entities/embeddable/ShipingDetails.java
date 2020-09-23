@@ -59,6 +59,6 @@ public class ShipingDetails {
 	
 	public void setEta(String eta) {
 		if(eta != null)
-			this.etd = LocalDate.parse(eta);
+			this.eta = LocalDate.parse(eta);
 	}
 }

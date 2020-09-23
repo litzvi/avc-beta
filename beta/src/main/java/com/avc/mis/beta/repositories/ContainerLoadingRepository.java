@@ -19,7 +19,7 @@ import com.avc.mis.beta.entities.process.ContainerLoading;
  * @author zvi
  *
  */
-public interface ContainerLoadingRepository  extends ProcessRepository<ContainerLoading> {
+public interface ContainerLoadingRepository  extends TransactionProcessRepository<ContainerLoading> {
 
 	@Query("select new com.avc.mis.beta.dto.process.ContainerLoadingDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "

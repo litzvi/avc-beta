@@ -9,6 +9,7 @@ import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.CountAmount;
 import com.avc.mis.beta.entities.values.Warehouse;
 
@@ -39,7 +40,7 @@ public class CountAmountDTO extends ProcessDTO implements Ordinal {
 	public CountAmountDTO(CountAmount countAmount) {
 		super(countAmount.getId(), countAmount.getVersion());
 		this.ordinal = countAmount.getOrdinal();
-		this.amount = countAmount.getAmount();
+		this.amount = countAmount.getAmount().setScale(MeasureUnit.SCALE);
 	}
 
 }

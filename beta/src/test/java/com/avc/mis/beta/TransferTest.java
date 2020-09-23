@@ -209,13 +209,13 @@ public class TransferTest {
 			itemCounts[i].setItem(item);
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
 			StorageInventoryRow randStorage = storagesRows.get(0);
-			itemCounts[i].setMeasureUnit(randStorage.getUnitAmount().getMeasureUnit());
+			itemCounts[i].setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
 			itemCounts[i].setContainerWeight(randStorage.getContainerWeight());
 			countAmounts = new CountAmount[storagesRows.size()];
 			int j=0;
 			for(StorageInventoryRow storageRow: storagesRows) {
 				countAmounts[j] = new CountAmount();
-				countAmounts[j].setAmount(storageRow.getUnitAmount().getAmount());
+				countAmounts[j].setAmount(storageRow.getTotalBalance().getAmount());
 				countAmounts[j].setOrdinal((storageRow.getOrdinal()));
 				
 				j++;

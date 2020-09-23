@@ -1,6 +1,7 @@
 package com.avc.mis.beta.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,12 +18,15 @@ import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.dto.view.ProcessRow;
+import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.repositories.InventoryRepository;
+import com.avc.mis.beta.repositories.ProductionProcessRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
 
 import lombok.AccessLevel;
@@ -45,6 +49,26 @@ public class WarehouseManagement {
 	@Autowired private InventoryRepository inventoryRepository;
 	@Autowired private TransferRepository transferRepository;
 
+	
+	public List<ProcessRow> getStorageTransfersTable() {
+		List<ProcessRow> transferRows = getTransferRepository().findProcessByType(ProcessName.STORAGE_TRANSFER);
+		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getTransferRepository()
+				.findAllUsedItemsByProcessType(ProcessName.STORAGE_TRANSFER)
+				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		Map<Integer, List<ProductionProcessWithItemAmount>> producedMap = getTransferRepository()
+				.findAllProducedItemsByProcessType(ProcessName.STORAGE_TRANSFER)
+				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = getTransferRepository()
+				.findAllItemsCounts()
+				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		for(ProcessRow row: transferRows) {
+			row.setUsedItems(usedMap.get(row.getId()));
+			row.setProducedItems(producedMap.get(row.getId()));
+			row.setItemCounts(countMap.get(row.getId()));
+		}		
+		
+		return transferRows;
+	}
 
 	/**
 	 * Adding a record about a storage transfer process

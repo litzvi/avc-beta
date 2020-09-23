@@ -33,6 +33,7 @@ public class ProcessRow extends ValueDTO {
 	private List<ProductionProcessWithItemAmount> usedItems;
 	private List<ProductionProcessWithItemAmount> producedItems;
 		
+	private List<ProductionProcessWithItemAmount> itemCounts;
 	
 	public ProcessRow(@NonNull Integer id, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
@@ -45,8 +46,9 @@ public class ProcessRow extends ValueDTO {
 	}
 	
 	public AmountWithUnit[] getProcessGain() {
-//		if(getUsedItems() == null)
-//			return null;
+		if(getProducedItems() == null || getUsedItems() == null) {
+			return null;
+		}
 		AmountWithUnit usedAmounts = getUsedItems().stream()
 				.map(i -> i.getAmountWithUnit()[0])
 				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
@@ -59,4 +61,24 @@ public class ProcessRow extends ValueDTO {
 		processGain[1] = diff.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 		return processGain;
 	}
+	
+	public AmountWithUnit[] getCountDifference() {
+		if(getItemCounts() == null || getUsedItems() == null) {
+			return null;
+		}
+
+		AmountWithUnit usedAmounts = getUsedItems().stream()
+				.map(i -> i.getAmountWithUnit()[0])
+				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+		AmountWithUnit countAmounts = getItemCounts().stream()
+				.map(i -> i.getAmountWithUnit()[0])
+				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+		AmountWithUnit[] countDifference = new AmountWithUnit[2];
+		AmountWithUnit diff = countAmounts.substract(usedAmounts);
+		countDifference[0] = diff.setScale(MeasureUnit.SCALE);
+		countDifference[1] = diff.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
+		return countDifference;
+	}
+	
+	
 }

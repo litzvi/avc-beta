@@ -3,6 +3,7 @@ package com.avc.mis.beta.repositories;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
@@ -10,11 +11,24 @@ import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
+import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 
-public interface TransferRepository extends ProcessRepository<StorageTransfer>{
+public interface TransferRepository extends TransactionProcessRepository<StorageTransfer>{
 	
+	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
+			+ "t.id, item.id, item.value, "
+			+ "SUM((count_amount.amount - coalesce(item_count.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "item.measureUnit) "
+		+ "from StorageTransfer t "
+			+ "join t.itemCounts item_count "
+				+ "join item_count.item item "
+				+ "join item_count.amounts count_amount "
+					+ "join UOM uom "
+						+ "on uom.fromUnit = item_count.measureUnit and uom.toUnit = item.measureUnit "
+		+ "group by t, item ")
+	Stream<ProductionProcessWithItemAmount> findAllItemsCounts();
 
 	@Query("select new com.avc.mis.beta.dto.process.StorageTransferDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
