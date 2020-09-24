@@ -66,17 +66,5 @@ public class LoadedItemDTO extends ProcessDTO {
 		this.remarks = remarks;
 	}
 
-//	public static List<LoadedItemDTO> getLoadedItems(List<LoadedItemWithStorage> storages) {
-//		Map<Integer, List<LoadedItemWithStorage>> map = storages.stream()
-//				.collect(Collectors.groupingBy(LoadedItemWithStorage::getId, Collectors.toList()));
-//		List<LoadedItemDTO> loadedItems = new ArrayList<>();
-//		for(List<LoadedItemWithStorage> list: map.values()) {
-//			LoadedItemDTO loadedItem = list.get(0).getLoadedItem();
-//			loadedItem.setStorageForms(list.stream().map(i -> i.getStorage())
-//					.collect(Collectors.toCollection(() -> new TreeSet<StorageDTO>(Ordinal.ordinalComparator()))));
-//			loadedItems.add(loadedItem);
-//		}
-//		return loadedItems;
-//	}
-	
+
 }

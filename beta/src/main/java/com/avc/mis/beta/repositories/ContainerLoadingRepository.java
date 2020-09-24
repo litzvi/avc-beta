@@ -5,12 +5,13 @@ package com.avc.mis.beta.repositories;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
-import com.avc.mis.beta.dto.query.LoadedItemWithStorage;
+import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.process.ContainerLoading;
@@ -45,29 +46,22 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	 * @param processId id of the process
 	 * @return List of LoadedItemWithStorage
 	 */
-//	@Query("select new com.avc.mis.beta.dto.query.LoadedItemWithStorage( "
-//			+ " i.id, i.version, "
-//			+ "item.id, item.value, item.category, "
-//			+ "poCode.code, ct.code, ct.suffix, s.name, "
-//			+ "sf.id, sf.version, sf.ordinal, "
-//			+ "unit.amount, unit.measureUnit, sf.numberUnits, sf.containerWeight, "
-//			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
-//			+ "i.groupName, i.description, i.remarks, i.tableView, "
-//			+ "itemPoCode.code, ctItem.code, ctItem.suffix, sItem.name) "
-//		+ "from LoadedItem i "
-//			+ "join i.item item "
-//			+ "join i.process p "
-//				+ "join p.poCode poCode "
-//					+ "join poCode.contractType ct "
-//					+ "join poCode.supplier s "
-//			+ "join i.storageForms sf "
-//				+ "join sf.unitAmount unit "
-//				+ "left join sf.warehouseLocation warehouseLocation "
-//			+ "join i.poCode itemPoCode "
-//				+ "join itemPoCode.contractType ctItem "
-//				+ "join itemPoCode.supplier sItem "
-//		+ "where p.id = :processId ")
-//	List<LoadedItemWithStorage> findLoadedItemWithStorage(int processId);
+	@Query("select new com.avc.mis.beta.dto.processinfo.LoadedItemDTO( "
+			+ " i.id, i.version, "
+			+ "item.id, item.value, item.category, "
+			+ "poCode.code, ct.code, ct.suffix, s.name, "
+			+ "da.amount, da.measureUnit, "
+			+ "i.description, i.remarks) "
+		+ "from LoadedItem i "
+			+ "join i.item item "
+			+ "left join i.declaredAmount da "
+			+ "join i.process p "
+				+ "join p.poCode poCode "
+					+ "join poCode.contractType ct "
+					+ "join poCode.supplier s "
+		+ "where p.id = :processId ")
+	Set<LoadedItemDTO> findLoadedItems(int processId);
+
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
@@ -117,4 +111,5 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 				+ "join shipment_code.portOfDischarge pod ")
 	List<LoadingRow> findContainerLoadings();
 
+	
 }

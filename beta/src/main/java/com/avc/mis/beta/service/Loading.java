@@ -82,10 +82,7 @@ public class Loading {
 	public ContainerLoadingDTO getLoading(int processId) {
 		Optional<ContainerLoadingDTO> loading = getContainerLoadingRepository().findContainerLoadingDTOById(processId);
 		ContainerLoadingDTO loadingDTO = loading.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id"));
-//		loadingDTO.setLoadedItems(LoadedItemDTO
-//				.getLoadedItems(getContainerLoadingRepository()
-//						.findLoadedItemWithStorage(processId))
-//				.stream().collect(Collectors.toSet()));
+		loadingDTO.setLoadedItems(getContainerLoadingRepository().findLoadedItems(processId));
 		loadingDTO.setUsedItemGroups(
 				UsedItemsGroupDTO.getUsedItemsGroups(
 						getContainerLoadingRepository().findUsedItemsWithGroup(processId))
