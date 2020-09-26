@@ -165,7 +165,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 			+ "and (:checkCategories = false or item.category in :itemCategories)  "
 			+ "and (item.id = :itemId or :itemId is null)  "
 		+ "group by sf, sf.numberUnits "
-		+ "having (sf.numberUnits > sum(coalesce(ui.numberUnits, 0))) ")
+		+ "having (sf.numberUnits > sum(coalesce(ui.usedUnits, 0))) ")
 	Set<PoCodeDTO> findInventoryPoCodeByType(boolean checkCategories, ItemCategory[] itemCategories, SupplyGroup supplyGroup, Integer itemId);
 
 	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("

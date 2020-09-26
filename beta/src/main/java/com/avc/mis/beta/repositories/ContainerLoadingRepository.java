@@ -65,7 +65,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
-			+ "SUM((unit.amount * ui.numberUnits - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "SUM((unit.amount * ui.usedUnits - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit, function('GROUP_CONCAT', wh.value)) "
 		+ "from ContainerLoading p "
 //			+ "left join p.poCode po_code "

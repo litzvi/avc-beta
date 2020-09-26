@@ -25,7 +25,7 @@ public class UsedItemDTO extends ProcessDTO {
 	private BasicValueEntity<Item> item;
 	@EqualsAndHashCode.Exclude
 	private PoCodeDTO itemPo;
-	private BigDecimal numberUnits;
+	private BigDecimal usedUnits;
 
 	//for equals comparing - since storage is excluded
 	private Integer storageId;
@@ -44,14 +44,14 @@ public class UsedItemDTO extends ProcessDTO {
 	private Warehouse NewLocation;
 	
 	
-	public UsedItemDTO(Integer id, Integer version, BigDecimal numberUnits,
+	public UsedItemDTO(Integer id, Integer version, BigDecimal usedUnits,
 			Integer itemId, String itemValue, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
 		super(id, version);
-		this.numberUnits = numberUnits;
+		this.usedUnits = usedUnits;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		if(poCodeId != null)
 			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
@@ -74,7 +74,7 @@ public class UsedItemDTO extends ProcessDTO {
 
 	public UsedItemDTO(UsedItem usedItem) {
 		super(usedItem.getId(), usedItem.getVersion());
-		this.numberUnits = usedItem.getNumberUnits();
+		this.usedUnits = usedItem.getUsedUnits();
 		Storage storage = usedItem.getStorage();
 		ProcessItem processItem = storage.getProcessItem();
 		if(processItem != null) {

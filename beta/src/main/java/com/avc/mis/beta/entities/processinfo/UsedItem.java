@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "USED_ITEMS")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class UsedItem extends AuditedEntity {
+public class UsedItem extends UsedItemBase {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "groupId")
@@ -47,9 +47,9 @@ public class UsedItem extends AuditedEntity {
 	private Storage storage;
 	
 	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
-	@NotNull(message = "Number of units is required")
-	@Positive(message = "Number of units has to be positive")
-	private BigDecimal numberUnits = BigDecimal.ONE;	
+	@NotNull(message = "Used number of units is required")
+	@Positive(message = "Used number of units has to be positive")
+	private BigDecimal usedUnits = BigDecimal.ONE;	
 
 //	protected boolean canEqual(Object o) {
 //		return Insertable.canEqualCheckNullId(this, o);

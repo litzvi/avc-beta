@@ -109,7 +109,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	public void setUsedItems(UsedItemDTO[] usedItems) {
 		try {
 			setStorageForms((Storage[]) Arrays.stream(usedItems)
-					.map(i -> i.getStorage().getNewStorage(i.getNumberUnits(), i.getNewLocation()))
+					.map(i -> i.getStorage().getNewStorage(i.getUsedUnits(), i.getNewLocation()))
 					.toArray());
 		} catch (NullPointerException e) {
 			throw new NullPointerException("Used item storage is null");

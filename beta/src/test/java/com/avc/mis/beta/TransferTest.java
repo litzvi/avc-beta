@@ -238,7 +238,7 @@ public class TransferTest {
 				usedItems[j].setStorage(storage);
 				storage.setId(storagesRow.getId());
 				storage.setVersion(storagesRow.getVersion());
-				usedItems[j].setNumberUnits(storagesRow.getNumberUnits());
+				usedItems[j].setUsedUnits(storagesRow.getNumberUnits());
 				j++;
 			}
 			usedItemsGroups[i] = new UsedItemsGroup();

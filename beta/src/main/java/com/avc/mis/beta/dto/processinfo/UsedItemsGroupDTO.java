@@ -90,7 +90,7 @@ public class UsedItemsGroupDTO extends ProcessDTO {
 		AmountWithUnit totalAmount = usedItems.stream()
 				.map(ui -> ui.getStorage().getUnitAmount()
 						.substract(Optional.ofNullable(ui.getStorage().getContainerWeight()).orElse(BigDecimal.ZERO))
-						.multiply(ui.getNumberUnits()))
+						.multiply(ui.getUsedUnits()))
 				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
 		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
 				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
