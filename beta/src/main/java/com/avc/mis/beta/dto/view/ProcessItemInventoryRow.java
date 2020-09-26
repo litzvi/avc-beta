@@ -29,6 +29,7 @@ public class ProcessItemInventoryRow extends ValueDTO {
 
 	private ItemDTO item;
 	private PoCodeDTO poCode;
+	private OffsetDateTime processDate;
 	private OffsetDateTime receiptDate;
 	private AmountWithUnit[] totalBalance;
 	private String[] warehouses;
@@ -38,12 +39,13 @@ public class ProcessItemInventoryRow extends ValueDTO {
 	 */
 	public ProcessItemInventoryRow(Integer id, Integer itemId, String itemValue, ItemCategory itemCategory,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
-			OffsetDateTime receiptDate,
+			OffsetDateTime processDate, OffsetDateTime receiptDate,
 			BigDecimal totalStoredAmount, BigDecimal totalUsedAmount, MeasureUnit measureUnit,
 			String warehouses) {
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
+		this.processDate = processDate;
 		this.receiptDate = receiptDate;
 		this.totalBalance = new AmountWithUnit[2];
 		AmountWithUnit totalBalance = new AmountWithUnit(totalStoredAmount.subtract(totalUsedAmount), measureUnit);

@@ -16,7 +16,7 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "t.id, item.id, item.value, "
-			+ "SUM((count_amount.amount - coalesce(item_count.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "SUM((count_amount.amount - coalesce(item_count.containerWeight, 0)) * uom.multiplicand / uom.divisor) - coalesce(t.accessWeight, 0), "
 			+ "item.measureUnit) "
 		+ "from StorageTransfer t "
 			+ "join t.itemCounts item_count "
@@ -32,7 +32,8 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
+			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
+			+ "r.accessWeight) "
 		+ "from StorageTransfer r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType t "

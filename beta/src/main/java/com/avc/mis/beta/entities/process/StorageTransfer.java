@@ -1,9 +1,11 @@
 package com.avc.mis.beta.entities.process;
 
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -12,6 +14,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,6 +42,9 @@ public class StorageTransfer extends TransactionProcess<ProcessItem> {
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<ItemCount> itemCounts = new HashSet<>();
+	
+	@Column(precision = 19, scale = MeasureUnit.SCALE)
+	private BigDecimal accessWeight;
 
 	/**
 	 * Setter for adding items that are processed, 

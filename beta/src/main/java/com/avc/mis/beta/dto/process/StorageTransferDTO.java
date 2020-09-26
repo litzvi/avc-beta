@@ -1,5 +1,6 @@
 package com.avc.mis.beta.dto.process;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
@@ -35,17 +36,21 @@ import lombok.ToString;
 public class StorageTransferDTO extends TransactionProcessDTO {
 	
 	private Set<ItemCountDTO> itemCounts; //can use a SortedSet like ContactDetails to maintain order
+	private BigDecimal accessWeight;
+
 	
 	public StorageTransferDTO(Integer id, Integer version, Instant createdDate, String userRecording, Integer poCodeId,
 			String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName,
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
-			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
+			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals, 
+			BigDecimal accessWeight) {
 		super(id, version, createdDate, userRecording, poCodeId, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName,
 				processName, productionLine, recordedTime, startTime, endTime, duration, 
 				numOfWorkers, processStatus, editStatus, remarks, approvals);
+		this.accessWeight = accessWeight;
 	}
 	
 	
@@ -55,6 +60,7 @@ public class StorageTransferDTO extends TransactionProcessDTO {
 		if(itemCounts != null)
 			this.itemCounts = Arrays.stream(itemCounts)
 					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toSet());
+		this.accessWeight = transfer.getAccessWeight();
 
 	}
 	
