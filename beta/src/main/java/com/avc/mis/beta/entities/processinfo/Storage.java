@@ -87,7 +87,7 @@ public class Storage extends AuditedEntity implements Ordinal {
 	
 	@ToString.Exclude 
 	@OneToMany(mappedBy = "storage", fetch = FetchType.LAZY)
-	private Set<UsedItem> usedItems;
+	private Set<UsedItemBase> usedItems;
 
 	/**
 	 * Used by Lombok so new/transient entities with null id won't be equal.

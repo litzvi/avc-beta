@@ -9,6 +9,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -33,7 +34,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "USED_ITEMS")
-@Inheritance(strategy=InheritanceType.JOINED)
+@PrimaryKeyJoinColumn(name = "UsedItemBaseId")
 public class UsedItem extends UsedItemBase {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -41,16 +42,6 @@ public class UsedItem extends UsedItemBase {
 	@NotNull(message = "Used items have to belong to a group categery")
 	private UsedItemsGroup group;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "storageId")
-	@NotNull(message = "Internal error: Used item has no referance to storage")
-	private Storage storage;
-	
-	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
-	@NotNull(message = "Used number of units is required")
-	@Positive(message = "Used number of units has to be positive")
-	private BigDecimal usedUnits = BigDecimal.ONE;	
-
 //	protected boolean canEqual(Object o) {
 //		return Insertable.canEqualCheckNullId(this, o);
 //	}
