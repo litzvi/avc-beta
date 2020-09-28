@@ -85,11 +85,6 @@ public class StorageMove extends StorageBase {
 			throw new ClassCastException("Referenced object isn't a storage relocation");
 		}		
 	}
-	
-	@JsonIgnore
-	@PrePersist
-	public void setProcessItem() {
-		super.setProcessItem(getStorage().getProcessItem());
-	}
+
 
 }

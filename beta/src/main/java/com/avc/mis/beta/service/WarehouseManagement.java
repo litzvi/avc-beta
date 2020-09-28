@@ -1,9 +1,12 @@
 package com.avc.mis.beta.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
+import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessRow;
@@ -27,6 +31,9 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
+import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.processinfo.StorageBase;
+import com.avc.mis.beta.entities.processinfo.StorageMove;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
@@ -89,7 +96,16 @@ public class WarehouseManagement {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addStorageRelocation(StorageRelocation relocation) {
 		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
-		dao.addRelocationProcessEntity(relocation);
+		StorageMove[] storageMoves = relocation.getStorageMoves();
+		Map<Integer, StorageBase> storageMap = getRelocationRepository().findStoragesById(
+				Arrays.stream(storageMoves)
+				.mapToInt(sm -> sm.getStorage().getId())
+				.toArray())
+				.collect(Collectors.toMap(StorageBase::getId, Function.identity()));
+		for(StorageMove move: storageMoves) {
+			move.setProcessItem(storageMap.get(move.getStorage().getId()).getProcessItem());
+		}
+		dao.addGeneralProcessEntity(relocation);
 		//check if storage moves match the amounts of the used item
 		checkRelocationBalance(relocation);
 	}
@@ -99,8 +115,12 @@ public class WarehouseManagement {
 	 * @param relocation
 	 */
 	private void checkRelocationBalance(StorageRelocation relocation) {
-		List<ProcessItemTransactionDifference> differences = getRelocationRepository().findRelocationDifferences(relocation.getId());
+		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageMoveBalances(relocation.getId());
+		if(!storageBalances.allMatch(b -> b.isLegal())) {
+			throw new IllegalArgumentException("Process used item amounts relocated exceed actual amount in inventory");
+		}
 		
+		List<ProcessItemTransactionDifference> differences = getRelocationRepository().findRelocationDifferences(relocation.getId());		
 		for(ProcessItemTransactionDifference d: differences) {
 			if(d.getDifference().signum() != 0) {
 				dao.sendMessageAlerts(relocation, "Relocated process items don't have matching amounts");
@@ -108,7 +128,7 @@ public class WarehouseManagement {
 		}
 		
 	}
-
+	
 	private void checkTransferBalance(StorageTransfer transfer) {
 		List<ItemTransactionDifference> differences = getTransferRepository().findTransferDifferences(transfer.getId());
 		
@@ -151,6 +171,14 @@ public class WarehouseManagement {
 	public void editStorageTransfer(StorageTransfer transfer) {
 		//check used items amounts don't exceed the storage amounts
 		dao.editTransactionProcessEntity(transfer);
+		checkTransferBalance(transfer);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editStorageRelocation(StorageRelocation relocation) {
+		//check used items amounts don't exceed the storage amounts
+		dao.editGeneralProcessEntity(relocation);
+		checkRelocationBalance(relocation);
 	}
 	
 //	//need to make sure currently in inventory - used for test

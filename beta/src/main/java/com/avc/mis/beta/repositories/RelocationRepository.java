@@ -4,11 +4,15 @@
 package com.avc.mis.beta.repositories;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.entities.process.StorageRelocation;
+import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.processinfo.StorageBase;
 
 /**
  * @author zvi
@@ -39,5 +43,10 @@ public interface RelocationRepository extends ProcessRepository<StorageRelocatio
 		+ "where p.id = :processId "
 		+ "group by pi ")
 	List<ProcessItemTransactionDifference> findRelocationDifferences(Integer processId);
+
+	@Query("select s "
+		+ "from Storage s "
+		+ "where s.id in :storageIds ")
+	Stream<Storage> findStoragesById(int[] storageIds);
 
 }

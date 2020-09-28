@@ -87,15 +87,17 @@ public class ProcessInfoDAO extends DAO {
 		}
 	}
 	
-	public void addRelocationProcessEntity(StorageRelocation process) {
-		addGeneralProcessEntity(process);
-		//check used items amounts () don't exceed the storage amounts
-		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageMoveBalances(process.getId());
-		if(!storageBalances.allMatch(b -> b.isLegal())) {
-			throw new IllegalArgumentException("Process used item amounts relocated exceed actual amount in inventory");
-		}
-	}
-	
+//	public void addRelocationProcessEntity(StorageRelocation process) {
+//		addGeneralProcessEntity(process);
+//		//check used items amounts () don't exceed the storage amounts
+//		checkRelocationBalance(process);
+//	}
+//	
+//	public  void editRelocationProcessEntity(StorageRelocation process) {
+//		editGeneralProcessEntity(process);
+//		checkRelocationBalance(process);
+//	}
+		
 	/**
 	 * Checks if for given array used items, used item storages total don't exceed storage amounts.
 	 * Checks only for storages that where used by given UsedItems.
@@ -147,7 +149,7 @@ public class ProcessInfoDAO extends DAO {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
 	}
-	
+		
 	/**
 	 * Sets up needed approvals and messages (notifications), for adding a process of the given type.
 	 * @param process the new GeneralProcess

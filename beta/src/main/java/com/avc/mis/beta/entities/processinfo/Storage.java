@@ -61,6 +61,12 @@ public class Storage extends StorageBase implements Ordinal {
 
 	@Column(nullable = false)
 	private Integer ordinal;
+	
+	@Override
+	@Null(message = "Internal error: Used item has to be null for storage class")
+	public Storage getStorage() {
+		return super.getStorage();
+	}
 		
 	@Override
 	@Null(message = "Internal error: Used units has to be null for storage class")
