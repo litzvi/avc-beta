@@ -23,6 +23,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.process.PoCode;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
@@ -44,11 +45,11 @@ import lombok.ToString;
 public class LoadedItem extends ProcessInfoEntity {
 	
 	
-	@ToString.Exclude
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "loadingId", nullable = false, updatable = false)
-	@NotNull
-	private ContainerLoading loading;
+//	@ToString.Exclude
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "loadingId", nullable = false, updatable = false)
+//	@NotNull
+//	private ContainerLoading loading;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "itemId", nullable = false)
@@ -72,13 +73,13 @@ public class LoadedItem extends ProcessInfoEntity {
 	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
 	private AmountWithUnit declaredAmount;	
 	
-	/**
-	 * Used by Lombok so new/transient entities with null id won't be equal.
-	 * @param o
-	 * @return false if both this object's and given object's id is null 
-	 * or given object is not of the same class, otherwise returns true.
-	 */
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof ContainerLoading) {
+			this.setProcess((ContainerLoading)referenced);
+		}
+		else {
+			throw new ClassCastException("Referenced object isn't a container loading process");
+		}		
+	}
 }

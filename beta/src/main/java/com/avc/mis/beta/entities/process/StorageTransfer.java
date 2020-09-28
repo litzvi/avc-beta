@@ -38,14 +38,6 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "processId")
 public class StorageTransfer extends TransactionProcess<ProcessItem> {
 	
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "process", orphanRemoval = true, 
-		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	private Set<ItemCount> itemCounts = new HashSet<>();
-	
-	@Column(precision = 19, scale = MeasureUnit.SCALE)
-	private BigDecimal accessWeight;
-
 	/**
 	 * Setter for adding items that are processed, 
 	 * receives an array (which can be ordered, for later use to add an order to the items).
@@ -62,23 +54,6 @@ public class StorageTransfer extends TransactionProcess<ProcessItem> {
 		return super.getProcessItems();
 	}
 	
-	/**
-	 * Gets the list of Item counts as an array (can be ordered).
-	 * @return the itemCounts
-	 */
-	public ItemCount[] getItemCounts() {
-		return this.itemCounts.toArray(new ItemCount[this.itemCounts.size()]);
-	}
-
-	/**
-	 * Setter for adding item counts, 
-	 * receives an array (which can be ordered, for later use to add an order to the item counts).
-	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
-	 * @param itemCounts the itemCounts to set
-	 */
-	public void setItemCounts(ItemCount[] itemCounts) {
-		this.itemCounts = Insertable.setReferences(itemCounts, (t) -> {t.setReference(this);	return t;});
-	}
 	
 	
 	

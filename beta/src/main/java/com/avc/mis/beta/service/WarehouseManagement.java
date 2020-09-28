@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
+import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessRow;
@@ -24,8 +25,10 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.repositories.InventoryRepository;
+import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
 
 import lombok.AccessLevel;
@@ -47,6 +50,7 @@ public class WarehouseManagement {
 	
 	@Autowired private InventoryRepository inventoryRepository;
 	@Autowired private TransferRepository transferRepository;
+	@Autowired private RelocationRepository relocationRepository;
 
 	
 	public List<ProcessRow> getStorageTransfersTable() {
@@ -81,9 +85,30 @@ public class WarehouseManagement {
 		checkTransferBalance(transfer);
 	}
 	
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addStorageRelocation(StorageRelocation relocation) {
+		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
+		dao.addRelocationProcessEntity(relocation);
+		//check if storage moves match the amounts of the used item
+		checkRelocationBalance(relocation);
+	}
+	
+	
 	/**
-	 * @param id
+	 * @param relocation
 	 */
+	private void checkRelocationBalance(StorageRelocation relocation) {
+		List<ProcessItemTransactionDifference> differences = getRelocationRepository().findRelocationDifferences(relocation.getId());
+		
+		for(ProcessItemTransactionDifference d: differences) {
+			if(d.getDifference().signum() != 0) {
+				dao.sendMessageAlerts(relocation, "Relocated process items don't have matching amounts");
+			}
+		}
+		
+	}
+
 	private void checkTransferBalance(StorageTransfer transfer) {
 		List<ItemTransactionDifference> differences = getTransferRepository().findTransferDifferences(transfer.getId());
 		

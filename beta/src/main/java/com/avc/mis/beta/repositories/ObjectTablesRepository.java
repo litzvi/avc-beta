@@ -154,7 +154,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 					+ "join poCode.contractType ct "
 					+ "join poCode.supplier s "
 			+ "join p.lifeCycle lc "
-			+ "join pi.storageForms sf "
+			+ "join pi.allStorags sf "
 //				+ "join sf.numberUnits sfNumberUnits"
 				+ "join sf.unitAmount unit "
 					+ "join UOM uom "
@@ -165,7 +165,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 			+ "and (:checkCategories = false or item.category in :itemCategories)  "
 			+ "and (item.id = :itemId or :itemId is null)  "
 		+ "group by sf, sf.numberUnits "
-		+ "having (sf.numberUnits > sum(coalesce(ui.usedUnits, 0))) ")
+		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) ")
 	Set<PoCodeDTO> findInventoryPoCodeByType(boolean checkCategories, ItemCategory[] itemCategories, SupplyGroup supplyGroup, Integer itemId);
 
 	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("

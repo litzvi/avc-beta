@@ -49,6 +49,8 @@ public class ProductionProcessWithItemAmount extends ValueDTO {
 			BigDecimal amount, MeasureUnit measureUnit) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+		System.out.println(amount);
+		assert amount != null;
 		AmountWithUnit amountWithUnit = new AmountWithUnit(amount, measureUnit);
 		this.amountWithUnit = new AmountWithUnit[] {
 				amountWithUnit,

@@ -5,12 +5,14 @@ package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
@@ -20,6 +22,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Where;
 
 import com.avc.mis.beta.dto.processinfo.BasicStorageDTO;
 import com.avc.mis.beta.dto.processinfo.StorageTableDTO;
@@ -39,6 +43,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Represents an Item that the process adds to stock. perhaps name should be changed to InItem/ImportItem/AddedItem
@@ -60,10 +65,16 @@ public class ProcessItem extends ProcessInfoEntity {
 	private Item item;
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "processItem", orphanRemoval = true, 
+	@OneToMany(mappedBy = "processItem", targetEntity=StorageBase.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@Where(clause = "dtype = 'Storage'")
 //	@NotEmpty(message = "Process line has to contain at least one storage line") //made a bug when using merge for persisting ProcessItem
 	private Set<Storage> storageForms;
+	
+	@JsonIgnore
+	@ToString.Exclude 
+	@OneToMany(mappedBy = "processItem", fetch = FetchType.LAZY)
+	private Set<StorageBase> allStorags;
 	
 	@Setter(value = AccessLevel.NONE) 
 	@JsonIgnore
@@ -109,7 +120,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	public void setUsedItems(UsedItemDTO[] usedItems) {
 		try {
 			setStorageForms((Storage[]) Arrays.stream(usedItems)
-					.map(i -> i.getStorage().getNewStorage(i.getUsedUnits(), i.getNewLocation()))
+					.map(i -> i.getStorage().getNewStorage(i.getNumberUsedUnits(), i.getNewLocation()))
 					.toArray());
 		} catch (NullPointerException e) {
 			throw new NullPointerException("Used item storage is null");

@@ -32,7 +32,7 @@ public class StorageInventoryRow  extends SubjectDataDTO {
 	BigDecimal numberUnits;	
 	BigDecimal containerWeight;
 	BasicValueEntity<Warehouse> warehouseLocation;
-	BigDecimal usedUnits;
+	BigDecimal numberUsedUnits;
 	AmountWithUnit totalBalance;
 	
 	/**
@@ -42,7 +42,7 @@ public class StorageInventoryRow  extends SubjectDataDTO {
 			Integer processItemId,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
-			BigDecimal usedUnits, 
+			BigDecimal numberUsedUnits, 
 			BigDecimal totalBalance, MeasureUnit totalBalanceMU) {
 		super(id, version, ordinal);
 		this.processItemId = processItemId;
@@ -53,7 +53,7 @@ public class StorageInventoryRow  extends SubjectDataDTO {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else
 			this.warehouseLocation = null;
-		this.usedUnits = usedUnits;
+		this.numberUsedUnits = numberUsedUnits;
 		this.totalBalance = new AmountWithUnit(totalBalance, totalBalanceMU);
 	}
 	
@@ -63,14 +63,14 @@ public class StorageInventoryRow  extends SubjectDataDTO {
 	public StorageInventoryRow(Integer id, Integer version, Integer ordinal,
 			Integer processItemId, AmountWithUnit unitAmount, BigDecimal containerWeight,
 			BigDecimal numberUnits, BasicValueEntity<Warehouse> warehouseLocation, 
-			BigDecimal usedUnits, AmountWithUnit totalBalance) {
+			BigDecimal numberUsedUnits, AmountWithUnit totalBalance) {
 		super(id, version, ordinal);
 		this.processItemId = processItemId;
 		this.unitAmount = unitAmount;
 		this.numberUnits = numberUnits;
 		this.containerWeight = containerWeight;
 		this.warehouseLocation = warehouseLocation;
-		this.usedUnits = usedUnits;
+		this.numberUsedUnits = numberUsedUnits;
 		this.totalBalance = totalBalance;
 	}
 }

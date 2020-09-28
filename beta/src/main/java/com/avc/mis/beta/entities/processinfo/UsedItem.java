@@ -30,17 +30,34 @@ import lombok.NoArgsConstructor;
  *
  */
 @Data
-@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "USED_ITEMS")
 @PrimaryKeyJoinColumn(name = "UsedItemBaseId")
 public class UsedItem extends UsedItemBase {
 	
+	public UsedItem() {
+		super();
+		super.setNumberUsedUnits(BigDecimal.ONE);
+	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "groupId")
 	@NotNull(message = "Used items have to belong to a group categery")
 	private UsedItemsGroup group;
+	
+	@Override
+	@NotNull(message = "Internal error: Used item has no referance to storage")
+	public Storage getStorage() {
+		return super.getStorage();
+	}
+	
+	@Override
+	@NotNull(message = "Used number of units is required")
+	@Positive(message = "Used number of units has to be positive")
+	public BigDecimal getNumberUsedUnits() {
+		return super.getNumberUsedUnits();
+	}
 	
 //	protected boolean canEqual(Object o) {
 //		return Insertable.canEqualCheckNullId(this, o);

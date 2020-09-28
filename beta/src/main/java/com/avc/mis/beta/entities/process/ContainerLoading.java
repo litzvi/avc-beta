@@ -47,7 +47,7 @@ import lombok.Setter;
 public class ContainerLoading extends TransactionProcess<ProcessItem> {
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "loading", orphanRemoval = true, 
+	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@NotEmpty(message = "Loaded item line has to contain at least one storage line")
 	private Set<LoadedItem> loadedItems;
@@ -80,11 +80,11 @@ public class ContainerLoading extends TransactionProcess<ProcessItem> {
 		return this.loadedItems.toArray(new LoadedItem[this.loadedItems.size()]);
 	}
 	
-	@JsonIgnore
-	@Override
-	protected boolean canEqual(Object o) {
-		return super.canEqual(o);
-	}
+//	@JsonIgnore
+//	@Override
+//	protected boolean canEqual(Object o) {
+//		return super.canEqual(o);
+//	}
 	
 	@Override
 	public String getProcessTypeDescription() {

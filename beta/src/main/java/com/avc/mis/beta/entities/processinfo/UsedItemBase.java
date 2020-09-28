@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
@@ -42,13 +43,10 @@ public abstract class UsedItemBase extends AuditedEntity {
 
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "storageId")
-	@NotNull(message = "Internal error: Used item has no referance to storage")
+	@JoinColumn(name = "storageId", updatable = false) //can't update so to not confuse the processItem of a storageMove
 	private Storage storage;
 	
-	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
-	@NotNull(message = "Used number of units is required")
-	@Positive(message = "Used number of units has to be positive")
-	private BigDecimal usedUnits = BigDecimal.ONE;	
+	@Column(precision = 19, scale = MeasureUnit.SCALE)
+	private BigDecimal numberUsedUnits;	
 
 }

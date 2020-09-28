@@ -25,6 +25,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
+import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
@@ -83,6 +84,15 @@ public class ProcessInfoDAO extends DAO {
 		//check used items amounts () don't exceed the storage amounts
 		if(!isInventorySufficiant(process.getId())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+		}
+	}
+	
+	public void addRelocationProcessEntity(StorageRelocation process) {
+		addGeneralProcessEntity(process);
+		//check used items amounts () don't exceed the storage amounts
+		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageMoveBalances(process.getId());
+		if(!storageBalances.allMatch(b -> b.isLegal())) {
+			throw new IllegalArgumentException("Process used item amounts relocated exceed actual amount in inventory");
 		}
 	}
 	

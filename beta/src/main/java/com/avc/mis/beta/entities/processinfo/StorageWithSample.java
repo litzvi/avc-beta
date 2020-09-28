@@ -33,7 +33,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "STORAGE_SAMPLE")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@PrimaryKeyJoinColumn(name = "storageId")
+@PrimaryKeyJoinColumn(name = "storageFormId")
 public class StorageWithSample extends Storage {
 
 	@Column(precision = 19, scale = MeasureUnit.SCALE)

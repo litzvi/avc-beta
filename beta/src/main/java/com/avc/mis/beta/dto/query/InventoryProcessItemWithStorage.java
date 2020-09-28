@@ -40,7 +40,7 @@ public class InventoryProcessItemWithStorage {
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
-			BigDecimal usedUnits, 
+			BigDecimal numberUsedUnits, 
 			BigDecimal totalBalance, MeasureUnit totalBalanceMU) {
 
 		this.processItemInventoryRow = new ProcessItemInventory(
@@ -52,7 +52,7 @@ public class InventoryProcessItemWithStorage {
 				processItemId,
 				unitAmount, measureUnit, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue,
-				usedUnits, 
+				numberUsedUnits, 
 				totalBalance, totalBalanceMU); 
 	}
 

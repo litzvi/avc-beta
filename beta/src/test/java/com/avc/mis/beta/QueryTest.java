@@ -280,7 +280,14 @@ public class QueryTest {
 	
 	@Test
 	void oneQueryTest() {		
-		List<ProcessRow> transferRows = warehouseManagement.getStorageTransfersTable();
+		List<ProcessRow> transferRows;
+		try {
+			transferRows = warehouseManagement.getStorageTransfersTable();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		transferRows.forEach(i -> System.out.println(i.getCountDifference()!=null? i.getCountDifference()[0]:null));
 	}
 }

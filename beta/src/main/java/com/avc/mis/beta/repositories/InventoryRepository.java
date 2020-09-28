@@ -40,8 +40,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, sf.containerWeight, "
 			+ "sto.id, sto.value, "
-			+ "sum(coalesce(ui.usedUnits, 0)), "
-			+ "(unit.amount * (sf.numberUnits - SUM(coalesce(ui.usedUnits, 0))) * uom.multiplicand / uom.divisor), "
+			+ "sum(coalesce(ui.numberUsedUnits, 0)), "
+			+ "(unit.amount * (sf.numberUnits - SUM(coalesce(ui.numberUsedUnits, 0))) * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit) "
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
@@ -50,7 +50,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "join poCode.contractType ct "
 					+ "join poCode.supplier s "
 			+ "join p.lifeCycle lc "
-			+ "join pi.storageForms sf "
+			+ "join pi.allStorags sf "
 				+ "join sf.unitAmount unit "
 					+ "join UOM uom "
 						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
@@ -62,7 +62,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (item.id = :itemId or :itemId is null) "
 			+ "and (poCode.code = :poCodeId or :poCodeId is null) "
 		+ "group by sf "
-		+ "having (sf.numberUnits > sum(coalesce(ui.usedUnits, 0))) "
+		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) "
 		+ "order by pi.id, sf.ordinal ")
 	List<InventoryProcessItemWithStorage> findInventoryProcessItemWithStorage(
 			boolean checkCategories, ItemCategory[] itemCategories, 
@@ -75,7 +75,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "p.recordedTime, r.recordedTime, "
 			+ "SUM((unit.amount - coalesce(sf.containerWeight, 0)) * sf.numberUnits * uom.multiplicand / uom.divisor), "
-			+ "SUM((unit.amount - coalesce(sf.containerWeight, 0)) * coalesce(ui.usedUnits, 0) * uom.multiplicand / uom.divisor), "
+			+ "SUM((unit.amount - coalesce(sf.containerWeight, 0)) * coalesce(ui.numberUsedUnits, 0) * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit, "
 			+ "function('GROUP_CONCAT', sto.value)) "
 		+ "from ProcessItem pi "
@@ -87,7 +87,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "join Receipt r "
 						+ "on r.poCode = poCode "
 			+ "join p.lifeCycle lc "
-			+ "join pi.storageForms sf "
+			+ "join pi.allStorags sf "
 				+ "join sf.unitAmount unit "
 					+ "join UOM uom "
 						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
@@ -103,23 +103,23 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ " from sf.usedItems usedStorage) "
 				+ "or "
 				+ "(sf.numberUnits > "
-				+ "(select sum(coalesce(usedStorage.usedUnits, 0)) "
+				+ "(select sum(coalesce(usedStorage.numberUsedUnits, 0)) "
 				+ " from sf.usedItems usedStorage))) "
 		+ "group by pi "
 //		+ "having (SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) "
-//			+ "> SUM(unit.amount * coalesce(ui.usedUnits, 0) * uom.multiplicand / uom.divisor)) "
+//			+ "> SUM(unit.amount * coalesce(ui.numberUsedUnits, 0) * uom.multiplicand / uom.divisor)) "
 		+ "order by poCode, item ")
 	List<ProcessItemInventoryRow> findInventoryProcessItemRows(
 			boolean checkCategories, ItemCategory[] itemCategories, SupplyGroup supplyGroup, Integer itemId, Integer poCodeId);
 
 	
 	/**
-	 * Gets the storage balance for the given array of storage entity objects.
-	 * @param storages array of storages ids
+	 * Gets the storage balance for storages used by the given process.
+	 * @param processId id of the process
 	 * @return Stream of StorageBalance
 	 */
 	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
-			+ "s.id, s.numberUnits, sum(ui.usedUnits) ) "
+			+ "s.id, s.numberUnits, sum(ui.numberUsedUnits) ) "
 			+ "from TransactionProcess p "
 				+ "join p.usedItemGroups grp "
 					+ "join grp.usedItems i "
@@ -128,6 +128,17 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "where p.id = :processId "
 			+ "group by s ")
 	Stream<StorageBalance> findStorageBalances(Integer processId);
+
+
+	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
+			+ "s.id, s.numberUnits, sum(ui.numberUsedUnits) ) "
+			+ "from StorageRelocation p "
+				+ "join p.storageMoves storageMove "
+					+ "join storageMove.storage s "
+						+ "left join s.usedItems ui "
+			+ "where p.id = :processId "
+			+ "group by s ")
+	Stream<StorageBalance> findStorageMoveBalances(Integer processId);
 
 
 	
@@ -170,7 +181,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 ////					+ "join UOM uom "
 ////						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
 //		+ "where lc.status = com.avc.mis.beta.entities.enums.RecordStatus.FINAL and "
-//			+ "sf.numberUnits > coalesce((select sum(ui.usedUnits) from UsedItem ui where ui.storage = sf group by ui.storage), 0) and "
+//			+ "sf.numberUnits > coalesce((select sum(ui.numberUsedUnits) from UsedItem ui where ui.storage = sf group by ui.storage), 0) and "
 //			+ "(item.supplyGroup = :supplyGroup or :supplyGroup is null) and "
 //			+ "(item.id = :itemId or :itemId is null) and "
 //			+ "(poCode.code = :poCodeId or :poCodeId is null) "
@@ -194,8 +205,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 //	@Query("select new com.avc.mis.beta.dto.query.StorageInventoryRow( "
 //			+ "sf.id, sf.version, pi.id, unit.amount, unit.measureUnit, sf.numberUnits, "
 //			+ "sto.id, sto.value, "
-//			+ "ui.usedUnits, "
-//			+ "SUM(unit.amount * (sf.numberUnits - coalesce(ui.usedUnits, 0)) * uom.multiplicand / uom.divisor), "
+//			+ "ui.numberUsedUnits, "
+//			+ "SUM(unit.amount * (sf.numberUnits - coalesce(ui.numberUsedUnits, 0)) * uom.multiplicand / uom.divisor), "
 //			+ "item.measureUnit) "
 //		+ "from ProcessItem pi "
 //			+ "join pi.item item "
@@ -208,7 +219,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 //		+ "where (item.supplyGroup = :supplyGroup or :supplyGroup is null) and "
 //			+ "(pi.id in :processItemIds or coalesce(:processItemIds, null) is null ) "
 //		+ "group by sf "
-//		+ "having (ui.usedUnits is null or sf.numberUnits > sum(ui.numberUnits))")
+//		+ "having (ui.numberUsedUnits is null or sf.numberUnits > sum(ui.numberUnits))")
 //	List<StorageInventoryRow> findInventoryStorage(SupplyGroup supplyGroup, List<Integer> processItemIds);
 
 }

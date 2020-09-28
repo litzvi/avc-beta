@@ -49,7 +49,7 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 
 	@Query("select new com.avc.mis.beta.dto.query.ItemTransactionDifference("
 				+ "usedItem.id, usedItem.value, "
-				+ "SUM(used_unit.amount * used_sf.numberUnits * uom_used.multiplicand / uom_used.divisor), "
+				+ "SUM(used_unit.amount * used_sf.numberUsedUnits * uom_used.multiplicand / uom_used.divisor), "
 				+ "usedItem.measureUnit, "
 				+ "SUM(producedUnit.amount * sf.numberUnits * uom_produced.multiplicand / uom_produced.divisor), "
 				+ "usedItem.measureUnit) "
@@ -67,7 +67,7 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 					+ "left join pi.storageForms sf "
 						+ "left join sf.unitAmount producedUnit "
 						+ "left join UOM uom_produced "
-							+ "on uom_produced.fromUnit = pi.item.measureUnit and uom_produced.toUnit = usedItem.measureUnit "
+							+ "on uom_produced.fromUnit = producedUnit.measureUnit and uom_produced.toUnit = usedItem.measureUnit "
 			+ "where p.id = :processId "
 //				+ "and (pi is null or usedItem = producedItem) "
 			+ "group by usedItem ")
@@ -86,7 +86,8 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 					+ "join poCode.contractType ct "
 					+ "join poCode.supplier s "
 			+ "join i.amounts count_amount "
-		+ "where p.id = :processId ")
+		+ "where p.id = :processId "
+		+ "order by i, count_amount.ordinal ")
 	List<ItemCountWithAmount> findItemCountWithAmount(int processId);
 
 	

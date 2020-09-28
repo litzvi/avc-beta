@@ -23,7 +23,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "EXTRA_ADDED")
-@PrimaryKeyJoinColumn(name = "storageId")
+@PrimaryKeyJoinColumn(name = "storageFormId")
 public class ExtraAdded extends StorageWithSample {
 
 }
