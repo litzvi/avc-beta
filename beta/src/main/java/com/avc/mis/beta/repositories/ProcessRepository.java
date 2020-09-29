@@ -42,11 +42,12 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "left join sf.warehouseLocation warehouseLocation "
 				+ "join sf.processItem pi "
 					+ "join pi.item item "
+					+ "join pi.process used_p "
+						+ "join used_p.poCode itemPo "
+							+ "left join itemPo.contractType ct "
+							+ "left join itemPo.supplier s "
 			+ "join i.group grp "
 				+ "join grp.process p "
-					+ "join p.poCode itemPo "
-						+ "left join itemPo.contractType ct "
-						+ "left join itemPo.supplier s "
 		+ "where p.id = :processId ")
 	Set<UsedItemDTO> findUsedItems(int processId);
 	
@@ -63,11 +64,12 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "left join sf.warehouseLocation warehouseLocation "
 				+ "join sf.processItem pi "
 					+ "join pi.item item "
+					+ "join pi.process used_p "
+						+ "join used_p.poCode itemPo "
+							+ "left join itemPo.contractType ct "
+							+ "left join itemPo.supplier s "
 			+ "join i.group grp "
 				+ "join grp.process p "
-					+ "join p.poCode itemPo "
-						+ "left join itemPo.contractType ct "
-						+ "left join itemPo.supplier s "
 		+ "where p.id = :processId ")
 	List<UsedItemWithGroup> findUsedItemsWithGroup(int processId);
 	

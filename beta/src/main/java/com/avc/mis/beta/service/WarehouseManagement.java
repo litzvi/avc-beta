@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
@@ -31,7 +32,6 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
-import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.StorageBase;
 import com.avc.mis.beta.entities.processinfo.StorageMove;
 import com.avc.mis.beta.repositories.InventoryRepository;
@@ -69,7 +69,7 @@ public class WarehouseManagement {
 				.findAllProducedItemsByProcessType(ProcessName.STORAGE_TRANSFER)
 				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = getTransferRepository()
-				.findAllItemsCounts()
+				.findAllItemsCounts(ProcessName.STORAGE_TRANSFER)
 				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		for(ProcessRow row: transferRows) {
 			row.setUsedItems(usedMap.get(row.getId()));
@@ -78,6 +78,22 @@ public class WarehouseManagement {
 		}		
 		
 		return transferRows;
+	}
+	
+	public List<ProcessRow> getStorageRelocationTable() {
+		List<ProcessRow> relocationRows = getRelocationRepository().findProcessByType(ProcessName.STORAGE_RELOCATION);
+		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getRelocationRepository()
+				.findAllMovedItemsByProcessType()
+				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = getRelocationRepository()
+				.findAllItemsCounts(ProcessName.STORAGE_RELOCATION)
+				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		for(ProcessRow row: relocationRows) {
+			row.setUsedItems(usedMap.get(row.getId()));
+			row.setItemCounts(countMap.get(row.getId()));
+		}		
+		
+		return relocationRows;
 	}
 
 	/**
@@ -165,6 +181,18 @@ public class WarehouseManagement {
 						getTransferRepository().findItemCountWithAmount(processId))
 				.stream().collect(Collectors.toSet()));
 		return transferDTO;
+	}
+	
+	public StorageRelocationDTO getStorageRelocation(int processId) {
+		Optional<StorageRelocationDTO> relocation = getRelocationRepository().findRelocationDTOByProcessId(processId);
+		StorageRelocationDTO relocationDTO = relocation.orElseThrow(
+				()->new IllegalArgumentException("No storage relocation with given process id"));
+		relocationDTO.setStorageMoves(getRelocationRepository().findStorageMoveDTOsByProcessId(processId));
+		relocationDTO.setItemCounts(
+				ItemCountDTO.getItemCounts(
+						getTransferRepository().findItemCountWithAmount(processId))
+				.stream().collect(Collectors.toSet()));
+		return relocationDTO;
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

@@ -274,20 +274,16 @@ public class QueryTest {
 		List<ProcessRow> transferRows = warehouseManagement.getStorageTransfersTable();
 		transferRows.forEach(i -> System.out.println(i));
 						
+		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocationTable();
+		relocationRows.forEach(i -> System.out.println(i));
+		
 		service.cleanup(po);
 
 	}
 	
 	@Test
 	void oneQueryTest() {		
-		List<ProcessRow> transferRows;
-		try {
-			transferRows = warehouseManagement.getStorageTransfersTable();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
-		transferRows.forEach(i -> System.out.println(i.getCountDifference()!=null? i.getCountDifference()[0]:null));
+		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocationTable();
+		relocationRows.forEach(i -> System.out.println(i));
 	}
 }

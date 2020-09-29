@@ -11,7 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -23,13 +22,11 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.process.PoCode;
-import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /**
  * Item line of container loading. 

@@ -15,7 +15,9 @@ import com.avc.mis.beta.entities.process.TransactionProcess;
  * @author zvi
  *
  */
-public interface TransactionProcessRepository<T extends TransactionProcess<?>> extends ProcessRepository<T> {
+public interface TransactionProcessRepository<T extends TransactionProcess<?>> extends PoProcessRepository<T> {
+	
+	
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "

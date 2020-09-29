@@ -18,6 +18,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
@@ -77,17 +78,17 @@ public class RelocationTest {
 			throw e;
 		}
 		
-//		StorageTransferDTO expected;
-//		try {
-//			expected = new StorageTransferDTO(relocation);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			throw e;
-//		}
-//		StorageTransferDTO actual = warehouseManagement.getStorageTransfer(relocation.getId());
-//		
-//		assertEquals(expected, actual, "Failed test adding storageTransfer with counts");
+		StorageRelocationDTO expected;
+		try {
+			expected = new StorageRelocationDTO(relocation);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+		StorageRelocationDTO actual = warehouseManagement.getStorageRelocation(relocation.getId());
+		
+		assertEquals(expected, actual, "Failed test adding storageRelocation with Counts");
 				
 	}
 	

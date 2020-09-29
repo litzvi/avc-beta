@@ -4,26 +4,18 @@
 package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
-import java.util.Set;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.entities.AuditedEntity;
-import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

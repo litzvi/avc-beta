@@ -3,11 +3,14 @@
  */
 package com.avc.mis.beta.dto.process;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.util.Set;
 
+import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -31,6 +34,10 @@ import lombok.NonNull;
 public abstract class PoProcessDTO extends GeneralProcessDTO {
 	
 	private PoCodeDTO poCode;
+	
+	private Set<ItemCountDTO> itemCounts; //can use a SortedSet like ContactDetails to maintain order
+	private BigDecimal accessWeight;
+
 		
 	public PoProcessDTO(Integer id, Integer version, Instant createdDate, String staffRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 

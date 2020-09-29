@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.entities.process;
 
-import java.util.Arrays;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -24,8 +23,6 @@ import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.processinfo.LoadedItem;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.Storage;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;

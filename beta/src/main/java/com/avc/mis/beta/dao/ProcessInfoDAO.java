@@ -25,7 +25,6 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
-import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.UserMessage;

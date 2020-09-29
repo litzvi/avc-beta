@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.entities.process;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,7 +12,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;

@@ -13,8 +13,6 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -26,8 +24,6 @@ import javax.validation.constraints.Positive;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.avc.mis.beta.entities.AuditedEntity;
-import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Warehouse;

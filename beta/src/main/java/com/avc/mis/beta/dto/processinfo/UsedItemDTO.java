@@ -3,15 +3,10 @@ package com.avc.mis.beta.dto.processinfo;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import com.avc.mis.beta.dto.ProcessDTO;
-import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
@@ -19,19 +14,10 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UsedItemDTO extends ProcessDTO {
+public class UsedItemDTO extends UsedItemBaseDTO {
 
-	@EqualsAndHashCode.Exclude
-	private BasicValueEntity<Item> item;
-	@EqualsAndHashCode.Exclude
-	private PoCodeDTO itemPo;
-	private BigDecimal numberUsedUnits;
-
-	//for equals comparing - since storage is excluded
-	private Integer storageId;
-	@EqualsAndHashCode.Exclude
-	private StorageDTO storage;
-
+	
+	//storage information - for easier access
 	@EqualsAndHashCode.Exclude
 	private Integer ordinal;	
 	@EqualsAndHashCode.Exclude
@@ -50,17 +36,12 @@ public class UsedItemDTO extends ProcessDTO {
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
-		super(id, version);
-		this.numberUsedUnits = numberUsedUnits;
-		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		if(poCodeId != null)
-			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
-		else
-			this.itemPo = null;
-		this.storageId = storageId;
-		this.storage = new StorageDTO(storageId, stoageVersion, storageOrdinal, 
-				unitAmount, measureUnit, storageNumberUnits, containerWeight, warehouseLocationId, warehouseLocationValue, 
-				storageRemarks, null);
+		super(id, version, numberUsedUnits,
+				itemId, itemValue, 
+				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
+				storageId, stoageVersion, storageOrdinal,
+				unitAmount, measureUnit, storageNumberUnits, containerWeight,
+				warehouseLocationId,  warehouseLocationValue, storageRemarks);
 
 		this.ordinal = storageOrdinal;
 		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
@@ -73,17 +54,10 @@ public class UsedItemDTO extends ProcessDTO {
 	}
 
 	public UsedItemDTO(UsedItem usedItem) {
-		super(usedItem.getId(), usedItem.getVersion());
-		this.numberUsedUnits = usedItem.getNumberUsedUnits();
-		Storage storage = usedItem.getStorage();
-		ProcessItem processItem = storage.getProcessItem();
-		if(processItem != null) {
-			this.item = new BasicValueEntity<Item>(processItem.getItem());
-			this.itemPo = new PoCodeDTO((processItem.getProcess()).getPoCode());
-		}
-		this.storageId = storage.getId();
-		this.storage = new StorageDTO(storage);
+		super(usedItem);
 
+		StorageDTO storage = getStorage();
+		
 		this.ordinal = storage.getOrdinal();
 		this.unitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		if(storage.getWarehouseLocation() != null) {

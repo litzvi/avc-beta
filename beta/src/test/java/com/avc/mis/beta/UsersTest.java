@@ -24,7 +24,7 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.Role;
-import com.avc.mis.beta.repositories.ProcessInfoRepository;
+import com.avc.mis.beta.repositories.PoProcessRepository;
 import com.avc.mis.beta.security.UserDetailsServiceImp;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.ProcessInfoReader;
@@ -55,7 +55,7 @@ public class UsersTest {
 	
 	@Autowired private UserDetailsServiceImp userDetailsServiceImp;
 	
-	@Autowired private ProcessInfoRepository processRepository;
+	@Autowired private PoProcessRepository processRepository;
 	
 
 	
