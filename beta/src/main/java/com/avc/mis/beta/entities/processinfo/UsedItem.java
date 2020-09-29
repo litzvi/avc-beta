@@ -41,7 +41,7 @@ public class UsedItem extends UsedItemBase {
 	
 	@Override
 	@NotNull(message = "Internal error: Used item has no referance to storage")
-	public Storage getStorage() {
+	public StorageBase getStorage() {
 		return super.getStorage();
 	}
 	

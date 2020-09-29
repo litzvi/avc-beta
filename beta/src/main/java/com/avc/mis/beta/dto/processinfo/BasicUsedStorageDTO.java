@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.processinfo.StorageBase;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
 
 import lombok.Data;
@@ -45,7 +46,7 @@ public class BasicUsedStorageDTO extends ProcessDTO {
 
 	public BasicUsedStorageDTO(@NonNull UsedItem usedItem) {
 		super(usedItem.getId(), usedItem.getVersion());
-		Storage storage = usedItem.getStorage();
+		StorageBase storage = usedItem.getStorage();
 		this.storageId = storage.getId();
 		this.storageVersion = storage.getVersion();
 		this.ordinal = storage.getOrdinal();

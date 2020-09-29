@@ -12,6 +12,7 @@ import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.processinfo.StorageBase;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
@@ -23,7 +24,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StorageDTO extends ProcessDTO implements Ordinal {
+public class StorageBaseDTO extends ProcessDTO implements Ordinal {
 
 	private Integer ordinal;
 //	private String name;
@@ -35,7 +36,7 @@ public class StorageDTO extends ProcessDTO implements Ordinal {
 	private String className; //to differentiate between storage to ExtraAdded
 //	Class<? extends Storage> clazz;
 		
-	public StorageDTO(Integer id, Integer version, Integer ordinal,
+	public StorageBaseDTO(Integer id, Integer version, Integer ordinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String remarks, Class<? extends Storage> clazz) {
@@ -58,7 +59,7 @@ public class StorageDTO extends ProcessDTO implements Ordinal {
 	 * @param id
 	 * @param version
 	 */
-	public StorageDTO(Storage storage) {
+	public StorageBaseDTO(StorageBase storage) {
 		super(storage.getId(), storage.getVersion());
 		this.ordinal = storage.getOrdinal();
 //		this.name = storage.getName();
@@ -85,7 +86,7 @@ public class StorageDTO extends ProcessDTO implements Ordinal {
 	 * @param warehouseLocation2
 	 * @param description
 	 */
-	public StorageDTO(Integer id, Integer version, Integer ordinal,
+	public StorageBaseDTO(Integer id, Integer version, Integer ordinal,
 			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz) {
 		super(id, version);

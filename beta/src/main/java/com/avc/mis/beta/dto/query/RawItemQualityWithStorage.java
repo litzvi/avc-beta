@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
-import com.avc.mis.beta.dto.processinfo.StorageDTO;
+import com.avc.mis.beta.dto.processinfo.StorageBaseDTO;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.Storage;
@@ -23,7 +23,7 @@ import lombok.Data;
 public class RawItemQualityWithStorage {
 	
 	private RawItemQualityDTO rawItemQuality;
-	private StorageDTO storage;
+	private StorageBaseDTO storage;
 
 	public RawItemQualityWithStorage(Integer id, Integer version,
 			Integer itemId, String itemValue, 
@@ -33,7 +33,7 @@ public class RawItemQualityWithStorage {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks,
 			String description, String remarks, Class<? extends Storage> clazz,
-			BigInteger wholeCountPerLb, BigInteger smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
+			BigInteger wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
 			BigDecimal foreignMaterial, BigDecimal humidity, BigDecimal testa,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, BigDecimal shrivel, BigDecimal desert,
 			BigDecimal deepSpot, BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 
@@ -51,7 +51,7 @@ public class RawItemQualityWithStorage {
 				deepSpot, mold, dirty, lightDirty, decay, insectDamage,
 				roastingWeightLoss,
 				colour, flavour);
-		this.storage = new StorageDTO(storageId, storageVersion, ordinal, 
+		this.storage = new StorageBaseDTO(storageId, storageVersion, ordinal, 
 				unitAmount, measureUnit, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 	}

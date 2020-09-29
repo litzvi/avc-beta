@@ -45,7 +45,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	
 	@JsonIgnore
 	private boolean tableView;
-	private SortedSet<StorageDTO> storageForms;
+	private SortedSet<StorageBaseDTO> storageForms;
 	
 	private AmountWithUnit[] totalAmount;
 	
@@ -75,7 +75,7 @@ public class ProcessItemDTO extends ProcessDTO {
 		this.tableView = processItem.isTableView();
 		
 		setStorageForms(Arrays.stream(processItem.getStorageForms())
-				.map(i->{return new StorageDTO(i);})
+				.map(i->{return new StorageBaseDTO(i);})
 				.collect(Collectors.toList()));
 
 		
@@ -91,7 +91,7 @@ public class ProcessItemDTO extends ProcessDTO {
 		this.remarks = remarks;
 	}
 	
-	public void setStorageForms(Collection<StorageDTO> storageForms) {
+	public void setStorageForms(Collection<StorageBaseDTO> storageForms) {
 		this.storageForms = new TreeSet<>(Ordinal.ordinalComparator());
 		this.storageForms.addAll(storageForms);
 		this.totalAmount = new AmountWithUnit[2];
@@ -104,7 +104,7 @@ public class ProcessItemDTO extends ProcessDTO {
 		this.totalAmount[1] = totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 	}
 	
-	public Set<StorageDTO> getStorageForms() {
+	public Set<StorageBaseDTO> getStorageForms() {
 		if(tableView) {
 			return null;
 		}

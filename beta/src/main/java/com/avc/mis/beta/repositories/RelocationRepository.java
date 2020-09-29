@@ -78,7 +78,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 			+ "used_sf.id, used_sf.version, used_sf.ordinal,"
 			+ "used_unit.amount, used_unit.measureUnit, used_sf.numberUnits, used_sf.containerWeight, "
 			+ "used_warehouseLocation.id, used_warehouseLocation.value, used_sf.remarks, "
-			+ "unit.amount, unit.measureUnit, m.numberUnits, m.containerWeight,"
+			+ "m.ordinal, unit.amount, unit.measureUnit, m.numberUnits, m.containerWeight,"
 			+ "warehouseLocation.id, warehouseLocation.value, type(m)) "
 		+ "from StorageMove m "
 			+ "join m.storage used_sf "

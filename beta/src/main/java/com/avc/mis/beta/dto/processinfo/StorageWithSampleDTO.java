@@ -24,7 +24,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class StorageWithSampleDTO extends StorageDTO {
+public class StorageWithSampleDTO extends StorageBaseDTO {
 
 	private BigDecimal sampleContainerWeight;	
 	private BigInteger numberOfSamples;	

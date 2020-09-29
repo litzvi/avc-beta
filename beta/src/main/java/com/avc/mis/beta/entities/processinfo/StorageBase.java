@@ -24,6 +24,7 @@ import javax.validation.constraints.Positive;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -47,9 +48,14 @@ import lombok.ToString;
 //@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @PrimaryKeyJoinColumn(name = "usedItemBaseId")
 @DiscriminatorColumn
-public abstract class StorageBase extends UsedItemBase {
+public abstract class StorageBase extends UsedItemBase implements Ordinal {
 	
+	@JsonIgnore
 	private String dtype;
+	
+	@Column(nullable = false)
+	private Integer ordinal;
+
 
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)

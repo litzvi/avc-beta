@@ -68,7 +68,7 @@ public class UsedItemsGroupDTO extends ProcessDTO {
 			this.usedItems.stream().findAny().ifPresent(s -> {
 				usedItemTable.setItem(s.getItem());
 				usedItemTable.setItemPo(s.getItemPo());
-				StorageDTO storage = s.getStorage();
+				StorageBaseDTO storage = s.getStorage();
 				usedItemTable.setMeasureUnit(storage.getUnitAmount().getMeasureUnit());
 				usedItemTable.setContainerWeight(storage.getContainerWeight());
 				BasicValueEntity<Warehouse> warehouse = storage.getWarehouseLocation();
@@ -76,7 +76,7 @@ public class UsedItemsGroupDTO extends ProcessDTO {
 					usedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 			});
 			List<BasicUsedStorageDTO> used = this.usedItems.stream().map((s) -> {
-				StorageDTO storage = s.getStorage();
+				StorageBaseDTO storage = s.getStorage();
 				return new BasicUsedStorageDTO(s.getId(), s.getVersion(), 
 						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getUnitAmount().getAmount());
 			}).collect(Collectors.toList());

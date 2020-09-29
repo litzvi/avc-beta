@@ -56,7 +56,7 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 	public UsedItemDTO(UsedItem usedItem) {
 		super(usedItem);
 
-		StorageDTO storage = getStorage();
+		StorageBaseDTO storage = getStorage();
 		
 		this.ordinal = storage.getOrdinal();
 		this.unitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);

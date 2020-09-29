@@ -28,19 +28,17 @@ import lombok.EqualsAndHashCode;
 @Table(name = "STORAGE_FORMS")
 //@Inheritance(strategy=InheritanceType.JOINED)
 //@PrimaryKeyJoinColumn(name = "storageBaseId")
-public class Storage extends StorageBase implements Ordinal {
+public class Storage extends StorageBase {
 		
 	public Storage() {
 		super();
 		setDtype("Storage");
 	}
 
-	@Column(nullable = false)
-	private Integer ordinal;
-	
+		
 	@Override
 	@Null(message = "Internal error: Used item has to be null for storage class")
-	public Storage getStorage() {
+	public StorageBase getStorage() {
 		return super.getStorage();
 	}
 		

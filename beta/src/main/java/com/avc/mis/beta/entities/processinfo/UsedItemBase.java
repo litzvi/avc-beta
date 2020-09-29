@@ -36,7 +36,7 @@ public abstract class UsedItemBase extends AuditedEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "storageId", updatable = false) //can't update so to not confuse the processItem of a storageMove
-	private Storage storage;
+	private StorageBase storage;
 	
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
 	private BigDecimal numberUsedUnits;	

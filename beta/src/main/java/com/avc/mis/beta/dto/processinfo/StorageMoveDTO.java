@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class StorageMoveDTO extends UsedItemBaseDTO {
 
-//	private Integer ordinal;
+	private Integer ordinal;
 	private AmountWithUnit unitAmount;
 	private BigDecimal numberUnits;	
 	private BigDecimal containerWeight;	
@@ -37,12 +37,12 @@ public class StorageMoveDTO extends UsedItemBaseDTO {
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, BigDecimal storageUnitAmount,
 			MeasureUnit storageMeasureUnit, BigDecimal storageNumberUnits, BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
-			/* Integer ordinal, */BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
+			Integer ordinal, BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
 		super(id, version, numberUsedUnits, itemId, itemValue, poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				storageId, stoageVersion, storageOrdinal, storageUnitAmount, storageMeasureUnit, storageNumberUnits, storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks);
-//		this.ordinal = ordinal;
+		this.ordinal = ordinal;
 		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 		this.containerWeight = containerWeight;
@@ -58,7 +58,7 @@ public class StorageMoveDTO extends UsedItemBaseDTO {
 	
 	public StorageMoveDTO(StorageMove storage) {
 		super(storage);
-//		this.ordinal = storage.getOrdinal();
+		this.ordinal = storage.getOrdinal();
 		this.unitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		this.numberUnits = Optional.ofNullable(storage.getNumberUnits()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		this.containerWeight = storage.getContainerWeight();

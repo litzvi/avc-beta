@@ -43,7 +43,7 @@ public class StorageMove extends StorageBase {
 	
 	@Override
 	@NotNull(message = "Internal error: Used item has no referance to storage")
-	public Storage getStorage() {
+	public StorageBase getStorage() {
 		return super.getStorage();
 	}
 	

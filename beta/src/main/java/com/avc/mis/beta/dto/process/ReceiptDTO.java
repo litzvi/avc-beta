@@ -17,7 +17,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
-import com.avc.mis.beta.dto.processinfo.StorageDTO;
+import com.avc.mis.beta.dto.processinfo.StorageBaseDTO;
 import com.avc.mis.beta.dto.query.ReceiptItemWithStorage;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -80,7 +80,7 @@ public class ReceiptDTO extends PoProcessDTO {
 			ReceiptItemDTO receiptItem = list.get(0).getReceiptItem();
 			//group list to storage/extraAdded and set accordingly
 			receiptItem.setStorageForms(list.stream().map(i -> i.getStorage())
-					.collect(Collectors.toCollection(() -> new TreeSet<StorageDTO>(Ordinal.ordinalComparator()))));
+					.collect(Collectors.toCollection(() -> new TreeSet<StorageBaseDTO>(Ordinal.ordinalComparator()))));
 			this.receiptItems.add(receiptItem);
 		}
 		

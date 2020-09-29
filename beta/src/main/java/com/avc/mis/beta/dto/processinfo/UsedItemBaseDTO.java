@@ -11,6 +11,7 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.processinfo.StorageBase;
 import com.avc.mis.beta.entities.processinfo.UsedItemBase;
 import com.avc.mis.beta.entities.values.Item;
 
@@ -34,7 +35,7 @@ public abstract class UsedItemBaseDTO extends ProcessDTO {
 	//for equals comparing - since storage is excluded
 	private Integer storageId;
 	@EqualsAndHashCode.Exclude
-	private StorageDTO storage;
+	private StorageBaseDTO storage;
 
 	
 	public UsedItemBaseDTO(Integer id, Integer version, BigDecimal numberUsedUnits,
@@ -51,7 +52,7 @@ public abstract class UsedItemBaseDTO extends ProcessDTO {
 		else
 			this.itemPo = null;
 		this.storageId = storageId;
-		this.storage = new StorageDTO(storageId, stoageVersion, storageOrdinal, 
+		this.storage = new StorageBaseDTO(storageId, stoageVersion, storageOrdinal, 
 				unitAmount, measureUnit, storageNumberUnits, containerWeight, warehouseLocationId, warehouseLocationValue, 
 				storageRemarks, null);
 	
@@ -60,14 +61,14 @@ public abstract class UsedItemBaseDTO extends ProcessDTO {
 	public UsedItemBaseDTO(UsedItemBase usedItem) {
 		super(usedItem.getId(), usedItem.getVersion());
 		this.numberUsedUnits = usedItem.getNumberUsedUnits();
-		Storage storage = usedItem.getStorage();
+		StorageBase storage = usedItem.getStorage();
 		ProcessItem processItem = storage.getProcessItem();
 		if(processItem != null) {
 			this.item = new BasicValueEntity<Item>(processItem.getItem());
 			this.itemPo = new PoCodeDTO((processItem.getProcess()).getPoCode());
 		}
 		this.storageId = storage.getId();
-		this.storage = new StorageDTO(storage);
+		this.storage = new StorageBaseDTO(storage);
 
 	}
 }

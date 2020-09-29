@@ -14,6 +14,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.StorageMove;
 
 import lombok.AccessLevel;
@@ -55,6 +56,7 @@ public class StorageRelocation extends PoProcess {
 	 * @param storageMoves the storageMoves to set
 	 */
 	public void setStorageMoves(StorageMove[] storageMoves) {
+		Ordinal.setOrdinals(storageMoves);
 		this.storageMoves = Insertable.setReferences(storageMoves, (t) -> {t.setReference(this);	return t;});
 	}
 

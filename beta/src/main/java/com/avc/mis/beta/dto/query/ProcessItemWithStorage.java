@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.processinfo.StorageDTO;
+import com.avc.mis.beta.dto.processinfo.StorageBaseDTO;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.Storage;
@@ -29,7 +29,7 @@ public class ProcessItemWithStorage extends ValueDTO {
 	
 	private ProcessItemDTO processItem;
 	private PoCodeDTO po;
-	private StorageDTO storage;
+	private StorageBaseDTO storage;
 	
 	/**
 	 * All database fields (the fields in the form they are fetched from the db) arguments constructor, 
@@ -48,7 +48,7 @@ public class ProcessItemWithStorage extends ValueDTO {
 				itemId, itemValue, itemCategory,
 				groupName, description, remarks, tableView);
 		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
-		this.storage = new StorageDTO(storageId, storageVersion, ordinal,
+		this.storage = new StorageBaseDTO(storageId, storageVersion, ordinal,
 				unitAmount, measureUnit, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 		

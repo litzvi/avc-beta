@@ -64,7 +64,8 @@ public class RawItemQuality extends ProcessInfoEntity {
 	
 	private BigInteger wholeCountPerLb;
 	
-	private BigInteger smallSize;
+	@Column(precision = 19, scale = QualityCheck.SCALE)
+	private BigDecimal smallSize;
 	
 	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal ws;
