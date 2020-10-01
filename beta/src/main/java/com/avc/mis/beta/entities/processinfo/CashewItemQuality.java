@@ -39,14 +39,14 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "QC_RAW_ITEMS")
-public class RawItemQuality extends ProcessInfoEntity {
+@Table(name = "QC_CASHEW_ITEMS")
+public class CashewItemQuality extends ProcessInfoEntity {
 	
 	@Column(nullable = false, updatable = false)
 	private boolean precentage = false;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "itemId", updatable = false, nullable = false)
+	@JoinColumn(name = "itemId", nullable = false)
 	@NotNull(message = "Item is mandatory", groups = OnPersist.class)
 	private Item item;
 	

@@ -16,7 +16,7 @@ import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.RawItemQuality;
+import com.avc.mis.beta.entities.processinfo.CashewItemQuality;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
@@ -55,7 +55,7 @@ public class QualityCheck extends PoProcess {
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@NotEmpty(message = "Quality check has to contain at least one testsed item")
-	private Set<RawItemQuality> testedItems = new HashSet<>();
+	private Set<CashewItemQuality> testedItems = new HashSet<>();
 	
 	/**
 	 * Gets the list of Items of QC process items as an array (can be ordered).
@@ -77,10 +77,10 @@ public class QualityCheck extends PoProcess {
 
 	/**
 	 * Gets the list of raw QC results as an array (can be ordered).
-	 * @return array of RawItemQuality QC info for raw cashew
+	 * @return array of CahsewItemQuality QC info for cashew items
 	 */
-	public RawItemQuality[] getTestedItems() {
-		return this.testedItems.toArray(new RawItemQuality[this.testedItems.size()]);
+	public CashewItemQuality[] getTestedItems() {
+		return this.testedItems.toArray(new CashewItemQuality[this.testedItems.size()]);
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class QualityCheck extends PoProcess {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param testedItems the testedItems to set
 	 */
-	public void setTestedItems(RawItemQuality[] testedItems) {
+	public void setTestedItems(CashewItemQuality[] testedItems) {
 		this.testedItems = Insertable.setReferences(testedItems, (t) -> {t.setReference(this);	return t;});
 	}
 	

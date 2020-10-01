@@ -3,8 +3,12 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +18,8 @@ import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
-import com.avc.mis.beta.dto.view.RawQcRow;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.repositories.QCRepository;
@@ -39,13 +44,28 @@ public class QualityChecks {
 	@Autowired private DeletableDAO deletableDAO;
 	
 	
-	public List<RawQcRow> getRawQualityChecks() {
-		return getQcRepository().findRawQualityChecks();
+	public List<CashewQcRow> getRawQualityChecks() {
+		return getQcRepository().findCashewQualityChecks(new ProcessName[] {
+				ProcessName.CASHEW_RECEIPT_QC,
+				ProcessName.SUPPLIER_QC,
+				ProcessName.VINA_CONTROL_QC,
+				ProcessName.SAMPLE_QC});
 	}
 	
+	public List<CashewQcRow> getRoastedQualityChecks() {
+		return getQcRepository().findCashewQualityChecks(new ProcessName[] {
+				ProcessName.ROASTED_CASHEW_QC});
+	}
+		
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewReceiptCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT_QC));
+		dao.addGeneralProcessEntity(check);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addRoastedCashewCheck(QualityCheck check) {
+		check.setProcessType(dao.getProcessTypeByValue(ProcessName.ROASTED_CASHEW_QC));
 		dao.addGeneralProcessEntity(check);
 	}
 	

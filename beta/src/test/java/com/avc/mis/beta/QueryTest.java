@@ -37,7 +37,7 @@ import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
-import com.avc.mis.beta.dto.view.RawQcRow;
+import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.dto.view.UserRow;
@@ -238,7 +238,7 @@ public class QueryTest {
 		itemInventory.forEach(i -> System.out.println(i));
 		
 		//test QC raw tables
-		List<RawQcRow> rawQcRows = qualityChecks.getRawQualityChecks();
+		List<CashewQcRow> rawQcRows = qualityChecks.getRawQualityChecks();
 		rawQcRows.forEach(i -> System.out.println(i));
 		
 		//get cashew standards in DTOs

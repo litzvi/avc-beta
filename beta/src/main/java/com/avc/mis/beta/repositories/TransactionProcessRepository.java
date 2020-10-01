@@ -39,7 +39,9 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 			+ "join p.processType pt "
 		+ "where pt.processName = :processName "
 			+ "and po_code_used_item.code = po_code.code "
-		+ "group by p, item ")
+		+ "group by p, item "
+//		+ "order by grp.ordinal "
+		+ "")
 	Stream<ProductionProcessWithItemAmount> findAllUsedItemsByProcessType(ProcessName processName);
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
@@ -56,7 +58,9 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 					+ "left join sf.warehouseLocation wh "
 			+ "join p.processType pt "
 		+ "where pt.processName = :processName "
-		+ "group by p, item ")
+		+ "group by p, item "
+//		+ "order by pi.ordinal"
+		+ " ")
 	Stream<ProductionProcessWithItemAmount> findAllProducedItemsByProcessType(ProcessName processName);
 
 }

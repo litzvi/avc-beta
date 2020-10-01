@@ -17,7 +17,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
+import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
 import com.avc.mis.beta.dto.processinfo.StorageBaseDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.entities.Ordinal;
@@ -49,7 +49,7 @@ public class QualityCheckDTO extends PoProcessDTO {
 	private String sampleTaker;
 		
 	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
-	private Set<RawItemQualityDTO> testedItems; //can use a SortedSet like ContactDetails to maintain order
+	private Set<CashewItemQualityDTO> testedItems; //can use a SortedSet like ContactDetails to maintain order
 	
 	public QualityCheckDTO(Integer id, Integer version, String inspector, String sampleTaker,
 			Instant createdDate, String userRecording, 
@@ -73,7 +73,7 @@ public class QualityCheckDTO extends PoProcessDTO {
 		this.processItems = Arrays.stream(check.getProcessItems())
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
 		this.testedItems = Arrays.stream(check.getTestedItems())
-				.map(i->{return new RawItemQualityDTO(i);}).collect(Collectors.toSet());
+				.map(i->{return new CashewItemQualityDTO(i);}).collect(Collectors.toSet());
 	}
 	
 	/**
@@ -94,7 +94,8 @@ public class QualityCheckDTO extends PoProcessDTO {
 		}
 		
 	}
-
+	
+	
 	@Override
 	public String getProcessTypeDescription() {
 		return "Quality Check";

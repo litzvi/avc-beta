@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
@@ -14,7 +15,9 @@ import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
@@ -23,22 +26,24 @@ import lombok.Value;
  * @author Zvi
  *
  */
-@Value
+@Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class RawQcRow extends ValueDTO {
+public class CashewQcRow extends ValueDTO {
 
-	PoCodeBasic poCode;
-	String supplierName;
-	String itemName;
-	OffsetDateTime checkDate;
-	BigInteger numberOfSamples;
-	BigDecimal sampleWeight;
-	BigDecimal totalDefects;
-	BigDecimal totalDamage;
+	private PoCodeBasic poCode;
+	private String supplierName;
+	private Integer itemId;
+	private String itemName;
+	private OffsetDateTime checkDate;
+	private BigInteger numberOfSamples;
+	private BigDecimal sampleWeight;
+	private BigDecimal totalDefects;
+	private BigDecimal totalDamage;
 
 
-	public RawQcRow(@NonNull Integer id, 
+	public CashewQcRow(@NonNull Integer id, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemName, OffsetDateTime checkDate, 
 			BigInteger numberOfSamples, BigDecimal sampleWeight, boolean precentage,

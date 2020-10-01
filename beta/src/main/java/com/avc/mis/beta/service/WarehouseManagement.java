@@ -249,7 +249,6 @@ public class WarehouseManagement {
 		boolean checkCategories = (itemCategories != null);
 		List<InventoryProcessItemWithStorage> processItemWithStorages =
 				getInventoryRepository().findInventoryProcessItemWithStorage(checkCategories, itemCategories, supplyGroup, itemId, poCodeId);	
-		
 		return ProcessItemInventory.getProcessItemInventoryRows(processItemWithStorages);
 		
 	}

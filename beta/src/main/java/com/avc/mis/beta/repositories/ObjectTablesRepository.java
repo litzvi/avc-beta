@@ -154,7 +154,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 					+ "join poCode.contractType ct "
 					+ "join poCode.supplier s "
 			+ "join p.lifeCycle lc "
-			+ "join pi.allStorags sf "
+			+ "join pi.allStorages sf "
 //				+ "join sf.numberUnits sfNumberUnits"
 				+ "join sf.unitAmount unit "
 					+ "join UOM uom "

@@ -44,7 +44,7 @@ import com.avc.mis.beta.entities.process.SampleReceipt;
 import com.avc.mis.beta.entities.processinfo.ItemWeight;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.RawItemQuality;
+import com.avc.mis.beta.entities.processinfo.CashewItemQuality;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.SampleItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
@@ -175,10 +175,10 @@ public class GeneralTest {
 		QualityCheck check = new QualityCheck();
 		check.setPoCode(poCode);
 		check.setRecordedTime(OffsetDateTime.now());
-		RawItemQuality[] rawItemQualities = new RawItemQuality[NUM_PO_ITEMS];
+		CashewItemQuality[] rawItemQualities = new CashewItemQuality[NUM_PO_ITEMS];
 		ProcessItem[] processItems = new ProcessItem[NUM_PO_ITEMS];
 		for(int i=0; i < NUM_PO_ITEMS; i++) {
-			rawItemQualities[i] = new RawItemQuality();
+			rawItemQualities[i] = new CashewItemQuality();
 			rawItemQualities[i].setItem(orderItems[i].getItem());
 			rawItemQualities[i].setMeasureUnit(MeasureUnit.OZ);
 			rawItemQualities[i].setSampleWeight(BigDecimal.valueOf(8).setScale(QualityCheck.SCALE));

@@ -18,6 +18,7 @@ import com.avc.mis.beta.validation.groups.OnPersist;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * @author zvi
@@ -36,6 +37,7 @@ public class StorageMove extends StorageBase {
 		setDtype("Storage");
 	}
 	
+	@ToString.Exclude
 	@NotNull(message = "System error: Process not referenced", groups = OnPersist.class)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processId", updatable = false)

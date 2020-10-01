@@ -48,7 +48,7 @@ import lombok.ToString;
 //@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @PrimaryKeyJoinColumn(name = "usedItemBaseId")
 @DiscriminatorColumn
-public abstract class StorageBase extends UsedItemBase implements Ordinal {
+public class StorageBase extends UsedItemBase implements Ordinal {
 	
 	@JsonIgnore
 	private String dtype;

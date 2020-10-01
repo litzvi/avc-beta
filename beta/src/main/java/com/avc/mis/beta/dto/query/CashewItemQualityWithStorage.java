@@ -6,7 +6,7 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
+import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
 import com.avc.mis.beta.dto.processinfo.StorageBaseDTO;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -20,12 +20,12 @@ import lombok.Data;
  */
 @Data
 @Deprecated
-public class RawItemQualityWithStorage {
+public class CashewItemQualityWithStorage {
 	
-	private RawItemQualityDTO rawItemQuality;
+	private CashewItemQualityDTO cashewItemQuality;
 	private StorageBaseDTO storage;
 
-	public RawItemQualityWithStorage(Integer id, Integer version,
+	public CashewItemQualityWithStorage(Integer id, Integer version,
 			Integer itemId, String itemValue, 
 			MeasureUnit testMU, BigDecimal sampleWeight, BigInteger numberOfSamples, boolean presentage,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
@@ -40,7 +40,7 @@ public class RawItemQualityWithStorage {
 			BigDecimal decay, BigDecimal insectDamage,
 			BigDecimal roastingWeightLoss,
 			CheckStatus colour, CheckStatus flavour) {
-		this.rawItemQuality = new RawItemQualityDTO(id, version,
+		this.cashewItemQuality = new CashewItemQualityDTO(id, version,
 				itemId, itemValue,
 				testMU, sampleWeight, numberOfSamples, presentage,
 				/* poCodeId, contractTypeCode, supplierName, */
@@ -63,7 +63,7 @@ public class RawItemQualityWithStorage {
 	 * Used for mapping to the logical structure that every RawItemQuality has a collection of storages.
 	 */
 	public Integer getId() {
-		return rawItemQuality.getId();
+		return cashewItemQuality.getId();
 	}
 	
 }

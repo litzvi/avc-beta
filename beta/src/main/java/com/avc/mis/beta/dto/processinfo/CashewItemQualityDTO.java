@@ -12,7 +12,7 @@ import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.processinfo.RawItemQuality;
+import com.avc.mis.beta.entities.processinfo.CashewItemQuality;
 import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;
@@ -26,7 +26,7 @@ import lombok.Value;
 @Value
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class RawItemQualityDTO extends ProcessDTO {
+public class CashewItemQualityDTO extends ProcessDTO {
 	
 
 	
@@ -56,7 +56,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 	CheckStatus flavour; 
 	
 
-	public RawItemQualityDTO(Integer id, Integer version,
+	public CashewItemQualityDTO(Integer id, Integer version,
 			Integer itemId, String itemValue,
 			MeasureUnit measureUnit, BigDecimal sampleWeight, BigInteger numberOfSamples, boolean precentage,
 			BigInteger wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
@@ -91,7 +91,7 @@ public class RawItemQualityDTO extends ProcessDTO {
 		this.flavour = flavour;
 	}
 	
-	public RawItemQualityDTO(RawItemQuality itemQuality) {
+	public CashewItemQualityDTO(CashewItemQuality itemQuality) {
 		super(itemQuality.getId(), itemQuality.getVersion());
 		this.item = new BasicValueEntity<Item>(itemQuality.getItem());
 		this.measureUnit = itemQuality.getMeasureUnit();

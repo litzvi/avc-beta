@@ -72,7 +72,7 @@ public class ProcessItem extends ProcessInfoEntity {
 	@JsonIgnore
 	@ToString.Exclude 
 	@OneToMany(mappedBy = "processItem", fetch = FetchType.LAZY)
-	private Set<StorageBase> allStorags;
+	private Set<StorageBase> allStorages;
 	
 	@Setter(value = AccessLevel.NONE) 
 	@JsonIgnore
