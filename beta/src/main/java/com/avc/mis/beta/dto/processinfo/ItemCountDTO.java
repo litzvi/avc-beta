@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.enums.ItemCategory;
@@ -26,7 +26,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ItemCountDTO extends ProcessDTO {
+public class ItemCountDTO extends SubjectDataDTO {
 
 	private ItemDTO item;
 	private MeasureUnit measureUnit;
@@ -34,10 +34,10 @@ public class ItemCountDTO extends ProcessDTO {
 	
 	private List<CountAmountDTO> amounts;
 
-	public ItemCountDTO(Integer id, Integer version, 
+	public ItemCountDTO(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ItemCategory itemCategory,
 			MeasureUnit measureUnit, BigDecimal containerWeight) {
-		super(id, version);
+		super(id, version, ordinal);
 		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
 		this.measureUnit = measureUnit;
 		this.containerWeight = containerWeight;
@@ -47,7 +47,7 @@ public class ItemCountDTO extends ProcessDTO {
 	 * @param itemCount
 	 */
 	public ItemCountDTO(ItemCount itemCount) {
-		super(itemCount.getId(), itemCount.getVersion());
+		super(itemCount.getId(), itemCount.getVersion(), itemCount.getOrdinal());
 		this.item = new ItemDTO(itemCount.getItem());
 		this.measureUnit = itemCount.getMeasureUnit();
 		this.containerWeight = itemCount.getContainerWeight();

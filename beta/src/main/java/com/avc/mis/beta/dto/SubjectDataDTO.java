@@ -26,7 +26,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public abstract class SubjectDataDTO extends DataDTO implements Ordinal {
 
-	@JsonIgnore
 	private Integer ordinal;
 	
 	public SubjectDataDTO(Integer id, Integer version, Integer ordinal) {

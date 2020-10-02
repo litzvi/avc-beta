@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
 
@@ -68,6 +69,7 @@ public abstract class PoProcess extends GeneralProcess {
 	 * @param itemCounts the itemCounts to set
 	 */
 	public void setItemCounts(ItemCount[] itemCounts) {
+		Ordinal.setOrdinals(itemCounts);
 		this.itemCounts = Insertable.setReferences(itemCounts, (t) -> {t.setReference(this);	return t;});
 	}
 	

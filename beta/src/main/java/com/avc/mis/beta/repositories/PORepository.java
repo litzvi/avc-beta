@@ -59,7 +59,7 @@ public interface PORepository extends BaseRepository<PO> {
 	 * @return Set of OrderItemDTOs for the given process
 	 */
 	@Query("select new com.avc.mis.beta.dto.processinfo.OrderItemDTO("
-			+ "i.id, i.version, item.id, item.value, units.amount, units.measureUnit, "
+			+ "i.id, i.version, i.ordinal, item.id, item.value, units.amount, units.measureUnit, "
 			+ "price.amount, price.currency, i.deliveryDate, i.defects, i.remarks, "
 			+ "SUM( "
 				+ "CASE "
@@ -79,7 +79,8 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "left join i.unitPrice price "
 			+ "join i.item item "
 		+ "where po.id = :processId "
-		+ "group by i ")
+		+ "group by i "
+		+ "order by i.ordinal ")
 	Set<OrderItemDTO> findPoOrderItemsById(Integer processId);
 	
 	/**

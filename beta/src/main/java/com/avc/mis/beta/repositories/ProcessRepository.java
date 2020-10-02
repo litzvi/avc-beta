@@ -31,7 +31,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 
 	
 	@Query("select new com.avc.mis.beta.dto.processinfo.UsedItemDTO( "
-			+ "i.id, i.version, i.numberUsedUnits, item.id, item.value, "
+			+ "i.id, i.version, i.ordinal, i.numberUsedUnits, item.id, item.value, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
@@ -52,12 +52,13 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "join i.group grp "
 				+ "join grp.process p "
 		+ "where p.id = :processId "
-		+ "group by sf ")
+		+ "group by sf "
+		+ "order by i.ordinal ")
 	Set<UsedItemDTO> findUsedItems(int processId);
 	
 	@Query("select new com.avc.mis.beta.dto.query.UsedItemWithGroup( "
-			+ "grp.id, grp.version, grp.groupName, grp.tableView, "
-			+ "i.id, i.version, i.numberUsedUnits, item.id, item.value, "
+			+ "grp.id, grp.version, grp.ordinal, grp.groupName, grp.tableView, "
+			+ "i.id, i.version, i.ordinal, i.numberUsedUnits, item.id, item.value, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
@@ -78,7 +79,8 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "join i.group grp "
 				+ "join grp.process p "
 		+ "where p.id = :processId "
-		+ "group by sf ")
+		+ "group by sf "
+		+ "order by grp.ordinal, i.ordinal ")
 	List<UsedItemWithGroup> findUsedItemsWithGroup(int processId);
 	
 
@@ -88,7 +90,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	 * @return List of ProcessItemWithStorage
 	 */
 	@Query("select new com.avc.mis.beta.dto.query.ProcessItemWithStorage( "
-			+ " i.id, i.version, "
+			+ " i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.category, "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
@@ -105,9 +107,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "join sf.unitAmount unit "
 				+ "left join sf.warehouseLocation warehouseLocation "
 		+ "where p.id = :processId "
-		+ "order by "
-//			+ "i.ordinal, "
-			+ "sf.ordinal ")
+		+ "order by i.ordinal, sf.ordinal ")
 	List<ProcessItemWithStorage> findProcessItemWithStorage(int processId);
 
 	/**

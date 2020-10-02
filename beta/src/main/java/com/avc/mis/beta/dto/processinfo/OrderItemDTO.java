@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -33,7 +33,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class OrderItemDTO extends ProcessDTO {
+public class OrderItemDTO extends SubjectDataDTO {
 
 	BasicValueEntity<Item> item;
 	AmountWithUnit numberUnits;
@@ -48,10 +48,10 @@ public class OrderItemDTO extends ProcessDTO {
 	 * All arguments Constructor ,
 	 * used to project directly from database without nested fetching.
 	 */
-	public OrderItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
+	public OrderItemDTO(Integer id, Integer version, Integer ordinal, Integer itemId, String itemValue, 
 			BigDecimal numberUnits, MeasureUnit measureUnit, BigDecimal unitPrice, Currency currency,
 			LocalDate deliveryDate, String defects, String remarks, BigDecimal amountReceived) {
-		super(id, version);
+		super(id, version, ordinal);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.numberUnits = new AmountWithUnit(numberUnits.setScale(MeasureUnit.SCALE), measureUnit);
 		if(unitPrice != null) {
@@ -71,7 +71,7 @@ public class OrderItemDTO extends ProcessDTO {
 	 * @param orderItem the OrderItem object
 	 */
 	public OrderItemDTO(@NonNull OrderItem orderItem) {
-		super(orderItem.getId(), orderItem.getVersion());
+		super(orderItem.getId(), orderItem.getVersion(), orderItem.getOrdinal());
 		this.item = new BasicValueEntity<Item>(orderItem.getItem());
 		this.numberUnits = orderItem.getNumberUnits().setScale(MeasureUnit.SCALE);
 		if(orderItem.getUnitPrice() != null) {

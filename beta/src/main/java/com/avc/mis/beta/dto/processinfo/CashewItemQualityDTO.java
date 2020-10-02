@@ -6,7 +6,7 @@ package com.avc.mis.beta.dto.processinfo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
@@ -26,7 +26,7 @@ import lombok.Value;
 @Value
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class CashewItemQualityDTO extends ProcessDTO {
+public class CashewItemQualityDTO extends SubjectDataDTO {
 	
 
 	
@@ -56,7 +56,7 @@ public class CashewItemQualityDTO extends ProcessDTO {
 	CheckStatus flavour; 
 	
 
-	public CashewItemQualityDTO(Integer id, Integer version,
+	public CashewItemQualityDTO(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue,
 			MeasureUnit measureUnit, BigDecimal sampleWeight, BigInteger numberOfSamples, boolean precentage,
 			BigInteger wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
@@ -66,7 +66,7 @@ public class CashewItemQualityDTO extends ProcessDTO {
 			BigDecimal decay, BigDecimal insectDamage, BigDecimal testa,
 			BigDecimal roastingWeightLoss,
 			CheckStatus colour, CheckStatus flavour) {
-		super(id, version);
+		super(id, version, ordinal);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.measureUnit = measureUnit;
 		this.sampleWeight = sampleWeight;
@@ -92,7 +92,7 @@ public class CashewItemQualityDTO extends ProcessDTO {
 	}
 	
 	public CashewItemQualityDTO(CashewItemQuality itemQuality) {
-		super(itemQuality.getId(), itemQuality.getVersion());
+		super(itemQuality.getId(), itemQuality.getVersion(), itemQuality.getOrdinal());
 		this.item = new BasicValueEntity<Item>(itemQuality.getItem());
 		this.measureUnit = itemQuality.getMeasureUnit();
 		this.sampleWeight = itemQuality.getSampleWeight();

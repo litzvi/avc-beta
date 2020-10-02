@@ -35,20 +35,20 @@ public class ProcessItemWithStorage extends ValueDTO {
 	 * All database fields (the fields in the form they are fetched from the db) arguments constructor, 
 	 * that fetches process item, process and storage details.
 	 */
-	public ProcessItemWithStorage(Integer id, Integer version, 
+	public ProcessItemWithStorage(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ItemCategory itemCategory,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
-			Integer storageId, Integer storageVersion, Integer ordinal,
+			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
 			String groupName, String description, String remarks, boolean tableView) {
 		super(id);
-		this.processItem = new ProcessItemDTO(id, version, 
+		this.processItem = new ProcessItemDTO(id, version, ordinal,
 				itemId, itemValue, itemCategory,
 				groupName, description, remarks, tableView);
 		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
-		this.storage = new StorageBaseDTO(storageId, storageVersion, ordinal,
+		this.storage = new StorageBaseDTO(storageId, storageVersion, storageOrdinal,
 				unitAmount, measureUnit, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 		

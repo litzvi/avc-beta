@@ -47,7 +47,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	 * @return List of LoadedItemWithStorage
 	 */
 	@Query("select new com.avc.mis.beta.dto.processinfo.LoadedItemDTO( "
-			+ " i.id, i.version, "
+			+ " i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.category, "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "da.amount, da.measureUnit, "
@@ -59,7 +59,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 				+ "join p.poCode poCode "
 					+ "join poCode.contractType ct "
 					+ "join poCode.supplier s "
-		+ "where p.id = :processId ")
+		+ "where p.id = :processId "
+		+ "order by i.ordinal ")
 	Set<LoadedItemDTO> findLoadedItems(int processId);
 
 

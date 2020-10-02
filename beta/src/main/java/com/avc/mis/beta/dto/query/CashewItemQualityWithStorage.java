@@ -25,11 +25,11 @@ public class CashewItemQualityWithStorage {
 	private CashewItemQualityDTO cashewItemQuality;
 	private StorageBaseDTO storage;
 
-	public CashewItemQualityWithStorage(Integer id, Integer version,
+	public CashewItemQualityWithStorage(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, 
 			MeasureUnit testMU, BigDecimal sampleWeight, BigInteger numberOfSamples, boolean presentage,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
-			Integer storageId, Integer storageVersion, Integer ordinal,
+			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks,
 			String description, String remarks, Class<? extends Storage> clazz,
@@ -40,7 +40,7 @@ public class CashewItemQualityWithStorage {
 			BigDecimal decay, BigDecimal insectDamage,
 			BigDecimal roastingWeightLoss,
 			CheckStatus colour, CheckStatus flavour) {
-		this.cashewItemQuality = new CashewItemQualityDTO(id, version,
+		this.cashewItemQuality = new CashewItemQualityDTO(id, version, ordinal,
 				itemId, itemValue,
 				testMU, sampleWeight, numberOfSamples, presentage,
 				/* poCodeId, contractTypeCode, supplierName, */
@@ -51,7 +51,7 @@ public class CashewItemQualityWithStorage {
 				deepSpot, mold, dirty, lightDirty, decay, insectDamage,
 				roastingWeightLoss,
 				colour, flavour);
-		this.storage = new StorageBaseDTO(storageId, storageVersion, ordinal, 
+		this.storage = new StorageBaseDTO(storageId, storageVersion, storageOrdinal, 
 				unitAmount, measureUnit, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 	}

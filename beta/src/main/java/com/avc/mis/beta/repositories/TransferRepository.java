@@ -60,7 +60,7 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 	List<ItemTransactionDifference> findTransferDifferences(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.query.ItemCountWithAmount( "
-			+ " i.id, i.version, "
+			+ " i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.category, "
 			+ "i.measureUnit, i.containerWeight,"
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
@@ -73,7 +73,7 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 					+ "join poCode.supplier s "
 			+ "join i.amounts count_amount "
 		+ "where p.id = :processId "
-		+ "order by i, count_amount.ordinal ")
+		+ "order by i.ordinal, count_amount.ordinal ")
 	List<ItemCountWithAmount> findItemCountWithAmount(int processId);
 
 

@@ -14,7 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.AuditedEntity;
+import com.avc.mis.beta.entities.RankedAuditedEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;
@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "USED_ITEMS_BASE")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class UsedItemBase extends AuditedEntity {
+public abstract class UsedItemBase extends RankedAuditedEntity {
 
 
 	@ManyToOne(fetch = FetchType.LAZY)

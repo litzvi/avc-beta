@@ -10,7 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.ProcessInfoEntity;
+import com.avc.mis.beta.entities.GeneralInfoEntity;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.validation.groups.OnPersist;
@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PROCESS_LIFE_CYCLE")
-public class ProcessLifeCycle extends ProcessInfoEntity {
+public class ProcessLifeCycle extends GeneralInfoEntity {
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, updatable = false)

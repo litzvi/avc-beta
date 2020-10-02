@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.time.LocalDate;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.processinfo.BookedContainer;
@@ -21,7 +21,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class BookedContainerDTO extends ProcessDTO {
+public class BookedContainerDTO extends SubjectDataDTO {
 	
 	String billNumber;
 	String vessel;
@@ -30,11 +30,11 @@ public class BookedContainerDTO extends ProcessDTO {
 	LocalDate etd;
 	String containerType;
 	
-	public BookedContainerDTO(Integer id, Integer version, 
+	public BookedContainerDTO(Integer id, Integer version, Integer ordinal,
 			String billNumber, String vessel, String shippingCompany,
 			Integer destinationPortId, String destinationPortValue, 
 			LocalDate etd, ShippingContainerType containerType) {
-		super(id, version);
+		super(id, version, ordinal);
 		this.billNumber = billNumber;
 		this.vessel = vessel;
 		this.shippingCompany = shippingCompany;
@@ -44,7 +44,7 @@ public class BookedContainerDTO extends ProcessDTO {
 	}
 	
 	public BookedContainerDTO(@NonNull BookedContainer container) {
-		super(container.getId(), container.getVersion());
+		super(container.getId(), container.getVersion(), container.getOrdinal());
 		this.billNumber = container.getBillNumber();
 		this.vessel = container.getVessel();
 		this.shippingCompany = container.getShippingCompany();

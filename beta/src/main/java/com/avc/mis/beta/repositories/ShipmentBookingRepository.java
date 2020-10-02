@@ -39,13 +39,14 @@ public interface ShipmentBookingRepository extends BaseRepository<ShipmentBookin
 	Optional<ShipmentBookingDTO> findBookingById(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.BookedContainerDTO("
-			+ "c.id, c.version, c.billNumber, c.vessel, c.shippingCompany, "
+			+ "c.id, c.version, c.ordinal, c.billNumber, c.vessel, c.shippingCompany, "
 			+ "port.id, port.value, "
 			+ "c.etd, c.containerType) "
 		+ "from BookedContainer c "
 			+ "join c.destinationPort port "
 			+ "join c.booking booking "
-		+ "where booking.id = :processId ")
+		+ "where booking.id = :processId "
+		+ "order by c.ordinal ")
 	Set<BookedContainerDTO> findBookedContainersByProcessId(int processId);
 
 }

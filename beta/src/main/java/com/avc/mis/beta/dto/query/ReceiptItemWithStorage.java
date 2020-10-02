@@ -32,10 +32,10 @@ public class ReceiptItemWithStorage {
 	private DataObject<OrderItem> orderItem;
 	
 	
-	public ReceiptItemWithStorage(Integer id, Integer version,
+	public ReceiptItemWithStorage(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ItemCategory itemCategory,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
-			Integer storageId, Integer storageVersion, Integer ordinal,
+			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
@@ -43,20 +43,20 @@ public class ReceiptItemWithStorage {
 			String groupName, String description, String remarks, boolean tableView,
 			BigDecimal receivedUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
-		this.receiptItem = new ReceiptItemDTO(id, version, 
+		this.receiptItem = new ReceiptItemDTO(id, version, ordinal,
 				itemId, itemValue, itemCategory,
 				/* poCodeId, contractTypeCode, supplierName, */
 				groupName, description, remarks, tableView,
 				receivedUnits, orderMU, unitPrice, currency,
 				orderItemId, orderItemVersion, extraRequested, extraMU);
 		if(ExtraAdded.class.equals(clazz)) {
-			this.storage = new ExtraAddedDTO(storageId, storageVersion, ordinal, 
+			this.storage = new ExtraAddedDTO(storageId, storageVersion, storageOrdinal, 
 					unitAmount, measureUnit, numberUnits, containerWeight,
 					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
 					sampleContainerWeight, numberOfSamples, avgTestedWeight);
 		}
 		else {
-			this.storage = new StorageWithSampleDTO(storageId, storageVersion, ordinal, 
+			this.storage = new StorageWithSampleDTO(storageId, storageVersion, storageOrdinal, 
 					unitAmount, measureUnit, numberUnits, containerWeight,
 					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
 					sampleContainerWeight, numberOfSamples, avgTestedWeight);

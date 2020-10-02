@@ -19,7 +19,7 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 	
 	//storage information - for easier access
 	@EqualsAndHashCode.Exclude
-	private Integer ordinal;	
+	private Integer storageOrdinal;	
 	@EqualsAndHashCode.Exclude
 	private AmountWithUnit unitAmount;
 	@EqualsAndHashCode.Exclude
@@ -32,21 +32,21 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 	private Warehouse NewLocation;
 	
 	
-	public UsedItemDTO(Integer id, Integer version, BigDecimal numberUsedUnits,
+	public UsedItemDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits,
 			Integer itemId, String itemValue, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, 
 			BigDecimal otherUsedUnits, BigDecimal containerWeight, 
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
-		super(id, version, numberUsedUnits,
+		super(id, version, ordinal, numberUsedUnits,
 				itemId, itemValue, 
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				storageId, stoageVersion, storageOrdinal,
 				unitAmount, measureUnit, storageNumberUnits, containerWeight,
 				warehouseLocationId,  warehouseLocationValue, storageRemarks);
 
-		this.ordinal = storageOrdinal;
+		this.storageOrdinal = storageOrdinal;
 		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
@@ -62,7 +62,7 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 
 		StorageBaseDTO storage = getStorage();
 		
-		this.ordinal = storage.getOrdinal();
+		this.storageOrdinal = storage.getOrdinal();
 		this.unitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		if(storage.getWarehouseLocation() != null) {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(

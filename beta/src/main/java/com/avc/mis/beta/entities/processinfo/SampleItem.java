@@ -21,6 +21,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Item;
@@ -69,6 +70,7 @@ public class SampleItem extends ProcessInfoEntity {
 	}
 
 	public void setItemWeights(ItemWeight[] itemWeights) {
+		Ordinal.setOrdinals(itemWeights);
 		this.itemWeights = Insertable.setReferences(itemWeights, (t) -> {t.setReference(this);	return t;});
 	}
 		

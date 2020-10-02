@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class UsedItemBaseDTO extends ProcessDTO {
+public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 
 	@EqualsAndHashCode.Exclude
 	private BasicValueEntity<Item> item;
@@ -37,13 +37,13 @@ public abstract class UsedItemBaseDTO extends ProcessDTO {
 	private StorageBaseDTO storage;
 
 	
-	public UsedItemBaseDTO(Integer id, Integer version, BigDecimal numberUsedUnits,
+	public UsedItemBaseDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits,
 			Integer itemId, String itemValue, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
-		super(id, version);
+		super(id, version, ordinal);
 		this.numberUsedUnits = numberUsedUnits;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		if(poCodeId != null)
@@ -58,7 +58,7 @@ public abstract class UsedItemBaseDTO extends ProcessDTO {
 	}
 
 	public UsedItemBaseDTO(UsedItemBase usedItem) {
-		super(usedItem.getId(), usedItem.getVersion());
+		super(usedItem.getId(), usedItem.getVersion(), usedItem.getOrdinal());
 		this.numberUsedUnits = usedItem.getNumberUsedUnits();
 		StorageBase storage = usedItem.getStorage();
 		ProcessItem processItem = storage.getProcessItem();

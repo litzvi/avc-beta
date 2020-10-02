@@ -43,13 +43,13 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 
 //	private Set<StorageDTO> extraAdded; //can use a SortedSet like ContactDetails to maintain order	
 	
-	public ReceiptItemDTO(Integer id, Integer version, 
+	public ReceiptItemDTO(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ItemCategory itemCategory,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			String groupName, String description, String remarks, boolean tableView,
 			BigDecimal orderUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit measureUnit) {
-		super(id, version, itemId, itemValue, itemCategory,
+		super(id, version, ordinal, itemId, itemValue, itemCategory,
 				/* poCodeId, contractTypeCode, supplierName, */groupName, description, remarks, tableView);
 		if(orderUnits != null) {
 			this.receivedOrderUnits = new AmountWithUnit(orderUnits.setScale(MeasureUnit.SCALE), orderMU);
@@ -66,9 +66,10 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 
 	
 	public ReceiptItemDTO(ReceiptItem receiptItem) {
-		super(receiptItem.getId(), receiptItem.getVersion(),
-				new ItemDTO(receiptItem.getItem()), receiptItem.getGroupName(),
-				receiptItem.getDescription(), receiptItem.getRemarks());
+		super(receiptItem);
+//		super(receiptItem.getId(), receiptItem.getVersion(), receiptItem.getOrdinal(),
+//				new ItemDTO(receiptItem.getItem()), receiptItem.getGroupName(),
+//				receiptItem.getDescription(), receiptItem.getRemarks());
 		
 		setStorageForms(Arrays.stream(receiptItem.getStorageForms())
 				.map(i->{
@@ -96,12 +97,12 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 	}
 
 
-	public ReceiptItemDTO(Integer id, Integer version,
+	public ReceiptItemDTO(Integer id, Integer version, Integer ordinal,
 			ItemDTO item, /* PoCodeDTO itemPo, */ 
 			String groupName, String description, String remarks, 
 			AmountWithUnit receivedOrderUnits, AmountWithCurrency unitPrice,
 			DataObject<OrderItem> orderItem, AmountWithUnit extraRequested) {
-		super(id, version, item, /* itemPo, */ groupName, description, remarks);
+		super(id, version, ordinal, item, /* itemPo, */ groupName, description, remarks);
 		this.receivedOrderUnits = receivedOrderUnits;
 		this.unitPrice = unitPrice;
 		this.orderItem = orderItem;

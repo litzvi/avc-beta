@@ -18,6 +18,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 
 import lombok.AccessLevel;
@@ -65,6 +66,7 @@ public class PO extends PoProcess {
 	 * @param orderItems the orderItems to set
 	 */
 	public void setOrderItems(OrderItem[] orderItems) {
+		Ordinal.setOrdinals(orderItems);
 		this.orderItems = Insertable.setReferences(orderItems, (t) -> {t.setReference(this);	return t;});
 	}
 

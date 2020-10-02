@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -30,7 +31,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UsedItemsGroupDTO extends ProcessDTO {
+public class UsedItemsGroupDTO extends SubjectDataDTO {
 
 	private String groupName;
 
@@ -39,15 +40,15 @@ public class UsedItemsGroupDTO extends ProcessDTO {
 	private Set<UsedItemDTO> usedItems; //can use a SortedSet like ContactDetails to maintain order
 
 
-	public UsedItemsGroupDTO(Integer id, Integer version,
+	public UsedItemsGroupDTO(Integer id, Integer version, Integer ordinal,
 			String groupName, boolean tableView) {
-		super(id, version);
+		super(id, version, ordinal);
 		this.groupName = groupName;
 		this.tableView = tableView;
 	}	
 
 	public UsedItemsGroupDTO(UsedItemsGroup group) {
-		super(group.getId(), group.getVersion());
+		super(group.getId(), group.getVersion(), group.getOrdinal());
 		this.groupName = group.getGroupName();
 		this.tableView = group.isTableView();
 		this.usedItems = (Arrays.stream(group.getUsedItems())

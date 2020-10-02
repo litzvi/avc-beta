@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.CashewItemQuality;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -72,6 +73,7 @@ public class QualityCheck extends PoProcess {
 	 * @param processItems the processItems to set
 	 */
 	public void setProcessItems(ProcessItem[] processItems) {
+		Ordinal.setOrdinals(processItems);
 		this.processItems = Insertable.setReferences(processItems, (t) -> {t.setReference(this);	return t;});
 	}
 
@@ -90,6 +92,7 @@ public class QualityCheck extends PoProcess {
 	 * @param testedItems the testedItems to set
 	 */
 	public void setTestedItems(CashewItemQuality[] testedItems) {
+		Ordinal.setOrdinals(testedItems);
 		this.testedItems = Insertable.setReferences(testedItems, (t) -> {t.setReference(this);	return t;});
 	}
 	

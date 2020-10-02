@@ -46,7 +46,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 	Optional<QualityCheckDTO> findQcDTOByProcessId(int id);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO("
-			+ "i.id, i.version, item.id, item.value, "
+			+ "i.id, i.version, i.ordinal, item.id, item.value, "
 			+ "i.measureUnit, i.sampleWeight, i.numberOfSamples, i.precentage, "
 //			+ "i.description, i.remarks, "
 			+ "i.wholeCountPerLb, i.smallSize, i.ws, i.lp, i.breakage, "
@@ -62,7 +62,8 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 			+ "join i.damage dam "
 //			+ "join i.storageForms sf "
 //				+ "left join sf.warehouseLocation warehouseLocation "
-		+ "where p.id = :processId ")
+		+ "where p.id = :processId "
+		+ "order by i.ordinal ")
 	Set<CashewItemQualityDTO> findCheckItemsById(int processId);
 
 	//perhaps should be moved elsewhere

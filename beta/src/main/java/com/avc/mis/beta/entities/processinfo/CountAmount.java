@@ -16,8 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import com.avc.mis.beta.entities.AuditedEntity;
-import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.RankedAuditedEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;
@@ -35,16 +34,13 @@ import lombok.ToString;
 @Entity
 @Table(name = "COUNT_AMOUNTS")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class CountAmount extends AuditedEntity implements Ordinal {
+public class CountAmount extends RankedAuditedEntity {
 
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "itemCountId", nullable = false, updatable = false)
 	@NotNull
 	private ItemCount itemCount;
-	
-	@Column(nullable = false)
-	private Integer ordinal;
 	
 	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Amount is required")

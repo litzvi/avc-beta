@@ -26,7 +26,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @MappedSuperclass
-public abstract class ProcessInfoEntity extends AuditedEntity {
+public abstract class ProcessInfoEntity extends RankedAuditedEntity {
 	
 	@NotNull(message = "System error: Process not referenced", groups = OnPersist.class)
 	@ManyToOne(fetch = FetchType.LAZY)

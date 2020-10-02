@@ -15,6 +15,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.SampleItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -59,6 +60,7 @@ public class SampleReceipt extends PoProcess {
 	 * @param sampleItems the sampleItems to set
 	 */
 	public void setSampleItems(SampleItem[] sampleItems) {
+		Ordinal.setOrdinals(sampleItems);
 		this.sampleItems = Insertable.setReferences(sampleItems, (t) -> {t.setReference(this);	return t;});
 	}
 	

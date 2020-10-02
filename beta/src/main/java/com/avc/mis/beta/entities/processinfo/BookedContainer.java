@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.AuditedEntity;
+import com.avc.mis.beta.entities.RankedAuditedEntity;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.ShipmentBooking;
@@ -37,7 +37,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "BOOKED_CONTAINERS")
-public class BookedContainer extends AuditedEntity {
+public class BookedContainer extends RankedAuditedEntity {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)

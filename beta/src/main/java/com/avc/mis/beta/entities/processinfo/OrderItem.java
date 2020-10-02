@@ -22,7 +22,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.avc.mis.beta.entities.AuditedEntity;
+import com.avc.mis.beta.entities.RankedAuditedEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -51,7 +51,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PO_ITEMS")
-public class OrderItem extends AuditedEntity {
+public class OrderItem extends RankedAuditedEntity {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)

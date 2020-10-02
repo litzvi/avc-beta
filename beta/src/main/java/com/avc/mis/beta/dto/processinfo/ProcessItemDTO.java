@@ -15,7 +15,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
@@ -36,7 +36,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ProcessItemDTO extends ProcessDTO {
+public class ProcessItemDTO extends SubjectDataDTO {
 
 	private ItemDTO item; //change to itemDTO in order to get category
 	private String groupName;
@@ -49,10 +49,10 @@ public class ProcessItemDTO extends ProcessDTO {
 	
 	private AmountWithUnit[] totalAmount;
 	
-	public ProcessItemDTO(Integer id, Integer version, Integer itemId, String itemValue, 
+	public ProcessItemDTO(Integer id, Integer version, Integer ordinal, Integer itemId, String itemValue, 
 			ItemCategory itemCategory,
 			String groupName, String description, String remarks, boolean tableView) {
-		super(id, version);
+		super(id, version, ordinal);
 		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
 		this.groupName = groupName;
 		this.description = description;
@@ -66,7 +66,7 @@ public class ProcessItemDTO extends ProcessDTO {
 	 * @param processItem
 	 */
 	public ProcessItemDTO(ProcessItem processItem) {
-		super(processItem.getId(), processItem.getVersion());
+		super(processItem.getId(), processItem.getVersion(), processItem.getOrdinal());
 		this.item = new ItemDTO(processItem.getItem());
 		
 		this.groupName = processItem.getGroupName();
@@ -81,10 +81,10 @@ public class ProcessItemDTO extends ProcessDTO {
 		
 	}
 
-	public ProcessItemDTO(Integer id, Integer version,
+	public ProcessItemDTO(Integer id, Integer version, Integer ordinal,
 			ItemDTO item,
 			String groupName, String description, String remarks) {
-		super(id, version);
+		super(id, version, ordinal);
 		this.item = item;
 		this.groupName = groupName;
 		this.description = description;

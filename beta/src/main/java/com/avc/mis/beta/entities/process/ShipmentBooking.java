@@ -20,6 +20,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.processinfo.BookedContainer;
 
@@ -70,6 +71,7 @@ public class ShipmentBooking extends GeneralProcess {
 	 * @param bookedContainers the bookedContainers to set
 	 */
 	public void setBookedContainers(BookedContainer[] bookedContainers) {
+		Ordinal.setOrdinals(bookedContainers);
 		this.bookedContainers = Insertable.setReferences(bookedContainers, (t) -> {t.setReference(this);	return t;});
 	}
 

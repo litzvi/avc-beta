@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 
 import lombok.AccessLevel;
@@ -58,6 +59,7 @@ public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProces
 	 * @param processItems the processItems to set
 	 */
 	protected void setProcessItems(T[] processItems) {
+		Ordinal.setOrdinals(processItems);
 		this.processItems = Insertable.setReferences(processItems, (t) -> {t.setReference(this);	return t;});
 	}
 }

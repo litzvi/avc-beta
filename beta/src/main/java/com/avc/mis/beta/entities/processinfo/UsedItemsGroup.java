@@ -19,6 +19,7 @@ import javax.validation.constraints.NotEmpty;
 import com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemTableDTO;
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -75,6 +76,7 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 	 * @param usedItems
 	 */
 	public void setUsedItems(UsedItem[] usedItems) {
+		Ordinal.setOrdinals(usedItems);
 		this.usedItems = Insertable.setReferences(usedItems, (t) -> {t.setReference(this);	return t;});
 	}
 	

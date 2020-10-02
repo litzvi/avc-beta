@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 
@@ -56,6 +57,7 @@ public abstract class TransactionProcess<T extends ProcessItem> extends ProcessW
 	 * @param usedItemGroups array of UsedItemsGroup in order, if required.
 	 */
 	public void setUsedItemGroups(UsedItemsGroup[] usedItemGroups) {
+		Ordinal.setOrdinals(usedItemGroups);
 		this.usedItemGroups = Insertable.setReferences(usedItemGroups, (t) -> {t.setReference(this);	return t;});
 	}
 

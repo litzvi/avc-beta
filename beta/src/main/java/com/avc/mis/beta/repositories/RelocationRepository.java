@@ -73,12 +73,12 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 	Optional<StorageRelocationDTO> findRelocationDTOByProcessId(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.StorageMoveDTO( "
-			+ "m.id, m.version, m.numberUsedUnits, item.id, item.value, "
+			+ "m.id, m.version, m.ordinal, m.numberUsedUnits, item.id, item.value, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "
 			+ "used_sf.id, used_sf.version, used_sf.ordinal,"
 			+ "used_unit.amount, used_unit.measureUnit, used_sf.numberUnits, used_sf.containerWeight, "
 			+ "used_warehouseLocation.id, used_warehouseLocation.value, used_sf.remarks, "
-			+ "m.ordinal, unit.amount, unit.measureUnit, m.numberUnits, m.containerWeight,"
+			+ "unit.amount, unit.measureUnit, m.numberUnits, m.containerWeight,"
 			+ "warehouseLocation.id, warehouseLocation.value, type(m)) "
 		+ "from StorageMove m "
 			+ "join m.storage used_sf "
@@ -93,7 +93,8 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 			+ "join m.unitAmount unit "
 			+ "left join m.warehouseLocation warehouseLocation "
 			+ "join m.process p "
-		+ "where p.id = :processId ")
+		+ "where p.id = :processId "
+		+ "order by m.ordinal ")
 	Set<StorageMoveDTO> findStorageMoveDTOsByProcessId(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("

@@ -19,6 +19,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.processinfo.LoadedItem;
@@ -69,6 +70,7 @@ public class ContainerLoading extends TransactionProcess<ProcessItem> {
 	 * @param loadedItems array of loaded items in order
 	 */
 	public void setLoadedItems(LoadedItem[] loadedItems) {
+		Ordinal.setOrdinals(loadedItems);
 		this.loadedItems = Insertable.setReferences(loadedItems, (t) -> {t.setReference(this);	return t;});
 	}
 	

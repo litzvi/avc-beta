@@ -13,6 +13,7 @@ import org.apache.commons.collections4.MultiSet;
 import org.apache.commons.collections4.multiset.HashMultiSet;
 
 import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -30,7 +31,7 @@ import lombok.NonNull;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class SampleItemDTO extends ProcessDTO {
+public class SampleItemDTO extends SubjectDataDTO {
 	
 	private BasicValueEntity<Item> item;
 //	private BigDecimal amountWeighed;
@@ -42,10 +43,10 @@ public class SampleItemDTO extends ProcessDTO {
 	private MultiSet<ItemWeightDTO> itemWeights;
 
 
-	public SampleItemDTO(Integer id, Integer version, 
+	public SampleItemDTO(Integer id, Integer version,  Integer ordinal,
 			Integer itemId, String itemValue, 
 			MeasureUnit measureUnit, BigDecimal sampleContainerWeight) {
-		super(id, version);
+		super(id, version, ordinal);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 //		this.unitAmount = amountWeighed.setScale(3);
 		this.measureUnit = measureUnit;
@@ -55,7 +56,7 @@ public class SampleItemDTO extends ProcessDTO {
 	}
 
 	public SampleItemDTO(@NonNull SampleItem sampleItem) {
-		super(sampleItem.getId(), sampleItem.getVersion());
+		super(sampleItem.getId(), sampleItem.getVersion(), sampleItem.getOrdinal());
 		this.item = new BasicValueEntity<Item>(sampleItem.getItem());
 		this.measureUnit = sampleItem.getMeasureUnit();
 //		this.numberOfSamples = sampleItem.getNumberOfSamples();

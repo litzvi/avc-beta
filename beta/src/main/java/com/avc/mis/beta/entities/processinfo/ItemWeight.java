@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
-import com.avc.mis.beta.entities.AuditedEntity;
+import com.avc.mis.beta.entities.RankedAuditedEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;
@@ -33,7 +33,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "ITEM_WEIGHTS")
-public class ItemWeight extends AuditedEntity {
+public class ItemWeight extends RankedAuditedEntity {
 	
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)

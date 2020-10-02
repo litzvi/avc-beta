@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Optional;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ItemWeight;
 
@@ -20,7 +20,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class ItemWeightDTO extends ProcessDTO {
+public class ItemWeightDTO extends SubjectDataDTO {
 
 	BigDecimal unitAmount;
 	BigDecimal numberUnits;	
@@ -28,10 +28,10 @@ public class ItemWeightDTO extends ProcessDTO {
 	BigDecimal avgTestedWeight;
 
 
-	public ItemWeightDTO(Integer id, Integer version,
+	public ItemWeightDTO(Integer id, Integer version, Integer ordinal,
 			BigDecimal unitAmount, BigDecimal numberUnits, 
 			BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
-		super(id, version);
+		super(id, version, ordinal);
 		this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 		this.numberOfSamples = numberOfSamples;
@@ -43,7 +43,7 @@ public class ItemWeightDTO extends ProcessDTO {
 
 
 	public ItemWeightDTO(ItemWeight itemWeight) {
-		super(itemWeight.getId(), itemWeight.getVersion());
+		super(itemWeight.getId(), itemWeight.getVersion(), itemWeight.getOrdinal());
 		this.unitAmount = itemWeight.getUnitAmount().setScale(MeasureUnit.SCALE);
 		this.numberUnits = itemWeight.getNumberUnits().setScale(MeasureUnit.SCALE);
 		this.numberOfSamples = itemWeight.getNumberOfSamples();

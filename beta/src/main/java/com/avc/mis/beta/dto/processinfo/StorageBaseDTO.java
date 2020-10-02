@@ -6,9 +6,8 @@ package com.avc.mis.beta.dto.processinfo;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.Storage;
@@ -24,9 +23,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StorageBaseDTO extends ProcessDTO implements Ordinal {
+public class StorageBaseDTO extends SubjectDataDTO {
 
-	private Integer ordinal;
 //	private String name;
 	private AmountWithUnit unitAmount;
 	private BigDecimal numberUnits;	
@@ -40,8 +38,7 @@ public class StorageBaseDTO extends ProcessDTO implements Ordinal {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String remarks, Class<? extends Storage> clazz) {
-		super(id, version);
-		this.ordinal = ordinal;
+		super(id, version, ordinal);
 //		this.name = name;
 		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
@@ -60,8 +57,7 @@ public class StorageBaseDTO extends ProcessDTO implements Ordinal {
 	 * @param version
 	 */
 	public StorageBaseDTO(StorageBase storage) {
-		super(storage.getId(), storage.getVersion());
-		this.ordinal = storage.getOrdinal();
+		super(storage.getId(), storage.getVersion(), storage.getOrdinal());
 //		this.name = storage.getName();
 		this.unitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		this.numberUnits = Optional.ofNullable(storage.getNumberUnits()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
@@ -89,8 +85,7 @@ public class StorageBaseDTO extends ProcessDTO implements Ordinal {
 	public StorageBaseDTO(Integer id, Integer version, Integer ordinal,
 			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz) {
-		super(id, version);
-		this.ordinal = ordinal;
+		super(id, version, ordinal);
 //		this.name = name;
 		this.unitAmount = unitAmount;
 //		this.measureUnit = measureUnit;
@@ -121,7 +116,7 @@ public class StorageBaseDTO extends ProcessDTO implements Ordinal {
 	 * @param newLocation the new warehouse location
 	 */
 	protected void setNewStorageFields(Storage storage, BigDecimal numberUnits, Warehouse newLocation) {
-		storage.setOrdinal(this.ordinal);
+		storage.setOrdinal(this.getOrdinal());
 		storage.setUnitAmount(this.unitAmount);
 		storage.setContainerWeight(this.containerWeight);
 		storage.setNumberUnits(numberUnits);
