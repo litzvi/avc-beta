@@ -34,6 +34,7 @@ import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.service.Orders;
@@ -260,6 +261,13 @@ public class TestService {
 	public Object getSupplycategory() {
 		List<SupplyCategory> supplyCategories = getSupplyCategories();
 		return supplyCategories.get(randNum.nextInt(supplyCategories.size()));
+	}
+	
+	public ShippingPort getShippingPort() {
+		List<ShippingPort> ports = valueTableReader.getAllShippingPorts();
+		if(ports.isEmpty())
+			fail("No Shipping Ports in database");
+		return ports.get(randNum.nextInt(ports.size()));
 	}
 
 	public void cleanup(Supplier supplier) {

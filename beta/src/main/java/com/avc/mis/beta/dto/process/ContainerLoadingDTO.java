@@ -11,12 +11,19 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.Embedded;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
+import com.avc.mis.beta.entities.embeddable.ContainerDetails;
+import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.ContainerLoading;
+import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
@@ -35,7 +42,10 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class ContainerLoadingDTO extends PoProcessDTO {
-
+	
+	private ContainerDetails containerDetails;
+	private ShipingDetails shipingDetails;
+	
 	private Set<LoadedItemDTO> loadedItems; //can use a SortedSet like ContactDetails to maintain order
 	private Set<UsedItemsGroupDTO> usedItemGroups; //can use a SortedSet like ContactDetails to maintain order
 	
@@ -45,16 +55,21 @@ public class ContainerLoadingDTO extends PoProcessDTO {
 			Integer supplierId, Integer supplierVersion, String supplierName,
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
-			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
+			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
+			ContainerDetails containerDetails, ShipingDetails shipingDetails) {
 		super(id, version, createdDate, userRecording, poCodeId, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName,
 				processName, productionLine, recordedTime, startTime, endTime, 
 				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
+		this.containerDetails = containerDetails;
+		this.shipingDetails = shipingDetails;
 	}
 	
 	
 	public ContainerLoadingDTO(@NonNull ContainerLoading loading) {
 		super(loading);
+		this.containerDetails = loading.getContainerDetails();
+		this.shipingDetails = loading.getShipingDetails();
 		this.loadedItems = Arrays.stream(loading.getLoadedItems())
 				.map(i->{return new LoadedItemDTO(i);}).collect(Collectors.toSet());
 		this.usedItemGroups = Arrays.stream(loading.getUsedItemGroups())

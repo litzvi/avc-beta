@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -47,8 +48,8 @@ public class ContainerLoading extends TransactionProcess<ProcessItem> {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@NotEmpty(message = "Loaded item line has to contain at least one storage line")
-	private Set<LoadedItem> loadedItems;
+//	@NotEmpty(message = "Loaded item line has to contain at least one storage line")
+	private Set<LoadedItem> loadedItems = new HashSet<LoadedItem>();
 	
 	@Valid
 	@NotNull(message = "Shipment code is mandatory")

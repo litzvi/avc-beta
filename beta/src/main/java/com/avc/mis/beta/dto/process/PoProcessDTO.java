@@ -50,13 +50,15 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 				processName, productionLine, 
 				recordedTime, startTime, endTime, 
 				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
-		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
+		if(poCodeId != null)
+			this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		
 	}
 	
 	public PoProcessDTO(@NonNull PoProcess process) {
 		super(process);
-		this.poCode = new PoCodeDTO(process.getPoCode());
+		if(process.getPoCode() != null)
+			this.poCode = new PoCodeDTO(process.getPoCode());
 	}
 	
 }
