@@ -5,12 +5,9 @@ package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.Null;
-
-import com.avc.mis.beta.entities.Ordinal;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

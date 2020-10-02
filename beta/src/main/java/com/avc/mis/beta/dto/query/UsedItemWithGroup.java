@@ -30,14 +30,14 @@ public class UsedItemWithGroup  extends ValueDTO {
 			Integer itemId, String itemValue, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, BigDecimal otherUsedUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
 		super(id);
 		this.usedItemsGroup = new UsedItemsGroupDTO(id, version, groupName, tableView);
 		this.usedItem = new UsedItemDTO(usedId, usedVersion, numberUnits, itemId, itemValue, 
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName, 
 				storageId, stoageVersion, storageOrdinal,
-				unitAmount, measureUnit, storageNumberUnits, containerWeight,
+				unitAmount, measureUnit, storageNumberUnits, otherUsedUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks);
 	}
 	

@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
-import java.util.List;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
@@ -20,7 +19,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.Value;
 
 /**
  * @author Zvi

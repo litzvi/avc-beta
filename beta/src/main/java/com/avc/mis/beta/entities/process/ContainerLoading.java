@@ -49,6 +49,8 @@ public class ContainerLoading extends TransactionProcess<ProcessItem> {
 	@NotEmpty(message = "Loaded item line has to contain at least one storage line")
 	private Set<LoadedItem> loadedItems;
 	
+	@Valid
+	@NotNull(message = "Shipment code is mandatory")
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, updatable = false)
 	private ShipmentCode shipmentCode;

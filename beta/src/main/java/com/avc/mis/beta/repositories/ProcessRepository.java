@@ -34,7 +34,9 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "i.id, i.version, i.numberUsedUnits, item.id, item.value, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
-			+ "unit.amount, unit.measureUnit, sf.numberUnits, sf.containerWeight, "
+			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
+			+ "sum(usedItems.numberUsedUnits) - i.numberUsedUnits, "
+			+ "sf.containerWeight, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks) "
 		+ "from UsedItem i "
 			+ "join i.storage sf "
@@ -46,9 +48,11 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 						+ "join used_p.poCode itemPo "
 							+ "left join itemPo.contractType ct "
 							+ "left join itemPo.supplier s "
+				+ "join sf.usedItems usedItems "
 			+ "join i.group grp "
 				+ "join grp.process p "
-		+ "where p.id = :processId ")
+		+ "where p.id = :processId "
+		+ "group by sf ")
 	Set<UsedItemDTO> findUsedItems(int processId);
 	
 	@Query("select new com.avc.mis.beta.dto.query.UsedItemWithGroup( "
@@ -56,7 +60,9 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "i.id, i.version, i.numberUsedUnits, item.id, item.value, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
-			+ "unit.amount, unit.measureUnit, sf.numberUnits, sf.containerWeight, "
+			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
+			+ "sum(usedItems.numberUsedUnits) - i.numberUsedUnits, "
+			+ "sf.containerWeight, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks) "
 		+ "from UsedItem i "
 			+ "join i.storage sf "
@@ -68,9 +74,11 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 						+ "join used_p.poCode itemPo "
 							+ "left join itemPo.contractType ct "
 							+ "left join itemPo.supplier s "
+				+ "join sf.usedItems usedItems "
 			+ "join i.group grp "
 				+ "join grp.process p "
-		+ "where p.id = :processId ")
+		+ "where p.id = :processId "
+		+ "group by sf ")
 	List<UsedItemWithGroup> findUsedItemsWithGroup(int processId);
 	
 

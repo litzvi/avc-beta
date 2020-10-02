@@ -25,6 +25,8 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 	@EqualsAndHashCode.Exclude
 	private BasicValueEntity<Warehouse> warehouseLocation;
 	@EqualsAndHashCode.Exclude
+	private BigDecimal otherUsedUnits;
+	@EqualsAndHashCode.Exclude
 	private BigDecimal containerWeight;	
 	
 	private Warehouse NewLocation;
@@ -34,7 +36,8 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 			Integer itemId, String itemValue, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, 
+			BigDecimal otherUsedUnits, BigDecimal containerWeight, 
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
 		super(id, version, numberUsedUnits,
 				itemId, itemValue, 
@@ -49,6 +52,7 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else
 			this.warehouseLocation = null;
+		this.otherUsedUnits = otherUsedUnits;
 		this.containerWeight = containerWeight;
 	
 	}

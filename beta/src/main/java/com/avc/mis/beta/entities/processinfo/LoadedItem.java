@@ -65,7 +65,6 @@ public class LoadedItem extends ProcessInfoEntity {
                            column=@Column(nullable = false))
     })
 	@Embedded
-	@NotNull(message = "Declared amount is mandatory")
 	@Valid
 	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
 	private AmountWithUnit declaredAmount;	
