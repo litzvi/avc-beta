@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.doc.ExportInfo;
+import com.avc.mis.beta.dto.doc.InventoryExportDoc;
+import com.avc.mis.beta.dto.doc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.view.LoadingRow;
@@ -109,4 +112,24 @@ public class Loading {
 	@Deprecated public void removeLoading(int loadingId) {
 		getDeletableDAO().permenentlyRemoveEntity(ContainerLoading.class, loadingId);
 	} 
+	
+	public InventoryExportDoc getInventoryExportDoc(int processId) {
+		InventoryExportDoc doc = new InventoryExportDoc();
+		Optional<ExportInfo> optInfo = getContainerLoadingRepository().findInventoryExportDocById(processId);
+		doc.setExportInfo(optInfo.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id")));
+		doc.setLoadedTotals(getContainerLoadingRepository().findLoadedTotals(processId));
+		
+		return doc; 
+		
+	}
+	
+	public SecurityExportDoc getSecurityExportDoc(int processId) {
+		SecurityExportDoc doc = new SecurityExportDoc();
+		Optional<ExportInfo> optInfo = getContainerLoadingRepository().findInventoryExportDocById(processId);
+		doc.setExportInfo(optInfo.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id")));
+		doc.setLoadedStorages(getContainerLoadingRepository().findLoadedStorages(processId));
+		
+		return doc; 
+		
+	}
 }

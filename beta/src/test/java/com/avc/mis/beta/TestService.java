@@ -179,7 +179,7 @@ public class TestService {
 	}
 	
 	private ReceiptItem[] getOrderReceiptItems(PoDTO poDTO) {
-		Set<OrderItemDTO> orderItems = poDTO.getOrderItems();
+		List<OrderItemDTO> orderItems = poDTO.getOrderItems();
 		ReceiptItem[] items = new ReceiptItem[orderItems.size()];
 		StorageWithSample[] storageForms = new StorageWithSample[items.length];
 		Warehouse storage = getWarehouse();

@@ -81,7 +81,7 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "where po.id = :processId "
 		+ "group by i "
 		+ "order by i.ordinal ")
-	Set<OrderItemDTO> findPoOrderItemsById(Integer processId);
+	List<OrderItemDTO> findPoOrderItemsById(Integer processId);
 	
 	/**
 	 * Gets rows of open orders for the given order type - 

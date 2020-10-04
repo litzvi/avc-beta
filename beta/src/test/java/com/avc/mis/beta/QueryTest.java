@@ -271,7 +271,14 @@ public class QueryTest {
 		List<BasicValueEntity<Item>> wasteItems = valueTablesReader.getItemsByCategry(ItemCategory.WASTE);
 		wasteItems.forEach(i->System.out.println(i));
 		
-		List<ProcessRow> transferRows = warehouseManagement.getStorageTransfersTable();
+		List<ProcessRow> transferRows;
+		try {
+			transferRows = warehouseManagement.getStorageTransfersTable();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		transferRows.forEach(i -> System.out.println(i));
 						
 		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocationTable();

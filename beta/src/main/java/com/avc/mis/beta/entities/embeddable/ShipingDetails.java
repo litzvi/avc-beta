@@ -34,7 +34,7 @@ public class ShipingDetails {
 	private String vessel;
 	private String shippingCompany;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "destinationPortId")
 	private ShippingPort portOfLoading;
 	
@@ -43,7 +43,7 @@ public class ShipingDetails {
 	@Convert(converter = LocalDateToLong.class)
 	private LocalDate etd;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "portOfDischargeId")
 	private ShippingPort portOfDischarge;
 

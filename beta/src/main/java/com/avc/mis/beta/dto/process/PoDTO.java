@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -39,7 +40,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class PoDTO extends PoProcessDTO {
 	
-	private Set<OrderItemDTO> orderItems; //can use a SortedSet like ContactDetails to maintain order
+	private List<OrderItemDTO> orderItems; //can use a SortedSet like ContactDetails to maintain order
 	
 	private String personInCharge;
 	
@@ -72,7 +73,7 @@ public class PoDTO extends PoProcessDTO {
 	public PoDTO(@NonNull PO po) {
 		super(po);
 		this.personInCharge = po.getPersonInCharge();
-		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toSet());
+		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toList());
 
 	}
 	

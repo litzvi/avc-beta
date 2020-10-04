@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
+import com.avc.mis.beta.dto.values.ShipmentCodeBasic;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -43,6 +44,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ContainerLoadingDTO extends PoProcessDTO {
 	
+	private ShipmentCodeDTO shipmentCode;
+	
 	private ContainerDetails containerDetails;
 	private ShipingDetails shipingDetails;
 	
@@ -56,11 +59,14 @@ public class ContainerLoadingDTO extends PoProcessDTO {
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
 			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
+			Integer shipmentCodeId,
+			/* Integer portOfDischargeId, */String portOfDischargeCode, /* String portOfDischargeValue, */
 			ContainerDetails containerDetails, ShipingDetails shipingDetails) {
 		super(id, version, createdDate, userRecording, poCodeId, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName,
 				processName, productionLine, recordedTime, startTime, endTime, 
 				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
+		this.shipmentCode = new ShipmentCodeDTO(shipmentCodeId, portOfDischargeCode);
 		this.containerDetails = containerDetails;
 		this.shipingDetails = shipingDetails;
 	}
@@ -68,6 +74,7 @@ public class ContainerLoadingDTO extends PoProcessDTO {
 	
 	public ContainerLoadingDTO(@NonNull ContainerLoading loading) {
 		super(loading);
+		this.shipmentCode = new ShipmentCodeDTO(loading.getShipmentCode());
 		this.containerDetails = loading.getContainerDetails();
 		this.shipingDetails = loading.getShipingDetails();
 		this.loadedItems = Arrays.stream(loading.getLoadedItems())

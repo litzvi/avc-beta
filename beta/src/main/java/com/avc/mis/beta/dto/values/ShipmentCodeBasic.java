@@ -8,6 +8,7 @@ import com.avc.mis.beta.entities.process.ShipmentCode;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.Value;
 
 /**
@@ -16,6 +17,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 public class ShipmentCodeBasic extends BaseDTO {
 
 	String portOfDischargeCode;

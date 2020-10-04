@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -10,12 +12,19 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
+import com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow;
+import com.avc.mis.beta.dto.doc.ExportInfo;
+import com.avc.mis.beta.dto.doc.InventoryExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.ContainerLoading;
+
+import lombok.NonNull;
 
 /**
  * @author zvi
@@ -29,8 +38,11 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
+			+ "sc.code, port.code, "
 			+ "r.containerDetails, r.shipingDetails) "
 		+ "from ContainerLoading r "
+			+ "join r.shipmentCode sc "
+				+ "join sc.portOfDischarge port "
 			+ "left join r.poCode po_code "
 				+ "left join po_code.contractType t "
 				+ "left join po_code.supplier s "
@@ -115,6 +127,53 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "join p.containerDetails cont "
 		+ "join p.shipingDetails ship ")
 	List<LoadingRow> findContainerLoadings();
+
+	@Query("select new com.avc.mis.beta.dto.doc.ExportInfo( "
+			+ "shipment_code.id, pod.code, pod.value, p.recordedTime) "
+		+ "from ContainerLoading p "
+			+ "join p.shipmentCode shipment_code "
+				+ "join shipment_code.portOfDischarge pod "
+		+ "where p.id = :processId ")
+	Optional<ExportInfo> findInventoryExportDocById(int processId);
+
+	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemRow( "
+			+ "item.value, itemPo.code, ct.code, ct.suffix, "
+			+ "sum((unit.amount - coalesce(sf.containerWeight, 0)) * i.numberUsedUnits * uom.multiplicand / uom.divisor), "
+			+ "item.measureUnit) "
+		+ "from ContainerLoading p "
+			+ "join p.usedItemGroups g "
+				+ "join g.usedItems i "
+					+ "join i.storage sf "
+						+ "join sf.processItem pi "
+							+ "join pi.process used_p "
+								+ "join used_p.poCode itemPo "
+									+ "left join itemPo.contractType ct "
+							+ "join pi.item item "
+						+ "join sf.unitAmount unit "
+							+ "join UOM uom "
+								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "				
+		+ "where p.id = :processId "
+		+ "group by item, itemPo.code ")
+	List<ContainerPoItemRow> findLoadedTotals(int processId);
+
+	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow( "
+			+ "item.value, itemPo.code, ct.code, ct.suffix, "
+			+ "unit.amount, unit.measureUnit, sum(i.numberUsedUnits)) "
+		+ "from ContainerLoading p "
+			+ "join p.usedItemGroups g "
+				+ "join g.usedItems i "
+					+ "join i.storage sf "
+						+ "join sf.processItem pi "
+							+ "join pi.process used_p "
+								+ "join used_p.poCode itemPo "
+									+ "left join itemPo.contractType ct "
+							+ "join pi.item item "
+						+ "join sf.unitAmount unit "
+							+ "join UOM uom "
+								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "				
+		+ "where p.id = :processId "
+		+ "group by item, itemPo.code, sf ")
+	List<ContainerPoItemStorageRow> findLoadedStorages(int processId);
 
 	
 }

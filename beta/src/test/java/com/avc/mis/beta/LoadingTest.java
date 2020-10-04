@@ -16,6 +16,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.doc.InventoryExportDoc;
+import com.avc.mis.beta.dto.doc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
@@ -95,6 +97,11 @@ public class LoadingTest {
 
 		ContainerLoadingDTO actual = loadingService.getLoading(loading.getId());
 
+		InventoryExportDoc inventoryExportDoc = loadingService.getInventoryExportDoc(loading.getId());
+		System.out.println(inventoryExportDoc);
+		
+		SecurityExportDoc securityExportDoc =loadingService.getSecurityExportDoc(loading.getId());
+		System.out.println(securityExportDoc);
 		
 		assertEquals(expected, actual, "Failed test adding container loading");
 

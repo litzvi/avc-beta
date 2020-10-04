@@ -66,13 +66,5 @@ public class ShipmentCode extends BaseEntity {
 	public void setId(Integer id) {
 		this.code = id;		
 	}
-	
-	/**
-	 * Used by Lombok so new/transient entities with null id won't be equal.
-	 * @param o
-	 * @return
-	 */
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
+
 }

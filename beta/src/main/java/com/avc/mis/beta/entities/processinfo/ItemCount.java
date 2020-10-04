@@ -73,8 +73,5 @@ public class ItemCount extends ProcessInfoEntity {
 		this.amounts = Insertable.setReferences(amounts, (t) -> {t.setReference(this);	return t;});
 	}
 	
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
 		
 }
