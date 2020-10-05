@@ -172,7 +172,7 @@ public class ObjectTablesReader {
 	 * Can be used for searching reports for any PO.
 	 * @return Set of PoRow for po's that are still active - still in production.
 	 */
-	public Set<PoCodeDTO> findAllPoCodes() {
+	public List<PoCodeDTO> findAllPoCodes() {
 		return getObjectTablesRepository().findAllPoCodeDTOs();
 	}
 	

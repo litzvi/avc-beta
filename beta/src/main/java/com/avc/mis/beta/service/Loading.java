@@ -90,8 +90,8 @@ public class Loading {
 		loadingDTO.setLoadedItems(getContainerLoadingRepository().findLoadedItems(processId));
 		loadingDTO.setUsedItemGroups(
 				UsedItemsGroupDTO.getUsedItemsGroups(
-						getContainerLoadingRepository().findUsedItemsWithGroup(processId))
-				.stream().collect(Collectors.toSet()));
+						getContainerLoadingRepository()
+						.findUsedItemsWithGroup(processId)));
 
 		return loadingDTO; 
 	}

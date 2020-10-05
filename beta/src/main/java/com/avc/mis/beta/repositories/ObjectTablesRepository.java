@@ -188,7 +188,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 //			+ "join p.processType t "
 //		+ "where t.processName in ?1 "
 		+ "order by po_code.code desc ")
-	Set<PoCodeDTO> findAllPoCodeDTOs();
+	List<PoCodeDTO> findAllPoCodeDTOs();
 
 	
 }

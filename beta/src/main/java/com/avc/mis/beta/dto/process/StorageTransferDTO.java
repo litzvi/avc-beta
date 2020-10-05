@@ -56,7 +56,7 @@ public class StorageTransferDTO extends TransactionProcessDTO {
 		ItemCount[] itemCounts = transfer.getItemCounts();
 		if(itemCounts != null)
 			this.setItemCounts(Arrays.stream(itemCounts)
-					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toSet()));
+					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toList()));
 		this.setAccessWeight(transfer.getAccessWeight());
 
 	}

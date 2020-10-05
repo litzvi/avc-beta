@@ -73,7 +73,8 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 					+ "join poCode.supplier s "
 			+ "join i.amounts count_amount "
 		+ "where p.id = :processId "
-		+ "order by i.ordinal, count_amount.ordinal ")
+//		+ "order by i.ordinal, count_amount.ordinal " //ordered by dto because using Collectors.groupingBy
+		+ "")
 	List<ItemCountWithAmount> findItemCountWithAmount(int processId);
 
 

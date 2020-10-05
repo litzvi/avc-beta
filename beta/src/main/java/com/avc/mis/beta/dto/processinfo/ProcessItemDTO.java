@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -36,6 +37,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class ProcessItemDTO extends SubjectDataDTO {
 
 	private ItemDTO item; //change to itemDTO in order to get category
@@ -45,7 +47,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 	
 	@JsonIgnore
 	private boolean tableView;
-	private SortedSet<StorageBaseDTO> storageForms;
+	private List<StorageBaseDTO> storageForms;
 	
 	private AmountWithUnit[] totalAmount;
 	
@@ -91,9 +93,8 @@ public class ProcessItemDTO extends SubjectDataDTO {
 		this.remarks = remarks;
 	}
 	
-	public void setStorageForms(Collection<StorageBaseDTO> storageForms) {
-		this.storageForms = new TreeSet<>(Ordinal.ordinalComparator());
-		this.storageForms.addAll(storageForms);
+	public void setStorageForms(List<StorageBaseDTO> storageForms) {
+		this.storageForms = storageForms;
 		this.totalAmount = new AmountWithUnit[2];
 		AmountWithUnit totalAmount = this.storageForms.stream()
 				.map(sf -> sf.getUnitAmount()
@@ -104,7 +105,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 		this.totalAmount[1] = totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 	}
 	
-	public Set<StorageBaseDTO> getStorageForms() {
+	public List<StorageBaseDTO> getStorageForms() {
 		if(tableView) {
 			return null;
 		}
@@ -142,6 +143,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 					.collect(Collectors.toList()));
 			processItems.add(processItem);
 		}
+		processItems.sort(Ordinal.ordinalComparator());
 		return processItems;
 	}
 		

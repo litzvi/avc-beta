@@ -11,6 +11,7 @@ import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.ToString;
 import lombok.Value;
 
 /**
@@ -19,6 +20,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 public class ItemDTO extends ValueDTO {
 
 	String value;

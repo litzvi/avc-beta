@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,7 +47,9 @@ public class StorageRelocation extends PoProcess {
 	 * @return the storageMoves
 	 */
 	public StorageMove[] getStorageMoves() {
-		return this.storageMoves.toArray(new StorageMove[this.storageMoves.size()]);
+		StorageMove[] storageMoves = this.storageMoves.toArray(new StorageMove[this.storageMoves.size()]);
+		Arrays.sort(storageMoves, Ordinal.ordinalComparator());
+		return storageMoves;
 	}
 
 	/**

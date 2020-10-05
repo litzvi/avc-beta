@@ -40,7 +40,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class PoDTO extends PoProcessDTO {
 	
-	private List<OrderItemDTO> orderItems; //can use a SortedSet like ContactDetails to maintain order
+	private List<OrderItemDTO> orderItems;
 	
 	private String personInCharge;
 	

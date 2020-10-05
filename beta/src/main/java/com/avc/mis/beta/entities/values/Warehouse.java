@@ -31,7 +31,7 @@ import lombok.NoArgsConstructor;
 @Table(name="WAREHOUSE_LOCATIONS")
 public class Warehouse extends ValueEntity implements ValueInterface {
 	
-	@Column(name = "name", nullable = false)
+	@Column(name = "name", unique = true, nullable = false)
 	@NotBlank(message = "Warehouse name(value) can't be blank")
 	private String value;
 	
@@ -44,6 +44,8 @@ public class Warehouse extends ValueEntity implements ValueInterface {
 		setId(id);
 		this.value = value;
 	}
+	
+	
 	
 	public Warehouse(Integer id) {
 		super();

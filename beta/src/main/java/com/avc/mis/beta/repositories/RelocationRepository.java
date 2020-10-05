@@ -95,7 +95,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 			+ "join m.process p "
 		+ "where p.id = :processId "
 		+ "order by m.ordinal ")
-	Set<StorageMoveDTO> findStorageMoveDTOsByProcessId(int processId);
+	List<StorageMoveDTO> findStorageMoveDTOsByProcessId(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "

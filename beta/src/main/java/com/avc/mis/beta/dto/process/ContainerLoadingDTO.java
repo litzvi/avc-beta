@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -49,8 +50,8 @@ public class ContainerLoadingDTO extends PoProcessDTO {
 	private ContainerDetails containerDetails;
 	private ShipingDetails shipingDetails;
 	
-	private Set<LoadedItemDTO> loadedItems; //can use a SortedSet like ContactDetails to maintain order
-	private Set<UsedItemsGroupDTO> usedItemGroups; //can use a SortedSet like ContactDetails to maintain order
+	private List<LoadedItemDTO> loadedItems; 
+	private List<UsedItemsGroupDTO> usedItemGroups; 
 	
 	
 	public ContainerLoadingDTO(Integer id, Integer version, Instant createdDate, String userRecording, Integer poCodeId,
@@ -60,13 +61,13 @@ public class ContainerLoadingDTO extends PoProcessDTO {
 			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
 			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
 			Integer shipmentCodeId,
-			/* Integer portOfDischargeId, */String portOfDischargeCode, /* String portOfDischargeValue, */
+			Integer portOfDischargeId, String portOfDischargeCode, String portOfDischargeValue,
 			ContainerDetails containerDetails, ShipingDetails shipingDetails) {
 		super(id, version, createdDate, userRecording, poCodeId, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName,
 				processName, productionLine, recordedTime, startTime, endTime, 
 				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
-		this.shipmentCode = new ShipmentCodeDTO(shipmentCodeId, portOfDischargeCode);
+		this.shipmentCode = new ShipmentCodeDTO(shipmentCodeId, portOfDischargeId, portOfDischargeCode, portOfDischargeValue);
 		this.containerDetails = containerDetails;
 		this.shipingDetails = shipingDetails;
 	}
@@ -78,9 +79,9 @@ public class ContainerLoadingDTO extends PoProcessDTO {
 		this.containerDetails = loading.getContainerDetails();
 		this.shipingDetails = loading.getShipingDetails();
 		this.loadedItems = Arrays.stream(loading.getLoadedItems())
-				.map(i->{return new LoadedItemDTO(i);}).collect(Collectors.toSet());
+				.map(i->{return new LoadedItemDTO(i);}).collect(Collectors.toList());
 		this.usedItemGroups = Arrays.stream(loading.getUsedItemGroups())
-				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toSet());
+				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList());
 	}
 	
 

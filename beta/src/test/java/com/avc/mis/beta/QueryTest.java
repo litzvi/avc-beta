@@ -105,15 +105,15 @@ public class QueryTest {
 		objectTablesReader.findOpenAndPendingCashewOrdersPoCodes().forEach(row -> System.out.println(row));
 		
 		//get list of cashew orders and receipts
-		Set<PoCodeDTO> activeCashewBasic =  objectTablesReader.findAllPoCodes();
+		List<PoCodeDTO> activeCashewBasic =  objectTablesReader.findAllPoCodes();
 		activeCashewBasic.forEach(row -> System.out.println(row));
 		
 		//get active po codes - so we can add QC for them
-		activeCashewBasic =  objectTablesReader.findOpenAndPendingCashewOrdersPoCodes();
-		if(activeCashewBasic.isEmpty()) {
+		Set<PoCodeDTO> openAndPendingCashewOrdersPoCodes = objectTablesReader.findOpenAndPendingCashewOrdersPoCodes();
+		if(openAndPendingCashewOrdersPoCodes.isEmpty()) {
 			fail("Couldn't test fetching purchase order by po code");
 		}
-		activeCashewBasic.forEach(row -> System.out.println(row));
+		openAndPendingCashewOrdersPoCodes.forEach(row -> System.out.println(row));
 		
 		//get order by process id
 		List<PoRow> poRows =  orders.findOpenCashewOrders();

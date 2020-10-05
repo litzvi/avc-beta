@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.processinfo;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -66,7 +67,9 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 	 * @return the usedItems
 	 */
 	public UsedItem[] getUsedItems() {
-		return this.usedItems.toArray(new UsedItem[this.usedItems.size()]);
+		UsedItem[] usedItems = this.usedItems.toArray(new UsedItem[this.usedItems.size()]);
+		Arrays.sort(usedItems, Ordinal.ordinalComparator());
+		return usedItems;
 	}
 
 	/**

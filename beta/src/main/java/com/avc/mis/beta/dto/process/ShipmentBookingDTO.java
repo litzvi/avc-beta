@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,7 +35,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ShipmentBookingDTO extends GeneralProcessDTO {
 
-	private Set<BookedContainerDTO> bookedContainers; //can use a SortedSet like ContactDetails to maintain order
+	private List<BookedContainerDTO> bookedContainers; 
 	
 	private String personInCharge;
 	
@@ -67,7 +68,7 @@ public class ShipmentBookingDTO extends GeneralProcessDTO {
 	public ShipmentBookingDTO(@NonNull ShipmentBooking booking) {
 		super(booking);
 		this.personInCharge = booking.getPersonInCharge();
-		this.bookedContainers = Arrays.stream(booking.getBookedContainers()).map(i->{return new BookedContainerDTO(i);}).collect(Collectors.toSet());
+		this.bookedContainers = Arrays.stream(booking.getBookedContainers()).map(i->{return new BookedContainerDTO(i);}).collect(Collectors.toList());
 
 	}
 	

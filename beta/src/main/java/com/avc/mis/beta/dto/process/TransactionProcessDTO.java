@@ -8,6 +8,7 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,8 +37,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public abstract class TransactionProcessDTO extends PoProcessDTO {
 	
-	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
-	private Set<UsedItemsGroupDTO> usedItemGroups; //can use a SortedSet like ContactDetails to maintain order
+	private List<ProcessItemDTO> processItems;
+	private List<UsedItemsGroupDTO> usedItemGroups;
 	
 	public TransactionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, Integer poCodeId,
 			String contractTypeCode, String contractTypeSuffix, 
@@ -55,8 +56,8 @@ public abstract class TransactionProcessDTO extends PoProcessDTO {
 	public TransactionProcessDTO(@NonNull TransactionProcess<?> transaction) {
 		super(transaction);
 		this.processItems = Arrays.stream(transaction.getProcessItems())
-				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
+				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList());
 		this.usedItemGroups = Arrays.stream(transaction.getUsedItemGroups())
-				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toSet());
+				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList());
 	}
 }

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
@@ -56,6 +57,7 @@ public class ItemCountDTO extends SubjectDataDTO {
 				.collect(Collectors.toList()));
 	}
 	
+	
 	public static List<ItemCountDTO> getItemCounts(List<ItemCountWithAmount> amounts) {
 		Map<Integer, List<ItemCountWithAmount>> map = amounts.stream()
 				.collect(Collectors.groupingBy(ItemCountWithAmount::getId, Collectors.toList()));
@@ -63,9 +65,11 @@ public class ItemCountDTO extends SubjectDataDTO {
 		for(List<ItemCountWithAmount> list: map.values()) {
 			ItemCountDTO itemCount = list.get(0).getItemCount();
 			itemCount.setAmounts(list.stream().map(i -> i.getAmount())
+					.sorted(Ordinal.ordinalComparator())
 					.collect(Collectors.toList()));
 			itemCounts.add(itemCount);
 		}
+		itemCounts.sort(Ordinal.ordinalComparator());
 		return itemCounts;
 	}
 	

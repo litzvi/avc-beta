@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,7 +67,9 @@ public class SampleItem extends ProcessInfoEntity {
 	private Set<ItemWeight> itemWeights = new HashSet<>();
 	
 	public ItemWeight[] getItemWeights() {
-		return (ItemWeight[])this.itemWeights.toArray(new ItemWeight[this.itemWeights.size()]);
+		ItemWeight[] itemWeights = (ItemWeight[])this.itemWeights.toArray(new ItemWeight[this.itemWeights.size()]);
+		Arrays.sort(itemWeights, Ordinal.ordinalComparator());
+		return itemWeights;
 	}
 
 	public void setItemWeights(ItemWeight[] itemWeights) {

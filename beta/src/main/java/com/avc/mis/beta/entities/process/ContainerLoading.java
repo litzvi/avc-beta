@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -79,7 +80,9 @@ public class ContainerLoading extends TransactionProcess<ProcessItem> {
 	 * @return array of loaded items in given order
 	 */
 	public LoadedItem[] getLoadedItems() {
-		return this.loadedItems.toArray(new LoadedItem[this.loadedItems.size()]);
+		LoadedItem[] loadedItems = this.loadedItems.toArray(new LoadedItem[this.loadedItems.size()]);
+		Arrays.sort(loadedItems, Ordinal.ordinalComparator());
+		return loadedItems;
 	}
 	
 //	@JsonIgnore

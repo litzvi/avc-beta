@@ -58,6 +58,7 @@ public interface SampleRepository extends BaseRepository<SampleReceipt> {
 			+ "join i.itemWeights w "
 //			+ "join i.amountWeighed weighed "
 		+ "where p.id = :processId "
-		+ "order by i.ordinal, w.ordinal ")
+//		+ "order by i.ordinal, w.ordinal " //sorted in dto
+		+ "")
 	List<SampleItemWithWeight> findSampleItemsWithWeight(int processId);
 }

@@ -35,7 +35,8 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "from Supplier s "
 			+ "left join s.supplyCategories c "
 			+ "where c.supplyGroup = :supplyGroup "
-				+ "and s.active = true ")
+				+ "and s.active = true "
+			+ "ORDER BY s.name")
 	List<DataObjectWithName> findSuppliersByGroupBasic(SupplyGroup supplyGroup);
 		
 	@Query("select new com.avc.mis.beta.dto.values.DataObjectWithName(s.id, s.version, s.name) "
@@ -66,7 +67,8 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 	@Query("select new com.avc.mis.beta.dto.view.SupplierRow(s.id, s.name, cd.id) "
 			+ "from Supplier s "
 			+ "left join s.contactDetails cd "
-			+ "where s.active = true")
+			+ "where s.active = true "
+			+ "order by s.name ")
 	List<SupplierRow> findAllSupplierRows();
 	
 	@Query("select new com.avc.mis.beta.dto.values.ValueObject(cd.id, p.value) "

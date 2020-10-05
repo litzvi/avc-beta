@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -61,7 +62,9 @@ public class ShipmentBooking extends GeneralProcess {
 	 * @return the bookedContainers
 	 */
 	public BookedContainer[] getBookedContainers() {
-		return this.bookedContainers.toArray(new BookedContainer[this.bookedContainers.size()]);
+		BookedContainer[] bookedContainers = this.bookedContainers.toArray(new BookedContainer[this.bookedContainers.size()]);
+		Arrays.sort(bookedContainers, Ordinal.ordinalComparator());
+		return bookedContainers;
 	}
 
 	/**

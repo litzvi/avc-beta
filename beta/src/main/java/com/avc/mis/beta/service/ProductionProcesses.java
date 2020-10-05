@@ -71,12 +71,11 @@ public class ProductionProcesses {
 				()->new IllegalArgumentException("No production process with given process id"));
 		processDTO.setProcessItems(ProcessItemDTO
 				.getProcessItems(getProcessRepository()
-						.findProcessItemWithStorage(processId))
-				.stream().collect(Collectors.toSet()));
+						.findProcessItemWithStorage(processId)));
 		processDTO.setUsedItemGroups(
 				UsedItemsGroupDTO.getUsedItemsGroups(
-						getProcessRepository().findUsedItemsWithGroup(processId))
-		.stream().collect(Collectors.toSet()));
+						getProcessRepository()
+						.findUsedItemsWithGroup(processId)));
 		
 		return processDTO;
 	}

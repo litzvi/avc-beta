@@ -4,6 +4,7 @@
 package com.avc.mis.beta;
 
 import java.security.AccessControlException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,8 @@ public class ExceptionControler {
 	//IllegalStateException - ProcessInfoReader
 	//AccessControlException
 	
+//	java.sql.SQLException
+	
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<List<String>> handleValidationExceptions(
 			ConstraintViolationException ex) {
@@ -95,7 +98,7 @@ public class ExceptionControler {
     }
 	
 	@ExceptionHandler({IllegalStateException.class, NullPointerException.class, 
-		TransactionRequiredException.class})
+		TransactionRequiredException.class, SQLException.class})
     public ResponseEntity<String> handleFatalException(RuntimeException e){
         return internalError(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }

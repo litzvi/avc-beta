@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.processinfo;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ import org.apache.commons.collections4.multiset.HashMultiSet;
 import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.SampleItem;
@@ -40,7 +42,7 @@ public class SampleItemDTO extends SubjectDataDTO {
 //	private BigDecimal avgTestedWeight;
 	private BigDecimal sampleContainerWeight;
 	
-	private MultiSet<ItemWeightDTO> itemWeights;
+	private List<ItemWeightDTO> itemWeights;
 
 
 	public SampleItemDTO(Integer id, Integer version,  Integer ordinal,
@@ -65,13 +67,14 @@ public class SampleItemDTO extends SubjectDataDTO {
 		
 		this.itemWeights = Arrays.stream(sampleItem.getItemWeights())
 				.map(i->{return new ItemWeightDTO(i);})
-				.collect(Collectors.toCollection(() -> {return new HashMultiSet<ItemWeightDTO>();}));
+				.collect(Collectors.toList());
 
 	}
 	
-	public void setItemWeights(Collection<ItemWeightDTO> itemWeights) {
-		this.itemWeights = new HashMultiSet<ItemWeightDTO>(itemWeights);
-	}
+//	public void setItemWeights(List<ItemWeightDTO> itemWeights) {
+//		itemWeights.sort(Ordinal.ordinalComparator());
+//		this.itemWeights = itemWeights;
+//	}
 	
 	@JsonIgnore
 	public Optional<AmountWithUnit> getSampleEstimate() {

@@ -90,7 +90,9 @@ public class ProcessItem extends ProcessInfoEntity {
 	 * @return the storageForms
 	 */
 	public Storage[] getStorageForms() {
-		return this.storageForms.toArray(new Storage[this.storageForms.size()]);
+		Storage[] storageForms = this.storageForms.toArray(new Storage[this.storageForms.size()]);
+		Arrays.sort(storageForms, Ordinal.ordinalComparator());
+		return storageForms;
 	}
 	
 	@JsonIgnore
@@ -188,14 +190,5 @@ public class ProcessItem extends ProcessInfoEntity {
 		
 	}
 	
-	/**
-	 * Used by Lombok so new/transient entities with null id won't be equal.
-	 * @param o
-	 * @return false if both this object's and given object's id is null 
-	 * or given object is not of the same class, otherwise returns true.
-	 */
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
-	
+
 }

@@ -8,6 +8,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Set;
 
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
@@ -35,7 +36,7 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 	
 	private PoCodeDTO poCode;
 	
-	private Set<ItemCountDTO> itemCounts; //can use a SortedSet like ContactDetails to maintain order
+	private List<ItemCountDTO> itemCounts;
 	private BigDecimal accessWeight;
 
 		

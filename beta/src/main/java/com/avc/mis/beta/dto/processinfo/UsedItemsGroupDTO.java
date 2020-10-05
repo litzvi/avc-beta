@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.ProcessDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
@@ -37,7 +38,7 @@ public class UsedItemsGroupDTO extends SubjectDataDTO {
 
 	@JsonIgnore
 	private boolean tableView;
-	private Set<UsedItemDTO> usedItems; //can use a SortedSet like ContactDetails to maintain order
+	private List<UsedItemDTO> usedItems;
 
 
 	public UsedItemsGroupDTO(Integer id, Integer version, Integer ordinal,
@@ -53,10 +54,10 @@ public class UsedItemsGroupDTO extends SubjectDataDTO {
 		this.tableView = group.isTableView();
 		this.usedItems = (Arrays.stream(group.getUsedItems())
 				.map(u->{return new UsedItemDTO(u);})
-				.collect(Collectors.toSet()));
+				.collect(Collectors.toList()));
 	}
 	
-	public Set<UsedItemDTO> getUsedItems() {
+	public List<UsedItemDTO> getUsedItems() {
 		if(tableView) {
 			return null;
 		}
@@ -103,12 +104,13 @@ public class UsedItemsGroupDTO extends SubjectDataDTO {
 		List<UsedItemsGroupDTO> usedItemsGroups = new ArrayList<>();
 		for(List<UsedItemWithGroup> list: map.values()) {
 			UsedItemsGroupDTO usedItemsGroup = list.get(0).getUsedItemsGroup();
-			usedItemsGroup.setUsedItems(list.stream().map(i -> i.getUsedItem())
-					.collect(Collectors.toSet()));
+			usedItemsGroup.setUsedItems(list.stream()
+					.map(i -> i.getUsedItem())
+					.sorted(Ordinal.ordinalComparator())
+					.collect(Collectors.toList()));
 			usedItemsGroups.add(usedItemsGroup);
 		}
-		usedItemsGroups.forEach(i -> System.out.println(i));
-
+		usedItemsGroups.sort(Ordinal.ordinalComparator());
 		return usedItemsGroups;
 	}
 }

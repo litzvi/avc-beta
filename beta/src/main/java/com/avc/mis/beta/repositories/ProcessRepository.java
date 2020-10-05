@@ -54,7 +54,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 		+ "where p.id = :processId "
 		+ "group by sf "
 		+ "order by i.ordinal ")
-	Set<UsedItemDTO> findUsedItems(int processId);
+	List<UsedItemDTO> findUsedItems(int processId);
 	
 	@Query("select new com.avc.mis.beta.dto.query.UsedItemWithGroup( "
 			+ "grp.id, grp.version, grp.ordinal, grp.groupName, grp.tableView, "
@@ -80,7 +80,8 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "join grp.process p "
 		+ "where p.id = :processId "
 		+ "group by sf "
-		+ "order by grp.ordinal, i.ordinal ")
+//		+ "order by grp.ordinal, i.ordinal " //ordered by dto function
+		+ "")
 	List<UsedItemWithGroup> findUsedItemsWithGroup(int processId);
 	
 
@@ -107,7 +108,9 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "join sf.unitAmount unit "
 				+ "left join sf.warehouseLocation warehouseLocation "
 		+ "where p.id = :processId "
-		+ "order by i.ordinal, sf.ordinal ")
+		+ "order by i.ordinal"
+//		+ ", sf.ordinal " //already sorted in dto setter for comparing between classes as well
+		+ "")
 	List<ProcessItemWithStorage> findProcessItemWithStorage(int processId);
 
 	/**

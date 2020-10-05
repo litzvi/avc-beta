@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -45,7 +46,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ReceiptDTO extends PoProcessDTO {
 
-	private Set<ReceiptItemDTO> receiptItems; //can use a SortedSet like ContactDetails to maintain order
+	private List<ReceiptItemDTO> receiptItems;
 	
 	public ReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
@@ -63,7 +64,7 @@ public class ReceiptDTO extends PoProcessDTO {
 	public ReceiptDTO(@NonNull Receipt receipt) {
 		super(receipt);
 		this.receiptItems = Arrays.stream(receipt.getReceiptItems())
-				.map(i->{return new ReceiptItemDTO((ReceiptItem) i);}).collect(Collectors.toSet());
+				.map(i->{return new ReceiptItemDTO((ReceiptItem) i);}).collect(Collectors.toList());
 
 	}
 	
@@ -72,18 +73,20 @@ public class ReceiptDTO extends PoProcessDTO {
 	 * to receiptItems that each have a Set of storages.
 	 * @param receiptItems collection of ReceiptItemWithStorage that contain all receipt items with storage detail.
 	 */
-	public void setReceiptItems(Collection<ReceiptItemWithStorage> receiptItems) {
+	public void setReceiptItems(List<ReceiptItemWithStorage> receiptItems) {
 		Map<Integer, List<ReceiptItemWithStorage>> map = receiptItems.stream()
 			.collect(Collectors.groupingBy(ReceiptItemWithStorage::getId, Collectors.toList()));
-		this.receiptItems = new HashSet<>();
+		this.receiptItems = new ArrayList<ReceiptItemDTO>();
 		for(List<ReceiptItemWithStorage> list: map.values()) {
 			ReceiptItemDTO receiptItem = list.get(0).getReceiptItem();
 			//group list to storage/extraAdded and set accordingly
-			receiptItem.setStorageForms(list.stream().map(i -> i.getStorage())
-					.collect(Collectors.toCollection(() -> new TreeSet<StorageBaseDTO>(Ordinal.ordinalComparator()))));
+			receiptItem.setStorageForms(list.stream()
+					.map(i -> i.getStorage())
+					.sorted(Ordinal.ordinalComparator())
+					.collect(Collectors.toList()));
 			this.receiptItems.add(receiptItem);
 		}
-		
+		this.receiptItems.sort(Ordinal.ordinalComparator());
 	}	
 
 	@Override

@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -63,7 +64,11 @@ public class QualityCheck extends PoProcess {
 	 * @return the processItems
 	 */
 	public ProcessItem[] getProcessItems() {
-		return this.processItems.toArray(new ProcessItem[this.processItems.size()]);
+		if(this.processItems == null)
+			return null;
+		ProcessItem[] processItems = this.processItems.toArray(new ProcessItem[this.processItems.size()]);
+		Arrays.sort(processItems, Ordinal.ordinalComparator());
+		return processItems;
 	}
 
 	/**
@@ -82,7 +87,9 @@ public class QualityCheck extends PoProcess {
 	 * @return array of CahsewItemQuality QC info for cashew items
 	 */
 	public CashewItemQuality[] getTestedItems() {
-		return this.testedItems.toArray(new CashewItemQuality[this.testedItems.size()]);
+		CashewItemQuality[] testedItems = this.testedItems.toArray(new CashewItemQuality[this.testedItems.size()]);
+		Arrays.sort(testedItems, Ordinal.ordinalComparator());
+		return testedItems;
 	}
 
 	/**

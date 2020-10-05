@@ -64,7 +64,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 //				+ "left join sf.warehouseLocation warehouseLocation "
 		+ "where p.id = :processId "
 		+ "order by i.ordinal ")
-	Set<CashewItemQualityDTO> findCheckItemsById(int processId);
+	List<CashewItemQualityDTO> findCheckItemsById(int processId);
 
 	//perhaps should be moved elsewhere
 	@Query("select new com.avc.mis.beta.dto.values.CashewStandardDTO("

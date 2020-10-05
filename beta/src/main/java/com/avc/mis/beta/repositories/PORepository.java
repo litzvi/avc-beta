@@ -90,7 +90,7 @@ public interface PORepository extends BaseRepository<PO> {
 	 * @return List of PoItemRow for all open orders sorted by delivery date.
 	 */
 	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, "
-			+ "function('GROUP_CONCAT', concat(coalesce(user.username, ''), ':', coalesce(approval.decision, ''))), "
+			+ "function('GROUP_CONCAT', concat(coalesce(user.username, ''), ' - ', coalesce(approval.decision, ''))), "
 			+ "i.value, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency, "
 			+ "SUM( "

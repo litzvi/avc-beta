@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.process;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -59,7 +60,9 @@ public abstract class PoProcess extends GeneralProcess {
 	 * @return the itemCounts
 	 */
 	public ItemCount[] getItemCounts() {
-		return this.itemCounts.toArray(new ItemCount[this.itemCounts.size()]);
+		ItemCount[] itemCounts = this.itemCounts.toArray(new ItemCount[this.itemCounts.size()]);
+		Arrays.sort(itemCounts, Ordinal.ordinalComparator());
+		return itemCounts;
 	}
 
 	/**

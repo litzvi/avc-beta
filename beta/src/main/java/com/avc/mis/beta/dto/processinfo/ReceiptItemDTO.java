@@ -79,7 +79,7 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 					else {						
 						return new StorageWithSampleDTO((StorageWithSample) i);
 					}})
-				.collect(Collectors.toCollection(() -> new TreeSet<StorageBaseDTO>(Ordinal.ordinalComparator()))));
+				.collect(Collectors.toList()));
 
 		this.receivedOrderUnits = receiptItem.getReceivedOrderUnits().setScale(MeasureUnit.SCALE);
 		if(receiptItem.getUnitPrice() != null) {

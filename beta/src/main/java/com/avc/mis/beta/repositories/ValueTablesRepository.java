@@ -26,13 +26,15 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 	@Query("select new com.avc.mis.beta.dto.values.ItemDTO(i.id, i.value, i.measureUnit, i.supplyGroup, i.category) "
 			+ "from Item i "
 			+ "where i.supplyGroup = :supplyGroup "
-				+ "and i.active = true")
+				+ "and i.active = true "
+			+ "order by i.value ")
 	List<ItemDTO> findItemsByGroupBasic(SupplyGroup supplyGroup);
 
 	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
 			+ "from Item i "
 			+ "where i.category = :category "
-				+ "and i.active = true")
+				+ "and i.active = true "
+			+ "order by i.value ")
 	List<BasicValueEntity<Item>> findItemsByCategry(ItemCategory category);
 
 	

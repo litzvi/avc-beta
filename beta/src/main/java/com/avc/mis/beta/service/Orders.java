@@ -189,6 +189,7 @@ public class Orders {
 				()->new IllegalArgumentException("No order with given PO code id"));
 		po.setOrderItems(getPoRepository().findPoOrderItemsById(po.getId()));
 		
+		
 		return po;
 	}
 	

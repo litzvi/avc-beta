@@ -7,18 +7,15 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.collections4.MultiSet;
-import org.apache.commons.collections4.multiset.HashMultiSet;
-
-import com.avc.mis.beta.dto.processinfo.ItemWeightDTO;
 import com.avc.mis.beta.dto.processinfo.SampleItemDTO;
 import com.avc.mis.beta.dto.query.SampleItemWithWeight;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -42,7 +39,7 @@ import lombok.ToString;
 public class SampleReceiptDTO extends PoProcessDTO {
 
 	//not set because we can have doubles, order should be unimportant for testing - so bag needed
-	private MultiSet<SampleItemDTO> sampleItems; 	
+	private List<SampleItemDTO> sampleItems; 	
 	
 	public SampleReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
@@ -61,23 +58,26 @@ public class SampleReceiptDTO extends PoProcessDTO {
 		super(sample);
 		this.sampleItems = Arrays.stream(sample.getSampleItems())
 				.map(i->{return new SampleItemDTO(i);})
-				.collect(Collectors.toCollection(() -> {return new HashMultiSet<SampleItemDTO>();}));
+				.collect(Collectors.toList());
 	}
 	
-	public void setSampleItems(Collection<SampleItemDTO> sampleItems) {
-		this.sampleItems = new HashMultiSet<SampleItemDTO>(sampleItems);
-	}
+//	public void setSampleItems(Collection<SampleItemDTO> sampleItems) {
+//		this.sampleItems = new HashMultiSet<SampleItemDTO>(sampleItems);
+//	}
 	
 	public void setSampleItems(List<SampleItemWithWeight> sampleItems) {
 		Map<Integer, List<SampleItemWithWeight>> map = sampleItems.stream()
 				.collect(Collectors.groupingBy(SampleItemWithWeight::getId, Collectors.toList()));
-			this.sampleItems = new HashMultiSet<>();
+			this.sampleItems = new ArrayList<SampleItemDTO>();
 			for(List<SampleItemWithWeight> list: map.values()) {
 				SampleItemDTO sampleItem = list.get(0).getSampleItem();
-				sampleItem.setItemWeights(list.stream().map(i -> i.getItemWeight())
-						.collect(Collectors.toCollection(() -> {return new HashMultiSet<ItemWeightDTO>();})));
+				sampleItem.setItemWeights(list.stream()
+						.map(i -> i.getItemWeight())
+						.sorted(Ordinal.ordinalComparator())
+						.collect(Collectors.toList()));
 				this.sampleItems.add(sampleItem);
 			}
+			this.sampleItems.sort(Ordinal.ordinalComparator());
 	}
 
 	@Override

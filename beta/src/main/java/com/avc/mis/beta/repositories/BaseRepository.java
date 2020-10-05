@@ -95,7 +95,8 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	List<ShippingPort> findAllShippingPorts();
 
 	
-	@Query("select t from ContractType t where t.active = true")
+	@Query("select t from ContractType t where t.active = true "
+			+ "order by t.value ")
 	List<ContractType> findAllContractTypes();
 
 //	@Query("select t from ProcessStatus t where t.active = true")

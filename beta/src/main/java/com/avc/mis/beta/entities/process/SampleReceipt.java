@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,7 +51,9 @@ public class SampleReceipt extends PoProcess {
 	 * @return the sampleItems
 	 */
 	public SampleItem[] getSampleItems() {
-		return this.sampleItems.toArray(new SampleItem[this.sampleItems.size()]);
+		SampleItem[] sampleItems = this.sampleItems.toArray(new SampleItem[this.sampleItems.size()]);
+		Arrays.sort(sampleItems, Ordinal.ordinalComparator());
+		return sampleItems;
 	}
 
 	/**

@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public abstract class ObjectEntityWithIdAndName extends ObjectEntityWithId {
 
-	@Column(unique = true, nullable = false, updatable = false)
+	@Column(unique = true, nullable = false)
 	@NotBlank(message = "Name is mandetory", groups = OnPersist.class)
 	private String name;
 

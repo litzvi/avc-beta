@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -50,7 +51,9 @@ public abstract class TransactionProcess<T extends ProcessItem> extends ProcessW
 	 * @return array of UsedItemsGroup in order
 	 */
 	public UsedItemsGroup[] getUsedItemGroups() {
-		return this.usedItemGroups.toArray(new UsedItemsGroup[this.usedItemGroups.size()]);
+		UsedItemsGroup[] usedItemsGroups = this.usedItemGroups.toArray(new UsedItemsGroup[this.usedItemGroups.size()]);
+		Arrays.sort(usedItemsGroups, Ordinal.ordinalComparator());
+		return usedItemsGroups;
 	}
 
 	/**

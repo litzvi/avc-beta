@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -56,7 +57,9 @@ public class PO extends PoProcess {
 	 * @return the orderItems
 	 */
 	public OrderItem[] getOrderItems() {
-		return (OrderItem[])this.orderItems.toArray(new OrderItem[this.orderItems.size()]);
+		OrderItem[] orderItems = (OrderItem[])this.orderItems.toArray(new OrderItem[this.orderItems.size()]);
+		Arrays.sort(orderItems, Ordinal.ordinalComparator());
+		return orderItems;
 	}
 
 	/**

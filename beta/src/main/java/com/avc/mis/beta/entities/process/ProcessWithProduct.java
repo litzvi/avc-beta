@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -47,9 +48,11 @@ public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProces
 	 * @return the processItems
 	 */
 	public ProcessItem[] getProcessItems() {
-		if(processItems == null)
+		if(this.processItems == null)
 			return null;
-		return this.processItems.toArray(new ProcessItem[this.processItems.size()]);
+		ProcessItem[] processItems = this.processItems.toArray(new ProcessItem[this.processItems.size()]);
+		Arrays.sort(processItems, Ordinal.ordinalComparator());
+		return processItems;
 	}
 
 	/**

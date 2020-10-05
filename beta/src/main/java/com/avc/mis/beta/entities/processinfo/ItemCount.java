@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -65,7 +66,9 @@ public class ItemCount extends ProcessInfoEntity {
 	private Set<CountAmount> amounts;
 	
 	public CountAmount[] getAmounts() {
-		return this.amounts.toArray(new CountAmount[this.amounts.size()]);
+		CountAmount[] amounts = this.amounts.toArray(new CountAmount[this.amounts.size()]);
+		Arrays.sort(amounts, Ordinal.ordinalComparator());	
+		return amounts;
 	}
 	
 	public void setAmounts(CountAmount[] amounts) {

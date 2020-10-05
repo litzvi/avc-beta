@@ -170,16 +170,15 @@ public class WarehouseManagement {
 				()->new IllegalArgumentException("No storage transfer with given process id"));
 		transferDTO.setProcessItems(ProcessItemDTO
 				.getProcessItems(getTransferRepository()
-						.findProcessItemWithStorage(processId))
-				.stream().collect(Collectors.toSet()));
+						.findProcessItemWithStorage(processId)));
 		transferDTO.setUsedItemGroups(
 				UsedItemsGroupDTO.getUsedItemsGroups(
-						getTransferRepository().findUsedItemsWithGroup(processId))
-				.stream().collect(Collectors.toSet()));
+						getTransferRepository()
+						.findUsedItemsWithGroup(processId)));
 		transferDTO.setItemCounts(
 				ItemCountDTO.getItemCounts(
-						getTransferRepository().findItemCountWithAmount(processId))
-				.stream().collect(Collectors.toSet()));
+						getTransferRepository()
+						.findItemCountWithAmount(processId)));
 		return transferDTO;
 	}
 	
@@ -190,8 +189,8 @@ public class WarehouseManagement {
 		relocationDTO.setStorageMoves(getRelocationRepository().findStorageMoveDTOsByProcessId(processId));
 		relocationDTO.setItemCounts(
 				ItemCountDTO.getItemCounts(
-						getTransferRepository().findItemCountWithAmount(processId))
-				.stream().collect(Collectors.toSet()));
+						getTransferRepository()
+						.findItemCountWithAmount(processId)));
 		return relocationDTO;
 	}
 	

@@ -7,6 +7,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
@@ -48,8 +49,8 @@ public class QualityCheckDTO extends PoProcessDTO {
 	private String inspector;
 	private String sampleTaker;
 		
-	private Set<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
-	private Set<CashewItemQualityDTO> testedItems; //can use a SortedSet like ContactDetails to maintain order
+	private List<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
+	private List<CashewItemQualityDTO> testedItems; //can use a SortedSet like ContactDetails to maintain order
 	
 	public QualityCheckDTO(Integer id, Integer version, String inspector, String sampleTaker,
 			Instant createdDate, String userRecording, 
@@ -71,9 +72,9 @@ public class QualityCheckDTO extends PoProcessDTO {
 		this.inspector = check.getInspector();
 		this.sampleTaker = check.getSampleTaker();
 		this.processItems = Arrays.stream(check.getProcessItems())
-				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toSet());
+				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList());
 		this.testedItems = Arrays.stream(check.getTestedItems())
-				.map(i->{return new CashewItemQualityDTO(i);}).collect(Collectors.toSet());
+				.map(i->{return new CashewItemQualityDTO(i);}).collect(Collectors.toList());
 	}
 	
 	/**
@@ -82,17 +83,19 @@ public class QualityCheckDTO extends PoProcessDTO {
 	 * @param processItems collection of ProcessItemWithStorage that contains all receipt QC items 
 	 * with storage detail.
 	 */
-	public void setProcessItems(Collection<ProcessItemWithStorage> processItems) {
+	public void setProcessItems(List<ProcessItemWithStorage> processItems) {
 		Map<Integer, List<ProcessItemWithStorage>> map = processItems.stream()
 			.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, Collectors.toList()));
-		this.processItems = new HashSet<>();
+		this.processItems = new ArrayList<ProcessItemDTO>();
 		for(List<ProcessItemWithStorage> list: map.values()) {
 			ProcessItemDTO processItem = list.get(0).getProcessItem();
-			processItem.setStorageForms(list.stream().map(i -> i.getStorage())
-					.collect(Collectors.toCollection(() -> new TreeSet<StorageBaseDTO>(Ordinal.ordinalComparator()))));
+			processItem.setStorageForms(list.stream()
+					.map(i -> i.getStorage())
+					.sorted(Ordinal.ordinalComparator())
+					.collect(Collectors.toList()));
 			this.processItems.add(processItem);
 		}
-		
+		this.processItems.sort(Ordinal.ordinalComparator());
 	}
 	
 	

@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -47,6 +48,6 @@ public interface ShipmentBookingRepository extends BaseRepository<ShipmentBookin
 			+ "join c.booking booking "
 		+ "where booking.id = :processId "
 		+ "order by c.ordinal ")
-	Set<BookedContainerDTO> findBookedContainersByProcessId(int processId);
+	List<BookedContainerDTO> findBookedContainersByProcessId(int processId);
 
 }

@@ -38,7 +38,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
-			+ "sc.code, port.code, "
+			+ "sc.code, port.id, port.code, port.value, "
 			+ "r.containerDetails, r.shipingDetails) "
 		+ "from ContainerLoading r "
 			+ "join r.shipmentCode sc "
@@ -75,7 +75,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 					+ "join poCode.supplier s "
 		+ "where p.id = :processId "
 		+ "order by i.ordinal ")
-	Set<LoadedItemDTO> findLoadedItems(int processId);
+	List<LoadedItemDTO> findLoadedItems(int processId);
 
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("

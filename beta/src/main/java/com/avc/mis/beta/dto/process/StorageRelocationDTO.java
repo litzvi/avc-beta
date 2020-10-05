@@ -9,11 +9,13 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
 import com.avc.mis.beta.dto.processinfo.StorageMoveDTO;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -37,7 +39,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class StorageRelocationDTO extends PoProcessDTO {
 	
-	private Set<StorageMoveDTO> storageMoves; //can use a SortedSet like ContactDetails to maintain order
+	private List<StorageMoveDTO> storageMoves;
 
 	public StorageRelocationDTO(Integer id, Integer version, Instant createdDate, String staffRecording,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
@@ -57,11 +59,11 @@ public class StorageRelocationDTO extends PoProcessDTO {
 	public StorageRelocationDTO(@NonNull StorageRelocation relocation) {
 		super(relocation);
 		this.storageMoves = Arrays.stream(relocation.getStorageMoves())
-				.map(i->{return new StorageMoveDTO(i);}).collect(Collectors.toSet());
+				.map(i->{return new StorageMoveDTO(i);}).collect(Collectors.toList());
 		ItemCount[] itemCounts = relocation.getItemCounts();
 		if(itemCounts != null)
 			this.setItemCounts(Arrays.stream(itemCounts)
-					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toSet()));
+					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toList()));
 		this.setAccessWeight(relocation.getAccessWeight());
 	}
 
