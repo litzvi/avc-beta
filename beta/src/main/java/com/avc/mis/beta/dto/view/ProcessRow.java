@@ -85,7 +85,7 @@ public class ProcessRow extends ValueDTO {
 			AmountWithUnit processGain = producedAmounts.get().substract(usedAmounts.get());
 			return new AmountWithUnit[] {
 					processGain.setScale(MeasureUnit.SCALE),                        
-					processGain.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)
+					processGain.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
 			};
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
@@ -119,13 +119,15 @@ public class ProcessRow extends ValueDTO {
 //		return processGain;
 	}
 	
-	public AmountWithUnit[] getUsedCountDifference() {
+		
+	//perhaps change to getUsedCountDifference
+	public AmountWithUnit[] getCountDifference() {
 		
 		try {
 			AmountWithUnit countDifference = countAmounts.get().substract(usedAmounts.get());
 			return new AmountWithUnit[] {
 					countDifference.setScale(MeasureUnit.SCALE),                        
-					countDifference.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)
+					countDifference.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
 			};
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;

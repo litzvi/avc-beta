@@ -18,6 +18,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
@@ -56,6 +57,7 @@ public class ReceiptItem extends ProcessItem {
         @AttributeOverride(name="measureUnit",
                            column=@Column(name = "orderMeasureUnit"))
     })
+	@NotNull(message = "Received amount is mandatory")
 	@Embedded
 	@Valid
 	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
