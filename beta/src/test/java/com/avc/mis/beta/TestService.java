@@ -12,24 +12,31 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
+import com.avc.mis.beta.dto.view.ProcessItemInventory;
+import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.processinfo.CountAmount;
 import com.avc.mis.beta.entities.processinfo.ExtraAdded;
+import com.avc.mis.beta.entities.processinfo.ItemCount;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.StorageWithSample;
+import com.avc.mis.beta.entities.processinfo.UsedItem;
+import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.ContractType;
@@ -37,6 +44,7 @@ import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Suppliers;
@@ -51,6 +59,7 @@ public class TestService {
 	
 	@Autowired private Suppliers suppliers;	
 	@Autowired ValueTablesReader valueTableReader;
+	@Autowired ObjectTablesReader objectTablesReader;
 	@Autowired Orders orders;
 	@Autowired Receipts receipts;
 	
@@ -216,6 +225,13 @@ public class TestService {
 			fail("No warehouses in database for running this test");
 		return warehouses.get(randNum.nextInt(warehouses.size()));
 	}
+	
+	public PoCodeDTO getPoCode() {
+		List<PoCodeDTO> poCodes = objectTablesReader.findAllPoCodes();
+		if(poCodes.isEmpty())
+			fail("No po codes in database for running this test");
+		return poCodes.get(randNum.nextInt(poCodes.size()));
+	}
 
 	public List<Item> getItems() {
 		List<Item> items = valueTableReader.getAllItems();
@@ -285,6 +301,89 @@ public class TestService {
 
 	public void cleanup(Receipt receipt) {
 		receipts.removeReceipt(receipt.getId());
+	}
+	
+	public static UsedItemsGroup[] getUsedItemsGroups(List<ProcessItemInventory> poInventory) {
+		UsedItemsGroup[] usedItemsGroups = new UsedItemsGroup[poInventory.size()];
+		int i = 0;
+		for(ProcessItemInventory processItemRow: poInventory) {
+			UsedItem[] usedItems = new UsedItem[processItemRow.getStorageForms().size()];
+			int j = 0;
+			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
+				usedItems[j] = new UsedItem();
+				Storage storage = new Storage();
+				usedItems[j].setStorage(storage);
+				storage.setId(storagesRow.getId());
+				storage.setVersion(storagesRow.getVersion());
+				usedItems[j].setNumberUsedUnits(storagesRow.getNumberUnits());
+				j++;
+			}
+			usedItemsGroups[i] = new UsedItemsGroup();
+			usedItemsGroups[i].setUsedItems(usedItems);
+			i++;
+
+		}
+		return usedItemsGroups;
+	}
+	
+	/**
+	 * @param poInventory
+	 * @return
+	 */
+	public static ItemCount[] getItemCounts(List<ProcessItemInventory> poInventory) {
+		ItemCount[] itemCounts = new ItemCount[poInventory.size()];
+		CountAmount[] countAmounts;
+		for(int i=0; i<itemCounts.length; i++) {
+			//build item count
+			ProcessItemInventory processItemRow = poInventory.get(i);
+			itemCounts[i] = new ItemCount();
+			Item item = new Item();
+			item.setId(processItemRow.getItem().getId());
+			itemCounts[i].setItem(item);
+			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
+			StorageInventoryRow randStorage = storagesRows.get(0);
+			itemCounts[i].setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
+			itemCounts[i].setContainerWeight(randStorage.getContainerWeight());
+			countAmounts = new CountAmount[storagesRows.size()];
+			int j=0;
+			for(StorageInventoryRow storageRow: storagesRows) {
+				countAmounts[j] = new CountAmount();
+				countAmounts[j].setAmount(storageRow.getTotalBalance().getAmount());
+				countAmounts[j].setOrdinal((storageRow.getOrdinal()));
+				
+				j++;
+			}
+			
+			itemCounts[i].setAmounts(countAmounts);
+		}
+		return itemCounts;
+	}
+
+	public ProcessItem[] getProcessItems(List<ProcessItemInventory> poInventory) {
+		ProcessItem[] processItems = new ProcessItem[poInventory.size()];
+		Storage[] storageForms;
+		for(int i=0; i<processItems.length; i++) {
+			//build process item
+			ProcessItemInventory processItemRow = poInventory.get(i);
+			processItems[i] = new ProcessItem();
+			Item item = new Item();
+			item.setId(processItemRow.getItem().getId());
+			processItems[i].setItem(item);
+			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
+			storageForms = new Storage[storagesRows.size()];
+			int j=0;
+			for(StorageInventoryRow storageRow: storagesRows) {
+				storageForms[j] = new Storage();
+				storageForms[j].setUnitAmount(storageRow.getUnitAmount());
+				storageForms[j].setNumberUnits(storageRow.getNumberUnits());
+				storageForms[j].setWarehouseLocation(getWarehouse());
+				
+				j++;
+			}
+			
+			processItems[i].setStorageForms(storageForms);
+		}
+		return processItems;
 	}
 
 }

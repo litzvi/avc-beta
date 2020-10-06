@@ -5,6 +5,7 @@ package com.avc.mis.beta.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,6 +182,17 @@ public class ProcessInfoReader {
 	 */
 	public List<ProcessBasic> getAllProcessesByPo(@NonNull Integer poCodeId) {
 		return getProcessInfoRepository().findAllProcessesByPo(poCodeId);
+	}
+	
+	
+	/**
+	 * Gets a list of processes of the given types (by name) for the given po code.
+	 * @param poCodeId id of PoCode
+	 * @param processNames all process types (by name) to get
+	 * @return List of ProcessBasic
+	 */
+	public List<ProcessBasic> getAllProcessesByPoAndName(@NonNull Integer poCodeId, Set<ProcessName> processNames) {
+		return getProcessInfoRepository().findAllProcessesByPoAndName(poCodeId, processNames);
 	}
 
 	

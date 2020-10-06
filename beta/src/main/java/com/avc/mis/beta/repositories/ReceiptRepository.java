@@ -105,8 +105,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 //			+ "where type(sf) <> ExtraAdded "
 				+ "where t.processName in :processNames "
 				+ "and lc.processStatus in :statuses "
-			+ "group by r.id, oi, pi "
-			+ "order by r.recordedTime ")
+			+ "group by r.id, oi, pi ")
 	List<ReceiptItemRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses);
 
 

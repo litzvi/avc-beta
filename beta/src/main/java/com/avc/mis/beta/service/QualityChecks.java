@@ -3,7 +3,10 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
+import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.QualityCheck;
@@ -21,6 +26,7 @@ import com.avc.mis.beta.repositories.QCRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -34,6 +40,8 @@ public class QualityChecks {
 	@Autowired private ProcessInfoDAO dao;
 
 	@Autowired private QCRepository qcRepository;
+	
+	@Autowired private ProcessInfoReader processInfoReader;
 	
 	@Deprecated
 	@Autowired private DeletableDAO deletableDAO;
@@ -80,6 +88,21 @@ public class QualityChecks {
 	public void addCashewVinaControlCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.VINA_CONTROL_QC));
 		dao.addGeneralProcessEntity(check);
+	}
+	
+	public Map<ProcessName, List<PoProcessDTO>> getAllQualityChecksByPo(@NonNull Integer poCodeId) {
+		Map<ProcessName, List<PoProcessDTO>> checksMap = new HashMap<>();
+		for(ProcessName processName: ProcessName.values()) {
+			if(processName.name().contains("QC")) {
+				checksMap.put(processName, new ArrayList<PoProcessDTO>());
+			}
+		}
+		List<ProcessBasic> basicProcesses = getProcessInfoReader().getAllProcessesByPoAndName(poCodeId, checksMap.keySet());
+		basicProcesses.forEach(p -> checksMap.get(p.getProcessName()).add(getProcessInfoReader().getProcess(p.getId(), p.getProcessName())));
+		
+		
+		return checksMap;
+		
 	}
 	
 	public QualityCheckDTO getQcByProcessId(int processId) {

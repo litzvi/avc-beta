@@ -62,6 +62,7 @@ public class InventoryReports {
 			ItemInventoryRow inventoryRow = new ItemInventoryRow(k, totalStock, v);
 			inventoryRows.add(inventoryRow);
 		});
+		//order by descending receipt dates (or process date)
 		return inventoryRows;
 	}
 	
@@ -84,6 +85,7 @@ public class InventoryReports {
 			PoInventoryRow inventoryRow = new PoInventoryRow(k, totalStock, v);
 			inventoryRows.add(inventoryRow);
 		});
+		//order by descending receipt dates (or process date)
 		return inventoryRows;
 	}
 	

@@ -59,7 +59,7 @@ public class ReceiptItemRow extends ValueDTO {
 		
 		this.receiptAmount = new AmountWithUnit[] {
 				receiptAmt,
-				receiptAmt.convert(MeasureUnit.LOT)
+				receiptAmt.convert(MeasureUnit.LBS)
 		};
 		
 		this.storage = storage;

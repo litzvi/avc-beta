@@ -24,6 +24,7 @@ import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
+import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
@@ -62,6 +63,8 @@ import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
+
+import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -284,13 +287,34 @@ public class QueryTest {
 		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocationTable();
 		relocationRows.forEach(i -> System.out.println(i));
 		
+		List<PoCodeDTO> poCodes = objectTablesReader.findAllPoCodes();
+		poCodes.forEach(c -> {
+			Map<ProcessName, List<PoProcessDTO>> qcProcessesMap = qualityChecks.getAllQualityChecksByPo(c.getId());
+			qcProcessesMap.forEach((k, v) -> {
+				if(!v.isEmpty()) {
+					System.out.println("Process name: " + k);
+					v.forEach(r -> System.out.println(r));
+				}
+			});
+		});
+		
 		service.cleanup(po);
 
 	}
 	
 	@Test
 	void oneQueryTest() {		
-		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocationTable();
-		relocationRows.forEach(i -> System.out.println(i));
+		List<PoCodeDTO> poCodes = objectTablesReader.findAllPoCodes();
+		poCodes.forEach(c -> {
+			Map<ProcessName, List<PoProcessDTO>> qcProcessesMap = qualityChecks.getAllQualityChecksByPo(c.getId());
+			qcProcessesMap.forEach((k, v) -> {
+				if(!v.isEmpty()) {
+					System.out.println("Process name: " + k);
+					v.forEach(r -> System.out.println(r));
+				}
+			});
+		});
+		
+				
 	}
 }

@@ -81,7 +81,7 @@ public class LoadingTest {
 
 		//get inventory storages for transfer
 		List<ProcessItemInventory> poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
-		loading.setUsedItemGroups(getUsedItemsGroups(poInventory));
+		loading.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 //		loading.setLoadedItems(getLoadedItems(poInventory));
 		
 		loadingService.addLoading(loading);
@@ -108,31 +108,5 @@ public class LoadingTest {
 	}
 	
 	
-//	private LoadedItem[] getLoadedItems(List<ProcessItemInventory> poInventory) {
-//		UsedItemsGroup[] usedItemsGroups = new UsedItemsGroup[poInventory.size()];
-//		return null;
-//	}
 
-	private UsedItemsGroup[] getUsedItemsGroups(List<ProcessItemInventory> poInventory) {
-		UsedItemsGroup[] usedItemsGroups = new UsedItemsGroup[poInventory.size()];
-		int i = 0;
-		for(ProcessItemInventory processItemRow: poInventory) {
-			UsedItem[] usedItems = new UsedItem[processItemRow.getStorageForms().size()];
-			int j = 0;
-			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
-				usedItems[j] = new UsedItem();
-				Storage storage = new Storage();
-				usedItems[j].setStorage(storage);
-				storage.setId(storagesRow.getId());
-				storage.setVersion(storagesRow.getVersion());
-				usedItems[j].setNumberUsedUnits(storagesRow.getNumberUnits());
-				j++;
-			}
-			usedItemsGroups[i] = new UsedItemsGroup();
-			usedItemsGroups[i].setUsedItems(usedItems);
-			i++;
-
-		}
-		return usedItemsGroups;
-	}
 }

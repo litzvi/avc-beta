@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.view;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.avc.mis.beta.dto.ValueDTO;
@@ -24,7 +25,7 @@ import lombok.Value;
 public class ReceiptRow extends ValueDTO {
 
 	AmountWithUnit[] totalAmount;
-
+	OffsetDateTime receiptDate;
 	List<ReceiptItemRow> receiptRows;
 
 	public ReceiptRow(@NonNull Integer id, AmountWithUnit totalAmount, List<ReceiptItemRow> receiptRows) {
@@ -33,6 +34,12 @@ public class ReceiptRow extends ValueDTO {
 		this.totalAmount[0] = totalAmount.setScale(MeasureUnit.SCALE);
 		this.totalAmount[1] = totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 		this.receiptRows = receiptRows;
+		if(receiptRows != null && !receiptRows.isEmpty()) {
+			this.receiptDate = receiptRows.get(0).getReceiptDate();
+		}
+		else {
+			this.receiptDate = null;
+		}
 	}
 	
 }

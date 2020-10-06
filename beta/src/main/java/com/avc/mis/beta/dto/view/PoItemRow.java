@@ -45,6 +45,7 @@ public class PoItemRow extends ValueDTO {
 	LocalDate deliveryDate;
 	String defects;
 	AmountWithCurrency unitPrice;
+	BigDecimal receivedOrderUnits;
 	BigDecimal receivedAmount;
 	List<String> orderStatus;
 	
@@ -57,7 +58,9 @@ public class PoItemRow extends ValueDTO {
 			String approvals,
 			String itemName, BigDecimal amount, MeasureUnit measureUnit, 
 			OffsetDateTime contractDate, LocalDate deliveryDate, 
-			String defects, BigDecimal unitPrice, Currency currency, BigDecimal receivedAmount, ProcessStatus status, long receiptsCancelled) {
+			String defects, BigDecimal unitPrice, Currency currency, 
+			BigDecimal receivedOrderUnits,
+			BigDecimal receivedAmount, ProcessStatus status, long receiptsCancelled) {
 		super(id);
 		this.personInCharge = personInCharge;
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
@@ -82,6 +85,7 @@ public class PoItemRow extends ValueDTO {
 		else {
 			this.unitPrice = null;
 		}
+		this.receivedOrderUnits = receivedOrderUnits;
 		this.receivedAmount = receivedAmount;
 		
 		this.orderStatus = new ArrayList<String>();
@@ -89,14 +93,14 @@ public class PoItemRow extends ValueDTO {
 		if(status == ProcessStatus.CANCELLED) {
 			this.orderStatus.add("CANCELLED");
 		}
-		else if(receivedAmount == null) {
+		else if(receivedOrderUnits == null) {
 			this.orderStatus.add("OPEN");
 		}
 		else {
-			switch(receivedAmount.compareTo(numberUnits.getAmount())) {
+			switch(receivedOrderUnits.compareTo(numberUnits.getAmount())) {
 			case -1:
 				this.orderStatus.add("OPEN");
-				if(receivedAmount.signum() > 0) {
+				if(receivedOrderUnits.signum() > 0) {
 					this.orderStatus.add("PARTLY RECEIVED");
 				}
 				break;
@@ -106,7 +110,7 @@ public class PoItemRow extends ValueDTO {
 				break;
 			}
 		}
-				
+		
 		if(receiptsCancelled > 0) {
 			this.orderStatus.add("REJECTED");
 		}

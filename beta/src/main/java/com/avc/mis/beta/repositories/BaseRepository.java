@@ -44,7 +44,8 @@ import com.avc.mis.beta.entities.values.Warehouse;
 public interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 	
 	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(s.id, s.value) "
-			+ "from Warehouse s where s.active = true")
+			+ "from Warehouse s where s.active = true "
+			+ "order by s.value ")
 	List<BasicValueEntity<Warehouse>> findAllWarehousesDTO();
 	
 	@Query("select s "

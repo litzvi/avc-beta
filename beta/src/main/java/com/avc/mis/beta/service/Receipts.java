@@ -3,8 +3,10 @@
  */
 package com.avc.mis.beta.service;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -126,6 +128,25 @@ public class Receipts {
 					.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
 			ReceiptRow receiptRow = new ReceiptRow(k, totalAmount, v);
 			receiptRows.add(receiptRow);
+		});
+		receiptRows.sort(new Comparator<ReceiptRow>() {
+			
+			@Override
+			public int compare(ReceiptRow o1, ReceiptRow o2) {
+				OffsetDateTime t1 = o1.getReceiptDate();
+				OffsetDateTime t2 = o2.getReceiptDate();
+				int result;
+				if(t1 == null) {
+					result = t2 == null ? 0 : -1;
+				}
+				else if(t2 == null) {
+					result = 1;
+				}
+				else {
+					result = t1.compareTo(t2);
+				}
+				return result;
+			}
 		});
 		return receiptRows;
 	}

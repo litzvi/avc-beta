@@ -13,6 +13,8 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 
+import lombok.NonNull;
+
 /**
  * @author Zvi
  *
@@ -125,5 +127,21 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "join p.processType t "
 		+ "where c.code = :poCodeId ")
 	List<ProcessBasic> findAllProcessesByPo(Integer poCodeId);
+	
+	/**
+	 * Gets all processes done for given PoCode
+	 * @param poCodeId id of PoCode
+	 * @return List of ProcessBasic
+	 */
+	@Query("select new com.avc.mis.beta.dto.values.ProcessBasic( "
+			+ "p.id, t.processName) "
+		+ "from PoProcess p "
+			+ "join p.poCode c "
+			+ "join p.processType t "
+		+ "where c.code = :poCodeId "
+			+ "and t.processName in :processNames ")
+	List<ProcessBasic> findAllProcessesByPoAndName(@NonNull Integer poCodeId, Set<ProcessName> processNames);
+
+
 
 }

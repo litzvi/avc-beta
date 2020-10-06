@@ -65,8 +65,8 @@ public class TransferTest {
 //				.stream()
 //				.map(PoProcessItemEntry::getProcessItem)
 //				.collect(Collectors.toList());
-		transfer.setUsedItemGroups(getUsedItemsGroups(poInventory));
-		transfer.setProcessItems(getProcessItems(poInventory));
+		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+		transfer.setProcessItems(service.getProcessItems(poInventory));
 		
 				
 //		System.out.println(transfer.getUsedItems().length);
@@ -87,8 +87,8 @@ public class TransferTest {
 		transfer = new StorageTransfer();
 		transfer.setPoCode(receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
-		transfer.setUsedItemGroups(getUsedItemsGroups(poInventory));
-		transfer.setProcessItems(getProcessItems(poInventory));
+		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+		transfer.setProcessItems(service.getProcessItems(poInventory));
 		
 		try {
 			warehouseManagement.addStorageTransfer(transfer);
@@ -105,8 +105,8 @@ public class TransferTest {
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
 		poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
-		transfer.setUsedItemGroups(getUsedItemsGroups(poInventory));
-		ProcessItem[] processItems = getProcessItems(poInventory);
+		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+		ProcessItem[] processItems = service.getProcessItems(poInventory);
 		List<Item> items = service.getItems();
 		if(items.size() < 2) {
 			fail("not enough items for test");
@@ -134,8 +134,8 @@ public class TransferTest {
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
 		poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
-		transfer.setUsedItemGroups(getUsedItemsGroups(poInventory));
-		processItems = getProcessItems(poInventory);
+		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+		processItems = service.getProcessItems(poInventory);
 		for(ProcessItem i: processItems) {
 			Storage[] storages = i.getStorageForms();
 			for(Storage s: storages) {
@@ -173,9 +173,9 @@ public class TransferTest {
 
 		//get inventory storages for transfer
 		List<ProcessItemInventory> poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
-		transfer.setUsedItemGroups(getUsedItemsGroups(poInventory));
-		transfer.setProcessItems(getProcessItems(poInventory));
-		transfer.setItemCounts(getItemCounts(poInventory));
+		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+		transfer.setProcessItems(service.getProcessItems(poInventory));
+		transfer.setItemCounts(TestService.getItemCounts(poInventory));
 
 		warehouseManagement.addStorageTransfer(transfer);
 		
@@ -193,86 +193,5 @@ public class TransferTest {
 				
 	}
 
-	/**
-	 * @param poInventory
-	 * @return
-	 */
-	private ItemCount[] getItemCounts(List<ProcessItemInventory> poInventory) {
-		ItemCount[] itemCounts = new ItemCount[poInventory.size()];
-		CountAmount[] countAmounts;
-		for(int i=0; i<itemCounts.length; i++) {
-			//build item count
-			ProcessItemInventory processItemRow = poInventory.get(i);
-			itemCounts[i] = new ItemCount();
-			Item item = new Item();
-			item.setId(processItemRow.getItem().getId());
-			itemCounts[i].setItem(item);
-			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
-			StorageInventoryRow randStorage = storagesRows.get(0);
-			itemCounts[i].setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
-			itemCounts[i].setContainerWeight(randStorage.getContainerWeight());
-			countAmounts = new CountAmount[storagesRows.size()];
-			int j=0;
-			for(StorageInventoryRow storageRow: storagesRows) {
-				countAmounts[j] = new CountAmount();
-				countAmounts[j].setAmount(storageRow.getTotalBalance().getAmount());
-				countAmounts[j].setOrdinal((storageRow.getOrdinal()));
-				
-				j++;
-			}
-			
-			itemCounts[i].setAmounts(countAmounts);
-		}
-		return itemCounts;
-	}
-
-	private UsedItemsGroup[] getUsedItemsGroups(List<ProcessItemInventory> poInventory) {
-		UsedItemsGroup[] usedItemsGroups = new UsedItemsGroup[poInventory.size()];
-		int i = 0;
-		for(ProcessItemInventory processItemRow: poInventory) {
-			UsedItem[] usedItems = new UsedItem[processItemRow.getStorageForms().size()];
-			int j = 0;
-			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
-				usedItems[j] = new UsedItem();
-				Storage storage = new Storage();
-				usedItems[j].setStorage(storage);
-				storage.setId(storagesRow.getId());
-				storage.setVersion(storagesRow.getVersion());
-				usedItems[j].setNumberUsedUnits(storagesRow.getNumberUnits());
-				j++;
-			}
-			usedItemsGroups[i] = new UsedItemsGroup();
-			usedItemsGroups[i].setUsedItems(usedItems);
-			i++;
-
-		}
-		return usedItemsGroups;
-	}
-
-	private ProcessItem[] getProcessItems(List<ProcessItemInventory> poInventory) {
-		ProcessItem[] processItems = new ProcessItem[poInventory.size()];
-		Storage[] storageForms;
-		for(int i=0; i<processItems.length; i++) {
-			//build process item
-			ProcessItemInventory processItemRow = poInventory.get(i);
-			processItems[i] = new ProcessItem();
-			Item item = new Item();
-			item.setId(processItemRow.getItem().getId());
-			processItems[i].setItem(item);
-			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
-			storageForms = new Storage[storagesRows.size()];
-			int j=0;
-			for(StorageInventoryRow storageRow: storagesRows) {
-				storageForms[j] = new Storage();
-				storageForms[j].setUnitAmount(storageRow.getUnitAmount());
-				storageForms[j].setNumberUnits(storageRow.getNumberUnits());
-				storageForms[j].setWarehouseLocation(service.getWarehouse());
-				
-				j++;
-			}
-			
-			processItems[i].setStorageForms(storageForms);
-		}
-		return processItems;
-	}
+	
 }
