@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -29,6 +30,7 @@ public class ProcessItemInventoryRow extends ValueDTO {
 
 	private ItemDTO item;
 	private PoCodeDTO poCode;
+	private String supplierName;
 	private OffsetDateTime processDate;
 	private OffsetDateTime receiptDate;
 	private AmountWithUnit[] totalBalance;
@@ -45,6 +47,7 @@ public class ProcessItemInventoryRow extends ValueDTO {
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
+		this.supplierName = supplierName;
 		this.processDate = processDate;
 		this.receiptDate = receiptDate;
 		this.totalBalance = new AmountWithUnit[2];

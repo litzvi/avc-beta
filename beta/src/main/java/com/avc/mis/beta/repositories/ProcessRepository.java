@@ -22,11 +22,12 @@ import lombok.NonNull;
 public interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> {
 
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
-			+ "p.id, po_code.code, t.code, t.suffix, "
+			+ "p.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "p.recordedTime, p.duration) "
 		+ "from PoProcess p "
 			+ "join p.poCode po_code "
 				+ "join po_code.contractType t "
+				+ "join po_code.supplier s "
 			+ "join p.processType pt "
 		+ "where pt.processName = :processName ")
 	List<ProcessRow> findProcessByType(ProcessName processName);
@@ -47,7 +48,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "join sf.processItem pi "
 					+ "join pi.item item "
 					+ "join pi.process used_p "
-						+ "join used_p.poCode itemPo "
+						+ "left join used_p.poCode itemPo "
 							+ "left join itemPo.contractType ct "
 							+ "left join itemPo.supplier s "
 				+ "join sf.usedItems usedItems "

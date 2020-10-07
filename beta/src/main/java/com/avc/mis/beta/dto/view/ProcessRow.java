@@ -30,6 +30,7 @@ import lombok.ToString;
 public class ProcessRow extends ValueDTO {
 
 	private PoCodeBasic poCode;
+	private String supplierName;
 	private OffsetDateTime recordedTime;
 	private Duration duration;
 	 
@@ -43,10 +44,11 @@ public class ProcessRow extends ValueDTO {
 	@JsonIgnore private Optional<AmountWithUnit> countAmounts;
 	
 	public ProcessRow(@NonNull Integer id, 
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			OffsetDateTime recordedTime, Duration duration) {
 		super(id);
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
+		this.supplierName = supplierName;
 		this.recordedTime = recordedTime;
 		this.duration = duration;
 		
@@ -84,7 +86,7 @@ public class ProcessRow extends ValueDTO {
 		try {
 			AmountWithUnit processGain = producedAmounts.get().substract(usedAmounts.get());
 			return new AmountWithUnit[] {
-					processGain.setScale(MeasureUnit.SCALE),                        
+					processGain.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),                        
 					processGain.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
 			};
 		} catch (NullPointerException | NoSuchElementException e) {
@@ -121,12 +123,12 @@ public class ProcessRow extends ValueDTO {
 	
 		
 	//perhaps change to getUsedCountDifference
-	public AmountWithUnit[] getCountDifference() {
+	public AmountWithUnit[] getUsedCountDifference() {
 		
 		try {
 			AmountWithUnit countDifference = countAmounts.get().substract(usedAmounts.get());
 			return new AmountWithUnit[] {
-					countDifference.setScale(MeasureUnit.SCALE),                        
+					countDifference.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),                        
 					countDifference.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
 			};
 		} catch (NullPointerException | NoSuchElementException e) {
@@ -155,7 +157,7 @@ public class ProcessRow extends ValueDTO {
 		try {
 			AmountWithUnit countDifference = countAmounts.get().substract(producedAmounts.get());
 			return new AmountWithUnit[] {
-					countDifference.setScale(MeasureUnit.SCALE),                        
+					countDifference.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),                        
 					countDifference.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)
 			};
 		} catch (NullPointerException | NoSuchElementException e) {
