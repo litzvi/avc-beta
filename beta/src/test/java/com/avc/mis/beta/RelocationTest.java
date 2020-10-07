@@ -65,7 +65,7 @@ public class RelocationTest {
 
 
 		//get inventory storages for relocation
-		List<ProcessItemInventory> poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getCashewInventoryByPo(receipt.getPoCode().getId());
 		relocation.setStorageMoves(getStorageMoves(poInventory));
 		relocation.setItemCounts(getItemCounts(poInventory));
 

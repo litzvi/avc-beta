@@ -26,7 +26,7 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class PoInventoryRow extends ValueDTO {
 
-	PoCodeDTO poCode;
+	PoCodeBasic poCode;
 	String supplierName;
 	AmountWithUnit[] totalStock;
 
@@ -35,7 +35,7 @@ public class PoInventoryRow extends ValueDTO {
 	public PoInventoryRow(@NonNull PoCodeDTO poCode, AmountWithUnit totalStock, 
 			List<ProcessItemInventoryRow> poInventoryRows) {
 		super(poCode.getId());
-		this.poCode = poCode;
+		this.poCode = poCode.getPoCodeBasic();
 		this.supplierName = poCode.getSupplierName();
 		this.totalStock = new AmountWithUnit[2];
 		this.totalStock[0] = totalStock.setScale(MeasureUnit.SCALE);

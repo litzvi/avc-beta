@@ -220,8 +220,8 @@ public class WarehouseManagement {
 //		return ProcessItemDTO.getProcessItemsWithPo(getInventoryRepository().findProcessItemWithStorageByItem(itemId));
 //	}
 
-	public List<ProcessItemInventory> getInventoryByPo(Integer poCodeId) {		
-		return getInventory(null, null, null, poCodeId);		
+	public List<ProcessItemInventory> getCashewInventoryByPo(Integer poCodeId) {		
+		return getInventory(SupplyGroup.CASHEW, null, null, poCodeId);		
 	}
 	
 	public List<ProcessItemInventory> getInventoryByItem(Integer itemId) {		

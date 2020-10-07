@@ -133,14 +133,15 @@ public class ProcessItemDTO extends SubjectDataDTO {
 
 	
 	
-	public static List<ProcessItemDTO> getProcessItems(List<ProcessItemWithStorage> storages) {
-		Map<Integer, List<ProcessItemWithStorage>> map = storages.stream()
+	public static List<ProcessItemDTO> getProcessItems(List<ProcessItemWithStorage> itemWithStorages) {
+		Map<Integer, List<ProcessItemWithStorage>> map = itemWithStorages.stream()
 				.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, Collectors.toList()));
 		List<ProcessItemDTO> processItems = new ArrayList<>();
 		for(List<ProcessItemWithStorage> list: map.values()) {
 			ProcessItemDTO processItem = list.get(0).getProcessItem();
-			processItem.setStorageForms(list.stream().map(i -> i.getStorage())
-					.collect(Collectors.toList()));
+			List<StorageBaseDTO> storages = list.stream().map(i -> i.getStorage()).collect(Collectors.toList());
+			storages.sort(Ordinal.ordinalComparator());
+			processItem.setStorageForms(storages);
 			processItems.add(processItem);
 		}
 		processItems.sort(Ordinal.ordinalComparator());

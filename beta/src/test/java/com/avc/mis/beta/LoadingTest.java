@@ -80,7 +80,7 @@ public class LoadingTest {
 		loading.setShipingDetails(shipingDetails);
 
 		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getCashewInventoryByPo(receipt.getPoCode().getId());
 		loading.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 //		loading.setLoadedItems(getLoadedItems(poInventory));
 		
