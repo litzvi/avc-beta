@@ -36,10 +36,6 @@ import lombok.Setter;
 	{ @UniqueConstraint(columnNames = { "code", "currency" }), 
 			@UniqueConstraint(columnNames = { "code", "suffix" }) })
 public class ContractType extends ValueEntity {
-
-	@Column(name = "name", unique = true, nullable = false)
-	@NotBlank(message = "Contract type name is mandatory")
-	private String value;
 	
 	@Column(name = "code", nullable = false)
 	@NotBlank(message = "Contract type has to have a code")

@@ -186,10 +186,10 @@ public class ProcessInfoDAO extends DAO {
 			if(approval.getDecision() != DecisionType.NOT_ATTENDED) {
 				approval.setDecision(DecisionType.EDIT_NOT_ATTENDED);
 			}			
-			approval.setDescription(process.getProcessType() + "process added and edited");
+			approval.setDescription(process.getProcessType().getValue() + " process added and edited");
 		}
 		
-		sendMessageAlerts(process, "Old " + process.getProcessTypeDescription() + " process edited");
+		sendMessageAlerts(process, "Old " + process.getProcessType().getValue() + " process edited");
 		
 	}
 	

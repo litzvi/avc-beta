@@ -45,6 +45,8 @@ public class QualityCheck extends PoProcess {
 	 */
 	public static final int SCALE = 4;	
 	
+	private String checkedBy;
+	
 	private String inspector;
 	private String sampleTaker;
 	

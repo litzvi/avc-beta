@@ -31,18 +31,10 @@ import lombok.NoArgsConstructor;
 @Table(name="BANK_BRANCHES")
 public class BankBranch extends ValueEntity {
 	
-	@Column(name = "name", nullable = false)
-	@NotBlank(message = "Branch name(value) is mandatory")
-	private String value;
-	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "bankId", nullable = false)
 	@NotNull(message = "Branch has to belong to a bank")
 	private Bank bank;
-	
-	public void setValue(String value) {
-		this.value = value.trim();
-	}
 	
 	@Override
 	public void setReference(Object referenced) {
@@ -53,15 +45,5 @@ public class BankBranch extends ValueEntity {
 			throw new ClassCastException("Branch needs to have a bank, bank not set");
 		}		
 	}
-	
-	/**
-	 * Used by Lombok so new/transient entities with null id won't be equal.
-	 * @param o
-	 * @return false if both this object's and given object's id is null 
-	 * or given object is not of the same class, otherwise returns true.
-	 */
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
 	
 }

@@ -21,7 +21,7 @@ public interface PoProcessRepository<T extends PoProcess> extends ProcessReposit
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
-			+ "SUM((count_amount.amount - coalesce(item_count.containerWeight, 0)) * uom.multiplicand / uom.divisor) - coalesce(p.accessWeight, 0), "
+			+ "SUM((count_amount.amount - coalesce(item_count.containerWeight, 0)) * uom.multiplicand / uom.divisor) - coalesce(item_count.accessWeight, 0), "
 			+ "item.measureUnit) "
 		+ "from PoProcess p "
 			+ "join p.itemCounts item_count "
@@ -31,7 +31,7 @@ public interface PoProcessRepository<T extends PoProcess> extends ProcessReposit
 						+ "on uom.fromUnit = item_count.measureUnit and uom.toUnit = item.measureUnit "
 			+ "join p.processType pt "
 		+ "where pt.processName = :processName "
-		+ "group by p, item ")
+		+ "group by p, item_count ")
 	Stream<ProductionProcessWithItemAmount> findAllItemsCounts(ProcessName processName);
 
 

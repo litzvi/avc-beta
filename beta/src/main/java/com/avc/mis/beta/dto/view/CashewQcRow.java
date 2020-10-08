@@ -32,6 +32,7 @@ public class CashewQcRow extends ValueDTO {
 
 	private PoCodeBasic poCode;
 	private String supplierName;
+	private String checkedBy;
 	private Integer itemId;
 	private String itemName;
 	private OffsetDateTime checkDate;
@@ -44,7 +45,7 @@ public class CashewQcRow extends ValueDTO {
 
 	public CashewQcRow(@NonNull Integer id, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			String itemName, OffsetDateTime checkDate, 
+			String checkedBy, String itemName, OffsetDateTime checkDate, 
 			BigInteger numberOfSamples, BigDecimal sampleWeight, boolean precentage,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, 
 			BigDecimal shrivel, BigDecimal desert, BigDecimal deepSpot, 
@@ -53,6 +54,7 @@ public class CashewQcRow extends ValueDTO {
 		super(id);
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
+		this.checkedBy = checkedBy;
 		this.itemName = itemName;
 		this.checkDate = checkDate;
 		this.numberOfSamples = numberOfSamples;

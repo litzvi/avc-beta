@@ -3,7 +3,9 @@
  */
 package com.avc.mis.beta.service;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
@@ -59,11 +60,17 @@ public class InventoryReports {
 			AmountWithUnit totalStock = v.stream()
 					.map(pi -> pi.getTotalBalance()[0])
 					.reduce(AmountWithUnit::add).get();
-//			AmountWithUnit totalStock = new AmountWithUnit(amount, v.get(0).getTotalBalanceAmount().getMeasureUnit());
+			v.sort(new Comparator<ProcessItemInventoryRow>() {	
+				
+				@Override
+				public int compare(ProcessItemInventoryRow o1, ProcessItemInventoryRow o2) {
+					return o1.getReceiptDate().compareTo(o2.getReceiptDate());
+				}
+			});
 			ItemInventoryRow inventoryRow = new ItemInventoryRow(k, totalStock, v);
 			inventoryRows.add(inventoryRow);
 		});
-		//order by descending receipt dates (or process date)
+		
 		return inventoryRows;
 	}
 	
@@ -86,22 +93,16 @@ public class InventoryReports {
 			PoInventoryRow inventoryRow = new PoInventoryRow(k, totalStock, v);
 			inventoryRows.add(inventoryRow);
 		});
-		//order by descending receipt dates (or process date)
+		inventoryRows.sort(new Comparator<PoInventoryRow>() {	
+			
+			@Override
+			public int compare(PoInventoryRow o1, PoInventoryRow o2) {
+				OffsetDateTime t1 = o1.getPoInventoryRows().get(0).getReceiptDate();
+				OffsetDateTime t2 = o2.getPoInventoryRows().get(0).getReceiptDate();
+				return t1.compareTo(t2);
+			}
+		});
 		return inventoryRows;
 	}
-	
-	//already implemented in WarehouseManagement
-//	private List<ProcessItemInventoryRow> getProcessItemRows() {
-//		List<InventoryProcessItemWithStorage> processItemWithStorages = 
-//				getInventoryRepository().findInventoryProcessItemWithStorage(SupplyGroup.CASHEW, null, null);		
-//
-////		List<StorageInventoryRow> storageRows = getInventoryRepository().findInventoryStorage(SupplyGroup.CASHEW, null);
-////		Map<Integer, List<StorageInventoryRow>> storageMap = storageRows.stream()
-////				.collect(Collectors.groupingBy(StorageInventoryRow::getProcessItemId, Collectors.toList()));
-////		
-////		processItemRows.forEach(pi -> pi.setStorageForms(storageMap.get(pi.getId())));
-////		
-//		return ProcessItemInventoryRow.getProcessItemInventoryRows(processItemWithStorages);
-//	}
 
 }

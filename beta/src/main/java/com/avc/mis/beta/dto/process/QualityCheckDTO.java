@@ -46,13 +46,15 @@ import lombok.ToString;
 @NoArgsConstructor
 public class QualityCheckDTO extends PoProcessDTO {
 
+	private String checkedBy;
+	
 	private String inspector;
 	private String sampleTaker;
 		
 	private List<ProcessItemDTO> processItems; //can use a SortedSet like ContactDetails to maintain order
 	private List<CashewItemQualityDTO> testedItems; //can use a SortedSet like ContactDetails to maintain order
 	
-	public QualityCheckDTO(Integer id, Integer version, String inspector, String sampleTaker,
+	public QualityCheckDTO(Integer id, Integer version, String inspector, String sampleTaker, String checkedBy,
 			Instant createdDate, String userRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, Integer supplierId, Integer supplierVersion, String supplierName,  
 			ProcessName processName, ProductionLine productionLine, 
@@ -63,12 +65,14 @@ public class QualityCheckDTO extends PoProcessDTO {
 				supplierId, supplierVersion, supplierName, 
 				processName, productionLine, recordedTime, startTime, endTime, duration,
 				numOfWorkers, processStatus, editStatus, remarks, approvals);
+		this.checkedBy = checkedBy;
 		this.inspector = inspector;
 		this.sampleTaker = sampleTaker;
 	}
 	
 	public QualityCheckDTO(@NonNull QualityCheck check) {
 		super(check);
+		this.checkedBy = check.getCheckedBy();
 		this.inspector = check.getInspector();
 		this.sampleTaker = check.getSampleTaker();
 		this.processItems = Arrays.stream(check.getProcessItems())

@@ -27,6 +27,7 @@ public class QcTest {
 		CashewStandard standard = new CashewStandard();
 		String standardOrganization = "VinaControl";
 		standard.setStandardOrganization(standardOrganization);
+		standard.setValue("W320 Vina Control");
 		standard.setDamage(new RawDamage());
 		standard.setDefects(new RawDefects());
 		Item item = service.getItem();

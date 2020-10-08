@@ -6,6 +6,7 @@ package com.avc.mis.beta;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -54,6 +55,7 @@ public class DataLoader implements ApplicationRunner {
 				for(ProcessName processName: ProcessName.values()) {
 					ProcessType processType = new ProcessType();
 					processType.setProcessName(processName);
+					processType.setValue(WordUtils.capitalizeFully(processName.name().replace('_', ' ')));
 					processTypes.add(processType);
 				}
 				settingsWriter.addAll(processTypes);

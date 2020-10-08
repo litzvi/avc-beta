@@ -42,12 +42,11 @@ public class StorageTransferDTO extends TransactionProcessDTO {
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
 			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, 
-			String approvals, BigDecimal accessWeight) {
+			String approvals) {
 		super(id, version, createdDate, userRecording, poCodeId, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName,
 				processName, productionLine, recordedTime, startTime, endTime, duration, 
 				numOfWorkers, processStatus, editStatus, remarks, approvals);
-		this.setAccessWeight(accessWeight);
 	}
 	
 	
@@ -57,7 +56,6 @@ public class StorageTransferDTO extends TransactionProcessDTO {
 		if(itemCounts != null)
 			this.setItemCounts(Arrays.stream(itemCounts)
 					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toList()));
-		this.setAccessWeight(transfer.getAccessWeight());
 
 	}
 	

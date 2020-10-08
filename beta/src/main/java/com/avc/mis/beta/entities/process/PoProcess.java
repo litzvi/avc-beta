@@ -51,9 +51,6 @@ public abstract class PoProcess extends GeneralProcess {
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<ItemCount> itemCounts = new HashSet<>();
-	
-	@Column(precision = 19, scale = MeasureUnit.SCALE)
-	private BigDecimal accessWeight;
 
 	/**
 	 * Gets the list of Item counts as an array (can be ordered).

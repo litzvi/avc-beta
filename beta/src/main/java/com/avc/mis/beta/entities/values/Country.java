@@ -35,27 +35,9 @@ import lombok.ToString;
 @Table(name="COUNTRIES")
 public class Country extends ValueEntity {
 	
-	@Column(name = "name", unique = true, nullable = false)
-	@NotBlank(message = "Country name can't be blank")
-	private String value;
-	
 	@JsonIgnore
 	@ToString.Exclude 
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
 	private Set<City> cities = new HashSet<>();
-	
-	public void setValue(String value) {
-		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
-	}
-	
-	/**
-	 * Used by Lombok so new/transient entities with null id won't be equal.
-	 * @param o
-	 * @return false if both this object's and given object's id is null 
-	 * or given object is not of the same class, otherwise returns true.
-	 */
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
 
 }

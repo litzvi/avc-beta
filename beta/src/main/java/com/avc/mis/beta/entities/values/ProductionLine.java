@@ -27,8 +27,4 @@ import lombok.NoArgsConstructor;
 @Table(name="PRODUCTION_LINES")
 public class ProductionLine extends ValueEntity {
 
-	@Column(name = "name", unique = true, nullable = false)
-	@NotBlank(message = "Production line name(value) can't be blank")
-	private String value;
-
 }

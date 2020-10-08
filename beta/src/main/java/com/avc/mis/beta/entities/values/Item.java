@@ -35,10 +35,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "ITEMS")
 public class Item extends ValueEntity implements ValueInterface {
-
-	@Column(name = "name", unique = true, nullable = false)
-	@NotBlank(message = "Item name(value) can't be blank")
-	private String value;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)

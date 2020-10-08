@@ -58,7 +58,10 @@ public class ItemCount extends ProcessInfoEntity {
 	
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
 	private BigDecimal containerWeight;	
-	
+		
+	@Column(precision = 19, scale = MeasureUnit.SCALE)
+	private BigDecimal accessWeight;
+
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "itemCount", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)

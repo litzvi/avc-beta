@@ -3,11 +3,14 @@
  */
 package com.avc.mis.beta.entities;
 
+import java.util.Optional;
+
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,6 +35,11 @@ public abstract class ValueEntity extends BaseEntity implements SoftDeleted {
 	@Column(nullable = false, updatable = false, columnDefinition = "boolean default true")
 	private boolean active = true;
 	
-	public abstract String getValue();
-
+	@Column(name = "name", unique = true, nullable = false)
+	@NotBlank(message = "Object value(name) can't be blank")
+	private String value;
+	
+	public void setValue(String value) {
+		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
+	}
 }

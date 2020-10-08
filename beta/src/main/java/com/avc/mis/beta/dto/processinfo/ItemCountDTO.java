@@ -34,17 +34,19 @@ public class ItemCountDTO extends SubjectDataDTO {
 
 	private ItemDTO item;
 	private MeasureUnit measureUnit;
-	private BigDecimal containerWeight;	
+	private BigDecimal containerWeight;
+	private BigDecimal accessWeight;
 	
 	private List<CountAmountDTO> amounts;
 
 	public ItemCountDTO(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ItemCategory itemCategory,
-			MeasureUnit measureUnit, BigDecimal containerWeight) {
+			MeasureUnit measureUnit, BigDecimal containerWeight, BigDecimal accessWeight) {
 		super(id, version, ordinal);
 		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
 		this.measureUnit = measureUnit;
 		this.containerWeight = containerWeight;
+		this.accessWeight = accessWeight;
 	}
 
 	/**
@@ -55,6 +57,7 @@ public class ItemCountDTO extends SubjectDataDTO {
 		this.item = new ItemDTO(itemCount.getItem());
 		this.measureUnit = itemCount.getMeasureUnit();
 		this.containerWeight = itemCount.getContainerWeight();
+		this.accessWeight = itemCount.getAccessWeight();
 		setAmounts(Arrays.stream(itemCount.getAmounts())
 				.map(i->{return new CountAmountDTO(i);})
 				.collect(Collectors.toList()));
@@ -70,7 +73,9 @@ public class ItemCountDTO extends SubjectDataDTO {
 		if(this.containerWeight != null) {
 			total = total.subtract(this.containerWeight.multiply(new BigDecimal(this.amounts.size()), MathContext.DECIMAL64));
 		}
-		//need to reduce accessWeight when changed to Item count
+		if(this.accessWeight != null) {
+			total = total.subtract(this.accessWeight);
+		}
 		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
 		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
 				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};

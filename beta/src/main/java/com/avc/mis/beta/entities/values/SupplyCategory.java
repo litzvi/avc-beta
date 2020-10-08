@@ -34,27 +34,9 @@ import lombok.EqualsAndHashCode;
 @NamedQuery(name = "SupplyCategory.findAll", query = "select sc from SupplyCategory sc")
 public class SupplyCategory extends ValueEntity {
 	
-	@Column(name = "name", unique = true, nullable = false)
-	@NotBlank(message = "Supply category name(value) can't be blank")
-	private String value;
-	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	@NotNull(message = "Supply group is mandatory")
 	private SupplyGroup supplyGroup;
-	
-	public void setValue(String value) {
-		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
-	}
-	
-	/**
-	 * Used by Lombok so new/transient entities with null id won't be equal.
-	 * @param o
-	 * @return false if both this object's and given object's id is null 
-	 * or given object is not of the same class, otherwise returns true.
-	 */
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
 	
 }

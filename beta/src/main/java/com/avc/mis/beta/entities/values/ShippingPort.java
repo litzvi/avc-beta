@@ -30,17 +30,8 @@ import lombok.NoArgsConstructor;
 @Table(name="SHIPPING_PORT")
 public class ShippingPort extends ValueEntity implements ValueInterface {
 
-	@Column(name = "name", unique = true, nullable = false)
-	@NotBlank(message = "Port name(value) is mandatory")
-	private String value;
-	
 	@Column(name = "code", unique = true, nullable = false)
 	@NotBlank(message = "Shipping port has to have a code")
 	private String code;
-		
-	public void setValue(String value) {
-		this.value = Optional.ofNullable(value).map(s -> s.trim()).orElse(null);
-	}
-	
 
 }

@@ -40,25 +40,18 @@ public class ProcessType extends ValueEntity {
 
 	@JsonIgnore
 	@Enumerated(EnumType.STRING)
-	@Column(name = "name", unique = true, nullable = false)
+	@Column(name = "processName", unique = true, nullable = false)
 	@NotNull(message = "Process type has to have a unique name(value)")
 	private ProcessName processName;
 
 	@JsonIgnore
 	@OneToMany(mappedBy = "processType", fetch = FetchType.LAZY)
 	private Set<ProcessManagement> alertRequirments = new HashSet<>();
-	
-	/**
-	 * @return the value of the process name (usefully used for representation e.g. drop down)
-	 */
-	public String getValue() {
-		return processName.name();
-	}
-	
-	@Override
-	public String toString() {
-		return getValue();
-		
-	}
+
+//	@Override
+//	public String toString() {
+//		return getValue();
+//		
+//	}
 
 }

@@ -133,19 +133,7 @@ public class Receipts {
 			
 			@Override
 			public int compare(ReceiptRow o1, ReceiptRow o2) {
-				OffsetDateTime t1 = o1.getReceiptDate();
-				OffsetDateTime t2 = o2.getReceiptDate();
-				int result;
-				if(t1 == null) {
-					result = t2 == null ? 0 : -1;
-				}
-				else if(t2 == null) {
-					result = 1;
-				}
-				else {
-					result = t1.compareTo(t2);
-				}
-				return result;
+				return o1.getReceiptDate().compareTo(o2.getReceiptDate());
 			}
 		});
 		return receiptRows;

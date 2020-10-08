@@ -25,7 +25,7 @@ import com.avc.mis.beta.entities.values.Item;
 public interface QCRepository extends ProcessRepository<QualityCheck> {
 
 	@Query("select new com.avc.mis.beta.dto.process.QualityCheckDTO("
-			+ "r.id, r.version, r.inspector, r.sampleTaker, "
+			+ "r.id, r.version, r.inspector, r.sampleTaker, r.checkedBy, "
 			+ "r.createdDate, p_user.username, "
 			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
@@ -107,7 +107,8 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 
 	@Query("select new com.avc.mis.beta.dto.view.CashewQcRow( "
 			+ "qc.id, po_code.id, ct.code, ct.suffix, s.name, "
-			+ "i.value, qc.recordedTime, ti.numberOfSamples, ti.sampleWeight, ti.precentage, "
+			+ "qc.checkedBy, i.value, qc.recordedTime, "
+			+ "ti.numberOfSamples, ti.sampleWeight, ti.precentage, "
 				+ "def.scorched, def.deepCut, def.offColour, "
 				+ "def.shrivel, def.desert, def.deepSpot, "
 				+ "dam.mold, dam.dirty, dam.lightDirty, "
