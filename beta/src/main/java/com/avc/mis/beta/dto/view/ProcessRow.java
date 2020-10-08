@@ -93,36 +93,11 @@ public class ProcessRow extends ValueDTO {
 			return null;
 		}
 		
-//		if(this.producedAmounts.isPresent() && this.usedAmounts.isPresent()) {
-//			AmountWithUnit processGain = producedAmounts.get().substract(usedAmounts.get());
-//			return new AmountWithUnit[] {
-//					processGain.setScale(MeasureUnit.SCALE),                        
-//					processGain.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)
-//			};
-//		}
-//		else {
-//			return null;
-//		}
-		
-		
-//		if(getProducedItems() == null || getUsedItems() == null) {
-//			return null;
-//		}
-//		AmountWithUnit usedAmounts = getUsedItems().stream()
-//				.map(i -> i.getAmountWithUnit()[0])
-//				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
-//		AmountWithUnit producedAmounts = getProducedItems().stream()
-//				.map(i -> i.getAmountWithUnit()[0])
-//				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
-//		AmountWithUnit[] processGain = new AmountWithUnit[2];
-//		AmountWithUnit diff = producedAmounts.substract(usedAmounts);
-//		processGain[0] = diff.setScale(MeasureUnit.SCALE);
-//		processGain[1] = diff.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
-//		return processGain;
+
 	}
 	
 		
-	//perhaps change to getUsedCountDifference
+	//perhaps change to getCountDifference
 	public AmountWithUnit[] getUsedCountDifference() {
 		
 		try {
@@ -135,21 +110,6 @@ public class ProcessRow extends ValueDTO {
 			return null;
 		}
 		
-//		if(getItemCounts() == null || getUsedItems() == null) {
-//			return null;
-//		}
-//
-//		AmountWithUnit usedAmounts = getUsedItems().stream()
-//				.map(i -> i.getAmountWithUnit()[0])
-//				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
-//		AmountWithUnit countAmounts = getItemCounts().stream()
-//				.map(i -> i.getAmountWithUnit()[0])
-//				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
-//		AmountWithUnit[] countDifference = new AmountWithUnit[2];
-//		AmountWithUnit diff = countAmounts.substract(usedAmounts);
-//		countDifference[0] = diff.setScale(MeasureUnit.SCALE);
-//		countDifference[1] = diff.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
-//		return countDifference;
 	}
 	
 	public AmountWithUnit[] getProducedCountDifference() {

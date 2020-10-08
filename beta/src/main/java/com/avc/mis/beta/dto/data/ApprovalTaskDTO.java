@@ -9,6 +9,7 @@ import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 
@@ -29,6 +30,7 @@ import lombok.NonNull;
 public class ApprovalTaskDTO extends DataDTO {
 
 	private PoCodeBasic poCode;
+	private String supplierName;
 	private String title;
 	private Integer processId;
 	private ProcessName processName;
@@ -39,12 +41,13 @@ public class ApprovalTaskDTO extends DataDTO {
 	private String processSnapshot;
 	
 	public ApprovalTaskDTO(Integer id, Integer version, 
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix,
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			String title, Integer processId, ProcessName processName, 
 			Instant createdDate, String userName, String modifiedBy, DecisionType decision, String processSnapshot) {
 		super(id, version);
 		if(poCodeId != null)
 			this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
+		this.supplierName = supplierName;
 		this.title = title;
 		this.processId = processId;
 		this.processName = processName;
@@ -57,8 +60,11 @@ public class ApprovalTaskDTO extends DataDTO {
 	
 	public ApprovalTaskDTO(@NonNull ApprovalTask approval) {
 		super(approval.getId(), approval.getVersion());
-		if(approval.getProcess() instanceof PoProcess)
-			this.poCode = new PoCodeBasic(((PoProcess)approval.getProcess()).getPoCode());
+		if(approval.getProcess() instanceof PoProcess) {
+			PoCode poCode = ((PoProcess)approval.getProcess()).getPoCode();
+			this.poCode = new PoCodeBasic(poCode);
+			this.supplierName = poCode.getSupplier().getName(); 
+		}
 		this.title = approval.getDescription();
 		this.processId = approval.getProcess().getId();
 		this.processName = approval.getProcess().getProcessType().getProcessName();

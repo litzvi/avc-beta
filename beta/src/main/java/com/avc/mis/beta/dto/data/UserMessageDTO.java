@@ -9,6 +9,7 @@ import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 
@@ -29,6 +30,7 @@ import lombok.NonNull;
 public class UserMessageDTO extends DataDTO {
 
 	private PoCodeBasic poCode;
+	private String supplierName;
 	private String title;
 	private Integer processId;
 	private ProcessName processName; 
@@ -38,7 +40,7 @@ public class UserMessageDTO extends DataDTO {
 	private String label;
 	
 	public UserMessageDTO(Integer id, Integer version, 
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix,
+			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			String title, Integer processId, ProcessName processName, 
 			Instant createdDate, String userName, String modifiedBy, MessageLabel label) {
 		super(id, version);
@@ -56,8 +58,11 @@ public class UserMessageDTO extends DataDTO {
 	
 	public UserMessageDTO(@NonNull UserMessage message) {
 		super(message.getId(), message.getVersion());
-		if(message.getProcess() instanceof PoProcess)
-			this.poCode = new PoCodeBasic(((PoProcess)message.getProcess()).getPoCode());
+			if(message.getProcess() instanceof PoProcess) {
+			PoCode poCode = ((PoProcess)message.getProcess()).getPoCode();
+			this.poCode = new PoCodeBasic(poCode);
+			this.supplierName = poCode.getSupplier().getName(); 
+		}
 		this.title = message.getDescription();
 		this.processId = message.getProcess().getId();
 		this.processName = message.getProcess().getProcessType().getProcessName();
