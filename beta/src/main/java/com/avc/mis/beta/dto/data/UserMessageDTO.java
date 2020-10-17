@@ -47,6 +47,7 @@ public class UserMessageDTO extends DataDTO {
 		if(poCodeId != null) {
 			this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		}
+		this.supplierName = supplierName;
 		this.title = title;
 		this.processId = processId;
 		this.processName = processName;
