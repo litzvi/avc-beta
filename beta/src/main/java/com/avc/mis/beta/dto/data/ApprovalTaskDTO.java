@@ -34,6 +34,7 @@ public class ApprovalTaskDTO extends DataDTO {
 	private String title;
 	private Integer processId;
 	private ProcessName processName;
+	private String processType;
 	private Instant createdDate;
 	private String userName;
 	private String modifiedBy;
@@ -42,7 +43,7 @@ public class ApprovalTaskDTO extends DataDTO {
 	
 	public ApprovalTaskDTO(Integer id, Integer version, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
-			String title, Integer processId, ProcessName processName, 
+			String title, Integer processId, ProcessName processName, String processType, 
 			Instant createdDate, String userName, String modifiedBy, DecisionType decision, String processSnapshot) {
 		super(id, version);
 		if(poCodeId != null)
@@ -51,6 +52,7 @@ public class ApprovalTaskDTO extends DataDTO {
 		this.title = title;
 		this.processId = processId;
 		this.processName = processName;
+		this.processType = processType;
 		this.createdDate = createdDate;
 		this.userName = userName;
 		this.modifiedBy = modifiedBy;
@@ -68,6 +70,7 @@ public class ApprovalTaskDTO extends DataDTO {
 		this.title = approval.getDescription();
 		this.processId = approval.getProcess().getId();
 		this.processName = approval.getProcess().getProcessType().getProcessName();
+		this.processType = approval.getProcess().getProcessType().getValue();
 		this.createdDate = approval.getCreatedDate();
 		this.userName = approval.getUser().getPerson().getName();
 		this.modifiedBy = approval.getModifiedBy().getPerson().getName();

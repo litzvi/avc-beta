@@ -86,9 +86,4 @@ public class CashewStandard extends ValueEntity {
 	@Column(precision = 19, scale = 3)
 	private BigDecimal roastingWeightLoss;
 
-	@Override
-	public String getValue() {
-		return String.format("%s", this.standardOrganization);
-	}
-
 }

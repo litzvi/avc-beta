@@ -54,7 +54,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<ApprovalTask> findProcessApprovals(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
-				+ "m.id, m.version, c.id, t.code, t.suffix, s.name, m.description, p.id, pt.processName, m.createdDate, pr.name, prm.name,  m.label) "
+				+ "m.id, m.version, c.id, t.code, t.suffix, s.name, m.description, p.id, pt.value, m.createdDate, pr.name, prm.name,  m.label) "
 			+ "from UserMessage m "
 				+ "left join m.process p "
 					+ "left join p.processType pt "
@@ -70,7 +70,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<UserMessageDTO> findAllMessagesByUser(Integer userId);
 
 	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
-			+ "pa.id, pa.version, c.id, t.code, t.suffix, s.name, pa.description, p.id, pt.processName, pa.createdDate, "
+			+ "pa.id, pa.version, c.id, t.code, t.suffix, s.name, pa.description, p.id, pt.processName, pt.value, pa.createdDate, "
 			+ "pr.name, prm.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 			+ "join pa.process p "
@@ -88,7 +88,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<ApprovalTaskDTO> findAllRequiredApprovalsByUser(Integer userId, DecisionType[] decisions);
 
 	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
-			+ "pa.id, pa.version, c.id, t.code, t.suffix, s.name, pa.description, p.id, pt.processName, pa.createdDate, "
+			+ "pa.id, pa.version, c.id, t.code, t.suffix, s.name, pa.description, p.id, pt.processName, pt.value, pa.createdDate, "
 			+ "pr.name, prm.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 		+ "join pa.process p "
@@ -105,7 +105,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<ApprovalTaskDTO> findAllApprovalsByUser(Integer userId);
 
 	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
-			+ "m.id, m.version, c.id, t.code, t.suffix, s.name, m.description, p.id, pt.processName, m.createdDate, pr.name, prm.name, m.label) "
+			+ "m.id, m.version, c.id, t.code, t.suffix, s.name, m.description, p.id, pt.value, m.createdDate, pr.name, prm.name, m.label) "
 		+ "from UserMessage m "
 			+ "join m.process p "
 				+ "join p.processType pt "

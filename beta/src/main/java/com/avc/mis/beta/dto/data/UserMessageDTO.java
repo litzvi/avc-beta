@@ -33,7 +33,7 @@ public class UserMessageDTO extends DataDTO {
 	private String supplierName;
 	private String title;
 	private Integer processId;
-	private ProcessName processName; 
+	private String processType; 
 	private Instant createdDate;
 	private String userName;
 	private String modifiedBy;
@@ -41,7 +41,7 @@ public class UserMessageDTO extends DataDTO {
 	
 	public UserMessageDTO(Integer id, Integer version, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
-			String title, Integer processId, ProcessName processName, 
+			String title, Integer processId, String processType, 
 			Instant createdDate, String userName, String modifiedBy, MessageLabel label) {
 		super(id, version);
 		if(poCodeId != null) {
@@ -50,7 +50,7 @@ public class UserMessageDTO extends DataDTO {
 		this.supplierName = supplierName;
 		this.title = title;
 		this.processId = processId;
-		this.processName = processName;
+		this.processType = processType;
 		this.createdDate = createdDate;
 		this.userName = userName;
 		this.modifiedBy = modifiedBy;
@@ -66,7 +66,7 @@ public class UserMessageDTO extends DataDTO {
 		}
 		this.title = message.getDescription();
 		this.processId = message.getProcess().getId();
-		this.processName = message.getProcess().getProcessType().getProcessName();
+		this.processType = message.getProcess().getProcessType().getValue();
 		this.createdDate = message.getCreatedDate();
 		this.userName = message.getUser().getPerson().getName();
 		this.modifiedBy = message.getModifiedBy().getPerson().getName();

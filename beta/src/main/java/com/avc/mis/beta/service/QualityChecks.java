@@ -72,23 +72,23 @@ public class QualityChecks {
 		dao.addGeneralProcessEntity(check);
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addCashewSampleCheck(QualityCheck check) {
-		check.setProcessType(dao.getProcessTypeByValue(ProcessName.SAMPLE_QC));
-		dao.addGeneralProcessEntity(check);
-	}
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addCashewSupplierCheck(QualityCheck check) {
-		check.setProcessType(dao.getProcessTypeByValue(ProcessName.SUPPLIER_QC));
-		dao.addGeneralProcessEntity(check);
-	}
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addCashewVinaControlCheck(QualityCheck check) {
-		check.setProcessType(dao.getProcessTypeByValue(ProcessName.VINA_CONTROL_QC));
-		dao.addGeneralProcessEntity(check);
-	}
+//	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+//	public void addCashewSampleCheck(QualityCheck check) {
+//		check.setProcessType(dao.getProcessTypeByValue(ProcessName.SAMPLE_QC));
+//		dao.addGeneralProcessEntity(check);
+//	}
+//	
+//	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+//	public void addCashewSupplierCheck(QualityCheck check) {
+//		check.setProcessType(dao.getProcessTypeByValue(ProcessName.SUPPLIER_QC));
+//		dao.addGeneralProcessEntity(check);
+//	}
+//	
+//	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+//	public void addCashewVinaControlCheck(QualityCheck check) {
+//		check.setProcessType(dao.getProcessTypeByValue(ProcessName.VINA_CONTROL_QC));
+//		dao.addGeneralProcessEntity(check);
+//	}
 	
 	public Map<ProcessName, List<PoProcessDTO>> getAllQualityChecksByPo(@NonNull Integer poCodeId) {
 		Map<ProcessName, List<PoProcessDTO>> checksMap = new HashMap<>();
