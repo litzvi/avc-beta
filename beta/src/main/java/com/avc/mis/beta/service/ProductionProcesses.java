@@ -82,6 +82,7 @@ public class ProductionProcesses {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editProductionProcess(ProductionProcess process) {
+		System.out.println("production edit called");
 		//check used items amounts don't exceed the storage amounts
 		dao.editTransactionProcessEntity(process);
 	}

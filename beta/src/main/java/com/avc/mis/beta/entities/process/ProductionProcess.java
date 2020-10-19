@@ -42,13 +42,7 @@ public class ProductionProcess extends TransactionProcess<ProcessItem> {
 	public ProcessItem[] getProcessItems() {
 		return super.getProcessItems();
 	}
-	
-	@JsonIgnore
-	@Override
-	protected boolean canEqual(Object o) {
-		return super.canEqual(o);
-	}
-		
+			
 	@Override
 	public String getProcessTypeDescription() {
 		return "Production";

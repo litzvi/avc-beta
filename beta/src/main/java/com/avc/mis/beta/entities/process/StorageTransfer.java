@@ -39,15 +39,6 @@ public class StorageTransfer extends TransactionProcess<ProcessItem> {
 		return super.getProcessItems();
 	}
 	
-	
-	
-	
-//	@JsonIgnore
-//	@Override
-//	protected boolean canEqual(Object o) {
-//		return super.canEqual(o);
-//	}
-	
 	@Override
 	public String getProcessTypeDescription() {
 		return "Storage transfer";
