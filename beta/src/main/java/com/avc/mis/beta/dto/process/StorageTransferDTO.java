@@ -1,6 +1,5 @@
 package com.avc.mis.beta.dto.process;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;

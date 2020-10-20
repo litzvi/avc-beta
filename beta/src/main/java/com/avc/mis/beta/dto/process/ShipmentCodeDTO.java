@@ -3,16 +3,9 @@
  */
 package com.avc.mis.beta.dto.process;
 
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
-
 import com.avc.mis.beta.dto.BaseDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ShippingPortDTO;
 import com.avc.mis.beta.entities.process.ShipmentCode;
-import com.avc.mis.beta.entities.values.ShippingPort;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;

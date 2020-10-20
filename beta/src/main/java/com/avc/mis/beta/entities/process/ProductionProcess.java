@@ -9,7 +9,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

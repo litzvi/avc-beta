@@ -4,9 +4,6 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
-import com.avc.mis.beta.entities.enums.ItemCategory;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.values.ShippingPort;
 
 import lombok.EqualsAndHashCode;

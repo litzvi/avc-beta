@@ -3,11 +3,8 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
@@ -15,16 +12,11 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow;
 import com.avc.mis.beta.dto.doc.ExportInfo;
-import com.avc.mis.beta.dto.doc.InventoryExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
-import com.avc.mis.beta.entities.embeddable.ShipingDetails;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.ContainerLoading;
-
-import lombok.NonNull;
 
 /**
  * @author zvi

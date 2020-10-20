@@ -3,8 +3,6 @@
  */
 package com.avc.mis.beta.entities.values;
 
-import java.util.Optional;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;

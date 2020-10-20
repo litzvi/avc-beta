@@ -51,8 +51,8 @@ public class ProductionProcessWithItemAmount extends ValueDTO {
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		AmountWithUnit amountWithUnit = new AmountWithUnit(amount, measureUnit);
 		this.amountWithUnit = new AmountWithUnit[] {
-				amountWithUnit,
-				amountWithUnit.convert(MeasureUnit.LOT)};
+				amountWithUnit.convert(MeasureUnit.KG),
+				amountWithUnit.convert(MeasureUnit.LBS)};
 		AmountWithUnit.setScales(this.amountWithUnit, MeasureUnit.SCALE);
 				
 	}
@@ -63,8 +63,8 @@ public class ProductionProcessWithItemAmount extends ValueDTO {
 		super(id);
 		this.item = item;
 		this.amountWithUnit = new AmountWithUnit[] {
-				amountWithUnit,
-				amountWithUnit.convert(MeasureUnit.LOT)};
+				amountWithUnit.convert(MeasureUnit.KG),
+				amountWithUnit.convert(MeasureUnit.LBS)};
 		AmountWithUnit.setScales(this.amountWithUnit, MeasureUnit.SCALE);		
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);

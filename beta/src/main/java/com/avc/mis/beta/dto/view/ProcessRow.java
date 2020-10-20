@@ -118,7 +118,7 @@ public class ProcessRow extends ValueDTO {
 			AmountWithUnit countDifference = countAmounts.get().substract(producedAmounts.get());
 			return new AmountWithUnit[] {
 					countDifference.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),                        
-					countDifference.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)
+					countDifference.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
 			};
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;

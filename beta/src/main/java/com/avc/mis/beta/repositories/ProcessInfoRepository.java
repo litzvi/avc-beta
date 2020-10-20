@@ -12,7 +12,6 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
-import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -23,8 +22,6 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
-
-import lombok.NonNull;
 
 /**
  * Spring repository for accessing all notification information and requirements of production processes.

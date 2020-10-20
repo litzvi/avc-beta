@@ -5,10 +5,8 @@ package com.avc.mis.beta.entities.values;
 
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.ValueInterface;

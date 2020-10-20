@@ -3,12 +3,8 @@
  */
 package com.avc.mis.beta.entities.values;
 
-import java.util.Optional;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.ValueEntity;
 

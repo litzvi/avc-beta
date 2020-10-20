@@ -9,23 +9,16 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
-
-import javax.persistence.Embedded;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
-import com.avc.mis.beta.dto.values.ShipmentCodeBasic;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.ContainerLoading;
-import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
