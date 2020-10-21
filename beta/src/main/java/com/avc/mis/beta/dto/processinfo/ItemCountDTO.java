@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -83,16 +84,16 @@ public class ItemCountDTO extends SubjectDataDTO {
 	
 	public static List<ItemCountDTO> getItemCounts(List<ItemCountWithAmount> amounts) {
 		Map<Integer, List<ItemCountWithAmount>> map = amounts.stream()
-				.collect(Collectors.groupingBy(ItemCountWithAmount::getId, Collectors.toList()));
+				.collect(Collectors.groupingBy(ItemCountWithAmount::getId, LinkedHashMap::new, Collectors.toList()));
 		List<ItemCountDTO> itemCounts = new ArrayList<>();
 		for(List<ItemCountWithAmount> list: map.values()) {
 			ItemCountDTO itemCount = list.get(0).getItemCount();
 			itemCount.setAmounts(list.stream().map(i -> i.getAmount())
-					.sorted(Ordinal.ordinalComparator())
+//					.sorted(Ordinal.ordinalComparator())
 					.collect(Collectors.toList()));
 			itemCounts.add(itemCount);
 		}
-		itemCounts.sort(Ordinal.ordinalComparator());
+//		itemCounts.sort(Ordinal.ordinalComparator());
 		return itemCounts;
 	}
 	

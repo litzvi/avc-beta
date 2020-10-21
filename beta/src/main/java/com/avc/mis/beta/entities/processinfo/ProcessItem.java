@@ -184,7 +184,7 @@ public class ProcessItem extends ProcessInfoEntity {
 			storageForms[i].setUnitAmount(new AmountWithUnit(amount.getAmount(), measureUnit));
 			storageForms[i].setContainerWeight(containerWeight);
 			storageForms[i].setWarehouseLocation(warehouse);
-			storageForms[i].setReference(this);
+//			storageForms[i].setReference(this);
 		}
 		setStorageForms(storageForms);
 		

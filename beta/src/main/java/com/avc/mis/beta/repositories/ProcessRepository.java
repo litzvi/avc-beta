@@ -29,7 +29,8 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "join po_code.contractType t "
 				+ "join po_code.supplier s "
 			+ "join p.processType pt "
-		+ "where pt.processName = :processName ")
+		+ "where pt.processName = :processName "
+		+ "order by p.recordedTime desc ")
 	List<ProcessRow> findProcessByType(ProcessName processName);
 
 	
@@ -83,8 +84,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "join grp.process p "
 		+ "where p.id = :processId "
 		+ "group by sf "
-//		+ "order by grp.ordinal, i.ordinal " //ordered by dto function
-		+ "")
+		+ "order by grp.ordinal, i.ordinal ")
 	List<UsedItemWithGroup> findUsedItemsWithGroup(int processId);
 	
 
@@ -111,7 +111,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "join sf.unitAmount unit "
 				+ "left join sf.warehouseLocation warehouseLocation "
 		+ "where p.id = :processId "
-		+ "order by i.ordinal"
+		+ "order by i.ordinal "
 //		+ ", sf.ordinal " //already sorted in dto setter for comparing between classes as well
 		+ "")
 	List<ProcessItemWithStorage> findProcessItemWithStorage(int processId);

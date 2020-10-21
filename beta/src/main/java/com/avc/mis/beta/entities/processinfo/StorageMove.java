@@ -34,7 +34,8 @@ public class StorageMove extends StorageBase {
 	
 	public StorageMove() {
 		super();
-		setDtype("Storage");
+		super.setNumberUsedUnits(BigDecimal.ONE);
+		setDtype("StorageMove");
 	}
 	
 	@ToString.Exclude

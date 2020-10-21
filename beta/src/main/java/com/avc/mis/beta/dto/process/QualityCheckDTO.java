@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -84,7 +85,7 @@ public class QualityCheckDTO extends PoProcessDTO {
 	 */
 	public void setProcessItems(List<ProcessItemWithStorage> processItems) {
 		Map<Integer, List<ProcessItemWithStorage>> map = processItems.stream()
-			.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, Collectors.toList()));
+			.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, LinkedHashMap::new, Collectors.toList()));
 		this.processItems = new ArrayList<ProcessItemDTO>();
 		for(List<ProcessItemWithStorage> list: map.values()) {
 			ProcessItemDTO processItem = list.get(0).getProcessItem();
@@ -94,7 +95,7 @@ public class QualityCheckDTO extends PoProcessDTO {
 					.collect(Collectors.toList()));
 			this.processItems.add(processItem);
 		}
-		this.processItems.sort(Ordinal.ordinalComparator());
+//		this.processItems.sort(Ordinal.ordinalComparator());
 	}
 	
 	

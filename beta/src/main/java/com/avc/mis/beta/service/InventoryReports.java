@@ -60,13 +60,13 @@ public class InventoryReports {
 			AmountWithUnit totalStock = v.stream()
 					.map(pi -> pi.getTotalBalance()[0])
 					.reduce(AmountWithUnit::add).get();
-			v.sort(new Comparator<ProcessItemInventoryRow>() {	
-				
-				@Override
-				public int compare(ProcessItemInventoryRow o1, ProcessItemInventoryRow o2) {
-					return o1.getReceiptDate().compareTo(o2.getReceiptDate());
-				}
-			});
+//			v.sort(new Comparator<ProcessItemInventoryRow>() {	
+//				
+//				@Override
+//				public int compare(ProcessItemInventoryRow o1, ProcessItemInventoryRow o2) {
+//					return o1.getReceiptDate().compareTo(o2.getReceiptDate());
+//				}
+//			});
 			ItemInventoryRow inventoryRow = new ItemInventoryRow(k, totalStock, v);
 			inventoryRows.add(inventoryRow);
 		});
@@ -93,15 +93,15 @@ public class InventoryReports {
 			PoInventoryRow inventoryRow = new PoInventoryRow(k, totalStock, v);
 			inventoryRows.add(inventoryRow);
 		});
-		inventoryRows.sort(new Comparator<PoInventoryRow>() {	
-			
-			@Override
-			public int compare(PoInventoryRow o1, PoInventoryRow o2) {
-				OffsetDateTime t1 = o1.getPoInventoryRows().get(0).getReceiptDate();
-				OffsetDateTime t2 = o2.getPoInventoryRows().get(0).getReceiptDate();
-				return t1.compareTo(t2);
-			}
-		});
+//		inventoryRows.sort(new Comparator<PoInventoryRow>() {	
+//			
+//			@Override
+//			public int compare(PoInventoryRow o1, PoInventoryRow o2) {
+//				OffsetDateTime t1 = o1.getPoInventoryRows().get(0).getReceiptDate();
+//				OffsetDateTime t2 = o2.getPoInventoryRows().get(0).getReceiptDate();
+//				return t1.compareTo(t2);
+//			}
+//		});
 		return inventoryRows;
 	}
 

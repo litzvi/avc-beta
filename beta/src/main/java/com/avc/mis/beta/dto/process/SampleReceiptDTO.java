@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,7 +68,7 @@ public class SampleReceiptDTO extends PoProcessDTO {
 	
 	public void setSampleItems(List<SampleItemWithWeight> sampleItems) {
 		Map<Integer, List<SampleItemWithWeight>> map = sampleItems.stream()
-				.collect(Collectors.groupingBy(SampleItemWithWeight::getId, Collectors.toList()));
+				.collect(Collectors.groupingBy(SampleItemWithWeight::getId, LinkedHashMap::new, Collectors.toList()));
 			this.sampleItems = new ArrayList<SampleItemDTO>();
 			for(List<SampleItemWithWeight> list: map.values()) {
 				SampleItemDTO sampleItem = list.get(0).getSampleItem();
@@ -77,7 +78,7 @@ public class SampleReceiptDTO extends PoProcessDTO {
 						.collect(Collectors.toList()));
 				this.sampleItems.add(sampleItem);
 			}
-			this.sampleItems.sort(Ordinal.ordinalComparator());
+//			this.sampleItems.sort(Ordinal.ordinalComparator());
 	}
 
 	@Override

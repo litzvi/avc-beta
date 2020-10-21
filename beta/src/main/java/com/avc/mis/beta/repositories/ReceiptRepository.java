@@ -72,7 +72,8 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 				+ "left join sf.warehouseLocation warehouseLocation "
 			+ "left join i.extraRequested extra "
 		+ "where p.id = :processId "
-//		+ "order by i.ordinal, sf.ordinal " //already sorted in dto for both receiptItems and storages
+		+ "order by i.ordinal "
+//		+ ", sf.ordinal " //already sorted in dto for storages
 		+ "")
 	List<ReceiptItemWithStorage> findReceiptItemWithStorage(int processId);
 
@@ -105,7 +106,8 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 //			+ "where type(sf) <> ExtraAdded "
 				+ "where t.processName in :processNames "
 				+ "and lc.processStatus in :statuses "
-			+ "group by r.id, oi, pi ")
+			+ "group by r.id, oi, pi "
+			+ "order by r.recordedTime desc ")
 	List<ReceiptItemRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses);
 
 

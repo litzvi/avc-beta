@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -70,7 +71,7 @@ public class ReceiptDTO extends PoProcessDTO {
 	 */
 	public void setReceiptItems(List<ReceiptItemWithStorage> receiptItems) {
 		Map<Integer, List<ReceiptItemWithStorage>> map = receiptItems.stream()
-			.collect(Collectors.groupingBy(ReceiptItemWithStorage::getId, Collectors.toList()));
+			.collect(Collectors.groupingBy(ReceiptItemWithStorage::getId, LinkedHashMap::new, Collectors.toList()));
 		this.receiptItems = new ArrayList<ReceiptItemDTO>();
 		for(List<ReceiptItemWithStorage> list: map.values()) {
 			ReceiptItemDTO receiptItem = list.get(0).getReceiptItem();
@@ -81,7 +82,7 @@ public class ReceiptDTO extends PoProcessDTO {
 					.collect(Collectors.toList()));
 			this.receiptItems.add(receiptItem);
 		}
-		this.receiptItems.sort(Ordinal.ordinalComparator());
+//		this.receiptItems.sort(Ordinal.ordinalComparator());
 	}	
 
 	@Override

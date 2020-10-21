@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -50,7 +51,6 @@ public class ProductionProcesses {
 			row.setUsedItems(usedMap.get(row.getId()));
 			row.setProducedItems(producedMap.get(row.getId()));
 		}		
-		
 		return processRows;
 	}
 	

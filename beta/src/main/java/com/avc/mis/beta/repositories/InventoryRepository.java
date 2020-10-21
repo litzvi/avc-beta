@@ -108,7 +108,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "group by pi "
 //		+ "having (SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) "
 //			+ "> SUM(unit.amount * coalesce(ui.numberUsedUnits, 0) * uom.multiplicand / uom.divisor)) "
-//		+ "order by poCode, item " //grouped later, therefore order not kept
+		+ "order by r.recordedTime " 
 		+ "")
 	List<ProcessItemInventoryRow> findInventoryProcessItemRows(
 			boolean checkCategories, ItemCategory[] itemCategories, SupplyGroup supplyGroup, Integer itemId, Integer poCodeId);

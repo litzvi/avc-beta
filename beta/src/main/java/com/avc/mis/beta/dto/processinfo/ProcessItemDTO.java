@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.processinfo;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -131,7 +132,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 	
 	public static List<ProcessItemDTO> getProcessItems(List<ProcessItemWithStorage> itemWithStorages) {
 		Map<Integer, List<ProcessItemWithStorage>> map = itemWithStorages.stream()
-				.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, Collectors.toList()));
+				.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, LinkedHashMap::new, Collectors.toList()));
 		List<ProcessItemDTO> processItems = new ArrayList<>();
 		for(List<ProcessItemWithStorage> list: map.values()) {
 			ProcessItemDTO processItem = list.get(0).getProcessItem();
@@ -140,7 +141,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 			processItem.setStorageForms(storages);
 			processItems.add(processItem);
 		}
-		processItems.sort(Ordinal.ordinalComparator());
+//		processItems.sort(Ordinal.ordinalComparator());
 		return processItems;
 	}
 		

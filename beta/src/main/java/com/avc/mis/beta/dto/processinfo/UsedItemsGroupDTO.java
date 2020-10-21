@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.processinfo;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -98,17 +99,17 @@ public class UsedItemsGroupDTO extends SubjectDataDTO {
 	
 	public static List<UsedItemsGroupDTO> getUsedItemsGroups(List<UsedItemWithGroup> usedItems) {
 		Map<Integer, List<UsedItemWithGroup>> map = usedItems.stream()
-				.collect(Collectors.groupingBy(UsedItemWithGroup::getId, Collectors.toList()));
+				.collect(Collectors.groupingBy(UsedItemWithGroup::getId, LinkedHashMap::new, Collectors.toList()));
 		List<UsedItemsGroupDTO> usedItemsGroups = new ArrayList<>();
 		for(List<UsedItemWithGroup> list: map.values()) {
 			UsedItemsGroupDTO usedItemsGroup = list.get(0).getUsedItemsGroup();
 			usedItemsGroup.setUsedItems(list.stream()
 					.map(i -> i.getUsedItem())
-					.sorted(Ordinal.ordinalComparator())
+//					.sorted(Ordinal.ordinalComparator())
 					.collect(Collectors.toList()));
 			usedItemsGroups.add(usedItemsGroup);
 		}
-		usedItemsGroups.sort(Ordinal.ordinalComparator());
+//		usedItemsGroups.sort(Ordinal.ordinalComparator());
 		return usedItemsGroups;
 	}
 }

@@ -6,6 +6,7 @@ package com.avc.mis.beta.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -119,7 +120,7 @@ public class Receipts {
 		List<ReceiptItemRow> itemRows = getReceiptRepository().findAllReceiptsByType(
 				processNames, statuses);
 		Map<Integer, List<ReceiptItemRow>> receiptMap = itemRows.stream()
-				.collect(Collectors.groupingBy(ReceiptItemRow::getId, Collectors.toList()));
+				.collect(Collectors.groupingBy(ReceiptItemRow::getId, LinkedHashMap::new, Collectors.toList()));
 		List<ReceiptRow> receiptRows = new ArrayList<ReceiptRow>();
 		receiptMap.forEach((k, v) -> {
 			AmountWithUnit totalAmount = v.stream()
@@ -127,13 +128,6 @@ public class Receipts {
 					.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
 			ReceiptRow receiptRow = new ReceiptRow(k, totalAmount, v);
 			receiptRows.add(receiptRow);
-		});
-		receiptRows.sort(new Comparator<ReceiptRow>() {
-			
-			@Override
-			public int compare(ReceiptRow o1, ReceiptRow o2) {
-				return o1.getReceiptDate().compareTo(o2.getReceiptDate());
-			}
 		});
 		return receiptRows;
 	}
