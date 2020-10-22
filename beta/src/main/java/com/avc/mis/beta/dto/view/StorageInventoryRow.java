@@ -73,4 +73,8 @@ public class StorageInventoryRow  extends SubjectDataDTO {
 		this.numberUsedUnits = numberUsedUnits;
 		this.totalBalance = totalBalance;
 	}
+	
+	public BigDecimal getNumberAvailableUnits() {
+		return this.numberUnits.subtract(this.numberUsedUnits);
+	}
 }
