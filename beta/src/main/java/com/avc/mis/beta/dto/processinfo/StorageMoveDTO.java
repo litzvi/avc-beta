@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
@@ -31,14 +32,16 @@ public class StorageMoveDTO extends UsedItemBaseDTO {
 
 	private String className; //to differentiate between storage to ExtraAdded nad perhaps storageMoves
 	
-	public StorageMoveDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits, Integer itemId, String itemValue,
+	public StorageMoveDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits, 
+			Integer itemId, String itemValue, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, BigDecimal storageUnitAmount,
 			MeasureUnit storageMeasureUnit, BigDecimal storageNumberUnits, BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
-		super(id, version, ordinal, numberUsedUnits, itemId, itemValue, poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
+		super(id, version, ordinal, numberUsedUnits, itemId, itemValue, itemProcessDate,
+				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				storageId, stoageVersion, storageOrdinal, storageUnitAmount, storageMeasureUnit, storageNumberUnits, storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks);
 		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);

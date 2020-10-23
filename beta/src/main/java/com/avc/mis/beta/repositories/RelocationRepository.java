@@ -71,7 +71,8 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 	Optional<StorageRelocationDTO> findRelocationDTOByProcessId(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.StorageMoveDTO( "
-			+ "m.id, m.version, m.ordinal, m.numberUsedUnits, item.id, item.value, "
+			+ "m.id, m.version, m.ordinal, m.numberUsedUnits, "
+			+ "item.id, item.value, used_p.recordedTime, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "
 			+ "used_sf.id, used_sf.version, used_sf.ordinal,"
 			+ "used_unit.amount, used_unit.measureUnit, used_sf.numberUnits, used_sf.containerWeight, "

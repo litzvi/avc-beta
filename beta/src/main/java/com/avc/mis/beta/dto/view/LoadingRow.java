@@ -9,6 +9,8 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
+import com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow;
 import com.avc.mis.beta.dto.values.ShipmentCodeBasic;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
 
@@ -36,7 +38,9 @@ public class LoadingRow extends ValueDTO {
 	 
 	private List<ProductionProcessWithItemAmount> usedItems;
 	private List<ProductionProcessWithItemAmount> loadedItems;
-	
+
+	private List<ContainerPoItemRow> loadedTotals;
+
 	
 	public LoadingRow(@NonNull Integer id, 
 			Integer shipmentCodeId, String portOfDischargeCode, String portOfDischargeValue, 

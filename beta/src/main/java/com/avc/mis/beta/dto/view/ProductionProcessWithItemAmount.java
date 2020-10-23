@@ -22,7 +22,7 @@ import lombok.experimental.NonFinal;
  *
  */
 @Value
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 public class ProductionProcessWithItemAmount extends ValueDTO {
 
 	BasicValueEntity<Item> item;

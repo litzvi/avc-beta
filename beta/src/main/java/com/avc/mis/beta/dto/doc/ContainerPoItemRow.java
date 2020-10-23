@@ -5,10 +5,16 @@ package com.avc.mis.beta.dto.doc;
 
 import java.math.BigDecimal;
 
+import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.values.Item;
 
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.Value;
 
 /**
@@ -16,18 +22,20 @@ import lombok.Value;
  *
  */
 @Value
-public class ContainerPoItemRow {
+@EqualsAndHashCode(callSuper = true)
+public class ContainerPoItemRow extends ValueDTO {
 
-	String item;
+	BasicValueEntity<Item> item;
 	PoCodeBasic poCode;
 
 	AmountWithUnit[] totalRow;
 
-	public ContainerPoItemRow(String item, 
+	public ContainerPoItemRow(@NonNull Integer id, 
+			Integer itemId, String itemValue,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
 			BigDecimal total, MeasureUnit measureUnit) {
-		super();
-		this.item = item;
+		super(id);
+		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		AmountWithUnit totalRow = new AmountWithUnit(total, measureUnit);
 		this.totalRow = new AmountWithUnit[] {

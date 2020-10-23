@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
@@ -28,6 +29,8 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	@EqualsAndHashCode.Exclude
 	private BasicValueEntity<Item> item;
 	@EqualsAndHashCode.Exclude
+	private OffsetDateTime itemProcessDate;
+	@EqualsAndHashCode.Exclude
 	private PoCodeDTO itemPo;
 	private BigDecimal numberUsedUnits;
 
@@ -38,7 +41,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 
 	
 	public UsedItemBaseDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits,
-			Integer itemId, String itemValue, 
+			Integer itemId, String itemValue, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, BigDecimal containerWeight,
@@ -46,6 +49,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		super(id, version, ordinal);
 		this.numberUsedUnits = numberUsedUnits;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+		this.itemProcessDate = itemProcessDate;
 		if(poCodeId != null)
 			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		else
@@ -64,6 +68,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		ProcessItem processItem = storage.getProcessItem();
 		if(processItem != null) {
 			this.item = new BasicValueEntity<Item>(processItem.getItem());
+			this.itemProcessDate = processItem.getProcess().getRecordedTime();
 			this.itemPo = new PoCodeDTO((processItem.getProcess()).getPoCode());
 		}
 		this.storageId = storage.getId();

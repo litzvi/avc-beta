@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.doc.ExportInfo;
 import com.avc.mis.beta.dto.doc.InventoryExportDoc;
 import com.avc.mis.beta.dto.doc.SecurityExportDoc;
@@ -53,9 +54,13 @@ public class Loading {
 		Map<Integer, List<ProductionProcessWithItemAmount>> loadedMap = getContainerLoadingRepository()
 				.findAllLoadedItems()
 				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		Map<Integer, List<ContainerPoItemRow>> usedByPoMap = getContainerLoadingRepository()
+				.findLoadedTotals(null).stream()
+				.collect(Collectors.groupingBy(ContainerPoItemRow::getId));
 		for(LoadingRow row: loadingRows) {
 			row.setUsedItems(usedMap.get(row.getId()));
 			row.setLoadedItems(loadedMap.get(row.getId()));
+			row.setLoadedTotals(usedByPoMap.get(row.getId()));
 		}		
 		
 		return loadingRows;

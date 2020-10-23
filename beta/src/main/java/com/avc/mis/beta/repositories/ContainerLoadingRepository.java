@@ -129,7 +129,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	Optional<ExportInfo> findInventoryExportDocById(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemRow( "
-			+ "item.value, itemPo.code, ct.code, ct.suffix, "
+			+ "p.id, item.id, item.value, "
+			+ "itemPo.code, ct.code, ct.suffix, "
 			+ "sum((unit.amount - coalesce(sf.containerWeight, 0)) * i.numberUsedUnits * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit) "
 		+ "from ContainerLoading p "
@@ -144,9 +145,10 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 						+ "join sf.unitAmount unit "
 							+ "join UOM uom "
 								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "				
-		+ "where p.id = :processId "
-		+ "group by item, itemPo.code ")
-	List<ContainerPoItemRow> findLoadedTotals(int processId);
+		+ "where p.id = :processId or :processId is null "
+		+ "group by pi "
+		+ "order by pi.ordinal ")
+	List<ContainerPoItemRow> findLoadedTotals(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow( "
 			+ "item.value, itemPo.code, ct.code, ct.suffix, "

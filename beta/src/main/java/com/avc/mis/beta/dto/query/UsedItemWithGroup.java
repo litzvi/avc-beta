@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
@@ -27,15 +28,16 @@ public class UsedItemWithGroup  extends ValueDTO {
 	
 	public UsedItemWithGroup(@NonNull Integer id, Integer version,  Integer ordinal, String groupName, boolean tableView,
 			Integer usedId, Integer usedVersion, Integer usedOrdinal, BigDecimal numberUnits,
-			Integer itemId, String itemValue, 
+			Integer itemId, String itemValue, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, BigDecimal otherUsedUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
 		super(id);
 		this.usedItemsGroup = new UsedItemsGroupDTO(id, version, ordinal, groupName, tableView);
-		this.usedItem = new UsedItemDTO(usedId, usedVersion, usedOrdinal, numberUnits, itemId, itemValue, 
-				poCodeId, contractTypeCode, contractTypeSuffix, supplierName, 
+		this.usedItem = new UsedItemDTO(usedId, usedVersion, usedOrdinal, numberUnits, 
+				itemId, itemValue, itemProcessDate,
+				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				storageId, stoageVersion, storageOrdinal,
 				unitAmount, measureUnit, storageNumberUnits, otherUsedUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks);

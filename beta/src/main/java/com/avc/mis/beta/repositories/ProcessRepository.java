@@ -35,7 +35,8 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 
 	
 	@Query("select new com.avc.mis.beta.dto.processinfo.UsedItemDTO( "
-			+ "i.id, i.version, i.ordinal, i.numberUsedUnits, item.id, item.value, "
+			+ "i.id, i.version, i.ordinal, i.numberUsedUnits, "
+			+ "item.id, item.value, used_p.recordedTime, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
@@ -62,7 +63,8 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	
 	@Query("select new com.avc.mis.beta.dto.query.UsedItemWithGroup( "
 			+ "grp.id, grp.version, grp.ordinal, grp.groupName, grp.tableView, "
-			+ "i.id, i.version, i.ordinal, i.numberUsedUnits, item.id, item.value, "
+			+ "i.id, i.version, i.ordinal, i.numberUsedUnits, "
+			+ "item.id, item.value, used_p.recordedTime, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, "
