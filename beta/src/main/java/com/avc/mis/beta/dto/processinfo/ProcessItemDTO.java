@@ -120,7 +120,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 					storageTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 			});
 			List<BasicStorageDTO> amounts = this.storageForms.stream().map((s) -> {
-				return new BasicStorageDTO(s.getId(), s.getVersion(), s.getOrdinal(), s.getUnitAmount().getAmount());
+				return new BasicStorageDTO(s.getId(), s.getVersion(), s.getOrdinal(), s.getNumberUnits());
 			}).collect(Collectors.toList());
 			storageTable.setAmounts(amounts);
 			return storageTable;

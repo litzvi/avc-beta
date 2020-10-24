@@ -39,7 +39,7 @@ public class AmountWithUnit implements Cloneable {
 
 	@NotNull(message = "Amount is required")
 	@Positive(message = "Amount has to be positive", groups = PositiveAmount.class)
-	private BigDecimal amount;
+	private BigDecimal amount = BigDecimal.ONE;
 	
 	@Enumerated(EnumType.STRING)
 	@NotNull(message = "Measure unit required")
@@ -61,6 +61,11 @@ public class AmountWithUnit implements Cloneable {
 		super();
 		this.amount = (new BigDecimal(amount));
 		this.measureUnit = MeasureUnit.valueOf(measureUnit);
+	}
+	
+	public AmountWithUnit(MeasureUnit measureUnit) {
+		super();
+		this.measureUnit = measureUnit;
 	}
 	
 	public AmountWithUnit add(AmountWithUnit augend) {
@@ -143,6 +148,8 @@ public class AmountWithUnit implements Cloneable {
 		}
 		
 	}
+
+	
 
 	
 	

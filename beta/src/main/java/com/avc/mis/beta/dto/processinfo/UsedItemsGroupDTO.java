@@ -76,10 +76,10 @@ public class UsedItemsGroupDTO extends SubjectDataDTO {
 				if(warehouse != null)
 					usedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 			});
-			List<BasicUsedStorageDTO> used = this.usedItems.stream().map((s) -> {
-				StorageBaseDTO storage = s.getStorage();
-				return new BasicUsedStorageDTO(s.getId(), s.getVersion(), 
-						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getUnitAmount().getAmount());
+			List<BasicUsedStorageDTO> used = this.usedItems.stream().map((i) -> {
+				StorageBaseDTO storage = i.getStorage();
+				return new BasicUsedStorageDTO(i.getId(), i.getVersion(), 
+						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits());
 			}).collect(Collectors.toList());
 			usedItemTable.setAmounts(used);
 			return usedItemTable;

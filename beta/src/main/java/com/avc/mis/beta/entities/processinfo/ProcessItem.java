@@ -181,7 +181,8 @@ public class ProcessItem extends ProcessInfoEntity {
 			BasicStorageDTO amount = amounts.get(i);
 			storageForms[i] = new Storage();
 			storageForms[i].setOrdinal(amount.getOrdinal());
-			storageForms[i].setUnitAmount(new AmountWithUnit(amount.getAmount(), measureUnit));
+			storageForms[i].setUnitAmount(new AmountWithUnit(measureUnit));
+			storageForms[i].setNumberUnits(amount.getAmount());
 			storageForms[i].setContainerWeight(containerWeight);
 			storageForms[i].setWarehouseLocation(warehouse);
 //			storageForms[i].setReference(this);

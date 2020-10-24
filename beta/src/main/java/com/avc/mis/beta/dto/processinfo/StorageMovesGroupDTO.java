@@ -82,7 +82,7 @@ public class StorageMovesGroupDTO extends SubjectDataDTO {
 			List<BasicUsedStorageDTO> used = this.storageMoves.stream().map((s) -> {
 				StorageBaseDTO storage = s.getStorage();
 				return new BasicUsedStorageDTO(s.getId(), s.getVersion(), 
-						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getUnitAmount().getAmount());
+						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits());
 			}).collect(Collectors.toList());
 			usedItemTable.setAmounts(used);
 			return usedItemTable;

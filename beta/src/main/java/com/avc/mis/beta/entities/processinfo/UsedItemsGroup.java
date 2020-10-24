@@ -100,6 +100,7 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 			usedItems[i] = new UsedItem();
 			usedItems[i].setId(basicUsedStorage.getId());
 			usedItems[i].setVersion(basicUsedStorage.getVersion());
+			usedItems[i].setNumberUsedUnits(basicUsedStorage.getAmount());
 			Storage storage = new Storage();
 			storage.setId(basicUsedStorage.getStorageId());
 			storage.setVersion(basicUsedStorage.getStorageVersion());

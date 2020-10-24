@@ -29,10 +29,10 @@ import lombok.EqualsAndHashCode;
 @PrimaryKeyJoinColumn(name = "UsedItemBaseId")
 public class UsedItem extends UsedItemBase {
 	
-	public UsedItem() {
-		super();
-		super.setNumberUsedUnits(BigDecimal.ONE);
-	}
+//	public UsedItem() {
+//		super();
+//		super.setNumberUsedUnits(BigDecimal.ONE);
+//	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "groupId")

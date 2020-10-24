@@ -101,13 +101,15 @@ public class StorageMovesGroup extends ProcessInfoEntity {
 			storageMoves[i] = new StorageMove();
 			storageMoves[i].setId(basicUsedStorage.getId());
 			storageMoves[i].setVersion(basicUsedStorage.getVersion());
+			storageMoves[i].setNumberUsedUnits(basicUsedStorage.getAmount());
 			Storage storage = new Storage();
 			storage.setId(basicUsedStorage.getStorageId());
 			storage.setVersion(basicUsedStorage.getStorageVersion());
 			storageMoves[i].setStorage(storage);
 			
 			storageMoves[i].setOrdinal(basicUsedStorage.getOrdinal());
-			storageMoves[i].setUnitAmount(new AmountWithUnit(basicUsedStorage.getAmount(), measureUnit));
+			storageMoves[i].setUnitAmount(new AmountWithUnit(measureUnit));
+			storageMoves[i].setNumberUnits(basicUsedStorage.getAmount());
 			storageMoves[i].setContainerWeight(containerWeight);
 			storageMoves[i].setWarehouseLocation(warehouse);
 
