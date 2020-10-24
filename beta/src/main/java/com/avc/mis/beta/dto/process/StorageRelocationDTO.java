@@ -13,11 +13,15 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
 import com.avc.mis.beta.dto.processinfo.StorageMoveDTO;
+import com.avc.mis.beta.dto.processinfo.StorageMovesGroupDTO;
+import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
+import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
+import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
@@ -36,7 +40,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class StorageRelocationDTO extends PoProcessDTO {
 	
-	private List<StorageMoveDTO> storageMoves;
+	private List<StorageMovesGroupDTO> storageMovesGroups;
 
 	public StorageRelocationDTO(Integer id, Integer version, Instant createdDate, String staffRecording,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
@@ -54,8 +58,8 @@ public class StorageRelocationDTO extends PoProcessDTO {
 
 	public StorageRelocationDTO(@NonNull StorageRelocation relocation) {
 		super(relocation);
-		this.storageMoves = Arrays.stream(relocation.getStorageMoves())
-				.map(i->{return new StorageMoveDTO(i);}).collect(Collectors.toList());
+		this.storageMovesGroups = Arrays.stream(relocation.getStorageMovesGroups())
+				.map(i->{return new StorageMovesGroupDTO((StorageMovesGroup)i);}).collect(Collectors.toList());
 		ItemCount[] itemCounts = relocation.getItemCounts();
 		if(itemCounts != null)
 			this.setItemCounts(Arrays.stream(itemCounts)

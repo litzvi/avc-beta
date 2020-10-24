@@ -32,6 +32,7 @@ import com.avc.mis.beta.entities.processinfo.ItemCount;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.StorageMove;
+import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.Item;
@@ -66,10 +67,9 @@ public class RelocationTest {
 
 		//get inventory storages for relocation
 		List<ProcessItemInventory> poInventory = warehouseManagement.getCashewInventoryByPo(receipt.getPoCode().getId());
-		relocation.setStorageMoves(getStorageMoves(poInventory));
+		relocation.setStorageMovesGroups(getStorageMoves(poInventory));
 		relocation.setItemCounts(getItemCounts(poInventory));
 
-		System.out.println(relocation.getStorageMoves());
 		try {
 			warehouseManagement.addStorageRelocation(relocation);
 		} catch (Exception e) {
@@ -96,26 +96,31 @@ public class RelocationTest {
 	 * @param poInventory
 	 * @return
 	 */
-	private StorageMove[] getStorageMoves(List<ProcessItemInventory> poInventory) {
-		List<StorageMove> storageMoves = new ArrayList<StorageMove>();
+	private StorageMovesGroup[] getStorageMoves(List<ProcessItemInventory> poInventory) {
+		StorageMovesGroup[] storageMovesGroups = new StorageMovesGroup[poInventory.size()];
+		int i = 0;
 		for(ProcessItemInventory processItemRow: poInventory) {
+			StorageMove[] storageMoves = new StorageMove[processItemRow.getStorageForms().size()];
+			int j = 0;
 			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
-				StorageMove storageMove = new StorageMove();
+				storageMoves[j] = new StorageMove();
 				Storage storage = new Storage();
-				storageMove.setStorage(storage);
+				storageMoves[j].setStorage(storage);
 				storage.setId(storagesRow.getId());
 				storage.setVersion(storagesRow.getVersion());
-				storageMove.setNumberUsedUnits(storagesRow.getNumberUnits());
-				storageMove.setUnitAmount(storagesRow.getUnitAmount());
-				storageMove.setNumberUnits(storagesRow.getNumberUnits());
-				storageMove.setContainerWeight(storagesRow.getContainerWeight());
-				storageMove.setWarehouseLocation(service.getWarehouse());
-
-				storageMoves.add(storageMove);
+				storageMoves[j].setNumberUsedUnits(storagesRow.getNumberUnits());
+				storageMoves[j].setUnitAmount(storagesRow.getUnitAmount());
+				storageMoves[j].setNumberUnits(storagesRow.getNumberUnits());
+				storageMoves[j].setContainerWeight(storagesRow.getContainerWeight());
+				storageMoves[j].setWarehouseLocation(service.getWarehouse());
+				j++;
 			}
+			storageMovesGroups[i] = new StorageMovesGroup();
+			storageMovesGroups[i].setStorageMoves(storageMoves);
+			i++;
 
 		}
-		return storageMoves.toArray(new StorageMove[storageMoves.size()]);
+		return storageMovesGroups;
 	}
 
 	private ItemCount[] getItemCounts(List<ProcessItemInventory> poInventory) {

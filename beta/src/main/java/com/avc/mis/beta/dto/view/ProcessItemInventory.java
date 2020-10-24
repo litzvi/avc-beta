@@ -41,7 +41,7 @@ public class ProcessItemInventory extends ValueDTO {
 
 	private ItemDTO item;
 	private PoCodeDTO poCode;
-	private OffsetDateTime processDate;
+	private OffsetDateTime itemProcessDate;
 	private OffsetDateTime receiptDate;
 	private AmountWithUnit[] totalBalanceAmount; //not calculated in method so won't be calculated repeatedly for totalLots
 	
@@ -59,7 +59,7 @@ public class ProcessItemInventory extends ValueDTO {
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
-		this.processDate = processDate;
+		this.itemProcessDate = processDate;
 		this.receiptDate = receiptDate;
 		this.tableView = tableView;
 	}
@@ -73,7 +73,7 @@ public class ProcessItemInventory extends ValueDTO {
 		super(id);
 		this.item = item;
 		this.poCode = poCode;
-		this.processDate = processDate;
+		this.itemProcessDate = processDate;
 		this.receiptDate = receiptDate;
 		this.tableView = tableView;
 	}

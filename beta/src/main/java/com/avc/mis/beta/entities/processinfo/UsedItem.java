@@ -52,10 +52,6 @@ public class UsedItem extends UsedItemBase {
 		return super.getNumberUsedUnits();
 	}
 	
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
-	
 	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof UsedItemsGroup) {

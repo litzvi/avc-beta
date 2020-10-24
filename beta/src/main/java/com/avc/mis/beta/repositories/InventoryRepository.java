@@ -136,9 +136,10 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
 			+ "s.id, s.numberUnits, sum(ui.numberUsedUnits) ) "
 			+ "from StorageRelocation p "
-				+ "join p.storageMoves storageMove "
-					+ "join storageMove.storage s "
-						+ "left join s.usedItems ui "
+				+ "join p.storageMovesGroups g "
+					+ "join g.storageMoves storageMove "
+						+ "join storageMove.storage s "
+							+ "left join s.usedItems ui "
 			+ "where p.id = :processId "
 			+ "group by s ")
 	Stream<StorageBalance> findStorageMoveBalances(Integer processId);

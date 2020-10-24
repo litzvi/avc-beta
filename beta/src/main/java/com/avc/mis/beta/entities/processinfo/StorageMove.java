@@ -38,11 +38,16 @@ public class StorageMove extends StorageBase {
 		setDtype("StorageMove");
 	}
 	
-	@ToString.Exclude
-	@NotNull(message = "System error: Process not referenced", groups = OnPersist.class)
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "processId", updatable = false)
-	private StorageRelocation process;
+	@JoinColumn(name = "groupId")
+	@NotNull(message = "Storage move have to belong to a group categery")
+	private StorageMovesGroup group;
+	
+//	@ToString.Exclude
+//	@NotNull(message = "System error: Process not referenced", groups = OnPersist.class)
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "processId", updatable = false)
+//	private StorageRelocation process;
 	
 	@Override
 	@NotNull(message = "Internal error: Used item has no referance to storage")
@@ -57,13 +62,23 @@ public class StorageMove extends StorageBase {
 		return super.getNumberUsedUnits();
 	}
 	
+//	@Override
+//	public void setReference(Object referenced) {
+//		if(referenced instanceof StorageRelocation) {
+//			this.setProcess((StorageRelocation)referenced);
+//		}
+//		else {
+//			throw new ClassCastException("Referenced object isn't a storage relocation");
+//		}		
+//	}
+	
 	@Override
 	public void setReference(Object referenced) {
-		if(referenced instanceof StorageRelocation) {
-			this.setProcess((StorageRelocation)referenced);
+		if(referenced instanceof StorageMovesGroup) {
+			this.setGroup((StorageMovesGroup)referenced);
 		}
 		else {
-			throw new ClassCastException("Referenced object isn't a storage relocation");
+			throw new ClassCastException("Referenced object isn't a used item group");
 		}		
 	}
 

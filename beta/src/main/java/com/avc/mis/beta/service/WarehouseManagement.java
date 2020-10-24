@@ -1,5 +1,6 @@
 package com.avc.mis.beta.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
+import com.avc.mis.beta.dto.processinfo.StorageMovesGroupDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
@@ -34,6 +36,7 @@ import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.processinfo.StorageBase;
 import com.avc.mis.beta.entities.processinfo.StorageMove;
+import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
@@ -112,15 +115,18 @@ public class WarehouseManagement {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addStorageRelocation(StorageRelocation relocation) {
 		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
-		StorageMove[] storageMoves = relocation.getStorageMoves();
+		List<StorageMove> storageMoves = new ArrayList<StorageMove>();
+		for(StorageMovesGroup group: relocation.getStorageMovesGroups()) {
+			Arrays.stream(group.getStorageMoves()).forEach(storageMoves::add);
+		}
 		Map<Integer, StorageBase> storageMap = getRelocationRepository().findStoragesById(
-				Arrays.stream(storageMoves)
+				storageMoves.stream()
 				.mapToInt(sm -> sm.getStorage().getId())
 				.toArray())
 				.collect(Collectors.toMap(StorageBase::getId, Function.identity()));
-		for(StorageMove move: storageMoves) {
+		storageMoves.forEach(move -> {
 			move.setProcessItem(storageMap.get(move.getStorage().getId()).getProcessItem());
-		}
+		});
 		dao.addGeneralProcessEntity(relocation);
 		//check if storage moves match the amounts of the used item
 		checkRelocationBalance(relocation);
@@ -186,7 +192,11 @@ public class WarehouseManagement {
 		Optional<StorageRelocationDTO> relocation = getRelocationRepository().findRelocationDTOByProcessId(processId);
 		StorageRelocationDTO relocationDTO = relocation.orElseThrow(
 				()->new IllegalArgumentException("No storage relocation with given process id"));
-		relocationDTO.setStorageMoves(getRelocationRepository().findStorageMoveDTOsByProcessId(processId));
+		relocationDTO.setStorageMovesGroups(
+				StorageMovesGroupDTO.getStorageMoveGroups(
+						getRelocationRepository()
+						.findStorageMovesWithGroup(processId)));
+//		relocationDTO.setStorageMoves(getRelocationRepository().findStorageMoveDTOsByProcessId(processId));
 		relocationDTO.setItemCounts(
 				ItemCountDTO.getItemCounts(
 						getTransferRepository()
