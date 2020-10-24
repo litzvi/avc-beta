@@ -50,7 +50,7 @@ public class BasicUsedStorageDTO extends ProcessDTO {
 		this.storageId = storage.getId();
 		this.storageVersion = storage.getVersion();
 		this.ordinal = storage.getOrdinal();
-		this.amount = storage.getUnitAmount().getAmount();
+		this.amount = storage.getNumberUnits();
 	}
 	
 	public BasicUsedStorageDTO(@NonNull StorageMove storageMove) {
@@ -59,7 +59,7 @@ public class BasicUsedStorageDTO extends ProcessDTO {
 		this.storageId = storage.getId();
 		this.storageVersion = storage.getVersion();
 		this.ordinal = storageMove.getOrdinal();
-		this.amount = storageMove.getUnitAmount().getAmount();
+		this.amount = storageMove.getNumberUnits();
 	}
 
 }

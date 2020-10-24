@@ -39,6 +39,6 @@ public class BasicStorageDTO extends ProcessDTO {
 	public BasicStorageDTO(@NonNull Storage storage) {
 		super(storage.getId(), storage.getVersion());
 		this.ordinal = storage.getOrdinal();
-		this.amount = storage.getUnitAmount().getAmount().setScale(MeasureUnit.SCALE);;
+		this.amount = storage.getNumberUnits().setScale(MeasureUnit.SCALE);;
 	}
 }

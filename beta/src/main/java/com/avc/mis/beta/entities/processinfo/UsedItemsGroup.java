@@ -94,6 +94,7 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 		this.tableView = true;
 		
 		List<BasicUsedStorageDTO> basicUsedStorages = usedItemTable.getAmounts();
+		basicUsedStorages.forEach(i->System.out.println(i));
 		UsedItem[] usedItems = new UsedItem[basicUsedStorages.size()];
 		for(int i=0; i<usedItems.length; i++) {
 			BasicUsedStorageDTO basicUsedStorage = basicUsedStorages.get(i);
