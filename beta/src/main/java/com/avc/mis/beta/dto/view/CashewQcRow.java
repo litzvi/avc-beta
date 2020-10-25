@@ -19,34 +19,37 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
+import lombok.Value;
 
 /**
  * @author Zvi
  *
  */
-@Data
-@NoArgsConstructor
+@Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class CashewQcRow extends ValueDTO {
 
-	private PoCodeBasic poCode;
-	private String supplierName;
-	private String checkedBy;
-	private Integer itemId;
-	private String itemName;
-	private OffsetDateTime checkDate;
-	private BigInteger numberOfSamples;
-	private Boolean precentage;
-	private BigDecimal sampleWeight;
-	private BigDecimal totalDefects;
-	private BigDecimal totalDamage;
+	PoCodeBasic poCode;
+	String supplierName;
+	String checkedBy;
+//	Integer itemId;
+	String itemName;
+	OffsetDateTime checkDate;
+	BigInteger numberOfSamples;
+//	Boolean precentage;
+	BigDecimal sampleWeight;
+	BigDecimal humidity;
+	BigDecimal breakage;
+	BigDecimal totalDefects;
+	BigDecimal totalDamage;
 
 
 	public CashewQcRow(@NonNull Integer id, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String checkedBy, String itemName, OffsetDateTime checkDate, 
 			BigInteger numberOfSamples, BigDecimal sampleWeight, boolean precentage,
+			BigDecimal humidity, BigDecimal breakage,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, 
 			BigDecimal shrivel, BigDecimal desert, BigDecimal deepSpot, 
 			BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 
@@ -59,19 +62,20 @@ public class CashewQcRow extends ValueDTO {
 		this.checkDate = checkDate;
 		this.numberOfSamples = numberOfSamples;
 		this.sampleWeight = sampleWeight;
+		this.humidity = humidity;
 		
 		RawDefects rawDefects = new RawDefects(scorched, deepCut, offColour, shrivel, desert, deepSpot);		
 		RawDamage rawDamage = new RawDamage(mold, dirty, lightDirty, decay, insectDamage, testa);
 		
-		this.precentage = precentage;
+//		this.precentage = precentage;
 		BigDecimal divisor;
 		if(precentage) {
-			this.precentage = precentage;
 			divisor = BigDecimal.valueOf(100L);
 		}
 		else{		
 			divisor = sampleWeight;
 		}
+		this.breakage = breakage.divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
 		this.totalDefects = rawDefects.getTotal().divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
 		this.totalDamage = rawDamage.getTotal().divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
 		

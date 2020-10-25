@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -108,6 +109,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 			+ "qc.id, po_code.id, ct.code, ct.suffix, s.name, "
 			+ "qc.checkedBy, i.value, qc.recordedTime, "
 			+ "ti.numberOfSamples, ti.sampleWeight, ti.precentage, "
+			+ "ti.humidity, ti.breakage,"
 				+ "def.scorched, def.deepCut, def.offColour, "
 				+ "def.shrivel, def.desert, def.deepSpot, "
 				+ "dam.mold, dam.dirty, dam.lightDirty, "
@@ -121,8 +123,9 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 				+ "join po_code.supplier s "
 				+ "join po_code.contractType ct "
 			+ "join qc.processType pt "
-		+ "where pt.processName in :processNames ")
-	List<CashewQcRow> findCashewQualityChecks(ProcessName[] processNames);
+		+ "where pt.processName in :processNames "
+			+ "and (po_code.id = :poId or :poId is null) ")
+	List<CashewQcRow> findCashewQualityChecks(ProcessName[] processNames, Integer poId);
 
 		
 	

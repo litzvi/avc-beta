@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
@@ -37,11 +38,13 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 							+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
 						+ "left join sf.warehouseLocation wh "
 			+ "join p.processType pt "
-		+ "where pt.processName = :processName "
+		+ "where "
+//			+ "pt.processName = :processName "
+			+ "p.id in :processIds "
 			+ "and po_code_used_item.code = po_code.code "
 		+ "group by p, item "
 		+ "order by grp.ordinal ")
-	Stream<ProductionProcessWithItemAmount> findAllUsedItemsByProcessType(ProcessName processName);
+	Stream<ProductionProcessWithItemAmount> findAllUsedItemsByProcessIds(int[] processIds);
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
@@ -56,9 +59,11 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
 					+ "left join sf.warehouseLocation wh "
 			+ "join p.processType pt "
-		+ "where pt.processName = :processName "
+		+ "where "
+//			+ "pt.processName = :processName "
+			+ "p.id in :processIds "
 		+ "group by p, item "
 		+ "order by pi.ordinal ")
-	Stream<ProductionProcessWithItemAmount> findAllProducedItemsByProcessType(ProcessName processName);
+	Stream<ProductionProcessWithItemAmount> findAllProducedItemsByProcessIds(int[] processIds);
 
 }

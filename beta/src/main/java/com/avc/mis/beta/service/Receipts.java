@@ -35,6 +35,7 @@ import com.avc.mis.beta.repositories.ReceiptRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -63,7 +64,7 @@ public class Receipts {
 	public List<ReceiptRow> findFinalCashewReceipts() {
 		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
-				new ProcessStatus[] {ProcessStatus.FINAL});
+				new ProcessStatus[] {ProcessStatus.FINAL}, null);
 	}
 
 	/**
@@ -74,7 +75,7 @@ public class Receipts {
 	public List<ReceiptItemRow> findFinalGeneralReceipts() {
 		return getReceiptRepository().findAllReceiptsByType(
 				new ProcessName[] {ProcessName.GENERAL_RECEIPT},
-				new ProcessStatus[] {ProcessStatus.FINAL});		
+				new ProcessStatus[] {ProcessStatus.FINAL}, null);		
 	}
 	
 	/**
@@ -87,7 +88,7 @@ public class Receipts {
 	public List<ReceiptRow> findPendingCashewReceipts() {
 		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
-				new ProcessStatus[] {ProcessStatus.PENDING});
+				new ProcessStatus[] {ProcessStatus.PENDING}, null);
 		
 	}
 	
@@ -100,7 +101,7 @@ public class Receipts {
 	public List<ReceiptRow> findPendingGeneralReceipts() {
 		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.GENERAL_RECEIPT}, 
-				new ProcessStatus[] {ProcessStatus.PENDING});
+				new ProcessStatus[] {ProcessStatus.PENDING}, null);
 		
 	}
 	
@@ -113,12 +114,18 @@ public class Receipts {
 	public List<ReceiptRow> findCancelledCashewReceipts() {
 		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
-				new ProcessStatus[] {ProcessStatus.CANCELLED});
+				new ProcessStatus[] {ProcessStatus.CANCELLED}, null);
 	}
 	
-	private List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses) {
-		List<ReceiptItemRow> itemRows = getReceiptRepository().findAllReceiptsByType(
-				processNames, statuses);
+	public List<ReceiptRow> findFinalCashewReceiptsByPoCode(@NonNull Integer poCodeId) {
+		return findAllReceiptsByType(
+				new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
+				new ProcessStatus[] {ProcessStatus.FINAL}, 
+				poCodeId);
+	}
+	
+	private List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses, Integer poCodeId) {
+		List<ReceiptItemRow> itemRows = getReceiptRepository().findAllReceiptsByType(processNames, statuses, poCodeId);
 		Map<Integer, List<ReceiptItemRow>> receiptMap = itemRows.stream()
 				.collect(Collectors.groupingBy(ReceiptItemRow::getId, LinkedHashMap::new, Collectors.toList()));
 		List<ReceiptRow> receiptRows = new ArrayList<ReceiptRow>();

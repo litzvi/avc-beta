@@ -112,8 +112,10 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 							+ "join UOM uom "
 								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
 							+ "left join sf.warehouseLocation wh "
+		+ "where "
+			+ "p.id in :processIds "
 		+ "group by p, item ")
-	Stream<ProductionProcessWithItemAmount> findAllMovedItemsByProcessType();
+	Stream<ProductionProcessWithItemAmount> findAllMovedItemsByProcessIds(int[] processIds);
 
 	@Query("select new com.avc.mis.beta.dto.query.StorageMoveWithGroup( "
 			+ "g.id, g.version, g.ordinal, g.groupName, g.tableView, "

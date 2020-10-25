@@ -20,6 +20,7 @@ import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.values.UserBasic;
+import com.avc.mis.beta.dto.view.PoFinalReport;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
@@ -53,6 +54,7 @@ public class ProcessInfoReader {
 	@Autowired private Samples samples;
 	@Autowired private WarehouseManagement warehouseManagement;
 	@Autowired private ProductionProcesses productionProcesses;
+	@Autowired private Loading loading;
 	
 	
 	/**
@@ -170,6 +172,8 @@ public class ProcessInfoReader {
 		case CASHEW_ROASTING:
 		case PACKING:
 			return productionProcesses.getProductionProcess(processId);
+		case CONTAINER_LOADING:
+			return loading.getLoading(processId);
 			default:
 		}
 		return null;
@@ -193,6 +197,21 @@ public class ProcessInfoReader {
 	 */
 	public List<ProcessBasic> getAllProcessesByPoAndName(@NonNull Integer poCodeId, Set<ProcessName> processNames) {
 		return getProcessInfoRepository().findAllProcessesByPoAndName(poCodeId, processNames);
+	}
+	
+	public PoFinalReport getPoFinalReport(@NonNull Integer poCodeId) {
+		PoFinalReport report = getProcessInfoRepository().findFinalReportBasic(poCodeId);
+		report.setReceipt(orderReceipts.findFinalCashewReceiptsByPoCode(poCodeId));
+		report.setReceiptQC(qualityChecks.getRawQualityChecksByPoCode(poCodeId));
+		report.setCleaning(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.CASHEW_CLEANING, poCodeId));
+		report.setRelocationCounts(warehouseManagement.getStorageTransfersByPoCode(poCodeId));
+//		report.setMoveToRoaster(warehouseManagement.getStorageRelocations());
+		report.setRoasting(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.CASHEW_ROASTING, poCodeId));
+		report.setRoastQC(qualityChecks.getRoastedQualityChecksByPoCode(poCodeId));
+		report.setPacking(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.PACKING, poCodeId));
+		report.setLoading(loading.getLoadingsByPoCode(poCodeId));
+		
+		return report;
 	}
 
 	

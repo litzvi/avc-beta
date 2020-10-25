@@ -4,6 +4,7 @@
 
 package com.avc.mis.beta.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,6 +30,7 @@ import com.avc.mis.beta.repositories.ContainerLoadingRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * @author zvi
@@ -65,6 +67,21 @@ public class Loading {
 		
 		return loadingRows;
 	}
+	
+	public List<LoadingRow> getLoadingsByPoCode(@NonNull Integer poCodeId) {
+		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getContainerLoadingRepository()
+				.findAllUsedItemsByPoCode(poCodeId)
+				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		List<LoadingRow> loadingRows = getContainerLoadingRepository()
+				.findContainerLoadingsByProcessIds(
+						usedMap.keySet().stream().mapToInt(Integer::intValue).toArray());
+		for(LoadingRow row: loadingRows) {
+			row.setUsedItems(usedMap.get(row.getId()));
+		}		
+		
+		return loadingRows;
+	}
+
 
 	/**
 	 * Adds a new container loading

@@ -34,6 +34,7 @@ import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
+import com.avc.mis.beta.dto.view.PoFinalReport;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
@@ -276,7 +277,7 @@ public class QueryTest {
 		
 		List<ProcessRow> transferRows;
 		try {
-			transferRows = warehouseManagement.getStorageTransfersTable();
+			transferRows = warehouseManagement.getStorageTransfers();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -284,7 +285,7 @@ public class QueryTest {
 		}
 		transferRows.forEach(i -> System.out.println(i));
 						
-		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocationTable();
+		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocations();
 		relocationRows.forEach(i -> System.out.println(i));
 		
 		List<PoCodeDTO> poCodes = objectTablesReader.findAllPoCodes();
@@ -297,23 +298,16 @@ public class QueryTest {
 				}
 			});
 		});
-		
+
+		//final report
+		poCodes.forEach(c -> System.out.println(processInfoReader.getPoFinalReport(c.getId())));
+
 		service.cleanup(po);
 
 	}
 	
 	@Test
 	void oneQueryTest() {		
-		List<PoCodeDTO> poCodes = objectTablesReader.findAllPoCodes();
-		poCodes.forEach(c -> {
-			Map<ProcessName, List<PoProcessDTO>> qcProcessesMap = qualityChecks.getAllQualityChecksByPo(c.getId());
-			qcProcessesMap.forEach((k, v) -> {
-				if(!v.isEmpty()) {
-					System.out.println("Process name: " + k);
-					v.forEach(r -> System.out.println(r));
-				}
-			});
-		});
 		
 				
 	}

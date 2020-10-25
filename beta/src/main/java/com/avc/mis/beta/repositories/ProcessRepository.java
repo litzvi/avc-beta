@@ -30,8 +30,9 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "join po_code.supplier s "
 			+ "join p.processType pt "
 		+ "where pt.processName = :processName "
+			+ "and (po_code.code = :poCodeId or :poCodeId is null) "
 		+ "order by p.recordedTime desc ")
-	List<ProcessRow> findProcessByType(ProcessName processName);
+	List<ProcessRow> findProcessByType(ProcessName processName, Integer poCodeId);
 
 	
 	@Query("select new com.avc.mis.beta.dto.processinfo.UsedItemDTO( "

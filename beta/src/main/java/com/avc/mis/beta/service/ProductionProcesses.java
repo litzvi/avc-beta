@@ -25,6 +25,7 @@ import com.avc.mis.beta.repositories.ProductionProcessRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * @author zvi
@@ -40,12 +41,22 @@ public class ProductionProcesses {
 	@Autowired private ProductionProcessRepository processRepository;
 	
 	public List<ProcessRow> getProductionProcessesByType(ProcessName processName) {
-		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName);
+		return getProductionProcessesByTypeAndPoCode(processName, null);
+	}
+	
+	/**
+	 * @param cashewCleaning
+	 * @param poCodeId
+	 * @return
+	 */
+	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
+		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId);
+		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getProcessRepository()
-				.findAllUsedItemsByProcessType(processName)
+				.findAllUsedItemsByProcessIds(processIds)
 				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		Map<Integer, List<ProductionProcessWithItemAmount>> producedMap = getProcessRepository()
-				.findAllProducedItemsByProcessType(processName)
+				.findAllProducedItemsByProcessIds(processIds)
 				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		for(ProcessRow row: processRows) {
 			row.setUsedItems(usedMap.get(row.getId()));
@@ -86,4 +97,6 @@ public class ProductionProcesses {
 		//check used items amounts don't exceed the storage amounts
 		dao.editTransactionProcessEntity(process);
 	}
+
+	
 }

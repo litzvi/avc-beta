@@ -63,16 +63,21 @@ public class WarehouseManagement {
 	@Autowired private RelocationRepository relocationRepository;
 
 	
-	public List<ProcessRow> getStorageTransfersTable() {
-		List<ProcessRow> transferRows = getTransferRepository().findProcessByType(ProcessName.STORAGE_TRANSFER);
+	public List<ProcessRow> getStorageTransfers() {
+		return getStorageTransfersByPoCode(null);
+	}
+	
+	public List<ProcessRow> getStorageTransfersByPoCode(Integer poCodeId) {
+		List<ProcessRow> transferRows = getTransferRepository().findProcessByType(ProcessName.STORAGE_TRANSFER, poCodeId);
+		int[] processIds = transferRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getTransferRepository()
-				.findAllUsedItemsByProcessType(ProcessName.STORAGE_TRANSFER)
+				.findAllUsedItemsByProcessIds(processIds)
 				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		Map<Integer, List<ProductionProcessWithItemAmount>> producedMap = getTransferRepository()
-				.findAllProducedItemsByProcessType(ProcessName.STORAGE_TRANSFER)
+				.findAllProducedItemsByProcessIds(processIds)
 				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = getTransferRepository()
-				.findAllItemsCounts(ProcessName.STORAGE_TRANSFER)
+				.findAllItemsCountsByProcessIds(processIds)
 				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		for(ProcessRow row: transferRows) {
 			row.setUsedItems(usedMap.get(row.getId()));
@@ -81,15 +86,22 @@ public class WarehouseManagement {
 		}		
 		
 		return transferRows;
+
+	}
+
+	
+	public List<ProcessRow> getStorageRelocations() {
+		return getStorageRelocationsByPoCode(null);
 	}
 	
-	public List<ProcessRow> getStorageRelocationTable() {
-		List<ProcessRow> relocationRows = getRelocationRepository().findProcessByType(ProcessName.STORAGE_RELOCATION);
+	public List<ProcessRow> getStorageRelocationsByPoCode(Integer poCodeId) {
+		List<ProcessRow> relocationRows = getRelocationRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId);
+		int[] processIds = relocationRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getRelocationRepository()
-				.findAllMovedItemsByProcessType()
+				.findAllMovedItemsByProcessIds(processIds)
 				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = getRelocationRepository()
-				.findAllItemsCounts(ProcessName.STORAGE_RELOCATION)
+				.findAllItemsCountsByProcessIds(processIds)
 				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		for(ProcessRow row: relocationRows) {
 			row.setUsedItems(usedMap.get(row.getId()));
@@ -277,4 +289,5 @@ public class WarehouseManagement {
 		boolean checkCategories = (itemCategories != null);
 		return getInventoryRepository().findInventoryProcessItemRows(checkCategories, itemCategories, supplyGroup, itemId, poCodeId);	
 	}
+
 }

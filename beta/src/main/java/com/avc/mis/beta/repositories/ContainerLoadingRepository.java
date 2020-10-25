@@ -5,6 +5,7 @@ package com.avc.mis.beta.repositories;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
@@ -92,6 +93,28 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 //			+ "and po_code_used_item.code = po_code.code "
 		+ "group by p, item ")
 	Stream<ProductionProcessWithItemAmount> findAllUsedItems();
+	
+	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
+			+ "p.id, item.id, item.value, "
+			+ "SUM((unit.amount * ui.numberUsedUnits - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "item.measureUnit, function('GROUP_CONCAT', coalesce(wh.value, ''))) "
+		+ "from ContainerLoading p "
+//			+ "left join p.poCode po_code "
+			+ "join p.usedItemGroups grp "
+				+ "join grp.usedItems ui "
+					+ "join ui.storage sf "
+						+ "join sf.processItem pi "
+							+ "join pi.item item "
+								+ "join pi.process p_used_item "
+									+ "join p_used_item.poCode po_code_used_item "
+						+ "join sf.unitAmount unit "
+						+ "join UOM uom "
+							+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
+						+ "left join sf.warehouseLocation wh "
+		+ "where po_code_used_item.code = :poCodeId "
+		+ "group by p, item ")
+	Stream<ProductionProcessWithItemAmount> findAllUsedItemsByPoCode(Integer poCodeId);
+
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
@@ -116,9 +139,21 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "from ContainerLoading p "
 			+ "join p.shipmentCode shipment_code "
 				+ "join shipment_code.portOfDischarge pod "
-		+ "join p.containerDetails cont "
-		+ "join p.shipingDetails ship ")
+			+ "join p.containerDetails cont "
+			+ "join p.shipingDetails ship ")
 	List<LoadingRow> findContainerLoadings();
+
+	@Query("select new com.avc.mis.beta.dto.view.LoadingRow( "
+			+ "p.id, shipment_code.code, pod.code, pod.value, "
+			+ "p.recordedTime, p.duration, ship.eta, cont.containerType) "
+		+ "from ContainerLoading p "
+			+ "join p.shipmentCode shipment_code "
+				+ "join shipment_code.portOfDischarge pod "
+			+ "join p.containerDetails cont "
+			+ "join p.shipingDetails ship "
+		+ "where "
+			+ "p.id in :processIds ")
+	List<LoadingRow> findContainerLoadingsByProcessIds(int[] processIds);
 
 	@Query("select new com.avc.mis.beta.dto.doc.ExportInfo( "
 			+ "shipment_code.id, pod.code, pod.value, p.recordedTime) "
@@ -168,6 +203,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "where p.id = :processId "
 		+ "group by item, itemPo.code, sf ")
 	List<ContainerPoItemStorageRow> findLoadedStorages(int processId);
+
 
 	
 }

@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.data.UserMessageDTO;
+import com.avc.mis.beta.dto.view.PoFinalReport;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -22,6 +23,8 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
+
+import lombok.NonNull;
 
 /**
  * Spring repository for accessing all notification information and requirements of production processes.
@@ -186,6 +189,14 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			+ "join a.processType t "
 		+ "where u.id = :currentUserId ")
 	List<ProcessManagementDTO> findAllUserProcessPrivilige(Integer currentUserId);
+
+	@Query("select new com.avc.mis.beta.dto.view.PoFinalReport("
+			+ "po_code.code, c.code, c.suffix, s.name) "
+		+ "from PoCode po_code "
+				+ "join po_code.contractType c "
+				+ "join po_code.supplier s "
+		+ "where po_code.code = :poCodeId ")
+	PoFinalReport findFinalReportBasic(@NonNull Integer poCodeId);
 
 	
 

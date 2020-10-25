@@ -52,14 +52,27 @@ public class QualityChecks {
 				ProcessName.CASHEW_RECEIPT_QC,
 				ProcessName.SUPPLIER_QC,
 				ProcessName.VINA_CONTROL_QC,
-				ProcessName.SAMPLE_QC});
+				ProcessName.SAMPLE_QC}, null);
+	}
+	
+	public List<CashewQcRow> getRawQualityChecksByPoCode(@NonNull Integer poCodeId) {
+		return getQcRepository().findCashewQualityChecks(new ProcessName[] {
+				ProcessName.CASHEW_RECEIPT_QC,
+				ProcessName.SUPPLIER_QC,
+				ProcessName.VINA_CONTROL_QC,
+				ProcessName.SAMPLE_QC}, poCodeId);
 	}
 	
 	public List<CashewQcRow> getRoastedQualityChecks() {
 		return getQcRepository().findCashewQualityChecks(new ProcessName[] {
-				ProcessName.ROASTED_CASHEW_QC});
+				ProcessName.ROASTED_CASHEW_QC}, null);
 	}
-		
+	
+	public List<CashewQcRow> getRoastedQualityChecksByPoCode(@NonNull Integer poCodeId) {
+		return getQcRepository().findCashewQualityChecks(new ProcessName[] {
+				ProcessName.ROASTED_CASHEW_QC}, poCodeId);
+	}
+			
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewReceiptCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT_QC));
@@ -131,4 +144,6 @@ public class QualityChecks {
 //				.orElseThrow(()->new IllegalArgumentException("No cashew standard for given item from given organization"));
 		return standard;
 	}
+
+	
 }

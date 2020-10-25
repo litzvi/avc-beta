@@ -30,9 +30,11 @@ public interface PoProcessRepository<T extends PoProcess> extends ProcessReposit
 					+ "join UOM uom "
 						+ "on uom.fromUnit = item_count.measureUnit and uom.toUnit = item.measureUnit "
 			+ "join p.processType pt "
-		+ "where pt.processName = :processName "
+		+ "where "
+//			+ "pt.processName = :processName "
+			+ "p.id in :processIds "
 		+ "group by p, item_count ")
-	Stream<ProductionProcessWithItemAmount> findAllItemsCounts(ProcessName processName);
+	Stream<ProductionProcessWithItemAmount> findAllItemsCountsByProcessIds(int[] processIds);
 
 
 }
