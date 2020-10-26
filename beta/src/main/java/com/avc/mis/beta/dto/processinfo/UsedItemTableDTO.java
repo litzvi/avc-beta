@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.avc.mis.beta.dto.process.PoCodeDTO;
@@ -23,6 +24,7 @@ public class UsedItemTableDTO {
 	
 	private BasicValueEntity<Item> item;
 	private PoCodeDTO itemPo;
+	private OffsetDateTime itemProcessDate;
 	
 	private List<BasicUsedStorageDTO> amounts;
 	

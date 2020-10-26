@@ -69,6 +69,7 @@ public class UsedItemsGroupDTO extends SubjectDataDTO {
 			this.usedItems.stream().findAny().ifPresent(s -> {
 				usedItemTable.setItem(s.getItem());
 				usedItemTable.setItemPo(s.getItemPo());
+				usedItemTable.setItemProcessDate(s.getItemProcessDate());
 				StorageBaseDTO storage = s.getStorage();
 				usedItemTable.setMeasureUnit(storage.getUnitAmount().getMeasureUnit());
 				usedItemTable.setContainerWeight(storage.getContainerWeight());

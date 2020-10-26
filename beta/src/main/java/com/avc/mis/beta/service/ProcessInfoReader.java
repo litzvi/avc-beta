@@ -168,6 +168,8 @@ public class ProcessInfoReader {
 			return samples.getSampleReceiptByProcessId(processId);
 		case STORAGE_TRANSFER:
 			return warehouseManagement.getStorageTransfer(processId);
+		case STORAGE_RELOCATION:
+			return warehouseManagement.getStorageRelocation(processId);
 		case CASHEW_CLEANING:
 		case CASHEW_ROASTING:
 		case PACKING:
