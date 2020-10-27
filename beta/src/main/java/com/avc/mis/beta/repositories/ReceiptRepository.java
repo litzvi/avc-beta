@@ -78,7 +78,8 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 	List<ReceiptItemWithStorage> findReceiptItemWithStorage(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.view.ReceiptItemRow( "
-				+ "r.id, po_code.id, ct.code, ct.suffix, s.name, i.value, "
+				+ "r.id, po_code.id, ct.code, ct.suffix, s.name, "
+				+ "i.id, i.value, "
 				+ "units.amount, units.measureUnit, "
 				+ "r.recordedTime, "
 				+ "SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor), i.measureUnit, "

@@ -7,9 +7,11 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -27,7 +29,8 @@ public class ReceiptItemRow extends ValueDTO {
 	
 	PoCodeBasic poCode;
 	String supplierName;
-	String itemName;
+	BasicValueEntity<Item> item;
+//	String itemName;
 	AmountWithUnit orderAmount;
 	AmountWithUnit orderBalance;
 	OffsetDateTime receiptDate;
@@ -37,13 +40,15 @@ public class ReceiptItemRow extends ValueDTO {
 	
 	public ReceiptItemRow(@NonNull Integer id, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			String itemName, BigDecimal orderAmount, MeasureUnit orderMU, OffsetDateTime receiptDate, 
+			Integer itemId, String itemValue,
+			BigDecimal orderAmount, MeasureUnit orderMU, OffsetDateTime receiptDate, 
 			BigDecimal receiptAmount, MeasureUnit receiptMU, String storage, 
 			BigDecimal extraAdded, MeasureUnit extraAddedMU) {
 		super(id);
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
-		this.itemName = itemName;
+		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+//		this.itemName = itemName;
 
 		AmountWithUnit receiptAmt = new AmountWithUnit(receiptAmount, receiptMU);
 		if(orderAmount != null) {
