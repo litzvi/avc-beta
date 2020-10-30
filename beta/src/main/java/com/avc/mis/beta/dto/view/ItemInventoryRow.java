@@ -37,9 +37,11 @@ public class ItemInventoryRow extends ValueDTO {
 			List<ProcessItemInventoryRow> poInventoryRows) {
 		super(item.getId());
 		this.item = item;
-		this.totalStock = new AmountWithUnit[2];
-		this.totalStock[0] = totalStock.setScale(MeasureUnit.SCALE);
-		this.totalStock[1] = totalStock.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
+		this.totalStock = new AmountWithUnit[] {
+				totalStock.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),
+				totalStock.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)
+		};
+
 		this.poInventoryRows = poInventoryRows;
 	}
 	

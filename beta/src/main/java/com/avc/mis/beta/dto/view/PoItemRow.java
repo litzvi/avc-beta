@@ -12,11 +12,13 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -39,7 +41,8 @@ public class PoItemRow extends ValueDTO {
 	PoCodeBasic poCode;
 	String[] approvals;
 	String supplierName;
-	String itemName;
+	BasicValueEntity<Item> item;
+//	String itemName;
 	AmountWithUnit[] numberUnits;
 	OffsetDateTime contractDate;
 	LocalDate deliveryDate;
@@ -56,7 +59,7 @@ public class PoItemRow extends ValueDTO {
 	public PoItemRow(@NonNull Integer id, String personInCharge,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String approvals,
-			String itemName, BigDecimal amount, MeasureUnit measureUnit, 
+			Integer itemId, String itemValue, BigDecimal amount, MeasureUnit measureUnit, 
 			OffsetDateTime contractDate, LocalDate deliveryDate, 
 			String defects, BigDecimal unitPrice, Currency currency, 
 			BigDecimal receivedOrderUnits,
@@ -71,7 +74,8 @@ public class PoItemRow extends ValueDTO {
 			this.approvals = null;
 		}
 		this.supplierName = supplierName;
-		this.itemName = itemName;
+		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+//		this.itemName = itemName;
 		AmountWithUnit numberUnits = new AmountWithUnit(amount, measureUnit);
 		this.numberUnits = new AmountWithUnit[] {
 				numberUnits.setScale(MeasureUnit.SCALE), 

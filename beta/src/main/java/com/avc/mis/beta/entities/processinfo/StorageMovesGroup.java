@@ -93,7 +93,10 @@ public class StorageMovesGroup extends ProcessInfoEntity {
 		MeasureUnit measureUnit = usedItemTable.getMeasureUnit();
 		BigDecimal containerWeight = usedItemTable.getContainerWeight();
 		Warehouse warehouse = usedItemTable.getWarehouseLocation();
-		
+		if(warehouse != null)
+			System.out.println("WareHouse: not null" + warehouse);
+		else
+			System.out.println("WareHouse: null");
 		List<BasicUsedStorageDTO> basicUsedStorages = usedItemTable.getAmounts();
 		StorageMove[] storageMoves = new StorageMove[basicUsedStorages.size()];
 		for(int i=0; i<storageMoves.length; i++) {

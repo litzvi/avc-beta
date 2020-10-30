@@ -90,7 +90,7 @@ public interface PORepository extends BaseRepository<PO> {
 	 */
 	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, "
 			+ "function('GROUP_CONCAT', concat(coalesce(user.username, ''), ' - ', coalesce(approval.decision, ''))), "
-			+ "i.value, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
+			+ "i.id, i.value, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency, "
 			+ "SUM( "
 				+ "CASE "
@@ -157,7 +157,7 @@ public interface PORepository extends BaseRepository<PO> {
 	 */
 		@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, "
 				+ "function('GROUP_CONCAT', concat(coalesce(user.username, ''), ':', coalesce(approval.decision, ''))), "
-				+ "i.value, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
+				+ "i.id, i.value, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 				+ "oi.defects, price.amount, price.currency, "
 				+ "SUM( "
 					+ "CASE "

@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.processinfo.StorageBase;
 
 /**
  * @author zvi
@@ -49,9 +50,9 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 	List<ProcessItemTransactionDifference> findRelocationDifferences(Integer processId);
 
 	@Query("select s "
-		+ "from Storage s "
+		+ "from StorageBase s "
 		+ "where s.id in :storageIds ")
-	Stream<Storage> findStoragesById(int[] storageIds);
+	Stream<StorageBase> findStoragesById(int[] storageIds);
 	
 	@Query("select new com.avc.mis.beta.dto.process.StorageRelocationDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "

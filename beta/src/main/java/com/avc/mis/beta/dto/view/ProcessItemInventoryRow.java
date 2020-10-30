@@ -49,10 +49,11 @@ public class ProcessItemInventoryRow extends ValueDTO {
 		this.supplierName = supplierName;
 		this.processDate = processDate;
 		this.receiptDate = receiptDate;
-		this.totalBalance = new AmountWithUnit[2];
 		AmountWithUnit totalBalance = new AmountWithUnit(totalStoredAmount.subtract(totalUsedAmount), measureUnit);
-		this.totalBalance[0] = totalBalance.setScale(MeasureUnit.SCALE);
-		this.totalBalance[1] = totalBalance.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
+		this.totalBalance = new AmountWithUnit[] {
+				totalBalance.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),
+				totalBalance.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
+		};
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
 		}

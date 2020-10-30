@@ -9,10 +9,12 @@ import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,7 +36,8 @@ public class CashewQcRow extends ValueDTO {
 	String supplierName;
 	String checkedBy;
 //	Integer itemId;
-	String itemName;
+	BasicValueEntity<Item> item;
+//	String itemName;
 	OffsetDateTime checkDate;
 	BigInteger numberOfSamples;
 //	Boolean precentage;
@@ -47,7 +50,10 @@ public class CashewQcRow extends ValueDTO {
 
 	public CashewQcRow(@NonNull Integer id, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			String checkedBy, String itemName, OffsetDateTime checkDate, 
+			String checkedBy,
+			Integer itemId, String itemValue, 
+//			String itemName, 
+			OffsetDateTime checkDate, 
 			BigInteger numberOfSamples, BigDecimal sampleWeight, boolean precentage,
 			BigDecimal humidity, BigDecimal breakage,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, 
@@ -58,7 +64,8 @@ public class CashewQcRow extends ValueDTO {
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.checkedBy = checkedBy;
-		this.itemName = itemName;
+		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+//		this.itemName = itemName;
 		this.checkDate = checkDate;
 		this.numberOfSamples = numberOfSamples;
 		this.sampleWeight = sampleWeight;
