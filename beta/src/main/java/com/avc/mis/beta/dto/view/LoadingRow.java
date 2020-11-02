@@ -8,10 +8,13 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow;
 import com.avc.mis.beta.dto.values.ShipmentCodeBasic;
+import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
 
 import lombok.Data;
@@ -29,12 +32,16 @@ import lombok.ToString;
 public class LoadingRow extends ValueDTO {
 
 	private ShipmentCodeBasic shipmentCode;
+	
 //	private PoCodeBasic poCode;
 	private OffsetDateTime recordedTime;
 	private Duration duration;
 	
 	private LocalDate eta;
+	private String containerNumber;
+	private String sealNumber;
 	private String containerSize;
+	
 	 
 	private List<ProductionProcessWithItemAmount> usedItems;
 	private List<ProductionProcessWithItemAmount> loadedItems;
@@ -44,13 +51,17 @@ public class LoadingRow extends ValueDTO {
 	
 	public LoadingRow(@NonNull Integer id, 
 			Integer shipmentCodeId, String portOfDischargeCode, String portOfDischargeValue, 
-			OffsetDateTime recordedTime, Duration duration, LocalDate eta, ShippingContainerType containerType) {
+			OffsetDateTime recordedTime, Duration duration, LocalDate eta,
+			String containerNumber, String sealNumber, ShippingContainerType containerType) {
 		super(id);
 		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, portOfDischargeCode, portOfDischargeValue);
 		this.recordedTime = recordedTime;
 		this.duration = duration;
 		
 		this.eta = eta;
+		
+		this.containerNumber = containerNumber;
+		this.sealNumber = sealNumber;
 		this.containerSize = containerType.toString();
 		
 	}

@@ -135,7 +135,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 
 	@Query("select new com.avc.mis.beta.dto.view.LoadingRow( "
 			+ "p.id, shipment_code.code, pod.code, pod.value, "
-			+ "p.recordedTime, p.duration, ship.eta, cont.containerType) "
+			+ "p.recordedTime, p.duration, ship.eta,"
+			+ "cont.containerNumber, cont.sealNumber, cont.containerType) "
 		+ "from ContainerLoading p "
 			+ "join p.shipmentCode shipment_code "
 				+ "join shipment_code.portOfDischarge pod "
@@ -145,7 +146,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 
 	@Query("select new com.avc.mis.beta.dto.view.LoadingRow( "
 			+ "p.id, shipment_code.code, pod.code, pod.value, "
-			+ "p.recordedTime, p.duration, ship.eta, cont.containerType) "
+			+ "p.recordedTime, p.duration, ship.eta, "
+			+ "cont.containerNumber, cont.sealNumber, cont.containerType) "
 		+ "from ContainerLoading p "
 			+ "join p.shipmentCode shipment_code "
 				+ "join shipment_code.portOfDischarge pod "
