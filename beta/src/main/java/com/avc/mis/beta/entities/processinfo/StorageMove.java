@@ -61,17 +61,7 @@ public class StorageMove extends StorageBase {
 	public BigDecimal getNumberUsedUnits() {
 		return super.getNumberUsedUnits();
 	}
-	
-//	@Override
-//	public void setReference(Object referenced) {
-//		if(referenced instanceof StorageRelocation) {
-//			this.setProcess((StorageRelocation)referenced);
-//		}
-//		else {
-//			throw new ClassCastException("Referenced object isn't a storage relocation");
-//		}		
-//	}
-	
+		
 	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof StorageMovesGroup) {

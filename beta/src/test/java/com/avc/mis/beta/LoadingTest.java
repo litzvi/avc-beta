@@ -103,6 +103,8 @@ public class LoadingTest {
 		SecurityExportDoc securityExportDoc =loadingService.getSecurityExportDoc(loading.getId());
 		System.out.println(securityExportDoc);
 		
+		loadingService.editLoading(loading);
+		
 		assertEquals(expected, actual, "Failed test adding container loading");
 
 	}

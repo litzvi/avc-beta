@@ -84,12 +84,6 @@ public class ContainerLoading extends TransactionProcess<ProcessItem> {
 		return loadedItems;
 	}
 	
-//	@JsonIgnore
-//	@Override
-//	protected boolean canEqual(Object o) {
-//		return super.canEqual(o);
-//	}
-	
 	@Override
 	public String getProcessTypeDescription() {
 		return "Container Loading";

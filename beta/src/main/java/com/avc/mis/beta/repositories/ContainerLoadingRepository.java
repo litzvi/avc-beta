@@ -181,8 +181,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 							+ "join UOM uom "
 								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "				
 		+ "where p.id = :processId or :processId is null "
-		+ "group by pi "
-		+ "order by pi.ordinal ")
+		+ "group by p, item.id, itemPo.code ")
 	List<ContainerPoItemRow> findLoadedTotals(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow( "
@@ -201,7 +200,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 							+ "join UOM uom "
 								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "				
 		+ "where p.id = :processId "
-		+ "group by item, itemPo.code, sf ")
+		+ "group by item.id, itemPo.code, unit.amount, unit.measureUnit ")
 	List<ContainerPoItemStorageRow> findLoadedStorages(int processId);
 
 

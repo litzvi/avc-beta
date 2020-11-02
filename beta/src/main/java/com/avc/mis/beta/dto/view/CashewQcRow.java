@@ -40,7 +40,7 @@ public class CashewQcRow extends ValueDTO {
 //	String itemName;
 	OffsetDateTime checkDate;
 	BigInteger numberOfSamples;
-//	Boolean precentage;
+	Boolean precentage;
 	BigDecimal sampleWeight;
 	BigDecimal humidity;
 	BigDecimal breakage;
@@ -74,7 +74,7 @@ public class CashewQcRow extends ValueDTO {
 		RawDefects rawDefects = new RawDefects(scorched, deepCut, offColour, shrivel, desert, deepSpot);		
 		RawDamage rawDamage = new RawDamage(mold, dirty, lightDirty, decay, insectDamage, testa);
 		
-//		this.precentage = precentage;
+		this.precentage = precentage;
 		BigDecimal divisor;
 		if(precentage) {
 			divisor = BigDecimal.valueOf(100L);

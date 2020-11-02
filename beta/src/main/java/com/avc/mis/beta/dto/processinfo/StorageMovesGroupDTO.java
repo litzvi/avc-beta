@@ -71,10 +71,10 @@ public class StorageMovesGroupDTO extends SubjectDataDTO {
 			this.storageMoves.stream().findAny().ifPresent(s -> {
 				usedItemTable.setItem(s.getItem());
 				usedItemTable.setItemPo(s.getItemPo());
-				StorageBaseDTO storage = s.getStorage();
-				usedItemTable.setMeasureUnit(storage.getUnitAmount().getMeasureUnit());
-				usedItemTable.setContainerWeight(storage.getContainerWeight());
-				BasicValueEntity<Warehouse> warehouse = storage.getWarehouseLocation();
+//				StorageBaseDTO storage = s.getStorage();
+				usedItemTable.setMeasureUnit(s.getUnitAmount().getMeasureUnit());
+				usedItemTable.setContainerWeight(s.getContainerWeight());
+				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
 				if(warehouse != null)
 					usedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 			});

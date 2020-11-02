@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.process;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -41,7 +42,7 @@ public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProces
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 //	@NotEmpty(message = "Has to containe at least one destination-storage-item (process item)")
-	private Set<ProcessItem> processItems;
+	private Set<ProcessItem> processItems = new HashSet<>();
 
 	/**
 	 * Gets the list of Items as an array (can be ordered).

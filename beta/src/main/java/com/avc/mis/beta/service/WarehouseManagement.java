@@ -127,24 +127,12 @@ public class WarehouseManagement {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addStorageRelocation(StorageRelocation relocation) {
 		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
-		List<StorageMove> storageMoves = new ArrayList<StorageMove>();
-		for(StorageMovesGroup group: relocation.getStorageMovesGroups()) {
-			Arrays.stream(group.getStorageMoves()).forEach(storageMoves::add);
-		}
-		Map<Integer, StorageBase> storageMap = getRelocationRepository().findStoragesById(
-				storageMoves.stream()
-				.mapToInt(sm -> sm.getStorage().getId())
-				.toArray())
-				.collect(Collectors.toMap(StorageBase::getId, Function.identity()));
-		storageMoves.forEach(move -> {
-			move.setProcessItem(storageMap.get(move.getStorage().getId()).getProcessItem());
-		});
+		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		dao.addGeneralProcessEntity(relocation);
 		//check if storage moves match the amounts of the used item
 		checkRelocationBalance(relocation);
 	}
-	
-	
+		
 	/**
 	 * @param relocation
 	 */
@@ -226,8 +214,24 @@ public class WarehouseManagement {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editStorageRelocation(StorageRelocation relocation) {
 		//check used items amounts don't exceed the storage amounts
+		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		dao.editGeneralProcessEntity(relocation);
 		checkRelocationBalance(relocation);
+	}
+	
+	private void setStorageMovesProcessItem(StorageMovesGroup[] storageMovesGroups) {
+		List<StorageMove> storageMoves = new ArrayList<StorageMove>();
+		for(StorageMovesGroup group: storageMovesGroups) {
+			Arrays.stream(group.getStorageMoves()).forEach(storageMoves::add);
+		}
+		Map<Integer, StorageBase> storageMap = getRelocationRepository().findStoragesById(
+				storageMoves.stream()
+				.mapToInt(sm -> sm.getStorage().getId())
+				.toArray())
+				.collect(Collectors.toMap(StorageBase::getId, Function.identity()));
+		storageMoves.forEach(move -> {
+			move.setProcessItem(storageMap.get(move.getStorage().getId()).getProcessItem());
+		});
 	}
 	
 //	//need to make sure currently in inventory - used for test
