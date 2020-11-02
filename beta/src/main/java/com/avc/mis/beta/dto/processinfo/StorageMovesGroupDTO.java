@@ -65,18 +65,22 @@ public class StorageMovesGroupDTO extends SubjectDataDTO {
 		return this.storageMoves;
 	}
 	
-	public UsedItemTableDTO getStorageMove() {
+	public MovedItemTableDTO getStorageMove() {
 		if(tableView && this.storageMoves != null && !this.storageMoves.isEmpty()) {
-			UsedItemTableDTO usedItemTable = new UsedItemTableDTO();
+			MovedItemTableDTO movedItemTable = new MovedItemTableDTO();
 			this.storageMoves.stream().findAny().ifPresent(s -> {
-				usedItemTable.setItem(s.getItem());
-				usedItemTable.setItemPo(s.getItemPo());
-//				StorageBaseDTO storage = s.getStorage();
-				usedItemTable.setMeasureUnit(s.getUnitAmount().getMeasureUnit());
-				usedItemTable.setContainerWeight(s.getContainerWeight());
+				movedItemTable.setItem(s.getItem());
+				movedItemTable.setItemPo(s.getItemPo());
 				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
 				if(warehouse != null)
-					usedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+					movedItemTable.setNewWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+				StorageBaseDTO storage = s.getStorage();
+				movedItemTable.setMeasureUnit(storage.getUnitAmount().getMeasureUnit());
+				movedItemTable.setContainerWeight(storage.getContainerWeight());
+				warehouse = storage.getWarehouseLocation();
+				if(warehouse != null)
+					movedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+				
 			});
 			
 			List<BasicUsedStorageDTO> used = this.storageMoves.stream().map((s) -> {
@@ -84,8 +88,8 @@ public class StorageMovesGroupDTO extends SubjectDataDTO {
 				return new BasicUsedStorageDTO(s.getId(), s.getVersion(), 
 						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits());
 			}).collect(Collectors.toList());
-			usedItemTable.setAmounts(used);
-			return usedItemTable;
+			movedItemTable.setAmounts(used);
+			return movedItemTable;
 		}
 		return null;
 	}

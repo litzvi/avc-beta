@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO;
+import com.avc.mis.beta.dto.processinfo.MovedItemTableDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemTableDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
@@ -87,13 +88,13 @@ public class StorageMovesGroup extends ProcessInfoEntity {
 		this.storageMoves = Insertable.setReferences(storageMoves, (t) -> {t.setReference(this);	return t;});
 	}
 	
-	public void setStorageMove(UsedItemTableDTO usedItemTable) {
+	public void setStorageMove(MovedItemTableDTO movedItemTable) {
 		this.tableView = true;
 		
-		MeasureUnit measureUnit = usedItemTable.getMeasureUnit();
-		BigDecimal containerWeight = usedItemTable.getContainerWeight();
-		Warehouse warehouse = usedItemTable.getWarehouseLocation();
-		List<BasicUsedStorageDTO> basicUsedStorages = usedItemTable.getAmounts();
+		MeasureUnit measureUnit = movedItemTable.getMeasureUnit();
+		BigDecimal containerWeight = movedItemTable.getContainerWeight();
+		Warehouse warehouse = movedItemTable.getNewWarehouseLocation();
+		List<BasicUsedStorageDTO> basicUsedStorages = movedItemTable.getAmounts();
 		StorageMove[] storageMoves = new StorageMove[basicUsedStorages.size()];
 		for(int i=0; i<storageMoves.length; i++) {
 			BasicUsedStorageDTO basicUsedStorage = basicUsedStorages.get(i);
