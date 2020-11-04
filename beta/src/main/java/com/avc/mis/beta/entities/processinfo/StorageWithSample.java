@@ -5,16 +5,20 @@ package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Map;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.Lob;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.utilities.MapToString;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -45,6 +49,13 @@ public class StorageWithSample extends Storage {
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
 	@Positive(message = "Average tested weight has to be positive")
 	private BigDecimal avgTestedWeight;
+	
+//	@Lob
+//	private String sampleDetails;
+	
+	@Convert(converter = MapToString.class)
+    private Map<Integer, BigDecimal> sampleWeights;
+
 
 	/**
 	 * Used by Lombok so new/transient entities with null id won't be equal.

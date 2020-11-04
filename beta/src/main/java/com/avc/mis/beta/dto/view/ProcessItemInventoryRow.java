@@ -41,7 +41,9 @@ public class ProcessItemInventoryRow extends ValueDTO {
 	public ProcessItemInventoryRow(Integer id, Integer itemId, String itemValue, ItemCategory itemCategory,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			OffsetDateTime processDate, OffsetDateTime receiptDate,
-			BigDecimal totalStoredAmount, BigDecimal totalUsedAmount, MeasureUnit measureUnit,
+//			BigDecimal totalStoredAmount, BigDecimal totalUsedAmount, 
+			BigDecimal balance,
+			MeasureUnit measureUnit,
 			String warehouses) {
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
@@ -49,10 +51,10 @@ public class ProcessItemInventoryRow extends ValueDTO {
 		this.supplierName = supplierName;
 		this.processDate = processDate;
 		this.receiptDate = receiptDate;
-		AmountWithUnit totalBalance = new AmountWithUnit(totalStoredAmount.subtract(totalUsedAmount), measureUnit);
+		AmountWithUnit balanceAmount = new AmountWithUnit(balance, measureUnit);
 		this.totalBalance = new AmountWithUnit[] {
-				totalBalance.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),
-				totalBalance.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
+				balanceAmount.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),
+				balanceAmount.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
 		};
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);

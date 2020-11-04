@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Currency;
+import java.util.Map;
 
 import com.avc.mis.beta.dto.processinfo.ExtraAddedDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
@@ -39,7 +40,7 @@ public class ReceiptItemWithStorage {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
-			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight,
+			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight, Map<Integer, BigDecimal> sampleWeights,
 			String groupName, String description, String remarks, boolean tableView,
 			BigDecimal receivedUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
@@ -59,7 +60,7 @@ public class ReceiptItemWithStorage {
 			this.storage = new StorageWithSampleDTO(storageId, storageVersion, storageOrdinal, 
 					unitAmount, measureUnit, numberUnits, containerWeight,
 					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
-					sampleContainerWeight, numberOfSamples, avgTestedWeight);
+					sampleContainerWeight, numberOfSamples, avgTestedWeight, sampleWeights);
 		}		
 		this.orderItem = new DataObject<OrderItem>(orderItemId, orderItemVersion);
 	}

@@ -45,7 +45,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, sf.containerWeight, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
-			+ "sf.sampleContainerWeight, sf.numberOfSamples, sf.avgTestedWeight, "
+			+ "sf.sampleContainerWeight, sf.numberOfSamples, sf.avgTestedWeight, sf.sampleWeights, "
 //			+ "CASE "
 //				+ "WHEN type(sf) = Storage THEN sf.emptyContainerWeight  "
 //				+ "ELSE null "

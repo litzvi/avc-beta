@@ -5,6 +5,9 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Map;
+
+import javax.persistence.Lob;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -29,18 +32,21 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 	private BigDecimal sampleContainerWeight;	
 	private BigInteger numberOfSamples;	
 	private BigDecimal avgTestedWeight;
+    private Map<Integer, BigDecimal> sampleWeights;
+
 		
 	public StorageWithSampleDTO(Integer id, Integer version, Integer ordinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, 
 			String remarks, Class<? extends Storage> clazz, 
-			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
+			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight, Map<Integer, BigDecimal> sampleWeights) {
 		super(id, version, ordinal, unitAmount, measureUnit, numberUnits, containerWeight, 
 				warehouseLocationId, warehouseLocationValue, remarks,
 				clazz);
 		this.sampleContainerWeight = sampleContainerWeight;
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
+		this.sampleWeights = sampleWeights;
 	}
 	
 	public StorageWithSampleDTO(StorageWithSample storage) {
@@ -51,16 +57,18 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 			this.numberOfSamples = storage.getNumberOfSamples();
 		if(storage.getAvgTestedWeight() != null)
 			this.avgTestedWeight = storage.getAvgTestedWeight().setScale(MeasureUnit.SCALE);
+		this.sampleWeights = storage.getSampleWeights();
 	}
 	
 	public StorageWithSampleDTO(Integer id, Integer version, Integer ordinal,
 			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz, 
-			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
+			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight, Map<Integer, BigDecimal> sampleWeights) {
 		super(id, version, ordinal, unitAmount, numberUnits, containerWeight, warehouseLocation, remarks, clazz);
 		this.sampleContainerWeight = sampleContainerWeight;
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
+		this.sampleWeights = sampleWeights;
 	}
 		
 	public AmountWithUnit getWeighedDifferance() {
