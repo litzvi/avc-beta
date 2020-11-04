@@ -31,7 +31,7 @@ public class ExtraAddedDTO extends StorageWithSampleDTO {
 			String remarks, Class<? extends Storage> clazz, BigDecimal sampleContainerWeight, BigInteger numberOfSamples,
 			BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, numberUnits, containerWeight, warehouseLocation, remarks, clazz,
-				sampleContainerWeight, numberOfSamples, avgTestedWeight, null);
+				sampleContainerWeight, null, numberOfSamples, avgTestedWeight);
 	}
 
 	public ExtraAddedDTO(Integer id, Integer version, Integer ordinal, BigDecimal unitAmount, MeasureUnit measureUnit,
@@ -39,7 +39,7 @@ public class ExtraAddedDTO extends StorageWithSampleDTO {
 			String warehouseLocationValue, String remarks, Class<? extends Storage> clazz,
 			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, measureUnit, numberUnits, containerWeight, warehouseLocationId,
-				warehouseLocationValue, remarks, clazz, sampleContainerWeight, numberOfSamples, avgTestedWeight, null);
+				warehouseLocationValue, remarks, clazz, sampleContainerWeight, null, numberOfSamples, avgTestedWeight);
 	}
 
 	public ExtraAddedDTO(ExtraAdded extraAdded) {

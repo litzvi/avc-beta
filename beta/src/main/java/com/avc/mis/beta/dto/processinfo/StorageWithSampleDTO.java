@@ -5,9 +5,12 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Lob;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -30,48 +33,51 @@ import lombok.ToString;
 public class StorageWithSampleDTO extends StorageBaseDTO {
 
 	private BigDecimal sampleContainerWeight;	
+    private List<Pair<Integer, BigDecimal>> sampleWeights;
 	private BigInteger numberOfSamples;	
 	private BigDecimal avgTestedWeight;
-    private Map<Integer, BigDecimal> sampleWeights;
 
 		
 	public StorageWithSampleDTO(Integer id, Integer version, Integer ordinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, 
 			String remarks, Class<? extends Storage> clazz, 
-			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight, Map<Integer, BigDecimal> sampleWeights) {
+			BigDecimal sampleContainerWeight, List<Pair<Integer, BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, measureUnit, numberUnits, containerWeight, 
 				warehouseLocationId, warehouseLocationValue, remarks,
 				clazz);
 		this.sampleContainerWeight = sampleContainerWeight;
+		this.sampleWeights = sampleWeights;
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
-		this.sampleWeights = sampleWeights;
 	}
 	
 	public StorageWithSampleDTO(StorageWithSample storage) {
 		super(storage);
 		if(storage.getSampleContainerWeight() != null)
 			this.sampleContainerWeight = storage.getSampleContainerWeight().setScale(MeasureUnit.SCALE);
+		
+		this.sampleWeights = storage.getSampleWeights();
+
 		if(storage.getNumberOfSamples() != null)
 			this.numberOfSamples = storage.getNumberOfSamples();
 		if(storage.getAvgTestedWeight() != null)
 			this.avgTestedWeight = storage.getAvgTestedWeight().setScale(MeasureUnit.SCALE);
-		this.sampleWeights = storage.getSampleWeights();
 	}
 	
 	public StorageWithSampleDTO(Integer id, Integer version, Integer ordinal,
 			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz, 
-			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight, Map<Integer, BigDecimal> sampleWeights) {
+			BigDecimal sampleContainerWeight, List<Pair<Integer, BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, numberUnits, containerWeight, warehouseLocation, remarks, clazz);
 		this.sampleContainerWeight = sampleContainerWeight;
+		this.sampleWeights = sampleWeights;
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
-		this.sampleWeights = sampleWeights;
 	}
 		
 	public AmountWithUnit getWeighedDifferance() {
+		//calculate with map, if exists
 		if(avgTestedWeight == null) {
 			return null;
 		}

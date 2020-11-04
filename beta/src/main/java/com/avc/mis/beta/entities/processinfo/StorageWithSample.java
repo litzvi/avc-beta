@@ -5,6 +5,7 @@ package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.Column;
@@ -17,8 +18,10 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Positive;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.utilities.MapToString;
+import com.avc.mis.beta.utilities.PairListToString;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,6 +46,9 @@ public class StorageWithSample extends Storage {
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
 	private BigDecimal sampleContainerWeight;	
 	
+	@Convert(converter = PairListToString.class)
+    private List<Pair<Integer, BigDecimal>> sampleWeights;
+
 	@Positive(message = "Number of samples has to be positive")
 	private BigInteger numberOfSamples;	
 	
@@ -53,18 +59,5 @@ public class StorageWithSample extends Storage {
 //	@Lob
 //	private String sampleDetails;
 	
-	@Convert(converter = MapToString.class)
-    private Map<Integer, BigDecimal> sampleWeights;
 
-
-	/**
-	 * Used by Lombok so new/transient entities with null id won't be equal.
-	 * @param o
-	 * @return false if both this object's and given object's id is null 
-	 * or given object is not of the same class, otherwise returns true.
-	 */
-//	@Override
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
 }
