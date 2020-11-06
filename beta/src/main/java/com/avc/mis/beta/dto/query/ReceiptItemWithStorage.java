@@ -15,6 +15,7 @@ import com.avc.mis.beta.dto.processinfo.ExtraAddedDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.processinfo.StorageWithSampleDTO;
 import com.avc.mis.beta.dto.values.DataObject;
+import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ExtraAdded;
@@ -43,7 +44,7 @@ public class ReceiptItemWithStorage {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
-			BigDecimal sampleContainerWeight, List<Pair<Integer, BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight, 
+			BigDecimal sampleContainerWeight, List<ValueObject<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight, 
 			String groupName, String description, String remarks, boolean tableView,
 			BigDecimal receivedUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {

@@ -14,6 +14,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
@@ -43,24 +44,25 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "USED_ITEMS_GROUP")
-public class UsedItemsGroup extends ProcessInfoEntity {
+@PrimaryKeyJoinColumn(name = "groupId")
+public class UsedItemsGroup extends ProcessGroup {
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "group", orphanRemoval = true, 
+	@OneToMany(mappedBy = "group", targetEntity = UsedItemBase.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@NotEmpty(message = "Has to containe at least one used storage item")
+//	@NotEmpty(message = "Has to containe at least one used storage item") //probably because persists empty when doing merge on a new one
 	private Set<UsedItem> usedItems = new HashSet<>();
 		
-	@Setter(value = AccessLevel.NONE) 
-	@JsonIgnore
-	@Column(nullable = false)
-	private boolean tableView = false;
-	
-	private String groupName;
-
-	public void setGroupName(String groupName) {
-		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
-	}
+//	@Setter(value = AccessLevel.PRIVATE) 
+//	@JsonIgnore
+//	@Column(nullable = false)
+//	private boolean tableView = false;
+//	
+//	private String groupName;
+//
+//	public void setGroupName(String groupName) {
+//		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
+//	}
 	
 	/**
 	 * Gets the list of used items as an array (can be ordered).
@@ -81,6 +83,7 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 	public void setUsedItems(UsedItem[] usedItems) {
 		Ordinal.setOrdinals(usedItems);
 		this.usedItems = Insertable.setReferences(usedItems, (t) -> {t.setReference(this);	return t;});
+		System.out.println("Number used Items: " + this.usedItems.size());
 	}
 	
 	/**
@@ -91,10 +94,9 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 	 * @param usedItemTable
 	 */
 	public void setUsedItem(UsedItemTableDTO usedItemTable) {
-		this.tableView = true;
+		setTableView(true);
 		
 		List<BasicUsedStorageDTO> basicUsedStorages = usedItemTable.getAmounts();
-		basicUsedStorages.forEach(i->System.out.println(i));
 		UsedItem[] usedItems = new UsedItem[basicUsedStorages.size()];
 		for(int i=0; i<usedItems.length; i++) {
 			BasicUsedStorageDTO basicUsedStorage = basicUsedStorages.get(i);
@@ -106,6 +108,8 @@ public class UsedItemsGroup extends ProcessInfoEntity {
 			storage.setId(basicUsedStorage.getStorageId());
 			storage.setVersion(basicUsedStorage.getStorageVersion());
 			usedItems[i].setStorage(storage);
+			
+			
 		}
 		setUsedItems(usedItems);
 	}

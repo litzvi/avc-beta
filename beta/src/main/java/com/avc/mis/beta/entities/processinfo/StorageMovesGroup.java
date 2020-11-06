@@ -15,6 +15,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
@@ -48,24 +49,25 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "STORAGE_MOVES_GROUP")
-public class StorageMovesGroup extends ProcessInfoEntity {
+@PrimaryKeyJoinColumn(name = "groupId")
+public class StorageMovesGroup extends ProcessGroup {
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "group", orphanRemoval = true, 
+	@OneToMany(mappedBy = "group", targetEntity = UsedItemBase.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@NotEmpty(message = "Has to containe at least one storage move")
 	private Set<StorageMove> storageMoves = new HashSet<>();
 		
-	@Setter(value = AccessLevel.NONE) 
-	@JsonIgnore
-	@Column(nullable = false)
-	private boolean tableView = false;
-	
-	private String groupName;
-
-	public void setGroupName(String groupName) {
-		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
-	}
+//	@Setter(value = AccessLevel.NONE) 
+//	@JsonIgnore
+//	@Column(nullable = false)
+//	private boolean tableView = false;
+//	
+//	private String groupName;
+//
+//	public void setGroupName(String groupName) {
+//		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
+//	}
 	
 	/**
 	 * Gets the list of storage moves as an array (can be ordered).
@@ -89,7 +91,7 @@ public class StorageMovesGroup extends ProcessInfoEntity {
 	}
 	
 	public void setStorageMove(MovedItemTableDTO movedItemTable) {
-		this.tableView = true;
+		setTableView(true);
 		
 		MeasureUnit measureUnit = movedItemTable.getMeasureUnit();
 		BigDecimal containerWeight = movedItemTable.getContainerWeight();

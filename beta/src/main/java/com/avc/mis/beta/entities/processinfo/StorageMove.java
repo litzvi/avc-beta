@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.validation.groups.OnPersist;
 
@@ -38,16 +39,24 @@ public class StorageMove extends StorageBase {
 		setDtype("StorageMove");
 	}
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "groupId")
-	@NotNull(message = "Storage move have to belong to a group categery")
-	private StorageMovesGroup group;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "groupId")
+//	@NotNull(message = "Storage move have to belong to a group categery")
+//	private StorageMovesGroup group;
 	
 //	@ToString.Exclude
 //	@NotNull(message = "System error: Process not referenced", groups = OnPersist.class)
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "processId", updatable = false)
 //	private StorageRelocation process;
+	
+	public void setGroup(StorageMovesGroup group) {
+		super.setGroup(group);
+	}
+	
+	public StorageMovesGroup getGroup() {
+		return (StorageMovesGroup) super.getGroup();
+	}
 	
 	@Override
 	@NotNull(message = "Internal error: Used item has no referance to storage")
@@ -71,6 +80,5 @@ public class StorageMove extends StorageBase {
 			throw new ClassCastException("Referenced object isn't a used item group");
 		}		
 	}
-
 
 }

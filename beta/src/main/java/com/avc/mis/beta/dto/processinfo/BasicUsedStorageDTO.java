@@ -13,6 +13,7 @@ import com.avc.mis.beta.entities.processinfo.UsedItem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * @author zvi
@@ -20,6 +21,7 @@ import lombok.NonNull;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class BasicUsedStorageDTO extends ProcessDTO {
 	
 	private Integer storageId;

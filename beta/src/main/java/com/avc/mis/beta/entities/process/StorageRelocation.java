@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.processinfo.ProcessGroup;
 import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
@@ -51,14 +52,14 @@ import lombok.Setter;
 public class StorageRelocation extends PoProcess {
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "process", orphanRemoval = true, 
+	@OneToMany(mappedBy = "process", targetEntity = ProcessGroup.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<StorageMovesGroup> storageMovesGroups = new HashSet<>();
 	
-	@Setter(value = AccessLevel.NONE) 
-	@JsonIgnore
-	@Column(nullable = false)
-	private boolean tableView = false;
+//	@Setter(value = AccessLevel.NONE) 
+//	@JsonIgnore
+//	@Column(nullable = false)
+//	private boolean tableView = false;
 
 	/**
 	 * Gets the list of storage move groups as an array (can be ordered).

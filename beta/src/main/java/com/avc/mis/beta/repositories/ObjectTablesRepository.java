@@ -160,12 +160,23 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 					+ "join UOM uom "
 						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
 				+ "left join sf.usedItems ui "
+					+ "left join ui.group used_g "
+						+ "left join used_g.process used_p "
+							+ "left join used_p.lifeCycle used_lc "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (item.supplyGroup = :supplyGroup or :supplyGroup is null)  "
 			+ "and (:checkCategories = false or item.category in :itemCategories)  "
 			+ "and (item.id = :itemId or :itemId is null)  "
 		+ "group by sf, sf.numberUnits "
-		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) ")
+//		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) "
+		+ "having sf.numberUnits > "
+			+ "SUM("
+				+ "(CASE "
+					+ "WHEN (ui IS NOT null AND used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+						+ "THEN ui.numberUsedUnits "
+					+ "ELSE 0 "
+				+ "END)"
+			+ " ) ")
 	Set<PoCodeDTO> findInventoryPoCodeByType(boolean checkCategories, ItemCategory[] itemCategories, SupplyGroup supplyGroup, Integer itemId);
 
 	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("

@@ -13,6 +13,7 @@ import javax.persistence.Lob;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.Storage;
@@ -33,7 +34,7 @@ import lombok.ToString;
 public class StorageWithSampleDTO extends StorageBaseDTO {
 
 	private BigDecimal sampleContainerWeight;	
-    private List<Pair<Integer, BigDecimal>> sampleWeights;
+    private List<ValueObject<BigDecimal>> sampleWeights;
 	private BigInteger numberOfSamples;	
 	private BigDecimal avgTestedWeight;
 
@@ -42,7 +43,7 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, 
 			String remarks, Class<? extends Storage> clazz, 
-			BigDecimal sampleContainerWeight, List<Pair<Integer, BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
+			BigDecimal sampleContainerWeight, List<ValueObject<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, measureUnit, numberUnits, containerWeight, 
 				warehouseLocationId, warehouseLocationValue, remarks,
 				clazz);
@@ -68,7 +69,7 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 	public StorageWithSampleDTO(Integer id, Integer version, Integer ordinal,
 			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz, 
-			BigDecimal sampleContainerWeight, List<Pair<Integer, BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
+			BigDecimal sampleContainerWeight, List<ValueObject<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, numberUnits, containerWeight, warehouseLocation, remarks, clazz);
 		this.sampleContainerWeight = sampleContainerWeight;
 		this.sampleWeights = sampleWeights;

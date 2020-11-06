@@ -11,6 +11,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+import com.avc.mis.beta.entities.process.PoProcess;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -34,10 +36,18 @@ public class UsedItem extends UsedItemBase {
 //		super.setNumberUsedUnits(BigDecimal.ONE);
 //	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "groupId")
-	@NotNull(message = "Used items have to belong to a group categery")
-	private UsedItemsGroup group;
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "groupId")
+//	@NotNull(message = "Used items have to belong to a group categery")
+//	private UsedItemsGroup group;
+	
+	public void setGroup(UsedItemsGroup group) {
+		super.setGroup(group);
+	}
+	
+	public UsedItemsGroup getGroup() {
+		return (UsedItemsGroup) super.getGroup();
+	}
 	
 	@Override
 	@NotNull(message = "Internal error: Used item has no referance to storage")
@@ -61,5 +71,4 @@ public class UsedItem extends UsedItemBase {
 			throw new ClassCastException("Referenced object isn't a used item group");
 		}		
 	}
-	
 }

@@ -24,8 +24,10 @@ import javax.validation.constraints.Positive;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
+import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -97,4 +99,5 @@ public class StorageBase extends UsedItemBase {
 			throw new ClassCastException("Referenced object isn't a process item");
 		}		
 	}
+
 }
