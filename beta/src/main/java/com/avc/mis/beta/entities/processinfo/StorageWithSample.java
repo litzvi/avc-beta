@@ -20,6 +20,7 @@ import javax.validation.constraints.Positive;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.avc.mis.beta.dto.values.OrdinalObject;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.utilities.PairListToString;
@@ -48,7 +49,7 @@ public class StorageWithSample extends Storage {
 	private BigDecimal sampleContainerWeight;	
 	
 	@Convert(converter = PairListToString.class)
-    private List<ValueObject<BigDecimal>> sampleWeights;
+    private List<OrdinalObject<BigDecimal>> sampleWeights;
 
 	@Positive(message = "Number of samples has to be positive")
 	private BigInteger numberOfSamples;	
