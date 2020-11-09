@@ -5,8 +5,10 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.Lob;
 
@@ -77,18 +79,31 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
 	}
+	
+	public BigDecimal getAvgTestedWeight() {
+		if(sampleWeights != null) {
+			 return sampleWeights.stream().map(OrdinalObject<BigDecimal>::getValue)
+					.reduce(BigDecimal::add)
+					.map(s -> s.divide(new BigDecimal(sampleWeights.size()), MathContext.DECIMAL64))
+					.orElseGet(() -> avgTestedWeight);
+		}
+		return avgTestedWeight;
+	}
+	
+	public BigInteger getNumberOfSamples() {
+		if(sampleWeights != null) {
+			return BigInteger.valueOf(sampleWeights.size());
+		}
+		return numberOfSamples;
+	}
 		
-	public AmountWithUnit getWeighedDifferance() {
-		//calculate with map, if exists
-		if(avgTestedWeight == null) {
+	public AmountWithUnit getWeighedDifferance() {		
+		
+		BigDecimal acumelatedAvg = getAvgTestedWeight();
+		if(acumelatedAvg == null) {
 			return null;
 		}
-		
-		BigDecimal acumelatedAvg;
-		if(sampleContainerWeight == null) {
-			acumelatedAvg = avgTestedWeight;
-		}
-		else {
+		if(sampleContainerWeight != null) {
 			acumelatedAvg = avgTestedWeight.subtract(sampleContainerWeight);
 		}
 		return new AmountWithUnit(acumelatedAvg
@@ -96,10 +111,7 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 				.multiply(getNumberUnits()), getUnitAmount().getMeasureUnit());
 	}
 	
-	/**
-	 * Gets a new StorageWithSample with all user set fields in the DTO (excluding id, version)
-	 * @return StorageWithSample with all fields besides for the ones managed by the persistence context. 
-	 */
+	
 	/**
 	 * Gets a new StorageWithSample with all user set fields in the DTO (excluding id, version) 
 	 * with given numerUnits and new warehouse location.
