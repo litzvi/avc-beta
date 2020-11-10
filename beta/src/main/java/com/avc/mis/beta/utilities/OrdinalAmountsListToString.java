@@ -15,7 +15,7 @@ import javax.persistence.Converter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.avc.mis.beta.dto.values.OrdinalObject;
+import com.avc.mis.beta.dto.values.OrdinalAmount;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,16 +25,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  *
  */
 @Converter
-public class OrdinalObjectListToString  implements AttributeConverter<List<OrdinalObject<BigDecimal>>, String> {
+public class OrdinalAmountsListToString  implements AttributeConverter<List<OrdinalAmount<BigDecimal>>, String> {
 
     private final static ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
 	@Override
-	public String convertToDatabaseColumn(List<OrdinalObject<BigDecimal>> list) {
+	public String convertToDatabaseColumn(List<OrdinalAmount<BigDecimal>> list) {
 		if(list == null) {
 			return null;
 		}
-		if(list.stream().anyMatch(i -> i.getValue() == null)) {
+		if(list.stream().anyMatch(i -> i.getAmount() == null)) {
 			throw new IllegalStateException("can't receive null sample weights");
 		}
 		try {
@@ -45,12 +45,12 @@ public class OrdinalObjectListToString  implements AttributeConverter<List<Ordin
 	}
 
 	@Override
-	public List<OrdinalObject<BigDecimal>> convertToEntityAttribute(String jsonMap) {
+	public List<OrdinalAmount<BigDecimal>> convertToEntityAttribute(String jsonMap) {
 		if(jsonMap == null) {
 			return null;
 		}
         try {
-            return OBJECT_MAPPER.readValue(jsonMap, new TypeReference<List<OrdinalObject<BigDecimal>>>() { });
+            return OBJECT_MAPPER.readValue(jsonMap, new TypeReference<List<OrdinalAmount<BigDecimal>>>() { });
         } catch (IOException e) {
         	throw new IllegalStateException("Can't convert json string to list");
         }

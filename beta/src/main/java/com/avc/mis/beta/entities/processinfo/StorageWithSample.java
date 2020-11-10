@@ -20,10 +20,10 @@ import javax.validation.constraints.Positive;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.avc.mis.beta.dto.values.OrdinalObject;
+import com.avc.mis.beta.dto.values.OrdinalAmount;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.utilities.OrdinalObjectListToString;
+import com.avc.mis.beta.utilities.OrdinalAmountsListToString;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -46,11 +46,15 @@ import lombok.ToString;
 public class StorageWithSample extends Storage {
 
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
-	private BigDecimal sampleContainerWeight;	
+	private BigDecimal sampleContainerWeight;
 	
 	@Lob
-	@Convert(converter = OrdinalObjectListToString.class)
-    private List<OrdinalObject<BigDecimal>> sampleWeights;
+	@Convert(converter = OrdinalAmountsListToString.class)
+    private List<OrdinalAmount<BigDecimal>> sampleContainerWeights;
+	
+	@Lob
+	@Convert(converter = OrdinalAmountsListToString.class)
+    private List<OrdinalAmount<BigDecimal>> sampleWeights;
 
 	@Positive(message = "Number of samples has to be positive")
 	private BigInteger numberOfSamples;	

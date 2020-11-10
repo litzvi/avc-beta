@@ -15,7 +15,7 @@ import com.avc.mis.beta.dto.processinfo.ExtraAddedDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.processinfo.StorageWithSampleDTO;
 import com.avc.mis.beta.dto.values.DataObject;
-import com.avc.mis.beta.dto.values.OrdinalObject;
+import com.avc.mis.beta.dto.values.OrdinalAmount;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -45,7 +45,8 @@ public class ReceiptItemWithStorage {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
-			BigDecimal sampleContainerWeight, List<OrdinalObject<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight, 
+			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, BigDecimal sampleContainerWeight, 
+			List<OrdinalAmount<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight, 
 			String groupName, String description, String remarks, boolean tableView,
 			BigDecimal receivedUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
@@ -65,7 +66,7 @@ public class ReceiptItemWithStorage {
 			this.storage = new StorageWithSampleDTO(storageId, storageVersion, storageOrdinal, 
 					unitAmount, measureUnit, numberUnits, containerWeight,
 					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
-					sampleContainerWeight, sampleWeights, numberOfSamples, avgTestedWeight);
+					sampleContainerWeights, sampleContainerWeight, sampleWeights, numberOfSamples, avgTestedWeight);
 		}		
 		this.orderItem = new DataObject<OrderItem>(orderItemId, orderItemVersion);
 	}

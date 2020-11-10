@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.processinfo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -15,7 +16,7 @@ import javax.persistence.Lob;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.OrdinalObject;
+import com.avc.mis.beta.dto.values.OrdinalAmount;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -35,9 +36,12 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public class StorageWithSampleDTO extends StorageBaseDTO {
+	
+	private static final Integer SAMPLE_SCALE = 5;
 
+	private List<OrdinalAmount<BigDecimal>> sampleContainerWeights;
 	private BigDecimal sampleContainerWeight;	
-    private List<OrdinalObject<BigDecimal>> sampleWeights;
+    private List<OrdinalAmount<BigDecimal>> sampleWeights;
 	private BigInteger numberOfSamples;	
 	private BigDecimal avgTestedWeight;
 
@@ -46,10 +50,12 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, 
 			String remarks, Class<? extends Storage> clazz, 
-			BigDecimal sampleContainerWeight, List<OrdinalObject<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
+			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, BigDecimal sampleContainerWeight, 
+			List<OrdinalAmount<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, measureUnit, numberUnits, containerWeight, 
 				warehouseLocationId, warehouseLocationValue, remarks,
 				clazz);
+		this.sampleContainerWeights = sampleContainerWeights;
 		this.sampleContainerWeight = sampleContainerWeight;
 		this.sampleWeights = sampleWeights;
 		this.numberOfSamples = numberOfSamples;
@@ -61,6 +67,7 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 		if(storage.getSampleContainerWeight() != null)
 			this.sampleContainerWeight = storage.getSampleContainerWeight().setScale(MeasureUnit.SCALE);
 		
+		this.sampleContainerWeights = storage.getSampleContainerWeights();
 		this.sampleWeights = storage.getSampleWeights();
 
 		if(storage.getNumberOfSamples() != null)
@@ -72,22 +79,36 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 	public StorageWithSampleDTO(Integer id, Integer version, Integer ordinal,
 			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz, 
-			BigDecimal sampleContainerWeight, List<OrdinalObject<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
+			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, BigDecimal sampleContainerWeight, 
+			List<OrdinalAmount<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, numberUnits, containerWeight, warehouseLocation, remarks, clazz);
+		this.sampleContainerWeights = sampleContainerWeights;
 		this.sampleContainerWeight = sampleContainerWeight;
 		this.sampleWeights = sampleWeights;
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
 	}
 	
-	public BigDecimal getAvgTestedWeight() {
-		if(sampleWeights != null) {
-			 return sampleWeights.stream().map(OrdinalObject<BigDecimal>::getValue)
+	public BigDecimal getSampleContainerWeight() {
+		Optional<BigDecimal> sampleContainerWeight = Optional.ofNullable(this.sampleContainerWeight);
+		if(sampleContainerWeights != null) {
+			sampleContainerWeight = sampleContainerWeights.stream().map(OrdinalAmount<BigDecimal>::getAmount)
 					.reduce(BigDecimal::add)
-					.map(s -> s.divide(new BigDecimal(sampleWeights.size()), MathContext.DECIMAL64))
-					.orElseGet(() -> avgTestedWeight);
+					.map(s -> s.divide(new BigDecimal(sampleContainerWeights.size()), MathContext.DECIMAL64));
 		}
-		return avgTestedWeight;
+		return sampleContainerWeight.map(w -> w.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN)).orElse(null);
+
+	}
+	
+	
+	public BigDecimal getAvgTestedWeight() {
+		Optional<BigDecimal> avgTestedWeight = Optional.ofNullable(this.avgTestedWeight);
+		if(sampleWeights != null) {
+			 avgTestedWeight = sampleWeights.stream().map(OrdinalAmount<BigDecimal>::getAmount)
+					.reduce(BigDecimal::add)
+					.map(s -> s.divide(new BigDecimal(sampleWeights.size()), MathContext.DECIMAL64).add(getUnitAmount().getAmount()));
+		}
+		return avgTestedWeight.map(w -> w.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN)).orElse(null);
 	}
 	
 	public BigInteger getNumberOfSamples() {
@@ -96,19 +117,21 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 		}
 		return numberOfSamples;
 	}
+	
+	
 		
 	public AmountWithUnit getWeighedDifferance() {		
-		
 		BigDecimal acumelatedAvg = getAvgTestedWeight();
 		if(acumelatedAvg == null) {
 			return null;
 		}
 		if(sampleContainerWeight != null) {
-			acumelatedAvg = avgTestedWeight.subtract(sampleContainerWeight);
+			acumelatedAvg = acumelatedAvg.subtract(sampleContainerWeight);
 		}
 		return new AmountWithUnit(acumelatedAvg
 				.subtract(getUnitAmount().getAmount())
-				.multiply(getNumberUnits()), getUnitAmount().getMeasureUnit());
+				.multiply(getNumberUnits())
+				.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN), getUnitAmount().getMeasureUnit());
 	}
 	
 	

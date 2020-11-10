@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.view;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -152,6 +153,7 @@ public class ProcessItemInventory extends ValueDTO {
 			.stream()
 			.collect(Collectors.groupingBy(
 					InventoryProcessItemWithStorage::getProcessItemInventoryRow, 
+					LinkedHashMap::new, 
 					Collectors.mapping(InventoryProcessItemWithStorage::getStorageInventoryRow,
 							Collectors.toList())));
 		
