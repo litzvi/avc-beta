@@ -18,10 +18,11 @@ import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 
@@ -130,7 +131,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO for all inventory Cashew.
 	 */
 	public Set<PoCodeDTO> findCashewInventoryPoCodes() {
-		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, SupplyGroup.CASHEW, null);		
+		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, ItemGroup.PRODUCT, null);		
 	}
 	
 	/**
@@ -140,7 +141,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO for all General inventory.
 	 */
 	public Set<PoCodeDTO> findGeneralInventoryPoCodes() {
-		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, SupplyGroup.GENERAL, null);		
+		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, ItemGroup.GENERAL, null);		
 	}
 	
 	/**
@@ -159,12 +160,16 @@ public class ObjectTablesReader {
 	 * @param itemCategories
 	 * @return Set of PoCodeDTO
 	 */
-	public Set<PoCodeDTO> findInventoryPoCodes(@NonNull ItemCategory[] itemCategories) {
-		return getObjectTablesRepository().findInventoryPoCodeByType(true, itemCategories, null, null);		
+	public Set<PoCodeDTO> findInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
+		return getObjectTablesRepository().findInventoryPoCodeByType(true, productionUses, null, null);		
 	}
 	
-	public Set<PoCodeDTO> findInventoryPoCodes(SupplyGroup supplyGroup) {
-		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, supplyGroup, null);		
+	public Set<PoCodeDTO> findInventoryPoCodes(ItemGroup group) {
+		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, group, null);		
+	}
+	
+	public Set<PoCodeDTO> findInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
+		return getObjectTablesRepository().findInventoryPoCodeByType(true,  productionUses, group, null);		
 	}
 	
 	/**
@@ -176,32 +181,5 @@ public class ObjectTablesReader {
 		return getObjectTablesRepository().findAllPoCodeDTOs();
 	}
 	
-	//commented so should use the same methods that return list of PoCodeDTO
-//	/**
-//	 * Gets the basic information of all open Cashew Orders with given OrderStatus - id, poCode, supplier and orderStatus.
-//	 * @return List of PoBasic for all open Cashew orders.
-//	 */
-//	public List<PoBasic> findOpenCashewOrdersBasic() {
-//		return getObjectTablesRepository().findOpenOrderByTypeBasic(ProcessName.CASHEW_ORDER);		
-//	}
-//	
-//	/**
-//	 * Gets the basic information of all General Orders with given OrderStatus - id, poCode, supplier and orderStatus.
-//	 * @return List of PoBasic for all open General orders.
-//	 */
-//	public List<PoBasic> findOpenGeneralOrdersBasic() {
-//		return getObjectTablesRepository().findOpenOrderByTypeBasic(ProcessName.GENERAL_ORDER);
-//	}
-//	
-//	/**
-//	 * Get the table of all active Cashew po that can be processed.
-//	 * @return list of PoRow for po's that are still active - still in production.
-//	 */
-//	public List<PoBasic> findActiveCashewPoBasic() {
-//		List<PoBasic> list = findOpenCashewOrdersBasic();
-//		list.addAll(getObjectTablesRepository().findReceivedPOsBasic(
-//				new ProcessName[] {ProcessName.CASHEW_ORDER_RECEIPT, ProcessName.CASHEW_RECEIPT}));
-//		return list;
-//	}
 	
 }

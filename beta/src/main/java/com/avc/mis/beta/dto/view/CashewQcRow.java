@@ -14,11 +14,9 @@ import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.item.Item;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;

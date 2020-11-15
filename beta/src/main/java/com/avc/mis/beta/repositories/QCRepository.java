@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -16,8 +15,8 @@ import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.ValueEntityObject;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.QualityCheck;
-import com.avc.mis.beta.entities.values.Item;
 /**
  * @author Zvi
  *

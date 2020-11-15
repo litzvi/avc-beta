@@ -24,6 +24,8 @@ import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.item.BulkItem;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
@@ -35,7 +37,6 @@ import com.avc.mis.beta.entities.processinfo.StorageMove;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
 
@@ -130,7 +131,7 @@ public class RelocationTest {
 			//build item count
 			ProcessItemInventory processItemRow = poInventory.get(i);
 			itemCounts[i] = new ItemCount();
-			Item item = new Item();
+			Item item = new BulkItem();
 			item.setId(processItemRow.getItem().getId());
 			itemCounts[i].setItem(item);
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();

@@ -10,9 +10,9 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.enums.ItemCategory;
-import com.avc.mis.beta.entities.enums.SupplyGroup;
-import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 
 /**
  * Spring repository for accessing lists of {@link ValueEntity} entities, 
@@ -23,22 +23,41 @@ import com.avc.mis.beta.entities.values.Item;
  */
 public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 
-	@Query("select new com.avc.mis.beta.dto.values.ItemDTO(i.id, i.value, i.measureUnit, i.supplyGroup, i.category) "
+//	@Query("select new com.avc.mis.beta.dto.values.ItemDTO(i.id, i.value, i.defaultMeasureUnit, i.itemGroup, i.productionUse) "
+//			+ "from Item i "
+//			+ "where i.itemGroup = :itemGroup "
+//				+ "and i.active = true "
+//			+ "order by i.value ")
+//	List<ItemDTO> findItemsByGroupBasic(ItemGroup itemGroup);
+	
+	@Query("select new com.avc.mis.beta.dto.values.ItemDTO(i.id, i.value, i.defaultMeasureUnit, i.itemGroup, i.productionUse) "
 			+ "from Item i "
-			+ "where i.supplyGroup = :supplyGroup "
-				+ "and i.active = true "
+			+ "where (i.itemGroup = :itemGroup or :itemGroup is null)"
+				+ "and (i.productionUse = :productionUse or :productionUse is null)"
 			+ "order by i.value ")
-	List<ItemDTO> findItemsByGroupBasic(SupplyGroup supplyGroup);
+	List<ItemDTO> findItemsByGroupBasic(ItemGroup itemGroup, ProductionUse productionUse);
 
 	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
 			+ "from Item i "
-			+ "where i.category = :category "
+			+ "where (i.itemGroup = :itemGroup or :itemGroup is null)"
+				+ "and (i.productionUse = :productionUse or :productionUse is null)"
 				+ "and i.active = true "
 			+ "order by i.value ")
-	List<BasicValueEntity<Item>> findItemsByCategry(ItemCategory category);
+	List<BasicValueEntity<Item>> findBasicItems(ItemGroup itemGroup, ProductionUse productionUse);
 
-	
-
+//	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
+//			+ "from Item i "
+//			+ "where i.productionUse = :productionUse "
+//				+ "and i.active = true "
+//			+ "order by i.value ")
+//	List<BasicValueEntity<Item>> findItemsByProductionUse(ProductionUse productionUse);
+//
+//	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
+//			+ "from Item i "
+//			+ "where i.itemGroup = :itemGroup "
+//				+ "and i.active = true "
+//			+ "order by i.value ")
+//	List<BasicValueEntity<Item>> findItemsByGroup(ItemGroup itemGroup);
 	
 	
 }

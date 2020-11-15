@@ -10,12 +10,10 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
-import com.avc.mis.beta.dto.processinfo.StorageMoveDTO;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.process.StorageRelocation;
-import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.StorageBase;
 
 /**
@@ -32,7 +30,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 			+ "pi.id, "
 			+ "SUM(used_unit.amount * storageMove.numberUsedUnits * uom_used.multiplicand / uom_used.divisor), "
 			+ "SUM(producedUnit.amount * storageMove.numberUnits * uom_produced.multiplicand / uom_produced.divisor), "
-			+ "item.measureUnit) "
+			+ "item.defaultMeasureUnit) "
 		+ "from StorageRelocation p "
 			+ "join p.storageMovesGroups g "
 				+ "join g.storageMoves storageMove "
@@ -40,11 +38,11 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 						+ "join pi.item item "
 					+ "join storageMove.unitAmount producedUnit "
 					+ "join UOM uom_produced "
-						+ "on uom_produced.fromUnit = producedUnit.measureUnit and uom_produced.toUnit = item.measureUnit "
+						+ "on uom_produced.fromUnit = producedUnit.measureUnit and uom_produced.toUnit = item.defaultMeasureUnit "
 					+ "join storageMove.storage used_sf "
 							+ "join used_sf.unitAmount used_unit "
 							+ "join UOM uom_used "
-								+ "on uom_used.fromUnit = used_unit.measureUnit and uom_used.toUnit = item.measureUnit "						
+								+ "on uom_used.fromUnit = used_unit.measureUnit and uom_used.toUnit = item.defaultMeasureUnit "						
 		+ "where p.id = :processId "
 		+ "group by pi ")
 	List<ProcessItemTransactionDifference> findRelocationDifferences(Integer processId);
@@ -102,7 +100,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
 			+ "SUM((m.numberUsedUnits * (unit.amount - coalesce(sf.containerWeight, 0))) * uom.multiplicand / uom.divisor), "
-			+ "item.measureUnit, function('GROUP_CONCAT', wh.value)) "
+			+ "item.defaultMeasureUnit, function('GROUP_CONCAT', wh.value)) "
 		+ "from StorageRelocation p "
 			+ "join p.storageMovesGroups g "
 				+ "join g.storageMoves m "
@@ -111,7 +109,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 							+ "join pi.item item "
 							+ "join sf.unitAmount unit "
 							+ "join UOM uom "
-								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
+								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.defaultMeasureUnit "
 							+ "left join sf.warehouseLocation wh "
 		+ "where "
 			+ "p.id in :processIds "

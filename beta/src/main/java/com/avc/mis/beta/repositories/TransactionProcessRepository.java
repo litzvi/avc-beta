@@ -3,13 +3,11 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
-import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.TransactionProcess;
 
 /**
@@ -23,7 +21,7 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
 			+ "SUM((ui.numberUsedUnits * (unit.amount - coalesce(sf.containerWeight, 0))) * uom.multiplicand / uom.divisor), "
-			+ "item.measureUnit, function('GROUP_CONCAT', wh.value)) "
+			+ "item.defaultMeasureUnit, function('GROUP_CONCAT', wh.value)) "
 		+ "from TransactionProcess p "
 			+ "join p.poCode po_code "
 			+ "join p.usedItemGroups grp "
@@ -35,7 +33,7 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 								+ "join p_used_item.poCode po_code_used_item "
 						+ "join sf.unitAmount unit "
 						+ "join UOM uom "
-							+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
+							+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.defaultMeasureUnit "
 						+ "left join sf.warehouseLocation wh "
 			+ "join p.processType pt "
 		+ "where "
@@ -49,14 +47,14 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, "
 			+ "SUM((sf.numberUnits * (unit.amount - coalesce(sf.containerWeight, 0))) * uom.multiplicand / uom.divisor), "
-			+ "item.measureUnit, function('GROUP_CONCAT', wh.value)) "
+			+ "item.defaultMeasureUnit, function('GROUP_CONCAT', wh.value)) "
 		+ "from TransactionProcess p "
 			+ "join p.processItems pi "
 				+ "join pi.item item "
 				+ "join pi.storageForms sf "
 					+ "join sf.unitAmount unit "
 					+ "join UOM uom "
-						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
+						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.defaultMeasureUnit "
 					+ "left join sf.warehouseLocation wh "
 			+ "join p.processType pt "
 		+ "where "

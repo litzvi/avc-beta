@@ -4,7 +4,6 @@
 package com.avc.mis.beta.entities.processinfo;
 
 import java.util.Optional;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,7 +12,6 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.ProcessInfoEntity;
-import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;

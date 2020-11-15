@@ -19,8 +19,11 @@ import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ValueEntityObject;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemCategory;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.CashewStandard;
@@ -28,7 +31,6 @@ import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Country;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.entities.values.ShippingPort;
@@ -189,17 +191,29 @@ public class ValueTablesReader {
 	 * @return List of ItemDTO of all CASHEW items.
 	 */
 //	@Transactional(readOnly = true)
-	public List<ItemDTO> getCashewItemsBasic() {
-		return getValueTablesRepository().findItemsByGroupBasic(SupplyGroup.CASHEW);
-	}
+//	public List<ItemDTO> getCashewItemsBasic() {
+//		return getValueTablesRepository().findItemsByGroupBasic(ItemGroup.PRODUCT, null);
+//	}
 	
 	/**
 	 * Get a list of GENERAL items basic -  id and value.
 	 * @return List of ItemDTO of all GENERAL items.
 	 */
 //	@Transactional(readOnly = true)
-	public List<ItemDTO> getGeneralItemsBasic() {
-		return getValueTablesRepository().findItemsByGroupBasic(SupplyGroup.GENERAL);
+//	public List<ItemDTO> getGeneralItemsBasic() {
+//		return getValueTablesRepository().findItemsByGroupBasic(ItemGroup.GENERAL, null);
+//	}
+	
+	public List<ItemDTO> getItemsByPrudoctionUse(ProductionUse productionUse) {
+		return getValueTablesRepository().findItemsByGroupBasic(null, productionUse);
+	}
+
+	public List<ItemDTO> getItemsByGroup(ItemGroup itemGroup) {
+		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, null);
+	}
+	
+	public List<ItemDTO> getItems(ItemGroup itemGroup, ProductionUse productionUse) {
+		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, productionUse);
 	}
 	
 	/**
@@ -208,8 +222,16 @@ public class ValueTablesReader {
 	 * @return List of BasicValueEntity of CASHEW items that belong to given category.
 	 */
 //	@Transactional(readOnly = true)
-	public List<BasicValueEntity<Item>> getItemsByCategry(ItemCategory category) {
-		return getValueTablesRepository().findItemsByCategry(category);
+	public List<BasicValueEntity<Item>> getBasicItemsByPrudoctionUse(ProductionUse productionUse) {
+		return getValueTablesRepository().findBasicItems(null, productionUse);
+	}
+
+	public List<BasicValueEntity<Item>> getBasicItemsByGroup(ItemGroup itemGroup) {
+		return getValueTablesRepository().findBasicItems(itemGroup, null);
+	}
+	
+	public List<BasicValueEntity<Item>> getBasicItems(ItemGroup itemGroup, ProductionUse productionUse) {
+		return getValueTablesRepository().findBasicItems(itemGroup, productionUse);
 	}
 	
 }

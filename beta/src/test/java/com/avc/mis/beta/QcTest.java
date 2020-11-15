@@ -10,8 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.CashewStandard;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.ValueWriter;
 

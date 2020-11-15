@@ -13,10 +13,10 @@ import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
-import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;

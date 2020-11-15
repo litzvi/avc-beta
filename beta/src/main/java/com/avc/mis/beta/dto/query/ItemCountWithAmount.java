@@ -9,8 +9,8 @@ import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.processinfo.CountAmountDTO;
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.ProductionUse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,12 +31,12 @@ public class ItemCountWithAmount extends ValueDTO {
 	 * @param id the ProcessItem id
 	 */
 	public ItemCountWithAmount(Integer id, Integer version, Integer ordinal,
-			Integer itemId, String itemValue, ItemCategory itemCategory,
+			Integer itemId, String itemValue, ProductionUse productionUse,
 			MeasureUnit measureUnit, BigDecimal containerWeight, BigDecimal accessWeight,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer amountId, Integer amountVersion, Integer amountOrdinal, BigDecimal amount) {
 		super(id);
-		this.itemCount = new ItemCountDTO(id, version, ordinal, itemId, itemValue, itemCategory, measureUnit, containerWeight, accessWeight);
+		this.itemCount = new ItemCountDTO(id, version, ordinal, itemId, itemValue, productionUse, measureUnit, containerWeight, accessWeight);
 		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.amount = new CountAmountDTO(amountId, amountVersion, amountOrdinal, amount);		
 	}

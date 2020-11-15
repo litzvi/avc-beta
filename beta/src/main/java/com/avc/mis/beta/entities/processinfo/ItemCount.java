@@ -26,7 +26,7 @@ import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.item.Item;
 
 import lombok.AccessLevel;
 import lombok.Data;

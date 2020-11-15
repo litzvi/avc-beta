@@ -29,9 +29,11 @@ import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.item.ItemCategory;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.processinfo.StorageBase;
@@ -247,15 +249,15 @@ public class WarehouseManagement {
 //	}
 
 	public List<ProcessItemInventory> getCashewInventoryByPo(Integer poCodeId) {		
-		return getInventory(SupplyGroup.CASHEW, null, null, poCodeId);		
+		return getInventory(ItemGroup.PRODUCT, null, null, poCodeId);		
 	}
 	
 	public List<ProcessItemInventory> getInventoryByItem(Integer itemId) {		
 		return getInventory(null, null, itemId, null);
 	}
 	
-	public List<ProcessItemInventory> getInventoryByItemCategories(@NonNull ItemCategory[] itemCategories) {		
-		return getInventory(null, itemCategories, null, null);
+	public List<ProcessItemInventory> getInventoryByItemProductionUses(@NonNull ProductionUse[] productionUses) {		
+		return getInventory(null, productionUses, null, null);
 	}
 	
 	/**
@@ -270,10 +272,10 @@ public class WarehouseManagement {
 	 * @param poCodeId constrain to only this po, if null than any.
 	 * @return List of ProcessItemInventory
 	 */
-	public List<ProcessItemInventory> getInventory(SupplyGroup supplyGroup, ItemCategory[] itemCategories, Integer itemId, Integer poCodeId) {
-		boolean checkCategories = (itemCategories != null);
+	public List<ProcessItemInventory> getInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
+		boolean checkProductionUses = (productionUses != null);
 		List<InventoryProcessItemWithStorage> processItemWithStorages =
-				getInventoryRepository().findInventoryProcessItemWithStorage(checkCategories, itemCategories, supplyGroup, itemId, poCodeId);	
+				getInventoryRepository().findInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, poCodeId);	
 		return ProcessItemInventory.getProcessItemInventoryRows(processItemWithStorages);
 		
 	}
@@ -289,9 +291,9 @@ public class WarehouseManagement {
 	 * @param poCodeId constrain to only this po, if null than any.
 	 * @return List of ProcessItemInventoryRow
 	 */
-	public List<ProcessItemInventoryRow> getInventoryRows(SupplyGroup supplyGroup, ItemCategory[] itemCategories, Integer itemId, Integer poCodeId) {
-		boolean checkCategories = (itemCategories != null);
-		return getInventoryRepository().findInventoryProcessItemRows(checkCategories, itemCategories, supplyGroup, itemId, poCodeId);	
+	public List<ProcessItemInventoryRow> getInventoryRows(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
+		boolean checkProductionUses = (productionUses != null);
+		return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, poCodeId);	
 	}
 
 }

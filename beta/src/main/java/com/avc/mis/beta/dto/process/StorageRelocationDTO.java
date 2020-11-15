@@ -12,16 +12,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
-import com.avc.mis.beta.dto.processinfo.StorageMoveDTO;
 import com.avc.mis.beta.dto.processinfo.StorageMovesGroupDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
-import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;

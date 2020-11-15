@@ -10,7 +10,7 @@ import java.util.List;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;

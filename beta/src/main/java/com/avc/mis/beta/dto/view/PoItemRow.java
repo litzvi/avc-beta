@@ -18,7 +18,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.item.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;

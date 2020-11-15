@@ -13,12 +13,9 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.RankedAuditedEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.PoProcess;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -14,13 +14,10 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
-import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
-import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

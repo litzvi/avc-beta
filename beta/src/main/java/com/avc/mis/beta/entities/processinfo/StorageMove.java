@@ -6,20 +6,12 @@ package com.avc.mis.beta.entities.processinfo;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import com.avc.mis.beta.entities.process.PoProcess;
-import com.avc.mis.beta.entities.process.StorageRelocation;
-import com.avc.mis.beta.validation.groups.OnPersist;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 /**
  * @author zvi

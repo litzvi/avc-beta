@@ -11,8 +11,8 @@ import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.ProductionUse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,7 +38,7 @@ public class ProcessItemInventoryRow extends ValueDTO {
 	/**
 	 * All database fields (the fields in the form they are fetched from the db) arguments constructor.
 	 */
-	public ProcessItemInventoryRow(Integer id, Integer itemId, String itemValue, ItemCategory itemCategory,
+	public ProcessItemInventoryRow(Integer id, Integer itemId, String itemValue, ProductionUse productionUse,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			OffsetDateTime processDate, OffsetDateTime receiptDate,
 //			BigDecimal totalStoredAmount, BigDecimal totalUsedAmount, 
@@ -46,7 +46,7 @@ public class ProcessItemInventoryRow extends ValueDTO {
 			MeasureUnit measureUnit,
 			String warehouses) {
 		super(id);
-		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
+		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
 		this.processDate = processDate;

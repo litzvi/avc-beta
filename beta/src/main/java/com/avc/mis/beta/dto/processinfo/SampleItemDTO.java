@@ -13,8 +13,8 @@ import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.processinfo.SampleItem;
-import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;

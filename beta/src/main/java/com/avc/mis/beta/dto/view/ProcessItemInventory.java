@@ -18,8 +18,8 @@ import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -54,11 +54,11 @@ public class ProcessItemInventory extends ValueDTO {
 	 * All database fields (the fields in the form they are fetched from the db) arguments constructor, 
 	 * excluding list of storage forms and calculated totals.
 	 */
-	public ProcessItemInventory(Integer id, Integer itemId, String itemValue, ItemCategory itemCategory,
+	public ProcessItemInventory(Integer id, Integer itemId, String itemValue, ProductionUse productionUse,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
 		super(id);
-		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
+		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.itemProcessDate = processDate;
 		this.receiptDate = receiptDate;

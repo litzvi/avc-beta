@@ -6,12 +6,10 @@ package com.avc.mis.beta;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,25 +30,25 @@ import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.DataObjectWithName;
 import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.values.UserBasic;
+import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
-import com.avc.mis.beta.dto.view.PoFinalReport;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
-import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.InventoryReports;
 import com.avc.mis.beta.service.Loading;
@@ -64,8 +62,6 @@ import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
-
-import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -145,7 +141,7 @@ public class QueryTest {
 		
 		
 		//get list of cashew items
-		valueTablesReader.getCashewItemsBasic().forEach(i -> System.out.println(i));
+		valueTablesReader.getItemsByGroup(ItemGroup.PRODUCT).forEach(i -> System.out.println(i));
 		
 		//print received orders
 		List<ReceiptRow> receiptRows = receipts.findFinalCashewReceipts();
@@ -213,14 +209,21 @@ public class QueryTest {
 		}
 		
 		//cashew inventory table by item
-		List<ItemInventoryRow> inventoryRows  = cashewReports.getInventoryTableByItem(SupplyGroup.CASHEW);
+		List<ItemInventoryRow> inventoryRows;
+		try {
+			inventoryRows = cashewReports.getInventoryTableByItem(ItemGroup.PRODUCT);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		inventoryRows.forEach(r -> System.out.println(r));
 		
 		
 		//cashew inventory table by po
-		List<PoInventoryRow> poInventoryRows = cashewReports. getInventoryTableByPo(SupplyGroup.CASHEW);
+		List<PoInventoryRow> poInventoryRows = cashewReports. getInventoryTableByPo(ItemGroup.PRODUCT);
 		poInventoryRows.forEach(r -> System.out.println(r));		
-		Set<PoCodeDTO> rawInventoryPos = objectTablesReader.findInventoryPoCodes(SupplyGroup.CASHEW);
+		Set<PoCodeDTO> rawInventoryPos = objectTablesReader.findInventoryPoCodes(ItemGroup.PRODUCT);
 		rawInventoryPos.forEach(r -> System.out.println(r));
 		assertTrue(rawInventoryPos.size() == rawInventoryPos.size(), "po codes and po inventory row for cashew aren't consistent");
 		
@@ -261,7 +264,7 @@ public class QueryTest {
 		
 		Set<PoCodeDTO> inventoryPoCodes;
 		try {
-			inventoryPoCodes = objectTablesReader.findInventoryPoCodes(new ItemCategory[]{ItemCategory.RAW, ItemCategory.CLEAN});
+			inventoryPoCodes = objectTablesReader.findInventoryPoCodes(new ProductionUse[]{ProductionUse.RAW_KERNEL, ProductionUse.CLEAN});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -272,7 +275,7 @@ public class QueryTest {
 		List<PoRow> allCashewOrders = orders.findAllCashewOrders();
 		allCashewOrders.forEach(i -> System.out.println(i));
 		
-		List<BasicValueEntity<Item>> wasteItems = valueTablesReader.getItemsByCategry(ItemCategory.WASTE);
+		List<BasicValueEntity<Item>> wasteItems = valueTablesReader.getBasicItemsByPrudoctionUse(ProductionUse.RAW_KERNEL);
 		wasteItems.forEach(i->System.out.println(i));
 		
 		List<ProcessRow> transferRows;

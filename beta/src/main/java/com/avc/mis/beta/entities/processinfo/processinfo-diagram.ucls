@@ -1,317 +1,148 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="com.avc.mis.beta.entities.processinfo.ProcessItem" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/ProcessItem.java" binary="false" 
+  <class id="1" language="java" name="com.avc.mis.beta.entities.processinfo.StorageBase" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/StorageBase.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="774" y="0"/>    
+    <position height="-1" width="-1" x="1019" y="430"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="com.avc.mis.beta.entities.processinfo.OrderItem" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/OrderItem.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="165" y="99"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="3" language="java" name="com.avc.mis.beta.entities.processinfo.LoadedItem" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/LoadedItem.java" binary="false" 
+  <class id="2" language="java" name="com.avc.mis.beta.entities.processinfo.UsedItemBase" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/UsedItemBase.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="773" y="333"/>    
+    <position height="93" width="240" x="883" y="49"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.avc.mis.beta.entities.processinfo.ItemWeight" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/ItemWeight.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1926" y="688"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="com.avc.mis.beta.entities.processinfo.ExtraAdded" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/ExtraAdded.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1119" y="644"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="6" language="java" name="com.avc.mis.beta.entities.processinfo.ApprovalTask" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/ApprovalTask.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="129" y="496"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="7" language="java" name="com.avc.mis.beta.entities.processinfo.BookedContainer" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/BookedContainer.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1903" y="374"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="8" language="java" name="com.avc.mis.beta.entities.processinfo.CashewItemQuality" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/CashewItemQuality.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="474" y="-18"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="9" language="java" name="com.avc.mis.beta.entities.processinfo.SampleItem" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/SampleItem.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1571" y="452"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="10" language="java" name="com.avc.mis.beta.entities.processinfo.Storage" project="beta" 
+  <class id="3" language="java" name="com.avc.mis.beta.entities.processinfo.Storage" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/Storage.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1124" y="112"/>    
+    <position height="-1" width="-1" x="1015" y="594"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="11" language="java" name="com.avc.mis.beta.entities.processinfo.StorageWithSample" project="beta" 
+  <class id="4" language="java" name="com.avc.mis.beta.entities.processinfo.StorageMove" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/StorageMove.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="53" width="140" x="605" y="698"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="com.avc.mis.beta.entities.processinfo.StorageWithSample" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/StorageWithSample.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1117" y="491"/>    
+    <position height="-1" width="-1" x="1019" y="746"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="12" language="java" name="com.avc.mis.beta.entities.processinfo.UsedItem" project="beta" 
+  <class id="6" language="java" name="com.avc.mis.beta.entities.processinfo.UsedItem" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/UsedItem.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1517" y="29"/>    
+    <position height="53" width="123" x="1325" y="295"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="13" language="java" name="com.avc.mis.beta.entities.processinfo.UserMessage" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/UserMessage.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="121" y="636"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="14" language="java" name="com.avc.mis.beta.entities.processinfo.UsedItemsGroup" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/UsedItemsGroup.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1897" y="-58"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="15" language="java" name="com.avc.mis.beta.entities.processinfo.ReceiptItem" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/ReceiptItem.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="446" y="344"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="16" language="java" name="com.avc.mis.beta.entities.processinfo.ItemCount" project="beta" 
+  <class id="7" language="java" name="com.avc.mis.beta.entities.processinfo.ItemCount" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/ItemCount.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1143" y="-122"/>    
+    <position height="-1" width="-1" x="1945" y="661"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="17" language="java" name="com.avc.mis.beta.entities.processinfo.CountAmount" project="beta" 
+  <class id="8" language="java" name="com.avc.mis.beta.entities.processinfo.ExtraAdded" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/ExtraAdded.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1024" y="901"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="com.avc.mis.beta.entities.processinfo.CountAmount" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/CountAmount.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1521" y="-150"/>    
+    <position height="-1" width="-1" x="1523" y="626"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="18" language="java" name="com.avc.mis.beta.entities.processinfo.UsedItemWithCount" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/processinfo/UsedItemWithCount.java" binary="false" 
-    corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1518" y="224"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <association id="19">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="20" name="itemWeights">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="21" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+  <generalization id="10">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <generalization id="11">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <association id="12">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="13" name="storage"/>      
+      <multiplicity id="14" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
+    <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="22">    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="23" name="extraAdded">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="24" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="25">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="26" name="usedItems">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="27" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="12" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="28">    
-    <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="29" name="orderItem">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="30" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+  <generalization id="15">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="3"/>  
+  </generalization>  
+  <association id="16">    
+    <end type="SOURCE" refId="1" navigable="false">      
+      <attribute id="17" name="usedItems"/>      
+      <multiplicity id="18" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="31">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="32" name="storageForms">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="33" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+  <generalization id="19">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <generalization id="20">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="21">    
+    <end type="SOURCE" refId="9" navigable="false">      
+      <attribute id="22" name="itemCount"/>      
+      <multiplicity id="23" minimum="0" maximum="1"/>    
     </end>    
-    <end type="TARGET" refId="10" navigable="true"/>    
+    <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="34">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="35" name="sampleItem">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="36" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
+  <association id="24">    
+    <end type="SOURCE" refId="7" navigable="false">      
+      <attribute id="25" name="amounts"/>      
+      <multiplicity id="26" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <generalization id="37">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="10"/>  
-  </generalization>  
-  <association id="38">    
-    <end type="SOURCE" refId="16" navigable="false">      
-      <attribute id="39" name="amounts">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="40" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="17" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="41">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="42" name="group">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="43" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="14" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="44">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <association id="45">    
-    <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="46" name="itemCount">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="47" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="48">    
-    <end type="SOURCE" refId="18"/>    
-    <end type="TARGET" refId="12"/>  
-  </generalization>  
-  <association id="49">    
-    <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="50" name="receiptItems">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="51" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="52">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="11"/>  
+  <generalization id="27">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="2"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    

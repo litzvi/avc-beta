@@ -15,10 +15,9 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
 
 import lombok.Data;
@@ -40,10 +39,10 @@ public class ItemCountDTO extends SubjectDataDTO {
 	private List<CountAmountDTO> amounts;
 
 	public ItemCountDTO(Integer id, Integer version, Integer ordinal,
-			Integer itemId, String itemValue, ItemCategory itemCategory,
+			Integer itemId, String itemValue, ProductionUse productionUse,
 			MeasureUnit measureUnit, BigDecimal containerWeight, BigDecimal accessWeight) {
 		super(id, version, ordinal);
-		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
+		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse);
 		this.measureUnit = measureUnit;
 		this.containerWeight = containerWeight;
 		this.accessWeight = accessWeight;

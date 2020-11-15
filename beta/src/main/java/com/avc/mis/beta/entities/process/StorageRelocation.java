@@ -3,34 +3,21 @@
  */
 package com.avc.mis.beta.entities.process;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.dto.processinfo.BasicStorageDTO;
-import com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemTableDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ProcessGroup;
-import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
-import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
-import com.avc.mis.beta.entities.processinfo.UsedItem;
-import com.avc.mis.beta.entities.values.Warehouse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;

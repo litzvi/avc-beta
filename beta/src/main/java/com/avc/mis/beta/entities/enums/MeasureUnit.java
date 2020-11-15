@@ -27,7 +27,8 @@ public enum MeasureUnit {
 	LBS,
 	LOT,
 	OZ,
-	GRAM;
+	GRAM, 
+	UNIT;
 	
 	/**
 	 * Nested map with full Cartesian product for converting from every unit to any other unit.

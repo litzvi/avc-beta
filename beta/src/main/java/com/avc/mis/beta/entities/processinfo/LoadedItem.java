@@ -20,9 +20,9 @@ import javax.validation.groups.Default;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.process.PoCode;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
 import lombok.Data;

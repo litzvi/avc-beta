@@ -18,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
+import com.avc.mis.beta.entities.item.Item;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

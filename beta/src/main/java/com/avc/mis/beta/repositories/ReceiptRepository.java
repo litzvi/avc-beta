@@ -41,7 +41,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 	Optional<ReceiptDTO> findReceiptDTOByProcessId(int id);
 	
 	@Query("select new com.avc.mis.beta.dto.query.ReceiptItemWithStorage( "
-			+ " i.id, i.version, i.ordinal, item.id, item.value, item.category, "
+			+ " i.id, i.version, i.ordinal, item.id, item.value, item.productionUse, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, sf.containerWeight, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
@@ -82,7 +82,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 				+ "i.id, i.value, "
 				+ "units.amount, units.measureUnit, "
 				+ "r.recordedTime, "
-				+ "SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor), i.measureUnit, "
+				+ "SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor), i.defaultMeasureUnit, "
 				+ "function('GROUP_CONCAT', sto.value), "
 				+ "extra.amount, extra.measureUnit) "
 			+ "from Receipt r "
@@ -96,7 +96,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 					+ "join pi.storageForms sf "
 						+ "join sf.unitAmount unit "
 							+ "join UOM uom "
-								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = i.measureUnit "
+								+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = i.defaultMeasureUnit "
 						+ "left join sf.warehouseLocation sto "
 //					+ "left join ExtraAdded as added "
 //						+ "on added.processItem = pi "

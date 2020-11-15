@@ -24,10 +24,8 @@ import javax.validation.constraints.Positive;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -48,7 +46,7 @@ import lombok.ToString;
 @Table(name = "STORAGES_BASE")
 //@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @PrimaryKeyJoinColumn(name = "usedItemBaseId")
-@DiscriminatorColumn
+//@DiscriminatorColumn
 public class StorageBase extends UsedItemBase {
 	
 	@JsonIgnore

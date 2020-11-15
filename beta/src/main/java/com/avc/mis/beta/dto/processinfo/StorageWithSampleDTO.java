@@ -8,16 +8,10 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-
-import javax.persistence.Lob;
-
-import org.apache.commons.lang3.tuple.Pair;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.OrdinalAmount;
-import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.Storage;
@@ -125,11 +119,11 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 		if(acumelatedAvg == null) {
 			return null;
 		}
+		BigDecimal sampleContainerWeight = getSampleContainerWeight();
 		if(sampleContainerWeight != null) {
 			acumelatedAvg = acumelatedAvg.subtract(sampleContainerWeight);
 		}
-		return new AmountWithUnit(acumelatedAvg
-				.subtract(getUnitAmount().getAmount())
+		return new AmountWithUnit((acumelatedAvg.subtract(getUnitAmount().getAmount()))
 				.multiply(getNumberUnits())
 				.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN), getUnitAmount().getMeasureUnit());
 	}

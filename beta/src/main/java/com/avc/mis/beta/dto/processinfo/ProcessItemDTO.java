@@ -18,8 +18,8 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -49,10 +49,10 @@ public class ProcessItemDTO extends SubjectDataDTO {
 	private AmountWithUnit[] totalAmount;
 	
 	public ProcessItemDTO(Integer id, Integer version, Integer ordinal, Integer itemId, String itemValue, 
-			ItemCategory itemCategory,
+			ProductionUse productionUse,
 			String groupName, String description, String remarks, boolean tableView) {
 		super(id, version, ordinal);
-		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
+		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse);
 		this.groupName = groupName;
 		this.description = description;
 		this.remarks = remarks;

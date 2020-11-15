@@ -7,18 +7,14 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Currency;
 import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.tuple.Pair;
 
 import com.avc.mis.beta.dto.processinfo.ExtraAddedDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.processinfo.StorageWithSampleDTO;
 import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.dto.values.OrdinalAmount;
-import com.avc.mis.beta.dto.values.ValueObject;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.processinfo.ExtraAdded;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
@@ -39,7 +35,7 @@ public class ReceiptItemWithStorage {
 	
 	
 	public ReceiptItemWithStorage(Integer id, Integer version, Integer ordinal,
-			Integer itemId, String itemValue, ItemCategory itemCategory,
+			Integer itemId, String itemValue, ProductionUse productionUse,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
@@ -51,7 +47,7 @@ public class ReceiptItemWithStorage {
 			BigDecimal receivedUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
 		this.receiptItem = new ReceiptItemDTO(id, version, ordinal,
-				itemId, itemValue, itemCategory,
+				itemId, itemValue, productionUse,
 				/* poCodeId, contractTypeCode, supplierName, */
 				groupName, description, remarks, tableView,
 				receivedUnits, orderMU, unitPrice, currency,

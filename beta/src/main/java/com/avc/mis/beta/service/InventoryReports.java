@@ -3,9 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,6 +19,7 @@ import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.repositories.InventoryRepository;
 
 import lombok.AccessLevel;
@@ -48,9 +47,9 @@ public class InventoryReports {
 	 * Gets report of all items that are currently in the inventory with full information needed for report display.
 	 * @return List of ItemInventoryRow that have a balance in inventory
 	 */
-	public List<ItemInventoryRow> getInventoryTableByItem(SupplyGroup supplyGroup) {
+	public List<ItemInventoryRow> getInventoryTableByItem(ItemGroup group) {
 
-		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(supplyGroup, null, null, null);
+		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(group, null, null, null);
 		
 		Map<ItemDTO, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
 				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getItem, Collectors.toList()));
@@ -78,9 +77,9 @@ public class InventoryReports {
 	 * Gets report of all po code that currently have balance in inventory with full information needed for report display.
 	 * @return List of PoInventoryRow that have a balance in inventory
 	 */
-	public List<PoInventoryRow> getInventoryTableByPo(SupplyGroup supplyGroup) {
+	public List<PoInventoryRow> getInventoryTableByPo(ItemGroup group) {
 		
-		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(supplyGroup, null, null, null);
+		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(group, null, null, null);
 
 		Map<PoCodeDTO, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
 				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getPoCode, Collectors.toList()));

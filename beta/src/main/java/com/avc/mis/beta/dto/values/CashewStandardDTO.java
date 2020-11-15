@@ -7,8 +7,8 @@ import java.util.Set;
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.CashewStandard;
-import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

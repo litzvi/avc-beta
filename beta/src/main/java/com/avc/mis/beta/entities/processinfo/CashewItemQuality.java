@@ -23,8 +23,8 @@ import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.QualityCheck;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.validation.groups.OnPersist;
 
 import lombok.Data;

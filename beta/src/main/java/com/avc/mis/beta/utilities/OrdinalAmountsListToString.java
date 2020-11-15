@@ -5,15 +5,10 @@ package com.avc.mis.beta.utilities;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.avc.mis.beta.dto.values.OrdinalAmount;
 import com.fasterxml.jackson.core.JsonProcessingException;

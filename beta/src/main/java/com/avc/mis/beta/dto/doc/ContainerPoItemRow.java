@@ -8,10 +8,9 @@ import java.math.BigDecimal;
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
-import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.item.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;

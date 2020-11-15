@@ -36,6 +36,7 @@ import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.QualityCheck;
@@ -49,7 +50,6 @@ import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.SampleItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.StorageWithSample;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
 import com.avc.mis.beta.service.Orders;
@@ -71,7 +71,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800171;
+	static final Integer PO_CODE = 800172;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	

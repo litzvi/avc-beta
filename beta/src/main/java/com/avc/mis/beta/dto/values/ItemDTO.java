@@ -4,10 +4,10 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.enums.SupplyGroup;
-import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -24,26 +24,27 @@ import lombok.Value;
 public class ItemDTO extends ValueDTO {
 
 	String value;
-	MeasureUnit measureUnit;
-	SupplyGroup supplyGroup;
-	ItemCategory category;
+	MeasureUnit defaultMeasureUnit;
+//	String dtype;
+	ItemGroup group;
+	ProductionUse productionUse;
 
 	
 	public ItemDTO(Integer id, String value, MeasureUnit measureUnit, 
-			SupplyGroup supplyGroup, ItemCategory category) {
+			ItemGroup group, ProductionUse productionUse) {
 		super(id);
 		this.value = value;
-		this.measureUnit = measureUnit;
-		this.supplyGroup = supplyGroup;
-		this.category = category;
+		this.defaultMeasureUnit = measureUnit;
+		this.group = group;
+		this.productionUse = productionUse;
 	}
 	
 	public ItemDTO(@NonNull Item item) {
 		super(item.getId());
 		this.value = item.getValue();
-		this.measureUnit = item.getMeasureUnit();
-		this.supplyGroup = item.getSupplyGroup();
-		this.category = item.getCategory();
+		this.defaultMeasureUnit = item.getDefaultMeasureUnit();
+		this.group = item.getItemGroup();
+		this.productionUse = item.getProductionUse();
 	}
 
 }

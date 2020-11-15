@@ -22,6 +22,7 @@ import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.processinfo.CountAmount;
@@ -30,7 +31,6 @@ import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
 

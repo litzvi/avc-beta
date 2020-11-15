@@ -17,10 +17,10 @@ import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.PoCode;
 
 /**
@@ -61,26 +61,6 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	
 //--------------------Finding PO code lists-----------------------
 	
-
-//	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po.version, "
-//				+ "po_code.code, po_code.contractType, s.name, s.id, s.version) "
-//			+ "from PO po "
-//			+ "join po.poCode po_code "
-//			+ "join po_code.supplier s "
-//			+ "join po.processType t "
-//			+ "join po.orderItems oi "
-//			+ "where not exists (select ri from ReceiptItem ri where ri.orderItem = oi) "
-//				+ "and t.processName = ?1 ")
-//	List<PoBasic> findOpenOrderByTypeBasic(ProcessName orderType);
-//
-//	@Query("select new com.avc.mis.beta.dto.values.PoBasic(r.id, r.version, "
-//				+ "po_code.code, po_code.contractType, s.name, s.id, s.version) "
-//			+ "from Receipt r "
-//			+ "join r.poCode po_code "
-//			+ "join po_code.supplier s "
-//			+ "join r.processType t "
-//				+ "where t.processName in ?1 ")
-//	List<PoBasic> findReceivedPOsBasic(ProcessName[] receiptType);
 
 	/**
 	 * Gets po code basic info for orders that are yet to be fully received 
@@ -158,14 +138,14 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 //				+ "join sf.numberUnits sfNumberUnits"
 				+ "join sf.unitAmount unit "
 					+ "join UOM uom "
-						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.measureUnit "
+						+ "on uom.fromUnit = unit.measureUnit and uom.toUnit = item.defaultMeasureUnit "
 				+ "left join sf.usedItems ui "
 					+ "left join ui.group used_g "
 						+ "left join used_g.process used_p "
 							+ "left join used_p.lifeCycle used_lc "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
-			+ "and (item.supplyGroup = :supplyGroup or :supplyGroup is null)  "
-			+ "and (:checkCategories = false or item.category in :itemCategories)  "
+			+ "and (item.itemGroup = :itemGroup or :itemGroup is null)  "
+			+ "and (:checkProductionUses = false or item.productionUse in :productionUses)  "
 			+ "and (item.id = :itemId or :itemId is null)  "
 		+ "group by sf, sf.numberUnits "
 //		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) "
@@ -177,7 +157,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 					+ "ELSE 0 "
 				+ "END)"
 			+ " ) ")
-	Set<PoCodeDTO> findInventoryPoCodeByType(boolean checkCategories, ItemCategory[] itemCategories, SupplyGroup supplyGroup, Integer itemId);
+	Set<PoCodeDTO> findInventoryPoCodeByType(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId);
 
 	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("
 			+ "po_code.code, c.code, c.suffix, s.name) "

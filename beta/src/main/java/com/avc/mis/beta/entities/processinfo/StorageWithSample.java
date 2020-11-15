@@ -6,7 +6,6 @@ package com.avc.mis.beta.entities.processinfo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -18,10 +17,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Positive;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.avc.mis.beta.dto.values.OrdinalAmount;
-import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.utilities.OrdinalAmountsListToString;
 

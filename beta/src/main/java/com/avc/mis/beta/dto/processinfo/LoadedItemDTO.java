@@ -10,8 +10,8 @@ import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ItemCategory;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.processinfo.LoadedItem;
 
 import lombok.Data;
@@ -33,12 +33,12 @@ public class LoadedItemDTO extends SubjectDataDTO {
 	private String remarks;
 		
 	public LoadedItemDTO(Integer id, Integer version, Integer ordinal,
-			Integer itemId, String itemValue, ItemCategory itemCategory,			
+			Integer itemId, String itemValue, ProductionUse productionUse,			
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			BigDecimal declaredAmount, MeasureUnit measureUnit,
 			String description, String remarks) {
 		super(id, version, ordinal);
-		this.item = new ItemDTO(itemId, itemValue, null, null, itemCategory);
+		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse);
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);	
 		this.declaredAmount = new AmountWithUnit(declaredAmount.setScale(MeasureUnit.SCALE), measureUnit);
 		this.description = description;

@@ -24,6 +24,8 @@ import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.item.BulkItem;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -40,7 +42,6 @@ import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.ContractType;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -197,7 +198,7 @@ public class TestService {
 		for(OrderItemDTO oItem: orderItems) {
 			items[i] = new ReceiptItem();
 			storageForms[i] = new StorageWithSample();
-			Item item = new Item();
+			Item item = new BulkItem();
 			item.setId(oItem.getItem().getId());
 			items[i].setItem(item);
 			items[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), "LBS"));
@@ -337,7 +338,7 @@ public class TestService {
 			//build item count
 			ProcessItemInventory processItemRow = poInventory.get(i);
 			itemCounts[i] = new ItemCount();
-			Item item = new Item();
+			Item item = new BulkItem();
 			item.setId(processItemRow.getItem().getId());
 			itemCounts[i].setItem(item);
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
@@ -366,7 +367,7 @@ public class TestService {
 			//build process item
 			ProcessItemInventory processItemRow = poInventory.get(i);
 			processItems[i] = new ProcessItem();
-			Item item = new Item();
+			Item item = new BulkItem();
 			item.setId(processItemRow.getItem().getId());
 			processItems[i].setItem(item);
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
