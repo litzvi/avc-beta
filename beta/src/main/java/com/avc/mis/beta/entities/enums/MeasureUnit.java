@@ -88,6 +88,10 @@ public enum MeasureUnit {
 		ozMap.put(OZ, new UOM(OZ, OZ, BigDecimal.ONE, BigDecimal.ONE));
 		CONVERTION_MAP.put(OZ, ozMap);
 		
+		Map<MeasureUnit, UOM> unitMap = new HashMap<MeasureUnit, UOM>();
+		kgMap.put(UNIT, new UOM(UNIT, UNIT, BigDecimal.ONE, BigDecimal.ONE));
+		CONVERTION_MAP.put(UNIT, unitMap);
+		
 	}
 	
 	public static BigDecimal convert(@NonNull BigDecimal amount, MeasureUnit fromUnit, MeasureUnit toUnit) {
