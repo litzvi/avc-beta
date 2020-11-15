@@ -34,7 +34,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	 */
 	@Query("select new com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage( "
 			+ "pi.id, "
-			+ "item.id, item.value, item.productionUse, "
+			+ "item.id, item.value, item.productionUse, type(item), "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "p.recordedTime, r.recordedTime, pi.tableView, "
 			+ "sf.id, sf.version, sf.ordinal, "
@@ -105,7 +105,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventoryRow( "
 			+ "pi.id, "
-			+ "item.id, item.value, item.productionUse, "
+			+ "item.id, item.value, item.productionUse, type(item), "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "p.recordedTime, r.recordedTime, "
 			+ "SUM(((unit.amount - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor) "

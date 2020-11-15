@@ -60,7 +60,7 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 
 	@Query("select new com.avc.mis.beta.dto.query.ItemCountWithAmount( "
 			+ " i.id, i.version, i.ordinal, "
-			+ "item.id, item.value, item.productionUse, "
+			+ "item.id, item.value, item.productionUse, type(item), "
 			+ "i.measureUnit, i.containerWeight, i.accessWeight, "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "count_amount.id, count_amount.version, count_amount.ordinal, count_amount.amount) "

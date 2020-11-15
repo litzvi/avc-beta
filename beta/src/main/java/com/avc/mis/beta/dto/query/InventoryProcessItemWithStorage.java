@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
 
 import lombok.Value;
@@ -34,7 +35,7 @@ public class InventoryProcessItemWithStorage {
 	 */
 	public InventoryProcessItemWithStorage(
 			Integer processItemId, 
-			Integer itemId, String itemValue, ProductionUse productionUse,
+			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
@@ -44,7 +45,7 @@ public class InventoryProcessItemWithStorage {
 			BigDecimal totalBalance, MeasureUnit totalBalanceMU) {
 
 		this.processItemInventoryRow = new ProcessItemInventory(
-				processItemId, itemId, itemValue, productionUse,
+				processItemId, itemId, itemValue, productionUse, clazz,
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				processDate, receiptDate, tableView);
 		this.storageInventoryRow = new StorageInventoryRow(

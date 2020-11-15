@@ -41,7 +41,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 	Optional<ReceiptDTO> findReceiptDTOByProcessId(int id);
 	
 	@Query("select new com.avc.mis.beta.dto.query.ReceiptItemWithStorage( "
-			+ " i.id, i.version, i.ordinal, item.id, item.value, item.productionUse, "
+			+ " i.id, i.version, i.ordinal, item.id, item.value, item.productionUse, type(item), "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "unit.amount, unit.measureUnit, sf.numberUnits, sf.containerWeight, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "

@@ -54,7 +54,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	 */
 	@Query("select new com.avc.mis.beta.dto.processinfo.LoadedItemDTO( "
 			+ " i.id, i.version, i.ordinal, "
-			+ "item.id, item.value, item.productionUse, "
+			+ "item.id, item.value, item.productionUse, type(item), "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "da.amount, da.measureUnit, "
 			+ "i.description, i.remarks) "

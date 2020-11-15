@@ -17,6 +17,7 @@ import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
 
@@ -39,10 +40,10 @@ public class ItemCountDTO extends SubjectDataDTO {
 	private List<CountAmountDTO> amounts;
 
 	public ItemCountDTO(Integer id, Integer version, Integer ordinal,
-			Integer itemId, String itemValue, ProductionUse productionUse,
+			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
 			MeasureUnit measureUnit, BigDecimal containerWeight, BigDecimal accessWeight) {
 		super(id, version, ordinal);
-		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse);
+		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
 		this.measureUnit = measureUnit;
 		this.containerWeight = containerWeight;
 		this.accessWeight = accessWeight;

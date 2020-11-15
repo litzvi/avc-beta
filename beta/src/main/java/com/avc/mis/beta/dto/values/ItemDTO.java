@@ -25,18 +25,18 @@ public class ItemDTO extends ValueDTO {
 
 	String value;
 	MeasureUnit defaultMeasureUnit;
-//	String dtype;
 	ItemGroup group;
 	ProductionUse productionUse;
-
+	Class<? extends Item> clazz;
 	
 	public ItemDTO(Integer id, String value, MeasureUnit measureUnit, 
-			ItemGroup group, ProductionUse productionUse) {
+			ItemGroup group, ProductionUse productionUse, Class<? extends Item> clazz) {
 		super(id);
 		this.value = value;
 		this.defaultMeasureUnit = measureUnit;
 		this.group = group;
 		this.productionUse = productionUse;
+		this.clazz = clazz;
 	}
 	
 	public ItemDTO(@NonNull Item item) {
@@ -45,6 +45,7 @@ public class ItemDTO extends ValueDTO {
 		this.defaultMeasureUnit = item.getDefaultMeasureUnit();
 		this.group = item.getItemGroup();
 		this.productionUse = item.getProductionUse();
+		this.clazz = item.getClass();
 	}
 
 }

@@ -19,6 +19,7 @@ import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -49,10 +50,10 @@ public class ProcessItemDTO extends SubjectDataDTO {
 	private AmountWithUnit[] totalAmount;
 	
 	public ProcessItemDTO(Integer id, Integer version, Integer ordinal, Integer itemId, String itemValue, 
-			ProductionUse productionUse,
+			ProductionUse productionUse, Class<? extends Item> clazz,
 			String groupName, String description, String remarks, boolean tableView) {
 		super(id, version, ordinal);
-		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse);
+		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
 		this.groupName = groupName;
 		this.description = description;
 		this.remarks = remarks;

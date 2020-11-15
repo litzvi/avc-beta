@@ -10,6 +10,7 @@ import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.StorageBaseDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.processinfo.Storage;
 
@@ -36,7 +37,7 @@ public class ProcessItemWithStorage extends ValueDTO {
 	 * that fetches process item, process and storage details.
 	 */
 	public ProcessItemWithStorage(Integer id, Integer version, Integer ordinal,
-			Integer itemId, String itemValue, ProductionUse productionUse,
+			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> ItemClazz,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
@@ -45,7 +46,7 @@ public class ProcessItemWithStorage extends ValueDTO {
 			String groupName, String description, String remarks, boolean tableView) {
 		super(id);
 		this.processItem = new ProcessItemDTO(id, version, ordinal,
-				itemId, itemValue, productionUse,
+				itemId, itemValue, productionUse, ItemClazz,
 				groupName, description, remarks, tableView);
 		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.storage = new StorageBaseDTO(storageId, storageVersion, storageOrdinal,
