@@ -175,7 +175,7 @@ public class TransferTest {
 		List<ProcessItemInventory> poInventory = warehouseManagement.getCashewInventoryByPo(receipt.getPoCode().getId());
 		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		transfer.setProcessItems(service.getProcessItems(poInventory));
-		transfer.setItemCounts(TestService.getItemCounts(poInventory));
+		transfer.setItemCounts(service.getItemCounts(poInventory));
 
 		try {
 			warehouseManagement.addStorageTransfer(transfer);

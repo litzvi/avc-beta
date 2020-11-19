@@ -338,7 +338,7 @@ public class TestService {
 	 * @param poInventory
 	 * @return
 	 */
-	public static ItemCount[] getItemCounts(List<ProcessItemInventory> poInventory) {
+	public ItemCount[] getItemCounts(List<ProcessItemInventory> poInventory) {
 		ItemCount[] itemCounts = new ItemCount[poInventory.size()];
 		CountAmount[] countAmounts;
 		for(int i=0; i<itemCounts.length; i++) {
@@ -393,7 +393,7 @@ public class TestService {
 		return processItems;
 	}
 	
-	public static Item getItem(ItemDTO itemDTO) {
+	public Item getItem(ItemDTO itemDTO) {
 		Item item = null;
 		if(itemDTO.getClazz() == BulkItem.class) {
 			item = new BulkItem();

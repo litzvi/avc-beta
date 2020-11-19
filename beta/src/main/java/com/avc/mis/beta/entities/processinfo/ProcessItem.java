@@ -56,7 +56,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PROCESSED_ITEMS")
-@Inheritance(strategy=InheritanceType.JOINED)
+//@Inheritance(strategy=InheritanceType.JOINED)
 public class ProcessItem extends ProcessGroupWithStorages {
 	
 	@ManyToOne(fetch = FetchType.LAZY)

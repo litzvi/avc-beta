@@ -47,7 +47,7 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "RECEIPT_ITEMS")
-@PrimaryKeyJoinColumn(name = "processItemId")
+//@PrimaryKeyJoinColumn(name = "processItemId")
 public class ReceiptItem extends ProcessItem {
 	
 	@AttributeOverrides({

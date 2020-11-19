@@ -27,7 +27,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PROCESS_GROUPS_W_STORAGES")
-@Inheritance(strategy=InheritanceType.JOINED)
+//@Inheritance(strategy=InheritanceType.JOINED)
 public abstract class ProcessGroupWithStorages extends ProcessGroup {
 
 	@Enumerated(EnumType.STRING)

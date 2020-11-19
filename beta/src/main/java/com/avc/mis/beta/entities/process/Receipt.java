@@ -46,13 +46,7 @@ public class Receipt extends ProcessWithProduct<ReceiptItem> {
 		ProcessItem[] processItems = super.getProcessItems();
 		return Arrays.copyOf(processItems, processItems.length, ReceiptItem[].class);
 	}
-	
-//	@JsonIgnore
-//	@Override
-//	protected boolean canEqual(Object o) {
-//		return super.canEqual(o);
-//	}
-	
+
 	/**
 	 * Life Cycle process status starts with PENDING, since needs to be checked and excepted.
 	 */
