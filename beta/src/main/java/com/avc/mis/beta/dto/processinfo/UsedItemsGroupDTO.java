@@ -67,10 +67,10 @@ public class UsedItemsGroupDTO extends SubjectDataDTO {
 			UsedItemTableDTO usedItemTable = new UsedItemTableDTO();
 			this.usedItems.stream().findAny().ifPresent(s -> {
 				usedItemTable.setItem(s.getItem());
+				usedItemTable.setMeasureUnit(s.getMeasureUnit());
 				usedItemTable.setItemPo(s.getItemPo());
 				usedItemTable.setItemProcessDate(s.getItemProcessDate());
 				StorageBaseDTO storage = s.getStorage();
-				usedItemTable.setMeasureUnit(storage.getUnitAmount().getMeasureUnit());
 				usedItemTable.setContainerWeight(storage.getContainerWeight());
 				BasicValueEntity<Warehouse> warehouse = storage.getWarehouseLocation();
 				if(warehouse != null)
@@ -89,9 +89,10 @@ public class UsedItemsGroupDTO extends SubjectDataDTO {
 	
 	public AmountWithUnit[] getTotalAmount() {
 		AmountWithUnit totalAmount = usedItems.stream()
-				.map(ui -> ui.getStorage().getUnitAmount()
-						.substract(Optional.ofNullable(ui.getStorage().getContainerWeight()).orElse(BigDecimal.ZERO))
-						.multiply(ui.getNumberUsedUnits()))
+				.map(ui -> new AmountWithUnit(ui.getStorage().getUnitAmount()
+							.subtract(Optional.ofNullable(ui.getStorage().getContainerWeight()).orElse(BigDecimal.ZERO))
+							.multiply(ui.getNumberUsedUnits()), 
+						ui.getMeasureUnit()))
 				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
 		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
 				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};

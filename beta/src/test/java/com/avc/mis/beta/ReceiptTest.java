@@ -62,6 +62,7 @@ public class ReceiptTest {
 
 		//insert order receipt for order
 		PO po = service.addBasicCashewOrder();
+		System.out.println("po code: " + po.getPoCode().getId());
 		receipt = service.getCashewOrderReceipt(po.getPoCode().getId());
 		expected = new ReceiptDTO(receipt);
 		actual = receipts.getReceiptByProcessId(receipt.getId());
@@ -73,7 +74,7 @@ public class ReceiptTest {
 		//add extra bonus
 		ExtraAdded[] added = new ExtraAdded[1];
 		added[0] = new ExtraAdded();
-		added[0].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(500), "KG"));//because database is set to scale 2
+		added[0].setUnitAmount(BigDecimal.valueOf(500));//because database is set to scale 2
 		added[0].setNumberUnits(new BigDecimal(4).setScale(2));
 		receipts.addExtra(added, receipt.getReceiptItems()[0].getId());
 		receipt.getReceiptItems()[0].setExtraAdded(added);;

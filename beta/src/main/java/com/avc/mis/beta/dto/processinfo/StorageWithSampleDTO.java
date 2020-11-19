@@ -41,12 +41,12 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 
 		
 	public StorageWithSampleDTO(Integer id, Integer version, Integer ordinal,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, 
 			String remarks, Class<? extends Storage> clazz, 
 			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, BigDecimal sampleContainerWeight, 
 			List<OrdinalAmount<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
-		super(id, version, ordinal, unitAmount, measureUnit, numberUnits, containerWeight, 
+		super(id, version, ordinal, unitAmount, numberUnits, containerWeight, 
 				warehouseLocationId, warehouseLocationValue, remarks,
 				clazz);
 		this.sampleContainerWeights = sampleContainerWeights;
@@ -71,7 +71,7 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 	}
 	
 	public StorageWithSampleDTO(Integer id, Integer version, Integer ordinal,
-			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz, 
 			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, BigDecimal sampleContainerWeight, 
 			List<OrdinalAmount<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
@@ -100,7 +100,7 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 		if(sampleWeights != null) {
 			 avgTestedWeight = sampleWeights.stream().map(OrdinalAmount<BigDecimal>::getAmount)
 					.reduce(BigDecimal::add)
-					.map(s -> s.divide(new BigDecimal(sampleWeights.size()), MathContext.DECIMAL64).add(getUnitAmount().getAmount()));
+					.map(s -> s.divide(new BigDecimal(sampleWeights.size()), MathContext.DECIMAL64).add(getUnitAmount()));
 		}
 		return avgTestedWeight.map(w -> w.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN)).orElse(null);
 	}
@@ -114,7 +114,7 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 	
 	
 		
-	public AmountWithUnit getWeighedDifferance() {		
+	public BigDecimal getWeighedDifferance() {		
 		BigDecimal acumelatedAvg = getAvgTestedWeight();
 		if(acumelatedAvg == null) {
 			return null;
@@ -123,9 +123,9 @@ public class StorageWithSampleDTO extends StorageBaseDTO {
 		if(sampleContainerWeight != null) {
 			acumelatedAvg = acumelatedAvg.subtract(sampleContainerWeight);
 		}
-		return new AmountWithUnit((acumelatedAvg.subtract(getUnitAmount().getAmount()))
+		return acumelatedAvg.subtract(getUnitAmount())
 				.multiply(getNumberUnits())
-				.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN), getUnitAmount().getMeasureUnit());
+				.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN);
 	}
 	
 	

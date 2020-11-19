@@ -58,18 +58,23 @@ public class StorageBase extends UsedItemBase {
 	@NotNull
 	private ProcessItem processItem;
 	
-	@AttributeOverrides({
-        @AttributeOverride(name="amount",
-                           column=@Column(name="unitAmount", nullable = false, 
-                           	precision = 19, scale = MeasureUnit.SCALE)),
-        @AttributeOverride(name="measureUnit",
-                           column=@Column(nullable = false))
-    })
-	@Embedded
+//	@AttributeOverrides({
+//        @AttributeOverride(name="amount",
+//                           column=@Column(name="unitAmount", nullable = false, 
+//                           	precision = 19, scale = MeasureUnit.SCALE)),
+//        @AttributeOverride(name="measureUnit",
+//                           column=@Column(nullable = false))
+//    })
+//	@Embedded
+//	@NotNull(message = "Unit amount is mandatory")
+//	@Valid
+//	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
+//	private AmountWithUnit unitAmount;
+	
+	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Unit amount is mandatory")
-	@Valid
-	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
-	private AmountWithUnit unitAmount;
+	@Positive(message = "Unit amount has to be positive")
+	private BigDecimal unitAmount = BigDecimal.ONE;	
 
 	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Number of units is required")
@@ -88,14 +93,6 @@ public class StorageBase extends UsedItemBase {
 	@OneToMany(mappedBy = "storage", fetch = FetchType.LAZY)
 	private Set<UsedItemBase> usedItems;
 
-	@Override
-	public void setReference(Object referenced) {
-		if(referenced instanceof ProcessItem) {
-			this.setProcessItem((ProcessItem)referenced);
-		}
-		else {
-			throw new ClassCastException("Referenced object isn't a process item");
-		}		
-	}
+	
 
 }

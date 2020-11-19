@@ -70,14 +70,23 @@ public class AmountWithUnit implements Cloneable {
 	}
 	
 	public AmountWithUnit add(AmountWithUnit augend) {
-		BigDecimal augendAmount = MeasureUnit.convert(augend.getAmount(), augend.getMeasureUnit(), this.measureUnit);
-		if(augendAmount == null)
-			throw new UnsupportedOperationException(
-					"Convertion from " + augend.getMeasureUnit() + " to " + this.measureUnit + " not supported");
-		return new AmountWithUnit(this.amount.add(augendAmount), this.measureUnit);
+		return add(augend.getAmount(), augend.getMeasureUnit());
+//		BigDecimal augendAmount = MeasureUnit.convert(augend.getAmount(), augend.getMeasureUnit(), this.measureUnit);
+//		if(augendAmount == null)
+//			throw new UnsupportedOperationException(
+//					"Convertion from " + augend.getMeasureUnit() + " to " + this.measureUnit + " not supported");
+//		return new AmountWithUnit(this.amount.add(augendAmount), this.measureUnit);
 	}
 	
-	public AmountWithUnit substract(AmountWithUnit subtrahend) {
+	public AmountWithUnit add(BigDecimal augendAmount, MeasureUnit augendMeasureUnit) {
+		BigDecimal augendConvertedAmount = MeasureUnit.convert(augendAmount, augendMeasureUnit, this.measureUnit);
+		if(augendConvertedAmount == null)
+			throw new UnsupportedOperationException(
+					"Convertion from " + augendMeasureUnit + " to " + this.measureUnit + " not supported");
+		return new AmountWithUnit(this.amount.add(augendConvertedAmount), this.measureUnit);
+	}
+	
+	public AmountWithUnit subtract(AmountWithUnit subtrahend) {
 		BigDecimal subtrahendAmount = MeasureUnit.convert(subtrahend.getAmount(), subtrahend.getMeasureUnit(), this.measureUnit);
 		if(subtrahendAmount == null)
 			throw new UnsupportedOperationException(

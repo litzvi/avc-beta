@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
@@ -39,6 +38,7 @@ import lombok.ToString;
 public class ProcessItemDTO extends SubjectDataDTO {
 
 	private ItemDTO item; //change to itemDTO in order to get category
+	private MeasureUnit measureUnit;
 	private String groupName;
 	private String description;
 	private String remarks;
@@ -47,13 +47,15 @@ public class ProcessItemDTO extends SubjectDataDTO {
 	private boolean tableView;
 	private List<StorageBaseDTO> storageForms;
 	
-	private AmountWithUnit[] totalAmount;
+//	private AmountWithUnit[] totalAmount;
 	
-	public ProcessItemDTO(Integer id, Integer version, Integer ordinal, Integer itemId, String itemValue, 
-			ProductionUse productionUse, Class<? extends Item> clazz,
+	public ProcessItemDTO(Integer id, Integer version, Integer ordinal, 
+			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
+			MeasureUnit measureUnit,
 			String groupName, String description, String remarks, boolean tableView) {
 		super(id, version, ordinal);
 		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
+		this.measureUnit = measureUnit;
 		this.groupName = groupName;
 		this.description = description;
 		this.remarks = remarks;
@@ -68,6 +70,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 	public ProcessItemDTO(ProcessItem processItem) {
 		super(processItem.getId(), processItem.getVersion(), processItem.getOrdinal());
 		this.item = new ItemDTO(processItem.getItem());
+		this.measureUnit = processItem.getMeasureUnit();
 		
 		this.groupName = processItem.getGroupName();
 		this.description = processItem.getDescription();
@@ -82,26 +85,19 @@ public class ProcessItemDTO extends SubjectDataDTO {
 	}
 
 	public ProcessItemDTO(Integer id, Integer version, Integer ordinal,
-			ItemDTO item,
+			ItemDTO item, MeasureUnit measureUnit,
 			String groupName, String description, String remarks) {
 		super(id, version, ordinal);
 		this.item = item;
+		this.measureUnit = measureUnit;
 		this.groupName = groupName;
 		this.description = description;
 		this.remarks = remarks;
 	}
 	
-	public void setStorageForms(List<StorageBaseDTO> storageForms) {
-		this.storageForms = storageForms;
-		this.totalAmount = new AmountWithUnit[2];
-		AmountWithUnit totalAmount = this.storageForms.stream()
-				.map(sf -> sf.getUnitAmount()
-						.substract(Optional.ofNullable(sf.getContainerWeight()).orElse(BigDecimal.ZERO))
-						.multiply(sf.getNumberUnits()))
-				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
-		this.totalAmount[0] = totalAmount.setScale(MeasureUnit.SCALE);
-		this.totalAmount[1] = totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
-	}
+//	public void setStorageForms(List<StorageBaseDTO> storageForms) {
+//		this.storageForms = storageForms;
+//	}
 	
 	public List<StorageBaseDTO> getStorageForms() {
 		if(tableView) {
@@ -114,7 +110,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 		if(tableView && this.storageForms != null && !this.storageForms.isEmpty()) {
 			StorageTableDTO storageTable = new StorageTableDTO();
 			this.storageForms.stream().findAny().ifPresent(s -> {
-				storageTable.setMeasureUnit(s.getUnitAmount().getMeasureUnit());
+//				storageTable.setMeasureUnit(s.getUnitAmount().getMeasureUnit());
 				storageTable.setContainerWeight(s.getContainerWeight());
 				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
 				if(warehouse != null)
@@ -127,6 +123,19 @@ public class ProcessItemDTO extends SubjectDataDTO {
 			return storageTable;
 		}
 		return null;
+	}
+	
+	public AmountWithUnit[] getTotalAmount() {
+		BigDecimal total = this.storageForms.stream()
+				.map(sf -> sf.getTotal())
+				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
+		
+		return new AmountWithUnit[] {
+				totalAmount.setScale(MeasureUnit.SCALE),
+				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)
+		};
+		
 	}
 
 	

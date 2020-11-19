@@ -28,7 +28,7 @@ import lombok.Value;
 public class StorageInventoryRow  extends SubjectDataDTO {
 
 	Integer processItemId;
-	AmountWithUnit unitAmount;
+	BigDecimal unitAmount;
 	BigDecimal numberUnits;	
 	BigDecimal containerWeight;
 	BasicValueEntity<Warehouse> warehouseLocation;
@@ -40,13 +40,13 @@ public class StorageInventoryRow  extends SubjectDataDTO {
 	 */
 	public StorageInventoryRow(Integer id, Integer version, Integer ordinal,
 			Integer processItemId,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			BigDecimal numberUsedUnits, 
 			BigDecimal totalBalance, MeasureUnit totalBalanceMU) {
 		super(id, version, ordinal);
 		this.processItemId = processItemId;
-		this.unitAmount = new AmountWithUnit(unitAmount, measureUnit);;
+		this.unitAmount = unitAmount;
 		this.numberUnits = numberUnits;
 		this.containerWeight = containerWeight;
 		if(warehouseLocationId != null && warehouseLocationValue != null)
@@ -61,7 +61,7 @@ public class StorageInventoryRow  extends SubjectDataDTO {
 	 * All class arguments constructor
 	 */
 	public StorageInventoryRow(Integer id, Integer version, Integer ordinal,
-			Integer processItemId, AmountWithUnit unitAmount, BigDecimal containerWeight,
+			Integer processItemId, BigDecimal unitAmount, BigDecimal containerWeight,
 			BigDecimal numberUnits, BasicValueEntity<Warehouse> warehouseLocation, 
 			BigDecimal numberUsedUnits, AmountWithUnit totalBalance) {
 		super(id, version, ordinal);

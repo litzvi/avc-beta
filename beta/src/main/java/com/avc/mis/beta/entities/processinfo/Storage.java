@@ -45,4 +45,15 @@ public class Storage extends StorageBase {
 		return super.getNumberUsedUnits();
 	}
 	
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof ProcessItem) {
+			super.setReference(referenced); //sets group to the same value
+			this.setProcessItem((ProcessItem)referenced);
+		}
+		else {
+			throw new ClassCastException("Referenced object isn't a process item");
+		}		
+	}
+	
 }

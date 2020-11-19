@@ -40,6 +40,6 @@ public class ProcessItemTransactionDifference extends ValueDTO {
 	
 	public AmountWithUnit getDifference() {
 		return Optional.ofNullable(producedAmount).orElse(AmountWithUnit.ZERO_KG)
-				.substract(Optional.ofNullable(usedAmount).orElse(AmountWithUnit.ZERO_KG));
+				.subtract(Optional.ofNullable(usedAmount).orElse(AmountWithUnit.ZERO_KG));
 	}
 }

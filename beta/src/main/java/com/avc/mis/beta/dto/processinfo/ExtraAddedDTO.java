@@ -26,7 +26,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ExtraAddedDTO extends StorageWithSampleDTO {
 	
-	public ExtraAddedDTO(Integer id, Integer version, Integer ordinal, AmountWithUnit unitAmount,
+	public ExtraAddedDTO(Integer id, Integer version, Integer ordinal, BigDecimal unitAmount,
 			BigDecimal numberUnits, BigDecimal containerWeight, BasicValueEntity<Warehouse> warehouseLocation,
 			String remarks, Class<? extends Storage> clazz, BigDecimal sampleContainerWeight, BigInteger numberOfSamples,
 			BigDecimal avgTestedWeight) {
@@ -38,7 +38,7 @@ public class ExtraAddedDTO extends StorageWithSampleDTO {
 			BigDecimal numberUnits, BigDecimal containerWeight, Integer warehouseLocationId,
 			String warehouseLocationValue, String remarks, Class<? extends Storage> clazz,
 			BigDecimal sampleContainerWeight, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
-		super(id, version, ordinal, unitAmount, measureUnit, numberUnits, containerWeight, warehouseLocationId,
+		super(id, version, ordinal, unitAmount, numberUnits, containerWeight, warehouseLocationId,
 				warehouseLocationValue, remarks, clazz, null, sampleContainerWeight, null, numberOfSamples, avgTestedWeight);
 	}
 

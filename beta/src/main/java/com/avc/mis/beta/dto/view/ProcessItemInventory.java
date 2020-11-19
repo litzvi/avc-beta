@@ -42,6 +42,7 @@ import lombok.ToString;
 public class ProcessItemInventory extends ValueDTO {
 
 	private ItemDTO item;
+	private MeasureUnit measureUnit;
 	private PoCodeDTO poCode;
 	private OffsetDateTime itemProcessDate;
 	private OffsetDateTime receiptDate;
@@ -56,10 +57,11 @@ public class ProcessItemInventory extends ValueDTO {
 	 * excluding list of storage forms and calculated totals.
 	 */
 	public ProcessItemInventory(Integer id, Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
+			MeasureUnit measureUnit, Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
+		this.measureUnit = measureUnit;
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.itemProcessDate = processDate;
 		this.receiptDate = receiptDate;
@@ -69,11 +71,12 @@ public class ProcessItemInventory extends ValueDTO {
 	/**
 	 * All class arguments constructor, excluding list of storage forms and calculated totals
 	 */
-	public ProcessItemInventory(Integer id, ItemDTO item, 
+	public ProcessItemInventory(Integer id, ItemDTO item, MeasureUnit measureUnit, 
 			PoCodeDTO poCode, 
 			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
 		super(id);
 		this.item = item;
+		this.measureUnit = measureUnit;
 		this.poCode = poCode;
 		this.itemProcessDate = processDate;
 		this.receiptDate = receiptDate;
@@ -114,7 +117,7 @@ public class ProcessItemInventory extends ValueDTO {
 		if(tableView && this.storageForms != null && !this.storageForms.isEmpty()) {
 			StorageTableDTO storageTable = new StorageTableDTO();
 			this.storageForms.stream().findAny().ifPresent(s -> {
-				storageTable.setMeasureUnit(s.getUnitAmount().getMeasureUnit());
+//				storageTable.setMeasureUnit(s.getUnitAmount().getMeasureUnit());
 				storageTable.setContainerWeight(s.getContainerWeight());
 				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
 				if(warehouse != null)
@@ -128,19 +131,6 @@ public class ProcessItemInventory extends ValueDTO {
 		}
 		return null;
 	}
-	
-//	/**
-//	 * @return the total balance in lots (lot = 35,000lbs)
-//	 */
-//	public AmountWithUnit getTotalLots() {
-//		AmountWithUnit totalBalanceAmount = getTotalBalanceAmount();
-//		if(totalBalanceAmount == null) {
-//			return null;
-//		}
-//		return new AmountWithUnit(
-//				MeasureUnit.convert(totalBalanceAmount, MeasureUnit.LOT)
-//				.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN), MeasureUnit.LOT);
-//	}
 	
 	/**
 	 * Transforms List of InventoryProcessItemWithStorage as fetched from db,

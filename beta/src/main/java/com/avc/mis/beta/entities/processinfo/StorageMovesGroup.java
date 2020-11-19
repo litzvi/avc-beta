@@ -10,12 +10,16 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.processinfo.MovedItemTableDTO;
@@ -45,8 +49,8 @@ import lombok.Setter;
 @Entity
 @Table(name = "STORAGE_MOVES_GROUP")
 @PrimaryKeyJoinColumn(name = "groupId")
-public class StorageMovesGroup extends ProcessGroup {
-
+public class StorageMovesGroup extends ProcessGroupWithStorages {
+	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "group", targetEntity = UsedItemBase.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
@@ -88,7 +92,7 @@ public class StorageMovesGroup extends ProcessGroup {
 	public void setStorageMove(MovedItemTableDTO movedItemTable) {
 		setTableView(true);
 		
-		MeasureUnit measureUnit = movedItemTable.getMeasureUnit();
+		setMeasureUnit(movedItemTable.getMeasureUnit());
 		BigDecimal containerWeight = movedItemTable.getContainerWeight();
 		Warehouse warehouse = movedItemTable.getNewWarehouseLocation();
 		List<BasicUsedStorageDTO> basicUsedStorages = movedItemTable.getAmounts();
@@ -105,7 +109,7 @@ public class StorageMovesGroup extends ProcessGroup {
 			storageMoves[i].setStorage(storage);
 			
 			storageMoves[i].setOrdinal(basicUsedStorage.getOrdinal());
-			storageMoves[i].setUnitAmount(new AmountWithUnit(measureUnit));
+//			storageMoves[i].setUnitAmount(new AmountWithUnit(measureUnit));
 			storageMoves[i].setNumberUnits(basicUsedStorage.getAmount());
 			storageMoves[i].setContainerWeight(containerWeight);
 			storageMoves[i].setWarehouseLocation(warehouse);

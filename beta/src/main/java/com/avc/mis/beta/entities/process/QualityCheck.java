@@ -18,6 +18,7 @@ import javax.validation.constraints.NotEmpty;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.CashewItemQuality;
+import com.avc.mis.beta.entities.processinfo.ProcessGroup;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -51,7 +52,7 @@ public class QualityCheck extends PoProcess {
 	private String sampleTaker;
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "process", orphanRemoval = true, 
+	@OneToMany(mappedBy = "process", targetEntity = ProcessGroup.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<ProcessItem> processItems = new HashSet<>();
 	

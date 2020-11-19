@@ -11,6 +11,7 @@ import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.StorageBase;
 import com.avc.mis.beta.entities.processinfo.UsedItemBase;
@@ -29,6 +30,8 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	@EqualsAndHashCode.Exclude
 	private BasicValueEntity<Item> item;
 	@EqualsAndHashCode.Exclude
+	private MeasureUnit measureUnit;
+	@EqualsAndHashCode.Exclude
 	private OffsetDateTime itemProcessDate;
 	@EqualsAndHashCode.Exclude
 	private PoCodeDTO itemPo;
@@ -41,14 +44,15 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 
 	
 	public UsedItemBaseDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits,
-			Integer itemId, String itemValue, OffsetDateTime itemProcessDate,
+			Integer itemId, String itemValue, MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal storageNumberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
 		super(id, version, ordinal);
 		this.numberUsedUnits = numberUsedUnits;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+		this.measureUnit = measureUnit;
 		this.itemProcessDate = itemProcessDate;
 		if(poCodeId != null)
 			this.itemPo = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
@@ -56,7 +60,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 			this.itemPo = null;
 		this.storageId = storageId;
 		this.storage = new StorageBaseDTO(storageId, stoageVersion, storageOrdinal, 
-				unitAmount, measureUnit, storageNumberUnits, containerWeight, warehouseLocationId, warehouseLocationValue, 
+				unitAmount, storageNumberUnits, containerWeight, warehouseLocationId, warehouseLocationValue, 
 				storageRemarks, null);
 	
 	}
@@ -68,6 +72,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		ProcessItem processItem = storage.getProcessItem();
 		if(processItem != null) {
 			this.item = new BasicValueEntity<Item>(processItem.getItem());
+			this.measureUnit = processItem.getMeasureUnit();
 			this.itemProcessDate = processItem.getProcess().getRecordedTime();
 			this.itemPo = new PoCodeDTO((processItem.getProcess()).getPoCode());
 		}

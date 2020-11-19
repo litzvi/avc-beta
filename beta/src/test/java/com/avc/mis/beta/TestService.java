@@ -19,13 +19,16 @@ import org.springframework.stereotype.Service;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -152,7 +155,8 @@ public class TestService {
 		Warehouse storage = getWarehouse();
 		for(int i=0; i<receiptItems.length; i++) {
 			storageForms[i] = new StorageWithSample();
-			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
+			storageForms[i].setUnitAmount(BigDecimal.ONE);
+//			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
 			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
 			storageForms[i].setWarehouseLocation(storage);
 			storageForms[i].setSampleContainerWeight(BigDecimal.valueOf(0.002));
@@ -162,11 +166,12 @@ public class TestService {
 			receiptItems[i] = new ReceiptItem();
 			receiptItems[i].setItem(items.get(randNum.nextInt(items.size())));
 			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), "LBS"));
+			receiptItems[i].setMeasureUnit(MeasureUnit.KG);
 			receiptItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			receiptItems[i].setStorageForms(new Storage[] {storageForms[i]});
 			//add extra bonus
 			added[i] = new ExtraAdded();
-			added[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "KG"));//because database is set to scale 2
+			added[i].setUnitAmount(BigDecimal.ONE);//because database is set to scale 2
 			added[i].setNumberUnits(new BigDecimal(4).setScale(2));
 			receiptItems[i].setExtraAdded(new ExtraAdded[] {added[i]});
 		}
@@ -190,6 +195,7 @@ public class TestService {
 	
 	private ReceiptItem[] getOrderReceiptItems(PoDTO poDTO) {
 		List<OrderItemDTO> orderItems = poDTO.getOrderItems();
+
 		ReceiptItem[] items = new ReceiptItem[orderItems.size()];
 		StorageWithSample[] storageForms = new StorageWithSample[items.length];
 		Warehouse storage = getWarehouse();
@@ -202,8 +208,9 @@ public class TestService {
 			item.setId(oItem.getItem().getId());
 			items[i].setItem(item);
 			items[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), "LBS"));
+			items[i].setMeasureUnit(MeasureUnit.KG);
 			items[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
-			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
+			storageForms[i].setUnitAmount(BigDecimal.ONE);
 			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
 			storageForms[i].setWarehouseLocation(storage);
 			storageForms[i].setSampleContainerWeight(BigDecimal.valueOf(0.002));
@@ -338,8 +345,7 @@ public class TestService {
 			//build item count
 			ProcessItemInventory processItemRow = poInventory.get(i);
 			itemCounts[i] = new ItemCount();
-			Item item = new BulkItem();
-			item.setId(processItemRow.getItem().getId());
+			Item item = getItem(processItemRow.getItem());
 			itemCounts[i].setItem(item);
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
 			StorageInventoryRow randStorage = storagesRows.get(0);
@@ -367,9 +373,9 @@ public class TestService {
 			//build process item
 			ProcessItemInventory processItemRow = poInventory.get(i);
 			processItems[i] = new ProcessItem();
-			Item item = new BulkItem();
-			item.setId(processItemRow.getItem().getId());
+			Item item = getItem(processItemRow.getItem());
 			processItems[i].setItem(item);
+			processItems[i].setMeasureUnit(processItemRow.getMeasureUnit());
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
 			storageForms = new Storage[storagesRows.size()];
 			int j=0;
@@ -385,6 +391,21 @@ public class TestService {
 			processItems[i].setStorageForms(storageForms);
 		}
 		return processItems;
+	}
+	
+	public static Item getItem(ItemDTO itemDTO) {
+		Item item = null;
+		if(itemDTO.getClazz() == BulkItem.class) {
+			item = new BulkItem();
+		}
+		else if(itemDTO.getClazz() == PackedItem.class) {
+			item = new PackedItem();
+		}
+		else {
+			throw new NullPointerException();
+		}
+		item.setId(itemDTO.getId());
+		return item;
 	}
 
 }

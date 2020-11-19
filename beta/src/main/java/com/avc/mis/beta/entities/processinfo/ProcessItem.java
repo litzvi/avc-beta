@@ -12,6 +12,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -55,17 +57,22 @@ import lombok.ToString;
 @Entity
 @Table(name = "PROCESSED_ITEMS")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class ProcessItem extends ProcessInfoEntity {
+public class ProcessItem extends ProcessGroupWithStorages {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "itemId", nullable = false)
 	@NotNull(message = "Item is mandatory")
 	private Item item;
+	
+//	@Enumerated(EnumType.STRING)
+//	@Column(nullable = false)
+//	@NotNull(message = "Measure unit required")
+//	private MeasureUnit measureUnit;
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "processItem", targetEntity=StorageBase.class, orphanRemoval = true, 
+	@OneToMany(mappedBy = "group", targetEntity=UsedItemBase.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@Where(clause = "dtype = 'Storage'")
+//	@Where(clause = "dtype = 'Storage'")
 //	@NotEmpty(message = "Process line has to contain at least one storage line") //made a bug when using merge for persisting ProcessItem
 	private Set<Storage> storageForms;
 	
@@ -74,16 +81,16 @@ public class ProcessItem extends ProcessInfoEntity {
 	@OneToMany(mappedBy = "processItem", fetch = FetchType.LAZY)
 	private Set<StorageBase> allStorages;
 	
-	@Setter(value = AccessLevel.NONE) 
-	@JsonIgnore
-	@Column(nullable = false)
-	private boolean tableView = false;
-	
-	private String groupName;
-	
-	public void setGroupName(String groupName) {
-		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
-	}
+//	@Setter(value = AccessLevel.NONE) 
+//	@JsonIgnore
+//	@Column(nullable = false)
+//	private boolean tableView = false;
+//	
+//	private String groupName;
+//	
+//	public void setGroupName(String groupName) {
+//		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
+//	}
 	
 	/**
 	 * Gets the list of Storage forms as an array (can be ordered).
@@ -170,9 +177,9 @@ public class ProcessItem extends ProcessInfoEntity {
 	 * @param storageTable
 	 */
 	public void setStorage(StorageTableDTO storageTable) {
-		this.tableView = true;
+		setTableView(true);
 		
-		MeasureUnit measureUnit = storageTable.getMeasureUnit();
+//		MeasureUnit measureUnit = storageTable.getMeasureUnit();
 		BigDecimal containerWeight = storageTable.getContainerWeight();
 		Warehouse warehouse = storageTable.getWarehouseLocation();
 		List<BasicStorageDTO> amounts = storageTable.getAmounts();
@@ -181,7 +188,7 @@ public class ProcessItem extends ProcessInfoEntity {
 			BasicStorageDTO amount = amounts.get(i);
 			storageForms[i] = new Storage();
 			storageForms[i].setOrdinal(amount.getOrdinal());
-			storageForms[i].setUnitAmount(new AmountWithUnit(measureUnit));
+//			storageForms[i].setUnitAmount(new AmountWithUnit(measureUnit));
 			storageForms[i].setNumberUnits(amount.getAmount());
 			storageForms[i].setContainerWeight(containerWeight);
 			storageForms[i].setWarehouseLocation(warehouse);

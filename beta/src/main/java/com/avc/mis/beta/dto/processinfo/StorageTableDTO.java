@@ -20,7 +20,6 @@ public class StorageTableDTO {
 	
 	private List<BasicStorageDTO> amounts;
 
-	private MeasureUnit measureUnit;
 	private BigDecimal containerWeight;	
 	
 	private Warehouse warehouseLocation;

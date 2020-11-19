@@ -13,6 +13,7 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.StorageBase;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -26,7 +27,7 @@ import lombok.EqualsAndHashCode;
 public class StorageBaseDTO extends SubjectDataDTO {
 
 //	private String name;
-	private AmountWithUnit unitAmount;
+	private BigDecimal unitAmount;
 	private BigDecimal numberUnits;	
 	private BigDecimal containerWeight;	
 	private BasicValueEntity<Warehouse> warehouseLocation;
@@ -35,12 +36,12 @@ public class StorageBaseDTO extends SubjectDataDTO {
 //	Class<? extends Storage> clazz;
 		
 	public StorageBaseDTO(Integer id, Integer version, Integer ordinal,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String remarks, Class<? extends Storage> clazz) {
 		super(id, version, ordinal);
 //		this.name = name;
-		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
+		this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 		this.containerWeight = containerWeight;
 		if(warehouseLocationId != null && warehouseLocationValue != null)
@@ -83,7 +84,7 @@ public class StorageBaseDTO extends SubjectDataDTO {
 	 * @param description
 	 */
 	public StorageBaseDTO(Integer id, Integer version, Integer ordinal,
-			AmountWithUnit unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz) {
 		super(id, version, ordinal);
 //		this.name = name;
@@ -94,6 +95,18 @@ public class StorageBaseDTO extends SubjectDataDTO {
 		this.warehouseLocation = warehouseLocation;
 		this.remarks = remarks;
 		this.className = clazz.getSimpleName();
+	}
+	
+	@JsonIgnore
+	public BigDecimal getTotal() {
+		if(getUnitAmount() == null || getNumberUnits() == null) {
+			return null;
+		}
+		else {
+			return getUnitAmount()
+				.subtract(Optional.ofNullable(getContainerWeight()).orElse(BigDecimal.ZERO))
+				.multiply(getNumberUnits());
+		}
 	}
 	
 	/**

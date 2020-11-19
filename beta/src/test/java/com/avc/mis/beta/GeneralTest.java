@@ -71,7 +71,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800172;
+	static final Integer PO_CODE = 800175;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -145,19 +145,20 @@ public class GeneralTest {
 		for(int i=0; i < receiptItems.length; i++) {
 			receiptItems[i] = new ReceiptItem();
 			receiptItems[i].setItem(orderItems[i].getItem());
+			receiptItems[i].setMeasureUnit(MeasureUnit.KG);
 			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), "LBS"));
 			receiptItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			receiptItems[i].setOrderItem(orderItems[i]);
 			
 			StorageWithSample[] storageForms = new StorageWithSample[2];
 			storageForms[0] = new StorageWithSample();
-			storageForms[0].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(50), "KG"));
+			storageForms[0].setUnitAmount(BigDecimal.valueOf(50));
 			storageForms[0].setNumberUnits(BigDecimal.valueOf(326));
 			storageForms[0].setWarehouseLocation(storages.get(i));
 //			storageForms[0].setMeasureUnit("KG");
 			
 			storageForms[1] = new StorageWithSample();
-			storageForms[1].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(26), "KG"));
+			storageForms[0].setUnitAmount(BigDecimal.valueOf(26));
 			storageForms[1].setNumberUnits(BigDecimal.valueOf(1));
 			storageForms[1].setWarehouseLocation(storages.get(i));
 //			storageForms[1].setMeasureUnit("KG");
@@ -188,10 +189,11 @@ public class GeneralTest {
 			
 			processItems[i] = new ProcessItem();
 			processItems[i].setItem(orderItems[i].getItem());
+			processItems[i].setMeasureUnit(MeasureUnit.OZ);
 			
 			Storage[] QCStorageForms = new Storage[1];
 			QCStorageForms[0] = new Storage();
-			QCStorageForms[0].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(8), "OZ"));
+			QCStorageForms[0].setUnitAmount(BigDecimal.valueOf(8));
 			QCStorageForms[0].setNumberUnits(BigDecimal.valueOf(2));
 			QCStorageForms[0].setWarehouseLocation(storages.get(i));
 //			QCStorageForms[0].setMeasureUnit("OZ");

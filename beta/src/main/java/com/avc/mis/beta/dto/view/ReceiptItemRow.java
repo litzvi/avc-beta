@@ -53,7 +53,7 @@ public class ReceiptItemRow extends ValueDTO {
 		AmountWithUnit receiptAmt = new AmountWithUnit(receiptAmount, receiptMU);
 		if(orderAmount != null) {
 			this.orderAmount = new AmountWithUnit(orderAmount, orderMU);
-			this.orderBalance = receiptAmt.substract(this.orderAmount);
+			this.orderBalance = receiptAmt.subtract(this.orderAmount);
 		}
 		else {
 			this.orderAmount = null;

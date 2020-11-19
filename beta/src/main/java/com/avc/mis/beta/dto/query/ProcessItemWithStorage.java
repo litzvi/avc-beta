@@ -38,19 +38,20 @@ public class ProcessItemWithStorage extends ValueDTO {
 	 */
 	public ProcessItemWithStorage(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> ItemClazz,
+			MeasureUnit measureUnit, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
 			String groupName, String description, String remarks, boolean tableView) {
 		super(id);
 		this.processItem = new ProcessItemDTO(id, version, ordinal,
-				itemId, itemValue, productionUse, ItemClazz,
+				itemId, itemValue, productionUse, ItemClazz, measureUnit, 
 				groupName, description, remarks, tableView);
 		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.storage = new StorageBaseDTO(storageId, storageVersion, storageOrdinal,
-				unitAmount, measureUnit, numberUnits, containerWeight,
+				unitAmount, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 		
 	}

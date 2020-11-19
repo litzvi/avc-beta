@@ -84,7 +84,7 @@ public class ProcessRow extends ValueDTO {
 	public AmountWithUnit[] getProcessGain() {
 		
 		try {
-			AmountWithUnit processGain = producedAmounts.get().substract(usedAmounts.get());
+			AmountWithUnit processGain = producedAmounts.get().subtract(usedAmounts.get());
 			return new AmountWithUnit[] {
 					processGain.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),                        
 					processGain.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
@@ -101,7 +101,7 @@ public class ProcessRow extends ValueDTO {
 	public AmountWithUnit[] getUsedCountDifference() {
 		
 		try {
-			AmountWithUnit countDifference = countAmounts.get().substract(usedAmounts.get());
+			AmountWithUnit countDifference = countAmounts.get().subtract(usedAmounts.get());
 			return new AmountWithUnit[] {
 					countDifference.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),                        
 					countDifference.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
@@ -115,7 +115,7 @@ public class ProcessRow extends ValueDTO {
 	public AmountWithUnit[] getProducedCountDifference() {
 		
 		try {
-			AmountWithUnit countDifference = countAmounts.get().substract(producedAmounts.get());
+			AmountWithUnit countDifference = countAmounts.get().subtract(producedAmounts.get());
 			return new AmountWithUnit[] {
 					countDifference.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),                        
 					countDifference.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)

@@ -24,7 +24,7 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 	@EqualsAndHashCode.Exclude
 	private Integer storageOrdinal;	
 	@EqualsAndHashCode.Exclude
-	private AmountWithUnit unitAmount;
+	private BigDecimal unitAmount;
 	@EqualsAndHashCode.Exclude
 	private BasicValueEntity<Warehouse> warehouseLocation;
 	@EqualsAndHashCode.Exclude
@@ -36,21 +36,21 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 	
 	
 	public UsedItemDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits,
-			Integer itemId, String itemValue, OffsetDateTime itemProcessDate,
+			Integer itemId, String itemValue, MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal storageNumberUnits, 
+			BigDecimal unitAmount, BigDecimal storageNumberUnits, 
 			BigDecimal otherUsedUnits, BigDecimal containerWeight, 
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
 		super(id, version, ordinal, numberUsedUnits,
-				itemId, itemValue, itemProcessDate,
+				itemId, itemValue, measureUnit, itemProcessDate,
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				storageId, stoageVersion, storageOrdinal,
-				unitAmount, measureUnit, storageNumberUnits, containerWeight,
+				unitAmount, storageNumberUnits, containerWeight,
 				warehouseLocationId,  warehouseLocationValue, storageRemarks);
 
 		this.storageOrdinal = storageOrdinal;
-		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
+		this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else

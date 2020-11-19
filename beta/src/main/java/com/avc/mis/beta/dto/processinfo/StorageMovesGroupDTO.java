@@ -32,6 +32,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class StorageMovesGroupDTO extends SubjectDataDTO {
 
+	private MeasureUnit measureUnit;
 	private String groupName;
 
 	@JsonIgnore
@@ -40,8 +41,9 @@ public class StorageMovesGroupDTO extends SubjectDataDTO {
 
 
 	public StorageMovesGroupDTO(Integer id, Integer version, Integer ordinal,
-			String groupName, boolean tableView) {
+			MeasureUnit measureUnit, String groupName, boolean tableView) {
 		super(id, version, ordinal);
+		this.measureUnit = measureUnit;
 		this.groupName = groupName;
 		this.tableView = tableView;
 	}	
@@ -49,6 +51,7 @@ public class StorageMovesGroupDTO extends SubjectDataDTO {
 	public StorageMovesGroupDTO(StorageMovesGroup group) {
 		super(group.getId(), group.getVersion(), group.getOrdinal());
 		this.groupName = group.getGroupName();
+		this.measureUnit = group.getMeasureUnit();
 		this.tableView = group.isTableView();
 		this.storageMoves = (Arrays.stream(group.getStorageMoves())
 				.map(u->{return new StorageMoveDTO(u);})
@@ -67,12 +70,12 @@ public class StorageMovesGroupDTO extends SubjectDataDTO {
 			MovedItemTableDTO movedItemTable = new MovedItemTableDTO();
 			this.storageMoves.stream().findAny().ifPresent(s -> {
 				movedItemTable.setItem(s.getItem());
+				movedItemTable.setMeasureUnit(s.getMeasureUnit());
 				movedItemTable.setItemPo(s.getItemPo());
 				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
 				if(warehouse != null)
 					movedItemTable.setNewWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 				StorageBaseDTO storage = s.getStorage();
-				movedItemTable.setMeasureUnit(storage.getUnitAmount().getMeasureUnit());
 				movedItemTable.setContainerWeight(storage.getContainerWeight());
 				warehouse = storage.getWarehouseLocation();
 				if(warehouse != null)
@@ -92,11 +95,17 @@ public class StorageMovesGroupDTO extends SubjectDataDTO {
 	}
 	
 	public AmountWithUnit[] getTotalAmount() {
-		AmountWithUnit totalAmount = storageMoves.stream()
-				.map(ui -> ui.getStorage().getUnitAmount()
-						.substract(Optional.ofNullable(ui.getStorage().getContainerWeight()).orElse(BigDecimal.ZERO))
-						.multiply(ui.getNumberUsedUnits()))
-				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+		BigDecimal total = this.storageMoves.stream()
+				.map(ui -> ui.getTotal())
+				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
+		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
+		
+//		BigDecimal total = this.storageMoves.stream()
+//				.map(ui -> ui.getStorage().getUnitAmount()
+//						.substract(Optional.ofNullable(ui.getStorage().getContainerWeight()).orElse(BigDecimal.ZERO))
+//						.multiply(ui.getNumberUsedUnits()))
+//				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+//		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
 		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
 				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 	}

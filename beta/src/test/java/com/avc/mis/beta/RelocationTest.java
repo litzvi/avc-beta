@@ -117,6 +117,7 @@ public class RelocationTest {
 				j++;
 			}
 			storageMovesGroups[i] = new StorageMovesGroup();
+			storageMovesGroups[i].setMeasureUnit(processItemRow.getMeasureUnit());
 			storageMovesGroups[i].setStorageMoves(storageMoves);
 			i++;
 

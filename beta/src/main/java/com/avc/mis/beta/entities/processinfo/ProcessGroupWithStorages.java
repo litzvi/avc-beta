@@ -3,8 +3,6 @@
  */
 package com.avc.mis.beta.entities.processinfo;
 
-import java.util.Optional;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,15 +12,11 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * @author zvi
@@ -32,19 +26,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "PROCESS_GROUPS")
+@Table(name = "PROCESS_GROUPS_W_STORAGES")
 @Inheritance(strategy=InheritanceType.JOINED)
-public abstract class ProcessGroup extends ProcessInfoEntity {
+public abstract class ProcessGroupWithStorages extends ProcessGroup {
 
-	@Setter(value = AccessLevel.PROTECTED) 
-	@JsonIgnore
+	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private boolean tableView = false;
-	
-	private String groupName;
+	@NotNull(message = "Measure unit required")
+	private MeasureUnit measureUnit;
 
-	public void setGroupName(String groupName) {
-		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
-	}
-	
 }

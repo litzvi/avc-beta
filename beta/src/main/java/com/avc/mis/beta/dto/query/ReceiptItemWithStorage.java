@@ -37,9 +37,10 @@ public class ReceiptItemWithStorage {
 	
 	public ReceiptItemWithStorage(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ProductionUse productionUse, 	Class<? extends Item> ItemClazz,
+			MeasureUnit measureUnit,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
 			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, BigDecimal sampleContainerWeight, 
@@ -48,7 +49,7 @@ public class ReceiptItemWithStorage {
 			BigDecimal receivedUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
 		this.receiptItem = new ReceiptItemDTO(id, version, ordinal,
-				itemId, itemValue, productionUse, ItemClazz,
+				itemId, itemValue, productionUse, ItemClazz, measureUnit,
 				/* poCodeId, contractTypeCode, supplierName, */
 				groupName, description, remarks, tableView,
 				receivedUnits, orderMU, unitPrice, currency,
@@ -61,7 +62,7 @@ public class ReceiptItemWithStorage {
 		}
 		else {
 			this.storage = new StorageWithSampleDTO(storageId, storageVersion, storageOrdinal, 
-					unitAmount, measureUnit, numberUnits, containerWeight,
+					unitAmount, numberUnits, containerWeight,
 					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
 					sampleContainerWeights, sampleContainerWeight, sampleWeights, numberOfSamples, avgTestedWeight);
 		}		

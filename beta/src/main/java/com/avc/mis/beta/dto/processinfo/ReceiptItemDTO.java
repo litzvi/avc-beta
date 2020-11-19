@@ -44,11 +44,12 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 	
 	public ReceiptItemDTO(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
+			MeasureUnit measureUnit,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			String groupName, String description, String remarks, boolean tableView,
 			BigDecimal orderUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
-			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit measureUnit) {
-		super(id, version, ordinal, itemId, itemValue, productionUse, clazz,
+			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
+		super(id, version, ordinal, itemId, itemValue, productionUse, clazz, measureUnit,
 				/* poCodeId, contractTypeCode, supplierName, */groupName, description, remarks, tableView);
 		if(orderUnits != null) {
 			this.receivedOrderUnits = new AmountWithUnit(orderUnits.setScale(MeasureUnit.SCALE), orderMU);
@@ -59,7 +60,7 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 		if(orderItemId != null)
 			this.orderItem = new DataObject<OrderItem>(orderItemId, orderItemVersion);
 		if(extraRequested != null) {
-			this.extraRequested = new AmountWithUnit(extraRequested.setScale(MeasureUnit.SCALE), measureUnit);
+			this.extraRequested = new AmountWithUnit(extraRequested.setScale(MeasureUnit.SCALE), extraMU);
 		}
 	}
 
@@ -97,11 +98,11 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 
 
 	public ReceiptItemDTO(Integer id, Integer version, Integer ordinal,
-			ItemDTO item, /* PoCodeDTO itemPo, */ 
+			ItemDTO item, /* PoCodeDTO itemPo, */ MeasureUnit measureUnit,
 			String groupName, String description, String remarks, 
 			AmountWithUnit receivedOrderUnits, AmountWithCurrency unitPrice,
 			DataObject<OrderItem> orderItem, AmountWithUnit extraRequested) {
-		super(id, version, ordinal, item, /* itemPo, */ groupName, description, remarks);
+		super(id, version, ordinal, item, /* itemPo, */ measureUnit, groupName, description, remarks);
 		this.receivedOrderUnits = receivedOrderUnits;
 		this.unitPrice = unitPrice;
 		this.orderItem = orderItem;
@@ -111,10 +112,10 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 //		this.measureUnit = measureUnit;
 	}
 	
-	public Optional<AmountWithUnit> getTotalDifferance() {
+	public Optional<BigDecimal> getTotalDifferance() {
 		return getStorageForms().stream()
 				.map(s -> ((StorageWithSampleDTO)s).getWeighedDifferance())
 				.filter(d -> d != null)
-				.reduce(AmountWithUnit::add);
+				.reduce(BigDecimal::add);
 	}
 }

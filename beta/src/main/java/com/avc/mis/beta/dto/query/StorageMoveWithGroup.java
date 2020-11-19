@@ -27,25 +27,25 @@ public class StorageMoveWithGroup extends ValueDTO {
 	StorageMovesGroupDTO storageMovesGroup;
 	StorageMoveDTO storageMove;
 	
-	public StorageMoveWithGroup(@NonNull Integer id, Integer version,  Integer ordinal, String groupName, boolean tableView,
-			
+	public StorageMoveWithGroup(@NonNull Integer id, Integer version,  Integer ordinal, 
+			MeasureUnit measureUnit, String groupName, boolean tableView,
 			Integer moveId, Integer moveVersion, Integer moveOrdinal, BigDecimal numberUsedUnits, 
-			Integer itemId, String itemValue, OffsetDateTime itemProcessDate,
+			Integer itemId, String itemValue, MeasureUnit movedMeasureUnit, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, BigDecimal storageUnitAmount,
-			MeasureUnit storageMeasureUnit, BigDecimal storageNumberUnits, BigDecimal storageContainerWeight,
+			BigDecimal storageNumberUnits, BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
 		super(id);
-		this.storageMovesGroup = new StorageMovesGroupDTO(id, version, ordinal, groupName, tableView);
+		this.storageMovesGroup = new StorageMovesGroupDTO(id, version, ordinal, measureUnit, groupName, tableView);
 		this.storageMove = new StorageMoveDTO(moveId, moveVersion, moveOrdinal, numberUsedUnits, 
-				itemId, itemValue, itemProcessDate,
+				itemId, itemValue, movedMeasureUnit, itemProcessDate,
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				storageId, stoageVersion, storageOrdinal, storageUnitAmount,
-				storageMeasureUnit, storageNumberUnits, storageContainerWeight,
+				storageNumberUnits, storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks,
-				unitAmount, measureUnit, numberUnits, containerWeight,
+				unitAmount, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, clazz);
 		}
 	

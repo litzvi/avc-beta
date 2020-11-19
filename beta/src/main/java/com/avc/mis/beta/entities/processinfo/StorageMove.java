@@ -66,6 +66,7 @@ public class StorageMove extends StorageBase {
 	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof StorageMovesGroup) {
+//			super.setReference(referenced);
 			this.setGroup((StorageMovesGroup)referenced);
 		}
 		else {

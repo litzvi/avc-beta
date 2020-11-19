@@ -87,9 +87,10 @@ public class OrderItemDTO extends SubjectDataDTO {
 		if(orderItem.getReceiptItems() != null) {
 			AmountWithUnit sum = new AmountWithUnit(BigDecimal.ZERO, this.numberUnits.getMeasureUnit());
 			for(ReceiptItem i: orderItem.getReceiptItems()) {
+				MeasureUnit receiptMU = i.getMeasureUnit();
 				if(i.getProcess().getLifeCycle().getProcessStatus() != ProcessStatus.CANCELLED) {
 					for(Storage s: i.getStorageForms()) {
-						sum.add(s.getUnitAmount().multiply(s.getNumberUnits()));
+						sum.add(s.getUnitAmount().multiply(s.getNumberUnits()), receiptMU);
 					}
 				}
 			}

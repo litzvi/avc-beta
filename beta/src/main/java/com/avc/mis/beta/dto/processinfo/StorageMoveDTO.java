@@ -13,6 +13,7 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.Storage;
 import com.avc.mis.beta.entities.processinfo.StorageMove;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,7 +26,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class StorageMoveDTO extends UsedItemBaseDTO {
 
-	private AmountWithUnit unitAmount;
+	private BigDecimal unitAmount;
 	private BigDecimal numberUnits;	
 	private BigDecimal containerWeight;	
 	private BasicValueEntity<Warehouse> warehouseLocation;
@@ -33,18 +34,19 @@ public class StorageMoveDTO extends UsedItemBaseDTO {
 	private String className; //to differentiate between storage to ExtraAdded nad perhaps storageMoves
 	
 	public StorageMoveDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits, 
-			Integer itemId, String itemValue, OffsetDateTime itemProcessDate,
+			Integer itemId, String itemValue, MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, BigDecimal storageUnitAmount,
-			MeasureUnit storageMeasureUnit, BigDecimal storageNumberUnits, BigDecimal storageContainerWeight,
+			/* MeasureUnit storageMeasureUnit, */BigDecimal storageNumberUnits, BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount,	/* MeasureUnit measureUnit, */ BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
-		super(id, version, ordinal, numberUsedUnits, itemId, itemValue, itemProcessDate,
+		super(id, version, ordinal, numberUsedUnits, itemId, itemValue, measureUnit, itemProcessDate,
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
-				storageId, stoageVersion, storageOrdinal, storageUnitAmount, storageMeasureUnit, storageNumberUnits, storageContainerWeight,
+				storageId, stoageVersion, storageOrdinal, storageUnitAmount,
+				/* storageMeasureUnit, */storageNumberUnits, storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks);
-		this.unitAmount = new AmountWithUnit(unitAmount.setScale(MeasureUnit.SCALE), measureUnit);
+		this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 		this.containerWeight = containerWeight;
 		if(warehouseLocationId != null && warehouseLocationValue != null)
@@ -70,6 +72,18 @@ public class StorageMoveDTO extends UsedItemBaseDTO {
 			this.warehouseLocation = null;
 		}
 		this.className = storage.getClass().getSimpleName();
+	}
+	
+	@JsonIgnore
+	public BigDecimal getTotal() {
+		if(getUnitAmount() == null || getNumberUnits() == null) {
+			return null;
+		}
+		else {
+			return getUnitAmount()
+				.subtract(Optional.ofNullable(getContainerWeight()).orElse(BigDecimal.ZERO))
+				.multiply(getNumberUnits());
+		}
 	}
 
 }
