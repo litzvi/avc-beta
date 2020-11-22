@@ -5,9 +5,8 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.processinfo.UsedItem;
+import com.avc.mis.beta.entities.process.inventory.UsedItem;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;

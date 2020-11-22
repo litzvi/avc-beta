@@ -38,10 +38,9 @@ import lombok.EqualsAndHashCode;
 /**
  * 
  * Entity that holds core information recoded for every process:
- * PO code, 
  * type of process (Cashew order, receive order, roasting etc.),
- * production line (if have multiple), user recorded time, duration,
- * number of workers and process life cycle.
+ * production line (needed for process types with multiple lines), 
+ * user recorded time, start time, end time, duration, number of workers and process life cycle.
  * 
  * @author zvi
  *
@@ -82,20 +81,10 @@ public abstract class GeneralProcess extends AuditedEntity {
 		
 	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Set<UserMessage> messages = new HashSet<>();
-	
-	/**
-	 * Used by Lombok so new/transient entities with null id won't be equal.
-	 * @param o
-	 * @return false if both this object's and given object's id is null 
-	 * or given object is not of the same class, otherwise returns true.
-	 */
-//	@JsonIgnore
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
 		
 	/**
-	 * Creates the life cycle information
+	 * Creates and sets the initial life cycle information to FINAL
+	 * Should be overridden for process classes who have a different initial state.
 	 */
 	@PrePersist
 	public void prePersist() {
@@ -104,9 +93,4 @@ public abstract class GeneralProcess extends AuditedEntity {
 		lifeCycle.setReference(this);
 	}
 
-	/**
-	 * @return a description for objects of this class.
-	 */
-	//TODO: may be static if no specific information added
-	public abstract String getProcessTypeDescription() ;
 }

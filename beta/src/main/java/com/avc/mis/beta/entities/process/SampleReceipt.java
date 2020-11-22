@@ -18,7 +18,6 @@ import javax.validation.constraints.NotEmpty;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.SampleItem;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -37,6 +36,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "SAMPLE_RECEIPTS")
 @PrimaryKeyJoinColumn(name = "processId")
+@Deprecated
 public class SampleReceipt extends PoProcess {
 	
 
@@ -67,14 +67,8 @@ public class SampleReceipt extends PoProcess {
 		this.sampleItems = Insertable.setReferences(sampleItems, (t) -> {t.setReference(this);	return t;});
 	}
 	
-	@JsonIgnore
-	@Override
-	protected boolean canEqual(Object o) {
-		return super.canEqual(o);
-	}
-	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Sample Cashew Receipt";
-	}
+//	@Override
+//	public String getProcessTypeDescription() {
+//		return "Sample Cashew Receipt";
+//	}
 }

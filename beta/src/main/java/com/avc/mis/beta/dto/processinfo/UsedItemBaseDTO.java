@@ -11,10 +11,9 @@ import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.inventory.StorageBase;
+import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.StorageBase;
-import com.avc.mis.beta.entities.processinfo.UsedItemBase;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

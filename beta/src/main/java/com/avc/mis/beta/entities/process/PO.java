@@ -73,9 +73,4 @@ public class PO extends PoProcess {
 		this.orderItems = Insertable.setReferences(orderItems, (t) -> {t.setReference(this);	return t;});
 	}
 	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Purchase Order";
-	}
-	
 }

@@ -27,6 +27,8 @@ import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 import com.avc.mis.beta.validation.groups.PositiveOrZeroAmount;
 
@@ -47,9 +49,13 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "RECEIPT_ITEMS")
-//@PrimaryKeyJoinColumn(name = "processItemId")
+@PrimaryKeyJoinColumn(name = "groupId")
 public class ReceiptItem extends ProcessItem {
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "orderItemId")
+	private OrderItem orderItem;
+
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
                            column=@Column(name="receivedOrderAmount", 
@@ -71,15 +77,6 @@ public class ReceiptItem extends ProcessItem {
 	@ConvertGroup(from = Default.class, to = PositiveOrZeroAmount.class)
 	private AmountWithCurrency unitPrice;
 	
-	
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@Transient
-	private Set<ExtraAdded> extraAdded = new HashSet<>();
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "orderItemId")
-	private OrderItem orderItem;
-	
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
                            column=@Column(name="extraRequested", precision = 19, scale = MeasureUnit.SCALE)),
@@ -91,6 +88,10 @@ public class ReceiptItem extends ProcessItem {
 	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
 	private AmountWithUnit extraRequested;
 	
+	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@Transient
+	private Set<ExtraAdded> extraAdded = new HashSet<>();
+		
 	/**
 	 * Setter for adding Extra Added for purchase receipts, 
 	 * receives an array (which can be ordered, for later use to add an order to the items).
@@ -104,7 +105,8 @@ public class ReceiptItem extends ProcessItem {
 		getStorageFormsField().addAll(this.extraAdded);
 	}
 		
-	public void setStorageForms(StorageWithSample[] storageForms) { 		
+	@Override
+	public void setStorageForms(Storage[] storageForms) { 		
 		super.setStorageForms(storageForms);
 		getStorageFormsField().addAll(this.extraAdded);
 	}

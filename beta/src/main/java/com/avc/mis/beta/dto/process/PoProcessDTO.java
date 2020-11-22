@@ -35,7 +35,6 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 	private PoCodeDTO poCode;
 	
 	private List<ItemCountDTO> itemCounts;
-//	private BigDecimal accessWeight;
 
 		
 	public PoProcessDTO(Integer id, Integer version, Instant createdDate, String staffRecording, 

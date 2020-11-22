@@ -42,7 +42,6 @@ public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProces
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", targetEntity = ProcessGroup.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-//	@NotEmpty(message = "Has to containe at least one destination-storage-item (process item)")
 	private Set<ProcessItem> processItems = new HashSet<>();
 
 	/**

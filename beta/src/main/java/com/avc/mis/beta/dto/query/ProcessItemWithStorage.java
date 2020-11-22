@@ -12,7 +12,7 @@ import com.avc.mis.beta.dto.processinfo.StorageBaseDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

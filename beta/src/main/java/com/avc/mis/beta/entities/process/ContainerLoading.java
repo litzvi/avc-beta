@@ -45,12 +45,6 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "processId")
 public class ContainerLoading extends TransactionProcess<ProcessItem> {
 	
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "process", orphanRemoval = true, 
-		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-//	@NotEmpty(message = "Loaded item line has to contain at least one storage line")
-	private Set<LoadedItem> loadedItems = new HashSet<LoadedItem>();
-	
 	@Valid
 	@NotNull(message = "Shipment code is mandatory")
 	@OneToOne(fetch = FetchType.LAZY)
@@ -66,7 +60,14 @@ public class ContainerLoading extends TransactionProcess<ProcessItem> {
 	@Embedded
 	@NotNull(message = "Shipping details is mandatory")
 	private ShipingDetails shipingDetails;
-		
+
+	
+	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@OneToMany(mappedBy = "process", orphanRemoval = true, 
+		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+//	@NotEmpty(message = "Loaded item line has to contain at least one storage line")
+	private Set<LoadedItem> loadedItems = new HashSet<LoadedItem>();
+
 	/**
 	 * @param loadedItems array of loaded items in order
 	 */
@@ -83,9 +84,5 @@ public class ContainerLoading extends TransactionProcess<ProcessItem> {
 		Arrays.sort(loadedItems, Ordinal.ordinalComparator());
 		return loadedItems;
 	}
-	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Container Loading";
-	}
+
 }

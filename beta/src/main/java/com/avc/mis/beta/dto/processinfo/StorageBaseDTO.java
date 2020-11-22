@@ -8,10 +8,9 @@ import java.util.Optional;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.processinfo.Storage;
-import com.avc.mis.beta.entities.processinfo.StorageBase;
+import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -39,6 +39,7 @@ public abstract class GeneralProcessDTO extends ProcessDTO {
 	private String userRecording;
 	@EqualsAndHashCode.Exclude //if poCode is the same than it's enough, because might be null when testing.
 	private ProcessName processName;
+	
 	private ProductionLine productionLine;
 	private OffsetDateTime recordedTime;
 

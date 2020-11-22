@@ -1,14 +1,17 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.processinfo;
+package com.avc.mis.beta.entities.process.inventory;
 
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+
+import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,8 +24,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "STORAGE_MOVES")
-//@Inheritance(strategy=InheritanceType.JOINED)
-//@PrimaryKeyJoinColumn(name = "storageBaseId")
+@PrimaryKeyJoinColumn(name = "storageBaseId")
 public class StorageMove extends StorageBase {
 	
 	public StorageMove() {
@@ -31,21 +33,7 @@ public class StorageMove extends StorageBase {
 		setDtype("StorageMove");
 	}
 	
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "groupId")
-//	@NotNull(message = "Storage move have to belong to a group categery")
-//	private StorageMovesGroup group;
-	
-//	@ToString.Exclude
-//	@NotNull(message = "System error: Process not referenced", groups = OnPersist.class)
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "processId", updatable = false)
-//	private StorageRelocation process;
-	
-	public void setGroup(StorageMovesGroup group) {
-		super.setGroup(group);
-	}
-	
+	@Override
 	public StorageMovesGroup getGroup() {
 		return (StorageMovesGroup) super.getGroup();
 	}
@@ -66,11 +54,10 @@ public class StorageMove extends StorageBase {
 	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof StorageMovesGroup) {
-//			super.setReference(referenced);
-			this.setGroup((StorageMovesGroup)referenced);
+			super.setReference(referenced);
 		}
 		else {
-			throw new ClassCastException("Referenced object isn't a used item group");
+			throw new ClassCastException("Referenced object isn't a storage move group");
 		}		
 	}
 

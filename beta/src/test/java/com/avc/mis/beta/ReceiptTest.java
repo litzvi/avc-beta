@@ -20,7 +20,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.processinfo.ExtraAdded;
+import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.Receipts;

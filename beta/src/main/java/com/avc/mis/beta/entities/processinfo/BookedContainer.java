@@ -37,6 +37,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "BOOKED_CONTAINERS")
+@Deprecated
 public class BookedContainer extends RankedAuditedEntity {
 	
 	@ToString.Exclude

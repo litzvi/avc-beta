@@ -36,15 +36,14 @@ public class ProductionProcess extends TransactionProcess<ProcessItem> {
 		super.setProcessItems(processItems);
 	}
 	
+	/**
+	 * Gets the list of Process Items as an array (can be ordered).
+	 * @return the processItems
+	 */
 	@NotEmpty(message = "Has to containe at least one destination-storage-item (process item)")
 	@Override
 	public ProcessItem[] getProcessItems() {
 		return super.getProcessItems();
-	}
-			
-	@Override
-	public String getProcessTypeDescription() {
-		return "Production";
 	}
 
 }

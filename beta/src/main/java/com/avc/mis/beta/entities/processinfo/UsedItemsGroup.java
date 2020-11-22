@@ -19,6 +19,9 @@ import com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemTableDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.entities.process.inventory.UsedItem;
+import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -47,17 +50,6 @@ public class UsedItemsGroup extends ProcessGroup {
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 //	@NotEmpty(message = "Has to containe at least one used storage item") //probably because persists empty when doing merge on a new one
 	private Set<UsedItem> usedItems = new HashSet<>();
-		
-//	@Setter(value = AccessLevel.PRIVATE) 
-//	@JsonIgnore
-//	@Column(nullable = false)
-//	private boolean tableView = false;
-//	
-//	private String groupName;
-//
-//	public void setGroupName(String groupName) {
-//		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
-//	}
 	
 	/**
 	 * Gets the list of used items as an array (can be ordered).

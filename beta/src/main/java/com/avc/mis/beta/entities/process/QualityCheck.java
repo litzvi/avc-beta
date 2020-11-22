@@ -18,9 +18,7 @@ import javax.validation.constraints.NotEmpty;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.CashewItemQuality;
-import com.avc.mis.beta.entities.processinfo.ProcessGroup;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -40,7 +38,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "QC_TESTS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class QualityCheck extends PoProcess {
+public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 	/**
 	 * Decimal scale for QC results
 	 */
@@ -52,37 +50,19 @@ public class QualityCheck extends PoProcess {
 	private String sampleTaker;
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "process", targetEntity = ProcessGroup.class, orphanRemoval = true, 
-		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	private Set<ProcessItem> processItems = new HashSet<>();
-	
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@NotEmpty(message = "Quality check has to contain at least one testsed item")
 	private Set<CashewItemQuality> testedItems = new HashSet<>();
 	
 	/**
-	 * Gets the list of Items of QC process items as an array (can be ordered).
-	 * @return the processItems
-	 */
-	public ProcessItem[] getProcessItems() {
-		if(this.processItems == null)
-			return null;
-		ProcessItem[] processItems = this.processItems.toArray(new ProcessItem[this.processItems.size()]);
-		Arrays.sort(processItems, Ordinal.ordinalComparator());
-		return processItems;
-	}
-
-	/**
-	 * Setter for adding items stored after using for QC
+	 * Setter for adding items that are processed, 
 	 * receives an array (which can be ordered, for later use to add an order to the items).
-	 * Filters the null items and set needed references to satisfy needed foreign keys of database.
+	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param processItems the processItems to set
 	 */
 	public void setProcessItems(ProcessItem[] processItems) {
-		Ordinal.setOrdinals(processItems);
-		this.processItems = Insertable.setReferences(processItems, (t) -> {t.setReference(this);	return t;});
+		super.setProcessItems(processItems);
 	}
 
 	/**
@@ -105,23 +85,5 @@ public class QualityCheck extends PoProcess {
 		Ordinal.setOrdinals(testedItems);
 		this.testedItems = Insertable.setReferences(testedItems, (t) -> {t.setReference(this);	return t;});
 	}
-	
-	/**
-	 * Used by Lombok so new/transient entities with null id won't be equal.
-	 * @param o
-	 * @return false if both this object's and given object's id is null 
-	 * or given object is not of the same class, otherwise returns true.
-	 */
-	@JsonIgnore
-	@Override
-	protected boolean canEqual(Object o) {
-		return super.canEqual(o);
-	}
-	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Quality Check";
-	}
-	
 
 }

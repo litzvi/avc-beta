@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.processinfo;
+package com.avc.mis.beta.entities.process.inventory;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -26,6 +26,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "USED_ITEM_COUNTS")
+@Deprecated
 public class UsedItemWithCount extends UsedItem {
 
 	@Column(precision = 19, scale = MeasureUnit.SCALE)

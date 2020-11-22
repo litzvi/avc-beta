@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.processinfo;
+package com.avc.mis.beta.entities.process.inventory;
 
 import java.math.BigDecimal;
 
@@ -13,13 +13,18 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.RankedAuditedEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.processinfo.ProcessGroup;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * @author zvi
@@ -40,9 +45,10 @@ public abstract class UsedItemBase extends RankedAuditedEntity {
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
 	private BigDecimal numberUsedUnits;	
 	
+	@Setter(value = AccessLevel.PROTECTED) @Getter(value = AccessLevel.PROTECTED)
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "groupId")
-//	@NotNull(message = "Used items have to belong to a group categery") //storage does not have a group (maybe processItem)
+	@JoinColumn(name = "groupId", nullable = false)
+	@NotNull(message = "Used items have to belong to a group categery") //storage does not have a group (maybe processItem)
 	private ProcessGroup group;
 	
 	@Override

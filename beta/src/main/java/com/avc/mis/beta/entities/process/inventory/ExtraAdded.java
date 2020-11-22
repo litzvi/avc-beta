@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.processinfo;
+package com.avc.mis.beta.entities.process.inventory;
 
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -23,7 +23,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "EXTRA_ADDED")
-@PrimaryKeyJoinColumn(name = "storageFormId")
+@PrimaryKeyJoinColumn(name = "storageId")
 public class ExtraAdded extends StorageWithSample {
 
 }

@@ -21,7 +21,6 @@ import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ValueEntityObject;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemCategory;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.values.Bank;

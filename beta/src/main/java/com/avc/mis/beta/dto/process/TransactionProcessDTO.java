@@ -20,10 +20,13 @@ import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -34,9 +37,9 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public abstract class TransactionProcessDTO extends PoProcessDTO {
+public abstract class TransactionProcessDTO<T extends ProcessItemDTO> extends ProcessWithProductDTO<T> {
 	
-	private List<ProcessItemDTO> processItems;
+	@Setter(value = AccessLevel.PROTECTED) @Getter(value = AccessLevel.PROTECTED)
 	private List<UsedItemsGroupDTO> usedItemGroups;
 	
 	public TransactionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, Integer poCodeId,
@@ -54,9 +57,7 @@ public abstract class TransactionProcessDTO extends PoProcessDTO {
 	
 	public TransactionProcessDTO(@NonNull TransactionProcess<?> transaction) {
 		super(transaction);
-		this.processItems = Arrays.stream(transaction.getProcessItems())
-				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList());
-		this.usedItemGroups = Arrays.stream(transaction.getUsedItemGroups())
-				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList());
 	}
+	
+	
 }

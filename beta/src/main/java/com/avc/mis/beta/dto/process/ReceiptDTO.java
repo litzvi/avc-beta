@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.query.ReceiptItemWithStorage;
 import com.avc.mis.beta.entities.Ordinal;
@@ -40,9 +41,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class ReceiptDTO extends PoProcessDTO {
-
-	private List<ReceiptItemDTO> receiptItems;
+public class ReceiptDTO extends ProcessWithProductDTO<ReceiptItemDTO> {
 	
 	public ReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
@@ -59,20 +58,29 @@ public class ReceiptDTO extends PoProcessDTO {
 
 	public ReceiptDTO(@NonNull Receipt receipt) {
 		super(receipt);
-		this.receiptItems = Arrays.stream(receipt.getReceiptItems())
-				.map(i->{return new ReceiptItemDTO((ReceiptItem) i);}).collect(Collectors.toList());
+		setReceiptItems(Arrays.stream(receipt.getReceiptItems())
+				.map(i->{return new ReceiptItemDTO((ReceiptItem) i);}).collect(Collectors.toList()));
 
 	}
+	
+	public List<ReceiptItemDTO> getReceiptItems() {
+		return super.getProcessItems();
+	}
+	
+	public void setReceiptItems(List<ReceiptItemDTO> receiptItems) {
+		super.setProcessItems(receiptItems);
+	}
+
 	
 	/**
 	 * Used for setting receiptItems from a flat form produced by a join of receipt items and it's storage info, 
 	 * to receiptItems that each have a Set of storages.
-	 * @param receiptItems collection of ReceiptItemWithStorage that contain all receipt items with storage detail.
+	 * @param receiptItemsWithStorage collection of ReceiptItemWithStorage that contain all receipt items with storage detail.
 	 */
-	public void setReceiptItems(List<ReceiptItemWithStorage> receiptItems) {
-		Map<Integer, List<ReceiptItemWithStorage>> map = receiptItems.stream()
+	public void setReceiptItemsWithStorage(List<ReceiptItemWithStorage> receiptItemsWithStorage) {
+		Map<Integer, List<ReceiptItemWithStorage>> map = receiptItemsWithStorage.stream()
 			.collect(Collectors.groupingBy(ReceiptItemWithStorage::getId, LinkedHashMap::new, Collectors.toList()));
-		this.receiptItems = new ArrayList<ReceiptItemDTO>();
+		List<ReceiptItemDTO> receiptItems = new ArrayList<ReceiptItemDTO>();
 		for(List<ReceiptItemWithStorage> list: map.values()) {
 			ReceiptItemDTO receiptItem = list.get(0).getReceiptItem();
 			//group list to storage/extraAdded and set accordingly
@@ -80,8 +88,9 @@ public class ReceiptDTO extends PoProcessDTO {
 					.map(i -> i.getStorage())
 					.sorted(Ordinal.ordinalComparator())
 					.collect(Collectors.toList()));
-			this.receiptItems.add(receiptItem);
+			receiptItems.add(receiptItem);
 		}
+		setReceiptItems(receiptItems);
 //		this.receiptItems.sort(Ordinal.ordinalComparator());
 	}	
 

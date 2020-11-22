@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.processinfo;
+package com.avc.mis.beta.entities.process.inventory;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -38,7 +38,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "STORAGE_SAMPLE")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@PrimaryKeyJoinColumn(name = "storageFormId")
+@PrimaryKeyJoinColumn(name = "storageId")
 public class StorageWithSample extends Storage {
 
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
@@ -58,9 +58,6 @@ public class StorageWithSample extends Storage {
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
 	@Positive(message = "Average tested weight has to be positive")
 	private BigDecimal avgTestedWeight;
-	
-//	@Lob
-//	private String sampleDetails;
 	
 
 }

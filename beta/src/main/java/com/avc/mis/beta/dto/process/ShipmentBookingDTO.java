@@ -32,6 +32,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
+@Deprecated
 public class ShipmentBookingDTO extends GeneralProcessDTO {
 
 	private List<BookedContainerDTO> bookedContainers; 

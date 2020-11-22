@@ -33,6 +33,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "ITEM_WEIGHTS")
+@Deprecated
 public class ItemWeight extends RankedAuditedEntity {
 	
 	@ToString.Exclude

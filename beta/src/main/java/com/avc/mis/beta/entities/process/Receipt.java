@@ -58,9 +58,4 @@ public class Receipt extends ProcessWithProduct<ReceiptItem> {
 	
 	}
 	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Receipt";
-	}
-	
 }

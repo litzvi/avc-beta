@@ -5,14 +5,18 @@ import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
+import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
+import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
+import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
@@ -31,7 +35,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class StorageTransferDTO extends TransactionProcessDTO {
+public class StorageTransferDTO extends TransactionProcessDTO<ProcessItemDTO> {
 	
 
 	
@@ -55,8 +59,35 @@ public class StorageTransferDTO extends TransactionProcessDTO {
 		if(itemCounts != null)
 			this.setItemCounts(Arrays.stream(itemCounts)
 					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toList()));
+		super.setProcessItems( Arrays.stream(transfer.getProcessItems())
+				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));
+		super.setUsedItemGroups(Arrays.stream(transfer.getUsedItemGroups())
+				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
 
 	}
+	
+	@Override
+	public List<ProcessItemDTO> getProcessItems() {
+		return super.getProcessItems();
+	}
+	
+	@Override
+	public void setProcessItems(List<ProcessItemDTO> processItems) {
+		super.setProcessItems(processItems);
+	}
+
+	
+	@Override
+	public List<UsedItemsGroupDTO> getUsedItemGroups() {
+		return super.getUsedItemGroups();
+	}
+
+	@Override
+	public void setUsedItemGroups(List<UsedItemsGroupDTO> usedItemGroups) {
+		super.setUsedItemGroups(usedItemGroups);
+	}
+
+
 	
 	@Override
 	public String getProcessTypeDescription() {

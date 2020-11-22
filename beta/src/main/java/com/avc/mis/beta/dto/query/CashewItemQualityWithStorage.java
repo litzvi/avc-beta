@@ -10,7 +10,7 @@ import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
 import com.avc.mis.beta.dto.processinfo.StorageBaseDTO;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.processinfo.Storage;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 
 import lombok.Data;
 

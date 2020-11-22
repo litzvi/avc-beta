@@ -1,4 +1,4 @@
-package com.avc.mis.beta.entities.processinfo;
+package com.avc.mis.beta.entities.process.inventory;
 
 import java.math.BigDecimal;
 
@@ -7,6 +7,8 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+
+import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,21 +27,8 @@ import lombok.EqualsAndHashCode;
 @Table(name = "USED_ITEMS")
 @PrimaryKeyJoinColumn(name = "UsedItemBaseId")
 public class UsedItem extends UsedItemBase {
-	
-//	public UsedItem() {
-//		super();
-//		super.setNumberUsedUnits(BigDecimal.ONE);
-//	}
-
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "groupId")
-//	@NotNull(message = "Used items have to belong to a group categery")
-//	private UsedItemsGroup group;
-	
-	public void setGroup(UsedItemsGroup group) {
-		super.setGroup(group);
-	}
-	
+		
+	@Override
 	public UsedItemsGroup getGroup() {
 		return (UsedItemsGroup) super.getGroup();
 	}

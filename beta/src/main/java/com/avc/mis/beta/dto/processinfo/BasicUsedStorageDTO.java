@@ -6,9 +6,9 @@ package com.avc.mis.beta.dto.processinfo;
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.ProcessDTO;
-import com.avc.mis.beta.entities.processinfo.StorageBase;
-import com.avc.mis.beta.entities.processinfo.StorageMove;
-import com.avc.mis.beta.entities.processinfo.UsedItem;
+import com.avc.mis.beta.entities.process.inventory.StorageBase;
+import com.avc.mis.beta.entities.process.inventory.StorageMove;
+import com.avc.mis.beta.entities.process.inventory.UsedItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

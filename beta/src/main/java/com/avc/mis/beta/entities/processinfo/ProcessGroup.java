@@ -7,15 +7,11 @@ import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ProcessInfoEntity;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
@@ -25,6 +21,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * Base abstract class for grouping process's collections.
+ * Used for display purposes. e.g. group name and if it's in table view.
+ * 
  * @author zvi
  *
  */

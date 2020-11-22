@@ -42,6 +42,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "SHIPPMENT_BOOKINGS")
 @PrimaryKeyJoinColumn(name = "processId")
+@Deprecated
 public class ShipmentBooking extends GeneralProcess {
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
@@ -78,13 +79,9 @@ public class ShipmentBooking extends GeneralProcess {
 		this.bookedContainers = Insertable.setReferences(bookedContainers, (t) -> {t.setReference(this);	return t;});
 	}
 
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
+//	@Override
+//	public String getProcessTypeDescription() {
+//		return "Container Booking";
 //	}
-	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Container Booking";
-	}
 	
 }

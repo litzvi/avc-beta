@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
@@ -27,6 +28,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * Process for moving inventory location possibly changing storage form without processing.
+ * 
  * @author zvi
  *
  */
@@ -41,12 +44,8 @@ public class StorageRelocation extends PoProcess {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", targetEntity = ProcessGroup.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@NotEmpty(message = "Has to containe at least one storage move")
 	private Set<StorageMovesGroup> storageMovesGroups = new HashSet<>();
-	
-//	@Setter(value = AccessLevel.NONE) 
-//	@JsonIgnore
-//	@Column(nullable = false)
-//	private boolean tableView = false;
 
 	/**
 	 * Gets the list of storage move groups as an array (can be ordered).
@@ -69,9 +68,4 @@ public class StorageRelocation extends PoProcess {
 		this.storageMovesGroups = Insertable.setReferences(storageMovesGroups, (t) -> {t.setReference(this);	return t;});
 	}
 	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Storage Relocation";
-	}
-
 }

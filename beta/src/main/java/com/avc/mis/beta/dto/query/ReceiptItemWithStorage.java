@@ -16,9 +16,9 @@ import com.avc.mis.beta.dto.values.OrdinalAmount;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.processinfo.ExtraAdded;
+import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
-import com.avc.mis.beta.entities.processinfo.Storage;
 
 import lombok.Data;
 

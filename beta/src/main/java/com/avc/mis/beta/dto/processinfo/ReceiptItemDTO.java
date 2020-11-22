@@ -16,10 +16,10 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.processinfo.ExtraAdded;
+import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
+import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
-import com.avc.mis.beta.entities.processinfo.StorageWithSample;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

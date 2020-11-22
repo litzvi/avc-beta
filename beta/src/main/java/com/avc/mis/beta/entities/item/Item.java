@@ -6,8 +6,7 @@ package com.avc.mis.beta.entities.item;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -44,15 +43,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "ITEMS")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorValue("abstract")
 //@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
-public abstract class Item extends ValueEntity implements ValueInterface {
-	
-	public Item() {
-		super();
-		setUnit(AmountWithUnit.ONE_UNIT);
-		setDefaultMeasureUnit(MeasureUnit.UNIT);
-	}
-	
+public class Item extends ValueEntity implements ValueInterface {
+		
 	@Setter(value = AccessLevel.PROTECTED)
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, updatable = false)

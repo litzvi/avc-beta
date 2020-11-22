@@ -32,15 +32,15 @@ import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
+import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
+import com.avc.mis.beta.entities.process.inventory.UsedItem;
 import com.avc.mis.beta.entities.processinfo.CountAmount;
-import com.avc.mis.beta.entities.processinfo.ExtraAdded;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
-import com.avc.mis.beta.entities.processinfo.Storage;
-import com.avc.mis.beta.entities.processinfo.StorageWithSample;
-import com.avc.mis.beta.entities.processinfo.UsedItem;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.City;
@@ -394,16 +394,16 @@ public class TestService {
 	}
 	
 	public Item getItem(ItemDTO itemDTO) {
-		Item item = null;
-		if(itemDTO.getClazz() == BulkItem.class) {
-			item = new BulkItem();
-		}
-		else if(itemDTO.getClazz() == PackedItem.class) {
-			item = new PackedItem();
-		}
-		else {
-			throw new NullPointerException();
-		}
+		Item item = new Item();
+//		if(itemDTO.getClazz() == BulkItem.class) {
+//			item = new BulkItem();
+//		}
+//		else if(itemDTO.getClazz() == PackedItem.class) {
+//			item = new PackedItem();
+//		}
+//		else {
+//			throw new NullPointerException();
+//		}
 		item.setId(itemDTO.getId());
 		return item;
 	}

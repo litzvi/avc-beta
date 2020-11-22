@@ -26,7 +26,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.processinfo.ExtraAdded;
+import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.repositories.PORepository;
@@ -228,7 +228,7 @@ public class Receipts {
 		Optional<ReceiptDTO> receipt = getReceiptRepository().findReceiptDTOByProcessId(processId);
 		ReceiptDTO receiptDTO = receipt.orElseThrow(
 				()->new IllegalArgumentException("No order receipt with given process id"));
-		receiptDTO.setReceiptItems(getReceiptRepository().findReceiptItemWithStorage(processId));
+		receiptDTO.setReceiptItemsWithStorage(getReceiptRepository().findReceiptItemWithStorage(processId));
 		
 		return receiptDTO;
 	}

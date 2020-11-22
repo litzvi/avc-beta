@@ -107,9 +107,10 @@ public class ValueWriter {
 		dao.addEntity(position);
 	}
 	
-	public void addItem(Item item) {
-		dao.addEntity(item);
-	}
+	//item should practically be abstarct
+//	public void addItem(Item item) {
+//		dao.addEntity(item);
+//	}
 	
 	public void addPackedItem(PackedItem item) {
 		dao.addEntity(item);

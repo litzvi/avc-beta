@@ -21,6 +21,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "STORAGE_TRANSFERS")
 @PrimaryKeyJoinColumn(name = "processId")
+@Deprecated
 public class StorageTransfer extends TransactionProcess<ProcessItem> {
 	
 	/**
@@ -39,9 +40,9 @@ public class StorageTransfer extends TransactionProcess<ProcessItem> {
 		return super.getProcessItems();
 	}
 	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Storage transfer";
-	}
+//	@Override
+//	public String getProcessTypeDescription() {
+//		return "Storage transfer";
+//	}
 
 }

@@ -10,23 +10,20 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.processinfo.MovedItemTableDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.entities.process.inventory.StorageMove;
+import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.AccessLevel;
@@ -56,17 +53,6 @@ public class StorageMovesGroup extends ProcessGroupWithStorages {
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@NotEmpty(message = "Has to containe at least one storage move")
 	private Set<StorageMove> storageMoves = new HashSet<>();
-		
-//	@Setter(value = AccessLevel.NONE) 
-//	@JsonIgnore
-//	@Column(nullable = false)
-//	private boolean tableView = false;
-//	
-//	private String groupName;
-//
-//	public void setGroupName(String groupName) {
-//		this.groupName = Optional.ofNullable(groupName).map(s -> s.trim()).orElse(null);
-//	}
 	
 	/**
 	 * Gets the list of storage moves as an array (can be ordered).
@@ -109,7 +95,6 @@ public class StorageMovesGroup extends ProcessGroupWithStorages {
 			storageMoves[i].setStorage(storage);
 			
 			storageMoves[i].setOrdinal(basicUsedStorage.getOrdinal());
-//			storageMoves[i].setUnitAmount(new AmountWithUnit(measureUnit));
 			storageMoves[i].setNumberUnits(basicUsedStorage.getAmount());
 			storageMoves[i].setContainerWeight(containerWeight);
 			storageMoves[i].setWarehouseLocation(warehouse);

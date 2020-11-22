@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
+import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
@@ -36,7 +37,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class ContainerLoadingDTO extends PoProcessDTO {
+public class ContainerLoadingDTO extends TransactionProcessDTO<ProcessItemDTO> {
 	
 	private ShipmentCodeDTO shipmentCode;
 	
@@ -44,7 +45,6 @@ public class ContainerLoadingDTO extends PoProcessDTO {
 	private ShipingDetails shipingDetails;
 	
 	private List<LoadedItemDTO> loadedItems; 
-	private List<UsedItemsGroupDTO> usedItemGroups; 
 	
 	
 	public ContainerLoadingDTO(Integer id, Integer version, Instant createdDate, String userRecording, Integer poCodeId,
@@ -73,8 +73,18 @@ public class ContainerLoadingDTO extends PoProcessDTO {
 		this.shipingDetails = loading.getShipingDetails();
 		this.loadedItems = Arrays.stream(loading.getLoadedItems())
 				.map(i->{return new LoadedItemDTO(i);}).collect(Collectors.toList());
-		this.usedItemGroups = Arrays.stream(loading.getUsedItemGroups())
-				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList());
+		super.setUsedItemGroups(Arrays.stream(loading.getUsedItemGroups())
+				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
+	}
+	
+	@Override
+	public List<UsedItemsGroupDTO> getUsedItemGroups() {
+		return super.getUsedItemGroups();
+	}
+
+	@Override
+	public void setUsedItemGroups(List<UsedItemsGroupDTO> usedItemGroups) {
+		super.setUsedItemGroups(usedItemGroups);
 	}
 	
 

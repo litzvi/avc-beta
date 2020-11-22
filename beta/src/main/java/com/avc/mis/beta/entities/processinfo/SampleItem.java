@@ -44,6 +44,7 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "SAMPLE_ITEMS")
+@Deprecated
 public class SampleItem extends ProcessInfoEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
