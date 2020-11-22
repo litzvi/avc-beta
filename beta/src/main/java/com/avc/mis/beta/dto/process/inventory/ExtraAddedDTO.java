@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.processinfo;
+package com.avc.mis.beta.dto.process.inventory;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -45,19 +45,19 @@ public class ExtraAddedDTO extends StorageWithSampleDTO {
 		super(extraAdded);
 	}
 	
-	/**
-	 * Gets a new ExtraAdded with all user set fields in the DTO (excluding id, version) 
-	 * with given numerUnits and new warehouse location.
-	 * @param numberUnits new storage number of units
-	 * @param newLocation the new warehouse location
-	 * @return ExtraAdded with all fields besides for the ones managed by the persistence context. 
-	 */
-	@Override
-	public Storage getNewStorage(BigDecimal numberUnits, Warehouse newLocation) {
-		ExtraAdded storage = new ExtraAdded();
-		setNewStorageFields(storage, numberUnits, newLocation);
-		return storage;
-	}
+//	/**
+//	 * Gets a new ExtraAdded with all user set fields in the DTO (excluding id, version) 
+//	 * with given numerUnits and new warehouse location.
+//	 * @param numberUnits new storage number of units
+//	 * @param newLocation the new warehouse location
+//	 * @return ExtraAdded with all fields besides for the ones managed by the persistence context. 
+//	 */
+//	@Override
+//	public Storage getNewStorage(BigDecimal numberUnits, Warehouse newLocation) {
+//		ExtraAdded storage = new ExtraAdded();
+//		setNewStorageFields(storage, numberUnits, newLocation);
+//		return storage;
+//	}
 
 	
 }

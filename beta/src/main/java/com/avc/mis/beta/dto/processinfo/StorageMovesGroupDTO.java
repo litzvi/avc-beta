@@ -12,10 +12,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
+import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
 import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -74,18 +79,18 @@ public class StorageMovesGroupDTO extends SubjectDataDTO {
 				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
 				if(warehouse != null)
 					movedItemTable.setNewWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
-				StorageBaseDTO storage = s.getStorage();
-				movedItemTable.setContainerWeight(storage.getContainerWeight());
-				warehouse = storage.getWarehouseLocation();
+//				StorageDTO storage = s.getStorage();
+				movedItemTable.setContainerWeight(s.getStorageContainerWeight());
+				warehouse = s.getStorageWarehouseLocation();
 				if(warehouse != null)
 					movedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 				
 			});
 			
 			List<BasicUsedStorageDTO> used = this.storageMoves.stream().map((s) -> {
-				StorageBaseDTO storage = s.getStorage();
+				DataObject<StorageBase> storage = s.getStorage();
 				return new BasicUsedStorageDTO(s.getId(), s.getVersion(), 
-						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits());
+						storage.getId(), storage.getVersion(), s.getStorageOrdinal(), s.getStorageNumberUnits());
 			}).collect(Collectors.toList());
 			movedItemTable.setAmounts(used);
 			return movedItemTable;

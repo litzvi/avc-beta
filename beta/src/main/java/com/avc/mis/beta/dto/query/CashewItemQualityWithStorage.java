@@ -6,8 +6,8 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
-import com.avc.mis.beta.dto.processinfo.StorageBaseDTO;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.Storage;
@@ -23,7 +23,7 @@ import lombok.Data;
 public class CashewItemQualityWithStorage {
 	
 	private CashewItemQualityDTO cashewItemQuality;
-	private StorageBaseDTO storage;
+	private StorageDTO storage;
 
 	public CashewItemQualityWithStorage(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, 
@@ -51,7 +51,7 @@ public class CashewItemQualityWithStorage {
 				deepSpot, mold, dirty, lightDirty, decay, insectDamage,
 				roastingWeightLoss,
 				colour, flavour);
-		this.storage = new StorageBaseDTO(storageId, storageVersion, storageOrdinal, 
+		this.storage = new StorageDTO(storageId, storageVersion, storageOrdinal, 
 				unitAmount, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 	}

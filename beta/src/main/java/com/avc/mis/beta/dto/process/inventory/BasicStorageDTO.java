@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.processinfo;
+package com.avc.mis.beta.dto.process.inventory;
 
 import java.math.BigDecimal;
 

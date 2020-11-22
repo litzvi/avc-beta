@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
+import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.values.ProcessBasic;
@@ -35,7 +35,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	List<ProcessRow> findProcessByType(ProcessName processName, Integer poCodeId);
 
 	
-	@Query("select new com.avc.mis.beta.dto.processinfo.UsedItemDTO( "
+	@Query("select new com.avc.mis.beta.dto.process.inventory.UsedItemDTO( "
 			+ "i.id, i.version, i.ordinal, i.numberUsedUnits, "
 			+ "item.id, item.value, sf_group.measureUnit, used_p.recordedTime, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "

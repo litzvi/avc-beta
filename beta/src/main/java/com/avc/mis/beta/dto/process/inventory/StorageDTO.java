@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.processinfo;
+package com.avc.mis.beta.dto.process.inventory;
 
 import java.math.BigDecimal;
 import java.util.Optional;
@@ -23,23 +23,20 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StorageBaseDTO extends SubjectDataDTO {
-
-//	private String name;
+public class StorageDTO extends SubjectDataDTO implements StorageBaseDTO {
+	
 	private BigDecimal unitAmount;
 	private BigDecimal numberUnits;	
 	private BigDecimal containerWeight;	
 	private BasicValueEntity<Warehouse> warehouseLocation;
-	private String remarks;
-	private String className; //to differentiate between storage to ExtraAdded
-//	Class<? extends Storage> clazz;
+
+	private String className; //to differentiate between storage to ExtraAdded nad perhaps storageMoves
 		
-	public StorageBaseDTO(Integer id, Integer version, Integer ordinal,
+	public StorageDTO(Integer id, Integer version, Integer ordinal,
 			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String remarks, Class<? extends Storage> clazz) {
 		super(id, version, ordinal);
-//		this.name = name;
 		this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 		this.containerWeight = containerWeight;
@@ -47,7 +44,6 @@ public class StorageBaseDTO extends SubjectDataDTO {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else
 			this.warehouseLocation = null;
-		this.remarks = remarks;
 		if(clazz != null)
 			this.className = clazz.getSimpleName();
 	}
@@ -56,9 +52,8 @@ public class StorageBaseDTO extends SubjectDataDTO {
 	 * @param id
 	 * @param version
 	 */
-	public StorageBaseDTO(StorageBase storage) {
+	public StorageDTO(StorageBase storage) {
 		super(storage.getId(), storage.getVersion(), storage.getOrdinal());
-//		this.name = storage.getName();
 		this.unitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		this.numberUnits = Optional.ofNullable(storage.getNumberUnits()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		this.containerWeight = storage.getContainerWeight();
@@ -69,7 +64,6 @@ public class StorageBaseDTO extends SubjectDataDTO {
 		else {
 			this.warehouseLocation = null;
 		}
-		this.remarks = storage.getRemarks();
 		this.className = storage.getClass().getSimpleName();
 	}
 
@@ -82,17 +76,14 @@ public class StorageBaseDTO extends SubjectDataDTO {
 	 * @param warehouseLocation2
 	 * @param description
 	 */
-	public StorageBaseDTO(Integer id, Integer version, Integer ordinal,
+	public StorageDTO(Integer id, Integer version, Integer ordinal,
 			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz) {
 		super(id, version, ordinal);
-//		this.name = name;
 		this.unitAmount = unitAmount;
-//		this.measureUnit = measureUnit;
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 		this.containerWeight = containerWeight.setScale(MeasureUnit.SCALE);
 		this.warehouseLocation = warehouseLocation;
-		this.remarks = remarks;
 		this.className = clazz.getSimpleName();
 	}
 	
@@ -108,33 +99,6 @@ public class StorageBaseDTO extends SubjectDataDTO {
 		}
 	}
 	
-	/**
-	 * Gets a new Storage with all user set fields in the DTO (excluding id, version) 
-	 * with given numerUnits and new warehouse location.
-	 * @param numberUnits new storage number of units
-	 * @param newLocation the new warehouse location
-	 * @return Storage with all fields besides for the ones managed by the persistence context. 
-	 */
-	public Storage getNewStorage(BigDecimal numberUnits, Warehouse newLocation) {
-		Storage storage = new Storage();
-		setNewStorageFields(storage, numberUnits, newLocation);
-		return storage;
-	}
-	
-	/**
-	 * Receives a Storage and fills in all user set fields of this StorageDto
-	 * @param storage Storage to set with this dto's data
-	 * @param numberUnits new storage number of units
-	 * @param newLocation the new warehouse location
-	 */
-	protected void setNewStorageFields(Storage storage, BigDecimal numberUnits, Warehouse newLocation) {
-		storage.setOrdinal(this.getOrdinal());
-		storage.setUnitAmount(this.unitAmount);
-		storage.setContainerWeight(this.containerWeight);
-		storage.setNumberUnits(numberUnits);
-		storage.setWarehouseLocation(newLocation);
-	}
-
 	
 	
 	

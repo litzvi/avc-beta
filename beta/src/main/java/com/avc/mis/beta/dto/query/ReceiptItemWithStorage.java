@@ -8,9 +8,9 @@ import java.math.BigInteger;
 import java.util.Currency;
 import java.util.List;
 
-import com.avc.mis.beta.dto.processinfo.ExtraAddedDTO;
+import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
-import com.avc.mis.beta.dto.processinfo.StorageWithSampleDTO;
 import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.dto.values.OrdinalAmount;
 import com.avc.mis.beta.entities.enums.MeasureUnit;

@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * DTO for entities that represent process recordings who record auditing data.
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 public abstract class ProcessDTO extends DataDTO {
 

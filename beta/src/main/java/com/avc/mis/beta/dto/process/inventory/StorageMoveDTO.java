@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.processinfo;
+package com.avc.mis.beta.dto.process.inventory;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StorageMoveDTO extends UsedItemBaseDTO {
+public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 
 	private BigDecimal unitAmount;
 	private BigDecimal numberUnits;	
@@ -32,18 +32,21 @@ public class StorageMoveDTO extends UsedItemBaseDTO {
 
 	private String className; //to differentiate between storage to ExtraAdded nad perhaps storageMoves
 	
+	
+	
 	public StorageMoveDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits, 
 			Integer itemId, String itemValue, MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
-			Integer storageId, Integer stoageVersion, Integer storageOrdinal, BigDecimal storageUnitAmount,
-			/* MeasureUnit storageMeasureUnit, */BigDecimal storageNumberUnits, BigDecimal storageContainerWeight,
+			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 
+			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
-			BigDecimal unitAmount,	/* MeasureUnit measureUnit, */ BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
-		super(id, version, ordinal, numberUsedUnits, itemId, itemValue, measureUnit, itemProcessDate,
+		super(id, version, ordinal, numberUsedUnits, 
+				itemId, itemValue, measureUnit, itemProcessDate,
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
-				storageId, stoageVersion, storageOrdinal, storageUnitAmount,
-				/* storageMeasureUnit, */storageNumberUnits, storageContainerWeight,
+				storageId, stoageVersion, storageOrdinal, 
+				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks);
 		this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);

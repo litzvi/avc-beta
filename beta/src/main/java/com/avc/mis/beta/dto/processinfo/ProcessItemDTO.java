@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
+import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
@@ -45,7 +47,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 	
 	@JsonIgnore
 	private boolean tableView;
-	private List<StorageBaseDTO> storageForms;
+	private List<StorageDTO> storageForms;
 	
 //	private AmountWithUnit[] totalAmount;
 	
@@ -78,7 +80,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 		this.tableView = processItem.isTableView();
 		
 		setStorageForms(Arrays.stream(processItem.getStorageForms())
-				.map(i->{return new StorageBaseDTO(i);})
+				.map(i->{return new StorageDTO(i);})
 				.collect(Collectors.toList()));
 
 		
@@ -99,7 +101,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 //		this.storageForms = storageForms;
 //	}
 	
-	public List<StorageBaseDTO> getStorageForms() {
+	public List<StorageDTO> getStorageForms() {
 		if(tableView) {
 			return null;
 		}
@@ -146,7 +148,7 @@ public class ProcessItemDTO extends SubjectDataDTO {
 		List<ProcessItemDTO> processItems = new ArrayList<>();
 		for(List<ProcessItemWithStorage> list: map.values()) {
 			ProcessItemDTO processItem = list.get(0).getProcessItem();
-			List<StorageBaseDTO> storages = list.stream().map(i -> i.getStorage()).collect(Collectors.toList());
+			List<StorageDTO> storages = list.stream().map(i -> i.getStorage()).collect(Collectors.toList());
 			storages.sort(Ordinal.ordinalComparator());
 			processItem.setStorageForms(storages);
 			processItems.add(processItem);

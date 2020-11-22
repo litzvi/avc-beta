@@ -13,10 +13,15 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
+import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageDTO;
+import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -70,16 +75,16 @@ public class UsedItemsGroupDTO extends SubjectDataDTO {
 				usedItemTable.setMeasureUnit(s.getMeasureUnit());
 				usedItemTable.setItemPo(s.getItemPo());
 				usedItemTable.setItemProcessDate(s.getItemProcessDate());
-				StorageBaseDTO storage = s.getStorage();
-				usedItemTable.setContainerWeight(storage.getContainerWeight());
-				BasicValueEntity<Warehouse> warehouse = storage.getWarehouseLocation();
+//				StorageDTO storage = s.getStorage();
+				usedItemTable.setContainerWeight(s.getStorageContainerWeight());
+				BasicValueEntity<Warehouse> warehouse = s.getStorageWarehouseLocation();
 				if(warehouse != null)
 					usedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 			});
 			List<BasicUsedStorageDTO> used = this.usedItems.stream().map((i) -> {
-				StorageBaseDTO storage = i.getStorage();
+				DataObject<StorageBase> storage = i.getStorage();
 				return new BasicUsedStorageDTO(i.getId(), i.getVersion(), 
-						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits());
+						storage.getId(), storage.getVersion(), i.getStorageOrdinal(), i.getStorageNumberUnits());
 			}).collect(Collectors.toList());
 			usedItemTable.setAmounts(used);
 			return usedItemTable;
@@ -89,8 +94,8 @@ public class UsedItemsGroupDTO extends SubjectDataDTO {
 	
 	public AmountWithUnit[] getTotalAmount() {
 		AmountWithUnit totalAmount = usedItems.stream()
-				.map(ui -> new AmountWithUnit(ui.getStorage().getUnitAmount()
-							.subtract(Optional.ofNullable(ui.getStorage().getContainerWeight()).orElse(BigDecimal.ZERO))
+				.map(ui -> new AmountWithUnit(ui.getStorageUnitAmount()
+							.subtract(Optional.ofNullable(ui.getStorageContainerWeight()).orElse(BigDecimal.ZERO))
 							.multiply(ui.getNumberUsedUnits()), 
 						ui.getMeasureUnit()))
 				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);

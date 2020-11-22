@@ -124,7 +124,9 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 			+ "item.id, item.value, used_group.measureUnit, used_p.recordedTime, "
 			+ "itemPo.id, ct.code, ct.suffix, s.name, "
 			+ "used_sf.id, used_sf.version, used_sf.ordinal,"
-			+ "used_sf.unitAmount, used_sf.numberUnits, used_sf.containerWeight, "
+			+ "used_sf.unitAmount, used_sf.numberUnits, "
+			+ "sum(usedItems.numberUsedUnits) - m.numberUsedUnits, "
+			+ "used_sf.containerWeight, "
 			+ "used_warehouseLocation.id, used_warehouseLocation.value, used_sf.remarks, "
 			+ "m.unitAmount, m.numberUnits, m.containerWeight,"
 			+ "warehouseLocation.id, warehouseLocation.value, type(m)) "
@@ -138,11 +140,12 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 						+ "join used_p.poCode itemPo "
 							+ "left join itemPo.contractType ct "
 							+ "left join itemPo.supplier s "
-//			+ "join m.unitAmount unit "
+				+ "join used_sf.usedItems usedItems "
 			+ "left join m.warehouseLocation warehouseLocation "
 			+ "join m.group g "
 				+ "join g.process p "
 		+ "where p.id = :processId "
+		+ "group by used_sf "
 		+ "order by g.ordinal, m.ordinal ")
 	List<StorageMoveWithGroup> findStorageMovesWithGroup(int processId);
 

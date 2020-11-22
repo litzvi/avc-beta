@@ -28,8 +28,9 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.avc.mis.beta.dto.processinfo.StorageBaseDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/processinfo/StorageBaseDTO.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="4" language="java" name="com.avc.mis.beta.dto.process.inventory.StorageDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/process/inventory/StorageDTO.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1226" y="426"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -46,8 +47,9 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="com.avc.mis.beta.dto.processinfo.ExtraAddedDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/processinfo/ExtraAddedDTO.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="6" language="java" name="com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/process/inventory/ExtraAddedDTO.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1230" y="738"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
@@ -74,8 +76,8 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="com.avc.mis.beta.dto.processinfo.StorageWithSampleDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/processinfo/StorageWithSampleDTO.java" binary="false" 
+  <class id="9" language="java" name="com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/process/inventory/StorageWithSampleDTO.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1228" y="632"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
@@ -84,8 +86,9 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="com.avc.mis.beta.dto.processinfo.UsedItemDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/processinfo/UsedItemDTO.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="10" language="java" name="com.avc.mis.beta.dto.process.inventory.UsedItemDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/process/inventory/UsedItemDTO.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1540" y="189"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
@@ -103,8 +106,8 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="12" language="java" name="com.avc.mis.beta.dto.processinfo.BasicStorageDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/processinfo/BasicStorageDTO.java" binary="false" 
+  <class id="12" language="java" name="com.avc.mis.beta.dto.process.inventory.BasicStorageDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/process/inventory/BasicStorageDTO.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1616" y="638"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
@@ -133,8 +136,8 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="15" language="java" name="com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/processinfo/BasicUsedStorageDTO.java" binary="false" 
+  <class id="15" language="java" name="com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/process/inventory/BasicUsedStorageDTO.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1998" y="801"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
@@ -143,50 +146,50 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <dependency id="16">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <association id="17">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="18" name="storageForms">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="19" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="20">    
-    <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="21" name="amounts">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="22" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="15" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="23">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <association id="24">    
+  <association id="16">    
     <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="25" name="usedItems">        
+      <attribute id="17" name="usedItems">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="26" minimum="0" maximum="2147483647">        
+      <multiplicity id="18" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
+  <association id="19">    
+    <end type="SOURCE" refId="11" navigable="false">      
+      <attribute id="20" name="amounts">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="21" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="15" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="22">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="23">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="24" name="storageForms">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="25" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="26">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
   <association id="27">    
     <end type="SOURCE" refId="13" navigable="false">      
       <attribute id="28" name="amounts">        

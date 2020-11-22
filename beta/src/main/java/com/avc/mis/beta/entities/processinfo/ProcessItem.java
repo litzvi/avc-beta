@@ -18,9 +18,9 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.dto.processinfo.BasicStorageDTO;
+import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
+import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.processinfo.StorageTableDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.item.Item;
@@ -105,7 +105,7 @@ public class ProcessItem extends ProcessGroupWithStorages {
 	public void setUsedItems(UsedItemDTO[] usedItems) {
 		try {
 			setStorageForms((Storage[]) Arrays.stream(usedItems)
-					.map(i -> i.getStorage().getNewStorage(i.getNumberUsedUnits(), i.getNewLocation()))
+					.map(i -> i.getNewStorage())
 					.toArray());
 		} catch (NullPointerException e) {
 			throw new NullPointerException("Used item storage is null");

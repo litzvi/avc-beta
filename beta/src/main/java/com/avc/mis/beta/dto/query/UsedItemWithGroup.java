@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.ValueDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemDTO;
+import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 

@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.dto.processinfo.BasicUsedStorageDTO;
+import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemTableDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
@@ -70,7 +70,6 @@ public class UsedItemsGroup extends ProcessGroup {
 	public void setUsedItems(UsedItem[] usedItems) {
 		Ordinal.setOrdinals(usedItems);
 		this.usedItems = Insertable.setReferences(usedItems, (t) -> {t.setReference(this);	return t;});
-		System.out.println("Number used Items: " + this.usedItems.size());
 	}
 	
 	/**
