@@ -29,6 +29,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 import com.avc.mis.beta.validation.groups.PositiveOrZeroAmount;
 
@@ -105,8 +106,7 @@ public class ReceiptItem extends ProcessItem {
 		getStorageFormsField().addAll(this.extraAdded);
 	}
 		
-	@Override
-	public void setStorageForms(Storage[] storageForms) { 		
+	public void setStorageForms(StorageWithSample[] storageForms) { 		
 		super.setStorageForms(storageForms);
 		getStorageFormsField().addAll(this.extraAdded);
 	}
