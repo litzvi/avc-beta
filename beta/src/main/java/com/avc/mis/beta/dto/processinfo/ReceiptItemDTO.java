@@ -101,10 +101,10 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 
 	public ReceiptItemDTO(Integer id, Integer version, Integer ordinal,
 			ItemDTO item, /* PoCodeDTO itemPo, */ MeasureUnit measureUnit,
-			String groupName, String description, String remarks, 
+			String groupName, String description, String remarks, boolean tableView,
 			AmountWithUnit receivedOrderUnits, AmountWithCurrency unitPrice,
 			DataObject<OrderItem> orderItem, AmountWithUnit extraRequested) {
-		super(id, version, ordinal, item, /* itemPo, */ measureUnit, groupName, description, remarks);
+		super(id, version, ordinal, item, /* itemPo, */ measureUnit, groupName, description, remarks, tableView);
 		this.receivedOrderUnits = receivedOrderUnits;
 		this.unitPrice = unitPrice;
 		this.orderItem = orderItem;

@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
+import com.avc.mis.beta.dto.process.inventory.UsedItemTableDTO;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.DataObject;
@@ -35,40 +36,32 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UsedItemsGroupDTO extends SubjectDataDTO {
+public class UsedItemsGroupDTO extends ProcessGroupDTO {
 
-	private String groupName;
-
-	@JsonIgnore
-	private boolean tableView;
 	private List<UsedItemDTO> usedItems;
 
 
 	public UsedItemsGroupDTO(Integer id, Integer version, Integer ordinal,
 			String groupName, boolean tableView) {
-		super(id, version, ordinal);
-		this.groupName = groupName;
-		this.tableView = tableView;
+		super(id, version, ordinal, groupName, tableView);
 	}	
 
 	public UsedItemsGroupDTO(UsedItemsGroup group) {
-		super(group.getId(), group.getVersion(), group.getOrdinal());
-		this.groupName = group.getGroupName();
-		this.tableView = group.isTableView();
+		super(group);
 		this.usedItems = (Arrays.stream(group.getUsedItems())
 				.map(u->{return new UsedItemDTO(u);})
 				.collect(Collectors.toList()));
 	}
 	
 	public List<UsedItemDTO> getUsedItems() {
-		if(tableView) {
+		if(isTableView()) {
 			return null;
 		}
 		return this.usedItems;
 	}
 	
 	public UsedItemTableDTO getUsedItem() {
-		if(tableView && this.usedItems != null && !this.usedItems.isEmpty()) {
+		if(isTableView() && this.usedItems != null && !this.usedItems.isEmpty()) {
 			UsedItemTableDTO usedItemTable = new UsedItemTableDTO();
 			this.usedItems.stream().findAny().ifPresent(s -> {
 				usedItemTable.setItem(s.getItem());

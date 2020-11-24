@@ -9,9 +9,9 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
-import com.avc.mis.beta.dto.data.UserMessageDTO;
+import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.dto.view.PoFinalReport;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -53,69 +53,71 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	@Query("select p.approvals from GeneralProcess p where p.id = ?1")
 	List<ApprovalTask> findProcessApprovals(Integer processId);
 
-	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
-				+ "m.id, m.version, c.id, t.code, t.suffix, s.name, m.description, p.id, pt.processName, pt.value, m.createdDate, pr.name, prm.name,  m.label) "
+	@Query("select new com.avc.mis.beta.dto.processinfo.UserMessageDTO("
+				+ "m.id, m.version, c.id, t.code, t.suffix, s.name, m.description, p.id, pt.processName, pt.value, m.createdDate, prm.name,  pr.name, m.label) "
 			+ "from UserMessage m "
 				+ "left join m.process p "
 					+ "left join p.processType pt "
 					+ "left join p.poCode c "
 						+ "left join c.contractType t "
 						+ "left join c.supplier s "
-				+ "join m.user u "
-					+ "join u.person pr "
 				+ "join m.modifiedBy um "
 					+ "join um.person prm "
+				+ "join m.user u "
+					+ "join u.person pr "
 			+ "where u.id = ?1 "
 			+ "ORDER BY m.createdDate DESC ")
 	List<UserMessageDTO> findAllMessagesByUser(Integer userId);
 
-	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
+	@Query("select new com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO("
 			+ "pa.id, pa.version, c.id, t.code, t.suffix, s.name, pa.description, p.id, pt.processName, pt.value, pa.createdDate, "
-			+ "pr.name, prm.name, pa.decision, pa.processSnapshot) "
+			+ "prm.name, pr.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 			+ "join pa.process p "
 				+ "join p.processType pt "
 				+ "left join p.poCode c "
 					+ "left join c.contractType t "
 					+ "left join c.supplier s "
-			+ "join pa.user u "
-				+ "join u.person pr "
 			+ "join pa.modifiedBy um "
 				+ "join um.person prm "
+			+ "join pa.user u "
+				+ "join u.person pr "
 		+ "where pa.decision in :decisions "
 			+ "and u.id = :userId "
 		+ "ORDER BY p.modifiedDate DESC ")
 	List<ApprovalTaskDTO> findAllRequiredApprovalsByUser(Integer userId, DecisionType[] decisions);
 
-	@Query("select new com.avc.mis.beta.dto.data.ApprovalTaskDTO("
-			+ "pa.id, pa.version, c.id, t.code, t.suffix, s.name, pa.description, p.id, pt.processName, pt.value, pa.createdDate, "
-			+ "pr.name, prm.name, pa.decision, pa.processSnapshot) "
+	@Query("select new com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO("
+			+ "pa.id, pa.version, "
+			+ "c.id, t.code, t.suffix, s.name, "
+			+ "pa.description, p.id, pt.processName, pt.value, "
+			+ "pa.createdDate, prm.name, pr.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
-		+ "join pa.process p "
-			+ "join p.processType pt "
-		+ "left join p.poCode c "
-			+ "left join c.contractType t "
-			+ "left join c.supplier s "
-		+ "join pa.user u "
-		+ "join u.person pr "
-		+ "join pa.modifiedBy um "
-		+ "join um.person prm "
+			+ "join pa.process p "
+				+ "join p.processType pt "
+				+ "left join p.poCode c "
+					+ "left join c.contractType t "
+					+ "left join c.supplier s "
+			+ "join pa.modifiedBy um "
+				+ "join um.person prm "
+			+ "join pa.user u "
+				+ "join u.person pr "
 		+ "where u.id = :userId "
 		+ "ORDER BY p.modifiedDate DESC ")
 	List<ApprovalTaskDTO> findAllApprovalsByUser(Integer userId);
 
-	@Query("select new com.avc.mis.beta.dto.data.UserMessageDTO("
-			+ "m.id, m.version, c.id, t.code, t.suffix, s.name, m.description, p.id, pt.processName, pt.value, m.createdDate, pr.name, prm.name, m.label) "
+	@Query("select new com.avc.mis.beta.dto.processinfo.UserMessageDTO("
+			+ "m.id, m.version, c.id, t.code, t.suffix, s.name, m.description, p.id, pt.processName, pt.value, m.createdDate, prm.name, pr.name, m.label) "
 		+ "from UserMessage m "
 			+ "join m.process p "
 				+ "join p.processType pt "
 			+ "left join p.poCode c "
 				+ "left join c.contractType t "
 				+ "left join c.supplier s "
-			+ "join m.user u "
-			+ "join u.person pr "
 			+ "join m.modifiedBy um "
-			+ "join um.person prm "
+				+ "join um.person prm "
+			+ "join m.user u "
+				+ "join u.person pr "
 		+ "where u.id = ?1 "
 			+ "and m.label in ?2 "
 		+ "ORDER BY m.createdDate DESC ")

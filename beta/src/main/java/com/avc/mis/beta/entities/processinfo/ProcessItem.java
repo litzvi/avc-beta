@@ -19,8 +19,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
-import com.avc.mis.beta.dto.processinfo.StorageTableDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.item.Item;

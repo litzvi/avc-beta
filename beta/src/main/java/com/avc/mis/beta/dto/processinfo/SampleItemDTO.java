@@ -27,6 +27,7 @@ import lombok.NonNull;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class SampleItemDTO extends SubjectDataDTO {
 	
 	private BasicValueEntity<Item> item;

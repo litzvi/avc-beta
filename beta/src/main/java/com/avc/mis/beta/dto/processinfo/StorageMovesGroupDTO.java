@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
+import com.avc.mis.beta.dto.process.inventory.MovedItemTableDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
 import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
@@ -34,43 +35,35 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StorageMovesGroupDTO extends SubjectDataDTO {
+public class StorageMovesGroupDTO extends ProcessGroupDTO {
 
 	private MeasureUnit measureUnit;
-	private String groupName;
-
-	@JsonIgnore
-	private boolean tableView;
 	private List<StorageMoveDTO> storageMoves;
 
 
 	public StorageMovesGroupDTO(Integer id, Integer version, Integer ordinal,
 			MeasureUnit measureUnit, String groupName, boolean tableView) {
-		super(id, version, ordinal);
+		super(id, version, ordinal, groupName, tableView);
 		this.measureUnit = measureUnit;
-		this.groupName = groupName;
-		this.tableView = tableView;
 	}	
 
 	public StorageMovesGroupDTO(StorageMovesGroup group) {
-		super(group.getId(), group.getVersion(), group.getOrdinal());
-		this.groupName = group.getGroupName();
+		super(group);
 		this.measureUnit = group.getMeasureUnit();
-		this.tableView = group.isTableView();
 		this.storageMoves = (Arrays.stream(group.getStorageMoves())
 				.map(u->{return new StorageMoveDTO(u);})
 				.collect(Collectors.toList()));
 	}
 	
 	public List<StorageMoveDTO> getStorageMoves() {
-		if(tableView) {
+		if(isTableView()) {
 			return null;
 		}
 		return this.storageMoves;
 	}
 	
 	public MovedItemTableDTO getStorageMove() {
-		if(tableView && this.storageMoves != null && !this.storageMoves.isEmpty()) {
+		if(isTableView() && this.storageMoves != null && !this.storageMoves.isEmpty()) {
 			MovedItemTableDTO movedItemTable = new MovedItemTableDTO();
 			this.storageMoves.stream().findAny().ifPresent(s -> {
 				movedItemTable.setItem(s.getItem());

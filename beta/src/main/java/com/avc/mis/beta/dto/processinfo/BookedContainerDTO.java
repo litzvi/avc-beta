@@ -21,6 +21,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class BookedContainerDTO extends SubjectDataDTO {
 	
 	String billNumber;
