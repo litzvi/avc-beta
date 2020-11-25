@@ -14,6 +14,7 @@ import com.avc.mis.beta.validation.groups.OnPersist;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Abstract class for entities representing information about a process of a specific po.
@@ -25,9 +26,11 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @MappedSuperclass
 public abstract class ProcessInfoEntity extends RankedAuditedEntity {
 	
+	@ToString.Exclude
 	@NotNull(message = "System error: Process not referenced", groups = OnPersist.class)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processId", updatable = false)

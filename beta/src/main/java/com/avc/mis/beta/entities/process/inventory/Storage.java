@@ -14,6 +14,7 @@ import com.avc.mis.beta.entities.processinfo.ProcessItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Represents the form and place an item is stored.
@@ -24,6 +25,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "STORAGE_FORMS")
 @PrimaryKeyJoinColumn(name = "storageBaseId")

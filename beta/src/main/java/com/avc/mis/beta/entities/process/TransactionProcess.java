@@ -27,6 +27,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * An abstract po process that uses items from inventory in order to for producing items.
@@ -37,6 +38,7 @@ import lombok.Setter;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "TRANSACTION_PROCESSES")
 @Inheritance(strategy=InheritanceType.JOINED)

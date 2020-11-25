@@ -43,7 +43,7 @@ public class ReceiptItemWithStorage {
 			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
-			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, BigDecimal sampleContainerWeight, 
+			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, 
 			List<OrdinalAmount<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight, 
 			String groupName, String description, String remarks, boolean tableView,
 			BigDecimal receivedUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
@@ -58,13 +58,13 @@ public class ReceiptItemWithStorage {
 			this.storage = new ExtraAddedDTO(storageId, storageVersion, storageOrdinal, 
 					unitAmount, measureUnit, numberUnits, containerWeight,
 					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
-					sampleContainerWeight, numberOfSamples, avgTestedWeight);
+					numberOfSamples, avgTestedWeight);
 		}
 		else {
 			this.storage = new StorageWithSampleDTO(storageId, storageVersion, storageOrdinal, 
 					unitAmount, numberUnits, containerWeight,
 					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
-					sampleContainerWeights, sampleContainerWeight, sampleWeights, numberOfSamples, avgTestedWeight);
+					sampleContainerWeights, sampleWeights, numberOfSamples, avgTestedWeight);
 		}		
 		this.orderItem = new DataObject<OrderItem>(orderItemId, orderItemVersion);
 	}

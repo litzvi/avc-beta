@@ -33,7 +33,7 @@ public class StorageWithSampleDTO extends StorageDTO {
 	private static final Integer SAMPLE_SCALE = 5;
 
 	private List<OrdinalAmount<BigDecimal>> sampleContainerWeights;
-	private BigDecimal sampleContainerWeight;	
+//	private BigDecimal sampleContainerWeight;	
     private List<OrdinalAmount<BigDecimal>> sampleWeights;
 	private BigInteger numberOfSamples;	
 	private BigDecimal avgTestedWeight;
@@ -43,13 +43,13 @@ public class StorageWithSampleDTO extends StorageDTO {
 			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, 
 			String remarks, Class<? extends Storage> clazz, 
-			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, BigDecimal sampleContainerWeight, 
+			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, 
 			List<OrdinalAmount<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, numberUnits, containerWeight, 
 				warehouseLocationId, warehouseLocationValue, remarks,
 				clazz);
 		this.sampleContainerWeights = sampleContainerWeights;
-		this.sampleContainerWeight = sampleContainerWeight;
+//		this.sampleContainerWeight = sampleContainerWeight;
 		this.sampleWeights = sampleWeights;
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
@@ -57,8 +57,8 @@ public class StorageWithSampleDTO extends StorageDTO {
 	
 	public StorageWithSampleDTO(StorageWithSample storage) {
 		super(storage);
-		if(storage.getSampleContainerWeight() != null)
-			this.sampleContainerWeight = storage.getSampleContainerWeight().setScale(MeasureUnit.SCALE);
+//		if(storage.getSampleContainerWeight() != null)
+//			this.sampleContainerWeight = storage.getSampleContainerWeight().setScale(MeasureUnit.SCALE);
 		
 		this.sampleContainerWeights = storage.getSampleContainerWeights();
 		this.sampleWeights = storage.getSampleWeights();
@@ -72,23 +72,26 @@ public class StorageWithSampleDTO extends StorageDTO {
 	public StorageWithSampleDTO(Integer id, Integer version, Integer ordinal,
 			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz, 
-			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, BigDecimal sampleContainerWeight, 
+			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, 
 			List<OrdinalAmount<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
 		super(id, version, ordinal, unitAmount, numberUnits, containerWeight, warehouseLocation, remarks, clazz);
 		this.sampleContainerWeights = sampleContainerWeights;
-		this.sampleContainerWeight = sampleContainerWeight;
+//		this.sampleContainerWeight = sampleContainerWeight;
 		this.sampleWeights = sampleWeights;
 		this.numberOfSamples = numberOfSamples;
 		this.avgTestedWeight = avgTestedWeight;
 	}
 	
 	public BigDecimal getSampleContainerWeight() {
-		Optional<BigDecimal> sampleContainerWeight = Optional.ofNullable(this.sampleContainerWeight);
-		if(sampleContainerWeights != null) {
-			sampleContainerWeight = sampleContainerWeights.stream().map(OrdinalAmount<BigDecimal>::getAmount)
-					.reduce(BigDecimal::add)
-					.map(s -> s.divide(new BigDecimal(sampleContainerWeights.size()), MathContext.DECIMAL64));
-		}
+//		Optional<BigDecimal> sampleContainerWeight = Optional.ofNullable(this.sampleContainerWeight);
+//		if(sampleContainerWeights != null) {
+//			sampleContainerWeight = sampleContainerWeights.stream().map(OrdinalAmount<BigDecimal>::getAmount)
+//					.reduce(BigDecimal::add)
+//					.map(s -> s.divide(new BigDecimal(sampleContainerWeights.size()), MathContext.DECIMAL64));
+//		}
+		Optional<BigDecimal> sampleContainerWeight = sampleContainerWeights.stream().map(OrdinalAmount<BigDecimal>::getAmount)
+				.reduce(BigDecimal::add)
+				.map(s -> s.divide(new BigDecimal(sampleContainerWeights.size()), MathContext.DECIMAL64));
 		return sampleContainerWeight.map(w -> w.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN)).orElse(null);
 
 	}

@@ -27,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Abstract class for data entities that represent process recordings who record auditing data.
@@ -37,6 +38,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AuditedEntity extends DataEntity {

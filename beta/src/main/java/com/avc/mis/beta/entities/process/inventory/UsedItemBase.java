@@ -25,6 +25,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author zvi
@@ -33,11 +34,13 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "USED_ITEMS_BASE")
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class UsedItemBase extends RankedAuditedEntity {
 
+	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "storageId", updatable = false) //can't update so to not confuse the processItem of a storageMove
 	private StorageBase storage;
@@ -45,6 +48,7 @@ public abstract class UsedItemBase extends RankedAuditedEntity {
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
 	private BigDecimal numberUsedUnits;	
 	
+	@ToString.Exclude
 	@Setter(value = AccessLevel.PROTECTED) @Getter(value = AccessLevel.PROTECTED)
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "groupId", nullable = false)

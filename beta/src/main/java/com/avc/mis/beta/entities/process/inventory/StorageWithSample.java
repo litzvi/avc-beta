@@ -41,8 +41,8 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "storageId")
 public class StorageWithSample extends Storage {
 
-	@Column(precision = 19, scale = MeasureUnit.SCALE)
-	private BigDecimal sampleContainerWeight;
+//	@Column(precision = 19, scale = MeasureUnit.SCALE)
+//	private BigDecimal sampleContainerWeight;
 	
 	@Lob
 	@Convert(converter = OrdinalAmountsListToString.class)

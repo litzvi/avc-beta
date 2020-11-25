@@ -90,6 +90,9 @@ public class ValueTablesReader {
 	}
 	
 	public List<Item> getAllItems() {
+//		getValueTablesRepository().findAllItems().forEach(i->System.out.println(i));
+//		if(true)
+//			throw new NullPointerException();
 		return getValueTablesRepository().findAllItems();
 	}
 	

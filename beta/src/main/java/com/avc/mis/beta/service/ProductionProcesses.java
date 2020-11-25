@@ -91,6 +91,9 @@ public class ProductionProcesses {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editProductionProcess(ProductionProcess process) {
+		System.out.println("edited cleaning process: " + process);
+//		if(true)
+//			throw new NullPointerException();
 		//check used items amounts don't exceed the storage amounts
 		dao.editTransactionProcessEntity(process);
 	}

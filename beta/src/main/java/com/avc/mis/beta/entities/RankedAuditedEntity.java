@@ -8,6 +8,7 @@ import javax.persistence.MappedSuperclass;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * @author zvi
@@ -15,6 +16,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @MappedSuperclass
 public abstract class RankedAuditedEntity extends AuditedEntity implements Ordinal {
 

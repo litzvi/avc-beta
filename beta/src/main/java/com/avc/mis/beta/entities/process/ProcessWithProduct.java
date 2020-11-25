@@ -25,6 +25,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * An abstract po process that produces items - has process items.
@@ -34,6 +35,7 @@ import lombok.Setter;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "PROCESSES_WITH_PRODUCT")
 @Inheritance(strategy=InheritanceType.JOINED)

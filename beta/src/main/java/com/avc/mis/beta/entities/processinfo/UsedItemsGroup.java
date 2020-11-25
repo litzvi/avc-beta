@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Groups used items of a transaction process, 
@@ -40,6 +41,7 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "USED_ITEMS_GROUP")
 @PrimaryKeyJoinColumn(name = "groupId")

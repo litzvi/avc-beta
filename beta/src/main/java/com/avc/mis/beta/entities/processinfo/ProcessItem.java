@@ -47,6 +47,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "PROCESSED_ITEMS")
 @PrimaryKeyJoinColumn(name = "groupId")

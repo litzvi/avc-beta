@@ -16,6 +16,7 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * ProcessGroup for collections that contain storages.
@@ -28,6 +29,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "PROCESS_GROUPS_W_STORAGES")
 @PrimaryKeyJoinColumn(name = "groupId")

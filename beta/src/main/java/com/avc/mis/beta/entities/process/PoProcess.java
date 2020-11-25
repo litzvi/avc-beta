@@ -26,6 +26,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Process that also refers to a specific single PO#
@@ -35,6 +36,7 @@ import lombok.Setter;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "PO_PROCESSES")
 @Inheritance(strategy=InheritanceType.JOINED)

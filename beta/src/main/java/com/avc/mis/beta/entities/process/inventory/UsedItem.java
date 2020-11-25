@@ -12,6 +12,7 @@ import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Represents items used for processing (input items of a process). 
@@ -23,6 +24,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "USED_ITEMS")
 @PrimaryKeyJoinColumn(name = "UsedItemBaseId")

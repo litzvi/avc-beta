@@ -91,7 +91,14 @@ public class QueryTest {
 	@Test
 	void queryTest() {
 
-		PO po = service.addBasicCashewOrder();
+		PO po;
+		try {
+			po = service.addBasicCashewOrder();
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			throw e2;
+		}
 
 		
 		//get list of cashew orders

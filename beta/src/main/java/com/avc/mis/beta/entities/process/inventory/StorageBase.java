@@ -34,6 +34,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "STORAGES_BASE")
 @PrimaryKeyJoinColumn(name = "usedItemBaseId")

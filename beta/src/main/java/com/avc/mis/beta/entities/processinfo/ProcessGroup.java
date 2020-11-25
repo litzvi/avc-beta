@@ -19,6 +19,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Base abstract class for grouping process's collections.
@@ -30,6 +31,7 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "PROCESS_GROUPS")
 @Inheritance(strategy=InheritanceType.JOINED)
