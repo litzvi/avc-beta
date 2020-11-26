@@ -11,7 +11,6 @@ import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.item.BulkItem;
-import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;

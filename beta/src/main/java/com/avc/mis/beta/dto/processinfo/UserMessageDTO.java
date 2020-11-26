@@ -5,12 +5,8 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.time.Instant;
 
-import com.avc.mis.beta.dto.DataDTO;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.PoCode;
-import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 
 import lombok.Data;

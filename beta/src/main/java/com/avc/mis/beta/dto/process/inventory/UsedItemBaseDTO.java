@@ -18,6 +18,7 @@ import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,8 +34,8 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	//UsedItemBase fields
 	private BigDecimal numberUsedUnits;
 	@EqualsAndHashCode.Exclude
-	private DataObject<StorageBase> storage;
-	//	private StorageDTO storage;
+	private StorageDTO storage;
+//	private DataObject<StorageBase> storage;
 
 	//storage processItem info - for display on edit
 	@EqualsAndHashCode.Exclude
@@ -75,10 +76,10 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 			Integer storageWarehouseLocationId,  String storageWarehouseLocationValue, String storageRemarks) {
 		super(id, version, ordinal);
 		this.numberUsedUnits = numberUsedUnits;
-		this.storage = new DataObject<StorageBase>(storageId, stoageVersion);
-//		this.storage = new StorageDTO(storageId, stoageVersion, storageOrdinal, 
-//				storageUnitAmount, storageNumberUnits, storageContainerWeight, storageWarehouseLocationId, storageWarehouseLocationValue, 
-//				storageRemarks, null);
+//		this.storage = new DataObject<StorageBase>(storageId, stoageVersion);
+		this.storage = new StorageDTO(storageId, stoageVersion, storageOrdinal, 
+				storageUnitAmount, storageNumberUnits, storageContainerWeight, storageWarehouseLocationId, storageWarehouseLocationValue, 
+				storageRemarks, null);
 
 		this.storageId = storageId;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
@@ -104,7 +105,8 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		super(usedItem.getId(), usedItem.getVersion(), usedItem.getOrdinal());
 		this.numberUsedUnits = usedItem.getNumberUsedUnits();
 		StorageBase storage = usedItem.getStorage();
-		this.storage = new DataObject<StorageBase>(storage);
+		this.storage = new StorageDTO(storage);
+//		this.storage = new DataObject<StorageBase>(storage);
 		this.storageId = storage.getId();
 		ProcessItem processItem = storage.getProcessItem();
 		if(processItem != null) {
@@ -139,6 +141,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	 * the location set is the newLocation set in this Class
 	 * @return Storage with all fields besides for the ones managed by the persistence context. 
 	 */
+	@JsonIgnore
 	public Storage getNewStorage() {
 		Storage storage = new Storage();
 		storage.setOrdinal(this.getStorageOrdinal());

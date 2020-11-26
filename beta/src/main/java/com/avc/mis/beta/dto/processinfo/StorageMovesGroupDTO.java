@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.MovedItemTableDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
@@ -24,7 +23,6 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.entities.values.Warehouse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -81,7 +79,7 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO {
 			});
 			
 			List<BasicUsedStorageDTO> used = this.storageMoves.stream().map((s) -> {
-				DataObject<StorageBase> storage = s.getStorage();
+				StorageDTO storage = s.getStorage();
 				return new BasicUsedStorageDTO(s.getId(), s.getVersion(), 
 						storage.getId(), storage.getVersion(), s.getStorageOrdinal(), s.getStorageNumberUnits());
 			}).collect(Collectors.toList());

@@ -25,6 +25,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * DTO Class representing a count/weight check for inventory check,
+ * but dosen't actually influence inventory balance.
+ * 
  * @author zvi
  *
  */

@@ -20,6 +20,8 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
+ * Contains the test results of a Quality Check made on Raw Cashew Kernel and Roasted Cashew item.
+ * 
  * @author Zvi
  *
  */

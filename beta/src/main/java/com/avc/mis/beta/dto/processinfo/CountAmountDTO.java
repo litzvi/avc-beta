@@ -13,6 +13,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * DTO class with the amount(weight). Part of a collection in ItemCountDTO class.
+ * 
  * @author zvi
  *
  */
@@ -27,9 +29,6 @@ public class CountAmountDTO extends SubjectDataDTO {
 		this.amount = amount;
 	}
 
-	/**
-	 * @param i
-	 */
 	public CountAmountDTO(CountAmount countAmount) {
 		super(countAmount.getId(), countAmount.getVersion(), countAmount.getOrdinal());
 		this.amount = countAmount.getAmount().setScale(MeasureUnit.SCALE);

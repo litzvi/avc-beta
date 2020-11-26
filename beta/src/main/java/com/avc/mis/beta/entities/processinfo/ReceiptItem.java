@@ -28,7 +28,6 @@ import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
-import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 import com.avc.mis.beta.validation.groups.PositiveOrZeroAmount;
