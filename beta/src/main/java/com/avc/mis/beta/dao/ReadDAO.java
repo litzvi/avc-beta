@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.avc.mis.beta.dto.values.UserLogin;
+import com.avc.mis.beta.dto.data.UserLogin;
 import com.avc.mis.beta.utilities.UserAware;
 
 import lombok.AccessLevel;

@@ -114,7 +114,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "join sf.group sf_group "
 				+ "left join sf.warehouseLocation warehouseLocation "
 		+ "where p.id = :processId "
-		+ "order by i.ordinal "
+		+ "order by i.ordinal , sf.ordinal, sf.dtype "
 //		+ ", sf.ordinal " //already sorted in dto setter for comparing between classes as well
 		+ "")
 	List<ProcessItemWithStorage> findProcessItemWithStorage(int processId);

@@ -6,7 +6,7 @@ package com.avc.mis.beta.dto.view;
 import java.math.BigDecimal;
 import java.util.stream.Stream;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.DTOWithId;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -23,7 +23,7 @@ import lombok.experimental.NonFinal;
  */
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class ProductionProcessWithItemAmount extends ValueDTO {
+public class ProductionProcessWithItemAmount extends DTOWithId {
 
 	BasicValueEntity<Item> item;
 	AmountWithUnit[] amountWithUnit;

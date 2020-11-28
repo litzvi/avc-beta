@@ -5,24 +5,24 @@ package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.processinfo.CountAmountDTO;
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * @author zvi
  *
  */
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class ItemCountWithAmount extends ValueDTO {
+//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+public class ItemCountWithAmount implements CollectionItemWithGroup<CountAmountDTO, ItemCountDTO> {
 
 	private ItemCountDTO itemCount;
 	private PoCodeDTO po;
@@ -36,10 +36,24 @@ public class ItemCountWithAmount extends ValueDTO {
 			MeasureUnit measureUnit, BigDecimal containerWeight, BigDecimal accessWeight,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer amountId, Integer amountVersion, Integer amountOrdinal, BigDecimal amount) {
-		super(id);
+//		super(id);
 		this.itemCount = new ItemCountDTO(id, version, ordinal, 
 				itemId, itemValue, productionUse, clazz, measureUnit, containerWeight, accessWeight);
 		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.amount = new CountAmountDTO(amountId, amountVersion, amountOrdinal, amount);		
 	}
+	
+	@JsonIgnore
+	@Override
+	public CountAmountDTO getItem() {
+		return getAmount();
+	}
+
+	@JsonIgnore
+	@Override
+	public ItemCountDTO getGroup() {
+		return getItemCount();
+	}
+
+
 }

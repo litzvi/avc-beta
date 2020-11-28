@@ -5,12 +5,10 @@ package com.avc.mis.beta.dto.process.inventory;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.inventory.Storage;
@@ -50,19 +48,19 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	//for equals comparing - since storage is excluded
 	private Integer storageId;
 
-	//storage information - for easier access
-	@EqualsAndHashCode.Exclude
-	private Integer storageOrdinal;	
-	@EqualsAndHashCode.Exclude
-	private BigDecimal storageUnitAmount;
-	@EqualsAndHashCode.Exclude
-	private BigDecimal storageNumberUnits;	
+//	//storage information - for easier access
+//	@EqualsAndHashCode.Exclude
+//	private Integer storageOrdinal;	
+//	@EqualsAndHashCode.Exclude
+//	private BigDecimal storageUnitAmount;
+//	@EqualsAndHashCode.Exclude
+//	private BigDecimal storageNumberUnits;	
 	@EqualsAndHashCode.Exclude
 	private BigDecimal storgeOtherUsedUnits;
-	@EqualsAndHashCode.Exclude
-	private BigDecimal storageContainerWeight;	
-	@EqualsAndHashCode.Exclude
-	private BasicValueEntity<Warehouse> storageWarehouseLocation;
+//	@EqualsAndHashCode.Exclude
+//	private BigDecimal storageContainerWeight;	
+//	@EqualsAndHashCode.Exclude
+//	private BasicValueEntity<Warehouse> storageWarehouseLocation;
 	
 	private Warehouse NewLocation;
 
@@ -90,15 +88,15 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		else
 			this.itemPo = null;
 	
-		this.storageOrdinal = storageOrdinal;
-		this.storageUnitAmount = storageUnitAmount.setScale(MeasureUnit.SCALE);
-		this.storageNumberUnits = storageNumberUnits.setScale(MeasureUnit.SCALE);
+//		this.storageOrdinal = storageOrdinal;
+//		this.storageUnitAmount = storageUnitAmount.setScale(MeasureUnit.SCALE);
+//		this.storageNumberUnits = storageNumberUnits.setScale(MeasureUnit.SCALE);
 		this.storgeOtherUsedUnits = storgeOtherUsedUnits;
-		this.storageContainerWeight = storageContainerWeight;
-		if(storageWarehouseLocationId != null && storageWarehouseLocationValue != null)
-			this.storageWarehouseLocation = new BasicValueEntity<Warehouse>(storageWarehouseLocationId,  storageWarehouseLocationValue);
-		else
-			this.storageWarehouseLocation = null;
+//		this.storageContainerWeight = storageContainerWeight;
+//		if(storageWarehouseLocationId != null && storageWarehouseLocationValue != null)
+//			this.storageWarehouseLocation = new BasicValueEntity<Warehouse>(storageWarehouseLocationId,  storageWarehouseLocationValue);
+//		else
+//			this.storageWarehouseLocation = null;
 	}
 
 	public UsedItemBaseDTO(UsedItemBase usedItem) {
@@ -116,18 +114,18 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 			this.itemPo = new PoCodeDTO((processItem.getProcess()).getPoCode());
 		}
 
-		this.storageOrdinal = storage.getOrdinal();
-		this.storageUnitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
-		this.storageNumberUnits = Optional.ofNullable(storage.getNumberUnits()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
-		
-		this.storageContainerWeight = storage.getContainerWeight();
-		if(storage.getWarehouseLocation() != null) {
-			this.storageWarehouseLocation = new BasicValueEntity<Warehouse>(
-					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
-		}
-		else {
-			this.storageWarehouseLocation = null;
-		}
+//		this.storageOrdinal = storage.getOrdinal();
+//		this.storageUnitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
+//		this.storageNumberUnits = Optional.ofNullable(storage.getNumberUnits()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
+//		
+//		this.storageContainerWeight = storage.getContainerWeight();
+//		if(storage.getWarehouseLocation() != null) {
+//			this.storageWarehouseLocation = new BasicValueEntity<Warehouse>(
+//					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
+//		}
+//		else {
+//			this.storageWarehouseLocation = null;
+//		}
 		
 		this.storgeOtherUsedUnits = null;//not used for testing
 
@@ -144,9 +142,10 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	@JsonIgnore
 	public Storage getNewStorage() {
 		Storage storage = new Storage();
-		storage.setOrdinal(this.getStorageOrdinal());
-		storage.setUnitAmount(this.getStorageUnitAmount());
-		storage.setContainerWeight(this.getStorageContainerWeight());
+		StorageDTO storageDTO = this.getStorage();
+		storage.setOrdinal(storageDTO.getOrdinal());
+		storage.setUnitAmount(storageDTO.getUnitAmount());
+		storage.setContainerWeight(storageDTO.getContainerWeight());
 		storage.setNumberUnits(this.getNumberUsedUnits());
 		storage.setWarehouseLocation(this.getNewLocation());
 

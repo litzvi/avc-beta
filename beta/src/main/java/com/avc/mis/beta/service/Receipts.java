@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
+import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.view.ReceiptItemRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.entities.Ordinal;
@@ -31,6 +32,7 @@ import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.repositories.ReceiptRepository;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -228,7 +230,12 @@ public class Receipts {
 		Optional<ReceiptDTO> receipt = getReceiptRepository().findReceiptDTOByProcessId(processId);
 		ReceiptDTO receiptDTO = receipt.orElseThrow(
 				()->new IllegalArgumentException("No order receipt with given process id"));
-		receiptDTO.setReceiptItemsWithStorage(getReceiptRepository().findReceiptItemWithStorage(processId));
+		receiptDTO.setReceiptItems(
+				CollectionItemWithGroup.getFilledGroups(
+						getReceiptRepository()
+						.findReceiptItemWithStorage(processId))
+				.stream().map(i -> (ReceiptItemDTO)i).collect(Collectors.toList())
+				);
 		
 		return receiptDTO;
 	}

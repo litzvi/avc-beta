@@ -23,6 +23,7 @@ import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.repositories.QCRepository;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -122,7 +123,12 @@ public class QualityChecks {
 		Optional<QualityCheckDTO> check = getQcRepository().findQcDTOByProcessId(processId);
 		QualityCheckDTO qualityCheckDTO = check.orElseThrow(
 				()->new IllegalArgumentException("No quality check with given process id"));
-		qualityCheckDTO.setProcessItemsWithStorage(getQcRepository().findProcessItemWithStorage(processId));
+		qualityCheckDTO.setProcessItems(
+				CollectionItemWithGroup.getFilledGroups(
+						getQcRepository()
+						.findProcessItemWithStorage(processId)));
+//				ProcessItemDTO.getProcessItems(getQcRepository()
+//						.findProcessItemWithStorage(processId)));
 		qualityCheckDTO.setTestedItems(getQcRepository().findCheckItemsById(processId));
 		return qualityCheckDTO;
 	}

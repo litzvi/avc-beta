@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.DTOWithId;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -27,7 +27,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ProcessRow extends ValueDTO {
+public class ProcessRow extends DTOWithId {
 
 	private PoCodeBasic poCode;
 	private String supplierName;

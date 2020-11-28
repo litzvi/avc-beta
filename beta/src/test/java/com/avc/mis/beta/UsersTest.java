@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.data.UserDTO;
-import com.avc.mis.beta.dto.values.UserLogin;
+import com.avc.mis.beta.dto.data.UserLogin;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;

@@ -19,9 +19,11 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public abstract class ValueDTO extends BaseDTO {
+public abstract class ValueDTO extends BaseEntityDTO {
 
 	public ValueDTO(@NonNull Integer id) {
 		super(id);
 	}
+	
+	public abstract String getValue();
 }

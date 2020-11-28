@@ -72,7 +72,7 @@ public interface ReceiptRepository extends BaseRepository<Receipt> {
 				+ "left join sf.warehouseLocation warehouseLocation "
 			+ "left join i.extraRequested extra "
 		+ "where p.id = :processId "
-		+ "order by i.ordinal "
+		+ "order by i.ordinal, sf.ordinal, sf.dtype "
 //		+ ", sf.ordinal " //already sorted in dto for storages
 		+ "")
 	List<ReceiptItemWithStorage> findReceiptItemWithStorage(int processId);

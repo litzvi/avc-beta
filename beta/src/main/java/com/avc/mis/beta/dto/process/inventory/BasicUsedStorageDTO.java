@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.process.inventory;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.entities.process.inventory.UsedItem;
@@ -22,11 +22,11 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class BasicUsedStorageDTO extends ProcessDTO {
+public class BasicUsedStorageDTO extends SubjectDataDTO {
 	
 	private Integer storageId;
 	private Integer storageVersion;
-	private Integer ordinal; //the storage ordinal
+//	private Integer ordinal; //the storage ordinal
 	private BigDecimal amount;
 	
 //	private StorageDTO storage;
@@ -38,10 +38,10 @@ public class BasicUsedStorageDTO extends ProcessDTO {
 	
 	public BasicUsedStorageDTO(Integer id, Integer version, 
 			Integer storageId, Integer storageVersion, Integer ordinal, BigDecimal amount) {
-		super(id, version);
+		super(id, version, ordinal);
 		this.storageId = storageId;
 		this.storageVersion = storageVersion;
-		this.ordinal = ordinal;
+//		this.ordinal = ordinal;
 		this.amount = amount;
 			
 	}
@@ -51,7 +51,7 @@ public class BasicUsedStorageDTO extends ProcessDTO {
 		StorageBase storage = usedItem.getStorage();
 		this.storageId = storage.getId();
 		this.storageVersion = storage.getVersion();
-		this.ordinal = storage.getOrdinal();
+		setOrdinal(storage.getOrdinal());
 		this.amount = storage.getNumberUnits();
 	}
 	
@@ -60,7 +60,7 @@ public class BasicUsedStorageDTO extends ProcessDTO {
 		StorageBase storage = storageMove.getStorage();
 		this.storageId = storage.getId();
 		this.storageVersion = storage.getVersion();
-		this.ordinal = storageMove.getOrdinal();
+		setOrdinal(storageMove.getOrdinal());
 		this.amount = storageMove.getNumberUnits();
 	}
 

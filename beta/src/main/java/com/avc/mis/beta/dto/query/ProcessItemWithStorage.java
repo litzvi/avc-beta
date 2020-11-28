@@ -5,7 +5,6 @@ package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
@@ -13,9 +12,9 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * Used as a buffer to query,
@@ -25,8 +24,8 @@ import lombok.EqualsAndHashCode;
  *
  */
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class ProcessItemWithStorage extends ValueDTO {
+//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDTO, ProcessItemDTO> {
 	
 	private ProcessItemDTO processItem;
 	private PoCodeDTO po;
@@ -45,7 +44,7 @@ public class ProcessItemWithStorage extends ValueDTO {
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
 			String groupName, String description, String remarks, boolean tableView) {
-		super(id);
+//		super(id);
 		this.processItem = new ProcessItemDTO(id, version, ordinal,
 				itemId, itemValue, productionUse, ItemClazz, measureUnit, 
 				groupName, description, remarks, tableView);
@@ -54,6 +53,16 @@ public class ProcessItemWithStorage extends ValueDTO {
 				unitAmount, numberUnits, containerWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 		
+	}
+
+	@Override
+	public StorageDTO getItem() {
+		return getStorage();
+	}
+
+	@Override
+	public ProcessItemDTO getGroup() {
+		return getProcessItem();
 	}
 	
 }

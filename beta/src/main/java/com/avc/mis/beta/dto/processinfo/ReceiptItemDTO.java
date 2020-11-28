@@ -9,9 +9,9 @@ import java.util.Currency;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
-import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -120,4 +120,5 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 				.filter(d -> d != null)
 				.reduce(BigDecimal::add);
 	}
+
 }

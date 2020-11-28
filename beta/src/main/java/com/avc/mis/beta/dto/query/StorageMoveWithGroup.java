@@ -6,14 +6,14 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
 import com.avc.mis.beta.dto.processinfo.StorageMovesGroupDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 /**
@@ -21,8 +21,8 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class StorageMoveWithGroup extends ValueDTO {
+//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMoveDTO, StorageMovesGroupDTO> {
 
 	StorageMovesGroupDTO storageMovesGroup;
 	StorageMoveDTO storageMove;
@@ -37,7 +37,7 @@ public class StorageMoveWithGroup extends ValueDTO {
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
 			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
-		super(id);
+//		super(id);
 		this.storageMovesGroup = new StorageMovesGroupDTO(id, version, ordinal, measureUnit, groupName, tableView);
 		this.storageMove = new StorageMoveDTO(moveId, moveVersion, moveOrdinal, numberUsedUnits, 
 				itemId, itemValue, movedMeasureUnit, itemProcessDate,
@@ -49,9 +49,21 @@ public class StorageMoveWithGroup extends ValueDTO {
 				warehouseLocationId, warehouseLocationValue, clazz);
 	}
 	
-	public StorageMoveWithGroup(@NonNull Integer id, StorageMovesGroupDTO storageMovesGroup, StorageMoveDTO storageMove) {
-		super(id);
-		this.storageMovesGroup = storageMovesGroup;
-		this.storageMove = storageMove;
+//	public StorageMoveWithGroup(@NonNull Integer id, StorageMovesGroupDTO storageMovesGroup, StorageMoveDTO storageMove) {
+//		super(id);
+//		this.storageMovesGroup = storageMovesGroup;
+//		this.storageMove = storageMove;
+//	}
+
+	@JsonIgnore
+	@Override
+	public StorageMoveDTO getItem() {
+		return getStorageMove();
+	}
+
+	@JsonIgnore
+	@Override
+	public StorageMovesGroupDTO getGroup() {
+		return getStorageMovesGroup();
 	}
 }

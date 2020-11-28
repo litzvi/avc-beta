@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.values.UserLogin;
+import com.avc.mis.beta.dto.data.UserLogin;
 import com.avc.mis.beta.repositories.UserRepository;
 
 /**

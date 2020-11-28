@@ -14,13 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -78,14 +77,20 @@ public class ProductionProcesses {
 		Optional<ProductionProcessDTO> process = getProcessRepository().findProductionProcessDTOById(processId);
 		ProductionProcessDTO processDTO = process.orElseThrow(
 				()->new IllegalArgumentException("No production process with given process id"));
-		processDTO.setProcessItems(ProcessItemDTO
-				.getProcessItems(getProcessRepository()
+		processDTO.setProcessItems(
+				CollectionItemWithGroup.getFilledGroups(
+						getProcessRepository()
 						.findProcessItemWithStorage(processId)));
+//				ProcessItemDTO.getProcessItems(getProcessRepository()
+//						.findProcessItemWithStorage(processId)));
 		processDTO.setUsedItemGroups(
-				UsedItemsGroupDTO.getUsedItemsGroups(
+				CollectionItemWithGroup.getFilledGroups(
 						getProcessRepository()
 						.findUsedItemsWithGroup(processId)));
-		
+	//				UsedItemsGroupDTO.getUsedItemsGroups(
+//						getProcessRepository()
+//						.findUsedItemsWithGroup(processId)));
+//		
 		return processDTO;
 	}
 	

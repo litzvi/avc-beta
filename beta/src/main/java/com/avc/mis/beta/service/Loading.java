@@ -20,12 +20,12 @@ import com.avc.mis.beta.dto.doc.ExportInfo;
 import com.avc.mis.beta.dto.doc.InventoryExportDoc;
 import com.avc.mis.beta.dto.doc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -110,9 +110,12 @@ public class Loading {
 		ContainerLoadingDTO loadingDTO = loading.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id"));
 		loadingDTO.setLoadedItems(getContainerLoadingRepository().findLoadedItems(processId));
 		loadingDTO.setUsedItemGroups(
-				UsedItemsGroupDTO.getUsedItemsGroups(
+				CollectionItemWithGroup.getFilledGroups(
 						getContainerLoadingRepository()
 						.findUsedItemsWithGroup(processId)));
+//				UsedItemsGroupDTO.getUsedItemsGroups(
+//						getContainerLoadingRepository()
+//						.findUsedItemsWithGroup(processId)));
 
 		return loadingDTO; 
 	}

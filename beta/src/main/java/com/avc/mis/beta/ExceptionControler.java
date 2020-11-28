@@ -59,10 +59,6 @@ public class ExceptionControler {
 		List<String> errors = ex.getConstraintViolations().stream()
 				.map(v -> v.getMessage())
 				.collect(Collectors.toList());
-//	    List<String> errors = new ArrayList<>();
-//	    ex.getConstraintViolations().forEach((error) -> {
-//	        errors.add(error.getMessage());
-//	    });
 	    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
 	}
 	
@@ -102,17 +98,7 @@ public class ExceptionControler {
     public ResponseEntity<String> handleFatalException(RuntimeException e){
         return internalError(HttpStatus.INTERNAL_SERVER_ERROR, e);
     }
-	
-//	@ExceptionHandler({NullPointerException.class})
-//    public ResponseEntity<String> handleNullPointerException(NullPointerException e){
-//        return internalError(HttpStatus.INTERNAL_SERVER_ERROR, e);
-//    }
-//	
-//	@ExceptionHandler({TransactionRequiredException.class})
-//    public ResponseEntity<String> handleTransactionRequiredException(TransactionRequiredException e){
-//        return internalError(HttpStatus.INTERNAL_SERVER_ERROR, e);
-//    }
-    
+	    
     /**
      * Getting suitable response entity for internal server errors who's cause should not be shown to user.
      * @param status http status of response

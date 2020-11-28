@@ -16,10 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
-import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.processinfo.StorageMovesGroupDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
@@ -40,6 +36,7 @@ import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -174,17 +171,26 @@ public class WarehouseManagement {
 		Optional<StorageTransferDTO> transfer = getTransferRepository().findTransferDTOByProcessId(processId);
 		StorageTransferDTO transferDTO = transfer.orElseThrow(
 				()->new IllegalArgumentException("No storage transfer with given process id"));
-		transferDTO.setProcessItems(ProcessItemDTO
-				.getProcessItems(getTransferRepository()
+		transferDTO.setProcessItems(
+				CollectionItemWithGroup.getFilledGroups(
+						getTransferRepository()
 						.findProcessItemWithStorage(processId)));
+//				ProcessItemDTO.getProcessItems(getTransferRepository()
+//						.findProcessItemWithStorage(processId)));
 		transferDTO.setUsedItemGroups(
-				UsedItemsGroupDTO.getUsedItemsGroups(
+				CollectionItemWithGroup.getFilledGroups(
 						getTransferRepository()
 						.findUsedItemsWithGroup(processId)));
+//				UsedItemsGroupDTO.getUsedItemsGroups(
+//						getTransferRepository()
+//						.findUsedItemsWithGroup(processId)));
 		transferDTO.setItemCounts(
-				ItemCountDTO.getItemCounts(
+				CollectionItemWithGroup.getFilledGroups(
 						getTransferRepository()
 						.findItemCountWithAmount(processId)));
+//				ItemCountDTO.getItemCounts(
+//						getTransferRepository()
+//						.findItemCountWithAmount(processId)));
 		return transferDTO;
 	}
 	
@@ -193,14 +199,21 @@ public class WarehouseManagement {
 		StorageRelocationDTO relocationDTO = relocation.orElseThrow(
 				()->new IllegalArgumentException("No storage relocation with given process id"));
 		relocationDTO.setStorageMovesGroups(
-				StorageMovesGroupDTO.getStorageMoveGroups(
+				CollectionItemWithGroup.getFilledGroups(
 						getRelocationRepository()
 						.findStorageMovesWithGroup(processId)));
+//				StorageMovesGroupDTO.getStorageMoveGroups(
+//						getRelocationRepository()
+//						.findStorageMovesWithGroup(processId)));
 //		relocationDTO.setStorageMoves(getRelocationRepository().findStorageMoveDTOsByProcessId(processId));
 		relocationDTO.setItemCounts(
-				ItemCountDTO.getItemCounts(
+				CollectionItemWithGroup.getFilledGroups(
 						getTransferRepository()
 						.findItemCountWithAmount(processId)));
+//		relocationDTO.setItemCounts(
+//				ItemCountDTO.getItemCounts(
+//						getTransferRepository()
+//						.findItemCountWithAmount(processId)));
 		return relocationDTO;
 	}
 	
@@ -274,7 +287,7 @@ public class WarehouseManagement {
 		boolean checkProductionUses = (productionUses != null);
 		List<InventoryProcessItemWithStorage> processItemWithStorages =
 				getInventoryRepository().findInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, poCodeId);	
-		return ProcessItemInventory.getProcessItemInventoryRows(processItemWithStorages);
+		return CollectionItemWithGroup.getFilledGroups(processItemWithStorages);
 		
 	}
 

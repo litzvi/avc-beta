@@ -9,8 +9,8 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.values.UserBasic;
-import com.avc.mis.beta.dto.values.UserLogin;
+import com.avc.mis.beta.dto.data.UserBasic;
+import com.avc.mis.beta.dto.data.UserLogin;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -46,7 +46,7 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 				+ "and u.active = true")
 	Optional<UserEntity> findById(Integer id);
 
-	@Query("select new com.avc.mis.beta.dto.values.UserBasic(u.id, u.version, u.username) "
+	@Query("select new com.avc.mis.beta.dto.data.UserBasic(u.id, u.version, u.username) "
 			+ "from UserEntity u "
 			+ "where u.active = true")
 	List<UserBasic> findAllBasic();

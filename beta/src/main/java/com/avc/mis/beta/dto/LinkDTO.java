@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public abstract class LinkDTO extends BaseDTO {
+public abstract class LinkDTO extends BaseEntityDTO {
 
 	public LinkDTO(Integer id) {
 		super(id);

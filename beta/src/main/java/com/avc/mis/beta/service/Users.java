@@ -17,9 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.SoftDeletableDAO;
+import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.data.UserBasic;
 import com.avc.mis.beta.dto.data.UserDTO;
-import com.avc.mis.beta.dto.values.DataObjectWithName;
-import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.Person;

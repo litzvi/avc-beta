@@ -6,7 +6,7 @@ package com.avc.mis.beta.dto.view;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.DTOWithId;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -25,7 +25,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ReceiptItemRow extends ValueDTO {
+public class ReceiptItemRow extends DTOWithId {
 	
 	PoCodeBasic poCode;
 	String supplierName;

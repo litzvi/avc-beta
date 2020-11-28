@@ -26,4 +26,8 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "storageId")
 public class ExtraAdded extends StorageWithSample {
 
+	{
+		setDtype("ExtraAdded");
+	}
+
 }

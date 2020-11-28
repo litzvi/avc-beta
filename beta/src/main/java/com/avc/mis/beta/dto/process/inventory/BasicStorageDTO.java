@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.process.inventory;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 
@@ -21,24 +21,21 @@ import lombok.NonNull;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class BasicStorageDTO extends ProcessDTO {
+public class BasicStorageDTO extends SubjectDataDTO {
 
-	private Integer ordinal;
 	private BigDecimal amount;
 	
 	public BasicStorageDTO(Integer id, Integer version, Integer ordinal, BigDecimal amount) {
-		super(id, version);
-		this.ordinal = ordinal;
+		super(id, version, ordinal);
 		this.amount = amount;
 	}
 	
 	public BasicStorageDTO(Integer id, Integer version) {
-		super(id, version);
+		super(id, version, null);
 	}
 
 	public BasicStorageDTO(@NonNull Storage storage) {
-		super(storage.getId(), storage.getVersion());
-		this.ordinal = storage.getOrdinal();
+		super(storage.getId(), storage.getVersion(), storage.getOrdinal());
 		this.amount = storage.getNumberUnits().setScale(MeasureUnit.SCALE);;
 	}
 }

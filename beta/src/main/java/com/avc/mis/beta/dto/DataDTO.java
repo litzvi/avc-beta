@@ -21,7 +21,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class DataDTO extends BaseDTO {
+public abstract class DataDTO extends BaseEntityDTO {
 	
 	@EqualsAndHashCode.Exclude
 	private Integer version;

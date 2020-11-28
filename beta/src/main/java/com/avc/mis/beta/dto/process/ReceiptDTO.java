@@ -7,16 +7,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
-import com.avc.mis.beta.dto.query.ReceiptItemWithStorage;
-import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -76,26 +71,28 @@ public class ReceiptDTO extends ProcessWithProductDTO<ReceiptItemDTO> {
 	 * to receiptItems that each have a Set of storages.
 	 * @param receiptItemsWithStorage collection of ReceiptItemWithStorage that contain all receipt items with storage detail.
 	 */
-	public void setReceiptItemsWithStorage(List<ReceiptItemWithStorage> receiptItemsWithStorage) {
-		Map<Integer, List<ReceiptItemWithStorage>> map = receiptItemsWithStorage.stream()
-			.collect(Collectors.groupingBy(ReceiptItemWithStorage::getId, LinkedHashMap::new, Collectors.toList()));
-		List<ReceiptItemDTO> receiptItems = new ArrayList<ReceiptItemDTO>();
-		for(List<ReceiptItemWithStorage> list: map.values()) {
-			ReceiptItemDTO receiptItem = list.get(0).getReceiptItem();
-			//group list to storage/extraAdded and set accordingly
-			receiptItem.setStorageForms(list.stream()
-					.map(i -> i.getStorage())
-					.sorted(Ordinal.ordinalComparator())
-					.collect(Collectors.toList()));
-			receiptItems.add(receiptItem);
-		}
-		setReceiptItems(receiptItems);
-//		this.receiptItems.sort(Ordinal.ordinalComparator());
-	}	
+//	public void setReceiptItemsWithStorage(List<ReceiptItemWithStorage> receiptItemsWithStorage) {
+//		Map<Integer, List<ReceiptItemWithStorage>> map = receiptItemsWithStorage.stream()
+//			.collect(Collectors.groupingBy(ReceiptItemWithStorage::getId, LinkedHashMap::new, Collectors.toList()));
+//		List<ReceiptItemDTO> receiptItems = new ArrayList<ReceiptItemDTO>();
+//		for(List<ReceiptItemWithStorage> list: map.values()) {
+//			ReceiptItemDTO receiptItem = list.get(0).getReceiptItem();
+//			//group list to storage/extraAdded and set accordingly
+//			receiptItem.setStorageForms(list.stream()
+//					.map(i -> i.getStorage())
+////					.sorted(Ordinal.ordinalComparator())
+//					.collect(Collectors.toList()));
+//			receiptItems.add(receiptItem);
+//		}
+//		setReceiptItems(receiptItems);
+////		this.receiptItems.sort(Ordinal.ordinalComparator());
+//	}	
 
 	@Override
 	public String getProcessTypeDescription() {
 		return "Receipt";
 	}
+
+	
 
 }

@@ -11,6 +11,7 @@ import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.Value;
 
@@ -22,7 +23,7 @@ import lombok.Value;
  *
  */
 @Value
-public class InventoryProcessItemWithStorage {
+public class InventoryProcessItemWithStorage implements CollectionItemWithGroup<StorageInventoryRow, ProcessItemInventory>{
 
 	ProcessItemInventory processItemInventoryRow;
 	StorageInventoryRow storageInventoryRow;
@@ -56,6 +57,21 @@ public class InventoryProcessItemWithStorage {
 				warehouseLocationId, warehouseLocationValue,
 				numberUsedUnits, 
 				totalBalance, totalBalanceMU); 
+	}
+
+//	@Override
+//	public Integer getGroupId() {
+//		return getProcessItemInventoryRow().getId();
+//	}
+
+	@Override
+	public StorageInventoryRow getItem() {
+		return getStorageInventoryRow();
+	}
+
+	@Override
+	public ProcessItemInventory getGroup() {
+		return getProcessItemInventoryRow();
 	}
 
 }

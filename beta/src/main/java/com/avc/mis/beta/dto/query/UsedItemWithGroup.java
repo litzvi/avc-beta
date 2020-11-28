@@ -6,13 +6,12 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
-import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 /**
@@ -20,8 +19,8 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class UsedItemWithGroup extends ValueDTO {
+//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+public class UsedItemWithGroup implements CollectionItemWithGroup<UsedItemDTO, UsedItemsGroupDTO> {
 	
 	UsedItemsGroupDTO usedItemsGroup;
 	UsedItemDTO usedItem;
@@ -33,7 +32,7 @@ public class UsedItemWithGroup extends ValueDTO {
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, BigDecimal storageNumberUnits, BigDecimal otherUsedUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
-		super(id);
+//		super(id);
 		this.usedItemsGroup = new UsedItemsGroupDTO(id, version, ordinal, groupName, tableView);
 		this.usedItem = new UsedItemDTO(usedId, usedVersion, usedOrdinal, numberUnits, 
 				itemId, itemValue, measureUnit, itemProcessDate,
@@ -44,10 +43,22 @@ public class UsedItemWithGroup extends ValueDTO {
 	}
 	
 	
-	public UsedItemWithGroup(@NonNull Integer id, UsedItemsGroupDTO usedItemsGroup, UsedItemDTO usedItem) {
-		super(id);
-		this.usedItemsGroup = usedItemsGroup;
-		this.usedItem = usedItem;
+//	public UsedItemWithGroup(@NonNull Integer id, UsedItemsGroupDTO usedItemsGroup, UsedItemDTO usedItem) {
+//		super(id);
+//		this.usedItemsGroup = usedItemsGroup;
+//		this.usedItem = usedItem;
+//	}
+
+
+	@Override
+	public UsedItemDTO getItem() {
+		return getUsedItem();
+	}
+
+
+	@Override
+	public UsedItemsGroupDTO getGroup() {
+		return getUsedItemsGroup();
 	}
 	
 	

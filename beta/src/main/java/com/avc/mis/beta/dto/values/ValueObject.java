@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.BaseEntityDTO;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
@@ -17,7 +17,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class ValueObject<T> extends ValueDTO {
+public class ValueObject<T> extends BaseEntityDTO {
 
 	T value;
 
@@ -25,4 +25,5 @@ public class ValueObject<T> extends ValueDTO {
 		super(id);
 		this.value = value;
 	}
+	
 }

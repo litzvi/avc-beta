@@ -12,7 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import com.avc.mis.beta.dto.values.UserLogin;
+import com.avc.mis.beta.dto.data.UserLogin;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

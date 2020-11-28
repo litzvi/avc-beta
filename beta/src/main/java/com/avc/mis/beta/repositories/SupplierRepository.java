@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.values.DataObjectWithName;
+import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.entities.data.CompanyContact;
@@ -24,14 +24,14 @@ import com.avc.mis.beta.entities.enums.SupplyGroup;
  */
 public interface SupplierRepository extends BaseRepository<Supplier> {
 	
-	@Query("select new com.avc.mis.beta.dto.values.DataObjectWithName(s.id, s.version, s.name) "
+	@Query("select new com.avc.mis.beta.dto.data.DataObjectWithName(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "left join s.supplyCategories c "
 			+ "where c.id = :categoryId "
 				+ "and s.active = true")
 	List<DataObjectWithName> findSuppliersByCategoryBasic(Integer categoryId);
 	
-	@Query("select distinct new com.avc.mis.beta.dto.values.DataObjectWithName(s.id, s.version, s.name) "
+	@Query("select distinct new com.avc.mis.beta.dto.data.DataObjectWithName(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "left join s.supplyCategories c "
 			+ "where c.supplyGroup = :supplyGroup "
@@ -39,7 +39,7 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "ORDER BY s.name")
 	List<DataObjectWithName> findSuppliersByGroupBasic(SupplyGroup supplyGroup);
 		
-	@Query("select new com.avc.mis.beta.dto.values.DataObjectWithName(s.id, s.version, s.name) "
+	@Query("select new com.avc.mis.beta.dto.data.DataObjectWithName(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "where s.active = true")
 	List<DataObjectWithName> findAllSuppliersBasic();

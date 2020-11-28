@@ -11,6 +11,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * DTO class for ProcessGroup which contains information used by all groups in collection of groups in a processes.
+ * 
  * @author zvi
  *
  */
@@ -35,4 +37,5 @@ public abstract class ProcessGroupDTO extends SubjectDataDTO {
 		this.groupName = group.getGroupName();
 		this.tableView = group.isTableView();
 	}
+	
 }

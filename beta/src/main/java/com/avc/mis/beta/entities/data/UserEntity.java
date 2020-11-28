@@ -56,10 +56,6 @@ public class UserEntity extends ObjectEntityWithId {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
 	private Set<Role> roles = new HashSet<>();
-
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
 	
 	@Override
 	public void setReference(Object person) {

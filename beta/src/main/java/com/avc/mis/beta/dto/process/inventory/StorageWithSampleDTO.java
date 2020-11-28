@@ -10,8 +10,8 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
+import com.avc.mis.beta.dto.OrdinalAmount;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.OrdinalAmount;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageWithSample;

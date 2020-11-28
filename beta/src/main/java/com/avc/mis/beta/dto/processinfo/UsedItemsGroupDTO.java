@@ -4,11 +4,8 @@
 package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -16,14 +13,13 @@ import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemTableDTO;
-import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.DataObject;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.utilities.ListGroup;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,7 +30,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UsedItemsGroupDTO extends ProcessGroupDTO {
+public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<UsedItemDTO> {
 
 	private List<UsedItemDTO> usedItems;
 
@@ -61,21 +57,21 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO {
 	public UsedItemTableDTO getUsedItem() {
 		if(isTableView() && this.usedItems != null && !this.usedItems.isEmpty()) {
 			UsedItemTableDTO usedItemTable = new UsedItemTableDTO();
-			this.usedItems.stream().findAny().ifPresent(s -> {
-				usedItemTable.setItem(s.getItem());
-				usedItemTable.setMeasureUnit(s.getMeasureUnit());
-				usedItemTable.setItemPo(s.getItemPo());
-				usedItemTable.setItemProcessDate(s.getItemProcessDate());
-//				StorageDTO storage = s.getStorage();
-				usedItemTable.setContainerWeight(s.getStorageContainerWeight());
-				BasicValueEntity<Warehouse> warehouse = s.getStorageWarehouseLocation();
+			this.usedItems.stream().findAny().ifPresent(ui -> {
+				usedItemTable.setItem(ui.getItem());
+				usedItemTable.setMeasureUnit(ui.getMeasureUnit());
+				usedItemTable.setItemPo(ui.getItemPo());
+				usedItemTable.setItemProcessDate(ui.getItemProcessDate());
+				StorageDTO storage = ui.getStorage();
+				usedItemTable.setContainerWeight(storage.getContainerWeight());
+				BasicValueEntity<Warehouse> warehouse = storage.getWarehouseLocation();
 				if(warehouse != null)
 					usedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 			});
 			List<BasicUsedStorageDTO> used = this.usedItems.stream().map((i) -> {
 				StorageDTO storage = i.getStorage();
 				return new BasicUsedStorageDTO(i.getId(), i.getVersion(), 
-						storage.getId(), storage.getVersion(), i.getStorageOrdinal(), i.getStorageNumberUnits());
+						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits());
 			}).collect(Collectors.toList());
 			usedItemTable.setAmounts(used);
 			return usedItemTable;
@@ -85,28 +81,47 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO {
 	
 	public AmountWithUnit[] getTotalAmount() {
 		AmountWithUnit totalAmount = usedItems.stream()
-				.map(ui -> new AmountWithUnit(ui.getStorageUnitAmount()
-							.subtract(Optional.ofNullable(ui.getStorageContainerWeight()).orElse(BigDecimal.ZERO))
+				.map(ui -> {
+					StorageDTO storage = ui.getStorage();
+					return new AmountWithUnit(storage.getUnitAmount()
+							.subtract(Optional.ofNullable(storage.getContainerWeight()).orElse(BigDecimal.ZERO))
 							.multiply(ui.getNumberUsedUnits()), 
-						ui.getMeasureUnit()))
+						ui.getMeasureUnit());
+				})
 				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
 		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
 				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 	}
 	
-	public static List<UsedItemsGroupDTO> getUsedItemsGroups(List<UsedItemWithGroup> usedItems) {
-		Map<Integer, List<UsedItemWithGroup>> map = usedItems.stream()
-				.collect(Collectors.groupingBy(UsedItemWithGroup::getId, LinkedHashMap::new, Collectors.toList()));
-		List<UsedItemsGroupDTO> usedItemsGroups = new ArrayList<>();
-		for(List<UsedItemWithGroup> list: map.values()) {
-			UsedItemsGroupDTO usedItemsGroup = list.get(0).getUsedItemsGroup();
-			usedItemsGroup.setUsedItems(list.stream()
-					.map(i -> i.getUsedItem())
-//					.sorted(Ordinal.ordinalComparator())
-					.collect(Collectors.toList()));
-			usedItemsGroups.add(usedItemsGroup);
-		}
-//		usedItemsGroups.sort(Ordinal.ordinalComparator());
-		return usedItemsGroups;
+	/**
+	 * @param usedItemWithGroup
+	 * @return
+	 */
+	/**
+	 * static function for building List of UsedItemsGroupDTO from a List of UsedItemWithGroup
+	 * received by a join query of usedItems with their group.
+	 * @param usedItemWithGroup a List<UsedItemWithGroup>
+	 * @return List<UsedItemsGroupDTO> as in the DTO structure.
+	 */
+//	public static List<UsedItemsGroupDTO> getUsedItemsGroups(List<UsedItemWithGroup> usedItemWithGroup) {
+//		Map<Integer, List<UsedItemWithGroup>> map = usedItemWithGroup.stream()
+//				.collect(Collectors.groupingBy(UsedItemWithGroup::getId, LinkedHashMap::new, Collectors.toList()));
+//		List<UsedItemsGroupDTO> usedItemsGroups = new ArrayList<>();
+//		for(List<UsedItemWithGroup> list: map.values()) {
+//			UsedItemsGroupDTO usedItemsGroup = list.get(0).getUsedItemsGroup();
+//			usedItemsGroup.setUsedItems(list.stream()
+//					.map(i -> i.getUsedItem())
+////					.sorted(Ordinal.ordinalComparator())
+//					.collect(Collectors.toList()));
+//			usedItemsGroups.add(usedItemsGroup);
+//		}
+////		usedItemsGroups.sort(Ordinal.ordinalComparator());
+//		return usedItemsGroups;
+//	}
+
+	@JsonIgnore
+	@Override
+	public void setList(List<UsedItemDTO> list) {
+		setUsedItems(list);
 	}
 }

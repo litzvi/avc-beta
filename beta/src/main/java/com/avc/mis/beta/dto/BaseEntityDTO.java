@@ -17,9 +17,9 @@ import lombok.ToString;
  * 		e.g. avoid list that aren't needed, present Enums as Strings etc.
  * 2. Structured way to fetch data needed, when it is lazily loaded by the persistence provider.
  * 		e.g. list of phones lazily loaded is fetched while building the DTO (see 5).
- * 3. Can be used for comparing entities while testing, without affecting entity class behaviour.
+ * 3. Can be used for comparing entities while testing, without affecting entity class behavior.
  * 		e.g. ignore id value for comparing inserted entity to actual entity from DB.
- * 4. Tune the queries to fetch only the necessary data with 'select new DTO()s'.
+ * 4. Tune the queries to fetch only the necessary data with select constructors ('select new DTO())'.
  * 		e.g. only basic supplier info needed when getting a purchase order.
  * 5. Control join fetch all cross-table data efficiently with 'select new DTO()'.
  *
@@ -32,7 +32,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class BaseDTO {
+public class BaseEntityDTO {
 	
 	@EqualsAndHashCode.Include
 	private Integer id;
@@ -48,8 +48,8 @@ public class BaseDTO {
 	@Override 
 	public boolean equals(Object o) {
 	    if (o == this) return true;
-	    if (!(o instanceof BaseDTO)) return false;
-	    BaseDTO other = (BaseDTO) o;
+	    if (!(o instanceof BaseEntityDTO)) return false;
+	    BaseEntityDTO other = (BaseEntityDTO) o;
 	    
 	    //Exclusively one is null so they are equal (objects with this id can equal)
 	    if(this.getId() == null ^ other.getId() == null) 
@@ -64,9 +64,10 @@ public class BaseDTO {
 	}
 	  
 	/**
-	 * Hash code can't depend on the field,
-	 * because any Object who's value is set, 
-	 * will be equal to an Object with null value.
+	 * Hash code can't depend on the id,
+	 * because any Object who's id is set, 
+	 * won't be equal to an Object with null value.
+	 * which isn't true for comparing a new entity with the persisted one for testing.
 	 */
 	@Override 
 	public int hashCode() {

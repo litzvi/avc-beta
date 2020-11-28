@@ -7,17 +7,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
-import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -92,21 +87,22 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 	 * @param processItemsWithStorage collection of ProcessItemWithStorage that contains all receipt QC items 
 	 * with storage detail.
 	 */
-	public void setProcessItemsWithStorage(List<ProcessItemWithStorage> processItemsWithStorage) {
-		Map<Integer, List<ProcessItemWithStorage>> map = processItemsWithStorage.stream()
-			.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, LinkedHashMap::new, Collectors.toList()));
-		List<ProcessItemDTO> processItems = new ArrayList<ProcessItemDTO>();
-		for(List<ProcessItemWithStorage> list: map.values()) {
-			ProcessItemDTO processItem = list.get(0).getProcessItem();
-			processItem.setStorageForms(list.stream()
-					.map(i -> i.getStorage())
-					.sorted(Ordinal.ordinalComparator())
-					.collect(Collectors.toList()));
-			processItems.add(processItem);
-		}
-		setProcessItems(processItems);
-//		this.processItems.sort(Ordinal.ordinalComparator());
-	}
+	//use static function in ProcessItemDTO
+//	public void setProcessItemsWithStorage(List<ProcessItemWithStorage> processItemsWithStorage) {
+//		Map<Integer, List<ProcessItemWithStorage>> map = processItemsWithStorage.stream()
+//			.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, LinkedHashMap::new, Collectors.toList()));
+//		List<ProcessItemDTO> processItems = new ArrayList<ProcessItemDTO>();
+//		for(List<ProcessItemWithStorage> list: map.values()) {
+//			ProcessItemDTO processItem = list.get(0).getProcessItem();
+//			processItem.setStorageForms(list.stream()
+//					.map(i -> i.getStorage())
+////					.sorted(Ordinal.ordinalComparator())
+//					.collect(Collectors.toList()));
+//			processItems.add(processItem);
+//		}
+//		setProcessItems(processItems);
+////		this.processItems.sort(Ordinal.ordinalComparator());
+//	}
 	
 	
 	@Override

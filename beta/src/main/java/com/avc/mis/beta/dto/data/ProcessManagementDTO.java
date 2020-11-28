@@ -5,7 +5,6 @@ package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.dto.LinkDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.UserBasic;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ManagementType;

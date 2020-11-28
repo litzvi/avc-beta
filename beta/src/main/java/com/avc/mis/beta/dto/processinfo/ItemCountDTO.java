@@ -5,21 +5,19 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
-import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
+import com.avc.mis.beta.utilities.ListGroup;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,7 +31,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ItemCountDTO extends SubjectDataDTO {
+public class ItemCountDTO extends SubjectDataDTO implements ListGroup<CountAmountDTO> {
 
 	private ItemDTO item;
 	private MeasureUnit measureUnit;
@@ -85,19 +83,25 @@ public class ItemCountDTO extends SubjectDataDTO {
 	}
 	
 	
-	public static List<ItemCountDTO> getItemCounts(List<ItemCountWithAmount> amounts) {
-		Map<Integer, List<ItemCountWithAmount>> map = amounts.stream()
-				.collect(Collectors.groupingBy(ItemCountWithAmount::getId, LinkedHashMap::new, Collectors.toList()));
-		List<ItemCountDTO> itemCounts = new ArrayList<>();
-		for(List<ItemCountWithAmount> list: map.values()) {
-			ItemCountDTO itemCount = list.get(0).getItemCount();
-			itemCount.setAmounts(list.stream().map(i -> i.getAmount())
-//					.sorted(Ordinal.ordinalComparator())
-					.collect(Collectors.toList()));
-			itemCounts.add(itemCount);
-		}
-//		itemCounts.sort(Ordinal.ordinalComparator());
-		return itemCounts;
+//	public static List<ItemCountDTO> getItemCounts(List<ItemCountWithAmount> amounts) {
+//		Map<Integer, List<ItemCountWithAmount>> map = amounts.stream()
+//				.collect(Collectors.groupingBy(ItemCountWithAmount::getId, LinkedHashMap::new, Collectors.toList()));
+//		List<ItemCountDTO> itemCounts = new ArrayList<>();
+//		for(List<ItemCountWithAmount> list: map.values()) {
+//			ItemCountDTO itemCount = list.get(0).getItemCount();
+//			itemCount.setAmounts(list.stream().map(i -> i.getAmount())
+////					.sorted(Ordinal.ordinalComparator())
+//					.collect(Collectors.toList()));
+//			itemCounts.add(itemCount);
+//		}
+////		itemCounts.sort(Ordinal.ordinalComparator());
+//		return itemCounts;
+//	}
+
+	@JsonIgnore
+	@Override
+	public void setList(List<CountAmountDTO> list) {
+		setAmounts(list);
 	}
 	
 	

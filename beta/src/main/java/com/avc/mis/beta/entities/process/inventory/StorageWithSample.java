@@ -17,7 +17,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Positive;
 
-import com.avc.mis.beta.dto.values.OrdinalAmount;
+import com.avc.mis.beta.dto.OrdinalAmount;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.utilities.OrdinalAmountsListToString;
 
@@ -40,6 +40,11 @@ import lombok.ToString;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @PrimaryKeyJoinColumn(name = "storageId")
 public class StorageWithSample extends Storage {
+	
+	{
+		setDtype("StorageWithSample");
+	}
+
 
 //	@Column(precision = 19, scale = MeasureUnit.SCALE)
 //	private BigDecimal sampleContainerWeight;

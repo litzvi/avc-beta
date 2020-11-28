@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.DTOWithId;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -19,7 +19,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class StorageBalance extends ValueDTO {
+public class StorageBalance extends DTOWithId {
 
 	BigDecimal numberUnits;
 	BigDecimal usedAmount;

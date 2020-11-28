@@ -2,7 +2,7 @@ package com.avc.mis.beta.dto.view;
 
 import java.util.List;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.DTOWithId;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -24,7 +24,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class PoInventoryRow extends ValueDTO {
+public class PoInventoryRow extends DTOWithId {
 
 	PoCodeBasic poCode;
 	String supplierName;

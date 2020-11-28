@@ -14,6 +14,7 @@ import com.avc.mis.beta.entities.processinfo.ProcessItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -24,6 +25,7 @@ import lombok.ToString;
  *
  */
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 @Entity
@@ -31,8 +33,7 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "storageBaseId")
 public class Storage extends StorageBase {
 		
-	public Storage() {
-		super();
+	{
 		setDtype("Storage");
 	}
 	

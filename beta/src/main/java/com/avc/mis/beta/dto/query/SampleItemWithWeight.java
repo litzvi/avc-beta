@@ -17,6 +17,7 @@ import lombok.Data;
  *
  */
 @Data
+@Deprecated
 public class SampleItemWithWeight {
 
 	private SampleItemDTO sampleItem;

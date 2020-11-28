@@ -9,7 +9,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.ProcessDTO;
+import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -32,7 +32,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public abstract class GeneralProcessDTO extends ProcessDTO {
+public abstract class GeneralProcessDTO extends DataDTO {
 	
 	@EqualsAndHashCode.Exclude // no need to compare for testing
 	private Instant createdDate;

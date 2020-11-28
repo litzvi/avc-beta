@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.values;
+package com.avc.mis.beta.dto.data;
 
 import java.util.Collection;
 import java.util.List;

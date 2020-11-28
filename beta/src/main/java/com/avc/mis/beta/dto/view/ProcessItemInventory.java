@@ -4,17 +4,13 @@
 package com.avc.mis.beta.dto.view;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.DTOWithId;
 import com.avc.mis.beta.dto.process.PoCodeDTO;
 import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
-import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -22,6 +18,7 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.utilities.ListGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -39,7 +36,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class ProcessItemInventory extends ValueDTO {
+public class ProcessItemInventory extends DTOWithId implements ListGroup<StorageInventoryRow> {
 
 	private ItemDTO item;
 	private MeasureUnit measureUnit;
@@ -138,23 +135,29 @@ public class ProcessItemInventory extends ValueDTO {
 	 * @param processItemWithStorages
 	 * @return
 	 */
-	public static List<ProcessItemInventory> getProcessItemInventoryRows(
-			List<InventoryProcessItemWithStorage> processItemWithStorages) {
-		Map<ProcessItemInventory, List<StorageInventoryRow>> processItemStorageMap = processItemWithStorages
-			.stream()
-			.collect(Collectors.groupingBy(
-					InventoryProcessItemWithStorage::getProcessItemInventoryRow, 
-					LinkedHashMap::new, 
-					Collectors.mapping(InventoryProcessItemWithStorage::getStorageInventoryRow,
-							Collectors.toList())));
-		
-		List<ProcessItemInventory> processItemInventoryRow = new ArrayList<ProcessItemInventory>();
-		processItemStorageMap.forEach((k, v) -> {
-			k.setStorageForms(v);
-			processItemInventoryRow.add(k);
-		});
-		
-		return processItemInventoryRow;
+//	public static List<ProcessItemInventory> getProcessItemInventoryRows(
+//			List<InventoryProcessItemWithStorage> processItemWithStorages) {
+//		Map<ProcessItemInventory, List<StorageInventoryRow>> processItemStorageMap = processItemWithStorages
+//			.stream()
+//			.collect(Collectors.groupingBy(
+//					InventoryProcessItemWithStorage::getProcessItemInventoryRow, 
+//					LinkedHashMap::new, 
+//					Collectors.mapping(InventoryProcessItemWithStorage::getStorageInventoryRow,
+//							Collectors.toList())));
+//		
+//		List<ProcessItemInventory> processItemInventoryRow = new ArrayList<ProcessItemInventory>();
+//		processItemStorageMap.forEach((k, v) -> {
+//			k.setStorageForms(v);
+//			processItemInventoryRow.add(k);
+//		});
+//		
+//		return processItemInventoryRow;
+//	}
+
+	@JsonIgnore
+	@Override
+	public void setList(List<StorageInventoryRow> list) {
+		setStorageForms(list);
 	}
 	
 	

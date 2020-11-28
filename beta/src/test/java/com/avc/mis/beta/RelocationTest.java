@@ -6,8 +6,6 @@ package com.avc.mis.beta;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -19,7 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
-import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -28,15 +25,11 @@ import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageRelocation;
-import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
-import com.avc.mis.beta.entities.process.inventory.UsedItem;
 import com.avc.mis.beta.entities.processinfo.CountAmount;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
-import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
 

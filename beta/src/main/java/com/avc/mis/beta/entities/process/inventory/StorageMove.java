@@ -30,8 +30,13 @@ public class StorageMove extends StorageBase {
 	public StorageMove() {
 		super();
 		super.setNumberUsedUnits(BigDecimal.ONE);
+//		setDtype("StorageMove");
+	}
+	
+	{
 		setDtype("StorageMove");
 	}
+
 	
 	@Override
 	public StorageMovesGroup getGroup() {

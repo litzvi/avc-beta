@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.BaseEntityDTO;
 import com.avc.mis.beta.entities.ValueInterface;
 
 import lombok.EqualsAndHashCode;
@@ -20,7 +20,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class ValueEntityObject<T extends ValueInterface> extends ValueDTO {
+public class ValueEntityObject<T extends ValueInterface> extends BaseEntityDTO {
 	
 	BasicValueEntity<T> value;
 

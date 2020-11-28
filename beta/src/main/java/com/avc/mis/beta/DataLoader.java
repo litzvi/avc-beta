@@ -6,7 +6,7 @@ package com.avc.mis.beta;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.text.WordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -63,24 +63,7 @@ public class DataLoader implements ApplicationRunner {
 		}
 		
 		//supply group
-		
-//		Map<MeasureUnit, Map<MeasureUnit, UOM>> uomMap = MeasureUnit.CONVERTION_MAP;
-//		List<UOM> dbUOM = settingsTableReader.getAllUOM();
-//		dbUOM.forEach(uom -> uomMap.get(uom.getFromUnit()).get(uom.getToUnit()).setId(uom.getId()));
-//		settingsWriter.mergeAll(MeasureUnit.getAllUOM());
-//		Map<MeasureUnit, Map<MeasureUnit, UOM>> dbMap = dbUOM.stream()
-//				.collect(Collectors.groupingBy(UOM::getFromUnit, Collectors.toMap(UOM::getToUnit, u->u)));
-//
-////		List<UOM> uomList = MeasureUnit.getAllUOM();
-//		Map<MeasureUnit, Map<MeasureUnit, UOM>> uomMap = MeasureUnit.CONVERTION_MAP;
-//		
-//		for(Entry<MeasureUnit, Map<MeasureUnit, UOM>> outerEntry: dbMap.entrySet()) {
-//			MeasureUnit fromUnit = outerEntry.getKey();
-//			for(Entry<MeasureUnit, UOM> innerEntry: outerEntry.getValue().entrySet()) {
-//				MeasureUnit toUnit = innerEntry.getKey();
-//				
-//			}
-//		}
+
 	}
 
 }

@@ -11,7 +11,7 @@ import java.util.Currency;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.DTOWithId;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
@@ -35,7 +35,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class PoItemRow extends ValueDTO {
+public class PoItemRow extends DTOWithId {
 	
 	String personInCharge;
 	PoCodeBasic poCode;

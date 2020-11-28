@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.values;
+package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.entities.ObjectEntityWithIdAndName;
 import com.fasterxml.jackson.annotation.JsonIgnore;

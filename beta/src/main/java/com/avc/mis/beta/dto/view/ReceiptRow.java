@@ -6,7 +6,7 @@ package com.avc.mis.beta.dto.view;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.DTOWithId;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
@@ -22,7 +22,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ReceiptRow extends ValueDTO {
+public class ReceiptRow extends DTOWithId {
 
 	AmountWithUnit[] totalAmount;
 	OffsetDateTime receiptDate;

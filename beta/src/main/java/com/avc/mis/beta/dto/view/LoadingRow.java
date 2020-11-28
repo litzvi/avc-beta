@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.DTOWithId;
 import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.values.ShipmentCodeBasic;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
@@ -25,7 +25,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class LoadingRow extends ValueDTO {
+public class LoadingRow extends DTOWithId {
 
 	private ShipmentCodeBasic shipmentCode;
 	
