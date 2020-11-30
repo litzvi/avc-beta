@@ -1,9 +1,9 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.values;
+package com.avc.mis.beta.dto.basic;
 
-import com.avc.mis.beta.dto.BaseEntityDTO;
+import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.entities.process.PoCode;
 
 import lombok.EqualsAndHashCode;
@@ -18,9 +18,9 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class PoCodeBasic extends BaseEntityDTO {
+public class PoCodeBasic extends BasicDTO {
 
 	String contractTypeCode;
 	String contractTypeSuffix;

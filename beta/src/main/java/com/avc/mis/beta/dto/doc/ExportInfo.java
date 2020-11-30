@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.doc;
 
 import java.time.OffsetDateTime;
 
-import com.avc.mis.beta.dto.values.ShipmentCodeBasic;
+import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 
 import lombok.Data;
 

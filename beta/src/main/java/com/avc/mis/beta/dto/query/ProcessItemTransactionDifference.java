@@ -6,7 +6,7 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.util.Optional;
 
-import com.avc.mis.beta.dto.DTOWithId;
+import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
@@ -20,7 +20,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class ProcessItemTransactionDifference extends DTOWithId {
+public class ProcessItemTransactionDifference extends BasicDTO {
 
 	AmountWithUnit usedAmount;
 	AmountWithUnit producedAmount;

@@ -7,12 +7,12 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.DTOWithId;
-import com.avc.mis.beta.dto.process.PoCodeDTO;
+import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -36,7 +36,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class ProcessItemInventory extends DTOWithId implements ListGroup<StorageInventoryRow> {
+public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageInventoryRow> {
 
 	private ItemDTO item;
 	private MeasureUnit measureUnit;

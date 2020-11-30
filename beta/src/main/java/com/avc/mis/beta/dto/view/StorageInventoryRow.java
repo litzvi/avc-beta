@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.SubjectDataDTO;
+import com.avc.mis.beta.dto.BasicSubjectDataDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -23,9 +23,9 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class StorageInventoryRow  extends SubjectDataDTO {
+public class StorageInventoryRow  extends BasicSubjectDataDTO {
 
 	Integer processItemId;
 	BigDecimal unitAmount;

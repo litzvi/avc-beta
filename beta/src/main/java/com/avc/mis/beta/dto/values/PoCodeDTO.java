@@ -1,10 +1,10 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.process;
+package com.avc.mis.beta.dto.values;
 
-import com.avc.mis.beta.dto.BaseEntityDTO;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,7 +22,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class PoCodeDTO extends BaseEntityDTO {
+public class PoCodeDTO extends ValueDTO {
 
 	String contractTypeCode;
 //	Currency currency;

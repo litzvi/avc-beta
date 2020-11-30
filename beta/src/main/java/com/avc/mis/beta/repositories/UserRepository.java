@@ -9,9 +9,9 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.data.UserBasic;
+import com.avc.mis.beta.dto.basic.UserBasic;
+import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.data.UserLogin;
-import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.Role;
@@ -46,7 +46,7 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 				+ "and u.active = true")
 	Optional<UserEntity> findById(Integer id);
 
-	@Query("select new com.avc.mis.beta.dto.data.UserBasic(u.id, u.version, u.username) "
+	@Query("select new com.avc.mis.beta.dto.basic.UserBasic(u.id, u.version, u.username) "
 			+ "from UserEntity u "
 			+ "where u.active = true")
 	List<UserBasic> findAllBasic();
@@ -69,7 +69,7 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 //			+ "where u.active = true")
 //	List<UserRow> findUserRowTable();
 	
-	@Query("select new com.avc.mis.beta.dto.values.ValueObject(u.id, r) "
+	@Query("select new com.avc.mis.beta.dto.basic.ValueObject(u.id, r) "
 			+ "from UserEntity u "
 				+ "join u.roles r "
 			+ "where u.active = true")

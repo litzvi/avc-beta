@@ -87,16 +87,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="com.avc.mis.beta.dto.ValueDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/ValueDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="340" y="134"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <interface id="11" language="java" name="com.avc.mis.beta.utilities.CollectionItemWithGroup" project="beta" 
+  <interface id="10" language="java" name="com.avc.mis.beta.utilities.CollectionItemWithGroup" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/utilities/CollectionItemWithGroup.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1482" y="118"/>    
@@ -106,7 +97,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </interface>  
-  <interface id="12" language="java" name="com.avc.mis.beta.utilities.ListGroup" project="beta" 
+  <interface id="11" language="java" name="com.avc.mis.beta.utilities.ListGroup" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/utilities/ListGroup.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1129" y="120"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
@@ -115,45 +106,54 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </interface>  
+  <class id="12" language="java" name="com.avc.mis.beta.dto.BasicDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/BasicDTO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="53" width="110" x="330" y="129"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
   <dependency id="13">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="11"/>  
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="14">    
-    <end type="SOURCE" refId="6"/>    
+    <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="15">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="11"/>  
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="16">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="11"/>  
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="17">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="11"/>  
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="18">    
-    <end type="SOURCE" refId="1"/>    
+    <end type="SOURCE" refId="10"/>    
     <end type="TARGET" refId="11"/>  
   </dependency>  
   <dependency id="19">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="11"/>  
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="20">    
     <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="10"/>  
+    <end type="TARGET" refId="12"/>  
   </dependency>  
   <dependency id="21">    
-    <end type="SOURCE" refId="11"/>    
+    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="12"/>  
   </dependency>  
   <dependency id="22">    
     <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="10"/>  
+    <end type="TARGET" refId="12"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
     sort-features="false" accessors="true" visibility="true">    

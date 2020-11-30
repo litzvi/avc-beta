@@ -5,9 +5,9 @@ package com.avc.mis.beta.dto.doc;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.DTOWithId;
+import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -22,7 +22,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class ContainerPoItemRow extends DTOWithId {
+public class ContainerPoItemRow extends BasicDTO {
 
 	BasicValueEntity<Item> item;
 	PoCodeBasic poCode;

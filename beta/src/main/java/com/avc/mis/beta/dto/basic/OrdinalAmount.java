@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto;
+package com.avc.mis.beta.dto.basic;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

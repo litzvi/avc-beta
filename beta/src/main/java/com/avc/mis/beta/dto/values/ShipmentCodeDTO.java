@@ -1,10 +1,9 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.process;
+package com.avc.mis.beta.dto.values;
 
-import com.avc.mis.beta.dto.BaseEntityDTO;
-import com.avc.mis.beta.dto.values.ShippingPortDTO;
+import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.process.ShipmentCode;
 
 import lombok.EqualsAndHashCode;
@@ -19,7 +18,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class ShipmentCodeDTO extends BaseEntityDTO {
+public class ShipmentCodeDTO extends ValueDTO {
 	
 	ShippingPortDTO portOfDischarge;
 	

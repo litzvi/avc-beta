@@ -32,7 +32,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class BaseEntityDTO {
+public abstract class BaseEntityDTO {
 	
 	@EqualsAndHashCode.Include
 	private Integer id;

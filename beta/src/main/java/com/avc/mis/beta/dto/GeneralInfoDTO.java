@@ -1,12 +1,11 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.processinfo;
+package com.avc.mis.beta.dto;
 
 import java.time.Instant;
 
-import com.avc.mis.beta.dto.DataDTO;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.entities.GeneralInfoEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoCode;

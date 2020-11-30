@@ -5,10 +5,10 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
-import com.avc.mis.beta.dto.values.ProcessBasic;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.GeneralProcess;
@@ -124,7 +124,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	 * @param poCodeId id of PoCode
 	 * @return List of ProcessBasic
 	 */
-	@Query("select new com.avc.mis.beta.dto.values.ProcessBasic( "
+	@Query("select new com.avc.mis.beta.dto.basic.ProcessBasic( "
 			+ "p.id, t.processName) "
 		+ "from PoProcess p "
 			+ "join p.poCode c "
@@ -137,7 +137,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	 * @param poCodeId id of PoCode
 	 * @return List of ProcessBasic
 	 */
-	@Query("select new com.avc.mis.beta.dto.values.ProcessBasic( "
+	@Query("select new com.avc.mis.beta.dto.basic.ProcessBasic( "
 			+ "p.id, t.processName) "
 		+ "from PoProcess p "
 			+ "join p.poCode c "

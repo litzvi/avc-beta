@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.DTOWithId;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.ProcessName;
 
 import lombok.Data;
@@ -23,9 +23,9 @@ import lombok.ToString;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class PoFinalReport extends DTOWithId {
+public class PoFinalReport extends BasicDTO {
 	
 	private PoCodeBasic poCode;
 	private String supplierName;

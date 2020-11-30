@@ -1,9 +1,9 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.data;
+package com.avc.mis.beta.dto.basic;
 
-import com.avc.mis.beta.dto.DataDTO;
+import com.avc.mis.beta.dto.BasicDataDTO;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,7 +18,8 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class UserBasic extends DataDTO {
+@ToString(callSuper = true)
+public class UserBasic extends BasicDataDTO {
 	
 	@JsonIgnore
 	@ToString.Exclude

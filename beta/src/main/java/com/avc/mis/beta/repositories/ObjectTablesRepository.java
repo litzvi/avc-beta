@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.process.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.ObjectEntityWithId;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
@@ -68,7 +68,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	 * @param processName
 	 * @return Set of PoCodeDTO
 	 */
-	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
 			+ "po_code.code, ct.code, ct.suffix, s.name) "
 		+ "from PO po "
 			+ "join po.lifeCycle lc "
@@ -106,7 +106,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	 * @param statuses
 	 * @return Set of PoCodeDTO
 	 */
-	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
 			+ "po_code.code, c.code, c.suffix, s.name) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
@@ -125,7 +125,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	 * @param itemId constrain to only this item, if null than any.
 	 * @return Set of PoCodeDTO
 	 */
-	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
 			+ "poCode.code, ct.code, ct.suffix, s.name) "
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
@@ -158,7 +158,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 			+ " ) ")
 	Set<PoCodeDTO> findInventoryPoCodeByType(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId);
 
-	@Query("select new com.avc.mis.beta.dto.process.PoCodeDTO("
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
 			+ "po_code.code, c.code, c.suffix, s.name) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
@@ -170,7 +170,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	List<PoCodeDTO> findReceivedPoCodeByTypes(ProcessName[] processNames);
 
 	//will also give old (history) po_codes
-	@Query("select distinct new com.avc.mis.beta.dto.process.PoCodeDTO("
+	@Query("select distinct new com.avc.mis.beta.dto.values.PoCodeDTO("
 			+ "po_code.code, c.code, c.suffix, s.name) "
 		+ "from PoCode po_code "
 				+ "join po_code.contractType c "

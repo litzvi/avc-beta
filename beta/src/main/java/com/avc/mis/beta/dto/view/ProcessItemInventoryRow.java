@@ -7,9 +7,9 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
-import com.avc.mis.beta.dto.DTOWithId;
-import com.avc.mis.beta.dto.process.PoCodeDTO;
+import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -26,7 +26,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class ProcessItemInventoryRow extends DTOWithId {
+public class ProcessItemInventoryRow extends BasicDTO {
 
 	private ItemDTO item;
 	private PoCodeDTO poCode;

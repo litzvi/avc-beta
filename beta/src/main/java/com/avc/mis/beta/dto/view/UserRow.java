@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.DTOWithId;
+import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.Role;
 
@@ -22,7 +22,7 @@ import lombok.experimental.NonFinal;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class UserRow extends DTOWithId {
+public class UserRow extends BasicDTO {
 	
 	
 	String personName;

@@ -15,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.SoftDeletableDAO;
+import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.data.BankAccountDTO;
 import com.avc.mis.beta.dto.data.CompanyContactDTO;
 import com.avc.mis.beta.dto.data.PaymentAccountDTO;
 import com.avc.mis.beta.dto.data.PersonDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
-import com.avc.mis.beta.dto.values.ValueObject;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.BankAccount;

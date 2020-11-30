@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.processinfo;
 
 import java.time.Instant;
 
+import com.avc.mis.beta.dto.GeneralInfoDTO;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.processinfo.UserMessage;

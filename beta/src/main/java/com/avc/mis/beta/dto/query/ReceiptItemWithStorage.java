@@ -8,7 +8,7 @@ import java.math.BigInteger;
 import java.util.Currency;
 import java.util.List;
 
-import com.avc.mis.beta.dto.OrdinalAmount;
+import com.avc.mis.beta.dto.basic.OrdinalAmount;
 import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;

@@ -8,9 +8,9 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 
-import com.avc.mis.beta.dto.DTOWithId;
+import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -26,9 +26,9 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class CashewQcRow extends DTOWithId {
+public class CashewQcRow extends BasicDTO {
 
 	PoCodeBasic poCode;
 	String supplierName;

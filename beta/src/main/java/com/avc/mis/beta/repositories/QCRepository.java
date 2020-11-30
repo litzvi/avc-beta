@@ -9,10 +9,10 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.basic.ValueEntityObject;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
-import com.avc.mis.beta.dto.values.ValueEntityObject;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.Item;
@@ -97,7 +97,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 		+ "where i.active = true")
 	List<CashewStandardDTO> findAllCashewStandardDTO();
 	
-	@Query("select new com.avc.mis.beta.dto.values.ValueEntityObject(i.id, item.id, item.value) "
+	@Query("select new com.avc.mis.beta.dto.basic.ValueEntityObject(i.id, item.id, item.value) "
 		+ "from CashewStandard i "
 			+ "join i.items item "
 		+ "where i.active = true")

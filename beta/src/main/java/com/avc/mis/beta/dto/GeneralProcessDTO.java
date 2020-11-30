@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.process;
+package com.avc.mis.beta.dto;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -9,7 +9,6 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;

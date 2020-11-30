@@ -1,81 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" always-add-relationships="false" generalizations="false" 
   realizations="false" associations="true" dependencies="true" nesting-relationships="false" router="FAN">  
-  <class id="1" language="java" name="com.avc.mis.beta.dto.BaseEntityDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/BaseEntityDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="73" width="123" x="1033" y="130"/>    
+  <class id="1" language="java" name="com.avc.mis.beta.dto.BasicDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/BasicDTO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="875" y="170"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="com.avc.mis.beta.dto.values.BankBranchDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/values/BankBranchDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="299" y="580"/>    
+  <class id="2" language="java" name="com.avc.mis.beta.dto.BasicDataDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/BasicDataDTO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="883" y="583"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="com.avc.mis.beta.dto.values.BasicValueEntity" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/values/BasicValueEntity.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1615" y="865"/>    
+  <class id="3" language="java" name="com.avc.mis.beta.dto.basic.OrdinalAmount" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/basic/OrdinalAmount.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="246" y="140"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.avc.mis.beta.dto.values.CashewStandardDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/values/CashewStandardDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1249" y="876"/>    
+  <class id="4" language="java" name="com.avc.mis.beta.dto.basic.PoCodeBasic" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/basic/PoCodeBasic.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1659" y="381"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="com.avc.mis.beta.dto.values.CityDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/values/CityDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="329" y="718"/>    
+  <class id="5" language="java" name="com.avc.mis.beta.dto.basic.ProcessBasic" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/basic/ProcessBasic.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1518" y="493"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="com.avc.mis.beta.dto.values.ItemDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/values/ItemDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="410" y="873"/>    
+  <class id="6" language="java" name="com.avc.mis.beta.dto.basic.ShipmentCodeBasic" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/basic/ShipmentCodeBasic.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1774" y="262"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="com.avc.mis.beta.dto.values.ShippingPortDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/values/ShippingPortDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="651" y="917"/>    
+  <class id="7" language="java" name="com.avc.mis.beta.dto.basic.UserBasic" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/basic/UserBasic.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="740" y="788"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="com.avc.mis.beta.dto.ValueDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/ValueDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="53" width="123" x="1014" y="404"/>    
+  <class id="8" language="java" name="com.avc.mis.beta.dto.basic.ValueEntityObject" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/basic/ValueEntityObject.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="132" y="428"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="com.avc.mis.beta.dto.values.ValueEntityObject" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/values/ValueEntityObject.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1931" y="846"/>    
+  <class id="9" language="java" name="com.avc.mis.beta.dto.basic.ValueObject" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/basic/ValueObject.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="272" y="526"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -83,56 +83,32 @@
     </display>  
   </class>  
   <dependency id="10">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <association id="11">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="12" name="items">        
-        <position height="0" width="0" x="1472" y="473"/>      
-      </attribute>      
-      <multiplicity id="13" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="1472" y="473"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="14">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="15">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="16">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="17">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="18">    
     <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
-  <association id="19">    
-    <end type="SOURCE" refId="9" navigable="false">      
-      <attribute id="20" name="value">        
-        <position height="0" width="0" x="171" y="-74"/>      
-      </attribute>      
-      <multiplicity id="21" minimum="0" maximum="1">        
-        <position height="0" width="0" x="171" y="-74"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="3" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="22">    
+  <dependency id="11">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="12">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="14">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="15">    
     <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="8"/>  
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="16">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    

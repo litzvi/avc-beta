@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
+import com.avc.mis.beta.dto.values.ShipmentCodeDTO;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.enums.EditStatus;

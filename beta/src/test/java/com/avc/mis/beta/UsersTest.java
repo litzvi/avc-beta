@@ -41,7 +41,7 @@ import com.avc.mis.beta.service.Users;
 @WithUserDetails("eli")
 public class UsersTest {
 	
-	private static Integer SERIAL_NO = 1942;
+	private static Integer SERIAL_NO = 1949;
 	
 	@Autowired private Users users;
 	

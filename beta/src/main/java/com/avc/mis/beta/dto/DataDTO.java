@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,6 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-@AllArgsConstructor
 public abstract class DataDTO extends BaseEntityDTO {
 	
 	@EqualsAndHashCode.Exclude

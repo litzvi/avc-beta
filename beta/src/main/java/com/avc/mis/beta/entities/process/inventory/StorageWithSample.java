@@ -17,7 +17,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.Positive;
 
-import com.avc.mis.beta.dto.OrdinalAmount;
+import com.avc.mis.beta.dto.basic.OrdinalAmount;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.utilities.OrdinalAmountsListToString;
 

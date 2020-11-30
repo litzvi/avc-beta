@@ -16,7 +16,7 @@ import lombok.ToString;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
 public abstract class ValueDTO extends BaseEntityDTO {

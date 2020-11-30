@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.doc;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 

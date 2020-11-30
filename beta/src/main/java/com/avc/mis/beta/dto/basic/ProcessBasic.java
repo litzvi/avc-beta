@@ -1,9 +1,9 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.values;
+package com.avc.mis.beta.dto.basic;
 
-import com.avc.mis.beta.dto.BaseEntityDTO;
+import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 
 import lombok.EqualsAndHashCode;
@@ -18,7 +18,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class ProcessBasic extends BaseEntityDTO {
+public class ProcessBasic extends BasicDTO {
 	
 	ProcessName processName;
 
