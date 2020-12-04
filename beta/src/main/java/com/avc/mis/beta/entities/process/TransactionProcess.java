@@ -10,11 +10,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.annotations.Where;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
@@ -41,12 +42,15 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "TRANSACTION_PROCESSES")
-@Inheritance(strategy=InheritanceType.JOINED)
+@PrimaryKeyJoinColumn(name = "processId")
 public abstract class TransactionProcess<T extends ProcessItem> extends ProcessWithProduct<T> {
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
-	@OneToMany(mappedBy = "process", targetEntity = ProcessGroup.class, orphanRemoval = true, 
+	@OneToMany(mappedBy = "process", 
+		targetEntity = ProcessGroup.class,  //caused it to persist the group instead of merge
+		orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@Where(clause = "dtype = 'UsedItemsGroup'")
 	@NotEmpty(message = "Has to containe at least one used/origion storage item")
 	private Set<UsedItemsGroup> usedItemGroups = new HashSet<>();
 

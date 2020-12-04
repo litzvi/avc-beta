@@ -40,7 +40,7 @@ public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDT
 	
 	
 	public ReceiptItemWithStorage(Integer id, Integer version, Integer ordinal,
-			Integer itemId, String itemValue, ProductionUse productionUse, 	Class<? extends Item> ItemClazz,
+			Integer itemId, String itemValue, ProductionUse productionUse, 	BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> ItemClazz,
 			MeasureUnit measureUnit,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
@@ -54,7 +54,7 @@ public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDT
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
 //		super(id);
 		this.receiptItem = new ReceiptItemDTO(id, version, ordinal,
-				itemId, itemValue, productionUse, ItemClazz, measureUnit,
+				itemId, itemValue, productionUse, itemUnitAmount, itemUnitMeasureUnit, ItemClazz, measureUnit,
 				/* poCodeId, contractTypeCode, supplierName, */
 				groupName, description, remarks, tableView,
 				receivedUnits, orderMU, unitPrice, currency,

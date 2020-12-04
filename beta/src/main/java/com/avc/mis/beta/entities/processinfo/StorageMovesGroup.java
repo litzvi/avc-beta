@@ -48,6 +48,10 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "groupId")
 public class StorageMovesGroup extends ProcessGroupWithStorages {
 	
+	{
+		setDtype("StorageMovesGroup");
+	}
+	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "group", targetEntity = UsedItemBase.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)

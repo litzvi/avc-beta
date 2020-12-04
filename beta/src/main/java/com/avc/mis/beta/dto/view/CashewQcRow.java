@@ -80,7 +80,12 @@ public class CashewQcRow extends BasicDTO {
 		else{		
 			divisor = sampleWeight;
 		}
-		this.breakage = breakage.divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
+		if(breakage != null) {
+			this.breakage = breakage.divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
+		}
+		else {
+			this.breakage = null;
+		}
 		this.totalDefects = rawDefects.getTotal().divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
 		this.totalDamage = rawDamage.getTotal().divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
 		

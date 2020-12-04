@@ -160,9 +160,9 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 						+ "join ui.storage s "
 							+ "join s.processItem pi "
 								+ "join pi.process ui_origion_p "
-									+ "join ui_origion_p.lifeCycle c "
-			+ "where ui_origion_p.id = :processId and "
-				+ "c.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
+//				+ "join p.lifeCycle c "
+			+ "where ui_origion_p.id = :processId ")
+//				+ "and c.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
 	Boolean isProcessReferenced(Integer processId);
 
 

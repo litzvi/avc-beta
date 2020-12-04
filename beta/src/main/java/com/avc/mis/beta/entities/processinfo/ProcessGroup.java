@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.ProcessInfoEntity;
@@ -35,7 +36,11 @@ import lombok.ToString;
 @Entity
 @Table(name = "PROCESS_GROUPS")
 @Inheritance(strategy=InheritanceType.JOINED)
+//@MappedSuperclass
 public abstract class ProcessGroup extends ProcessInfoEntity {
+
+	@JsonIgnore
+	private String dtype;
 
 	@Setter(value = AccessLevel.PROTECTED) 
 	@JsonIgnore

@@ -15,6 +15,8 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.annotations.Where;
+
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.ProcessGroup;
@@ -44,6 +46,7 @@ public class StorageRelocation extends PoProcess {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", targetEntity = ProcessGroup.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@Where(clause = "dtype = 'StorageMovesGroup'")
 	@NotEmpty(message = "Has to containe at least one storage move")
 	private Set<StorageMovesGroup> storageMovesGroups = new HashSet<>();
 

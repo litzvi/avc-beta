@@ -15,6 +15,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
@@ -39,7 +40,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "PO_PROCESSES")
-@Inheritance(strategy=InheritanceType.JOINED)
+@PrimaryKeyJoinColumn(name = "processId")
 public abstract class PoProcess extends GeneralProcess {	
 
 	@ManyToOne(fetch = FetchType.LAZY)

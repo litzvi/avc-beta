@@ -33,6 +33,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "PROCESS_GROUPS_W_STORAGES")
 @PrimaryKeyJoinColumn(name = "groupId")
+//@Inheritance(strategy=InheritanceType.JOINED)
 public abstract class ProcessGroupWithStorages extends ProcessGroup {
 
 	@Enumerated(EnumType.STRING)

@@ -19,9 +19,9 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 	
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
-			+ "p.id, item.id, item.value, "
+			+ "p.id, item.id, item.value, item.defaultMeasureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "SUM((ui.numberUsedUnits * (sf.unitAmount - coalesce(sf.containerWeight, 0))) * uom.multiplicand / uom.divisor), "
-			+ "item.defaultMeasureUnit, function('GROUP_CONCAT', wh.value)) "
+			+ "function('GROUP_CONCAT', wh.value)) "
 		+ "from TransactionProcess p "
 			+ "join p.poCode po_code "
 			+ "join p.usedItemGroups grp "
@@ -29,6 +29,7 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 					+ "join ui.storage sf "
 						+ "join sf.processItem pi "
 							+ "join pi.item item "
+								+ "join item.unit item_unit "
 							+ "join pi.process p_used_item "
 								+ "join p_used_item.poCode po_code_used_item "
 						+ "join sf.group sf_group "
@@ -45,12 +46,13 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 	Stream<ProductionProcessWithItemAmount> findAllUsedItemsByProcessIds(int[] processIds);
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
-			+ "p.id, item.id, item.value, "
+			+ "p.id, item.id, item.value, item.defaultMeasureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "SUM((sf.numberUnits * (sf.unitAmount - coalesce(sf.containerWeight, 0))) * uom.multiplicand / uom.divisor), "
-			+ "item.defaultMeasureUnit, function('GROUP_CONCAT', wh.value)) "
+			+ "function('GROUP_CONCAT', wh.value)) "
 		+ "from TransactionProcess p "
 			+ "join p.processItems pi "
 				+ "join pi.item item "
+					+ "join item.unit item_unit "
 				+ "join pi.storageForms sf "
 					+ "join sf.group sf_group "
 						+ "join UOM uom "

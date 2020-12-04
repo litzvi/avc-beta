@@ -133,7 +133,9 @@ public class ProcessInfoDAO extends DAO {
 		}
 		process.setModifiedDate(null);
 		editEntity(process);
+		
 		editAlerts(process);
+
 	}
 	
 	/**
@@ -179,7 +181,7 @@ public class ProcessInfoDAO extends DAO {
 	 * @param process the edited GeneralProcess
 	 */
 	private void editAlerts(GeneralProcess process) {
-
+				
 		List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(process.getId());
 
 		for(ApprovalTask approval: approvals) {
@@ -188,7 +190,6 @@ public class ProcessInfoDAO extends DAO {
 			}			
 			approval.setDescription("Process added and edited");
 		}
-		
 		sendMessageAlerts(process, "Old process edited");
 		
 	}

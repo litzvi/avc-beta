@@ -36,7 +36,7 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 	 * that fetches process item, process and storage details.
 	 */
 	public ProcessItemWithStorage(Integer id, Integer version, Integer ordinal,
-			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> ItemClazz,
+			Integer itemId, String itemValue, ProductionUse productionUse, BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> ItemClazz,
 			MeasureUnit measureUnit, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
@@ -46,8 +46,8 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 			String groupName, String description, String remarks, boolean tableView) {
 //		super(id);
 		this.processItem = new ProcessItemDTO(id, version, ordinal,
-				itemId, itemValue, productionUse, ItemClazz, measureUnit, 
-				groupName, description, remarks, tableView);
+				itemId, itemValue, productionUse, itemUnitAmount, itemUnitMeasureUnit, ItemClazz, 
+				measureUnit, groupName, description, remarks, tableView);
 		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.storage = new StorageDTO(storageId, storageVersion, storageOrdinal,
 				unitAmount, numberUnits, containerWeight,

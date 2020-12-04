@@ -8,9 +8,12 @@ import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemWithUnit;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.PackedItem;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -31,10 +34,10 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 	String[] warehouses;
 	
 	public ProductionProcessWithItemAmount(@NonNull Integer id, 
-			Integer itemId, String itemValue, 
-			BigDecimal amount, MeasureUnit measureUnit,
-			String warehouses) {
-		this(id, itemId, itemValue, amount, measureUnit);
+			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
+			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
+			BigDecimal amount, String warehouses) {
+		this(id, itemId, itemValue, defaultMeasureUnit, unitAmount, unitMeasureUnit, clazz, amount);
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
 		}
@@ -45,11 +48,22 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 	}
 	
 	public ProductionProcessWithItemAmount(@NonNull Integer id, 
-			Integer itemId, String itemValue, 
-			BigDecimal amount, MeasureUnit measureUnit) {
+			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
+			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
+			BigDecimal amount) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		AmountWithUnit amountWithUnit = new AmountWithUnit(amount, measureUnit);
+		AmountWithUnit amountWithUnit;
+		if(clazz == BulkItem.class) {
+			amountWithUnit = new AmountWithUnit(amount, defaultMeasureUnit);			
+		}
+		else if(clazz == PackedItem.class){
+			amountWithUnit = new AmountWithUnit(amount.multiply(unitAmount), unitMeasureUnit);
+		}
+		else 
+		{
+			throw new IllegalStateException("The class can only apply to weight items");
+		}
 		this.amountWithUnit = new AmountWithUnit[] {
 				amountWithUnit.convert(MeasureUnit.KG),
 				amountWithUnit.convert(MeasureUnit.LBS)};
@@ -72,8 +86,6 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 		else {
 			this.warehouses = null;
 		}
-	}
-	
-	
+	}	
 	
 }

@@ -82,6 +82,7 @@ public class StorageWithSampleDTO extends StorageDTO {
 		this.avgTestedWeight = avgTestedWeight;
 	}
 	
+	
 	public BigDecimal getSampleContainerWeight() {
 //		Optional<BigDecimal> sampleContainerWeight = Optional.ofNullable(this.sampleContainerWeight);
 //		if(sampleContainerWeights != null) {
@@ -89,10 +90,16 @@ public class StorageWithSampleDTO extends StorageDTO {
 //					.reduce(BigDecimal::add)
 //					.map(s -> s.divide(new BigDecimal(sampleContainerWeights.size()), MathContext.DECIMAL64));
 //		}
-		Optional<BigDecimal> sampleContainerWeight = sampleContainerWeights.stream().map(OrdinalAmount<BigDecimal>::getAmount)
-				.reduce(BigDecimal::add)
-				.map(s -> s.divide(new BigDecimal(sampleContainerWeights.size()), MathContext.DECIMAL64));
-		return sampleContainerWeight.map(w -> w.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN)).orElse(null);
+		
+		if(this.sampleContainerWeights != null) {
+			Optional<BigDecimal> sampleContainerWeight = this.sampleContainerWeights.stream().map(OrdinalAmount<BigDecimal>::getAmount)
+					.reduce(BigDecimal::add)
+					.map(s -> s.divide(new BigDecimal(sampleContainerWeights.size()), MathContext.DECIMAL64));
+			return sampleContainerWeight.map(w -> w.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN)).orElse(null);
+		}
+		else {
+			return null;
+		}
 
 	}
 	

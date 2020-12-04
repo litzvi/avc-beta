@@ -251,7 +251,14 @@ public class QueryTest {
 		itemInventory.forEach(i -> System.out.println(i));
 		
 		//test QC raw tables
-		List<CashewQcRow> rawQcRows = qualityChecks.getRawQualityChecks();
+		List<CashewQcRow> rawQcRows;
+		try {
+			rawQcRows = qualityChecks.getRawQualityChecks();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		rawQcRows.forEach(i -> System.out.println(i));
 		
 		//get cashew standards in DTOs

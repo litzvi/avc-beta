@@ -45,7 +45,12 @@ import lombok.ToString;
 @Entity
 @Table(name = "USED_ITEMS_GROUP")
 @PrimaryKeyJoinColumn(name = "groupId")
+//@Inheritance(strategy=InheritanceType.JOINED)
 public class UsedItemsGroup extends ProcessGroup {
+	
+	{
+		setDtype("UsedItemsGroup");
+	}
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "group", targetEntity = UsedItemBase.class, orphanRemoval = true, 
@@ -82,6 +87,7 @@ public class UsedItemsGroup extends ProcessGroup {
 	 * @param usedItemTable
 	 */
 	public void setUsedItem(UsedItemTableDTO usedItemTable) {
+			
 		setTableView(true);
 		
 		List<BasicUsedStorageDTO> basicUsedStorages = usedItemTable.getAmounts();

@@ -13,11 +13,15 @@ import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Where;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.ProcessGroup;
+import com.avc.mis.beta.entities.processinfo.ProcessGroupWithStorages;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 
 import lombok.AccessLevel;
@@ -38,12 +42,13 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @Entity
 @Table(name = "PROCESSES_WITH_PRODUCT")
-@Inheritance(strategy=InheritanceType.JOINED)
+@PrimaryKeyJoinColumn(name = "processId")
 public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProcess {
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", targetEntity = ProcessGroup.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@Where(clause = "dtype = 'ProcessItem'")
 	private Set<ProcessItem> processItems = new HashSet<>();
 
 	/**

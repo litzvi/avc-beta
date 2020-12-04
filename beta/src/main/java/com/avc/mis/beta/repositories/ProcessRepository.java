@@ -98,7 +98,8 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	 */
 	@Query("select new com.avc.mis.beta.dto.query.ProcessItemWithStorage( "
 			+ " i.id, i.version, i.ordinal, "
-			+ "item.id, item.value, item.productionUse, type(item), sf_group.measureUnit, "
+			+ "item.id, item.value, item.productionUse, "
+			+ "item_unit.amount, item_unit.measureUnit, type(item), sf_group.measureUnit, "
 			+ "poCode.code, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "sf.unitAmount, sf.numberUnits, sf.containerWeight, "
@@ -106,6 +107,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "i.groupName, i.description, i.remarks, i.tableView) "
 		+ "from ProcessItem i "
 			+ "join i.item item "
+				+ "join item.unit item_unit "
 			+ "join i.process p "
 				+ "join p.poCode poCode "
 					+ "join poCode.contractType ct "

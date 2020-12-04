@@ -13,9 +13,12 @@ import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -35,7 +38,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<StorageDTO> {
 
-	private ItemDTO item; //change to itemDTO in order to get category
+	private ItemWithUnitDTO item; //change to itemDTO in order to get category
 	private MeasureUnit measureUnit;
 	private String description;
 	private String remarks;
@@ -45,11 +48,12 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 //	private AmountWithUnit[] totalAmount;
 	
 	public ProcessItemDTO(Integer id, Integer version, Integer ordinal, 
-			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
+			Integer itemId, String itemValue, ProductionUse productionUse, 
+			BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> clazz,
 			MeasureUnit measureUnit,
 			String groupName, String description, String remarks, boolean tableView) {
 		super(id, version, ordinal, groupName, tableView);
-		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, null, null, productionUse, itemUnitAmount, itemUnitMeasureUnit, clazz);
 		this.measureUnit = measureUnit;
 		this.description = description;
 		this.remarks = remarks;
@@ -62,7 +66,7 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 	 */
 	public ProcessItemDTO(ProcessItem processItem) {
 		super(processItem);
-		this.item = new ItemDTO(processItem.getItem());
+		this.item = new ItemWithUnitDTO(processItem.getItem());
 		this.measureUnit = processItem.getMeasureUnit();
 		
 		this.description = processItem.getDescription();
@@ -76,7 +80,7 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 	}
 
 	public ProcessItemDTO(Integer id, Integer version, Integer ordinal,
-			ItemDTO item, MeasureUnit measureUnit,
+			ItemWithUnitDTO item, MeasureUnit measureUnit,
 			String groupName, String description, String remarks, boolean tableView) {
 		super(id, version, ordinal, groupName, tableView);
 		this.item = item;
@@ -119,13 +123,23 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 		BigDecimal total = this.storageForms.stream()
 				.map(sf -> sf.getTotal())
 				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
+		AmountWithUnit totalAmount;
+		Class<? extends Item> itemClass = this.item.getClazz();
+		if(itemClass == BulkItem.class) {
+			totalAmount = new AmountWithUnit(total, this.measureUnit);
+		}
+		else if(itemClass == PackedItem.class){
+			totalAmount = this.item.getUnit().multiply(total);
+		}
+		else 
+		{
+			throw new IllegalStateException("The class can only apply to weight items");
+		}
 		
 		return new AmountWithUnit[] {
 				totalAmount.setScale(MeasureUnit.SCALE),
 				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)
-		};
-		
+		};	
 	}
 
 	

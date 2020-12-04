@@ -15,4 +15,5 @@ public enum ProductionUse {
 	PACKED,
 	INGREDIENTS,
 	PACKING_SUPPLYES,
+	WASTE,
 }

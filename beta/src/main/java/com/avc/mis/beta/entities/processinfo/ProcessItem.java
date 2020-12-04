@@ -5,6 +5,7 @@ package com.avc.mis.beta.entities.processinfo;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Where;
 
 import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
@@ -53,6 +56,10 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "groupId")
 public class ProcessItem extends ProcessGroupWithStorages {
 	
+	{
+		setDtype("ProcessItem");
+	}
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "itemId", nullable = false)
 	@NotNull(message = "Item is mandatory")
@@ -63,7 +70,7 @@ public class ProcessItem extends ProcessGroupWithStorages {
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 //	@Where(clause = "dtype = 'Storage'") //only storage belongs to this group - storageMove belongs to StorageMovesGroup
 //	@NotEmpty(message = "Process line has to contain at least one storage line") //made a bug when using merge for persisting ProcessItem
-	private Set<Storage> storageForms;
+	private Set<Storage> storageForms = new HashSet<>();
 	
 	@JsonIgnore
 	@ToString.Exclude 
@@ -121,6 +128,9 @@ public class ProcessItem extends ProcessGroupWithStorages {
 	 * @param storageTable
 	 */
 	public void setStorage(StorageTableDTO storageTable) {
+		
+		System.out.println("edit storage table: " + storageTable);
+		
 		setTableView(true);
 		
 		BigDecimal containerWeight = storageTable.getContainerWeight();
@@ -130,6 +140,8 @@ public class ProcessItem extends ProcessGroupWithStorages {
 		for(int i=0; i<storageForms.length; i++) {
 			BasicStorageDTO amount = amounts.get(i);
 			storageForms[i] = new Storage();
+			storageForms[i].setId(amount.getId());
+			storageForms[i].setVersion(amount.getVersion());
 			storageForms[i].setOrdinal(amount.getOrdinal());
 			storageForms[i].setNumberUnits(amount.getAmount());
 			storageForms[i].setContainerWeight(containerWeight);

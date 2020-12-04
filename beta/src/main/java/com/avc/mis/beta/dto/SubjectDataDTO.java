@@ -8,6 +8,7 @@ import com.avc.mis.beta.entities.Ordinal;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * DTO for entities that represent information of another object 
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 public abstract class SubjectDataDTO extends DataDTO implements Ordinal {
 

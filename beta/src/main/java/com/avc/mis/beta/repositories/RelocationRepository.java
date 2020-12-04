@@ -100,15 +100,16 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 //	List<StorageMoveDTO> findStorageMoveDTOsByProcessId(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
-			+ "p.id, item.id, item.value, "
+			+ "p.id, item.id, item.value, item.defaultMeasureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "SUM((m.numberUsedUnits * (sf.unitAmount - coalesce(sf.containerWeight, 0))) * uom.multiplicand / uom.divisor), "
-			+ "item.defaultMeasureUnit, function('GROUP_CONCAT', wh.value)) "
+			+ "function('GROUP_CONCAT', wh.value)) "
 		+ "from StorageRelocation p "
 			+ "join p.storageMovesGroups g "
 				+ "join g.storageMoves m "
 					+ "join m.storage sf "
 						+ "join sf.processItem pi "
 							+ "join pi.item item "
+								+ "join item.unit item_unit "
 							+ "join sf.group sf_group "
 								+ "join UOM uom "
 									+ "on uom.fromUnit = sf_group.measureUnit and uom.toUnit = item.defaultMeasureUnit "
