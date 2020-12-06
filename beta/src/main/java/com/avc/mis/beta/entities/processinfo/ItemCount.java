@@ -65,7 +65,7 @@ public class ItemCount extends ProcessInfoEntity {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "itemCount", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@NotEmpty(message = "Sample has to contain at least one sampled amount")
+//	@NotEmpty(message = "Sample has to contain at least one sampled amount")
 	private Set<CountAmount> amounts;
 	
 	public CountAmount[] getAmounts() {

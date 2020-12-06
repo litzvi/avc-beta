@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.report.ProductionReportLine;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
@@ -60,6 +64,30 @@ public class ProductionProcesses {
 			row.setProducedItems(producedMap.get(row.getId()));
 		}		
 		return processRows;
+	}
+	
+	public ProductionReportLine getProductionSummary(ProcessName processName, Integer poCodeId) {
+		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId);
+		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
+
+		ProductionReportLine reportLine = new ProductionReportLine();
+
+		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
+		
+		Stream<ItemAmount> itemAmounts = getProcessRepository().findSummaryUsedItemAmounts(processIds);
+		Map<ItemGroup, List<ItemAmount>> itemsMap = itemAmounts.collect(Collectors.groupingBy(ItemAmount::getItemGroup));
+
+		reportLine.setProductIn(itemsMap.get(ItemGroup.PRODUCT));
+		reportLine.setIngredients(itemsMap.get(ItemGroup.GENERAL));
+		
+		itemAmounts = getProcessRepository().findSummaryProducedItemAmounts(processIds);
+		itemsMap = itemAmounts.collect(Collectors.groupingBy(ItemAmount::getItemGroup));
+
+		reportLine.setProductOut(itemsMap.get(ItemGroup.PRODUCT));
+		reportLine.setWaste(itemsMap.get(ItemGroup.WASTE));
+		reportLine.setQc(itemsMap.get(ItemGroup.QC));
+		
+		return reportLine;
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

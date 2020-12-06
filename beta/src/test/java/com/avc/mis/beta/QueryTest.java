@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
+import com.avc.mis.beta.dto.report.ProductionReportLine;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
@@ -324,7 +326,7 @@ public class QueryTest {
 	
 	@Test
 	void oneQueryTest() {		
-		
-				
+		ProductionReportLine reportLine = productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, 14107);
+		System.out.println("Report line: " + reportLine);
 	}
 }

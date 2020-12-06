@@ -128,9 +128,9 @@ public class ProcessInfoDAO extends DAO {
 		if(status != EditStatus.EDITABLE) {
 			throw new AccessControlException("Process was closed for edit");
 		}
-		if(getProcessRepository().isProcessReferenced(process.getId())) {
-			throw new AccessControlException("Process can't be edited because it's already in use");
-		}
+//		if(getProcessRepository().isProcessReferenced(process.getId())) {
+//			throw new AccessControlException("Process can't be edited because it's already in use");
+//		}
 		process.setModifiedDate(null);
 		editEntity(process);
 		

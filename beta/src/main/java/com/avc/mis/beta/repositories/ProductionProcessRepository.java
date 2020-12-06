@@ -4,10 +4,12 @@
 package com.avc.mis.beta.repositories;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
 /**
@@ -35,6 +37,8 @@ public interface ProductionProcessRepository extends TransactionProcessRepositor
 		+ "where r.id = :processId ")
 	Optional<ProductionProcessDTO> findProductionProcessDTOById(int processId);
 
+	
+	
 	
 	
 }
