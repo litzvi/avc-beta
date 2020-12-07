@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -35,7 +36,9 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 	
 	
 	public StorageMoveDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits, 
-			Integer itemId, String itemValue, MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
+			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
+			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
+			MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 
 			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal storageContainerWeight,
@@ -43,7 +46,8 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
 		super(id, version, ordinal, numberUsedUnits, 
-				itemId, itemValue, measureUnit, itemProcessDate,
+				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
+				measureUnit, itemProcessDate,
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				storageId, stoageVersion, storageOrdinal, 
 				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, storageContainerWeight,

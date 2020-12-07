@@ -79,46 +79,21 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 		return null;
 	}
 	
-	public AmountWithUnit[] getTotalAmount() {
-		AmountWithUnit totalAmount = usedItems.stream()
-				.map(ui -> {
-					StorageDTO storage = ui.getStorage();
-					return new AmountWithUnit(storage.getUnitAmount()
-							.subtract(Optional.ofNullable(storage.getContainerWeight()).orElse(BigDecimal.ZERO))
-							.multiply(ui.getNumberUsedUnits()), 
-						ui.getMeasureUnit());
-				})
-				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
-		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
-				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
-	}
-	
-	/**
-	 * @param usedItemWithGroup
-	 * @return
-	 */
-	/**
-	 * static function for building List of UsedItemsGroupDTO from a List of UsedItemWithGroup
-	 * received by a join query of usedItems with their group.
-	 * @param usedItemWithGroup a List<UsedItemWithGroup>
-	 * @return List<UsedItemsGroupDTO> as in the DTO structure.
-	 */
-//	public static List<UsedItemsGroupDTO> getUsedItemsGroups(List<UsedItemWithGroup> usedItemWithGroup) {
-//		Map<Integer, List<UsedItemWithGroup>> map = usedItemWithGroup.stream()
-//				.collect(Collectors.groupingBy(UsedItemWithGroup::getId, LinkedHashMap::new, Collectors.toList()));
-//		List<UsedItemsGroupDTO> usedItemsGroups = new ArrayList<>();
-//		for(List<UsedItemWithGroup> list: map.values()) {
-//			UsedItemsGroupDTO usedItemsGroup = list.get(0).getUsedItemsGroup();
-//			usedItemsGroup.setUsedItems(list.stream()
-//					.map(i -> i.getUsedItem())
-////					.sorted(Ordinal.ordinalComparator())
-//					.collect(Collectors.toList()));
-//			usedItemsGroups.add(usedItemsGroup);
-//		}
-////		usedItemsGroups.sort(Ordinal.ordinalComparator());
-//		return usedItemsGroups;
+	//not matched for packed items
+//	public AmountWithUnit[] getTotalAmount() {
+//		AmountWithUnit totalAmount = usedItems.stream()
+//				.map(ui -> {
+//					StorageDTO storage = ui.getStorage();
+//					return new AmountWithUnit(storage.getUnitAmount()
+//							.subtract(Optional.ofNullable(storage.getContainerWeight()).orElse(BigDecimal.ZERO))
+//							.multiply(ui.getNumberUsedUnits()), 
+//						ui.getMeasureUnit());
+//				})
+//				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+//		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
+//				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 //	}
-
+	
 	@JsonIgnore
 	@Override
 	public void setList(List<UsedItemDTO> list) {

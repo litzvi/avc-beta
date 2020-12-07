@@ -55,7 +55,7 @@ public class StorageMovesGroup extends ProcessGroupWithStorages {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "group", targetEntity = UsedItemBase.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@NotEmpty(message = "Has to containe at least one storage move")
+//	@NotEmpty(message = "Has to containe at least one storage move")
 	private Set<StorageMove> storageMoves = new HashSet<>();
 	
 	/**

@@ -8,9 +8,12 @@ import java.math.BigDecimal;
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemWithUnit;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.PackedItem;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -30,13 +33,27 @@ public class ContainerPoItemRow extends BasicDTO {
 	AmountWithUnit[] totalRow;
 
 	public ContainerPoItemRow(@NonNull Integer id, 
-			Integer itemId, String itemValue,
+			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
+			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
 			BigDecimal total, MeasureUnit measureUnit) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
-		AmountWithUnit totalRow = new AmountWithUnit(total, measureUnit);
+		
+		AmountWithUnit totalRow;
+		if(itemClazz == BulkItem.class) {
+			totalRow = new AmountWithUnit(total, measureUnit);
+		}
+		else if(itemClazz == PackedItem.class){
+			totalRow = new AmountWithUnit(total.multiply(itemUnitAmount), itemMeasureUnit);
+		}
+		else 
+		{
+			throw new IllegalStateException("The class can only apply to weight items");
+		}
+		
+		
 		this.totalRow = new AmountWithUnit[] {
 				totalRow.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE),
 				totalRow.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE)

@@ -169,7 +169,9 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	Optional<ExportInfo> findInventoryExportDocById(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemRow( "
-			+ "p.id, item.id, item.value, "
+			+ "p.id, "
+			+ "item.id, item.value, item.defaultMeasureUnit, "
+			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "itemPo.code, ct.code, ct.suffix, "
 			+ "sum((sf.unitAmount - coalesce(sf.containerWeight, 0)) * i.numberUsedUnits * uom.multiplicand / uom.divisor), "
 			+ "item.defaultMeasureUnit) "
@@ -182,6 +184,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 								+ "join used_p.poCode itemPo "
 									+ "left join itemPo.contractType ct "
 							+ "join pi.item item "
+								+ "join item.unit item_unit "
 //						+ "join sf.unitAmount unit "
 							+ "join UOM uom "
 								+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.defaultMeasureUnit "				
@@ -190,7 +193,9 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	List<ContainerPoItemRow> findLoadedTotals(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow( "
-			+ "item.value, itemPo.code, ct.code, ct.suffix, "
+			+ "item.id, item.value, item.defaultMeasureUnit, "
+			+ "item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "itemPo.code, ct.code, ct.suffix, "
 			+ "sf.unitAmount, pi.measureUnit, sum(i.numberUsedUnits)) "
 		+ "from ContainerLoading p "
 			+ "join p.usedItemGroups g "
@@ -201,9 +206,10 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 								+ "join used_p.poCode itemPo "
 									+ "left join itemPo.contractType ct "
 							+ "join pi.item item "
+								+ "join item.unit item_unit "
 //						+ "join sf.unitAmount unit "
-							+ "join UOM uom "
-								+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.defaultMeasureUnit "				
+//							+ "join UOM uom "
+//								+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.defaultMeasureUnit "				
 		+ "where p.id = :processId "
 		+ "group by item.id, itemPo.code, sf.unitAmount, pi.measureUnit ")
 	List<ContainerPoItemStorageRow> findLoadedStorages(int processId);

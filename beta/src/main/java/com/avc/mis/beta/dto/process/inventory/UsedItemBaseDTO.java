@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemWithUnit;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -38,7 +39,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 
 	//storage processItem info - for display on edit
 	@EqualsAndHashCode.Exclude
-	private BasicValueEntity<Item> item;
+	private ItemWithUnit item;
 	@EqualsAndHashCode.Exclude
 	private MeasureUnit measureUnit;
 	@EqualsAndHashCode.Exclude
@@ -68,7 +69,9 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 
 	
 	public UsedItemBaseDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits,
-			Integer itemId, String itemValue, MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
+			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
+			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
+			MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal storageContainerWeight,
@@ -81,7 +84,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 				storageRemarks, null);
 
 		this.storageId = storageId;
-		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+		this.item = new ItemWithUnit(itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz);
 		this.measureUnit = measureUnit;
 		this.itemProcessDate = itemProcessDate;
 		if(poCodeId != null)
@@ -109,7 +112,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		this.storageId = storage.getId();
 		ProcessItem processItem = storage.getProcessItem();
 		if(processItem != null) {
-			this.item = new BasicValueEntity<Item>(processItem.getItem());
+			this.item = new ItemWithUnit(processItem.getItem());
 			this.measureUnit = processItem.getMeasureUnit();
 			this.itemProcessDate = processItem.getProcess().getRecordedTime();
 			this.itemPo = new PoCodeDTO((processItem.getProcess()).getPoCode());

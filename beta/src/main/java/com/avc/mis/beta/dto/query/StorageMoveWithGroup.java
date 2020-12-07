@@ -9,6 +9,7 @@ import java.time.OffsetDateTime;
 import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
 import com.avc.mis.beta.dto.processinfo.StorageMovesGroupDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,7 +31,9 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 	public StorageMoveWithGroup(@NonNull Integer id, Integer version,  Integer ordinal, 
 			MeasureUnit measureUnit, String groupName, boolean tableView,
 			Integer moveId, Integer moveVersion, Integer moveOrdinal, BigDecimal numberUsedUnits, 
-			Integer itemId, String itemValue, MeasureUnit movedMeasureUnit, OffsetDateTime itemProcessDate,
+			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
+			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
+			MeasureUnit movedMeasureUnit, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 
 			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal storageContainerWeight,
@@ -40,7 +43,8 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 //		super(id);
 		this.storageMovesGroup = new StorageMovesGroupDTO(id, version, ordinal, measureUnit, groupName, tableView);
 		this.storageMove = new StorageMoveDTO(moveId, moveVersion, moveOrdinal, numberUsedUnits, 
-				itemId, itemValue, movedMeasureUnit, itemProcessDate,
+				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
+				movedMeasureUnit, itemProcessDate,
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				storageId, stoageVersion, storageOrdinal, 
 				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, storageContainerWeight,

@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.values;
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.ValueInterface;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
@@ -17,7 +18,7 @@ import lombok.Value;
  * @author Zvi
  *
  */
-@Value
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class BasicValueEntity<T extends ValueInterface> extends ValueDTO implements ValueInterface {
 	
