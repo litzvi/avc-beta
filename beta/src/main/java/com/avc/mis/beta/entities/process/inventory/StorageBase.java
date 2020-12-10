@@ -60,7 +60,7 @@ public class StorageBase extends UsedItemBase {
 	private BigDecimal numberUnits;	
 	
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
-	private BigDecimal containerWeight;	
+	private BigDecimal accessWeight;	
 		
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "warehouseLocationId")

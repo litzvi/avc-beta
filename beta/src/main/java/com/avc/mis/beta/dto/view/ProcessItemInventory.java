@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.utilities.ListGroup;
@@ -53,11 +54,13 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 	 * All database fields (the fields in the form they are fetched from the db) arguments constructor, 
 	 * excluding list of storage forms and calculated totals.
 	 */
-	public ProcessItemInventory(Integer id, Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
+	public ProcessItemInventory(Integer id, 
+			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
+			ItemGroup group, ProductionUse productionUse, Class<? extends Item> clazz,
 			MeasureUnit measureUnit, Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
 		super(id);
-		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
+		this.item = new ItemDTO(itemId, itemValue, defaultMeasureUnit, group, productionUse, clazz);
 		this.measureUnit = measureUnit;
 		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
 		this.itemProcessDate = processDate;
@@ -115,7 +118,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 			StorageTableDTO storageTable = new StorageTableDTO();
 			this.storageForms.stream().findAny().ifPresent(s -> {
 //				storageTable.setMeasureUnit(s.getUnitAmount().getMeasureUnit());
-				storageTable.setContainerWeight(s.getContainerWeight());
+				storageTable.setAccessWeight(s.getAccessWeight());
 				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
 				if(warehouse != null)
 					storageTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));

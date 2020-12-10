@@ -29,7 +29,8 @@ import lombok.experimental.NonFinal;
 public class ProductionProcessWithItemAmount extends BasicDTO {
 
 	BasicValueEntity<Item> item;
-	AmountWithUnit[] amountWithUnit;
+	AmountWithUnit[] weight;
+	AmountWithUnit amount;
 	@NonFinal
 	String[] warehouses;
 	
@@ -55,31 +56,34 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		AmountWithUnit amountWithUnit;
 		if(clazz == BulkItem.class) {
-			amountWithUnit = new AmountWithUnit(amount, defaultMeasureUnit);			
+			this.amount = null;
+			amountWithUnit = new AmountWithUnit(amount, defaultMeasureUnit);
 		}
 		else if(clazz == PackedItem.class){
+			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			amountWithUnit = new AmountWithUnit(amount.multiply(unitAmount), unitMeasureUnit);
 		}
 		else 
 		{
 			throw new IllegalStateException("The class can only apply to weight items");
 		}
-		this.amountWithUnit = new AmountWithUnit[] {
+		this.weight = new AmountWithUnit[] {
 				amountWithUnit.convert(MeasureUnit.KG),
 				amountWithUnit.convert(MeasureUnit.LBS)};
-		AmountWithUnit.setScales(this.amountWithUnit, MeasureUnit.SCALE);
+		AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
 				
 	}
 	
 	public ProductionProcessWithItemAmount(@NonNull Integer id, 
-			BasicValueEntity<Item> item, AmountWithUnit amountWithUnit,
+			BasicValueEntity<Item> item, AmountWithUnit weight, AmountWithUnit amount,
 			String warehouses) {
 		super(id);
 		this.item = item;
-		this.amountWithUnit = new AmountWithUnit[] {
-				amountWithUnit.convert(MeasureUnit.KG),
-				amountWithUnit.convert(MeasureUnit.LBS)};
-		AmountWithUnit.setScales(this.amountWithUnit, MeasureUnit.SCALE);		
+		this.weight = new AmountWithUnit[] {
+				weight.convert(MeasureUnit.KG),
+				weight.convert(MeasureUnit.LBS)};
+		AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);	
+		this.amount = amount;
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
 		}

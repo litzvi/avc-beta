@@ -71,7 +71,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800179;
+	static final Integer PO_CODE = 800185;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -144,8 +144,9 @@ public class GeneralTest {
 		List<Warehouse> storages = valueTablesReader.getAllWarehouses();
 		for(int i=0; i < receiptItems.length; i++) {
 			receiptItems[i] = new ReceiptItem();
-			receiptItems[i].setItem(orderItems[i].getItem());
-			receiptItems[i].setMeasureUnit(MeasureUnit.KG);
+			Item item = orderItems[i].getItem();
+			receiptItems[i].setItem(item);
+			receiptItems[i].setMeasureUnit(item.getMeasureUnit());
 			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), "LBS"));
 			receiptItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			receiptItems[i].setOrderItem(orderItems[i]);
@@ -188,8 +189,9 @@ public class GeneralTest {
 			rawItemQualities[i].setDamage(new RawDamage());
 			
 			processItems[i] = new ProcessItem();
-			processItems[i].setItem(orderItems[i].getItem());
-			processItems[i].setMeasureUnit(MeasureUnit.OZ);
+			Item item = orderItems[i].getItem();
+			processItems[i].setItem(item);
+			processItems[i].setMeasureUnit(item.getMeasureUnit());
 			
 			Storage[] QCStorageForms = new Storage[1];
 			QCStorageForms[0] = new Storage();

@@ -20,11 +20,11 @@ public class PackedItem extends Item {
 
 	public PackedItem() {
 		super();
-		super.setDefaultMeasureUnit(MeasureUnit.UNIT);
+		super.setMeasureUnit(MeasureUnit.UNIT);
 	}
 	
 	@Override
-	public void setDefaultMeasureUnit(MeasureUnit measureUnit) {
+	public void setMeasureUnit(MeasureUnit measureUnit) {
 //		if(!measureUnit.equals(MeasureUnit.UNIT)) {
 //			throw new IllegalArgumentException("Packed item can't have a weight as default measure unit");
 //		}

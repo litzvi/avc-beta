@@ -13,6 +13,7 @@ import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -33,6 +34,7 @@ public class ProcessRow extends BasicDTO {
 	private String supplierName;
 	private OffsetDateTime recordedTime;
 	private Duration duration;
+	private ProcessStatus status;
 	 
 	private List<ProductionProcessWithItemAmount> usedItems;
 	@JsonIgnore private Optional<AmountWithUnit> usedAmounts;
@@ -45,12 +47,13 @@ public class ProcessRow extends BasicDTO {
 	
 	public ProcessRow(@NonNull Integer id, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
-			OffsetDateTime recordedTime, Duration duration) {
+			OffsetDateTime recordedTime, Duration duration, ProcessStatus status) {
 		super(id);
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.recordedTime = recordedTime;
 		this.duration = duration;
+		this.status = status;
 		
 	}
 	
@@ -58,7 +61,7 @@ public class ProcessRow extends BasicDTO {
 		this.usedItems = usedItems;
 		if(usedItems != null) {
 			this.usedAmounts = getUsedItems().stream()
-					.map(i -> i.getAmountWithUnit()[0])
+					.map(i -> i.getWeight()[0])
 					.reduce(AmountWithUnit::add);
 		}
 	}
@@ -67,7 +70,7 @@ public class ProcessRow extends BasicDTO {
 		this.producedItems = producedItems;
 		if(producedItems != null) {
 			this.producedAmounts = getProducedItems().stream()
-					.map(i -> i.getAmountWithUnit()[0])
+					.map(i -> i.getWeight()[0])
 					.reduce(AmountWithUnit::add);
 		}
 	}
@@ -76,7 +79,7 @@ public class ProcessRow extends BasicDTO {
 		this.itemCounts = itemCounts;
 		if(itemCounts != null) {
 			this.countAmounts = getItemCounts().stream()
-					.map(i -> i.getAmountWithUnit()[0])
+					.map(i -> i.getWeight()[0])
 					.reduce(AmountWithUnit::add);
 		}
 	}

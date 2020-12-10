@@ -62,7 +62,13 @@ public class ReceiptTest {
 		//insert order receipt for order
 		PO po = service.addBasicCashewOrder();
 		System.out.println("po code: " + po.getPoCode().getId());
-		receipt = service.getCashewOrderReceipt(po.getPoCode().getId());
+		try {
+			receipt = service.getCashewOrderReceipt(po.getPoCode().getId());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		expected = new ReceiptDTO(receipt);
 		actual = receipts.getReceiptByProcessId(receipt.getId());
 		assertEquals(expected, actual, "failed test adding order receipt");

@@ -88,7 +88,7 @@ public class QueryTest {
 	@Autowired ProductionProcesses productionProcesses;
 	@Autowired Loading loading;
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void queryTest() {
 
@@ -328,5 +328,13 @@ public class QueryTest {
 	void oneQueryTest() {		
 		ProductionReportLine reportLine = productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, 14107);
 		System.out.println("Report line: " + reportLine);
+		
+		Map<ProcessName, List<PoProcessDTO>> qcProcessesMap = qualityChecks.getAllQualityChecksByPo(44952);
+		qcProcessesMap.forEach((k, v) -> {
+			if(!v.isEmpty()) {
+				System.out.println("Process name: " + k);
+				v.forEach(r -> System.out.println(r));
+			}
+		});
 	}
 }

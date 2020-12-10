@@ -28,6 +28,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -102,8 +103,9 @@ public class TestService {
 		List<Item> items = getItems();
 		for(int i=0; i<orderItems.length; i++) {
 			orderItems[i] = new OrderItem();
-			orderItems[i].setItem(items.get(randNum.nextInt(items.size())));
-			orderItems[i].setNumberUnits(new AmountWithUnit(new BigDecimal(i+1), "KG"));
+			Item item = items.get(randNum.nextInt(items.size()));
+			orderItems[i].setItem(item);
+			orderItems[i].setNumberUnits(new AmountWithUnit(new BigDecimal(i+1), item.getMeasureUnit()));
 			orderItems[i].setUnitPrice(new AmountWithCurrency("1.16", "USD"));
 			orderItems[i].setDeliveryDate("1983-11-23");
 		}
@@ -163,9 +165,10 @@ public class TestService {
 			storageForms[i].setAvgTestedWeight(BigDecimal.valueOf(50.01));
 			//build receipt item
 			receiptItems[i] = new ReceiptItem();
-			receiptItems[i].setItem(items.get(randNum.nextInt(items.size())));
-			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), "LBS"));
-			receiptItems[i].setMeasureUnit(MeasureUnit.KG);
+			Item item = items.get(randNum.nextInt(items.size()));
+			receiptItems[i].setItem(item);
+			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), MeasureUnit.LBS));
+			receiptItems[i].setMeasureUnit(item.getMeasureUnit());
 			receiptItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			receiptItems[i].setStorageForms(new Storage[] {storageForms[i]});
 			//add extra bonus
@@ -203,11 +206,11 @@ public class TestService {
 		for(OrderItemDTO oItem: orderItems) {
 			items[i] = new ReceiptItem();
 			storageForms[i] = new StorageWithSample();
-			Item item = new BulkItem();
-			item.setId(oItem.getItem().getId());
+			int itemId = oItem.getItem().getId();
+			Item item = getItems().stream().filter(j -> j.getId() == itemId).findAny().get();
 			items[i].setItem(item);
-			items[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), "LBS"));
-			items[i].setMeasureUnit(MeasureUnit.KG);
+			items[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), MeasureUnit.LBS));
+			items[i].setMeasureUnit(item.getMeasureUnit());
 			items[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			storageForms[i].setUnitAmount(BigDecimal.ONE);
 			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
@@ -349,7 +352,7 @@ public class TestService {
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
 			StorageInventoryRow randStorage = storagesRows.get(0);
 			itemCounts[i].setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
-			itemCounts[i].setContainerWeight(randStorage.getContainerWeight());
+			itemCounts[i].setContainerWeight(randStorage.getAccessWeight());
 			countAmounts = new CountAmount[storagesRows.size()];
 			int j=0;
 			for(StorageInventoryRow storageRow: storagesRows) {
@@ -374,7 +377,7 @@ public class TestService {
 			processItems[i] = new ProcessItem();
 			Item item = getItem(processItemRow.getItem());
 			processItems[i].setItem(item);
-			processItems[i].setMeasureUnit(processItemRow.getMeasureUnit());
+			processItems[i].setMeasureUnit(item.getMeasureUnit());
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
 			storageForms = new Storage[storagesRows.size()];
 			int j=0;
@@ -393,16 +396,16 @@ public class TestService {
 	}
 	
 	public Item getItem(ItemDTO itemDTO) {
-		Item item = new Item();
-//		if(itemDTO.getClazz() == BulkItem.class) {
-//			item = new BulkItem();
-//		}
-//		else if(itemDTO.getClazz() == PackedItem.class) {
-//			item = new PackedItem();
-//		}
-//		else {
-//			throw new NullPointerException();
-//		}
+		Item item;
+		if(itemDTO.getClazz() == BulkItem.class) {
+			item = new BulkItem(itemDTO.getMeasureUnit());			
+		}
+		else if(itemDTO.getClazz() == PackedItem.class) {
+			item = new PackedItem();
+		}
+		else {
+			throw new NullPointerException();
+		}
 		item.setId(itemDTO.getId());
 		return item;
 	}

@@ -38,7 +38,7 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 
 			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
 //		super(id);
 		this.storageMovesGroup = new StorageMovesGroupDTO(id, version, ordinal, measureUnit, groupName, tableView);
@@ -49,7 +49,7 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 				storageId, stoageVersion, storageOrdinal, 
 				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks,
-				unitAmount, numberUnits, containerWeight,
+				unitAmount, numberUnits, accessWeight,
 				warehouseLocationId, warehouseLocationValue, clazz);
 	}
 	

@@ -5,9 +5,11 @@ package com.avc.mis.beta.entities.enums;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -28,7 +30,8 @@ public enum MeasureUnit {
 	LOT,
 	OZ,
 	GRAM, 
-	UNIT;
+	UNIT,
+	BOX;
 	
 	/**
 	 * Nested map with full Cartesian product for converting from every unit to any other unit.
@@ -38,6 +41,10 @@ public enum MeasureUnit {
 	 * Should be used for inserting all UOM to database on deployment, so conversions could be done in queries.
 	 */
 	public static final Map<MeasureUnit, Map<MeasureUnit, UOM>> CONVERTION_MAP;
+	
+	public static final Set<MeasureUnit> WEIGHT_UNITS = EnumSet.of(KG, LBS, LOT, OZ, GRAM);
+	public static final Set<MeasureUnit> DISCRETE_UNITS = EnumSet.of(UNIT, BOX);
+
 	
 	/**
 	 * Default scale when returning result from conversion
@@ -89,9 +96,13 @@ public enum MeasureUnit {
 		CONVERTION_MAP.put(OZ, ozMap);
 		
 		Map<MeasureUnit, UOM> unitMap = new HashMap<MeasureUnit, UOM>();
-		kgMap.put(UNIT, new UOM(UNIT, UNIT, BigDecimal.ONE, BigDecimal.ONE));
+		unitMap.put(UNIT, new UOM(UNIT, UNIT, BigDecimal.ONE, BigDecimal.ONE));
 		CONVERTION_MAP.put(UNIT, unitMap);
-		
+
+		Map<MeasureUnit, UOM> boxMap = new HashMap<MeasureUnit, UOM>();
+		boxMap.put(BOX, new UOM(BOX, BOX, BigDecimal.ONE, BigDecimal.ONE));
+		CONVERTION_MAP.put(BOX, boxMap);
+
 	}
 	
 	public static BigDecimal convert(@NonNull BigDecimal amount, MeasureUnit fromUnit, MeasureUnit toUnit) {

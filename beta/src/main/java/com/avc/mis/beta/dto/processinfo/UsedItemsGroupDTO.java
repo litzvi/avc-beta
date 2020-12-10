@@ -63,7 +63,7 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 				usedItemTable.setItemPo(ui.getItemPo());
 				usedItemTable.setItemProcessDate(ui.getItemProcessDate());
 				StorageDTO storage = ui.getStorage();
-				usedItemTable.setContainerWeight(storage.getContainerWeight());
+				usedItemTable.setAccessWeight(storage.getAccessWeight());
 				BasicValueEntity<Warehouse> warehouse = storage.getWarehouseLocation();
 				if(warehouse != null)
 					usedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));

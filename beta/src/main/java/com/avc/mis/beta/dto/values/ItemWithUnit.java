@@ -28,21 +28,21 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class ItemWithUnit extends BasicValueEntity<Item> {
 
-	MeasureUnit defaultMeasureUnit;
+	MeasureUnit measureUnit;
 	AmountWithUnit unit;
 	Class<? extends Item> clazz;
 	
-	public ItemWithUnit(Integer id, String value, MeasureUnit defaultMeasureUnit, 
+	public ItemWithUnit(Integer id, String value, MeasureUnit measureUnit, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz) {
 		super(id, value);
-		this.defaultMeasureUnit = defaultMeasureUnit;
+		this.measureUnit = measureUnit;
 		this.unit = new AmountWithUnit(unitAmount, unitMeasureUnit);
 		this.clazz = clazz;
 	}
 	
 	public ItemWithUnit(@NonNull Item item) {
 		super(item);
-		this.defaultMeasureUnit = item.getDefaultMeasureUnit();
+		this.measureUnit = item.getMeasureUnit();
 		this.unit = item.getUnit();
 		this.clazz = item.getClass();
 	}

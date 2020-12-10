@@ -15,6 +15,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -26,13 +28,17 @@ import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import io.micrometer.core.instrument.Measurement;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -133,7 +139,7 @@ public class ProcessItem extends ProcessGroupWithStorages {
 		
 		setTableView(true);
 		
-		BigDecimal containerWeight = storageTable.getContainerWeight();
+		BigDecimal accessWeight = storageTable.getAccessWeight();
 		Warehouse warehouse = storageTable.getWarehouseLocation();
 		List<BasicStorageDTO> amounts = storageTable.getAmounts();
 		Storage[] storageForms = new Storage[amounts.size()];
@@ -144,11 +150,25 @@ public class ProcessItem extends ProcessGroupWithStorages {
 			storageForms[i].setVersion(amount.getVersion());
 			storageForms[i].setOrdinal(amount.getOrdinal());
 			storageForms[i].setNumberUnits(amount.getAmount());
-			storageForms[i].setContainerWeight(containerWeight);
+			storageForms[i].setAccessWeight(accessWeight);
 			storageForms[i].setWarehouseLocation(warehouse);
 		}
 		setStorageForms(storageForms);
 		
+	}
+	
+	@PrePersist @PreUpdate
+	public void measureUnitItemCompatiable() {
+		MeasureUnit itemDefaultMU = item.getMeasureUnit();
+		if(MeasureUnit.DISCRETE_UNITS.contains(itemDefaultMU) ^ MeasureUnit.DISCRETE_UNITS.contains(getMeasureUnit())) {
+			if(MeasureUnit.DISCRETE_UNITS.contains(itemDefaultMU)) {
+				throw new IllegalArgumentException("Discrete item can't have a weight measure unit");
+			}
+			else {
+				throw new IllegalArgumentException("Bulk weight item can't have a Discrete measure unit");
+			}
+//			throw new IllegalArgumentException("Measure unit has to be convirtable to item default measure unit");
+		}
 	}
 	
 

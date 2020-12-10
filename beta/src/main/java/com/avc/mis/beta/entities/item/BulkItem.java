@@ -25,9 +25,15 @@ public class BulkItem extends Item {
 		super.setUnit(AmountWithUnit.ONE_UNIT);
 	}
 	
+	public BulkItem(MeasureUnit measureUnit) {
+		super();
+		super.setUnit(AmountWithUnit.ONE_UNIT);
+		super.setMeasureUnit(measureUnit);
+	}
+	
 	@Override
-	public void setDefaultMeasureUnit(MeasureUnit measureUnit) {
-		super.setDefaultMeasureUnit(measureUnit);
+	public void setMeasureUnit(MeasureUnit measureUnit) {
+		super.setMeasureUnit(measureUnit);
 	}
 	
 	@Override

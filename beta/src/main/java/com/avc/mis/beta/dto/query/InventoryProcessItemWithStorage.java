@@ -10,6 +10,7 @@ import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
@@ -36,24 +37,25 @@ public class InventoryProcessItemWithStorage implements CollectionItemWithGroup<
 	 */
 	public InventoryProcessItemWithStorage(
 			Integer processItemId, 
-			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
+			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
+			ItemGroup group, ProductionUse productionUse, Class<? extends Item> clazz,
 			MeasureUnit measureUnit, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			BigDecimal numberUsedUnits, 
 			BigDecimal totalBalance, MeasureUnit totalBalanceMU) {
 
 		this.processItemInventoryRow = new ProcessItemInventory(
-				processItemId, itemId, itemValue, productionUse, clazz, measureUnit,
+				processItemId, itemId, itemValue, defaultMeasureUnit, group, productionUse, clazz, measureUnit,
 				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
 				processDate, receiptDate, tableView);
 		this.storageInventoryRow = new StorageInventoryRow(
 				storageId, storageVersion, storageOrdinal,
 				processItemId,
-				unitAmount, numberUnits, containerWeight,
+				unitAmount, numberUnits, accessWeight,
 				warehouseLocationId, warehouseLocationValue,
 				numberUsedUnits, 
 				totalBalance, totalBalanceMU); 

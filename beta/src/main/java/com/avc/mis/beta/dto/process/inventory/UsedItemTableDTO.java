@@ -29,7 +29,7 @@ public class UsedItemTableDTO {
 	private List<BasicUsedStorageDTO> amounts;
 	
 	private MeasureUnit measureUnit;
-	private BigDecimal containerWeight;	
+	private BigDecimal accessWeight;	
 	
 	private Warehouse warehouseLocation;
 	

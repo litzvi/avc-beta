@@ -30,7 +30,7 @@ public class StorageInventoryRow  extends BasicSubjectDataDTO {
 	Integer processItemId;
 	BigDecimal unitAmount;
 	BigDecimal numberUnits;	
-	BigDecimal containerWeight;
+	BigDecimal accessWeight;
 	BasicValueEntity<Warehouse> warehouseLocation;
 	BigDecimal numberUsedUnits;
 	AmountWithUnit totalBalance;
@@ -40,7 +40,7 @@ public class StorageInventoryRow  extends BasicSubjectDataDTO {
 	 */
 	public StorageInventoryRow(Integer id, Integer version, Integer ordinal,
 			Integer processItemId,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			BigDecimal numberUsedUnits, 
 			BigDecimal totalBalance, MeasureUnit totalBalanceMU) {
@@ -48,7 +48,7 @@ public class StorageInventoryRow  extends BasicSubjectDataDTO {
 		this.processItemId = processItemId;
 		this.unitAmount = unitAmount;
 		this.numberUnits = numberUnits;
-		this.containerWeight = containerWeight;
+		this.accessWeight = accessWeight;
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else
@@ -61,14 +61,14 @@ public class StorageInventoryRow  extends BasicSubjectDataDTO {
 	 * All class arguments constructor
 	 */
 	public StorageInventoryRow(Integer id, Integer version, Integer ordinal,
-			Integer processItemId, BigDecimal unitAmount, BigDecimal containerWeight,
+			Integer processItemId, BigDecimal unitAmount, BigDecimal accessWeight,
 			BigDecimal numberUnits, BasicValueEntity<Warehouse> warehouseLocation, 
 			BigDecimal numberUsedUnits, AmountWithUnit totalBalance) {
 		super(id, version, ordinal);
 		this.processItemId = processItemId;
 		this.unitAmount = unitAmount;
 		this.numberUnits = numberUnits;
-		this.containerWeight = containerWeight;
+		this.accessWeight = accessWeight;
 		this.warehouseLocation = warehouseLocation;
 		this.numberUsedUnits = numberUsedUnits;
 		this.totalBalance = totalBalance;

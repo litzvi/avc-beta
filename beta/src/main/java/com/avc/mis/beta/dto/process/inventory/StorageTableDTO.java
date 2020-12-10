@@ -19,7 +19,7 @@ public class StorageTableDTO {
 	
 	private List<BasicStorageDTO> amounts;
 
-	private BigDecimal containerWeight;	
+	private BigDecimal accessWeight;	
 	
 	private Warehouse warehouseLocation;
 

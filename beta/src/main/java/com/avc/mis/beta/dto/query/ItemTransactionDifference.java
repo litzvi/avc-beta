@@ -23,26 +23,27 @@ import lombok.Value;
 public class ItemTransactionDifference extends BasicDTO {
 
 	String itemName;
-	AmountWithUnit usedAmount;
-	AmountWithUnit producedAmount;
+	BigDecimal usedAmount;
+	MeasureUnit usedMU;
+	BigDecimal producedAmount;
+	MeasureUnit producedMU;
 	
 	public ItemTransactionDifference(@NonNull Integer itemId, String itemName, 
 			BigDecimal usedAmount, MeasureUnit usedMU, 
 			BigDecimal producedAmount, MeasureUnit producedMU) {
 		super(itemId);
 		this.itemName = itemName;
-		if(producedAmount != null)
-			this.producedAmount = new AmountWithUnit(producedAmount, producedMU);
-		else
-			this.producedAmount = null;
-		if(usedAmount != null)
-			this.usedAmount = new AmountWithUnit(usedAmount, usedMU);
-		else
-			this.usedAmount = null;
+		this.producedAmount = producedAmount;
+		this.usedMU = usedMU;
+		this.usedAmount = usedAmount;
+		this.producedMU = producedMU;
 	}
 	
 	public AmountWithUnit getDifference() {
-		return Optional.ofNullable(producedAmount).orElse(AmountWithUnit.ZERO_KG)
-				.subtract(Optional.ofNullable(usedAmount).orElse(AmountWithUnit.ZERO_KG));
+		
+		AmountWithUnit produced = new AmountWithUnit(Optional.ofNullable(producedAmount).orElse(BigDecimal.ZERO), producedMU);
+		AmountWithUnit used = new AmountWithUnit(Optional.ofNullable(usedAmount).orElse(BigDecimal.ZERO), usedMU);
+
+		return produced.subtract(used);
 	}
 }

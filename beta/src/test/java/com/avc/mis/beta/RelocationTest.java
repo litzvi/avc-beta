@@ -60,7 +60,7 @@ public class RelocationTest {
 
 
 		//get inventory storages for relocation
-		List<ProcessItemInventory> poInventory = warehouseManagement.getCashewInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAllInventoryByPo(receipt.getPoCode().getId());
 		relocation.setStorageMovesGroups(getStorageMoves(poInventory));
 		relocation.setItemCounts(getItemCounts(poInventory));
 
@@ -105,12 +105,12 @@ public class RelocationTest {
 				storageMoves[j].setNumberUsedUnits(storagesRow.getNumberUnits());
 				storageMoves[j].setUnitAmount(storagesRow.getUnitAmount());
 				storageMoves[j].setNumberUnits(storagesRow.getNumberUnits());
-				storageMoves[j].setContainerWeight(storagesRow.getContainerWeight());
+				storageMoves[j].setAccessWeight(storagesRow.getAccessWeight());
 				storageMoves[j].setWarehouseLocation(service.getWarehouse());
 				j++;
 			}
 			storageMovesGroups[i] = new StorageMovesGroup();
-			storageMovesGroups[i].setMeasureUnit(processItemRow.getMeasureUnit());
+			storageMovesGroups[i].setMeasureUnit(processItemRow.getItem().getMeasureUnit());
 			storageMovesGroups[i].setStorageMoves(storageMoves);
 			i++;
 
@@ -131,7 +131,7 @@ public class RelocationTest {
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
 			StorageInventoryRow randStorage = storagesRows.get(0);
 			itemCounts[i].setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
-			itemCounts[i].setContainerWeight(randStorage.getContainerWeight());
+			itemCounts[i].setContainerWeight(randStorage.getAccessWeight());
 			countAmounts = new CountAmount[storagesRows.size()];
 			int j=0;
 			for(StorageInventoryRow storageRow: storagesRows) {

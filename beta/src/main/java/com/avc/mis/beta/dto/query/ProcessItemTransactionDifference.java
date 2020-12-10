@@ -28,18 +28,19 @@ public class ProcessItemTransactionDifference extends BasicDTO {
 	public ProcessItemTransactionDifference(@NonNull Integer processItemId, 
 			BigDecimal usedAmount, BigDecimal producedAmount, MeasureUnit measureUnit) {
 		super(processItemId);
-		if(producedAmount != null)
-			this.producedAmount = new AmountWithUnit(producedAmount, measureUnit);
-		else
-			this.producedAmount = null;
-		if(usedAmount != null)
-			this.usedAmount = new AmountWithUnit(usedAmount, measureUnit);
-		else
-			this.usedAmount = null;
+		this.producedAmount = new AmountWithUnit(Optional.ofNullable(producedAmount).orElse(BigDecimal.ZERO), measureUnit);
+//		if(producedAmount != null)
+//			this.producedAmount = new AmountWithUnit(producedAmount, measureUnit);
+//		else
+//			this.producedAmount = null;
+		this.usedAmount = new AmountWithUnit(Optional.ofNullable(usedAmount).orElse(BigDecimal.ZERO), measureUnit);
+//		if(usedAmount != null)
+//			this.usedAmount = new AmountWithUnit(usedAmount, measureUnit);
+//		else
+//			this.usedAmount = null;
 	}
 	
 	public AmountWithUnit getDifference() {
-		return Optional.ofNullable(producedAmount).orElse(AmountWithUnit.ZERO_KG)
-				.subtract(Optional.ofNullable(usedAmount).orElse(AmountWithUnit.ZERO_KG));
+		return producedAmount.subtract(usedAmount);
 	}
 }

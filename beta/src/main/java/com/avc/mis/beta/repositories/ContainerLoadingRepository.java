@@ -71,8 +71,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
-			+ "p.id, item.id, item.value, item.defaultMeasureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((sf.unitAmount * ui.numberUsedUnits - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "p.id, item.id, item.value, item.measureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "SUM((sf.unitAmount * ui.numberUsedUnits - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor), "
 			+ "function('GROUP_CONCAT', coalesce(wh.value, ''))) "
 		+ "from ContainerLoading p "
 //			+ "left join p.poCode po_code "
@@ -86,7 +86,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 //									+ "join p_used_item.poCode po_code_used_item "
 //						+ "join sf.unitAmount unit "
 						+ "join UOM uom "
-							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.defaultMeasureUnit "
+							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
 						+ "left join sf.warehouseLocation wh "
 //			+ "join p.processType pt "
 //		+ "where pt.processName = :processName "
@@ -95,8 +95,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	Stream<ProductionProcessWithItemAmount> findAllUsedItems();
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
-			+ "p.id, item.id, item.value, item.defaultMeasureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((sf.unitAmount * ui.numberUsedUnits - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "p.id, item.id, item.value, item.measureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "SUM((sf.unitAmount * ui.numberUsedUnits - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor), "
 			+ "function('GROUP_CONCAT', coalesce(wh.value, ''))) "
 		+ "from ContainerLoading p "
 //			+ "left join p.poCode po_code "
@@ -110,7 +110,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 								+ "join p_used_item.poCode po_code_used_item "
 //						+ "join sf.unitAmount unit "
 						+ "join UOM uom "
-							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.defaultMeasureUnit "
+							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
 						+ "left join sf.warehouseLocation wh "
 		+ "where po_code_used_item.code = :poCodeId "
 		+ "group by p, item ")
@@ -118,8 +118,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
-			+ "p.id, item.id, item.value, item.defaultMeasureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((sf.unitAmount * sf.numberUnits - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "p.id, item.id, item.value, item.measureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "SUM((sf.unitAmount * sf.numberUnits - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor), "
 			+ "function('GROUP_CONCAT', coalesce(wh.value, ''))) "
 		+ "from ContainerLoading p "
 			+ "join p.processItems pi "
@@ -128,7 +128,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 				+ "join pi.storageForms sf "
 //					+ "join sf.unitAmount unit "
 					+ "join UOM uom "
-						+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.defaultMeasureUnit "
+						+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
 					+ "left join sf.warehouseLocation wh "
 //			+ "join p.processType pt "
 //		+ "where pt.processName = :processName "
@@ -170,11 +170,11 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 
 	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemRow( "
 			+ "p.id, "
-			+ "item.id, item.value, item.defaultMeasureUnit, "
+			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "itemPo.code, ct.code, ct.suffix, "
-			+ "sum((sf.unitAmount - coalesce(sf.containerWeight, 0)) * i.numberUsedUnits * uom.multiplicand / uom.divisor), "
-			+ "item.defaultMeasureUnit) "
+			+ "sum((sf.unitAmount * i.numberUsedUnits - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "item.measureUnit) "
 		+ "from ContainerLoading p "
 			+ "join p.usedItemGroups g "
 				+ "join g.usedItems i "
@@ -187,13 +187,13 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 								+ "join item.unit item_unit "
 //						+ "join sf.unitAmount unit "
 							+ "join UOM uom "
-								+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.defaultMeasureUnit "				
+								+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "				
 		+ "where p.id = :processId or :processId is null "
 		+ "group by p, item.id, itemPo.code ")
 	List<ContainerPoItemRow> findLoadedTotals(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow( "
-			+ "item.id, item.value, item.defaultMeasureUnit, "
+			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "itemPo.code, ct.code, ct.suffix, "
 			+ "sf.unitAmount, pi.measureUnit, sum(i.numberUsedUnits)) "

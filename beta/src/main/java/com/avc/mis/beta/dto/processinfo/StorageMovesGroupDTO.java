@@ -67,7 +67,7 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 				if(warehouse != null)
 					movedItemTable.setNewWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 				StorageDTO storage = m.getStorage();
-				movedItemTable.setContainerWeight(storage.getContainerWeight());
+				movedItemTable.setAccessWeight(storage.getAccessWeight());
 				warehouse = storage.getWarehouseLocation();
 				if(warehouse != null)
 					movedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));

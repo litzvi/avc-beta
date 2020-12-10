@@ -82,8 +82,9 @@ public class StorageMovesGroup extends ProcessGroupWithStorages {
 	public void setStorageMove(MovedItemTableDTO movedItemTable) {
 		setTableView(true);
 		
+		//same as the original process item, for convenience in queries
 		setMeasureUnit(movedItemTable.getMeasureUnit());
-		BigDecimal containerWeight = movedItemTable.getContainerWeight();
+		BigDecimal accessWeight = movedItemTable.getAccessWeight();
 		Warehouse warehouse = movedItemTable.getNewWarehouseLocation();
 		List<BasicUsedStorageDTO> basicUsedStorages = movedItemTable.getAmounts();
 		StorageMove[] storageMoves = new StorageMove[basicUsedStorages.size()];
@@ -100,7 +101,7 @@ public class StorageMovesGroup extends ProcessGroupWithStorages {
 			
 			storageMoves[i].setOrdinal(basicUsedStorage.getOrdinal());
 			storageMoves[i].setNumberUnits(basicUsedStorage.getAmount());
-			storageMoves[i].setContainerWeight(containerWeight);
+			storageMoves[i].setAccessWeight(accessWeight);
 			storageMoves[i].setWarehouseLocation(warehouse);
 
 		}

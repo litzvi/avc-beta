@@ -49,7 +49,14 @@ public class LoadingTest {
 
 	@Test
 	void loadingTest() {
-		Receipt receipt = service.addBasicCashewReceipt();
+		Receipt receipt;
+		try {
+			receipt = service.addBasicCashewReceipt();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
@@ -71,7 +78,7 @@ public class LoadingTest {
 		loading.setShipingDetails(shipingDetails);
 
 		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getCashewInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAllInventoryByPo(receipt.getPoCode().getId());
 		loading.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 //		loading.setLoadedItems(getLoadedItems(poInventory));
 		
@@ -98,8 +105,5 @@ public class LoadingTest {
 		
 		assertEquals(expected, actual, "Failed test adding container loading");
 
-	}
-	
-	
-
+	}	
 }

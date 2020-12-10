@@ -30,7 +30,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 //			+ "order by i.value ")
 //	List<ItemDTO> findItemsByGroupBasic(ItemGroup itemGroup);
 	
-	@Query("select new com.avc.mis.beta.dto.values.ItemDTO(i.id, i.value, i.defaultMeasureUnit, i.itemGroup, i.productionUse, type(i)) "
+	@Query("select new com.avc.mis.beta.dto.values.ItemDTO(i.id, i.value, i.measureUnit, i.itemGroup, i.productionUse, type(i)) "
 			+ "from Item i "
 			+ "where (i.itemGroup = :itemGroup or :itemGroup is null)"
 				+ "and (i.productionUse = :productionUse or :productionUse is null)"

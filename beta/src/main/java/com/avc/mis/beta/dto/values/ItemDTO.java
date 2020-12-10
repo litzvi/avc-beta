@@ -24,7 +24,7 @@ import lombok.Value;
 public class ItemDTO extends ValueDTO {
 
 	String value;
-	MeasureUnit defaultMeasureUnit;
+	MeasureUnit measureUnit;
 	ItemGroup group;
 	ProductionUse productionUse;
 	Class<? extends Item> clazz;
@@ -33,7 +33,7 @@ public class ItemDTO extends ValueDTO {
 			ItemGroup group, ProductionUse productionUse, Class<? extends Item> clazz) {
 		super(id);
 		this.value = value;
-		this.defaultMeasureUnit = measureUnit;
+		this.measureUnit = measureUnit;
 		this.group = group;
 		this.productionUse = productionUse;
 		this.clazz = clazz;
@@ -42,7 +42,7 @@ public class ItemDTO extends ValueDTO {
 	public ItemDTO(@NonNull Item item) {
 		super(item.getId());
 		this.value = item.getValue();
-		this.defaultMeasureUnit = item.getDefaultMeasureUnit();
+		this.measureUnit = item.getMeasureUnit();
 		this.group = item.getItemGroup();
 		this.productionUse = item.getProductionUse();
 		this.clazz = item.getClass();

@@ -27,19 +27,19 @@ public class StorageDTO extends SubjectDataDTO implements StorageBaseDTO {
 	
 	private BigDecimal unitAmount;
 	private BigDecimal numberUnits;	
-	private BigDecimal containerWeight;	
+	private BigDecimal accessWeight;	
 	private BasicValueEntity<Warehouse> warehouseLocation;
 
 	private String className; //to differentiate between storage to ExtraAdded nad perhaps storageMoves
 		
 	public StorageDTO(Integer id, Integer version, Integer ordinal,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String remarks, Class<? extends Storage> clazz) {
 		super(id, version, ordinal);
 		this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
-		this.containerWeight = containerWeight;
+		this.accessWeight = accessWeight;
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else
@@ -56,7 +56,7 @@ public class StorageDTO extends SubjectDataDTO implements StorageBaseDTO {
 		super(storage.getId(), storage.getVersion(), storage.getOrdinal());
 		this.unitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		this.numberUnits = Optional.ofNullable(storage.getNumberUnits()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
-		this.containerWeight = storage.getContainerWeight();
+		this.accessWeight = storage.getAccessWeight();
 		if(storage.getWarehouseLocation() != null) {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(
 					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
@@ -77,12 +77,12 @@ public class StorageDTO extends SubjectDataDTO implements StorageBaseDTO {
 	 * @param description
 	 */
 	public StorageDTO(Integer id, Integer version, Integer ordinal,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz) {
 		super(id, version, ordinal);
 		this.unitAmount = unitAmount;
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
-		this.containerWeight = containerWeight.setScale(MeasureUnit.SCALE);
+		this.accessWeight = accessWeight.setScale(MeasureUnit.SCALE);
 		this.warehouseLocation = warehouseLocation;
 		this.className = clazz.getSimpleName();
 	}
@@ -94,8 +94,8 @@ public class StorageDTO extends SubjectDataDTO implements StorageBaseDTO {
 		}
 		else {
 			return getUnitAmount()
-				.subtract(Optional.ofNullable(getContainerWeight()).orElse(BigDecimal.ZERO))
-				.multiply(getNumberUnits());
+				.multiply(getNumberUnits())
+				.subtract(Optional.ofNullable(getAccessWeight()).orElse(BigDecimal.ZERO));
 		}
 	}
 	

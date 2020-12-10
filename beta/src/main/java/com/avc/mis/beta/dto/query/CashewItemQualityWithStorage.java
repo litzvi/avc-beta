@@ -30,7 +30,7 @@ public class CashewItemQualityWithStorage {
 			MeasureUnit testMU, BigDecimal sampleWeight, BigInteger numberOfSamples, boolean presentage,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks,
 			String description, String remarks, Class<? extends Storage> clazz,
 			BigInteger wholeCountPerLb, BigDecimal smallSize, BigDecimal ws, BigDecimal lp, BigDecimal breakage, 
@@ -52,7 +52,7 @@ public class CashewItemQualityWithStorage {
 				roastingWeightLoss,
 				colour, flavour);
 		this.storage = new StorageDTO(storageId, storageVersion, storageOrdinal, 
-				unitAmount, numberUnits, containerWeight,
+				unitAmount, numberUnits, accessWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 	}
 	

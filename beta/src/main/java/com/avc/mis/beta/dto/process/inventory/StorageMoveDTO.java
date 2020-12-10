@@ -28,7 +28,7 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 
 	private BigDecimal unitAmount;
 	private BigDecimal numberUnits;	
-	private BigDecimal containerWeight;	
+	private BigDecimal accessWeight;	
 	private BasicValueEntity<Warehouse> warehouseLocation;
 
 	private String className; //to differentiate between storage to ExtraAdded nad perhaps storageMoves
@@ -43,7 +43,7 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 
 			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal containerWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
 		super(id, version, ordinal, numberUsedUnits, 
 				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
@@ -54,7 +54,7 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks);
 		this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
-		this.containerWeight = containerWeight;
+		this.accessWeight = accessWeight;
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else
@@ -69,7 +69,7 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 		super(storage);
 		this.unitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		this.numberUnits = Optional.ofNullable(storage.getNumberUnits()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
-		this.containerWeight = storage.getContainerWeight();
+		this.accessWeight = storage.getAccessWeight();
 		if(storage.getWarehouseLocation() != null) {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(
 					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
@@ -87,8 +87,8 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 		}
 		else {
 			return getUnitAmount()
-				.subtract(Optional.ofNullable(getContainerWeight()).orElse(BigDecimal.ZERO))
-				.multiply(getNumberUnits());
+				.multiply(getNumberUnits())
+				.subtract(Optional.ofNullable(getAccessWeight()).orElse(BigDecimal.ZERO));
 		}
 	}
 

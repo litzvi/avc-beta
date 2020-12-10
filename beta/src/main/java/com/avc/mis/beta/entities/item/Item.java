@@ -54,9 +54,9 @@ public class Item extends ValueEntity implements ValueInterface {
 		
 	@Setter(value = AccessLevel.PROTECTED)
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, updatable = false)
+	@Column(name = "defaultMeasureUnit", nullable = false, updatable = false)
 	@NotNull(message = "Item has to have a default measure unit")
-	private MeasureUnit defaultMeasureUnit;
+	private MeasureUnit measureUnit;
 	
 	@Setter(value = AccessLevel.PROTECTED)
 	@AttributeOverrides({

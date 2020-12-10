@@ -52,7 +52,7 @@ public class TransferTest {
 
 
 		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getCashewInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAllInventoryByPo(receipt.getPoCode().getId());
 		
 //		List<ProcessItemDTO> poInventory = warehouseManagement
 //				.getProcessItemsWithPoByPo(receipt.getPoCode().getId())
@@ -98,9 +98,11 @@ public class TransferTest {
 		transfer.setPoCode(receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
-		poInventory = warehouseManagement.getCashewInventoryByPo(receipt.getPoCode().getId());
+		poInventory = warehouseManagement.getAllInventoryByPo(receipt.getPoCode().getId());
+		
 		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		ProcessItem[] processItems = service.getProcessItems(poInventory);
+
 		List<Item> items = service.getItems();
 		if(items.size() < 2) {
 			fail("not enough items for test");
@@ -127,7 +129,7 @@ public class TransferTest {
 		transfer.setPoCode(receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
-		poInventory = warehouseManagement.getCashewInventoryByPo(receipt.getPoCode().getId());
+		poInventory = warehouseManagement.getAllInventoryByPo(receipt.getPoCode().getId());
 		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		processItems = service.getProcessItems(poInventory);
 		for(ProcessItem i: processItems) {
@@ -166,7 +168,7 @@ public class TransferTest {
 
 
 		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getCashewInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAllInventoryByPo(receipt.getPoCode().getId());
 		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		transfer.setProcessItems(service.getProcessItems(poInventory));
 		transfer.setItemCounts(service.getItemCounts(poInventory));

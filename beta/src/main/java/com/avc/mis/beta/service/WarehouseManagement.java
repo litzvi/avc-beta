@@ -1,5 +1,6 @@
 package com.avc.mis.beta.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -152,7 +153,7 @@ public class WarehouseManagement {
 		List<ItemTransactionDifference> differences = getTransferRepository().findTransferDifferences(transfer.getId());
 		
 		for(ItemTransactionDifference d: differences) {
-			AmountWithUnit producedAmount = d.getProducedAmount();
+			BigDecimal producedAmount = d.getProducedAmount();
 			if (producedAmount == null /* || producedAmount.compareTo(BigDecimal.ZERO) == 0 */) {
 				throw new IllegalArgumentException("Storage transfer can't change item");
 			}
@@ -261,6 +262,15 @@ public class WarehouseManagement {
 
 	public List<ProcessItemInventory> getCashewInventoryByPo(Integer poCodeId) {		
 		return getInventory(ItemGroup.PRODUCT, null, null, poCodeId);		
+	}
+	
+	/**
+	 * Gets inventory for all item groups (Product, General, Waste etc.)
+	 * @param poCodeId
+	 * @return
+	 */
+	public List<ProcessItemInventory> getAllInventoryByPo(Integer poCodeId) {		
+		return getInventory(null, null, null, poCodeId);		
 	}
 	
 	public List<ProcessItemInventory> getInventoryByItem(Integer itemId) {		
