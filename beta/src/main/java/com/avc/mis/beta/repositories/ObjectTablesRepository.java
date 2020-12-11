@@ -119,8 +119,10 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	Set<PoCodeDTO> findAllPoCodeByType(ProcessName[] processNames, ProcessStatus[] statuses);
 	
 	/**
-	 * Gets set of All PoCodes that are currently in inventory 
+	 * Gets set of All PoCodes that have item/s currently in available inventory 
 	 * and contain the given item and belong to given supply group.
+	 * Items are considered available inventory if the producing process status is final 
+	 * and it's not completely used by another using process where the using process isn't cancelled.
 	 * @param supplyGroup constrain to only this supply group, if null than any.
 	 * @param itemId constrain to only this item, if null than any.
 	 * @return Set of PoCodeDTO
@@ -152,12 +154,12 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 		+ "having sf.numberUnits > "
 			+ "SUM("
 				+ "(CASE "
-					+ "WHEN (ui IS NOT null AND used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+					+ "WHEN (ui IS NOT null AND used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
 						+ "THEN ui.numberUsedUnits "
 					+ "ELSE 0 "
 				+ "END)"
 			+ " ) ")
-	Set<PoCodeDTO> findInventoryPoCodeByType(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId);
+	Set<PoCodeDTO> findAvailableInventoryPoCodeByType(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId);
 
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
 			+ "po_code.code, c.code, c.suffix, s.name) "

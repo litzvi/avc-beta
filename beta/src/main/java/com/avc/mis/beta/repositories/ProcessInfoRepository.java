@@ -147,11 +147,11 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	Optional<ProcessLifeCycle> findProcessLifeCycleManagerByUser(Integer processId, Integer currentUserId);
 
 
-	@Query("select c.editStatus "
+	@Query("select c "
 			+ "from ProcessLifeCycle c "
 				+ "join c.process p "
 			+ "where p.id = :processId ")
-	EditStatus findProcessEditStatus(Integer processId);
+	ProcessLifeCycle findProcessEditStatus(Integer processId);
 
 	@Query("select new java.lang.Boolean(count(*) > 0) "
 			+ "from TransactionProcess p "

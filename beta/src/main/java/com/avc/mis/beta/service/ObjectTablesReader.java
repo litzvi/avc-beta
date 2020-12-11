@@ -130,7 +130,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO for all inventory Cashew.
 	 */
 	public Set<PoCodeDTO> findCashewInventoryPoCodes() {
-		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, ItemGroup.PRODUCT, null);		
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, ItemGroup.PRODUCT, null);		
 	}
 	
 	/**
@@ -139,8 +139,8 @@ public class ObjectTablesReader {
 	 * Can be used for choosing a po for factory processing.
 	 * @return Set of PoCodeDTO for all General inventory.
 	 */
-	public Set<PoCodeDTO> findGeneralInventoryPoCodes() {
-		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, ItemGroup.GENERAL, null);		
+	public Set<PoCodeDTO> findGeneralAvailableInventoryPoCodes() {
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, ItemGroup.GENERAL, null);		
 	}
 	
 	/**
@@ -150,7 +150,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO
 	 */
 	public Set<PoCodeDTO> findInventoryPoCodes(Integer itemId) {
-		return getObjectTablesRepository().findInventoryPoCodeByType(false, null, null, itemId);		
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false, null, null, itemId);		
 	}
 	
 	/**
@@ -160,15 +160,15 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeDTO
 	 */
 	public Set<PoCodeDTO> findInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
-		return getObjectTablesRepository().findInventoryPoCodeByType(true, productionUses, null, null);		
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true, productionUses, null, null);		
 	}
 	
-	public Set<PoCodeDTO> findInventoryPoCodes(ItemGroup group) {
-		return getObjectTablesRepository().findInventoryPoCodeByType(false,  null, group, null);		
+	public Set<PoCodeDTO> findAvailableInventoryPoCodes(ItemGroup group) {
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, group, null);		
 	}
 	
-	public Set<PoCodeDTO> findInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
-		return getObjectTablesRepository().findInventoryPoCodeByType(true,  productionUses, group, null);		
+	public Set<PoCodeDTO> findAvailableInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true,  productionUses, group, null);		
 	}
 	
 	/**

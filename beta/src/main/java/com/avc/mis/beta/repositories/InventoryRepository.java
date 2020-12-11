@@ -23,10 +23,13 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 
 
 	/**
-	 * Gets all information of items in the inventory, for provided supply group, item or po code.
+	 * Available inventory for querying what items are available for use by a process.
+	 * Gets all information of items in the inventory that are available, for provided supply group, item or po code.
 	 * If one of the parameters are null than will ignore that constraint.
-	 * For each stored item in inventory, provides information on the process item, storage and amounts used.
-	 * Items are considered in inventory if process status is final and it's not completely used.
+	 * For each available item in inventory, provides information on the process item, storage and amounts used.
+	 * Items are considered available inventory if the producing process status is final 
+	 * and it's not completely used by another using process where the using process isn't cancelled.
+	 * STORAGE IS CONSIDERED USED EVEN IF IT'S PENDING.
 	 * @param supplyGroup constrain to only this supply group, if null than any.
 	 * @param itemId constrain to only this item, if null than any.
 	 * @param poCodeId constrain to only this po, if null than any.
@@ -42,22 +45,19 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "sto.id, sto.value, "
 			+ "SUM("
 				+ "(CASE "
-					+ "WHEN (ui IS NOT null AND used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+					+ "WHEN (ui IS NOT null AND used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
 						+ "THEN ui.numberUsedUnits "
 					+ "ELSE 0 "
 				+ "END)"
 			+ " ) AS total_used, "
-//			+ "sum(coalesce(ui.numberUsedUnits, 0)), "
-//			+ "unit.amount * uom.multiplicand / uom.divisor) * (sf.numberUnits - SUM(coalesce(ui.numberUsedUnits, 0)))"
 			+ "(sf.unitAmount * uom.multiplicand / uom.divisor) "
 				+ " * item_unit.amount "
 				+ " * (sf.numberUnits - SUM("
 					+ "(CASE "
-						+ "WHEN (ui IS NOT null AND used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+						+ "WHEN (ui IS NOT null AND used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
 							+ "THEN ui.numberUsedUnits "
 						+ "ELSE 0 "
 					+ "END))) AS balance, "
-//			+ "(unit.amount * (sf.numberUnits - total_used) * uom.multiplicand / uom.divisor), "
 			+ "(CASE "
 			+ "WHEN type(item) = com.avc.mis.beta.entities.item.PackedItem THEN item_unit.measureUnit "
 				+ "ELSE item.measureUnit "
@@ -90,18 +90,16 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (item.id = :itemId or :itemId is null) "
 			+ "and (poCode.code = :poCodeId or :poCodeId is null) "
 		+ "group by sf "
-//		+ "having sf.numberUnits > total_used "
-//		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) "
 		+ "having sf.numberUnits > "
 			+ "SUM("
 				+ "(CASE "
-					+ "WHEN (ui IS NOT null AND used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+					+ "WHEN (ui IS NOT null AND used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
 						+ "THEN ui.numberUsedUnits "
 					+ "ELSE 0 "
 				+ "END)"
 			+ " ) "
 		+ "order by p.recordedTime, pi.ordinal, sf.ordinal ")
-	List<InventoryProcessItemWithStorage> findInventoryProcessItemWithStorage(
+	List<InventoryProcessItemWithStorage> findAvailableInventoryProcessItemWithStorage(
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			ItemGroup itemGroup, Integer itemId, Integer poCodeId);
 
@@ -126,8 +124,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "ELSE  - (coalesce(sf.accessWeight, 0) / size(sf.usedItems)) "
 			+ "END)"
 			+ " )  - coalesce(sf.accessWeight, 0) AS balance, "
-//			+ "SUM((unit.amount - coalesce(sf.containerWeight, 0)) * sf.numberUnits / size(sf.usedItems) * uom.multiplicand / uom.divisor), "
-//			+ "SUM((unit.amount - coalesce(sf.containerWeight, 0)) * coalesce(ui.numberUsedUnits, 0) * uom.multiplicand / uom.divisor), "
 			+ "(CASE type(item) "
 				+ "WHEN com.avc.mis.beta.entities.item.PackedItem THEN item_unit.measureUnit "
 				+ "ELSE item.measureUnit "
@@ -160,11 +156,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.id = :itemId or :itemId is null) "
 			+ "and (poCode.code = :poCodeId or :poCodeId is null) "
-//			+ "and (not exists "
-//				+ "(select usedStorage "
-//				+ " from sf.usedItems usedStorage) "
-//		 	+ "and ((sf.usedItems is empty) "
-//				+ "or "
 			+ "and"
 				+ "(sf.numberUnits > "
 					+ "coalesce("
@@ -177,18 +168,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ ", 0)"
 				+ ") "
 		+ "group by pi "
-//		+ "having "
-//			+ "SUM((unit.amount - coalesce(sf.containerWeight, 0)) * uom.multiplicand / uom.divisor "
-//				+ "* "
-//				+ "(CASE "
-//					+ "WHEN ui is null THEN sf.numberUnits "
-//					+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
-//						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUsedUnits) "
-//					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
-//				+ "END)"
-//			+ " ) > 0 "
-//		+ "having (SUM(unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) "
-//			+ "> SUM(unit.amount * coalesce(ui.numberUsedUnits, 0) * uom.multiplicand / uom.divisor)) "
 		+ "order by r.recordedTime " 
 		+ "")
 	List<ProcessItemInventoryRow> findInventoryProcessItemRows(

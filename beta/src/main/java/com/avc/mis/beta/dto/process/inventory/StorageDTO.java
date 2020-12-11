@@ -29,6 +29,7 @@ public class StorageDTO extends SubjectDataDTO implements StorageBaseDTO {
 	private BigDecimal numberUnits;	
 	private BigDecimal accessWeight;	
 	private BasicValueEntity<Warehouse> warehouseLocation;
+//	private BigDecimal numberUsedUnits;
 
 	private String className; //to differentiate between storage to ExtraAdded nad perhaps storageMoves
 		

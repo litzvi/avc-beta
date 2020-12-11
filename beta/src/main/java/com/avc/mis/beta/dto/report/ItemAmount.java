@@ -9,8 +9,10 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -27,26 +29,35 @@ public class ItemAmount {
 	BasicValueEntity<Item> item;
 
 	@ToString.Exclude @JsonIgnore
-	ItemWithUnitDTO itemWithUnit;
-	BigDecimal amount;
+	ItemGroup itemGroup;
+	AmountWithUnit[] weight;
+	AmountWithUnit amount;
 	
 	public ItemAmount(Integer id, String value, MeasureUnit defaultMeasureUnit, 
-			ItemGroup group, ProductionUse productionUse, 
+			ItemGroup itemGroup, ProductionUse productionUse, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz, 
 			BigDecimal amount) {
 		super();
 		this.item = new BasicValueEntity<Item>(id, value);
-		this.itemWithUnit = new ItemWithUnitDTO(id, value, defaultMeasureUnit, group, productionUse, unitAmount, unitMeasureUnit, clazz);
-		this.amount = amount;
+		this.itemGroup = itemGroup;
+		AmountWithUnit amountWithUnit;
+		if(clazz == BulkItem.class) {
+			this.amount = null;
+			amountWithUnit = new AmountWithUnit(amount, defaultMeasureUnit);
+		}
+		else if(clazz == PackedItem.class){
+			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
+			amountWithUnit = new AmountWithUnit(amount.multiply(unitAmount), unitMeasureUnit);
+		}
+		else 
+		{
+			throw new IllegalStateException("The class can only apply to weight items");
+		}
+		this.weight = new AmountWithUnit[] {
+				amountWithUnit.convert(MeasureUnit.KG),
+				amountWithUnit.convert(MeasureUnit.LBS)};
+		AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
 	}
 	
-	public AmountWithUnit[] getWeight() {
-		return null;
-	}
-	
-	@JsonIgnore
-	public ItemGroup getItemGroup() {
-		return itemWithUnit.getGroup();
-	}
 
 }

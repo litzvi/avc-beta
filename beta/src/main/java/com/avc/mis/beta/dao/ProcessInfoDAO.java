@@ -124,13 +124,18 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public <T extends GeneralProcess> void editGeneralProcessEntity(T process) {
 		//check used items amounts don't exceed the storage amounts
-		EditStatus status = getProcessRepository().findProcessEditStatus(process.getId());
+		ProcessLifeCycle lifeCycle = getProcessRepository().findProcessEditStatus(process.getId());
+		EditStatus status = lifeCycle.getEditStatus();
 		if(status != EditStatus.EDITABLE) {
 			throw new AccessControlException("Process was closed for edit");
 		}
-//		if(getProcessRepository().isProcessReferenced(process.getId())) {
-//			throw new AccessControlException("Process can't be edited because it's already in use");
-//		}
+		ProcessStatus processStatus = lifeCycle.getProcessStatus();
+		if(processStatus == ProcessStatus.CANCELLED) {
+			throw new AccessControlException("Cancelled process can't be edited");
+		}
+		if(getProcessRepository().isProcessReferenced(process.getId())) {
+			throw new AccessControlException("Process can't be edited because it's already in use");
+		}
 		process.setModifiedDate(null);
 		editEntity(process);
 		

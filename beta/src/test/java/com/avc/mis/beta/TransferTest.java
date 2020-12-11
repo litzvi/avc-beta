@@ -52,7 +52,7 @@ public class TransferTest {
 
 
 		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAllInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
 		
 //		List<ProcessItemDTO> poInventory = warehouseManagement
 //				.getProcessItemsWithPoByPo(receipt.getPoCode().getId())
@@ -98,7 +98,7 @@ public class TransferTest {
 		transfer.setPoCode(receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
-		poInventory = warehouseManagement.getAllInventoryByPo(receipt.getPoCode().getId());
+		poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
 		
 		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		ProcessItem[] processItems = service.getProcessItems(poInventory);
@@ -129,7 +129,7 @@ public class TransferTest {
 		transfer.setPoCode(receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
-		poInventory = warehouseManagement.getAllInventoryByPo(receipt.getPoCode().getId());
+		poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
 		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		processItems = service.getProcessItems(poInventory);
 		for(ProcessItem i: processItems) {
@@ -168,7 +168,7 @@ public class TransferTest {
 
 
 		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAllInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
 		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		transfer.setProcessItems(service.getProcessItems(poInventory));
 		transfer.setItemCounts(service.getItemCounts(poInventory));

@@ -231,7 +231,7 @@ public class QueryTest {
 		//cashew inventory table by po
 		List<PoInventoryRow> poInventoryRows = cashewReports. getInventoryTableByPo(ItemGroup.PRODUCT);
 		poInventoryRows.forEach(r -> System.out.println(r));		
-		Set<PoCodeDTO> rawInventoryPos = objectTablesReader.findInventoryPoCodes(ItemGroup.PRODUCT);
+		Set<PoCodeDTO> rawInventoryPos = objectTablesReader.findAvailableInventoryPoCodes(ItemGroup.PRODUCT);
 		rawInventoryPos.forEach(r -> System.out.println(r));
 		assertTrue(rawInventoryPos.size() == rawInventoryPos.size(), "po codes and po inventory row for cashew aren't consistent");
 		
@@ -249,7 +249,7 @@ public class QueryTest {
 		}
 		
 		//test getting inventory storages by item
-		List<ProcessItemInventory> itemInventory = warehouseManagement.getInventoryByItem(service.getItem().getId());
+		List<ProcessItemInventory> itemInventory = warehouseManagement.getAvailableInventoryByItem(service.getItem().getId());
 		itemInventory.forEach(i -> System.out.println(i));
 		
 		//test QC raw tables
