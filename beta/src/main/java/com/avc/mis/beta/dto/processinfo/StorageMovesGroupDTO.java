@@ -31,6 +31,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<StorageMoveDTO> {
 
+	@JsonIgnore
 	private MeasureUnit measureUnit;
 	private List<StorageMoveDTO> storageMoves;
 
@@ -85,13 +86,14 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 		return null;
 	}
 	
-	public AmountWithUnit[] getTotalAmount() {
+	public AmountWithUnit getTotalAmount() {
 		BigDecimal total = this.storageMoves.stream()
 				.map(m -> m.getTotal())
 				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
 		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
-		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
-				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
+		return totalAmount;
+//		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
+//				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 	}
 	
 	/**

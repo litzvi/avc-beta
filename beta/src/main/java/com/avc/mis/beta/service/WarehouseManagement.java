@@ -261,7 +261,7 @@ public class WarehouseManagement {
 //	}
 
 	public List<ProcessItemInventory> getCashewAvailableInventoryByPo(Integer poCodeId) {		
-		return getInventory(ItemGroup.PRODUCT, null, null, poCodeId);		
+		return getAvailableInventory(ItemGroup.PRODUCT, null, null, poCodeId);		
 	}
 	
 	/**
@@ -270,15 +270,15 @@ public class WarehouseManagement {
 	 * @return
 	 */
 	public List<ProcessItemInventory> getAllAvailableInventoryByPo(Integer poCodeId) {		
-		return getInventory(null, null, null, poCodeId);		
+		return getAvailableInventory(null, null, null, poCodeId);		
 	}
 	
 	public List<ProcessItemInventory> getAvailableInventoryByItem(Integer itemId) {		
-		return getInventory(null, null, itemId, null);
+		return getAvailableInventory(null, null, itemId, null);
 	}
 	
 	public List<ProcessItemInventory> getAvailableInventoryByItemProductionUses(@NonNull ProductionUse[] productionUses) {		
-		return getInventory(null, productionUses, null, null);
+		return getAvailableInventory(null, productionUses, null, null);
 	}
 	
 	/**
@@ -295,8 +295,7 @@ public class WarehouseManagement {
 	 * @param poCodeId constrain to only this po, if null than any.
 	 * @return List of ProcessItemInventory
 	 */
-	//should change name to getAvailableInventory
-	public List<ProcessItemInventory> getInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
+	public List<ProcessItemInventory> getAvailableInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
 		boolean checkProductionUses = (productionUses != null);
 		List<InventoryProcessItemWithStorage> processItemWithStorages =
 				getInventoryRepository().findAvailableInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, poCodeId);	

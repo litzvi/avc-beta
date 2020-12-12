@@ -107,7 +107,7 @@ public class QueryTest {
 		openCashewOrdersBasic = objectTablesReader.findOpenCashewOrdersPoCodes();
 		openCashewOrdersBasic.forEach(row -> System.out.println(row));
 		
-		Set<PoCodeDTO> inventoryCashewBasic = objectTablesReader.findCashewInventoryPoCodes();
+		Set<PoCodeDTO> inventoryCashewBasic = objectTablesReader.findCashewAvailableInventoryPoCodes();
 		inventoryCashewBasic.forEach(row -> System.out.println(row));
 		
 		objectTablesReader.findOpenAndPendingCashewOrdersPoCodes().forEach(row -> System.out.println(row));
@@ -279,7 +279,7 @@ public class QueryTest {
 		
 		Set<PoCodeDTO> inventoryPoCodes;
 		try {
-			inventoryPoCodes = objectTablesReader.findInventoryPoCodes(new ProductionUse[]{ProductionUse.RAW_KERNEL, ProductionUse.CLEAN});
+			inventoryPoCodes = objectTablesReader.findAvailableInventoryPoCodes(new ProductionUse[]{ProductionUse.RAW_KERNEL, ProductionUse.CLEAN});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -129,7 +129,7 @@ public class ObjectTablesReader {
 	 * Can be used for choosing a po for factory processing.
 	 * @return Set of PoCodeDTO for all inventory Cashew.
 	 */
-	public Set<PoCodeDTO> findCashewInventoryPoCodes() {
+	public Set<PoCodeDTO> findCashewAvailableInventoryPoCodes() {
 		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, ItemGroup.PRODUCT, null);		
 	}
 	
@@ -149,7 +149,7 @@ public class ObjectTablesReader {
 	 * @param itemId id of the item
 	 * @return Set of PoCodeDTO
 	 */
-	public Set<PoCodeDTO> findInventoryPoCodes(Integer itemId) {
+	public Set<PoCodeDTO> findAvailableInventoryPoCodes(Integer itemId) {
 		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false, null, null, itemId);		
 	}
 	
@@ -159,7 +159,7 @@ public class ObjectTablesReader {
 	 * @param itemCategories
 	 * @return Set of PoCodeDTO
 	 */
-	public Set<PoCodeDTO> findInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
+	public Set<PoCodeDTO> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
 		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true, productionUses, null, null);		
 	}
 	

@@ -11,6 +11,7 @@ import java.util.List;
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
 
 import lombok.Data;
@@ -32,6 +33,7 @@ public class LoadingRow extends BasicDTO {
 //	private PoCodeBasic poCode;
 	private OffsetDateTime recordedTime;
 	private Duration duration;
+	private ProcessStatus status;
 	
 	private LocalDate eta;
 	private String containerNumber;
@@ -47,12 +49,13 @@ public class LoadingRow extends BasicDTO {
 	
 	public LoadingRow(@NonNull Integer id, 
 			Integer shipmentCodeId, String portOfDischargeCode, String portOfDischargeValue, 
-			OffsetDateTime recordedTime, Duration duration, LocalDate eta,
+			OffsetDateTime recordedTime, Duration duration, ProcessStatus status, LocalDate eta,
 			String containerNumber, String sealNumber, ShippingContainerType containerType) {
 		super(id);
 		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, portOfDischargeCode, portOfDischargeValue);
 		this.recordedTime = recordedTime;
 		this.duration = duration;
+		this.status = status;
 		
 		this.eta = eta;
 		

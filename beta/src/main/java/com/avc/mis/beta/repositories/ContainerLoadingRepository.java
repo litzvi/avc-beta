@@ -137,25 +137,27 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 
 	@Query("select new com.avc.mis.beta.dto.view.LoadingRow( "
 			+ "p.id, shipment_code.code, pod.code, pod.value, "
-			+ "p.recordedTime, p.duration, ship.eta,"
+			+ "p.recordedTime, p.duration, lc.processStatus, ship.eta,"
 			+ "cont.containerNumber, cont.sealNumber, cont.containerType) "
 		+ "from ContainerLoading p "
 			+ "join p.shipmentCode shipment_code "
 				+ "join shipment_code.portOfDischarge pod "
 			+ "join p.containerDetails cont "
 			+ "join p.shipingDetails ship "
+			+ "join p.lifeCycle lc "
 		+ "order by p.recordedTime desc ")
 	List<LoadingRow> findContainerLoadings();
 
 	@Query("select new com.avc.mis.beta.dto.view.LoadingRow( "
 			+ "p.id, shipment_code.code, pod.code, pod.value, "
-			+ "p.recordedTime, p.duration, ship.eta, "
+			+ "p.recordedTime, p.duration, lc.processStatus, ship.eta, "
 			+ "cont.containerNumber, cont.sealNumber, cont.containerType) "
 		+ "from ContainerLoading p "
 			+ "join p.shipmentCode shipment_code "
 				+ "join shipment_code.portOfDischarge pod "
 			+ "join p.containerDetails cont "
 			+ "join p.shipingDetails ship "
+			+ "join p.lifeCycle lc "
 		+ "where "
 			+ "p.id in :processIds ")
 	List<LoadingRow> findContainerLoadingsByProcessIds(int[] processIds);

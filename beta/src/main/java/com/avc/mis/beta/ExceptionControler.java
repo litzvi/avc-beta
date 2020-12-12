@@ -46,6 +46,8 @@ public class ExceptionControler {
 	 * 
 	 * ProcessInfoDAO
 	 * @throws InvalidDataAccessApiUsageException
+	 * 
+	 * UnsupportedOperationException
 	 */
 	
 	//IllegalStateException - ProcessInfoReader
@@ -80,6 +82,11 @@ public class ExceptionControler {
 	@ExceptionHandler({EntityExistsException.class})
     public ResponseEntity<String> handleEntityExistsException(EntityExistsException e){
         return error(HttpStatus.CONFLICT, e);
+    }
+	
+	@ExceptionHandler({UnsupportedOperationException.class})
+    public ResponseEntity<String> handleEntityExistsException(UnsupportedOperationException e){
+        return error(HttpStatus.I_AM_A_TEAPOT, e);
     }
 	
 	/**
