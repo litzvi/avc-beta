@@ -44,11 +44,15 @@ public class ReceiptRow extends BasicDTO {
 	}
 
 	//perhaps total weight
-	public AmountWithUnit getTotalAmount() {
-		return receiptRows.stream()
-				.map(pi -> pi.getReceiptAmount())
+	public AmountWithUnit[] getTotalAmount() {
+		AmountWithUnit totalAmount = receiptRows.stream()
+				.map(pi -> pi.getReceiptAmt())
 				.filter(u -> MeasureUnit.WEIGHT_UNITS.contains(u.getMeasureUnit()))
 				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+
+		return new AmountWithUnit[] {
+				totalAmount.setScale(MeasureUnit.SCALE),
+				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 
 	}
 

@@ -34,12 +34,14 @@ public class PoRow extends BasicDTO {
 	}
 	
 	//perhaps total weight
-	public AmountWithUnit getTotalAmount() {
-		return poRows.stream()
-				.map(pi -> pi.getNumberUnits())
+	public AmountWithUnit[] getTotalAmount() {
+		AmountWithUnit totalAmount = poRows.stream()
+				.map(pi -> pi.getNumUnits())
 				.filter(u -> MeasureUnit.WEIGHT_UNITS.contains(u.getMeasureUnit()))
 				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_LBS);
-
+		return new AmountWithUnit[] {
+				totalAmount.setScale(MeasureUnit.SCALE),
+				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 	}
 
 }

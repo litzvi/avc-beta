@@ -12,6 +12,7 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -34,7 +35,8 @@ public class ReceiptItemRow extends BasicDTO {
 	AmountWithUnit orderAmount;
 	AmountWithUnit orderBalance;
 	OffsetDateTime receiptDate;
-	AmountWithUnit receiptAmount;
+	@JsonIgnore
+	AmountWithUnit receiptAmt;
 	String storage;
 	AmountWithUnit extraAdded;
 	
@@ -61,7 +63,7 @@ public class ReceiptItemRow extends BasicDTO {
 		}
 		this.receiptDate = receiptDate;
 		
-		this.receiptAmount = receiptAmt;
+		this.receiptAmt = receiptAmt;
 //		this.receiptAmount = new AmountWithUnit[] {
 //				receiptAmt,
 //				receiptAmt.convert(MeasureUnit.LBS)
@@ -74,6 +76,15 @@ public class ReceiptItemRow extends BasicDTO {
 		else {
 			this.extraAdded = null;
 		}
+	}
+	
+	public AmountWithUnit[] getReceiptAmount() {
+		if(MeasureUnit.WEIGHT_UNITS.contains(this.receiptAmt.getMeasureUnit())) {
+			return new AmountWithUnit[] {
+					this.receiptAmt.setScale(MeasureUnit.SCALE),
+					this.receiptAmt.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
+		}
+		return null;
 	}
 	
 }

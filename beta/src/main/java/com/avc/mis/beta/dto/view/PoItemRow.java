@@ -19,6 +19,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.Item;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -43,7 +44,8 @@ public class PoItemRow extends BasicDTO {
 	String supplierName;
 	BasicValueEntity<Item> item;
 //	String itemName;
-	AmountWithUnit numberUnits;
+	@JsonIgnore
+	AmountWithUnit numUnits;
 	OffsetDateTime contractDate;
 	LocalDate deliveryDate;
 	String defects;
@@ -76,7 +78,7 @@ public class PoItemRow extends BasicDTO {
 		this.supplierName = supplierName;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 //		this.itemName = itemName;
-		this.numberUnits = new AmountWithUnit(amount, measureUnit);
+		this.numUnits = new AmountWithUnit(amount, measureUnit);
 //		this.numberUnits = new AmountWithUnit[] {
 //				numberUnits.setScale(MeasureUnit.SCALE), 
 //				numberUnits.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
@@ -101,7 +103,7 @@ public class PoItemRow extends BasicDTO {
 			this.orderStatus.add("OPEN");
 		}
 		else {
-			switch(receivedOrderUnits.compareTo(numberUnits.getAmount())) {
+			switch(receivedOrderUnits.compareTo(numUnits.getAmount())) {
 			case -1:
 				this.orderStatus.add("OPEN");
 				if(receivedOrderUnits.signum() > 0) {
@@ -118,6 +120,15 @@ public class PoItemRow extends BasicDTO {
 		if(receiptsCancelled > 0) {
 			this.orderStatus.add("REJECTED");
 		}
+	}
+	
+	public AmountWithUnit[] getNumberUnits() {
+		if(MeasureUnit.WEIGHT_UNITS.contains(this.numUnits.getMeasureUnit())) {
+			return new AmountWithUnit[] {
+					this.numUnits.setScale(MeasureUnit.SCALE),
+					this.numUnits.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
+		}
+		return null;
 	}
 		
 	/**
