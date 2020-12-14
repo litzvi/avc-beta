@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -64,12 +65,25 @@ public class ProductionReportLine {
 	}
 
 	public AmountWithUnit getDifference() {		
+//		Optional<AmountWithUnit> difference = totalProductOut;
+//		if(totalWaste.isPresent()) {
+//			calculate(difference, totalWaste, (AmountWithUnit::add));
+//		}
 		return totalProductOut.orElse(AmountWithUnit.ZERO_KG)
 				.add(totalWaste.orElse(AmountWithUnit.ZERO_KG))
 				.add(totalQC.orElse(AmountWithUnit.ZERO_KG))
 				.subtract(totalProductIn.orElse(AmountWithUnit.ZERO_KG))
 				.subtract(totalIngredients.orElse(AmountWithUnit.ZERO_KG));
 	}
+	
+	
+
+	
+//	private void calculate(Optional<AmountWithUnit> arg1, Optional<AmountWithUnit> arg2, 
+//			BiFunction<AmountWithUnit, AmountWithUnit, AmountWithUnit> fn) {
+//		// TODO Auto-generated method stub
+//		
+//	}
 
 	private Optional<AmountWithUnit> getTotalWeight(List<ItemAmount> itemAmounts) {
 		if(itemAmounts == null)
