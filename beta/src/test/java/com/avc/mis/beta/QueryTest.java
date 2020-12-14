@@ -88,7 +88,7 @@ public class QueryTest {
 	@Autowired ProductionProcesses productionProcesses;
 	@Autowired Loading loading;
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void queryTest() {
 
@@ -124,7 +124,14 @@ public class QueryTest {
 		openAndPendingCashewOrdersPoCodes.forEach(row -> System.out.println(row));
 		
 		//get order by process id
-		List<PoRow> poRows =  orders.findOpenCashewOrders();
+		List<PoRow> poRows;
+		try {
+			poRows = orders.findOpenCashewOrders();
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			throw e2;
+		}
 		if(poRows.isEmpty()) {
 			fail("Couldn't test fetching purchase order by process id, no open orders");
 		}
@@ -326,8 +333,17 @@ public class QueryTest {
 	
 	@Test
 	void oneQueryTest() {		
-		ProductionReportLine reportLine = productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, 14107);
+		ProductionReportLine reportLine;
+		reportLine = productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, 14107);
+		try {
+			System.out.println("Difference: " + reportLine.getDifference());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		System.out.println("Report line: " + reportLine);
+		System.out.println("Difference: " + reportLine.getDifference());
 		
 		Map<ProcessName, List<PoProcessDTO>> qcProcessesMap = qualityChecks.getAllQualityChecksByPo(44952);
 		qcProcessesMap.forEach((k, v) -> {

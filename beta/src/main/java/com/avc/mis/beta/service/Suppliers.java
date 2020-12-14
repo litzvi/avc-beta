@@ -136,9 +136,11 @@ public class Suppliers {
 	@Deprecated
 	public void permenentlyRemoveSupplier(int supplierId) {
 		SupplierDTO supplier = getSupplier(supplierId);
-		for(PaymentAccountDTO paymentAccount: supplier.getContactDetails().getPaymentAccounts())  {
-			BankAccountDTO bankAccount = paymentAccount.getBankAccount();
-			getDeletableDAO().permenentlyRemoveEntity(BankAccount.class, bankAccount.getId());
+		if(supplier.getContactDetails() != null) {
+			for(PaymentAccountDTO paymentAccount: supplier.getContactDetails().getPaymentAccounts())  {
+				BankAccountDTO bankAccount = paymentAccount.getBankAccount();
+				getDeletableDAO().permenentlyRemoveEntity(BankAccount.class, bankAccount.getId());
+			}
 		}
 		for(CompanyContactDTO companyContact: supplier.getCompanyContacts())  {
 			PersonDTO person = companyContact.getPerson();

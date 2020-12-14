@@ -41,11 +41,5 @@ public class Supplier extends Company {
 	@ManyToMany(fetch = FetchType.LAZY)
 //	@BatchSize(size = BaseEntity.BATCH_SIZE)
 	private Set<SupplyCategory> supplyCategories = new HashSet<>();
-
-	@JsonIgnore
-	@Override
-	protected boolean canEqual(Object o) {
-		return super.canEqual(o);
-	}	
 		
 }

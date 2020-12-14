@@ -43,7 +43,7 @@ public class PoItemRow extends BasicDTO {
 	String supplierName;
 	BasicValueEntity<Item> item;
 //	String itemName;
-	AmountWithUnit[] numberUnits;
+	AmountWithUnit numberUnits;
 	OffsetDateTime contractDate;
 	LocalDate deliveryDate;
 	String defects;
@@ -76,10 +76,10 @@ public class PoItemRow extends BasicDTO {
 		this.supplierName = supplierName;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 //		this.itemName = itemName;
-		AmountWithUnit numberUnits = new AmountWithUnit(amount, measureUnit);
-		this.numberUnits = new AmountWithUnit[] {
-				numberUnits.setScale(MeasureUnit.SCALE), 
-				numberUnits.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
+		this.numberUnits = new AmountWithUnit(amount, measureUnit);
+//		this.numberUnits = new AmountWithUnit[] {
+//				numberUnits.setScale(MeasureUnit.SCALE), 
+//				numberUnits.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 		this.contractDate = contractDate;
 		this.deliveryDate = deliveryDate;
 		this.defects = defects;

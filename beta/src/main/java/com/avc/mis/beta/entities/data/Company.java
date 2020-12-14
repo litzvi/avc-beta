@@ -44,7 +44,8 @@ public class Company extends ObjectEntityWithIdAndName {
 	
 	@JsonManagedReference(value = "company_contactDetails")
 	@OneToOne(mappedBy = "company", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, 
-		optional = false, fetch = FetchType.LAZY)
+//		optional = false, 
+		fetch = FetchType.LAZY)
 	private ContactDetails contactDetails;
 	
 	@JsonManagedReference(value = "company_companyContacts")
@@ -67,15 +68,11 @@ public class Company extends ObjectEntityWithIdAndName {
 		}
 	}
 	
-	public ContactDetails getContactDetails() {
-		if(this.contactDetails == null) {
-			setContactDetails(new ContactDetails());
-		}
-		return this.contactDetails;
-	}
-		
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
+//	public ContactDetails getContactDetails() {
+//		if(this.contactDetails == null) {
+//			setContactDetails(new ContactDetails());
+//		}
+//		return this.contactDetails;
 //	}
 
 }

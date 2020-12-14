@@ -34,7 +34,7 @@ public class ReceiptItemRow extends BasicDTO {
 	AmountWithUnit orderAmount;
 	AmountWithUnit orderBalance;
 	OffsetDateTime receiptDate;
-	AmountWithUnit receiptAmount[];
+	AmountWithUnit receiptAmount;
 	String storage;
 	AmountWithUnit extraAdded;
 	
@@ -61,11 +61,11 @@ public class ReceiptItemRow extends BasicDTO {
 		}
 		this.receiptDate = receiptDate;
 		
-		
-		this.receiptAmount = new AmountWithUnit[] {
-				receiptAmt,
-				receiptAmt.convert(MeasureUnit.LBS)
-		};
+		this.receiptAmount = receiptAmt;
+//		this.receiptAmount = new AmountWithUnit[] {
+//				receiptAmt,
+//				receiptAmt.convert(MeasureUnit.LBS)
+//		};
 		
 		this.storage = storage;
 		if(extraAdded != null) {

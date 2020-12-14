@@ -99,10 +99,7 @@ public class Orders {
 				.collect(Collectors.groupingBy(PoItemRow::getId, Collectors.toList()));
 		List<PoRow> poRows = new ArrayList<PoRow>();
 		poMap.forEach((k, v) -> {
-			AmountWithUnit totalAmount = v.stream()
-					.map(pi -> pi.getNumberUnits()[0])
-					.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
-			PoRow poRow = new PoRow(k, totalAmount, v);
+			PoRow poRow = new PoRow(k, v);
 			poRows.add(poRow);
 		});
 		

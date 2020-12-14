@@ -18,20 +18,28 @@ public class PoRow extends BasicDTO {
 
 //	PoCodeBasic poCode;
 //	LocalDate deliveryDate; //for sorting
-	AmountWithUnit[] totalAmount;
+//	AmountWithUnit totalAmount;
 
 	List<PoItemRow> poRows;
 
-	public PoRow(@NonNull Integer id, AmountWithUnit totalAmount, List<PoItemRow> poRows) {
+	public PoRow(@NonNull Integer id, List<PoItemRow> poRows) {
 		super(id);
 //		this.poCode = poCode;
 //		this.deliveryDate = deliveryDate;
-		this.totalAmount = new AmountWithUnit[] {
-				totalAmount.setScale(MeasureUnit.SCALE),
-				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
+//		this.totalAmount = totalAmount.setScale(MeasureUnit.SCALE);
+//		this.totalAmount = new AmountWithUnit[] {
+//				totalAmount.setScale(MeasureUnit.SCALE),
+//				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 		this.poRows = poRows;
 	}
 	
-	
+	//perhaps total weight
+	public AmountWithUnit getTotalAmount() {
+		return poRows.stream()
+				.map(pi -> pi.getNumberUnits())
+				.filter(u -> MeasureUnit.WEIGHT_UNITS.contains(u.getMeasureUnit()))
+				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_LBS);
+
+	}
 
 }

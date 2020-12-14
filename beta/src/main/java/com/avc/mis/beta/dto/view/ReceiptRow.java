@@ -24,15 +24,15 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class ReceiptRow extends BasicDTO {
 
-	AmountWithUnit[] totalAmount;
+//	AmountWithUnit[] totalAmount;
 	OffsetDateTime receiptDate;
 	List<ReceiptItemRow> receiptRows;
 
-	public ReceiptRow(@NonNull Integer id, AmountWithUnit totalAmount, List<ReceiptItemRow> receiptRows) {
+	public ReceiptRow(@NonNull Integer id, List<ReceiptItemRow> receiptRows) {
 		super(id);
-		this.totalAmount = new AmountWithUnit[2];
-		this.totalAmount[0] = totalAmount.setScale(MeasureUnit.SCALE);
-		this.totalAmount[1] = totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
+//		this.totalAmount = new AmountWithUnit[2];
+//		this.totalAmount[0] = totalAmount.setScale(MeasureUnit.SCALE);
+//		this.totalAmount[1] = totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 		this.receiptRows = receiptRows;
 		if(receiptRows != null && !receiptRows.isEmpty()) {
 			this.receiptDate = receiptRows.get(0).getReceiptDate();
@@ -40,6 +40,16 @@ public class ReceiptRow extends BasicDTO {
 		else {
 			this.receiptDate = null;
 		}
+		
 	}
-	
+
+	//perhaps total weight
+	public AmountWithUnit getTotalAmount() {
+		return receiptRows.stream()
+				.map(pi -> pi.getReceiptAmount())
+				.filter(u -> MeasureUnit.WEIGHT_UNITS.contains(u.getMeasureUnit()))
+				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+
+	}
+
 }

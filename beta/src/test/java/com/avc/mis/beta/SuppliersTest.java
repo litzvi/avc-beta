@@ -63,6 +63,8 @@ class SuppliersTest {
 		supplier.getSupplyCategories().addAll(service.getSupplyCategories());
 		supplier.getSupplyCategories().remove(service.getSupplycategory());
 		
+		supplier.setContactDetails(new ContactDetails());
+		
 		//add phones
 		Phone[] phones = new Phone[NUM_ITEMS];
 		for(int i=0; i<phones.length; i++) {
@@ -160,6 +162,7 @@ class SuppliersTest {
 		SupplierDTO actual = null;
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test adding supplier with white spaces added to all info fields");
+//		fail("actual basic supplier: " + actual);
 		
 		//try adding supplier with duplicate name
 		Supplier duplicateSupplier = basicSupplier();
@@ -180,7 +183,13 @@ class SuppliersTest {
 		suppliers.editSupplierMainInfo(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test editing supplier with white spaces added to all info fields");
-		service.cleanup(supplier);
+		try {
+			service.cleanup(supplier);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		
 		//add, remove supply categories
 		supplier = fullSupplier();
