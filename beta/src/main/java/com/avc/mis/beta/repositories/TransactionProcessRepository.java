@@ -21,7 +21,7 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, item.measureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((ui.numberUsedUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "SUM((ui.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor), "
 			+ "function('GROUP_CONCAT', wh.value)) "
 		+ "from TransactionProcess p "
 			+ "join p.poCode po_code "
@@ -71,7 +71,7 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 //			+ "p.id, "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((ui.numberUsedUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor)) "
+			+ "SUM((ui.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor)) "
 //			+ "function('GROUP_CONCAT', wh.value)) "
 		+ "from TransactionProcess p "
 			+ "join p.poCode po_code "

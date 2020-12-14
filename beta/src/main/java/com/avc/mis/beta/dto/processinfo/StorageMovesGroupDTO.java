@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.processinfo;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
@@ -31,20 +32,20 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<StorageMoveDTO> {
 
-	@JsonIgnore
-	private MeasureUnit measureUnit;
+//	@JsonIgnore
+//	private MeasureUnit measureUnit;
 	private List<StorageMoveDTO> storageMoves;
 
 
 	public StorageMovesGroupDTO(Integer id, Integer version, Integer ordinal,
-			MeasureUnit measureUnit, String groupName, boolean tableView) {
+			String groupName, boolean tableView) {
 		super(id, version, ordinal, groupName, tableView);
-		this.measureUnit = measureUnit;
+//		this.measureUnit = measureUnit;
 	}	
 
 	public StorageMovesGroupDTO(StorageMovesGroup group) {
 		super(group);
-		this.measureUnit = group.getMeasureUnit();
+//		this.measureUnit = group.getMeasureUnit();
 		this.storageMoves = (Arrays.stream(group.getStorageMoves())
 				.map(u->{return new StorageMoveDTO(u);})
 				.collect(Collectors.toList()));
@@ -64,6 +65,7 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 				movedItemTable.setItem(m.getItem());
 				movedItemTable.setMeasureUnit(m.getMeasureUnit());
 				movedItemTable.setItemPo(m.getItemPo());
+				movedItemTable.setItemProcessDate(m.getItemProcessDate());
 				BasicValueEntity<Warehouse> warehouse = m.getWarehouseLocation();
 				if(warehouse != null)
 					movedItemTable.setNewWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
@@ -87,11 +89,14 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 	}
 	
 	public AmountWithUnit getTotalAmount() {
-		BigDecimal total = this.storageMoves.stream()
+		
+		Optional<AmountWithUnit> totalAmount = this.storageMoves.stream()
 				.map(m -> m.getTotal())
-				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
-		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
-		return totalAmount;
+				.reduce(AmountWithUnit::add);
+//		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
+		System.out.println("total: " + totalAmount.orElse(null));
+
+		return totalAmount.orElse(null);
 //		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
 //				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 	}

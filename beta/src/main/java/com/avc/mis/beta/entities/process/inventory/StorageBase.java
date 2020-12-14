@@ -54,10 +54,10 @@ public class StorageBase extends UsedItemBase {
 	@Positive(message = "Unit amount has to be positive")
 	private BigDecimal unitAmount = BigDecimal.ONE;	
 
-	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
-	@NotNull(message = "Number of units is required")
-	@Positive(message = "Number of units has to be positive")
-	private BigDecimal numberUnits;	
+//	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
+//	@NotNull(message = "Number of units is required")
+//	@Positive(message = "Number of units has to be positive")
+//	private BigDecimal numberUnits;	
 	
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
 	private BigDecimal accessWeight;	

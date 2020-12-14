@@ -41,12 +41,12 @@ public class UsedItem extends UsedItemBase {
 		return super.getStorage();
 	}
 	
-	@Override
-	@NotNull(message = "Used number of units is required")
-	@Positive(message = "Used number of units has to be positive")
-	public BigDecimal getNumberUsedUnits() {
-		return super.getNumberUsedUnits();
-	}
+//	@Override
+//	@NotNull(message = "Used number of units is required")
+//	@Positive(message = "Used number of units has to be positive")
+//	public BigDecimal getNumberUsedUnits() {
+//		return super.getNumberUsedUnits();
+//	}
 	
 	@Override
 	public void setReference(Object referenced) {

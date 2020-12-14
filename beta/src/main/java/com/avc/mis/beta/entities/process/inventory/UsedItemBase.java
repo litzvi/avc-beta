@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.entities.RankedAuditedEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -44,9 +45,14 @@ public abstract class UsedItemBase extends RankedAuditedEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "storageId", updatable = false) //can't update so to not confuse the processItem of a storageMove
 	private StorageBase storage;
-	
-	@Column(precision = 19, scale = MeasureUnit.SCALE)
-	private BigDecimal numberUsedUnits;	
+
+	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
+	@NotNull(message = "Number of units is required")
+	@Positive(message = "Number of units has to be positive")
+	private BigDecimal numberUnits;	
+
+//	@Column(precision = 19, scale = MeasureUnit.SCALE)
+//	private BigDecimal numberUsedUnits;	
 	
 	@ToString.Exclude
 	@Setter(value = AccessLevel.PROTECTED) @Getter(value = AccessLevel.PROTECTED)
@@ -54,6 +60,23 @@ public abstract class UsedItemBase extends RankedAuditedEntity {
 	@JoinColumn(name = "groupId", nullable = false)
 	@NotNull(message = "Used items have to belong to a group categery") //storage does not have a group (maybe processItem)
 	private ProcessGroup group;
+	
+	/**
+	 * Synonym for numberUnits 
+	 * @param numberUsedUnits
+	 */
+	public void setNumberUsedUnits(BigDecimal numberUsedUnits) {
+		this.numberUnits = numberUsedUnits;
+	}
+	
+	/**
+	 * Synonym for numberUnits 
+	 * @return numberUnits
+	 */
+	public BigDecimal getNumberUsedUnits() {
+		return this.numberUnits;
+	}
+
 	
 	@Override
 	public void setReference(Object referenced) {

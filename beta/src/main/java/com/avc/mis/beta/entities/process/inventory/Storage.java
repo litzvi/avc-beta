@@ -48,11 +48,11 @@ public class Storage extends StorageBase {
 		return super.getStorage();
 	}
 		
-	@Override
-	@Null(message = "Internal error: Used units has to be null for storage class")
-	public BigDecimal getNumberUsedUnits() {
-		return super.getNumberUsedUnits();
-	}
+//	@Override
+//	@Null(message = "Internal error: Used units has to be null for storage class")
+//	public BigDecimal getNumberUsedUnits() {
+//		return super.getNumberUsedUnits();
+//	}
 	
 	@Override
 	public void setReference(Object referenced) {

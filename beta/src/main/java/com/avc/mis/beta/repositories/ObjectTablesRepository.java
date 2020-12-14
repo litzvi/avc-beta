@@ -155,7 +155,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 			+ "SUM("
 				+ "(CASE "
 					+ "WHEN (ui IS NOT null AND used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
-						+ "THEN ui.numberUsedUnits "
+						+ "THEN ui.numberUnits "
 					+ "ELSE 0 "
 				+ "END)"
 			+ " ) ")

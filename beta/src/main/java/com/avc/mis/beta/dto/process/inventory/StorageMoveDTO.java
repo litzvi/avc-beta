@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.inventory.Storage;
@@ -81,14 +82,15 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 	}
 	
 	@JsonIgnore
-	public BigDecimal getTotal() {
+	public AmountWithUnit getTotal() {
 		if(getUnitAmount() == null || getNumberUnits() == null) {
 			return null;
 		}
 		else {
-			return getUnitAmount()
+			return new AmountWithUnit(getUnitAmount()
 				.multiply(getNumberUnits())
-				.subtract(Optional.ofNullable(getAccessWeight()).orElse(BigDecimal.ZERO));
+				.subtract(Optional.ofNullable(getAccessWeight()).orElse(BigDecimal.ZERO)), 
+				getMeasureUnit());
 		}
 	}
 

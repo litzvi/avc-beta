@@ -29,7 +29,7 @@ public class StorageMove extends StorageBase {
 	
 	public StorageMove() {
 		super();
-		super.setNumberUsedUnits(BigDecimal.ONE);
+		super.setNumberUnits(BigDecimal.ONE);
 //		setDtype("StorageMove");
 	}
 	
@@ -49,12 +49,12 @@ public class StorageMove extends StorageBase {
 		return super.getStorage();
 	}
 	
-	@Override
-	@NotNull(message = "Used number of units is required")
-	@Positive(message = "Used number of units has to be positive")
-	public BigDecimal getNumberUsedUnits() {
-		return super.getNumberUsedUnits();
-	}
+//	@Override
+//	@NotNull(message = "Used number of units is required")
+//	@Positive(message = "Used number of units has to be positive")
+//	public BigDecimal getNumberUsedUnits() {
+//		return super.getNumberUsedUnits();
+//	}
 		
 	@Override
 	public void setReference(Object referenced) {

@@ -38,7 +38,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 
 	
 	@Query("select new com.avc.mis.beta.dto.process.inventory.UsedItemDTO( "
-			+ "i.id, i.version, i.ordinal, i.numberUsedUnits, "
+			+ "i.id, i.version, i.ordinal, i.numberUnits, "
 			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "sf_group.measureUnit, used_p.recordedTime, "
@@ -48,7 +48,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "SUM("
 				+ "(CASE "
 					+ "WHEN (sf_ui <> i AND sf_used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
-						+ "THEN sf_ui.numberUsedUnits "
+						+ "THEN sf_ui.numberUnits "
 					+ "ELSE 0 "
 				+ "END)"
 			+ "), "
@@ -78,7 +78,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	
 	@Query("select new com.avc.mis.beta.dto.query.UsedItemWithGroup( "
 			+ "grp.id, grp.version, grp.ordinal, grp.groupName, grp.tableView, "
-			+ "i.id, i.version, i.ordinal, i.numberUsedUnits, "
+			+ "i.id, i.version, i.ordinal, i.numberUnits, "
 			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "sf_group.measureUnit, used_p.recordedTime, "
@@ -88,7 +88,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "SUM("
 				+ "(CASE "
 					+ "WHEN (sf_ui <> i AND sf_used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
-						+ "THEN sf_ui.numberUsedUnits "
+						+ "THEN sf_ui.numberUnits "
 					+ "ELSE 0 "
 				+ "END)"
 			+ "), "

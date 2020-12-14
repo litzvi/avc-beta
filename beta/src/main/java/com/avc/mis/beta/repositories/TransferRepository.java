@@ -34,7 +34,7 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 
 	@Query("select new com.avc.mis.beta.dto.query.ItemTransactionDifference("
 				+ "usedItem.id, usedItem.value, "
-				+ "SUM(used_sf.unitAmount * used_sf.numberUsedUnits * uom_used.multiplicand / uom_used.divisor), "
+				+ "SUM(used_sf.unitAmount * used_sf.numberUnits * uom_used.multiplicand / uom_used.divisor), "
 				+ "usedItem.measureUnit, "
 				+ "SUM(sf.unitAmount * sf.numberUnits * uom_produced.multiplicand / uom_produced.divisor), "
 				+ "usedItem.measureUnit) "

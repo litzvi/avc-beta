@@ -46,7 +46,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "STORAGE_MOVES_GROUP")
 @PrimaryKeyJoinColumn(name = "groupId")
-public class StorageMovesGroup extends ProcessGroupWithStorages {
+public class StorageMovesGroup extends ProcessGroup {
 	
 	{
 		setDtype("StorageMovesGroup");
@@ -83,7 +83,7 @@ public class StorageMovesGroup extends ProcessGroupWithStorages {
 		setTableView(true);
 		
 		//same as the original process item, for convenience in queries
-		setMeasureUnit(movedItemTable.getMeasureUnit());
+//		setMeasureUnit(movedItemTable.getMeasureUnit());
 		BigDecimal accessWeight = movedItemTable.getAccessWeight();
 		Warehouse warehouse = movedItemTable.getNewWarehouseLocation();
 		List<BasicUsedStorageDTO> basicUsedStorages = movedItemTable.getAmounts();
@@ -100,7 +100,7 @@ public class StorageMovesGroup extends ProcessGroupWithStorages {
 			storageMoves[i].setStorage(storage);
 			
 			storageMoves[i].setOrdinal(basicUsedStorage.getOrdinal());
-			storageMoves[i].setNumberUnits(basicUsedStorage.getAmount());
+//			storageMoves[i].setNumberUnits(basicUsedStorage.getAmount());
 			storageMoves[i].setAccessWeight(accessWeight);
 			storageMoves[i].setWarehouseLocation(warehouse);
 
