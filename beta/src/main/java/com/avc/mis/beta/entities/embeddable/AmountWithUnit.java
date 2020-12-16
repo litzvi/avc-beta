@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.Optional;
 
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
@@ -86,6 +87,10 @@ public class AmountWithUnit implements Cloneable {
 		return new AmountWithUnit(this.amount.add(augendConvertedAmount), this.measureUnit);
 	}
 	
+	private AmountWithUnit negate() {
+		return new AmountWithUnit(this.amount.negate(), measureUnit);
+	}
+	
 	public AmountWithUnit subtract(AmountWithUnit subtrahend) {
 		BigDecimal subtrahendAmount = MeasureUnit.convert(subtrahend.getAmount(), subtrahend.getMeasureUnit(), this.measureUnit);
 		if(subtrahendAmount == null)
@@ -94,7 +99,7 @@ public class AmountWithUnit implements Cloneable {
 		return new AmountWithUnit(this.amount.subtract(subtrahendAmount), this.measureUnit);
 	}
 	
-	public AmountWithUnit substract(BigDecimal subtrahend) {
+	public AmountWithUnit subtract(BigDecimal subtrahend) {
 		return new AmountWithUnit(this.amount.subtract(subtrahend), this.measureUnit);
 	}
 	
@@ -159,13 +164,33 @@ public class AmountWithUnit implements Cloneable {
 		
 	}
 
+	public static AmountWithUnit addNullable(AmountWithUnit base, AmountWithUnit augend) {
+		if(base != null && augend != null) {
+			return base.add(augend);
+		}
+		if(base != null) {
+			return base;
+		}
+		if(augend != null) {
+			return augend;
+		}
+		return null;
+	}
 	
+	public static AmountWithUnit subtractNullable(AmountWithUnit base, AmountWithUnit subtrahend) {
+		if(base != null && subtrahend != null) {
+			return base.subtract(subtrahend);
+		}
+		if(base != null) {
+			return base;
+		}
+		if(subtrahend != null) {
+			return subtrahend.negate();
+		}
+		return null;
+	}
 
 	
-	
-
-	
-
 	
 
 	

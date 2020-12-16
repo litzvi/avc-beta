@@ -32,12 +32,12 @@ public class ProductionReportLine {
 	
 	Set<LocalDate> dates;
 	
-	Optional<AmountWithUnit> totalProductIn = Optional.empty();	
-	Optional<AmountWithUnit> totalIngredients = Optional.empty();	
+	AmountWithUnit totalProductIn;	
+	AmountWithUnit totalIngredients;
 	
-	Optional<AmountWithUnit> totalProductOut = Optional.empty();
-	Optional<AmountWithUnit> totalWaste = Optional.empty();
-	Optional<AmountWithUnit> totalQC = Optional.empty();
+	AmountWithUnit totalProductOut;
+	AmountWithUnit totalWaste;
+	AmountWithUnit totalQC;
 	
 	public void setProductIn(List<ItemAmount> productIn) {
 		this.productIn = productIn;
@@ -65,30 +65,25 @@ public class ProductionReportLine {
 	}
 
 	public AmountWithUnit getDifference() {		
-//		Optional<AmountWithUnit> difference = totalProductOut;
+		AmountWithUnit totalOut = AmountWithUnit.addNullable(AmountWithUnit.addNullable(totalProductOut, totalWaste), totalQC);
+		AmountWithUnit totalIn = AmountWithUnit.addNullable(totalProductIn, totalIngredients);
+		
+		return AmountWithUnit.subtractNullable(totalOut, totalIn);
 //		if(totalWaste.isPresent()) {
 //			calculate(difference, totalWaste, (AmountWithUnit::add));
 //		}
-		return totalProductOut.orElse(AmountWithUnit.ZERO_KG)
-				.add(totalWaste.orElse(AmountWithUnit.ZERO_KG))
-				.add(totalQC.orElse(AmountWithUnit.ZERO_KG))
-				.subtract(totalProductIn.orElse(AmountWithUnit.ZERO_KG))
-				.subtract(totalIngredients.orElse(AmountWithUnit.ZERO_KG));
+		
+//		return totalProductOut.orElse(AmountWithUnit.ZERO_KG)
+//				.add(totalWaste.orElse(AmountWithUnit.ZERO_KG))
+//				.add(totalQC.orElse(AmountWithUnit.ZERO_KG))
+//				.subtract(totalProductIn.orElse(AmountWithUnit.ZERO_KG))
+//				.subtract(totalIngredients.orElse(AmountWithUnit.ZERO_KG));
 	}
-	
-	
 
-	
-//	private void calculate(Optional<AmountWithUnit> arg1, Optional<AmountWithUnit> arg2, 
-//			BiFunction<AmountWithUnit, AmountWithUnit, AmountWithUnit> fn) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-
-	private Optional<AmountWithUnit> getTotalWeight(List<ItemAmount> itemAmounts) {
+	private AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
 		if(itemAmounts == null)
-			return Optional.empty();
-		return itemAmounts.stream().map(i -> i.getWeight()[0]).reduce(AmountWithUnit::add);
+			return null;
+		return itemAmounts.stream().map(i -> i.getWeight()[0]).reduce(AmountWithUnit::add).get();
 //		return new AmountWithUnit[] {
 //				totalWeight.convert(MeasureUnit.KG),
 //				totalWeight.convert(MeasureUnit.LBS)};
