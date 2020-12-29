@@ -54,8 +54,8 @@ public class ItemAmount {
 			throw new IllegalStateException("The class can only apply to weight items");
 		}
 		this.weight = new AmountWithUnit[] {
-				amountWithUnit.convert(MeasureUnit.KG),
-				amountWithUnit.convert(MeasureUnit.LBS)};
+				amountWithUnit.convert(MeasureUnit.LBS),
+				amountWithUnit.convert(MeasureUnit.KG)};
 		AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
 	}
 	

@@ -27,6 +27,7 @@ import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.dto.report.ProductionReportLine;
+import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
@@ -88,7 +89,7 @@ public class QueryTest {
 	@Autowired ProductionProcesses productionProcesses;
 	@Autowired Loading loading;
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void queryTest() {
 
@@ -326,24 +327,9 @@ public class QueryTest {
 
 		//final report
 		poCodes.forEach(c -> System.out.println(processInfoReader.getPoFinalReport(c.getId())));
+		poCodes.forEach(c -> System.out.println(productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, c.getId())));
+		poCodes.forEach(c -> System.out.println(qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, c.getId())));
 
-		service.cleanup(po);
-
-	}
-	
-	@Test
-	void oneQueryTest() {		
-		ProductionReportLine reportLine;
-		reportLine = productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, 14107);
-		try {
-			System.out.println("Difference: " + reportLine.getDifference());
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
-		System.out.println("Report line: " + reportLine);
-		System.out.println("Difference: " + reportLine.getDifference());
 		
 		Map<ProcessName, List<PoProcessDTO>> qcProcessesMap = qualityChecks.getAllQualityChecksByPo(44952);
 		qcProcessesMap.forEach((k, v) -> {
@@ -352,5 +338,15 @@ public class QueryTest {
 				v.forEach(r -> System.out.println(r));
 			}
 		});
+
+		service.cleanup(po);
+
+	}
+	
+	@Test
+	void oneQueryTest() {		
+		
+		List<QcReportLine> qcReportLines = qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, 1234);
+		qcReportLines.forEach(c -> System.out.println(c));
 	}
 }

@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.basic.ValueEntityObject;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
+import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -123,8 +124,29 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 				+ "join po_code.contractType ct "
 			+ "join qc.processType pt "
 		+ "where pt.processName in :processNames "
-			+ "and (po_code.id = :poId or :poId is null) ")
+			+ "and (po_code.id = :poId or :poId is null) "
+		+ "order by qc.recordedTime desc ")
 	List<CashewQcRow> findCashewQualityChecks(ProcessName[] processNames, Integer poId);
+
+	@Query("select new com.avc.mis.beta.dto.report.QcReportLine( "
+			+ "qc.checkedBy, i.id, i.value, qc.recordedTime, "
+			+ "ti.sampleWeight, ti.precentage, "
+			+ "ti.humidity, ti.breakage,"
+				+ "def.scorched, def.deepCut, def.offColour, "
+				+ "def.shrivel, def.desert, def.deepSpot, "
+				+ "dam.mold, dam.dirty, dam.lightDirty, "
+				+ "dam.decay, dam.insectDamage, dam.testa) "
+		+ "from QualityCheck qc "
+			+ "join qc.testedItems ti "
+				+ "join ti.item i "
+				+ "join ti.defects def "
+				+ "join ti.damage dam "
+			+ "join qc.poCode po_code "
+			+ "join qc.processType pt "
+		+ "where pt.processName = :processName "
+			+ "and po_code.id = :poId "
+		+ "order by qc.recordedTime desc ")
+	List<QcReportLine> findCashewQCReportLines(ProcessName processName, Integer poId);
 
 		
 	

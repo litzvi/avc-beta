@@ -63,7 +63,7 @@ public class ReceiptItem extends ProcessItem {
         @AttributeOverride(name="measureUnit",
                            column=@Column(name = "orderMeasureUnit"))
     })
-	@NotNull(message = "Received amount is mandatory")
+	@NotNull(message = "Invoice amount is mandatory")
 	@Embedded
 	@Valid
 	@ConvertGroup(from = Default.class, to = PositiveAmount.class)

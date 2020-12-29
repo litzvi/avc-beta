@@ -3,7 +3,7 @@
   realizations="false" associations="false" dependencies="false" nesting-relationships="false" router="FAN">  
   <class id="1" language="java" name="com.avc.mis.beta.dto.report.ItemAmount" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/report/ItemAmount.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="565" y="335"/>    
+    <position height="-1" width="-1" x="460" y="319"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -13,7 +13,7 @@
   <class id="2" language="java" name="com.avc.mis.beta.dto.report.ProductionReportLine" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/report/ProductionReportLine.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1027" y="338"/>    
+    <position height="273" width="251" x="886" y="190"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      

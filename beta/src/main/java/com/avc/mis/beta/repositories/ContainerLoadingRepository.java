@@ -30,7 +30,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
-			+ "sc.code, port.id, port.code, port.value, "
+			+ "sc.code, port.id, port.value, port.code, "
 			+ "r.containerDetails, r.shipingDetails) "
 		+ "from ContainerLoading r "
 			+ "join r.shipmentCode sc "

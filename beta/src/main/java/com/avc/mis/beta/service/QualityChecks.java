@@ -18,6 +18,7 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
+import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -72,6 +73,10 @@ public class QualityChecks {
 	public List<CashewQcRow> getRoastedQualityChecksByPoCode(@NonNull Integer poCodeId) {
 		return getQcRepository().findCashewQualityChecks(new ProcessName[] {
 				ProcessName.ROASTED_CASHEW_QC}, poCodeId);
+	}
+	
+	public List<QcReportLine> getQcSummary(ProcessName processName, Integer poCodeId) {
+		return getQcRepository().findCashewQCReportLines(processName, poCodeId);
 	}
 			
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

@@ -23,21 +23,21 @@ import lombok.Data;
 @Data
 public class ProductionReportLine {
 	
-	List<ItemAmount> productIn;
-	List<ItemAmount> ingredients;
-	
-	List<ItemAmount> productOut;
-	List<ItemAmount> waste;
-	List<ItemAmount> qc;
-	
-	Set<LocalDate> dates;
-	
-	AmountWithUnit totalProductIn;	
-	AmountWithUnit totalIngredients;
-	
-	AmountWithUnit totalProductOut;
-	AmountWithUnit totalWaste;
-	AmountWithUnit totalQC;
+	private List<ItemAmount> productIn;
+	private List<ItemAmount> ingredients;
+	 
+	private List<ItemAmount> productOut;
+	private List<ItemAmount> waste;
+	private List<ItemAmount> qc;
+	 
+	private Set<LocalDate> dates;
+	 
+	private AmountWithUnit totalProductIn;	
+	private AmountWithUnit totalIngredients;
+	 
+	private AmountWithUnit totalProductOut;
+	private AmountWithUnit totalWaste;
+	private AmountWithUnit totalQC;
 	
 	public void setProductIn(List<ItemAmount> productIn) {
 		this.productIn = productIn;
