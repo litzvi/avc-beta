@@ -21,6 +21,7 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
@@ -51,7 +52,7 @@ public class ProductionProcesses {
 	 * @return
 	 */
 	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
-		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId);
+		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId, true);
 		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getProcessRepository()
 				.findAllUsedItemsByProcessIds(processIds)
@@ -67,13 +68,15 @@ public class ProductionProcesses {
 	}
 	
 	public ProductionReportLine getProductionSummary(ProcessName processName, Integer poCodeId) {
-		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId);
+		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId, false);
 		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
 
+		if(processRows.isEmpty()) {
+			return null;
+		}
+		
 		ProductionReportLine reportLine = new ProductionReportLine();
-
-		if(!processRows.isEmpty())
-			reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
+		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
 		
 		Stream<ItemAmount> itemAmounts = getProcessRepository().findSummaryUsedItemAmounts(processIds);
 		Map<ItemGroup, List<ItemAmount>> itemsMap = itemAmounts.collect(Collectors.groupingBy(ItemAmount::getItemGroup));
@@ -87,6 +90,17 @@ public class ProductionProcesses {
 		reportLine.setProductOut(itemsMap.get(ItemGroup.PRODUCT));
 		reportLine.setWaste(itemsMap.get(ItemGroup.WASTE));
 		reportLine.setQc(itemsMap.get(ItemGroup.QC));
+		
+		List<ItemAmount> producedAmounts = null;
+		if(reportLine.getProductOut() != null) {
+			int[] productItemsIds = reportLine.getProductOut().stream().mapToInt(i -> i.getItem().getId()).toArray();
+			processRows = getProcessRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, false);
+			processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
+			for(int i=0; i < processIds.length && (producedAmounts == null || producedAmounts.isEmpty()); i++) {
+				producedAmounts = getProcessRepository().findProductCountItemAmountsByProcessId(processIds[i], productItemsIds);
+			}
+			reportLine.setProductCount(producedAmounts);						
+		}
 		
 		return reportLine;
 	}

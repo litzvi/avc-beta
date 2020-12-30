@@ -19,6 +19,7 @@ import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
+import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.view.PoFinalReport;
 import com.avc.mis.beta.entities.data.ProcessManagement;
@@ -215,6 +216,20 @@ public class ProcessInfoReader {
 		
 		return report;
 	}
+	
+	public FinalReport getFinalReport(@NonNull Integer poCodeId) {
+		FinalReport report = new FinalReport();
+		report.setReceipt(orderReceipts.getReceiptSummary(poCodeId));
+		report.setReceiptQC(qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, poCodeId));
+		report.setCleaning(productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, poCodeId));
+		report.setRoasting(productionProcesses.getProductionSummary(ProcessName.CASHEW_ROASTING, poCodeId));
+		report.setRoastQC(qualityChecks.getQcSummary(ProcessName.ROASTED_CASHEW_QC, poCodeId));
+		report.setPacking(productionProcesses.getProductionSummary(ProcessName.PACKING, poCodeId));
+//		report.setLoading(loading.getLoadingsByPoCode(poCodeId));
+		
+		return report;
+	}
+
 
 	
 }

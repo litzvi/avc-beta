@@ -14,6 +14,7 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.item.Item;
 
 import lombok.EqualsAndHashCode;
@@ -48,7 +49,7 @@ public class CashewQcRow extends BasicDTO {
 
 	public CashewQcRow(@NonNull Integer id, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			String checkedBy,
+			QcCompany checkedBy,
 			Integer itemId, String itemValue, 
 //			String itemName, 
 			OffsetDateTime checkDate, 
@@ -61,7 +62,7 @@ public class CashewQcRow extends BasicDTO {
 		super(id);
 		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
-		this.checkedBy = checkedBy;
+		this.checkedBy = checkedBy.toString();
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 //		this.itemName = itemName;
 		this.checkDate = checkDate;
@@ -90,6 +91,12 @@ public class CashewQcRow extends BasicDTO {
 		this.totalDamage = rawDamage.getTotal().divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
 		
 		
+	}
+	
+	public String getCheckedBy() {
+		if(this.checkedBy != null)
+			return this.checkedBy.toString();
+		return null;
 	}
 	
 	public BigDecimal getTotalDefectsAndDamage() {

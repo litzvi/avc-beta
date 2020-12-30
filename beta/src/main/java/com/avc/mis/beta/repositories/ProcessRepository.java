@@ -32,9 +32,9 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "join p.lifeCycle lc "
 		+ "where pt.processName = :processName "
 			+ "and (po_code.code = :poCodeId or :poCodeId is null) "
-//			+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "order by p.recordedTime desc ")
-	List<ProcessRow> findProcessByType(ProcessName processName, Integer poCodeId);
+	List<ProcessRow> findProcessByType(ProcessName processName, Integer poCodeId, boolean cancelled);
 
 	
 	@Query("select new com.avc.mis.beta.dto.process.inventory.UsedItemDTO( "

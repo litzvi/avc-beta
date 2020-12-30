@@ -10,18 +10,23 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
 
+import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.ItemGroup;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * @author zvi
  *
  */
 @Data
-public class ProductionReportLine {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
+public class ProductionReportLine extends ReportLine {
 	
 	private List<ItemAmount> productIn;
 	private List<ItemAmount> ingredients;
@@ -29,8 +34,9 @@ public class ProductionReportLine {
 	private List<ItemAmount> productOut;
 	private List<ItemAmount> waste;
 	private List<ItemAmount> qc;
-	 
-	private Set<LocalDate> dates;
+
+//	private Set<LocalDate> dates;
+//	private List<ItemAmount> productCount;
 	 
 	private AmountWithUnit totalProductIn;	
 	private AmountWithUnit totalIngredients;
@@ -39,29 +45,36 @@ public class ProductionReportLine {
 	private AmountWithUnit totalWaste;
 	private AmountWithUnit totalQC;
 	
+//	private AmountWithUnit totalProductCount;	
+	
 	public void setProductIn(List<ItemAmount> productIn) {
-		this.productIn = productIn;
-		this.totalProductIn= getTotalWeight(productIn); 
+		boolean empty = productIn == null || productIn.isEmpty();
+		this.productIn = empty ? null : productIn;
+		this.totalProductIn = empty ? null : getTotalWeight(productIn);
 	}
 
 	public void setIngredients(List<ItemAmount> ingredients) {
-		this.ingredients = ingredients;
-		this.totalIngredients= getTotalWeight(ingredients); 
+		boolean empty = ingredients == null || ingredients.isEmpty();
+		this.ingredients = empty ? null : ingredients;
+		this.totalIngredients = empty ? null : getTotalWeight(ingredients);
 	}
 
 	public void setProductOut(List<ItemAmount> productOut) {
-		this.productOut = productOut;
-		this.totalProductOut = getTotalWeight(productOut); 
+		boolean empty = productOut == null || productOut.isEmpty();
+		this.productOut = empty ? null : productOut;
+		this.totalProductOut = empty ? null : getTotalWeight(productOut);
 	}
 
 	public void setWaste(List<ItemAmount> waste) {
-		this.waste = waste;
-		this.totalWaste = getTotalWeight(waste); 
+		boolean empty = waste == null || waste.isEmpty();
+		this.waste = empty ? null : waste;
+		this.totalWaste = empty ? null : getTotalWeight(waste);
 	}
 
 	public void setQc(List<ItemAmount> qc) {
-		this.qc = qc;
-		this.totalQC = getTotalWeight(qc); 
+		boolean empty = qc == null || qc.isEmpty();
+		this.qc = empty ? null : qc;
+		this.totalQC = empty ? null : getTotalWeight(qc);
 	}
 
 	public AmountWithUnit getDifference() {		
@@ -78,15 +91,6 @@ public class ProductionReportLine {
 //				.add(totalQC.orElse(AmountWithUnit.ZERO_KG))
 //				.subtract(totalProductIn.orElse(AmountWithUnit.ZERO_KG))
 //				.subtract(totalIngredients.orElse(AmountWithUnit.ZERO_KG));
-	}
-
-	private AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
-		if(itemAmounts == null)
-			return null;
-		return itemAmounts.stream().map(i -> i.getWeight()[0]).reduce(AmountWithUnit::add).get();
-//		return new AmountWithUnit[] {
-//				totalWeight.convert(MeasureUnit.KG),
-//				totalWeight.convert(MeasureUnit.LBS)};
 	}
 
 

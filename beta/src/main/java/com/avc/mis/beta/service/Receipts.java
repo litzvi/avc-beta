@@ -20,12 +20,17 @@ import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
+import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.report.ProductionReportLine;
+import com.avc.mis.beta.dto.report.ReceiptReportLine;
+import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ReceiptItemRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
@@ -55,6 +60,35 @@ public class Receipts {
 	@Deprecated
 	@Autowired private DeletableDAO deletableDAO;
 		
+	public ReceiptReportLine getReceiptSummary(Integer poCodeId) {
+		List<ProcessRow> processRows = getReceiptRepository().findProcessByType(ProcessName.CASHEW_RECEIPT, poCodeId, false);
+		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
+
+		if(processRows.isEmpty()) {
+			return null;
+		}
+		
+		ReceiptReportLine reportLine = new ReceiptReportLine();
+		reportLine.setPoCode(processRows.get(0).getPoCode());
+		reportLine.setSupplierName(processRows.get(0).getSupplierName());
+		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
+		
+		Stream<ItemAmount> itemAmounts = getReceiptRepository().findSummaryProducedItemAmounts(processIds);
+		reportLine.setReceived(itemAmounts.collect(Collectors.toList()));
+		
+		List<ItemAmount> countAmounts = null;
+		if(reportLine.getReceived() != null) {
+			int[] productItemsIds = reportLine.getReceived().stream().mapToInt(i -> i.getItem().getId()).toArray();
+			processRows = getReceiptRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, false);
+			processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
+			for(int i=0; i < processIds.length && (countAmounts == null || countAmounts.isEmpty()); i++) {
+				countAmounts = getReceiptRepository().findProductCountItemAmountsByProcessId(processIds[i], productItemsIds);
+			}
+			reportLine.setProductCount(countAmounts);						
+		}
+
+		return reportLine;
+	}
 	
 	/**
 	 * Gets rows for table of Cashew received orders that where finalized. 

@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
@@ -44,7 +45,7 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 		
 	private List<CashewItemQualityDTO> testedItems; //can use a SortedSet like ContactDetails to maintain order
 	
-	public QualityCheckDTO(Integer id, Integer version, String inspector, String sampleTaker, String checkedBy,
+	public QualityCheckDTO(Integer id, Integer version, String inspector, String sampleTaker, QcCompany checkedBy,
 			Instant createdDate, String userRecording, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, Integer supplierId, Integer supplierVersion, String supplierName,  
 			ProcessName processName, ProductionLine productionLine, 
@@ -55,7 +56,7 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 				supplierId, supplierVersion, supplierName, 
 				processName, productionLine, recordedTime, startTime, endTime, duration,
 				numOfWorkers, processStatus, editStatus, remarks, approvals);
-		this.checkedBy = checkedBy;
+		this.checkedBy = checkedBy.toString();
 		this.inspector = inspector;
 		this.sampleTaker = sampleTaker;
 	}
@@ -70,7 +71,7 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 		this.testedItems = Arrays.stream(check.getTestedItems())
 				.map(i->{return new CashewItemQualityDTO(i);}).collect(Collectors.toList());
 	}
-	
+		
 	@Override
 	public List<ProcessItemDTO> getProcessItems() {
 		return super.getProcessItems();

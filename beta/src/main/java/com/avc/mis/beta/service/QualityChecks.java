@@ -22,6 +22,7 @@ import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.repositories.QCRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
@@ -76,7 +77,12 @@ public class QualityChecks {
 	}
 	
 	public List<QcReportLine> getQcSummary(ProcessName processName, Integer poCodeId) {
-		return getQcRepository().findCashewQCReportLines(processName, poCodeId);
+		List<QcReportLine> lines = getQcRepository().findCashewQCReportLines(processName, poCodeId, QcCompany.AVC_LAB);
+		if(lines == null || lines.isEmpty()) {
+			return null;
+		}
+		return lines;
+		
 	}
 			
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

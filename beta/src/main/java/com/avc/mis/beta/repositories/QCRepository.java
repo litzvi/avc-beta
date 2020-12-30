@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.QualityCheck;
 /**
@@ -145,8 +146,9 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 			+ "join qc.processType pt "
 		+ "where pt.processName = :processName "
 			+ "and po_code.id = :poId "
+			+ "and qc.checkedBy = :qcCompany "
 		+ "order by qc.recordedTime desc ")
-	List<QcReportLine> findCashewQCReportLines(ProcessName processName, Integer poId);
+	List<QcReportLine> findCashewQCReportLines(ProcessName processName, Integer poId, QcCompany qcCompany);
 
 		
 	

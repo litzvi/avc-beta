@@ -82,11 +82,11 @@ public class CashewItemQuality extends ProcessInfoEntity {
 	@Column(precision = 19, scale = QualityCheck.SCALE)
 	private BigDecimal humidity;
 	
-	@NotNull
+//	@NotNull
 	@Embedded
 	private RawDefects defects;
 
-	@NotNull
+//	@NotNull
 	@Embedded
 	private RawDamage damage;
 		

@@ -14,6 +14,7 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.item.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -42,7 +43,7 @@ public class QcReportLine {
 	BigDecimal totalDamage;
 
 
-	public QcReportLine(String checkedBy,
+	public QcReportLine(QcCompany checkedBy,
 			Integer itemId, String itemValue, 
 			OffsetDateTime checkDate, 
 			BigDecimal sampleWeight, boolean precentage,
@@ -51,7 +52,7 @@ public class QcReportLine {
 			BigDecimal shrivel, BigDecimal desert, BigDecimal deepSpot, 
 			BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 
 			BigDecimal decay, BigDecimal insectDamage, BigDecimal testa) {
-		this.checkedBy = checkedBy;
+		this.checkedBy = checkedBy.toString();
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.checkDate = checkDate;
 		this.humidity = humidity;
@@ -78,6 +79,12 @@ public class QcReportLine {
 		
 		
 	}
+	
+//	public String getCheckedBy() {
+//		if(this.checkedBy != null)
+//			return this.checkedBy.toString();
+//		return null;
+//	}
 	
 	public BigDecimal getTotalDefectsAndDamage() {
 		return getTotalDamage().add(getTotalDefects());

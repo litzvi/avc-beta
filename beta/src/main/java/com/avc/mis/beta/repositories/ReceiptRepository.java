@@ -19,7 +19,7 @@ import com.avc.mis.beta.entities.process.Receipt;
  * @author Zvi
  *
  */
-public interface ReceiptRepository extends BaseRepository<Receipt> {
+public interface ReceiptRepository extends ProcessWithProductRepository<Receipt> {
 
 	@Query("select new com.avc.mis.beta.dto.process.ReceiptDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "

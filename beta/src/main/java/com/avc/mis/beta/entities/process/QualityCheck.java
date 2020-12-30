@@ -8,17 +8,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.enums.QcCompany;
+import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.processinfo.CashewItemQuality;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.utilities.LocalDateToLong;
+import com.avc.mis.beta.utilities.QcCompanyToString;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -44,7 +53,14 @@ public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 	 */
 	public static final int SCALE = 4;	
 	
-	private String checkedBy;
+//	private String checkedBy;
+	
+//	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	@NotNull(message = "Checked by is mandatory")
+//	@Convert(converter = QcCompanyToString.class)
+	private QcCompany checkedBy;
+
 	
 	private String inspector;
 	private String sampleTaker;
@@ -54,6 +70,18 @@ public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@NotEmpty(message = "Quality check has to contain at least one testsed item")
 	private Set<CashewItemQuality> testedItems = new HashSet<>();
+	
+	public void setCheckedBy(String checkedBy) {
+		this.checkedBy = QcCompany.valueOfLabel(checkedBy);
+	}
+	
+	public String getCheckedBy() {
+		if(this.checkedBy != null)
+			return this.checkedBy.toString();
+		return null;
+	}
+
+
 	
 	/**
 	 * Setter for adding items that are processed, 

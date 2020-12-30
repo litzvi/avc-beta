@@ -28,6 +28,7 @@ import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.dto.report.ProductionReportLine;
 import com.avc.mis.beta.dto.report.QcReportLine;
+import com.avc.mis.beta.dto.report.ReceiptReportLine;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
@@ -89,7 +90,7 @@ public class QueryTest {
 	@Autowired ProductionProcesses productionProcesses;
 	@Autowired Loading loading;
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void queryTest() {
 
@@ -324,12 +325,6 @@ public class QueryTest {
 				}
 			});
 		});
-
-		//final report
-		poCodes.forEach(c -> System.out.println(processInfoReader.getPoFinalReport(c.getId())));
-		poCodes.forEach(c -> System.out.println(productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, c.getId())));
-		poCodes.forEach(c -> System.out.println(qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, c.getId())));
-
 		
 		Map<ProcessName, List<PoProcessDTO>> qcProcessesMap = qualityChecks.getAllQualityChecksByPo(44952);
 		qcProcessesMap.forEach((k, v) -> {
@@ -339,14 +334,25 @@ public class QueryTest {
 			}
 		});
 
+		//final report
+		poCodes.forEach(c -> System.out.println(processInfoReader.getPoFinalReport(c.getId())));
+		poCodes.forEach(c -> System.out.println(qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, c.getId())));
+		poCodes.forEach(c -> System.out.println(productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, c.getId())));
+		poCodes.forEach(c -> System.out.println(receipts.getReceiptSummary(c.getId())));
+
+		poCodes.forEach(c -> System.out.println(processInfoReader.getFinalReport(c.getId())));
+
+		
 		service.cleanup(po);
 
 	}
 	
 	@Test
-	void oneQueryTest() {		
+	void oneQueryTest() {
+				
+		System.out.println(processInfoReader.getFinalReport(14107));
 		
-		List<QcReportLine> qcReportLines = qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, 1234);
-		qcReportLines.forEach(c -> System.out.println(c));
+//		List<QcReportLine> qcReportLines = qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, 1234);
+//		qcReportLines.forEach(c -> System.out.println(c));
 	}
 }

@@ -71,7 +71,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800185;
+	static final Integer PO_CODE = 800186;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -177,6 +177,7 @@ public class GeneralTest {
 		QualityCheck check = new QualityCheck();
 		check.setPoCode(poCode);
 		check.setRecordedTime(OffsetDateTime.now());
+		check.setCheckedBy("avc lab");
 		CashewItemQuality[] rawItemQualities = new CashewItemQuality[NUM_PO_ITEMS];
 		ProcessItem[] processItems = new ProcessItem[NUM_PO_ITEMS];
 		for(int i=0; i < NUM_PO_ITEMS; i++) {

@@ -66,7 +66,7 @@ public class WarehouseManagement {
 	}
 	
 	public List<ProcessRow> getStorageTransfersByPoCode(Integer poCodeId) {
-		List<ProcessRow> transferRows = getTransferRepository().findProcessByType(ProcessName.STORAGE_TRANSFER, poCodeId);
+		List<ProcessRow> transferRows = getTransferRepository().findProcessByType(ProcessName.STORAGE_TRANSFER, poCodeId, true);
 		int[] processIds = transferRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getTransferRepository()
 				.findAllUsedItemsByProcessIds(processIds)
@@ -93,7 +93,7 @@ public class WarehouseManagement {
 	}
 	
 	public List<ProcessRow> getStorageRelocationsByPoCode(Integer poCodeId) {
-		List<ProcessRow> relocationRows = getRelocationRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId);
+		List<ProcessRow> relocationRows = getRelocationRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, true);
 		int[] processIds = relocationRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getRelocationRepository()
 				.findAllMovedItemsByProcessIds(processIds)
