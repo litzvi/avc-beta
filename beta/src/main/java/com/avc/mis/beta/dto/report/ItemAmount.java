@@ -47,6 +47,7 @@ public class ItemAmount {
 		}
 		else if(clazz == PackedItem.class){
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
+			this.amount.setScale(MeasureUnit.SCALE);
 			amountWithUnit = new AmountWithUnit(amount.multiply(unitAmount), unitMeasureUnit);
 		}
 		else 

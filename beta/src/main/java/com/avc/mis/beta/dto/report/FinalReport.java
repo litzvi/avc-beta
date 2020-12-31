@@ -31,7 +31,7 @@ public class FinalReport {
 	private ProductionReportLine roasting;
 	private List<QcReportLine> roastQC;
 	private ProductionReportLine packing;
-//	private List<LoadingRow> loading;//add container and seal
+	private List<LoadingReportLine> loadings;
 	
 
 }

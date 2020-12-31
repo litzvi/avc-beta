@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -14,8 +16,16 @@ import com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow;
 import com.avc.mis.beta.dto.doc.ExportInfo;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
+import com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine;
+import com.avc.mis.beta.dto.report.LoadingReportLine;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
+import com.avc.mis.beta.entities.embeddable.ContainerDetails;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 
 /**
@@ -23,6 +33,32 @@ import com.avc.mis.beta.entities.process.ContainerLoading;
  *
  */
 public interface ContainerLoadingRepository  extends TransactionProcessRepository<ContainerLoading> {
+	
+	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine("
+			+ "sc.code, port.code, port.value, p.containerDetails, p.recordedTime, "
+			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
+			+ "item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "SUM((ui.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor)) "
+		+ "from ContainerLoading p "
+			+ "join p.shipmentCode sc "
+				+ "join sc.portOfDischarge port "
+			+ "join p.usedItemGroups grp "
+				+ "join grp.usedItems ui "
+					+ "join ui.storage sf "
+						+ "join sf.processItem pi "
+							+ "join pi.item item "
+								+ "join item.unit item_unit "
+							+ "join pi.process p_used_item "
+								+ "join p_used_item.poCode po_code_used_item "
+						+ "join UOM uom "
+							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
+			+ "join p.lifeCycle lc "
+		+ "where po_code_used_item.code = :poCodeId "
+			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
+		+ "group by p, item ")
+	List<ItemAmountWithLoadingReportLine> findLoadingsByItemsPoCode(Integer poCodeId, boolean cancelled);
+
+
 
 	@Query("select new com.avc.mis.beta.dto.process.ContainerLoadingDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "

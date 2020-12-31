@@ -26,6 +26,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -48,6 +50,8 @@ public class ExceptionControler {
 	 * @throws InvalidDataAccessApiUsageException
 	 * 
 	 * UnsupportedOperationException
+	 * 
+	 * com.fasterxml.jackson.databind.exc.InvalidFormatException
 	 */
 	
 	//IllegalStateException - ProcessInfoReader
@@ -118,7 +122,7 @@ public class ExceptionControler {
         		"Internal server error, please contact system manager\n");
     }
 	
-	@ExceptionHandler({DataIntegrityViolationException.class})
+	@ExceptionHandler({DataIntegrityViolationException.class, InvalidFormatException.class})
     public ResponseEntity<String> handleDataIntegrityViolationException(NestedRuntimeException e){
         return error(HttpStatus.BAD_REQUEST, e.getRootCause());
     }

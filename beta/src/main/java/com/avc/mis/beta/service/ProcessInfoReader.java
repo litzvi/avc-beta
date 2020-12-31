@@ -225,7 +225,7 @@ public class ProcessInfoReader {
 		report.setRoasting(productionProcesses.getProductionSummary(ProcessName.CASHEW_ROASTING, poCodeId));
 		report.setRoastQC(qualityChecks.getQcSummary(ProcessName.ROASTED_CASHEW_QC, poCodeId));
 		report.setPacking(productionProcesses.getProductionSummary(ProcessName.PACKING, poCodeId));
-//		report.setLoading(loading.getLoadingsByPoCode(poCodeId));
+		report.setLoadings(loading.getLoadingSummary(poCodeId));
 		
 		return report;
 	}

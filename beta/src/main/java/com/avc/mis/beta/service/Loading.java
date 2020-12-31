@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,12 @@ import com.avc.mis.beta.dto.doc.ExportInfo;
 import com.avc.mis.beta.dto.doc.InventoryExportDoc;
 import com.avc.mis.beta.dto.doc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
+import com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine;
+import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.report.LoadingReportLine;
+import com.avc.mis.beta.dto.report.ReceiptReportLine;
 import com.avc.mis.beta.dto.view.LoadingRow;
+import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ContainerLoading;
@@ -136,6 +142,16 @@ public class Loading {
 	@Deprecated public void removeLoading(int loadingId) {
 		getDeletableDAO().permenentlyRemoveEntity(ContainerLoading.class, loadingId);
 	} 
+	
+	public List<LoadingReportLine> getLoadingSummary(Integer poCodeId) {
+		List<ItemAmountWithLoadingReportLine> lines = getContainerLoadingRepository().findLoadingsByItemsPoCode(poCodeId, false);
+
+		if(lines == null || lines.isEmpty()) {
+			return null;
+		}
+		
+		return CollectionItemWithGroup.getFilledGroups(lines);
+	}
 	
 	public InventoryExportDoc getInventoryExportDoc(int processId) {
 		InventoryExportDoc doc = new InventoryExportDoc();
