@@ -10,8 +10,6 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -21,7 +19,6 @@ import org.hibernate.annotations.Where;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.ProcessGroup;
-import com.avc.mis.beta.entities.processinfo.ProcessGroupWithStorages;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 
 import lombok.AccessLevel;

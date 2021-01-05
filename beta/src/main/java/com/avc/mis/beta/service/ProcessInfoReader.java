@@ -191,6 +191,10 @@ public class ProcessInfoReader {
 		return getProcessInfoRepository().findAllProcessesByPo(poCodeId);
 	}
 	
+	public ProcessBasic getProcessesBasic(@NonNull Integer processId) {
+		return getProcessInfoRepository().findProcessBasic(processId);
+	}
+	
 	
 	/**
 	 * Gets a list of processes of the given types (by name) for the given po code.
@@ -229,6 +233,8 @@ public class ProcessInfoReader {
 		
 		return report;
 	}
+
+	
 
 
 	

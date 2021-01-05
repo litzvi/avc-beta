@@ -4,7 +4,6 @@
 package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.report.ItemAmount;

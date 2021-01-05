@@ -153,7 +153,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	 * @return List of ProcessBasic
 	 */
 	@Query("select new com.avc.mis.beta.dto.basic.ProcessBasic( "
-			+ "p.id, t.processName) "
+			+ "p.id, t.processName, type(p)) "
 		+ "from PoProcess p "
 			+ "join p.poCode c "
 			+ "join p.processType t "
@@ -166,7 +166,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	 * @return List of ProcessBasic
 	 */
 	@Query("select new com.avc.mis.beta.dto.basic.ProcessBasic( "
-			+ "p.id, t.processName) "
+			+ "p.id, t.processName, type(p)) "
 		+ "from PoProcess p "
 			+ "join p.poCode c "
 			+ "join p.processType t "
@@ -174,6 +174,13 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "and t.processName in :processNames ")
 	List<ProcessBasic> findAllProcessesByPoAndName(@NonNull Integer poCodeId, Set<ProcessName> processNames);
 
+
+	@Query("select new com.avc.mis.beta.dto.basic.ProcessBasic( "
+			+ "p.id, t.processName, type(p)) "
+		+ "from GeneralProcess p "
+			+ "join p.processType t "
+		+ "where p.id = :processId ")
+	ProcessBasic findProcessBasic(@NonNull Integer processId);
 
 
 }

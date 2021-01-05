@@ -122,10 +122,11 @@ class SuppliersTest {
 			phone.setValue("phone for person " + i);
 			Email email = new Email();
 			email.setValue("email for person " + i);
-			person.getContactDetails().setPhones(new Phone[] {phone});
-			person.getContactDetails().setFaxes(new Fax[] {fax});
-			person.getContactDetails().setEmails(new Email[] {email});
-			
+			ContactDetails contactDetails = new ContactDetails();
+			contactDetails.setPhones(new Phone[] {phone});
+			contactDetails.setFaxes(new Fax[] {fax});
+			contactDetails.setEmails(new Email[] {email});
+			person.setContactDetails(contactDetails);
 		}
 		supplier.setCompanyContacts(contacts);
 		
@@ -256,7 +257,7 @@ class SuppliersTest {
 		contactDetailsDTO.getFaxes().add(new FaxDTO(updatedFax));
 		contactDetails.setFaxes(faxes);
 
-		suppliers.editContactInfo(contactDetails);
+		suppliers.editContactInfo(contactDetails, supplier.getId());
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
 		service.cleanup(supplier);

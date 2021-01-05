@@ -21,7 +21,6 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
@@ -139,7 +138,6 @@ public class ProductionProcesses {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editProductionProcess(ProductionProcess process) {
-		System.out.println("edited cleaning process: " + process);
 //		if(true)
 //			throw new NullPointerException();
 		//check used items amounts don't exceed the storage amounts

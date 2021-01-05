@@ -9,7 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 

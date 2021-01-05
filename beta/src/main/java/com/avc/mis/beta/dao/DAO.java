@@ -3,14 +3,21 @@
  */
 package com.avc.mis.beta.dao;
 
+import java.security.AccessControlException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.avc.mis.beta.dto.data.UserLogin;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.service.Orders;
 
 import lombok.AccessLevel;
@@ -29,6 +36,8 @@ import lombok.Getter;
 public abstract class DAO extends ReadDAO {
 
 	@Autowired private EntityManager entityManager;
+	@Autowired private PasswordEncoder encoder;
+
 		
 	/**
 	 * Used for adding entity that references a detached entity.
@@ -135,4 +144,24 @@ public abstract class DAO extends ReadDAO {
 	public <T extends BaseEntity> T find(Class<T> entityClass, Integer id) {
 		return getEntityManager().find(entityClass, id);
 	}
+	
+	public int changeUserPassword(CharSequence password, String newPassword) {
+		
+		UserLogin user = getCurrentUser();
+		String encodedPassword = user.getPassword();
+		if(encoder.matches(password, encodedPassword)) {
+			CriteriaUpdate<UserEntity> update = 
+		    		getEntityManager().getCriteriaBuilder().createCriteriaUpdate(UserEntity.class);
+		    Root<UserEntity> root = update.from(UserEntity.class);
+		    return getEntityManager().createQuery(update.
+		    		set("password", encoder.encode(newPassword)).where(root.get("id").in(user.getId()))).executeUpdate();
+		}		
+		else {
+			throw new AccessControlException("Couldn't change password: wrong password");
+		}
+
+		
+
+	}
+
 }

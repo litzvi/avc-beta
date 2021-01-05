@@ -9,10 +9,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -23,11 +20,8 @@ import javax.validation.constraints.NotNull;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.QcCompany;
-import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.processinfo.CashewItemQuality;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.utilities.LocalDateToLong;
-import com.avc.mis.beta.utilities.QcCompanyToString;
 
 import lombok.AccessLevel;
 import lombok.Data;

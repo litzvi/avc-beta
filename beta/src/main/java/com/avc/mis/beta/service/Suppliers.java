@@ -166,8 +166,13 @@ public class Suppliers {
 	 * phones, emails, faxes address and payment accounts.
 	 * @param contactDetails with all ContactDetails editable details set to state after edit.
 	 */
-	public void editContactInfo(ContactDetails contactDetails) {
-		dao.editEntity(contactDetails);
+	public void editContactInfo(ContactDetails contactDetails, int companyId) {
+		if(contactDetails.getId() == null) {
+			dao.addEntity(contactDetails, Company.class, companyId);
+		}
+		else {
+			dao.editEntity(contactDetails);
+		}
 	}
 	
 	/**
@@ -204,6 +209,9 @@ public class Suppliers {
 	public void addAccount(PaymentAccount account, int contactId) {
 //		ContactDetails contactDetails = getEntityManager().getReference(ContactDetails.class, contactId);
 //		account.setContactDetails(contactDetails);
+		if(account.getOrdinal() == null) {
+			account.setOrdinal(0);
+		}
 		dao.addEntity(account, ContactDetails.class, contactId);
 	}
 	

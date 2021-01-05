@@ -5,12 +5,8 @@ package com.avc.mis.beta.dto.doc;
 
 import java.util.List;
 
-import com.avc.mis.beta.dto.values.ItemWithUnit;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.PackedItem;
 
 import lombok.Data;
 

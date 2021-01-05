@@ -3,17 +3,9 @@
  */
 package com.avc.mis.beta.dto.report;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.BiFunction;
 
-import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.ItemGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

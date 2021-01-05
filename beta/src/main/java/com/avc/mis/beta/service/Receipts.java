@@ -21,16 +21,13 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.report.ProductionReportLine;
 import com.avc.mis.beta.dto.report.ReceiptReportLine;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ReceiptItemRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
@@ -173,7 +170,7 @@ public class Receipts {
 			
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addOrderReceipt(Receipt receipt) {
-		//TODO should check if order item was already fully received(even if pending)
+		//checks if order item was already fully received(even if pending)
 		if(!isOrderOpen(receipt.getReceiptItems())) {
 			throw new IllegalArgumentException("Order items where already fully received");
 		}

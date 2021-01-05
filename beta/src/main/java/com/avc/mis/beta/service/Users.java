@@ -3,12 +3,16 @@
  */
 package com.avc.mis.beta.service;
 
+import java.security.AccessControlException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,10 +25,12 @@ import com.avc.mis.beta.dto.basic.UserBasic;
 import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.data.UserDTO;
+import com.avc.mis.beta.dto.data.UserLogin;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.Role;
+import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.repositories.PersonRepository;
 import com.avc.mis.beta.repositories.UserRepository;
 
@@ -186,9 +192,10 @@ public class Users {
 		dao.editEntity(user);
 	}
 	
-//	public void changePassword(Integer userId, String oldPassword, String newPassword) {
-//		userRepository.changePassword(userId, oldPassword, newPassword);
-//	}
+	public void changePassword(CharSequence password, String newPassword) {
+		getDao().changeUserPassword(password, newPassword);			
+		
+	}
 	
 	/**
 	 * Edits all the personal details of this user, will edit user and person details.

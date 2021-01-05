@@ -58,9 +58,9 @@ public class Person extends ObjectEntityWithId {
 	}
 	
 	public ContactDetails getContactDetails() {
-		if(this.contactDetails == null) {
-			setContactDetails(new ContactDetails());
-		}
+//		if(this.contactDetails == null) {
+//			setContactDetails(new ContactDetails());
+//		}
 		return this.contactDetails;
 	}
 	

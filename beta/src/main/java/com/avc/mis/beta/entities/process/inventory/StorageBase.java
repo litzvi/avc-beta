@@ -6,6 +6,7 @@ package com.avc.mis.beta.entities.process.inventory;
 import java.math.BigDecimal;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -68,7 +69,7 @@ public class StorageBase extends UsedItemBase {
 	
 	@JsonIgnore
 	@ToString.Exclude 
-	@OneToMany(mappedBy = "storage", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "storage", cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<UsedItemBase> usedItems;
 
 	

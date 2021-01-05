@@ -1,12 +1,9 @@
 package com.avc.mis.beta.entities.process.inventory;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 

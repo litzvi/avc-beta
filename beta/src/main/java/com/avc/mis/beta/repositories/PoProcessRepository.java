@@ -10,8 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
-import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.PoProcess;
 
 /**

@@ -9,7 +9,6 @@ import com.avc.mis.beta.entities.ValueInterface;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-import lombok.Value;
 
 /**
  * Generic class for holding only id and value of an entity, 

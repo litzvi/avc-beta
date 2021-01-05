@@ -3,8 +3,6 @@
  */
 package com.avc.mis.beta.entities.item;
 
-import java.math.BigDecimal;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 

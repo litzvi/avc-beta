@@ -8,9 +8,7 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
-import com.avc.mis.beta.entities.process.TransactionProcess;
 
 /**
  * @author zvi

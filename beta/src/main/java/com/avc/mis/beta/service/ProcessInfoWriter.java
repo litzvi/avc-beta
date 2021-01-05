@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -20,6 +21,9 @@ import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.PoCode;
+import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 
@@ -136,7 +140,22 @@ public class ProcessInfoWriter {
 	public void setMessageLabel(int messageId, MessageLabel labelName) {
 		dao.setMessageLabel(messageId, labelName);
 	}
+	
+	public void removeProcess(Integer processId) {
+		ProcessBasic processBasic = processInfoReader.getProcessesBasic(processId);
+		removeProcess(processId, processBasic.getProcessClazz());
+	}
+	
+	private void removeProcess(Integer processId, Class<? extends GeneralProcess> clazz) {
+		deletableDAO.permenentlyRemoveEntity(clazz, processId);
+	}
 
+	public void removeAllProcesses(Integer poCodeId) {
+		List<ProcessBasic> processes = processInfoReader.getAllProcessesByPo(poCodeId);
+		processes.forEach(i -> removeProcess(i.getId(), i.getProcessClazz()));
+		//delete po code
+		deletableDAO.permenentlyRemoveEntity(PoCode.class, poCodeId);
+	}
 	
 	
 }

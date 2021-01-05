@@ -266,14 +266,15 @@ public class GeneralTest {
 		
 		
 		//remove all
-		samples.removeSampleReceipt(sampleReceipt.getId());
-		checks.removeCheck(check.getId());
-		receipts.removeReceipt(receiptDTO.getId());
-		orders.removeOrder(poDTO.getId());
-		suppliers.permenentlyRemoveEntity(poCode);
+//		samples.removeSampleReceipt(sampleReceipt.getId());
+//		checks.removeCheck(check.getId());
+//		receipts.removeReceipt(receiptDTO.getId());
+//		orders.removeOrder(poDTO.getId());
+//		suppliers.permenentlyRemoveEntity(poCode);
+//		suppliers.permenentlyRemoveSupplier(supplierDTO.getId());
+		
+		processInfoWriter.removeAllProcesses(poCode.getId());
 		suppliers.permenentlyRemoveSupplier(supplierDTO.getId());
-		
-		
-		
+
 	}
 }

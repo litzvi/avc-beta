@@ -5,19 +5,14 @@ package com.avc.mis.beta.dto.values;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.ValueDTO;
-import com.avc.mis.beta.entities.ValueInterface;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.Value;
 
 /**
  * @author zvi

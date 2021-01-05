@@ -52,6 +52,8 @@ public class ExceptionControler {
 	 * UnsupportedOperationException
 	 * 
 	 * com.fasterxml.jackson.databind.exc.InvalidFormatException
+	 * 
+	 * org.springframework.http.converter.HttpMessageNotReadableException
 	 */
 	
 	//IllegalStateException - ProcessInfoReader

@@ -34,5 +34,11 @@ public abstract class ReadDAO {
 		userEntity.orElseThrow(() -> new IllegalStateException("No user logged in or user not reachable"));
 		return userEntity.get().getId();
 	}
+	
+	UserLogin getCurrentUser() {
+		return getUserAware().getCurrentUser().orElseThrow(() -> new IllegalStateException("No user logged in or user not reachable"));
+	}
+
+	
 
 }

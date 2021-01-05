@@ -3,8 +3,6 @@
  */
 package com.avc.mis.beta.entities.process.inventory;
 
-import java.math.BigDecimal;
-
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;

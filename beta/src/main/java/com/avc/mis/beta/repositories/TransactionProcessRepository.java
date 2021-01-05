@@ -3,15 +3,12 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
-import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.TransactionProcess;
 
 /**
