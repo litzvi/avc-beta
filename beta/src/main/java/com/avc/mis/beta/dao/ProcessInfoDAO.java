@@ -4,9 +4,14 @@
 package com.avc.mis.beta.dao;
 
 import java.security.AccessControlException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import javax.persistence.criteria.CriteriaUpdate;
@@ -25,8 +30,11 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
+import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.TransactionProcess;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.InventoryRepository;
@@ -133,13 +141,26 @@ public class ProcessInfoDAO extends DAO {
 		if(processStatus == ProcessStatus.CANCELLED) {
 			throw new AccessControlException("Cancelled process can't be edited");
 		}
-		if(getProcessRepository().isProcessReferenced(process.getId())) {
-			throw new AccessControlException("Process can't be edited because it's already in use");
-		}
+//		if(getProcessRepository().isProcessReferenced(process.getId())) {
+//			throw new AccessControlException("Process can't be edited because it's already in use");
+//		}
 		process.setModifiedDate(null);
 		editEntity(process);
+
 		
 		editAlerts(process);
+
+	}
+	
+	public <T extends ProcessWithProduct<?>> void editProcessWithProductEntity(T process) {
+		HashSet<Integer> storageIds = new HashSet<Integer>();
+		for(ProcessItem pi: process.getProcessItems()) {
+			storageIds.addAll(Arrays.stream(pi.getStorageForms()).map(Storage::getId).collect(Collectors.toSet()));
+		}
+		if(getProcessRepository().isRemovingUsedProduct(process.getId(), storageIds)) {
+			throw new AccessControlException("Process items can't be edited because they are already in use");
+		}
+		editGeneralProcessEntity(process);	
 
 	}
 	
@@ -149,7 +170,7 @@ public class ProcessInfoDAO extends DAO {
 	 * @param process GeneralProcess to be edited.
 	 */
 	public <T extends TransactionProcess<?>> void editTransactionProcessEntity(T process) {
-		editGeneralProcessEntity(process);
+		editProcessWithProductEntity(process);
 		//check used items amounts (after edit) don't exceed the storage amounts
 		if(!isInventorySufficiant(process.getId())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");

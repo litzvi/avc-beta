@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -159,9 +160,9 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 						+ "join ui.storage s "
 							+ "join s.processItem pi "
 								+ "join pi.process ui_origion_p "
-//				+ "join p.lifeCycle c "
-			+ "where ui_origion_p.id = :processId ")
-//				+ "and c.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
+				+ "join p.lifeCycle c "
+			+ "where ui_origion_p.id = :processId "
+				+ "and c.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
 	Boolean isProcessReferenced(Integer processId);
 
 
@@ -198,6 +199,19 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "join po_code.supplier s "
 		+ "where po_code.code = :poCodeId ")
 	PoFinalReport findFinalReportBasic(@NonNull Integer poCodeId);
+
+	@Query("select new java.lang.Boolean(count(*) > 0) "
+			+ "from ProcessWithProduct p "
+				+ "join p.processItems pi "
+					+ "join pi.storageForms sf "
+						+ "join sf.usedItems using_items "
+							+ "join using_items.group ui_g "
+								+ "join ui_g.process ui_origion_p "
+									+ "join ui_origion_p.lifeCycle c "
+			+ "where p.id = :processId "
+				+ "and c.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+				+ "and sf.id not in :storageIds ")
+	Boolean isRemovingUsedProduct(Integer processId, Set<Integer> storageIds);
 
 	
 
