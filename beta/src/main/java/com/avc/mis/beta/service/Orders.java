@@ -48,6 +48,7 @@ public class Orders {
 	 * Get all cashew orders with the order status - pending, received, rejected but not cancelled.
 	 * @return list of PoRow for all orders
 	 */
+	@Deprecated
 	public List<PoRow> findAllCashewOrders() {
 		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER,
 				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});

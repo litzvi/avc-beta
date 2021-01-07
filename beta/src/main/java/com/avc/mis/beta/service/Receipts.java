@@ -149,6 +149,12 @@ public class Receipts {
 				new ProcessStatus[] {ProcessStatus.CANCELLED}, null);
 	}
 	
+	public List<ReceiptRow> findCashewReceiptsHistory () {
+		return findAllReceiptsByType(
+				new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
+				ProcessStatus.values(), null);
+	}
+	
 	public List<ReceiptRow> findFinalCashewReceiptsByPoCode(@NonNull Integer poCodeId) {
 		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 

@@ -41,7 +41,7 @@ import com.avc.mis.beta.service.Users;
 @WithUserDetails("eli")
 public class UsersTest {
 	
-	private static Integer SERIAL_NO = 1967;
+	private static Integer SERIAL_NO = 1971;
 	
 	@Autowired private Users users;
 	
@@ -135,6 +135,7 @@ public class UsersTest {
 		processInfoWriter.removeUserMessages(user.getId());
 		
 		users.changePassword("309", "123");
+		users.changePassword("309", "309");
 		users.permenentlyRemoveUser(user.getId());
 		
 		
