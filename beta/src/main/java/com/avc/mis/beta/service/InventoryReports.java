@@ -4,6 +4,7 @@
 package com.avc.mis.beta.service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -51,7 +52,7 @@ public class InventoryReports {
 		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(group, null, null, null);
 		
 		Map<ItemDTO, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
-				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getItem, Collectors.toList()));
+				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getItem, LinkedHashMap::new, Collectors.toList()));
 		
 		List<ItemInventoryRow> inventoryRows = new ArrayList<ItemInventoryRow>(piMap.size());
 		piMap.forEach((k, v) -> {
@@ -81,7 +82,7 @@ public class InventoryReports {
 		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(group, null, null, null);
 
 		Map<PoCodeDTO, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
-				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getPoCode, Collectors.toList()));
+				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getPoCode, LinkedHashMap::new, Collectors.toList()));
 		
 		List<PoInventoryRow> inventoryRows = new ArrayList<PoInventoryRow>();
 		piMap.forEach((k, v) -> {

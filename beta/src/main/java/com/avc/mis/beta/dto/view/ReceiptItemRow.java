@@ -11,6 +11,7 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -36,6 +37,8 @@ public class ReceiptItemRow extends BasicDTO {
 	AmountWithUnit orderBalance;
 	OffsetDateTime receiptDate;
 	@JsonIgnore
+	ProcessStatus status;
+	@JsonIgnore
 	AmountWithUnit receiptAmt;
 	String storage;
 	AmountWithUnit extraAdded;
@@ -43,7 +46,7 @@ public class ReceiptItemRow extends BasicDTO {
 	public ReceiptItemRow(@NonNull Integer id, 
 			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			Integer itemId, String itemValue,
-			BigDecimal orderAmount, MeasureUnit orderMU, OffsetDateTime receiptDate, 
+			BigDecimal orderAmount, MeasureUnit orderMU, OffsetDateTime receiptDate, ProcessStatus status,
 			BigDecimal receiptAmount, MeasureUnit receiptMU, String storage, 
 			BigDecimal extraAdded, MeasureUnit extraAddedMU) {
 		super(id);
@@ -62,6 +65,7 @@ public class ReceiptItemRow extends BasicDTO {
 			this.orderBalance = null;
 		}
 		this.receiptDate = receiptDate;
+		this.status = status;
 		
 		this.receiptAmt = receiptAmt;
 //		this.receiptAmount = new AmountWithUnit[] {

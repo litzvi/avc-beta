@@ -9,6 +9,7 @@ import java.util.List;
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -26,6 +27,7 @@ public class ReceiptRow extends BasicDTO {
 
 //	AmountWithUnit[] totalAmount;
 	OffsetDateTime receiptDate;
+	ProcessStatus status;
 	List<ReceiptItemRow> receiptRows;
 
 	public ReceiptRow(@NonNull Integer id, List<ReceiptItemRow> receiptRows) {
@@ -35,10 +37,13 @@ public class ReceiptRow extends BasicDTO {
 //		this.totalAmount[1] = totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 		this.receiptRows = receiptRows;
 		if(receiptRows != null && !receiptRows.isEmpty()) {
-			this.receiptDate = receiptRows.get(0).getReceiptDate();
+			ReceiptItemRow itemRow = receiptRows.get(0);
+			this.receiptDate = itemRow.getReceiptDate();
+			this.status = itemRow.getStatus();
 		}
 		else {
 			this.receiptDate = null;
+			this.status = null;
 		}
 		
 	}

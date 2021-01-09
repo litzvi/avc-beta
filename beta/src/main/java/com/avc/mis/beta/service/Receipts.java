@@ -104,8 +104,8 @@ public class Receipts {
 	 * @return List of ReceiptItemRow - id, PO#, supplier, item, order amount, receipt amount,
 	 * receipt date and storage - for every received item.
 	 */
-	public List<ReceiptItemRow> findFinalGeneralReceipts() {
-		return getReceiptRepository().findAllReceiptsByType(
+	public List<ReceiptRow> findFinalGeneralReceipts() {
+		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.GENERAL_RECEIPT},
 				new ProcessStatus[] {ProcessStatus.FINAL}, null);		
 	}
@@ -152,6 +152,12 @@ public class Receipts {
 	public List<ReceiptRow> findCashewReceiptsHistory () {
 		return findAllReceiptsByType(
 				new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
+				ProcessStatus.values(), null);
+	}
+	
+	public List<ReceiptRow> findGeneralReceiptsHistory () {
+		return findAllReceiptsByType(
+				new ProcessName[] {ProcessName.GENERAL_RECEIPT}, 
 				ProcessStatus.values(), null);
 	}
 	

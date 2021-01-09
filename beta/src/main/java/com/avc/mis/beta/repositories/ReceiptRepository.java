@@ -83,7 +83,7 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 				+ "r.id, po_code.id, ct.code, ct.suffix, s.name, "
 				+ "i.id, i.value, "
 				+ "units.amount, units.measureUnit, "
-				+ "r.recordedTime, "
+				+ "r.recordedTime, lc.processStatus, "
 				+ "SUM(sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor), i.measureUnit, "
 				+ "function('GROUP_CONCAT', sto.value), "
 				+ "extra.amount, extra.measureUnit) "
