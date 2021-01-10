@@ -38,7 +38,7 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 	public ProcessItemWithStorage(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ProductionUse productionUse, BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> ItemClazz,
 			MeasureUnit measureUnit, 
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
@@ -48,7 +48,7 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 		this.processItem = new ProcessItemDTO(id, version, ordinal,
 				itemId, itemValue, productionUse, itemUnitAmount, itemUnitMeasureUnit, ItemClazz, 
 				measureUnit, groupName, description, remarks, tableView);
-		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
+		this.po = new PoCodeDTO(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.storage = new StorageDTO(storageId, storageVersion, storageOrdinal,
 				unitAmount, numberUnits, accessWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);

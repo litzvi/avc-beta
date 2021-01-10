@@ -56,7 +56,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 	
 	@Query("select new com.avc.mis.beta.dto.process.StorageRelocationDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
+			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)) ) "
@@ -125,7 +125,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "pi.measureUnit, used_p.recordedTime, "
-			+ "itemPo.id, ct.code, ct.suffix, s.name, "
+			+ "itemPo.id, itemPo.code, ct.code, ct.suffix, s.name, "
 			+ "used_sf.id, used_sf.version, used_sf.ordinal,"
 			+ "used_sf.unitAmount, used_sf.numberUnits, "
 			+ "SUM("

@@ -28,7 +28,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 	@Query("select new com.avc.mis.beta.dto.process.QualityCheckDTO("
 			+ "r.id, r.version, r.inspector, r.sampleTaker, r.checkedBy, "
 			+ "r.createdDate, p_user.username, "
-			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
+			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
@@ -107,7 +107,7 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 
 
 	@Query("select new com.avc.mis.beta.dto.view.CashewQcRow( "
-			+ "qc.id, po_code.id, ct.code, ct.suffix, s.name, "
+			+ "qc.id, po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
 			+ "qc.checkedBy, i.id, i.value, qc.recordedTime, "
 			+ "ti.numberOfSamples, ti.sampleWeight, ti.precentage, "
 			+ "ti.humidity, ti.breakage,"

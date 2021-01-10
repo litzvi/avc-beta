@@ -61,14 +61,14 @@ public class OrdersTest {
 		PO po = service.addBasicCashewOrder();
 		PoDTO expected = null;
 		expected = new PoDTO(po);
-		PoDTO actual = orders.getOrder(po.getPoCode().getCode());
+		PoDTO actual = orders.getOrder(po.getPoCode().getId());
 		assertEquals(expected, actual, "failed test adding po");
 
 		//edit order status
 		po.setDuration(Duration.ofHours(15));
 		expected = new PoDTO(po);
 		orders.editOrder(po);
-		actual = orders.getOrder(po.getPoCode().getCode());
+		actual = orders.getOrder(po.getPoCode().getId());
 		assertEquals(expected, actual, "failed test editing po order status");		
 		
 		//cleanup

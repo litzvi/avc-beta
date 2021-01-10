@@ -83,7 +83,7 @@ public class Suppliers {
 		
 	/**
 	 * Adds (persists) the given supplier with all information - 
-	 * assumes all references and data wher'nt previously inserted.
+	 * assumes all references and data whern't previously inserted.
 	 * @param supplier the added Supplier
 	 * @throws IllegalArgumentException if supplier name isn't set or not legal.
 	 */

@@ -89,6 +89,10 @@ public class ObjectTablesReader {
 	
 //---------------------------------DTOs---------------------------------------------------------
 	
+	public List<PoCodeDTO> findFreePoCodes() {
+		return getObjectTablesRepository().findFreePoCodes();		
+	}
+	
 	/**
 	 * Gets the po code basic information of all open Cashew Orders  - id, poCode and supplier.
 	 * Open order - orders that are yet to be fully received and not cancelled. 

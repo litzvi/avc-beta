@@ -71,7 +71,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800186;
+	static final Integer PO_CODE = 800189;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -100,9 +100,10 @@ public class GeneralTest {
 		//create a cashew order with 2 order lines
 		PO po = new PO();
 		PoCode poCode = new PoCode();
-		poCode.setId(PO_CODE);
+		poCode.setCode(Integer.toString(PO_CODE));
 		poCode.setContractType(valueTablesRepository.findContractTypeByCodeAndCurrency("VAT", Currency.getInstance("VND")));
 		poCode.setSupplier(supplier);
+		orders.addPoCode(poCode);
 		po.setPoCode(poCode);
 		po.setRecordedTime(OffsetDateTime.now());
 		OrderItem[] orderItems = new OrderItem[NUM_PO_ITEMS];

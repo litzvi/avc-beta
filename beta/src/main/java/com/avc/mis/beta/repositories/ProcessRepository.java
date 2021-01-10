@@ -22,7 +22,7 @@ import lombok.NonNull;
 public interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> {
 
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
-			+ "p.id, po_code.code, t.code, t.suffix, s.name, "
+			+ "p.id, po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "p.recordedTime, p.duration, lc.processStatus) "
 		+ "from PoProcess p "
 			+ "join p.poCode po_code "
@@ -31,7 +31,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "join p.processType pt "
 			+ "join p.lifeCycle lc "
 		+ "where pt.processName = :processName "
-			+ "and (po_code.code = :poCodeId or :poCodeId is null) "
+			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "order by p.recordedTime desc ")
 	List<ProcessRow> findProcessByType(ProcessName processName, Integer poCodeId, boolean cancelled);
@@ -42,7 +42,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "sf_group.measureUnit, used_p.recordedTime, "
-			+ "itemPo.id, ct.code, ct.suffix, s.name, "
+			+ "itemPo.id, itemPo.code, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "sf.unitAmount, sf.numberUnits, "
 			+ "SUM("
@@ -82,7 +82,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "sf_group.measureUnit, used_p.recordedTime, "
-			+ "itemPo.id, ct.code, ct.suffix, s.name, "
+			+ "itemPo.id, itemPo.code, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "sf.unitAmount, sf.numberUnits, "
 			+ "SUM("
@@ -126,7 +126,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ " i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), sf_group.measureUnit, "
-			+ "poCode.code, ct.code, ct.suffix, s.name, "
+			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "sf.unitAmount, sf.numberUnits, sf.accessWeight, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
@@ -157,7 +157,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 		+ "from PoProcess p "
 			+ "join p.poCode c "
 			+ "join p.processType t "
-		+ "where c.code = :poCodeId ")
+		+ "where c.id = :poCodeId ")
 	List<ProcessBasic> findAllProcessesByPo(Integer poCodeId);
 	
 	/**
@@ -170,7 +170,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 		+ "from PoProcess p "
 			+ "join p.poCode c "
 			+ "join p.processType t "
-		+ "where c.code = :poCodeId "
+		+ "where c.id = :poCodeId "
 			+ "and t.processName in :processNames ")
 	List<ProcessBasic> findAllProcessesByPoAndName(@NonNull Integer poCodeId, Set<ProcessName> processNames);
 

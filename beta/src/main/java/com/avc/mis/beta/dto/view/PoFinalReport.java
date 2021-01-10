@@ -40,9 +40,9 @@ public class PoFinalReport extends BasicDTO {
 	private List<ProcessRow> packing;
 	private List<LoadingRow> loading;//add container and seal
 	
-	public PoFinalReport(@NonNull Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName) {
+	public PoFinalReport(@NonNull Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName) {
 		super(poCodeId);
-		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 	}
 	

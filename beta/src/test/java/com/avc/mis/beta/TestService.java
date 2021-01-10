@@ -76,17 +76,28 @@ public class TestService {
 		suppliers.addSupplier(supplier);
 		return supplier;
 	}
+
+	private PoCode addPoCode() {
+		PoCode poCode = new PoCode();
+		poCode.setCode(Integer.toString(randCode++));
+		Supplier supplier = addBasicSupplier();
+		poCode.setSupplier(supplier);
+		poCode.setContractType(getContractType());
+		orders.addPoCode(poCode);
+		return poCode;
+	}
+
 	
 	public PO addBasicCashewOrder() {
 		
 		//build purchase order
 		PO po = new PO();
-		PoCode poCode = new PoCode();
+		PoCode poCode = addPoCode();
 		po.setPoCode(poCode);
-		poCode.setId(randCode++);
-		Supplier supplier = addBasicSupplier();
-		poCode.setSupplier(supplier);
-		poCode.setContractType(getContractType());
+//		poCode.setCode(Integer.toString(randCode++));
+//		Supplier supplier = addBasicSupplier();
+//		poCode.setSupplier(supplier);
+//		poCode.setContractType(getContractType());
 		
 		//build process
 		po.setRecordedTime(OffsetDateTime.now());
@@ -115,11 +126,11 @@ public class TestService {
 	public Receipt addOneItemCashewReceipt() {
 		//build order receipt
 		Receipt receipt = new Receipt();
-		PoCode poCode = new PoCode();
-		poCode.setCode(randCode++);
-		Supplier supplier = addBasicSupplier();
-		poCode.setSupplier(supplier);
-		poCode.setContractType(getContractType());
+		PoCode poCode = addPoCode();
+//		poCode.setCode(Integer.toString(randCode++));
+//		Supplier supplier = addBasicSupplier();
+//		poCode.setSupplier(supplier);
+//		poCode.setContractType(getContractType());
 		receipt.setPoCode(poCode);
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());
@@ -132,11 +143,7 @@ public class TestService {
 	public Receipt addBasicCashewReceipt() {
 		//build order receipt
 		Receipt receipt = new Receipt();
-		PoCode poCode = new PoCode();
-		poCode.setCode(randCode++);
-		Supplier supplier = addBasicSupplier();
-		poCode.setSupplier(supplier);
-		poCode.setContractType(getContractType());
+		PoCode poCode = addPoCode();
 		receipt.setPoCode(poCode);
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());
@@ -146,7 +153,6 @@ public class TestService {
 		receipts.addCashewReceipt(receipt);
 		return receipt;
 	}
-	
 
 	private ReceiptItem[] getReceiptItems(int numOfItems) {
 		ReceiptItem[] receiptItems = new ReceiptItem[numOfItems];
@@ -184,7 +190,7 @@ public class TestService {
 		//build order receipt
 		Receipt receipt = new Receipt();
 		PoCode poCode = new PoCode();
-		poCode.setCode(orderPoCode);
+		poCode.setId(orderPoCode);
 		receipt.setPoCode(poCode);
 		//build process
 		receipt.setRecordedTime(OffsetDateTime.now());

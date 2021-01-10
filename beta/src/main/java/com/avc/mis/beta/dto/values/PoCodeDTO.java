@@ -24,6 +24,7 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class PoCodeDTO extends ValueDTO {
 
+	String code;
 	String contractTypeCode;
 //	Currency currency;
 	String contractTypeSuffix;
@@ -35,9 +36,10 @@ public class PoCodeDTO extends ValueDTO {
 	 * @param contractTypeSuffix
 	 * @param supplierName
 	 */
-	public PoCodeDTO(Integer id, 
+	public PoCodeDTO(Integer id, String code,
 			String contractTypeCode, String contractTypeSuffix, String supplierName) {
 		super(id);
+		this.code = code;
 		this.contractTypeCode = contractTypeCode;
 		this.supplierName = supplierName;
 //		this.currency = currency;
@@ -48,31 +50,32 @@ public class PoCodeDTO extends ValueDTO {
 	 * @param poCode
 	 */
 	public PoCodeDTO(PoCode poCode) {
-		super(poCode.getCode());
+		super(poCode.getId());
+		this.code = poCode.getCode();
 		this.contractTypeCode = poCode.getContractType() != null ? poCode.getContractType().getCode(): null;
 		this.supplierName = poCode.getSupplier() != null ? poCode.getSupplier().getName(): null;
 //		this.currency = poCode.getContractType() != null ? poCode.getContractType().getCurrency(): null;
 		this.contractTypeSuffix = poCode.getContractType() != null ? poCode.getContractType().getSuffix(): "";
 	}
 	
-	/**
-	 * Used as a synonymous for getting id
-	 * @return the code/id
-	 */
-	public Integer getCode() {
-		return getId();
-	}
+//	/**
+//	 * Used as a synonymous for getting id
+//	 * @return the code/id
+//	 */
+//	public Integer getCode() {
+//		return getId();
+//	}
 	
 	/**
 	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
 	 */
 	public String getValue() {		
-		return String.format("%s-%d%s", this.contractTypeCode, this.getId(), this.contractTypeSuffix);
+		return String.format("%s-%s-%s", this.contractTypeCode, this.getCode(), this.contractTypeSuffix);
 	}
 	
 	@JsonIgnore
 	public PoCodeBasic getPoCodeBasic() {
-		return new PoCodeBasic(this.getId(), this.getContractTypeCode(), this.contractTypeSuffix);
+		return new PoCodeBasic(this.getId(), this.getCode(), this.getContractTypeCode(), this.contractTypeSuffix);
 	}
 		
 }

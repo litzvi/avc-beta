@@ -3,15 +3,30 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.annotations.Where;
+
+import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.processinfo.ProcessGroup;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -27,6 +42,7 @@ import lombok.ToString;
 @Table(name = "PRODUCTION_PROCESS")
 @PrimaryKeyJoinColumn(name = "processId")
 public class ProductionProcess extends TransactionProcess<ProcessItem> {
+	
 	
 	/**
 	 * Setter for adding items that are processed, 

@@ -44,13 +44,13 @@ public class ReceiptItemRow extends BasicDTO {
 	AmountWithUnit extraAdded;
 	
 	public ReceiptItemRow(@NonNull Integer id, 
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			Integer itemId, String itemValue,
 			BigDecimal orderAmount, MeasureUnit orderMU, OffsetDateTime receiptDate, ProcessStatus status,
 			BigDecimal receiptAmount, MeasureUnit receiptMU, String storage, 
 			BigDecimal extraAdded, MeasureUnit extraAddedMU) {
 		super(id);
-		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 //		this.itemName = itemName;

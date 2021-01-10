@@ -31,11 +31,11 @@ public class ApprovalTaskDTO extends GeneralInfoDTO {
 	private String processSnapshot;
 	
 	public ApprovalTaskDTO(Integer id, Integer version, 
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			String title, Integer processId, ProcessName processName, String processType, 
 			Instant createdDate, String modifiedBy, String userName, DecisionType decision, String processSnapshot) {
 		super(id, version, 
-				poCodeId, contractTypeCode, contractTypeSuffix, supplierName, 
+				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, 
 				title, processId, processName, processType, 
 				createdDate, modifiedBy);
 		this.userName = userName;

@@ -32,7 +32,7 @@ public interface PORepository extends BaseRepository<PO> {
 	 */
 	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
 			+ "po.id, po.version, po.createdDate, p_user.username, "
-			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
+			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "po.recordedTime, po.startTime, po.endTime, po.duration, po.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, po.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
@@ -88,7 +88,8 @@ public interface PORepository extends BaseRepository<PO> {
 	 * @param orderType e.g. GENERAL_ORDER, CASHEW_ORDER
 	 * @return List of PoItemRow for all open orders sorted by delivery date.
 	 */
-	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, "
+	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, "
+			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
 			+ "function('GROUP_CONCAT', concat(coalesce(user.username, ''), ' - ', coalesce(approval.decision, ''))), "
 			+ "i.id, i.value, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency, "
@@ -155,7 +156,8 @@ public interface PORepository extends BaseRepository<PO> {
 	 * @param orderType e.g. GENERAL_ORDER, CASHEW_ORDER
 	 * @return List of PoItemRow for all orders.
 	 */
-		@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, po_code.code, ct.code, ct.suffix, s.name, "
+		@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, "
+				+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
 				+ "function('GROUP_CONCAT', concat(coalesce(user.username, ''), ':', coalesce(approval.decision, ''))), "
 				+ "i.id, i.value, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 				+ "oi.defects, price.amount, price.currency, "

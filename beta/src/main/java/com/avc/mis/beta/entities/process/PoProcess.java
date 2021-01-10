@@ -48,7 +48,25 @@ public abstract class PoProcess extends GeneralProcess {
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	private Set<ProductWeightedPo> productWeightedPos = new HashSet<>();
+	
+	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@OneToMany(mappedBy = "process", orphanRemoval = true, 
+		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<ItemCount> itemCounts = new HashSet<>();
+	
+	public ProductWeightedPo[] getProductWeightedPos() {
+		if(this.productWeightedPos == null)
+			return null;
+		ProductWeightedPo[] productWeightedPos = this.productWeightedPos.toArray(new ProductWeightedPo[this.productWeightedPos.size()]);
+		Arrays.sort(productWeightedPos, Ordinal.ordinalComparator());
+		return productWeightedPos;
+	}
+
+	public void setProductWeightedPos(ProductWeightedPo[] productWeightedPos) {
+		Ordinal.setOrdinals(productWeightedPos);
+		this.productWeightedPos = Insertable.setReferences(productWeightedPos, (t) -> {t.setReference(this);	return t;});
+	}
 
 	/**
 	 * Gets the list of Item counts as an array (can be ordered).

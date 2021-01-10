@@ -21,6 +21,7 @@ import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PO;
+import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.repositories.PORepository;
 
 import lombok.AccessLevel;
@@ -142,11 +143,15 @@ public class Orders {
 		return getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
 	}
 	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addPoCode(PoCode poCode) {
+		dao.addEntity(poCode);
+	}	
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addOrder(PO po) {
 		//using save rather than persist in case POid was assigned by user
-		dao.addEntityWithFlexibleGenerator(po.getPoCode());
+//		dao.addEntityWithFlexibleGenerator(po.getPoCode());
 //		Session session = getEntityManager().unwrap(Session.class);
 //		session.save(po.getPoCode());
 		dao.addGeneralProcessEntity(po);			

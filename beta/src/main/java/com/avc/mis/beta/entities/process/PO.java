@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -71,6 +72,12 @@ public class PO extends PoProcess {
 	public void setOrderItems(OrderItem[] orderItems) {
 		Ordinal.setOrdinals(orderItems);
 		this.orderItems = Insertable.setReferences(orderItems, (t) -> {t.setReference(this);	return t;});
+	}
+	
+	@NotNull(message = "Purchase Order has to reference a po code")
+	@Override
+	public PoCode getPoCode() {
+		return super.getPoCode();
 	}
 	
 }

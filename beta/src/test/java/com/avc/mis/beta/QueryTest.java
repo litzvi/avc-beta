@@ -326,6 +326,9 @@ public class QueryTest {
 			});
 		});
 		
+		poCodes = objectTablesReader.findFreePoCodes();
+		poCodes.forEach(i -> System.out.println(i));
+		
 		Map<ProcessName, List<PoProcessDTO>> qcProcessesMap = qualityChecks.getAllQualityChecksByPo(44952);
 		qcProcessesMap.forEach((k, v) -> {
 			if(!v.isEmpty()) {
@@ -351,6 +354,10 @@ public class QueryTest {
 	void oneQueryTest() {
 				
 		System.out.println(processInfoReader.getFinalReport(14107));
+		
+		List<PoCodeDTO> poCodes = objectTablesReader.findFreePoCodes();
+		poCodes.forEach(i -> System.out.println(i));
+
 		
 //		List<QcReportLine> qcReportLines = qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, 1234);
 //		qcReportLines.forEach(c -> System.out.println(c));

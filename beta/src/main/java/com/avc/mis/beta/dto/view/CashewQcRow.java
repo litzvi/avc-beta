@@ -48,7 +48,7 @@ public class CashewQcRow extends BasicDTO {
 
 
 	public CashewQcRow(@NonNull Integer id, 
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			QcCompany checkedBy,
 			Integer itemId, String itemValue, 
 //			String itemName, 
@@ -60,7 +60,7 @@ public class CashewQcRow extends BasicDTO {
 			BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 
 			BigDecimal decay, BigDecimal insectDamage, BigDecimal testa) {
 		super(id);
-		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.checkedBy = checkedBy.toString();
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);

@@ -35,12 +35,12 @@ public class LoadedItemDTO extends SubjectDataDTO {
 		
 	public LoadedItemDTO(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,		
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			BigDecimal declaredAmount, MeasureUnit measureUnit,
 			String description, String remarks) {
 		super(id, version, ordinal);
 		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
-		this.poCode = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);	
+		this.poCode = new PoCodeDTO(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);	
 		this.declaredAmount = new AmountWithUnit(declaredAmount.setScale(MeasureUnit.SCALE), measureUnit);
 		this.description = description;
 		this.remarks = remarks;

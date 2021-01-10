@@ -10,6 +10,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
@@ -56,6 +57,12 @@ public class Receipt extends ProcessWithProduct<ReceiptItem> {
 		super.prePersist();
 		getLifeCycle().setProcessStatus(ProcessStatus.PENDING);
 	
+	}
+	
+	@NotNull(message = "Receipt has to reference a po code")
+	@Override
+	public PoCode getPoCode() {
+		return super.getPoCode();
 	}
 	
 }

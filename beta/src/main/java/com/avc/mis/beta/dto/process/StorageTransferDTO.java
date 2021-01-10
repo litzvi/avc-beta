@@ -40,13 +40,14 @@ public class StorageTransferDTO extends TransactionProcessDTO<ProcessItemDTO> {
 
 	
 	public StorageTransferDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName,
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
 			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, 
 			String approvals) {
-		super(id, version, createdDate, userRecording, poCodeId, contractTypeCode, contractTypeSuffix,
+		super(id, version, createdDate, userRecording, 
+				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
 				supplierId, supplierVersion, supplierName,
 				processName, productionLine, recordedTime, startTime, endTime, duration, 
 				numOfWorkers, processStatus, editStatus, remarks, approvals);

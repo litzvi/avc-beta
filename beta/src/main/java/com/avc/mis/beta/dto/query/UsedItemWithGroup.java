@@ -31,7 +31,7 @@ public class UsedItemWithGroup implements CollectionItemWithGroup<UsedItemDTO, U
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
 			MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, BigDecimal storageNumberUnits, BigDecimal otherUsedUnits, BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
@@ -40,7 +40,7 @@ public class UsedItemWithGroup implements CollectionItemWithGroup<UsedItemDTO, U
 		this.usedItem = new UsedItemDTO(usedId, usedVersion, usedOrdinal, numberUnits, 
 				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
 				measureUnit, itemProcessDate,
-				poCodeId, contractTypeCode, contractTypeSuffix, supplierName,
+				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName,
 				storageId, stoageVersion, storageOrdinal,
 				unitAmount, storageNumberUnits, otherUsedUnits, accessWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks);

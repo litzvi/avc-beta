@@ -34,12 +34,12 @@ public class ItemCountWithAmount implements CollectionItemWithGroup<CountAmountD
 	public ItemCountWithAmount(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
 			MeasureUnit measureUnit, BigDecimal containerWeight, BigDecimal accessWeight,
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			Integer amountId, Integer amountVersion, Integer amountOrdinal, BigDecimal amount) {
 //		super(id);
 		this.itemCount = new ItemCountDTO(id, version, ordinal, 
 				itemId, itemValue, productionUse, clazz, measureUnit, containerWeight, accessWeight);
-		this.po = new PoCodeDTO(poCodeId, contractTypeCode, contractTypeSuffix, supplierName);
+		this.po = new PoCodeDTO(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.amount = new CountAmountDTO(amountId, amountVersion, amountOrdinal, amount);		
 	}
 	

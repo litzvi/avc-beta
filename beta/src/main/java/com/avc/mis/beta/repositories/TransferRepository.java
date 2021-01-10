@@ -15,7 +15,7 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 	
 	@Query("select new com.avc.mis.beta.dto.process.StorageTransferDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
+			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)) ) "
@@ -64,7 +64,7 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 			+ " i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.productionUse, type(item), "
 			+ "i.measureUnit, i.containerWeight, i.accessWeight, "
-			+ "poCode.code, ct.code, ct.suffix, s.name, "
+			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, "
 			+ "count_amount.id, count_amount.version, count_amount.ordinal, count_amount.amount) "
 		+ "from ItemCount i "
 			+ "join i.item item "

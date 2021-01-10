@@ -69,7 +69,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	 * @return Set of PoCodeDTO
 	 */
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
-			+ "po_code.code, ct.code, ct.suffix, s.name) "
+			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name) "
 		+ "from PO po "
 			+ "join po.lifeCycle lc "
 			+ "join po.poCode po_code "
@@ -107,7 +107,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	 * @return Set of PoCodeDTO
 	 */
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
-			+ "po_code.code, c.code, c.suffix, s.name) "
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType c "
@@ -128,7 +128,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	 * @return Set of PoCodeDTO
 	 */
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
-			+ "poCode.code, ct.code, ct.suffix, s.name) "
+			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name) "
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
 			+ "join pi.process p "
@@ -162,26 +162,43 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithI
 	Set<PoCodeDTO> findAvailableInventoryPoCodeByType(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId);
 
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
-			+ "po_code.code, c.code, c.suffix, s.name) "
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType c "
 				+ "join po_code.supplier s "
 			+ "join r.processType t "
 		+ "where t.processName in ?1 "
-		+ "order by po_code.code desc ")
+		+ "order by po_code.id desc ")
 	List<PoCodeDTO> findReceivedPoCodeByTypes(ProcessName[] processNames);
 
 	//will also give old (history) po_codes
 	@Query("select distinct new com.avc.mis.beta.dto.values.PoCodeDTO("
-			+ "po_code.code, c.code, c.suffix, s.name) "
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from PoCode po_code "
 				+ "join po_code.contractType c "
 				+ "join po_code.supplier s "
 //			+ "join p.processType t "
 //		+ "where t.processName in ?1 "
-		+ "order by po_code.code desc ")
+		+ "order by po_code.id desc ")
 	List<PoCodeDTO> findAllPoCodeDTOs();
+
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
+		+ "from PoCode po_code "
+			+ "join po_code.contractType c "
+			+ "join po_code.supplier s "
+			+ "left join po_code.processes p "
+				+ "left join p.lifeCycle lc "
+		+ "where p is null "
+			+ "or not exists ("
+				+ "select p_2 "
+				+ "from po_code.processes p_2 "
+					+ "join p_2.lifeCycle lc_2 "
+				+ "where lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED ) "
+		+ "group by po_code "
+		+ "order by po_code.id desc ")
+	List<PoCodeDTO> findFreePoCodes();
 
 	
 }

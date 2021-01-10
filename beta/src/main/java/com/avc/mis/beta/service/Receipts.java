@@ -198,7 +198,6 @@ public class Receipts {
 		if(receiptItems == null || receiptItems.length == 0) {
 			return true;
 		}
-		// TODO Auto-generated method stub
 		List<OrderItem> orderItems = getPoRepository().findNonOpenOrderItemsById(
 				Stream.of(receiptItems)
 				.filter(i -> i.getOrderItem() != null)
@@ -212,8 +211,9 @@ public class Receipts {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addReceipt(Receipt receipt) {
 		//using save rather than persist in case POid was assigned by user
-		dao.addEntityWithFlexibleGenerator(receipt.getPoCode());
-		addOrderReceipt(receipt);
+//		dao.addEntityWithFlexibleGenerator(receipt.getPoCode());
+//		addOrderReceipt(receipt);
+		dao.addGeneralProcessEntity(receipt);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

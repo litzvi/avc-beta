@@ -59,7 +59,7 @@ public class PoItemRow extends BasicDTO {
 	 * used to project directly from database without nested fetching.
 	 */
 	public PoItemRow(@NonNull Integer id, String personInCharge,
-			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, String supplierName, 
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String approvals,
 			Integer itemId, String itemValue, BigDecimal amount, MeasureUnit measureUnit, 
 			OffsetDateTime contractDate, LocalDate deliveryDate, 
@@ -68,7 +68,7 @@ public class PoItemRow extends BasicDTO {
 			BigDecimal receivedAmount, ProcessStatus status, long receiptsCancelled) {
 		super(id);
 		this.personInCharge = personInCharge;
-		this.poCode = new PoCodeBasic(poCodeId, contractTypeCode, contractTypeSuffix);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix);
 		if(approvals != null) {
 			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
 		}

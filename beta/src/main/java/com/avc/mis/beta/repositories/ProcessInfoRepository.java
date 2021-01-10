@@ -54,7 +54,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<ApprovalTask> findProcessApprovals(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.UserMessageDTO("
-				+ "m.id, m.version, c.id, t.code, t.suffix, s.name, m.description, p.id, pt.processName, pt.value, m.createdDate, prm.name,  pr.name, m.label) "
+				+ "m.id, m.version, c.id, c.code, t.code, t.suffix, s.name, m.description, p.id, pt.processName, pt.value, m.createdDate, prm.name,  pr.name, m.label) "
 			+ "from UserMessage m "
 				+ "left join m.process p "
 					+ "left join p.processType pt "
@@ -70,7 +70,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<UserMessageDTO> findAllMessagesByUser(Integer userId);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO("
-			+ "pa.id, pa.version, c.id, t.code, t.suffix, s.name, pa.description, p.id, pt.processName, pt.value, pa.createdDate, "
+			+ "pa.id, pa.version, c.id, c.code, t.code, t.suffix, s.name, pa.description, p.id, pt.processName, pt.value, pa.createdDate, "
 			+ "prm.name, pr.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 			+ "join pa.process p "
@@ -89,7 +89,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO("
 			+ "pa.id, pa.version, "
-			+ "c.id, t.code, t.suffix, s.name, "
+			+ "c.id, c.code, t.code, t.suffix, s.name, "
 			+ "pa.description, p.id, pt.processName, pt.value, "
 			+ "pa.createdDate, prm.name, pr.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
@@ -107,7 +107,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<ApprovalTaskDTO> findAllApprovalsByUser(Integer userId);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.UserMessageDTO("
-			+ "m.id, m.version, c.id, t.code, t.suffix, s.name, m.description, p.id, pt.processName, pt.value, m.createdDate, prm.name, pr.name, m.label) "
+			+ "m.id, m.version, c.id, c.code, t.code, t.suffix, s.name, m.description, p.id, pt.processName, pt.value, m.createdDate, prm.name, pr.name, m.label) "
 		+ "from UserMessage m "
 			+ "join m.process p "
 				+ "join p.processType pt "
@@ -193,11 +193,11 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<ProcessManagementDTO> findAllUserProcessPrivilige(Integer currentUserId);
 
 	@Query("select new com.avc.mis.beta.dto.view.PoFinalReport("
-			+ "po_code.code, c.code, c.suffix, s.name) "
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from PoCode po_code "
 				+ "join po_code.contractType c "
 				+ "join po_code.supplier s "
-		+ "where po_code.code = :poCodeId ")
+		+ "where po_code.id = :poCodeId ")
 	PoFinalReport findFinalReportBasic(@NonNull Integer poCodeId);
 
 	@Query("select new java.lang.Boolean(count(*) > 0) "
