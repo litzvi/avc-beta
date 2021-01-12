@@ -42,7 +42,7 @@ import lombok.ToString;
 public abstract class PoProcess extends GeneralProcess {	
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(updatable = false)
+	@JoinColumn(updatable = false, name = "po_code_code")
 	private PoCode poCode;
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)

@@ -49,7 +49,7 @@ public class PoCodeBasic extends BasicDTO {
 	 * @return a string representing full PO code. e.g. VAT-900001
 	 */
 	public String getValue() {
-		return String.format("%s-%s-%s", this.contractTypeCode, this.getCode(), this.contractTypeSuffix);
+		return String.format("%s-%s%s", this.contractTypeCode, this.getCode(), this.contractTypeSuffix);
 	}
 
 }

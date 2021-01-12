@@ -70,7 +70,7 @@ public class PoCodeDTO extends ValueDTO {
 	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
 	 */
 	public String getValue() {		
-		return String.format("%s-%s-%s", this.contractTypeCode, this.getCode(), this.contractTypeSuffix);
+		return String.format("%s-%s%s", this.contractTypeCode, this.getCode(), this.contractTypeSuffix);
 	}
 	
 	@JsonIgnore
