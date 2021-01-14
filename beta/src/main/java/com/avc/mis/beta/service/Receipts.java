@@ -283,7 +283,7 @@ public class Receipts {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editReceipt(Receipt receipt) {
 		//can't edit if finalised - should be checked by process status, perhaps in  table
-		dao.editGeneralProcessEntity(receipt);
+		dao.editProcessWithProductEntity(receipt);
 	}
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

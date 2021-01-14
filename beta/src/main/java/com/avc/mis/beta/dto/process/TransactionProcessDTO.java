@@ -36,7 +36,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public abstract class TransactionProcessDTO<T extends ProcessItemDTO> extends ProcessWithProductDTO<T> {
 	
-	@Setter(value = AccessLevel.PROTECTED) @Getter(value = AccessLevel.PROTECTED)
+	@Setter(value = AccessLevel.PUBLIC) @Getter(value = AccessLevel.PROTECTED)
 	private List<UsedItemsGroupDTO> usedItemGroups;
 	
 	public TransactionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 

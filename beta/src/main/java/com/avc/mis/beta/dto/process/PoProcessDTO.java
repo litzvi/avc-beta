@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
+import com.avc.mis.beta.dto.processinfo.ProductWeightedPoDTO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -39,6 +40,7 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 	private PoCodeDTO poCode;
 	
 	private List<ItemCountDTO> itemCounts;
+	
 
 		
 	public PoProcessDTO(Integer id, Integer version, Instant createdDate, String staffRecording, 

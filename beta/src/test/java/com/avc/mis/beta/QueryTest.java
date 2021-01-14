@@ -259,7 +259,8 @@ public class QueryTest {
 		
 		//test getting inventory storages by item
 		List<ProcessItemInventory> itemInventory = warehouseManagement.getAvailableInventoryByItem(service.getItem().getId());
-		itemInventory.forEach(i -> System.out.println(i));
+		if(itemInventory != null)
+			itemInventory.forEach(i -> System.out.println(i));
 		
 		//test QC raw tables
 		List<CashewQcRow> rawQcRows;
@@ -350,6 +351,7 @@ public class QueryTest {
 
 	}
 	
+//	@Disabled
 	@Test
 	void oneQueryTest() {
 				

@@ -59,8 +59,8 @@ public class OrderItem extends RankedAuditedEntity {
 	private PO po;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "itemId", updatable = false, nullable = false)
-	@NotNull(message = "Item is mandatory", groups = OnPersist.class)
+	@JoinColumn(name = "itemId", nullable = false)
+	@NotNull(message = "Item is mandatory")
 	private Item item;
 	
 	@AttributeOverrides({

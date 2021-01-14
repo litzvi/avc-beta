@@ -3,11 +3,13 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.processinfo.ProductWeightedPoDTO;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
 /**
@@ -35,8 +37,19 @@ public interface ProductionProcessRepository extends TransactionProcessRepositor
 		+ "where r.id = :processId ")
 	Optional<ProductionProcessDTO> findProductionProcessDTOById(int processId);
 
-	
-	
+	@Query("select new com.avc.mis.beta.dto.processinfo.ProductWeightedPoDTO( "
+			+ "weighted_po.id, weighted_po.version, weighted_po.ordinal, "
+			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
+			+ "weighted_po.weight) "
+		+ "from PoProcess p "
+			+ "join p.productWeightedPos weighted_po "
+				+ "join weighted_po.poCode po_code "
+					+ "join po_code.contractType ct "
+					+ "join po_code.supplier s "
+		+ "where p.id = :processId "
+		+ "order by weighted_po.ordinal ")
+	List<ProductWeightedPoDTO> findProductWeightedPos(Integer processId);
+
 	
 	
 }

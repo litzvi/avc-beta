@@ -41,6 +41,8 @@ public class ProductionProcesses {
 
 	@Autowired private ProductionProcessRepository processRepository;
 	
+	@Autowired private ProcessInfoReader processInfoReader;
+	
 	public List<ProcessRow> getProductionProcessesByType(ProcessName processName) {
 		return getProductionProcessesByTypeAndPoCode(processName, null);
 	}
@@ -119,20 +121,12 @@ public class ProductionProcesses {
 		Optional<ProductionProcessDTO> process = getProcessRepository().findProductionProcessDTOById(processId);
 		ProductionProcessDTO processDTO = process.orElseThrow(
 				()->new IllegalArgumentException("No production process with given process id"));
-		processDTO.setProcessItems(
-				CollectionItemWithGroup.getFilledGroups(
-						getProcessRepository()
-						.findProcessItemWithStorage(processId)));
-//				ProcessItemDTO.getProcessItems(getProcessRepository()
-//						.findProcessItemWithStorage(processId)));
-		processDTO.setUsedItemGroups(
-				CollectionItemWithGroup.getFilledGroups(
-						getProcessRepository()
-						.findUsedItemsWithGroup(processId)));
-	//				UsedItemsGroupDTO.getUsedItemsGroups(
-//						getProcessRepository()
-//						.findUsedItemsWithGroup(processId)));
-//		
+		
+		getProcessInfoReader().setTransactionProcessCollections(processDTO);
+		
+		processDTO.setProductWeightedPos(
+				getProcessRepository().findProductWeightedPos(processDTO.getId()));
+
 		return processDTO;
 	}
 	

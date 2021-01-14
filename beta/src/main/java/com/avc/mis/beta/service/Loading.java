@@ -45,6 +45,8 @@ public class Loading {
 	@Autowired private ProcessInfoDAO dao;
 	
 	@Autowired private ContainerLoadingRepository containerLoadingRepository;
+	
+	@Autowired private ProcessInfoReader processInfoReader;
 
 	@Deprecated
 	@Autowired private DeletableDAO deletableDAO;
@@ -110,14 +112,17 @@ public class Loading {
 	public ContainerLoadingDTO getLoading(int processId) {
 		Optional<ContainerLoadingDTO> loading = getContainerLoadingRepository().findContainerLoadingDTOById(processId);
 		ContainerLoadingDTO loadingDTO = loading.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id"));
+		
+		getProcessInfoReader().setTransactionProcessCollections(loadingDTO);
+		
 		loadingDTO.setLoadedItems(getContainerLoadingRepository().findLoadedItems(processId));
-		loadingDTO.setUsedItemGroups(
-				CollectionItemWithGroup.getFilledGroups(
-						getContainerLoadingRepository()
-						.findUsedItemsWithGroup(processId)));
-//				UsedItemsGroupDTO.getUsedItemsGroups(
+//		loadingDTO.setUsedItemGroups(
+//				CollectionItemWithGroup.getFilledGroups(
 //						getContainerLoadingRepository()
 //						.findUsedItemsWithGroup(processId)));
+////				UsedItemsGroupDTO.getUsedItemsGroups(
+////						getContainerLoadingRepository()
+////						.findUsedItemsWithGroup(processId)));
 
 		return loadingDTO; 
 	}

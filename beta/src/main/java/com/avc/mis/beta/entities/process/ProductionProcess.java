@@ -15,12 +15,10 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
-import org.hibernate.annotations.Where;
-
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.processinfo.ProcessGroup;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.entities.processinfo.ProductWeightedPo;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -44,6 +42,12 @@ import lombok.ToString;
 public class ProductionProcess extends TransactionProcess<ProcessItem> {
 	
 	
+	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@OneToMany(mappedBy = "process", orphanRemoval = true, 
+		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	private Set<ProductWeightedPo> productWeightedPos = new HashSet<>();
+
+	
 	/**
 	 * Setter for adding items that are processed, 
 	 * receives an array (which can be ordered, for later use to add an order to the items).
@@ -63,5 +67,20 @@ public class ProductionProcess extends TransactionProcess<ProcessItem> {
 	public ProcessItem[] getProcessItems() {
 		return super.getProcessItems();
 	}
+	
+	
+	public ProductWeightedPo[] getProductWeightedPos() {
+		if(this.productWeightedPos == null)
+			return null;
+		ProductWeightedPo[] productWeightedPos = this.productWeightedPos.toArray(new ProductWeightedPo[this.productWeightedPos.size()]);
+		Arrays.sort(productWeightedPos, Ordinal.ordinalComparator());
+		return productWeightedPos;
+	}
+
+	public void setProductWeightedPos(ProductWeightedPo[] productWeightedPos) {
+		Ordinal.setOrdinals(productWeightedPos);
+		this.productWeightedPos = Insertable.setReferences(productWeightedPos, (t) -> {t.setReference(this);	return t;});
+	}
+
 
 }

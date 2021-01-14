@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
+import com.avc.mis.beta.dto.processinfo.ProductWeightedPoDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -28,6 +29,9 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> {
+	
+	private List<ProductWeightedPoDTO> productWeightedPos;
+
 	
 	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 

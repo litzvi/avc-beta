@@ -31,6 +31,9 @@ public interface CollectionItemWithGroup<S, G extends ListGroup<S>> {
 	
 	
 	public static <S, G extends ListGroup<S>> List<G> getFilledGroups(List<? extends CollectionItemWithGroup<S, G>> dataWithGroups) {
+		if(dataWithGroups.isEmpty()) {
+			return null;
+		}
 		Map<Integer, List<CollectionItemWithGroup<S, G>>> map = dataWithGroups.stream()
 				.collect(Collectors.groupingBy(CollectionItemWithGroup<S, G>::getGroupId, LinkedHashMap::new, Collectors.toList()));
 		List<G> processGroups = new ArrayList<>();
@@ -49,6 +52,9 @@ public interface CollectionItemWithGroup<S, G extends ListGroup<S>> {
 	 * Same as getFilledGroups static method but probably less efficient because needs to compare full ProcessGroups for groupingby
 	 */
 	public static <S, G extends ListGroup<S>> List<G> getFilledGroupsByComparing(List<? extends CollectionItemWithGroup<S, G>> dataWithGroups) {
+		if(dataWithGroups.isEmpty()) {
+			return null;
+		}
 		Map<G, List<S>> map = dataWithGroups.stream()
 				.collect(Collectors.groupingBy(CollectionItemWithGroup<S, G>::getGroup, 
 						LinkedHashMap::new, 

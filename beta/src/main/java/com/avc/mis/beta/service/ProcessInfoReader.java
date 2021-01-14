@@ -17,7 +17,11 @@ import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.basic.UserBasic;
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.process.PoProcessDTO;
+import com.avc.mis.beta.dto.process.ProcessWithProductDTO;
+import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.process.TransactionProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
@@ -27,7 +31,9 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -58,6 +64,35 @@ public class ProcessInfoReader {
 	@Autowired private Loading loading;
 	
 	
+	void setTransactionProcessCollections(TransactionProcessDTO<ProcessItemDTO> processDTO) {
+		processDTO.setUsedItemGroups(
+				CollectionItemWithGroup.getFilledGroups(
+						getProcessInfoRepository()
+						.findUsedItemsWithGroup(processDTO.getId())));
+	//				UsedItemsGroupDTO.getUsedItemsGroups(
+//						getProcessRepository()
+//						.findUsedItemsWithGroup(processId)));
+//		
+		setProcessWithProductCollections(processDTO);
+		
+	}
+	
+	void setProcessWithProductCollections(ProcessWithProductDTO<ProcessItemDTO> processDTO) {
+		processDTO.setProcessItems(
+				CollectionItemWithGroup.getFilledGroups(
+						getProcessInfoRepository()
+						.findProcessItemWithStorage(processDTO.getId())));
+//				ProcessItemDTO.getProcessItems(getProcessRepository()
+//						.findProcessItemWithStorage(processId)));
+
+		setProcessDTOCollections(processDTO);
+		
+	}
+
+	void setProcessDTOCollections(PoProcessDTO processDTO) {
+				
+	}
+
 	/**
 	 * Gets a ProcessManagement that contains a user to be notified, 
 	 * for a given process and the type of approval required.
