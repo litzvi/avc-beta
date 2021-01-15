@@ -48,11 +48,11 @@ public class LoadingRow extends BasicDTO {
 
 	
 	public LoadingRow(@NonNull Integer id, 
-			Integer shipmentCodeId, String portOfDischargeCode, String portOfDischargeValue, 
+			Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue, 
 			OffsetDateTime recordedTime, Duration duration, ProcessStatus status, LocalDate eta,
 			String containerNumber, String sealNumber, ShippingContainerType containerType) {
 		super(id);
-		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, portOfDischargeCode, portOfDischargeValue);
+		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, shipmentCodeCode, portOfDischargeCode, portOfDischargeValue);
 		this.recordedTime = recordedTime;
 		this.duration = duration;
 		this.status = status;

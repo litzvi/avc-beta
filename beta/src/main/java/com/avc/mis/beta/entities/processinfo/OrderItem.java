@@ -29,7 +29,6 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.utilities.LocalDateToLong;
-import com.avc.mis.beta.validation.groups.OnPersist;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 import com.avc.mis.beta.validation.groups.PositiveOrZeroAmount;
 

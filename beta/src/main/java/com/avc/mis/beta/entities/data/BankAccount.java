@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.ObjectEntityWithId;
+import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.values.BankBranch;
 
 import lombok.Data;
@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true ,callSuper = true)
 @Entity
 @Table(name = "BANK_ACCOUNTS")
-public class BankAccount extends ObjectEntityWithId {
+public class BankAccount extends ObjectDataEntity {
 	
 	@Column(nullable = false)
 	@NotBlank(message = "Account number is mandetory")

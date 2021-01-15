@@ -20,15 +20,18 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class ShipmentCodeDTO extends ValueDTO {
 	
+	String code;
 	ShippingPortDTO portOfDischarge;
 	
-	public ShipmentCodeDTO(@NonNull Integer id, Integer portOfDischargeId, String portOfDischargeValue, String portOfDischargeCode) {
+	public ShipmentCodeDTO(@NonNull Integer id, String code, Integer portOfDischargeId, String portOfDischargeValue, String portOfDischargeCode) {
 		super(id);
+		this.code = code;
 		this.portOfDischarge = new ShippingPortDTO(portOfDischargeId, portOfDischargeValue, portOfDischargeCode);
 	}
 	
 	public ShipmentCodeDTO(ShipmentCode shipmentCode) {
-		super(shipmentCode.getCode());
+		super(shipmentCode.getId());
+		this.code = shipmentCode.getCode();
 		this.portOfDischarge = shipmentCode.getPortOfDischarge() != null ? new ShippingPortDTO(shipmentCode.getPortOfDischarge()) : null;
 	}
 	
@@ -36,16 +39,16 @@ public class ShipmentCodeDTO extends ValueDTO {
 	 * @return a string representing full Shipment code. e.g. TAN-51284
 	 */
 	public String getValue() {
-		return String.format("%s-%d", portOfDischarge.getCode(), this.getId());
+		return String.format("%s-%s", portOfDischarge.getCode(), this.getCode());
 	}
 
-	/**
-	 * Used as a synonymous for getting id
-	 * @return the code/id
-	 */
-	public Integer getCode() {
-		return getId();
-	}
+//	/**
+//	 * Used as a synonymous for getting id
+//	 * @return the code/id
+//	 */
+//	public Integer getCode() {
+//		return getId();
+//	}
 
 
 

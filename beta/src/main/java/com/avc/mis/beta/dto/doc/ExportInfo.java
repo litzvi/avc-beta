@@ -22,11 +22,11 @@ public class ExportInfo {
 	//driver(name, phone, id)
 	
 	
-	public ExportInfo(Integer shipmentCodeId, String portOfDischargeCode, String portOfDischargeValue, 
+	public ExportInfo(Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue, 
 			OffsetDateTime processDate
 			) {
 		super();
-		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, portOfDischargeCode, portOfDischargeValue);
+		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, shipmentCodeCode, portOfDischargeCode, portOfDischargeValue);
 		this.processDate = processDate;
 	}
 	

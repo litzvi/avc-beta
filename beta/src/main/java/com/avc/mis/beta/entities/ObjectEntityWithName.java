@@ -25,7 +25,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @MappedSuperclass
-public abstract class ObjectEntityWithIdAndName extends ObjectEntityWithId {
+public abstract class ObjectEntityWithName extends ObjectDataEntity {
 
 	@Column(unique = true, nullable = false)
 	@NotBlank(message = "Name is mandetory", groups = OnPersist.class)

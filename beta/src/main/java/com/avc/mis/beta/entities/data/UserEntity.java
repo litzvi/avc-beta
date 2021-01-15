@@ -19,7 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.ObjectEntityWithId;
+import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.enums.Role;
 import com.avc.mis.beta.validation.groups.OnPersist;
 
@@ -36,7 +36,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "USERS")
-public class UserEntity extends ObjectEntityWithId {
+public class UserEntity extends ObjectDataEntity {
 	
 	@Column(unique = true, nullable = false, updatable = false)
 	@NotBlank(message = "Username is mandatory", groups = OnPersist.class)

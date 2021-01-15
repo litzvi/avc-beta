@@ -3,7 +3,13 @@
  */
 package com.avc.mis.beta.entities;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Abstract base class extended by all persistence entities.
@@ -11,8 +17,14 @@ import javax.persistence.MappedSuperclass;
  * @author Zvi
  *
  */
+@Data
 @MappedSuperclass
 public abstract class BaseEntity implements Insertable {
+	
+	@EqualsAndHashCode.Include
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;	
+
 
 	/**
 	 * Defined so that new Entities with the same data aren't considered equals before they are assigned an id,

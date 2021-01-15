@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.ObjectEntityWithId;
+import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.avc.mis.beta.validation.groups.OnPersist;
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -29,7 +29,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "COMPANY_CONTACTS")
-public class CompanyContact extends ObjectEntityWithId {
+public class CompanyContact extends ObjectDataEntity {
 	
 	@ToString.Exclude
 	@JsonBackReference(value = "company_companyContacts")

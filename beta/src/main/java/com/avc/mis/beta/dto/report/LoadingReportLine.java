@@ -33,10 +33,10 @@ public class LoadingReportLine extends ReportLine implements ListGroup<ItemAmoun
 	private AmountWithUnit totalProductIn;
 	
 	public LoadingReportLine(
-			Integer id, String portOfDischargeCode, String portOfDischargeValue, 
+			Integer id, String code, String portOfDischargeCode, String portOfDischargeValue, 
 			ContainerDetails containerDetails, OffsetDateTime loadingDate) {
 		super();
-		this.shipmentCode = new ShipmentCodeBasic(id, portOfDischargeCode, portOfDischargeValue);
+		this.shipmentCode = new ShipmentCodeBasic(id, code, portOfDischargeCode, portOfDischargeValue);
 		this.containerDetails = containerDetails;
 		super.setDates(Stream.of(loadingDate.toLocalDate()).collect(Collectors.toSet()));
 	}

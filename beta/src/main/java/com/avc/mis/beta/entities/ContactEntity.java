@@ -24,7 +24,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @MappedSuperclass
-public abstract class ContactEntity extends SubjectEntityWithId {
+public abstract class ContactEntity extends SubjectDataEntity {
 
 	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)

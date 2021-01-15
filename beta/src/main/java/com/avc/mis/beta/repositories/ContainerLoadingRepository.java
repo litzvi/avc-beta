@@ -26,7 +26,7 @@ import com.avc.mis.beta.entities.process.ContainerLoading;
 public interface ContainerLoadingRepository  extends TransactionProcessRepository<ContainerLoading> {
 	
 	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine("
-			+ "sc.code, port.code, port.value, p.containerDetails, p.recordedTime, "
+			+ "sc.id, sc.code, port.code, port.value, p.containerDetails, p.recordedTime, "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "SUM((ui.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor)) "
@@ -57,7 +57,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
-			+ "sc.code, port.id, port.value, port.code, "
+			+ "sc.id, sc.code, port.id, port.value, port.code, "
 			+ "r.containerDetails, r.shipingDetails) "
 		+ "from ContainerLoading r "
 			+ "join r.shipmentCode sc "
@@ -163,7 +163,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	Stream<ProductionProcessWithItemAmount> findAllLoadedItems();
 
 	@Query("select new com.avc.mis.beta.dto.view.LoadingRow( "
-			+ "p.id, shipment_code.code, pod.code, pod.value, "
+			+ "p.id, shipment_code.id, shipment_code.code, pod.code, pod.value, "
 			+ "p.recordedTime, p.duration, lc.processStatus, ship.eta,"
 			+ "cont.containerNumber, cont.sealNumber, cont.containerType) "
 		+ "from ContainerLoading p "
@@ -176,7 +176,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	List<LoadingRow> findContainerLoadings();
 
 	@Query("select new com.avc.mis.beta.dto.view.LoadingRow( "
-			+ "p.id, shipment_code.code, pod.code, pod.value, "
+			+ "p.id, shipment_code.id, shipment_code.code, pod.code, pod.value, "
 			+ "p.recordedTime, p.duration, lc.processStatus, ship.eta, "
 			+ "cont.containerNumber, cont.sealNumber, cont.containerType) "
 		+ "from ContainerLoading p "
@@ -190,7 +190,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	List<LoadingRow> findContainerLoadingsByProcessIds(int[] processIds);
 
 	@Query("select new com.avc.mis.beta.dto.doc.ExportInfo( "
-			+ "shipment_code.id, pod.code, pod.value, p.recordedTime) "
+			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, p.recordedTime) "
 		+ "from ContainerLoading p "
 			+ "join p.shipmentCode shipment_code "
 				+ "join shipment_code.portOfDischarge pod "

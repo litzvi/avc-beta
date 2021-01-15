@@ -3,9 +3,6 @@
  */
 package com.avc.mis.beta.entities;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 import lombok.Data;
@@ -24,7 +21,7 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public abstract class LinkEntity extends BaseEntity {
 	
-	@EqualsAndHashCode.Include
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+//	@EqualsAndHashCode.Include
+//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+//	private Integer id;
 }

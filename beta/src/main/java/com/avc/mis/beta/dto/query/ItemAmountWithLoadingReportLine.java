@@ -29,13 +29,13 @@ public class ItemAmountWithLoadingReportLine implements CollectionItemWithGroup<
 	ItemAmount itemAmount;
 	
 	public ItemAmountWithLoadingReportLine(
-			Integer id, String portOfDischargeCode, String portOfDischargeValue, 
+			Integer id, String code, String portOfDischargeCode, String portOfDischargeValue, 
 			ContainerDetails containerDetails, OffsetDateTime loadingDate, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			ItemGroup itemGroup, ProductionUse productionUse, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz, 
 			BigDecimal amount) {
-		this.loadingReportLine = new LoadingReportLine(id, portOfDischargeCode, portOfDischargeValue, containerDetails, loadingDate);
+		this.loadingReportLine = new LoadingReportLine(id, code, portOfDischargeCode, portOfDischargeValue, containerDetails, loadingDate);
 		this.itemAmount = new ItemAmount(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unitAmount, unitMeasureUnit, clazz, amount);
 	}
 

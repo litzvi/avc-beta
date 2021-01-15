@@ -19,7 +19,6 @@ import javax.persistence.Table;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
-import com.avc.mis.beta.entities.processinfo.ProductWeightedPo;
 
 import lombok.AccessLevel;
 import lombok.Data;

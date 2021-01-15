@@ -17,7 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.ObjectEntityWithIdAndName;
+import com.avc.mis.beta.entities.ObjectEntityWithName;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -34,7 +34,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name="COMPANIES", indexes = {@Index(columnList = "name", unique = true)})
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Company extends ObjectEntityWithIdAndName {
+public class Company extends ObjectEntityWithName {
 	
 	private String localName;
 	private String englishName;

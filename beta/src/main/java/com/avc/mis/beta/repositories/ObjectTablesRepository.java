@@ -9,7 +9,7 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.values.PoCodeDTO;
-import com.avc.mis.beta.entities.ObjectEntityWithId;
+import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
@@ -27,7 +27,7 @@ import com.avc.mis.beta.entities.process.PoCode;
  * @author Zvi
  *
  */
-public interface ObjectTablesRepository extends BaseRepository<ObjectEntityWithId> {
+public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity> {
 	
 //-----------Finding all Base entities--------------
 	

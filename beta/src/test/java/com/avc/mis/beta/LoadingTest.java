@@ -61,7 +61,7 @@ public class LoadingTest {
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
 		ContainerLoading loading = new ContainerLoading();
-		ShipmentCode shipmentCode = new ShipmentCode();
+		ShipmentCode shipmentCode = service.getShipmentCode();
 		shipmentCode.setPortOfDischarge(service.getShippingPort());
 		loading.setShipmentCode(shipmentCode);
 		loading.setRecordedTime(OffsetDateTime.now());

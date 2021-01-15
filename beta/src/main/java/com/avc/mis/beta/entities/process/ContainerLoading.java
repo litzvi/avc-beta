@@ -47,8 +47,9 @@ public class ContainerLoading extends TransactionProcess<ProcessItem> {
 	
 	@Valid
 	@NotNull(message = "Shipment code is mandatory")
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false, updatable = false)
+	@OneToOne(orphanRemoval = true, 
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false, updatable = false, name = "shipment_code_code")
 	private ShipmentCode shipmentCode;
 	
 	@Valid

@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import com.avc.mis.beta.entities.ObjectEntityWithIdAndName;
+import com.avc.mis.beta.entities.ObjectEntityWithName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
@@ -28,7 +28,7 @@ public class DataObjectWithName extends DataObject {
 		this.name = name;
 	}
 	
-	public DataObjectWithName(@NonNull ObjectEntityWithIdAndName entity) {
+	public DataObjectWithName(@NonNull ObjectEntityWithName entity) {
 		super(entity.getId(), entity.getVersion());
 		this.name = entity.getName();
 	}

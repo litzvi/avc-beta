@@ -4,12 +4,9 @@
 package com.avc.mis.beta.dto.processinfo;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
-import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.ProductWeightedPo;
 
 import lombok.Data;

@@ -32,6 +32,7 @@ import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
@@ -85,6 +86,13 @@ public class TestService {
 		poCode.setContractType(getContractType());
 		orders.addPoCode(poCode);
 		return poCode;
+	}
+
+	public ShipmentCode getShipmentCode() {
+		ShipmentCode shipmentCode = new ShipmentCode();
+		shipmentCode.setCode(Integer.toString(randCode++));
+
+		return shipmentCode;
 	}
 
 	
@@ -248,6 +256,8 @@ public class TestService {
 			fail("No po codes in database for running this test");
 		return poCodes.get(randNum.nextInt(poCodes.size()));
 	}
+	
+	
 
 	public List<Item> getItems() {
 		List<Item> items = valueTableReader.getAllItems();
@@ -415,5 +425,6 @@ public class TestService {
 		item.setId(itemDTO.getId());
 		return item;
 	}
+
 
 }

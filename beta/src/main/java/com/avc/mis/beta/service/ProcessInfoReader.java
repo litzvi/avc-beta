@@ -18,7 +18,6 @@ import com.avc.mis.beta.dto.basic.UserBasic;
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.process.ProcessWithProductDTO;
-import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.process.TransactionProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
@@ -31,7 +30,6 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
