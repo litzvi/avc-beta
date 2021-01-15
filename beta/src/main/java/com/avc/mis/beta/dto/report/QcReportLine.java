@@ -3,85 +3,61 @@
  */
 package com.avc.mis.beta.dto.report;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.List;
 
-import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.embeddable.RawDamage;
-import com.avc.mis.beta.entities.embeddable.RawDefects;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.QcCompany;
-import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.utilities.ListGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Value;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * @author Zvi
  *
  */
-@Value
-public class QcReportLine {
-
-	String checkedBy;
-	BasicValueEntity<Item> item;
-	OffsetDateTime checkDate;
+@Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
+public class QcReportLine extends ReportLine implements ListGroup<ItemQc> {
 
 	@JsonIgnore
-	Boolean precentage;
+	private Integer processId;
+	private QcCompany checkedBy;
+//	OffsetDateTime checkDate;
 
-	BigDecimal humidity;
-	BigDecimal breakage;
-	BigDecimal totalDefects;
-	BigDecimal totalDamage;
-
-
-	public QcReportLine(QcCompany checkedBy,
-			Integer itemId, String itemValue, 
-			OffsetDateTime checkDate, 
-			BigDecimal sampleWeight, boolean precentage,
-			BigDecimal humidity, BigDecimal breakage,
-			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, 
-			BigDecimal shrivel, BigDecimal desert, BigDecimal deepSpot, 
-			BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 
-			BigDecimal decay, BigDecimal insectDamage, BigDecimal testa) {
-		this.checkedBy = checkedBy.toString();
-		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		this.checkDate = checkDate;
-		this.humidity = humidity;
-		
-		RawDefects rawDefects = new RawDefects(scorched, deepCut, offColour, shrivel, desert, deepSpot);		
-		RawDamage rawDamage = new RawDamage(mold, dirty, lightDirty, decay, insectDamage, testa);
-		
-		this.precentage = precentage;
-		BigDecimal divisor;
-		if(precentage) {
-			divisor = BigDecimal.valueOf(100L);
-		}
-		else{		
-			divisor = sampleWeight;
-		}
-		if(breakage != null) {
-			this.breakage = breakage.divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
-		}
-		else {
-			this.breakage = null;
-		}
-		this.totalDefects = rawDefects.getTotal().divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
-		this.totalDamage = rawDamage.getTotal().divide(divisor, MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
-		
-		
+	private List<ItemQc> itemQcs;
+	
+	public QcReportLine(@NonNull Integer processId, 
+			QcCompany checkedBy, 
+			OffsetDateTime date, ProcessStatus status, String approvals) {
+		super();
+		this.processId = processId;
+		this.checkedBy = checkedBy;
+		setProcesses(new ProcessStateInfo(date.toLocalDate(), status, approvals));
 	}
 	
-//	public String getCheckedBy() {
-//		if(this.checkedBy != null)
-//			return this.checkedBy.toString();
-//		return null;
-//	}
-	
-	public BigDecimal getTotalDefectsAndDamage() {
-		return getTotalDamage().add(getTotalDefects());
+	public void setItemQcs(List<ItemQc> itemQcs) {
+		boolean empty = itemQcs == null || itemQcs.isEmpty();
+		this.itemQcs = empty ? null : itemQcs;
 	}
 
+	@Override
+	public Integer getId() {
+		return getProcessId();
+	}
+
+	@Override
+	public void setList(List<ItemQc> list) {
+		setItemQcs(list);
+	}
+
+	
+	
+	
 }

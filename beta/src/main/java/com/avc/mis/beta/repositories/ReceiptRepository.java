@@ -37,7 +37,8 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 			+ "join r.lifeCycle lc "
 			+ "left join r.approvals approval "
 				+ "left join approval.user u "
-		+ "where r.id = :id ")
+		+ "where r.id = :id "
+		+ "group by r ")
 	Optional<ReceiptDTO> findReceiptDTOByProcessId(int id);
 	
 	@Query("select new com.avc.mis.beta.dto.query.ReceiptItemWithStorage( "

@@ -21,6 +21,7 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.report.ReceiptReportLine;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ReceiptItemRow;
@@ -66,9 +67,11 @@ public class Receipts {
 		}
 		
 		ReceiptReportLine reportLine = new ReceiptReportLine();
+//		reportLine.set
 		reportLine.setPoCode(processRows.get(0).getPoCode());
 		reportLine.setSupplierName(processRows.get(0).getSupplierName());
-		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
+		reportLine.setProcesses(processRows.stream());
+//		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
 		
 		Stream<ItemAmount> itemAmounts = getReceiptRepository().findSummaryProducedItemAmounts(processIds);
 		reportLine.setReceived(itemAmounts.collect(Collectors.toList()));

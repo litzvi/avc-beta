@@ -76,7 +76,8 @@ public class ProductionProcesses {
 		}
 		
 		ProductionReportLine reportLine = new ProductionReportLine();
-		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
+		reportLine.setProcesses(processRows.stream());
+//		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
 		
 		Stream<ItemAmount> itemAmounts = getProcessRepository().findSummaryUsedItemAmounts(processIds);
 		Map<ItemGroup, List<ItemAmount>> itemsMap = itemAmounts.collect(Collectors.groupingBy(ItemAmount::getItemGroup));

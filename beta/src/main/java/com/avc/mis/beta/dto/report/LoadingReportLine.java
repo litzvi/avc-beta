@@ -11,7 +11,9 @@ import java.util.stream.Stream;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.utilities.ListGroup;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,21 +26,25 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class LoadingReportLine extends ReportLine implements ListGroup<ItemAmount> {
+public class LoadingReportLine extends ProductReportLine implements ListGroup<ItemAmount> {
 
+	@JsonIgnore
+	private Integer processId;
 	private ShipmentCodeBasic shipmentCode;
 	private ContainerDetails containerDetails;
 
 	private List<ItemAmount> productIn;
 	private AmountWithUnit totalProductIn;
 	
-	public LoadingReportLine(
-			Integer id, String code, String portOfDischargeCode, String portOfDischargeValue, 
-			ContainerDetails containerDetails, OffsetDateTime loadingDate) {
+	public LoadingReportLine(Integer processId, 
+			Integer shipmentId, String shipmentCode, String portOfDischargeCode, String portOfDischargeValue, 
+			ContainerDetails containerDetails, OffsetDateTime loadingDate, ProcessStatus status, String approvals) {
 		super();
-		this.shipmentCode = new ShipmentCodeBasic(id, code, portOfDischargeCode, portOfDischargeValue);
+		this.processId = processId;
+		this.shipmentCode = new ShipmentCodeBasic(shipmentId, shipmentCode,  portOfDischargeCode, portOfDischargeValue);
 		this.containerDetails = containerDetails;
-		super.setDates(Stream.of(loadingDate.toLocalDate()).collect(Collectors.toSet()));
+		super.setProcesses(new ProcessStateInfo(loadingDate.toLocalDate(), status, approvals));
+//		super.setDates(Stream.of(loadingDate.toLocalDate()).collect(Collectors.toSet()));
 	}
 
 	public void setProductIn(List<ItemAmount> productIn) {
@@ -49,7 +55,7 @@ public class LoadingReportLine extends ReportLine implements ListGroup<ItemAmoun
 
 	@Override
 	public Integer getId() {
-		return shipmentCode.getId();
+		return getProcessId();
 	}
 
 	@Override

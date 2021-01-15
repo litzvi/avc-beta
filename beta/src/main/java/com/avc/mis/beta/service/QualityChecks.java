@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
+import com.avc.mis.beta.dto.report.ItemQc;
 import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
@@ -77,12 +80,25 @@ public class QualityChecks {
 	}
 	
 	public List<QcReportLine> getQcSummary(ProcessName processName, Integer poCodeId) {
+		
 		List<QcReportLine> lines = getQcRepository().findCashewQCReportLines(processName, poCodeId, QcCompany.AVC_LAB);
+		int[] processIds = lines.stream().mapToInt(QcReportLine::getId).toArray();
+//		System.out.println("lines: " + lines.size());
 		if(lines == null || lines.isEmpty()) {
 			return null;
 		}
+		
+		Stream<ItemQc> itemQcs = getQcRepository().findCashewQcItems(processIds);
+		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getProcessId));
+		
+		for(QcReportLine line: lines) {
+			line.setItemQcs(itemsMap.get(line.getId()));
+		}
+		
+		
 		return lines;
 		
+//		return CollectionItemWithGroup.getFilledGroups(lines);
 	}
 			
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

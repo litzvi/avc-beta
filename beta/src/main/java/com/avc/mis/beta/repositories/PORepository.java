@@ -48,7 +48,8 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "left join po.approvals approval "
 				+ "left join approval.user u "
 		+ "where po.id = :processId or po_code.id = :poCodeId "
-			+ "and (:processId is null or :poCodeId is null)")
+			+ "and (:processId is null or :poCodeId is null) "
+		+ "group by po ")
 	Optional<PoDTO> findOrderById(Integer processId, Integer poCodeId);
 	
 	/**

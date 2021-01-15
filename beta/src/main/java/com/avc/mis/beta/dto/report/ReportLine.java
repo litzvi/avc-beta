@@ -6,10 +6,16 @@ package com.avc.mis.beta.dto.report;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.view.ProcessRow;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * @author zvi
@@ -17,25 +23,19 @@ import lombok.Data;
  */
 @Data
 public class ReportLine {
-
-	private Set<LocalDate> dates;
-	private List<ItemAmount> productCount;
-
-	private AmountWithUnit totalProductCount;	
 	
-	public void setProductCount(List<ItemAmount> productCount) {
-		boolean empty = productCount == null || productCount.isEmpty();
-		this.productCount = empty ? null : productCount;
-		this.totalProductCount = empty ? null : getTotalWeight(productCount);
+	private List<ProcessStateInfo> processes;
+	private Set<LocalDate> dates;
+
+	public void setProcesses(Stream<ProcessRow> processRows) {
+		this.processes = processRows.map(
+				r -> new ProcessStateInfo(r.getRecordedTime().toLocalDate(), r.getStatus(), r.getApprovals())).collect(Collectors.toList());
+		this.dates = this.processes.stream().map(r -> r.getDate()).collect(Collectors.toSet());
 	}
-
-
-	AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
-		return itemAmounts.stream().map(i -> i.getWeight()[0]).reduce(AmountWithUnit::add).get();
-//		return new AmountWithUnit[] {
-//				totalWeight.convert(MeasureUnit.KG),
-//				totalWeight.convert(MeasureUnit.LBS)};
+	
+	public void setProcesses(ProcessStateInfo process) {
+		this.processes = Stream.of(process).collect(Collectors.toList());
+		this.dates = Stream.of(process.getDate()).collect(Collectors.toSet());
 	}
-
 
 }

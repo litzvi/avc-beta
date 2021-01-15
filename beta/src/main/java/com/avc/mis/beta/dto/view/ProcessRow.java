@@ -35,6 +35,7 @@ public class ProcessRow extends BasicDTO {
 	private OffsetDateTime recordedTime;
 	private Duration duration;
 	private ProcessStatus status;
+	private String approvals;
 	 
 	private List<ProductionProcessWithItemAmount> usedItems;
 	@JsonIgnore private Optional<AmountWithUnit> usedAmounts;
@@ -47,14 +48,14 @@ public class ProcessRow extends BasicDTO {
 	
 	public ProcessRow(@NonNull Integer id, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,
-			OffsetDateTime recordedTime, Duration duration, ProcessStatus status) {
+			OffsetDateTime recordedTime, Duration duration, ProcessStatus status, String approvals) {
 		super(id);
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix);
 		this.supplierName = supplierName;
 		this.recordedTime = recordedTime;
 		this.duration = duration;
 		this.status = status;
-		
+		this.approvals = approvals;
 	}
 	
 	public void setUsedItems(List<ProductionProcessWithItemAmount> usedItems) {

@@ -9,6 +9,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -18,7 +19,11 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class ProductionReportLine extends ReportLine {
+public class ProductionReportLine extends ProductReportLine {
+	
+//	public ProductionReportLine(@NonNull Integer id) {
+//		super(id);
+//	}
 	
 	private List<ItemAmount> productIn;
 	private List<ItemAmount> ingredients;

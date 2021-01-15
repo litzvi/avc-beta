@@ -23,16 +23,20 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
 			+ "p.id, po_code.id, po_code.code, t.code, t.suffix, s.name, "
-			+ "p.recordedTime, p.duration, lc.processStatus) "
+			+ "p.recordedTime, p.duration, lc.processStatus, "
+			+ "function('GROUP_CONCAT', concat(u.username, ':', approval.decision)) ) "
 		+ "from PoProcess p "
 			+ "join p.poCode po_code "
 				+ "join po_code.contractType t "
 				+ "join po_code.supplier s "
 			+ "join p.processType pt "
 			+ "join p.lifeCycle lc "
+			+ "left join p.approvals approval "
+				+ "left join approval.user u "
 		+ "where pt.processName = :processName "
 			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
+		+ "group by p "
 		+ "order by p.recordedTime desc ")
 	List<ProcessRow> findProcessByType(ProcessName processName, Integer poCodeId, boolean cancelled);
 

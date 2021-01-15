@@ -34,7 +34,8 @@ public interface ProductionProcessRepository extends TransactionProcessRepositor
 			+ "join r.lifeCycle lc "
 			+ "left join r.approvals approval "
 				+ "left join approval.user u "
-		+ "where r.id = :processId ")
+		+ "where r.id = :processId "
+		+ "group by r ")
 	Optional<ProductionProcessDTO> findProductionProcessDTOById(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.ProductWeightedPoDTO( "

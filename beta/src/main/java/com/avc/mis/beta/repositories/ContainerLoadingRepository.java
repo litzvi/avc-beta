@@ -26,7 +26,8 @@ import com.avc.mis.beta.entities.process.ContainerLoading;
 public interface ContainerLoadingRepository  extends TransactionProcessRepository<ContainerLoading> {
 	
 	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine("
-			+ "sc.id, sc.code, port.code, port.value, p.containerDetails, p.recordedTime, "
+			+ "p.id, sc.id, sc.code, port.code, port.value, p.containerDetails, p.recordedTime, "
+			+ "lc.processStatus, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "SUM((ui.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor)) "
@@ -44,6 +45,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 						+ "join UOM uom "
 							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
 			+ "join p.lifeCycle lc "
+			+ "left join p.approvals approval "
+				+ "left join approval.user u "
 		+ "where po_code_used_item.id = :poCodeId "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "group by p, item ")
@@ -71,7 +74,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "join r.lifeCycle lc "
 			+ "left join r.approvals approval "
 				+ "left join approval.user u "
-		+ "where r.id = :processId ")
+		+ "where r.id = :processId "
+		+ "group by r ")
 	Optional<ContainerLoadingDTO> findContainerLoadingDTOById(int processId);
 
 	/**

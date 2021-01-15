@@ -26,6 +26,7 @@ import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
+import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.report.ProductionReportLine;
 import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.dto.report.ReceiptReportLine;
@@ -90,7 +91,7 @@ public class QueryTest {
 	@Autowired ProductionProcesses productionProcesses;
 	@Autowired Loading loading;
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void queryTest() {
 
@@ -355,10 +356,19 @@ public class QueryTest {
 	@Test
 	void oneQueryTest() {
 				
-		System.out.println(processInfoReader.getFinalReport(14107));
+		FinalReport finalReport;
+		try {
+			finalReport = processInfoReader.getFinalReport(5);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+		System.out.println(finalReport);
+		System.out.println(finalReport.getReceiptQC());
 		
-		List<PoCodeDTO> poCodes = objectTablesReader.findFreePoCodes();
-		poCodes.forEach(i -> System.out.println(i));
+//		List<PoCodeDTO> poCodes = objectTablesReader.findFreePoCodes();
+//		poCodes.forEach(i -> System.out.println(i));
 
 		
 //		List<QcReportLine> qcReportLines = qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, 1234);

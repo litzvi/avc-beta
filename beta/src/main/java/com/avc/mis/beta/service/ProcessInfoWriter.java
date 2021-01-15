@@ -152,6 +152,7 @@ public class ProcessInfoWriter {
 	public void removeAllProcesses(Integer poCodeId) {
 		List<ProcessBasic> processes = processInfoReader.getAllProcessesByPo(poCodeId);
 		processes.forEach(i -> removeProcess(i.getId(), i.getProcessClazz()));
+		//find used items that are disappearing
 		//delete po code
 		deletableDAO.permenentlyRemoveEntity(PoCode.class, poCodeId);
 	}

@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.basic.ValueEntityObject;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
+import com.avc.mis.beta.dto.report.ItemQc;
 import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
@@ -130,7 +131,25 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 	List<CashewQcRow> findCashewQualityChecks(ProcessName[] processNames, Integer poId);
 
 	@Query("select new com.avc.mis.beta.dto.report.QcReportLine( "
-			+ "qc.checkedBy, i.id, i.value, qc.recordedTime, "
+			+ "qc.id, qc.checkedBy, "
+			+ "qc.recordedTime, "
+			+ "lc.processStatus, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
+		+ "from QualityCheck qc "
+			+ "join qc.poCode po_code "
+			+ "join qc.processType pt "
+			+ "join qc.lifeCycle lc "
+			+ "left join qc.approvals approval "
+				+ "left join approval.user u "
+		+ "where pt.processName = :processName "
+			+ "and po_code.id = :poId "
+			+ "and qc.checkedBy = :qcCompany "
+		+ "group by qc "
+		+ "order by qc.recordedTime desc ")
+	List<QcReportLine> findCashewQCReportLines(ProcessName processName, Integer poId, QcCompany qcCompany);
+
+	@Query("select new com.avc.mis.beta.dto.report.ItemQc( "
+			+ "qc.id, "
+			+ "i.id, i.value, "
 			+ "ti.sampleWeight, ti.precentage, "
 			+ "ti.humidity, ti.breakage,"
 				+ "def.scorched, def.deepCut, def.offColour, "
@@ -144,11 +163,35 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 				+ "join ti.damage dam "
 			+ "join qc.poCode po_code "
 			+ "join qc.processType pt "
-		+ "where pt.processName = :processName "
-			+ "and po_code.id = :poId "
-			+ "and qc.checkedBy = :qcCompany "
-		+ "order by qc.recordedTime desc ")
-	List<QcReportLine> findCashewQCReportLines(ProcessName processName, Integer poId, QcCompany qcCompany);
+		+ "where qc.id in :processIds "
+		+ "order by ti.ordinal ")
+	Stream<ItemQc> findCashewQcItems(int[] processIds);
+
+//	@Query("select com.avc.mis.beta.dto.query.ItemQcWithQcReportLine( "
+//			+ "qc.id, qc.checkedBy, "
+//			+ "qc.recordedTime, lc.processStatus, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
+//			+ "i.id, i.value, "
+//			+ "ti.sampleWeight, ti.precentage, "
+//			+ "ti.humidity, ti.breakage,"
+//				+ "def.scorched, def.deepCut, def.offColour, "
+//				+ "def.shrivel, def.desert, def.deepSpot, "
+//				+ "dam.mold, dam.dirty, dam.lightDirty, "
+//				+ "dam.decay, dam.insectDamage, dam.testa) "
+//		+ "from QualityCheck qc "
+//			+ "join qc.testedItems ti "
+//				+ "join ti.item i "
+//				+ "join ti.defects def "
+//				+ "join ti.damage dam "
+//			+ "join qc.poCode po_code "
+//			+ "join qc.processType pt "
+//			+ "join qc.lifeCycle lc "
+//			+ "left join qc.approvals approval "
+//				+ "left join approval.user u "
+//		+ "where pt.processName = :processName "
+//			+ "and po_code.id = :poId "
+//			+ "and qc.checkedBy = :qcCompany "
+//		+ "order by qc.recordedTime desc ")
+//	List<ItemQcWithQcReportLine> findCashewQcItemsWithQcReportLine(ProcessName processName, Integer poId, QcCompany qcCompany);
 
 		
 	

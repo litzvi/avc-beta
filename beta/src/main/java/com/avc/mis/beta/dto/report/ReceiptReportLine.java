@@ -10,6 +10,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -19,8 +20,12 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class ReceiptReportLine extends ReportLine {
+public class ReceiptReportLine extends ProductReportLine {
 
+//	public ReceiptReportLine(@NonNull Integer id) {
+//		super(id);
+//	}
+	
 	private PoCodeBasic poCode;
 	private String supplierName;
 
