@@ -156,7 +156,13 @@ public class Orders {
 //		session.save(po.getPoCode());
 
 		//TODO check poCode is available
-		dao.addGeneralProcessEntity(po);			
+		if(dao.isPoCodeFree(po.getPoCode())) {
+			dao.addGeneralProcessEntity(po);						
+		}
+		else {
+			throw new IllegalArgumentException("Po Code is already used for another order or receipt");
+		}
+		
 	}
 
 	/**

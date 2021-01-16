@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.dto.query.StorageBalance;
+import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -27,6 +28,7 @@ import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.TransactionProcess;
@@ -36,6 +38,7 @@ import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.InventoryRepository;
+import com.avc.mis.beta.repositories.ObjectTablesRepository;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 
 import lombok.AccessLevel;
@@ -56,6 +59,7 @@ public class ProcessInfoDAO extends DAO {
 	
 	@Autowired private ProcessInfoRepository processRepository;
 	@Autowired private InventoryRepository inventoryRepository;
+	@Autowired private ObjectTablesRepository objectTablesRepository;
 	
 	/**
 	 * Gets the ProcessType by it's unique name. 
@@ -407,6 +411,20 @@ public class ProcessInfoDAO extends DAO {
 		else {
 			throw new AccessControlException("Can't change message label for another user");
 		}
+	}
+
+	/**
+	 * Checks if po code is free to use for a new order or receipt.
+	 * Considered free only if it wasn't used for another order or receipt that weren't cancelled.
+	 * @param poCode po code to check
+	 * @return true if given PO Code isn't used
+	 */
+	public boolean isPoCodeFree(PoCode poCode) {
+		List<PoCodeDTO> poCodes = getObjectTablesRepository().findFreePoCodes(poCode.getId());
+		if(poCodes == null || poCodes.size() == 0) {
+			return false;
+		}
+		return true;
 	}
 
 	

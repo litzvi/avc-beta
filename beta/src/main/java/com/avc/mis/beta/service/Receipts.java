@@ -217,7 +217,12 @@ public class Receipts {
 //		addOrderReceipt(receipt);
 
 		//TODO check poCode is available
-		dao.addGeneralProcessEntity(receipt);
+		if(dao.isPoCodeFree(receipt.getPoCode())) {
+			dao.addGeneralProcessEntity(receipt);
+		}
+		else {
+			throw new IllegalArgumentException("Po Code is already used for another order or receipt");
+		}
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

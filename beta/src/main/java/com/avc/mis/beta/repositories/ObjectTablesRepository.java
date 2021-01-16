@@ -188,21 +188,23 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 		+ "from PoCode po_code "
 			+ "join po_code.contractType c "
 			+ "join po_code.supplier s "
-		+ "where po_code.processes is empty "
-			+ "or not exists ("
-				+ "select p_2 "
-				+ "from po_code.processes p_2 "
-					+ "left join PO po "
-						+ "on p_2 = po "
-					+ "left join Receipt r "
-						+ "on p_2 = r "
-					+ "join p_2.lifeCycle lc_2 "
-				+ "where "
-					+ "(po is not null or r is not null) "
-					+ "and lc_2.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+		+ "where (po_code.id = :poCodeId or :poCodeId is null) "
+			+ "and (po_code.processes is empty "
+				+ "or not exists ("
+					+ "select p_2 "
+					+ "from po_code.processes p_2 "
+						+ "left join PO po "
+							+ "on p_2 = po "
+						+ "left join Receipt r "
+							+ "on p_2 = r "
+						+ "join p_2.lifeCycle lc_2 "
+					+ "where "
+						+ "(po is not null or r is not null) "
+						+ "and lc_2.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+				+ ")"
 			+ ") "
 		+ "order by po_code.id desc ")
-	List<PoCodeDTO> findFreePoCodes();
+	List<PoCodeDTO> findFreePoCodes(Integer poCodeId);
 
 	
 }

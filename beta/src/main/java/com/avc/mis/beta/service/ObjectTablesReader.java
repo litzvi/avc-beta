@@ -90,7 +90,7 @@ public class ObjectTablesReader {
 //---------------------------------DTOs---------------------------------------------------------
 	
 	public List<PoCodeDTO> findFreePoCodes() {
-		return getObjectTablesRepository().findFreePoCodes();		
+		return getObjectTablesRepository().findFreePoCodes(null);		
 	}
 	
 	/**
