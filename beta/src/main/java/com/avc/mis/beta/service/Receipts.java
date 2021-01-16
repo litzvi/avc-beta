@@ -21,7 +21,6 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.report.ReceiptReportLine;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ReceiptItemRow;
@@ -216,6 +215,8 @@ public class Receipts {
 		//using save rather than persist in case POid was assigned by user
 //		dao.addEntityWithFlexibleGenerator(receipt.getPoCode());
 //		addOrderReceipt(receipt);
+
+		//TODO check poCode is available
 		dao.addGeneralProcessEntity(receipt);
 	}
 	

@@ -52,6 +52,8 @@ public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> 
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));
 		super.setUsedItemGroups(Arrays.stream(process.getUsedItemGroups())
 				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
+		setProductWeightedPos(Arrays.stream(process.getProductWeightedPos())
+				.map(i->{return new ProductWeightedPoDTO(i);}).collect(Collectors.toList()));
 
 	}
 	

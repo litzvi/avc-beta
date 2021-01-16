@@ -38,6 +38,6 @@ public class BasicStorageDTO extends SubjectDataDTO {
 
 	public BasicStorageDTO(@NonNull Storage storage) {
 		super(storage.getId(), storage.getVersion(), storage.getOrdinal());
-		this.amount = storage.getNumberUnits().setScale(MeasureUnit.SCALE);;
+		this.amount = storage.getNumberUnits().setScale(MeasureUnit.SCALE);
 	}
 }

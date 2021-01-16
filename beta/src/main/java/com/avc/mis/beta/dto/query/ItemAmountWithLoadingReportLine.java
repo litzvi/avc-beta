@@ -16,7 +16,6 @@ import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
-import lombok.Data;
 import lombok.Value;
 
 /**

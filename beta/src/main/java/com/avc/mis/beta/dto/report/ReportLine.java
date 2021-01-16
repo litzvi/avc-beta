@@ -9,13 +9,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.view.ProcessRow;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
 
 /**
  * @author zvi

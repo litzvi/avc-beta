@@ -5,13 +5,11 @@ package com.avc.mis.beta.dto.report;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.item.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

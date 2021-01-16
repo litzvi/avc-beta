@@ -3,20 +3,6 @@
  */
 package com.avc.mis.beta.dto.query;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-
-import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.report.ItemQc;
-import com.avc.mis.beta.dto.report.LoadingReportLine;
-import com.avc.mis.beta.dto.report.QcReportLine;
-import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
-
-import lombok.Data;
-import lombok.NonNull;
-import lombok.Value;
-
 /**
  * @author zvi
  *

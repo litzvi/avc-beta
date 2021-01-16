@@ -154,6 +154,8 @@ public class Orders {
 //		dao.addEntityWithFlexibleGenerator(po.getPoCode());
 //		Session session = getEntityManager().unwrap(Session.class);
 //		session.save(po.getPoCode());
+
+		//TODO check poCode is available
 		dao.addGeneralProcessEntity(po);			
 	}
 

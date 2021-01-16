@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.ProcessInfoEntity;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.PoCode;
 
 import lombok.Data;
@@ -34,7 +35,7 @@ public class ProductWeightedPo extends ProcessInfoEntity {
 	@JoinColumn(nullable = false)
 	private PoCode poCode;
 	
-	@Column(nullable = false)
+	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	private BigDecimal weight = BigDecimal.ONE;
 
 }
