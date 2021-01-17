@@ -7,18 +7,27 @@ import java.time.LocalDate;
 
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 
+import lombok.Data;
 import lombok.Value;
 
 /**
  * @author zvi
  *
  */
-@Value
+@Data
 public class ProcessStateInfo {
 
 	LocalDate date;
 	ProcessStatus status;
 	String approvals;
+	
+	public ProcessStateInfo(LocalDate date, ProcessStatus status, String approvals) {
+		super();
+		this.date = date;
+		this.status = status;
+		this.approvals = approvals;
+	}
+
 	
 	
 }

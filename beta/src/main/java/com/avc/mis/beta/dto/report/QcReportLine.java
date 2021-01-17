@@ -23,7 +23,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class QcReportLine extends ReportLine implements ListGroup<ItemQc> {
+public class QcReportLine extends ProcessStateInfo implements ListGroup<ItemQc> {
 
 	@JsonIgnore
 	private Integer processId;
@@ -35,10 +35,10 @@ public class QcReportLine extends ReportLine implements ListGroup<ItemQc> {
 	public QcReportLine(@NonNull Integer processId, 
 			QcCompany checkedBy, 
 			OffsetDateTime date, ProcessStatus status, String approvals) {
-		super();
+		super(date.toLocalDate(), status, approvals);
 		this.processId = processId;
 		this.checkedBy = checkedBy;
-		setProcesses(new ProcessStateInfo(date.toLocalDate(), status, approvals));
+//		setProcesses(new ProcessStateInfo(date.toLocalDate(), status, approvals));
 	}
 	
 	public void setItemQcs(List<ItemQc> itemQcs) {

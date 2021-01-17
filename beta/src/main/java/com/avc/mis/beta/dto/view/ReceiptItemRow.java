@@ -34,7 +34,9 @@ public class ReceiptItemRow extends BasicDTO {
 	BasicValueEntity<Item> item;
 //	String itemName;
 	AmountWithUnit orderAmount;
+	AmountWithUnit receivedOrderUnits;
 	AmountWithUnit orderBalance;
+	@JsonIgnore
 	OffsetDateTime receiptDate;
 	@JsonIgnore
 	ProcessStatus status;
@@ -46,7 +48,9 @@ public class ReceiptItemRow extends BasicDTO {
 	public ReceiptItemRow(@NonNull Integer id, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			Integer itemId, String itemValue,
-			BigDecimal orderAmount, MeasureUnit orderMU, OffsetDateTime receiptDate, ProcessStatus status,
+			BigDecimal orderAmount, MeasureUnit orderMU, 
+			BigDecimal receivedOrderAmount, MeasureUnit receivedOrderMU, 			
+			OffsetDateTime receiptDate, ProcessStatus status,
 			BigDecimal receiptAmount, MeasureUnit receiptMU, String storage, 
 			BigDecimal extraAdded, MeasureUnit extraAddedMU) {
 		super(id);
@@ -64,6 +68,7 @@ public class ReceiptItemRow extends BasicDTO {
 			this.orderAmount = null;
 			this.orderBalance = null;
 		}
+		this.receivedOrderUnits = new AmountWithUnit(receivedOrderAmount, receivedOrderMU);
 		this.receiptDate = receiptDate;
 		this.status = status;
 		
