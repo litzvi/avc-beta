@@ -199,6 +199,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 		+ "where po_code.id = :poCodeId ")
 	PoFinalReport findFinalReportBasic(@NonNull Integer poCodeId);
 
+	//TODO check if can change number of units
 	@Query("select new java.lang.Boolean(count(*) > 0) "
 			+ "from ProcessWithProduct p "
 				+ "join p.processItems pi "

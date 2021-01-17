@@ -31,17 +31,12 @@ public class ProductReportLine extends ReportLine {
 	public void setProductCount(List<ItemAmount> productCount) {
 		boolean empty = productCount == null || productCount.isEmpty();
 		this.productCount = empty ? null : productCount;
-		this.totalProductCount = empty ? null : getTotalWeight(productCount);
+		this.totalProductCount = empty ? null : FinalReport.getTotalWeight(productCount);
 	}
 	
 
 
-	static AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
-		return itemAmounts.stream().map(i -> i.getWeight()[0]).reduce(AmountWithUnit::add).get();
-//		return new AmountWithUnit[] {
-//				totalWeight.convert(MeasureUnit.KG),
-//				totalWeight.convert(MeasureUnit.LBS)};
-	}
+	
 
 
 }

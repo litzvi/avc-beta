@@ -3,7 +3,7 @@
   realizations="false" associations="true" dependencies="true" nesting-relationships="false" router="FAN">  
   <class id="1" language="java" name="com.avc.mis.beta.dto.report.ReportLine" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/report/ReportLine.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="93" width="269" x="873" y="66"/>    
+    <position height="-1" width="-1" x="1604" y="117"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,7 +12,7 @@
   </class>  
   <class id="2" language="java" name="com.avc.mis.beta.dto.report.LoadingReportLine" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/report/LoadingReportLine.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="527" y="688"/>    
+    <position height="-1" width="-1" x="971" y="349"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -22,7 +22,7 @@
   <class id="3" language="java" name="com.avc.mis.beta.dto.report.ProductionReportLine" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/report/ProductionReportLine.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1030" y="736"/>    
+    <position height="-1" width="-1" x="1461" y="734"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -31,25 +31,25 @@
   </class>  
   <class id="4" language="java" name="com.avc.mis.beta.dto.report.ReceiptReportLine" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/report/ReceiptReportLine.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1447" y="676"/>    
+    <position height="-1" width="-1" x="1805" y="690"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="com.avc.mis.beta.dto.report.QcReportLine" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/report/QcReportLine.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="701" y="389"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="6" language="java" name="com.avc.mis.beta.dto.report.ProductReportLine" project="beta" 
+  <class id="5" language="java" name="com.avc.mis.beta.dto.report.ProductReportLine" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/report/ProductReportLine.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1009" y="383"/>    
+    <position height="-1" width="-1" x="1606" y="388"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="6" language="java" name="com.avc.mis.beta.dto.report.QcReportLine" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/report/QcReportLine.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="571" y="332"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -58,7 +58,7 @@
   </class>  
   <class id="7" language="java" name="com.avc.mis.beta.dto.report.ItemQc" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/report/ItemQc.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="193" width="228" x="47" y="269"/>    
+    <position height="193" width="228" x="79" y="244"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -66,32 +66,24 @@
     </display>  
   </class>  
   <dependency id="8">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="6"/>  
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
   </dependency>  
   <dependency id="9">    
-    <end type="SOURCE" refId="6"/>    
+    <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
-  <dependency id="10">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <association id="11">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="12" name="itemQcs"/>      
-      <multiplicity id="13" minimum="0" maximum="2147483647"/>    
+  <association id="10">    
+    <end type="SOURCE" refId="6" navigable="false">      
+      <attribute id="11" name="itemQcs"/>      
+      <multiplicity id="12" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="14">    
+  <dependency id="13">    
     <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="15">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="1"/>  
+    <end type="TARGET" refId="5"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    

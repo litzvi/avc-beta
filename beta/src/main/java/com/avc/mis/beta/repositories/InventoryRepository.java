@@ -73,6 +73,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "join poCode.supplier s "
 					+ "join Receipt r "
 						+ "on r.poCode = poCode "
+						+ "join r.lifeCycle receipt_lc "
 			+ "join p.lifeCycle lc "
 			+ "join pi.allStorages sf "
 				+ "join sf.group sf_group "
@@ -86,6 +87,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "left join used_g.process used_p "
 							+ "left join used_p.lifeCycle used_lc "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and receipt_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
@@ -142,6 +144,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "join poCode.supplier s "
 					+ "join Receipt r "
 						+ "on r.poCode = poCode "
+						+ "join r.lifeCycle receipt_lc "
 				+ "join p.lifeCycle lc "
 			+ "join pi.allStorages sf "
 				+ "join sf.group sf_group "
@@ -155,6 +158,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "left join used_g.process used_p "
 							+ "left join used_p.lifeCycle used_lc "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and receipt_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
@@ -172,7 +176,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ ", 0)"
 				+ ") "
 		+ "group by pi "
-		+ "order by r.recordedTime " 
+		+ "order by r.recordedTime, p.recordedTime " 
 		+ "")
 	List<ProcessItemInventoryRow> findInventoryProcessItemRows(
 			boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId, Integer poCodeId);

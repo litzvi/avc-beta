@@ -38,7 +38,7 @@ public class ReceiptReportLine extends ProductReportLine {
 	public void setReceived(List<ItemAmount> received) {
 		boolean empty = received == null || received.isEmpty();
 		this.received = empty ? null : received;
-		this.totalReceived = empty ? null : getTotalWeight(received);
+		this.totalReceived = empty ? null : FinalReport.getTotalWeight(received);
 //		
 //		if(received == null || received.isEmpty()) {
 //			this.received = null;

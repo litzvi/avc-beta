@@ -155,6 +155,7 @@ public class ProcessInfoDAO extends DAO {
 	}
 	
 	public <T extends ProcessWithProduct<?>> void editProcessWithProductEntity(T process) {
+		//TODO check if can change number of units, if balance after change is legal
 		HashSet<Integer> storageIds = new HashSet<Integer>();
 		for(ProcessItem pi: process.getProcessItems()) {
 			storageIds.addAll(Arrays.stream(pi.getStorageForms()).map(Storage::getId).collect(Collectors.toSet()));

@@ -46,31 +46,31 @@ public class ProductionReportLine extends ProductReportLine {
 	public void setProductIn(List<ItemAmount> productIn) {
 		boolean empty = productIn == null || productIn.isEmpty();
 		this.productIn = empty ? null : productIn;
-		this.totalProductIn = empty ? null : getTotalWeight(productIn);
+		this.totalProductIn = empty ? null : FinalReport.getTotalWeight(productIn);
 	}
 
 	public void setIngredients(List<ItemAmount> ingredients) {
 		boolean empty = ingredients == null || ingredients.isEmpty();
 		this.ingredients = empty ? null : ingredients;
-		this.totalIngredients = empty ? null : getTotalWeight(ingredients);
+		this.totalIngredients = empty ? null : FinalReport.getTotalWeight(ingredients);
 	}
 
 	public void setProductOut(List<ItemAmount> productOut) {
 		boolean empty = productOut == null || productOut.isEmpty();
 		this.productOut = empty ? null : productOut;
-		this.totalProductOut = empty ? null : getTotalWeight(productOut);
+		this.totalProductOut = empty ? null : FinalReport.getTotalWeight(productOut);
 	}
 
 	public void setWaste(List<ItemAmount> waste) {
 		boolean empty = waste == null || waste.isEmpty();
 		this.waste = empty ? null : waste;
-		this.totalWaste = empty ? null : getTotalWeight(waste);
+		this.totalWaste = empty ? null : FinalReport.getTotalWeight(waste);
 	}
 
 	public void setQc(List<ItemAmount> qc) {
 		boolean empty = qc == null || qc.isEmpty();
 		this.qc = empty ? null : qc;
-		this.totalQC = empty ? null : getTotalWeight(qc);
+		this.totalQC = empty ? null : FinalReport.getTotalWeight(qc);
 	}
 
 	public AmountWithUnit getDifference() {		

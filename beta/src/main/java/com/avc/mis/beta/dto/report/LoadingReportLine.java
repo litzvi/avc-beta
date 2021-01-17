@@ -24,7 +24,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class LoadingReportLine extends ProductReportLine implements ListGroup<ItemAmount> {
+public class LoadingReportLine extends ProcessStateInfo implements ListGroup<ItemAmount> {
 
 	@JsonIgnore
 	private Integer processId;
@@ -37,18 +37,18 @@ public class LoadingReportLine extends ProductReportLine implements ListGroup<It
 	public LoadingReportLine(Integer processId, 
 			Integer shipmentId, String shipmentCode, String portOfDischargeCode, String portOfDischargeValue, 
 			ContainerDetails containerDetails, OffsetDateTime loadingDate, ProcessStatus status, String approvals) {
-		super();
+		super(loadingDate.toLocalDate(), status, approvals);
 		this.processId = processId;
 		this.shipmentCode = new ShipmentCodeBasic(shipmentId, shipmentCode,  portOfDischargeCode, portOfDischargeValue);
 		this.containerDetails = containerDetails;
-		super.setProcesses(new ProcessStateInfo(loadingDate.toLocalDate(), status, approvals));
+//		super.setProcesses(new ProcessStateInfo(loadingDate.toLocalDate(), status, approvals));
 //		super.setDates(Stream.of(loadingDate.toLocalDate()).collect(Collectors.toSet()));
 	}
 
 	public void setProductIn(List<ItemAmount> productIn) {
 		boolean empty = productIn == null || productIn.isEmpty();
 		this.productIn = empty ? null : productIn;
-		this.totalProductIn = empty ? null : getTotalWeight(productIn);
+		this.totalProductIn = empty ? null : FinalReport.getTotalWeight(productIn);
 	}
 
 	@Override
