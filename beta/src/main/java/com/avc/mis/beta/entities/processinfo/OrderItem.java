@@ -16,6 +16,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -106,6 +108,11 @@ public class OrderItem extends RankedAuditedEntity {
 		else {
 			throw new ClassCastException("Referenced object isn't a purchase order");
 		}		
+	}
+	
+	@PrePersist @PreUpdate
+	public void measureUnitItemCompatiable() {
+		Item.measureUnitItemCompatiable(getItem().getMeasureUnit(), getNumberUnits().getMeasureUnit());
 	}
 
 }

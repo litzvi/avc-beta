@@ -130,7 +130,7 @@ public class ProcessItem extends ProcessGroupWithStorages {
 	 */
 	public void setStorage(StorageTableDTO storageTable) {
 		
-		System.out.println("edit storage table: " + storageTable);
+//		System.out.println("edit storage table: " + storageTable);
 		
 		setTableView(true);
 		
@@ -154,16 +154,16 @@ public class ProcessItem extends ProcessGroupWithStorages {
 	
 	@PrePersist @PreUpdate
 	public void measureUnitItemCompatiable() {
-		MeasureUnit itemDefaultMU = item.getMeasureUnit();
-		if(MeasureUnit.DISCRETE_UNITS.contains(itemDefaultMU) ^ MeasureUnit.DISCRETE_UNITS.contains(getMeasureUnit())) {
-			if(MeasureUnit.DISCRETE_UNITS.contains(itemDefaultMU)) {
-				throw new IllegalArgumentException("Discrete item can't have a weight measure unit");
-			}
-			else {
-				throw new IllegalArgumentException("Bulk weight item can't have a Discrete measure unit");
-			}
-//			throw new IllegalArgumentException("Measure unit has to be convirtable to item default measure unit");
-		}
+		Item.measureUnitItemCompatiable(item.getMeasureUnit(), getMeasureUnit());
+//		MeasureUnit itemDefaultMU = item.getMeasureUnit();
+//		if(MeasureUnit.DISCRETE_UNITS.contains(itemDefaultMU) ^ MeasureUnit.DISCRETE_UNITS.contains(getMeasureUnit())) {
+//			if(MeasureUnit.DISCRETE_UNITS.contains(itemDefaultMU)) {
+//				throw new IllegalArgumentException("Discrete item can't have a weight measure unit");
+//			}
+//			else {
+//				throw new IllegalArgumentException("Bulk weight item can't have a Discrete measure unit");
+//			}
+//		}
 	}
 	
 

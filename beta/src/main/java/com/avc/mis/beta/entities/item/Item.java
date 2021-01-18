@@ -82,5 +82,17 @@ public class Item extends ValueEntity implements ValueInterface {
 	@Column(nullable = false)
 	@NotNull(message = "Item production use/stage is mandatory")
 	private ProductionUse productionUse;
+	
+	public static void measureUnitItemCompatiable(MeasureUnit itemDefault, MeasureUnit measureUnit) {
+//		MeasureUnit itemDefaultMU = item.getMeasureUnit();
+		if(MeasureUnit.DISCRETE_UNITS.contains(itemDefault) ^ MeasureUnit.DISCRETE_UNITS.contains(measureUnit)) {
+			if(MeasureUnit.DISCRETE_UNITS.contains(itemDefault)) {
+				throw new IllegalArgumentException("Discrete item can't have a weight measure unit");
+			}
+			else {
+				throw new IllegalArgumentException("Bulk weight item can't have a Discrete measure unit");
+			}
+		}
+	}
 
 }
