@@ -25,6 +25,7 @@ import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
+import com.avc.mis.beta.repositories.ProcessInfoRepository;
 
 /**
  * @author Zvi
@@ -39,6 +40,8 @@ public class ProcessInfoWriter {
 	@Autowired private DeletableDAO deletableDAO;
 	
 	@Autowired private ProcessInfoReader processInfoReader;
+	
+	@Autowired private ProcessInfoRepository processInfoRepository;
 
 
 	@Deprecated

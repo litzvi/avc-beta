@@ -91,7 +91,7 @@ public class ProcessInfoDAO extends DAO {
 	public void addTransactionProcessEntity(TransactionProcess<?> process) {
 		addGeneralProcessEntity(process);
 		//check used items amounts () don't exceed the storage amounts
-		if(!isInventorySufficiant(process.getId())) {
+		if(!isUsedInventorySufficiant(process.getId())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
 	}
@@ -113,9 +113,9 @@ public class ProcessInfoDAO extends DAO {
 	 * @param usedItems array of UsedItem
 	 * @return true if for all storages, used amounts are equal or less than storage amount, false otherwise
 	 */
-	private boolean isInventorySufficiant(Integer processId) {
+	private boolean isUsedInventorySufficiant(Integer processId) {
 		
-		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageBalances(processId);
+		Stream<StorageBalance> storageBalances = getInventoryRepository().findUsedStorageBalances(processId);
 		return storageBalances.allMatch(b -> b.isLegal());
 //		Map<Integer, StorageBalance> storageBalanceMap = storageBalances.collect(Collectors.toMap(StorageBalance::getId, o -> o));
 //		for(UsedItem i: usedItems) {
@@ -125,6 +125,12 @@ public class ProcessInfoDAO extends DAO {
 //		}
 //		
 //		return true;
+	}
+	
+	private boolean isProducedInventorySufficiant(Integer processId) {
+		
+		Stream<StorageBalance> storageBalances = getInventoryRepository().findProducedStorageBalances(processId);
+		return storageBalances.allMatch(b -> b.isLegal());
 	}
 
 	/**
@@ -163,8 +169,12 @@ public class ProcessInfoDAO extends DAO {
 		if(getProcessRepository().isRemovingUsedProduct(process.getId(), storageIds)) {
 			throw new AccessControlException("Process items can't be edited because they are already in use");
 		}
+		
 		editGeneralProcessEntity(process);	
 
+		if(!isProducedInventorySufficiant(process.getId())) {
+			throw new IllegalArgumentException("Process produced amounts can't be reduced because already in use");
+		}
 	}
 	
 	/**
@@ -175,7 +185,7 @@ public class ProcessInfoDAO extends DAO {
 	public <T extends TransactionProcess<?>> void editTransactionProcessEntity(T process) {
 		editProcessWithProductEntity(process);
 		//check used items amounts (after edit) don't exceed the storage amounts
-		if(!isInventorySufficiant(process.getId())) {
+		if(!isUsedInventorySufficiant(process.getId())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
 	}
@@ -355,7 +365,7 @@ public class ProcessInfoDAO extends DAO {
 			
 			//check that process items aren't used so can be cancelled
 			if(processStatus == ProcessStatus.CANCELLED && getProcessRepository().isProcessReferenced(processId)) {
-				throw new IllegalStateException("Can't cancel process who's items are used in another process");			
+				throw new IllegalStateException("Process can't be cancelled, is referenced by other not cancelled processes");			
 			}
 			
 //			processLifeCycle.setStatus(recordStatus); // record status is not updatable for security
@@ -384,10 +394,10 @@ public class ProcessInfoDAO extends DAO {
 		ProcessLifeCycle processLifeCycle = optional
 			.orElseThrow(() -> new AccessControlException("You don't have permission to manage process life cycle"));
 				
-		//check that process items aren't used so can't be edited
-		if(editStatus == EditStatus.EDITABLE && getProcessRepository().isProcessReferenced(processId)) {
-			throw new IllegalStateException("Can't edit process who's items are used in another process");			
-		}
+		//check that process items aren't used so can't be edited -- chnged now can be edited, as long as there is no contradiction
+//		if(editStatus == EditStatus.EDITABLE && getProcessRepository().isProcessReferenced(processId)) {
+//			throw new IllegalStateException("Can't edit process who's items are used in another process");			
+//		}
 		
 		CriteriaUpdate<ProcessLifeCycle> update = 
 	    		getEntityManager().getCriteriaBuilder().createCriteriaUpdate(ProcessLifeCycle.class);

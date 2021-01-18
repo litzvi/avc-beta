@@ -205,7 +205,26 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 										+ "join used_p.lifeCycle used_lc "
 			+ "where p.id = :processId "
 			+ "group by s ")
-	Stream<StorageBalance> findStorageBalances(Integer processId);
+	Stream<StorageBalance> findUsedStorageBalances(Integer processId);
+	
+	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
+			+ "s.id, s.numberUnits, "
+			+ "SUM("
+			+ "(CASE "
+				+ "WHEN (used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
+					+ "THEN ui.numberUnits "
+				+ "ELSE 0 "
+			+ "END))) "
+			+ "from ProcessWithProduct p "
+				+ "join p.processItems pi "
+					+ "join pi.storageForms s "
+						+ "join s.usedItems ui "
+							+ "join ui.group used_g "
+								+ "join used_g.process used_p "
+									+ "join used_p.lifeCycle used_lc "
+			+ "where p.id = :processId "
+			+ "group by s ")
+	Stream<StorageBalance> findProducedStorageBalances(Integer processId);
 
 
 	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("

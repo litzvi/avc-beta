@@ -33,15 +33,15 @@ public class ReceiptItemRow extends BasicDTO {
 	String supplierName;
 	BasicValueEntity<Item> item;
 //	String itemName;
-	AmountWithUnit orderAmount;
 	AmountWithUnit receivedOrderUnits;
+	@JsonIgnore
+	AmountWithUnit receiptAmt;
+	AmountWithUnit orderAmount;
 	AmountWithUnit orderBalance;
 	@JsonIgnore
 	OffsetDateTime receiptDate;
 	@JsonIgnore
 	ProcessStatus status;
-	@JsonIgnore
-	AmountWithUnit receiptAmt;
 	String storage;
 	AmountWithUnit extraAdded;
 	
@@ -59,20 +59,20 @@ public class ReceiptItemRow extends BasicDTO {
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 //		this.itemName = itemName;
 
-		AmountWithUnit receiptAmt = new AmountWithUnit(receiptAmount, receiptMU);
+		this.receivedOrderUnits = new AmountWithUnit(receivedOrderAmount, receivedOrderMU);
+		this.receiptAmt = new AmountWithUnit(receiptAmount, receiptMU);
+		this.orderBalance = this.receiptAmt.subtract(this.receivedOrderUnits);
 		if(orderAmount != null) {
 			this.orderAmount = new AmountWithUnit(orderAmount, orderMU);
-			this.orderBalance = receiptAmt.subtract(this.orderAmount);
+//			this.orderBalance = this.receiptAmt.subtract(this.orderAmount);
 		}
 		else {
 			this.orderAmount = null;
-			this.orderBalance = null;
+//			this.orderBalance = null;
 		}
-		this.receivedOrderUnits = new AmountWithUnit(receivedOrderAmount, receivedOrderMU);
 		this.receiptDate = receiptDate;
 		this.status = status;
 		
-		this.receiptAmt = receiptAmt;
 //		this.receiptAmount = new AmountWithUnit[] {
 //				receiptAmt,
 //				receiptAmt.convert(MeasureUnit.LBS)

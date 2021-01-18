@@ -153,15 +153,22 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	ProcessLifeCycle findProcessEditStatus(Integer processId);
 
 	@Query("select new java.lang.Boolean(count(*) > 0) "
-			+ "from TransactionProcess p "
-				+ "join p.usedItemGroups grp "
-					+ "join grp.usedItems ui "
-						+ "join ui.storage s "
-							+ "join s.processItem pi "
-								+ "join pi.process ui_origion_p "
-				+ "join p.lifeCycle c "
-			+ "where ui_origion_p.id = :processId "
-				+ "and c.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
+			+ "from ProcessWithProduct p "
+				+ "join p.processItems pi "
+					+ "join pi.storageForms s "
+						+ "join s.usedItems ui "
+							+ "join ui.group used_g "
+								+ "join used_g.process used_p "
+									+ "join used_p.lifeCycle used_lc "
+//			+ "from TransactionProcess p "
+//				+ "join p.usedItemGroups grp "
+//					+ "join grp.usedItems ui "
+//						+ "join ui.storage s "
+//							+ "join s.processItem pi "
+//								+ "join pi.process ui_origion_p "
+//				+ "join p.lifeCycle c "
+			+ "where p.id = :processId "
+				+ "and used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
 	Boolean isProcessReferenced(Integer processId);
 
 
@@ -207,9 +214,9 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 						+ "join sf.usedItems using_items "
 							+ "join using_items.group ui_g "
 								+ "join ui_g.process ui_origion_p "
-									+ "join ui_origion_p.lifeCycle c "
+									+ "join ui_origion_p.lifeCycle ui_p_lc "
 			+ "where p.id = :processId "
-				+ "and c.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+				+ "and ui_p_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
 				+ "and sf.id not in :storageIds ")
 	Boolean isRemovingUsedProduct(Integer processId, Set<Integer> storageIds);
 
