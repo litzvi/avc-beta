@@ -60,6 +60,7 @@ public class Orders {
 	 * Get all cashew orders with the order status - pending, received, rejected or cancelled.
 	 * @return list of PoRow for all orders
 	 */
+	@Deprecated
 	public List<PoRow> findAllCashewOrdersHistory() {
 		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values());
 		return getPoRows(itemRows);
@@ -69,6 +70,7 @@ public class Orders {
 	 * Gat all General orders with the order status - pending, received, rejected but not cancelled.
 	 * @return list of PoRow for all orders
 	 */
+	@Deprecated
 	public List<PoRow> findAllGeneralOrders() {
 		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER,
 				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
@@ -79,6 +81,7 @@ public class Orders {
 	 * Get the table of all Cashew purchase orders that are active and where not received.
 	 * @return list of PoRow for orders that are yet to be received
 	 */
+	@Deprecated
 	public List<PoRow> findOpenCashewOrders() {
 		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
 		
@@ -89,6 +92,7 @@ public class Orders {
 	 * Get the table of all General purchase orders that are active and where not received.
 	 * @return list of PoRow for orders that are yet to be received
 	 */
+	@Deprecated
 	public List<PoRow> findOpenGeneralOrders() {
 		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
 		System.out.println("PoItemRows size: " + itemRows.size());
@@ -128,11 +132,30 @@ public class Orders {
 	}
 	
 	/**
+	 * Get the table of all Cashew purchase orders that are not cancelled.
+	 * @return list of PoRow for all orders (not cancelled)
+	 */
+	public List<PoItemRow> findAllGeneralOrderItems() {
+		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
+		return poItemRows;
+	}
+	
+	/**
 	 * Get the table of all Cashew purchase orders including cancelled orders.
 	 * @return list of PoRow for all orders
 	 */
 	public List<PoItemRow> findAllCashewOrderItemsHistory() {
 		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values());
+		return poItemRows;
+	}
+	
+	/**
+	 * Get the table of all Cashew purchase orders including cancelled orders.
+	 * @return list of PoRow for all orders
+	 */
+	public List<PoItemRow> findAllGeneralOrderItemsHistory() {
+		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER, ProcessStatus.values());
 		return poItemRows;
 	}
 	
