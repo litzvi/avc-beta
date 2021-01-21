@@ -31,7 +31,7 @@ public class ProductReportLine extends ReportLine {
 	public void setProductCount(List<ItemAmount> productCount) {
 		boolean empty = productCount == null || productCount.isEmpty();
 		this.productCount = empty ? null : productCount;
-		this.totalProductCount = empty ? null : FinalReport.getTotalWeight(productCount);
+		this.totalProductCount = empty ? null : ItemAmount.getTotalWeight(productCount);
 	}
 	
 

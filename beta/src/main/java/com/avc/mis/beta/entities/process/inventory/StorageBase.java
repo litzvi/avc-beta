@@ -53,7 +53,7 @@ public class StorageBase extends UsedItemBase {
 	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 	@NotNull(message = "Unit amount is mandatory")
 	@Positive(message = "Unit amount has to be positive")
-	private BigDecimal unitAmount = BigDecimal.ONE;	
+	private BigDecimal unitAmount = BigDecimal.ONE;
 
 //	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 //	@NotNull(message = "Number of units is required")

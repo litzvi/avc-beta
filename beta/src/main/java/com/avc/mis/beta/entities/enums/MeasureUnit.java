@@ -25,13 +25,17 @@ import lombok.NonNull;
  */
 public enum MeasureUnit {
 	
+	NONE,
 	KG,
 	LBS,
 	LOT,
 	OZ,
 	GRAM, 
 	UNIT,
-	BOX;
+	BOX,
+	TANK,
+	BAG,
+	ROLL;
 	
 	/**
 	 * Nested map with full Cartesian product for converting from every unit to any other unit.
@@ -43,7 +47,7 @@ public enum MeasureUnit {
 	public static final Map<MeasureUnit, Map<MeasureUnit, UOM>> CONVERTION_MAP;
 	
 	public static final Set<MeasureUnit> WEIGHT_UNITS = EnumSet.of(KG, LBS, LOT, OZ, GRAM);
-	public static final Set<MeasureUnit> DISCRETE_UNITS = EnumSet.of(UNIT, BOX);
+	public static final Set<MeasureUnit> DISCRETE_UNITS = EnumSet.of(UNIT, BOX, TANK, BAG, ROLL);
 
 	
 	/**

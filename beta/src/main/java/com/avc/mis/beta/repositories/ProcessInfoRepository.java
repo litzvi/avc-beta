@@ -168,8 +168,19 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 //								+ "join pi.process ui_origion_p "
 //				+ "join p.lifeCycle c "
 			+ "where p.id = :processId "
-				+ "and used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED")
+				+ "and used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED ")
 	Boolean isProcessReferenced(Integer processId);
+	
+	@Query("select new java.lang.Boolean(count(*) > 0) "
+			+ "from PO po "
+				+ "join po.orderItems oi "
+					+ "join oi.receiptItems ri "
+						+ "join ri.process r "
+							+ "join r.lifeCycle r_lc "		
+			+ "where po.id = :processId "
+				+ "and r_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED ")
+	Boolean isOrderReferenced(Integer processId);
+
 
 
 	@Query("select a.managementType "
@@ -219,6 +230,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "and ui_p_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
 				+ "and sf.id not in :storageIds ")
 	Boolean isRemovingUsedProduct(Integer processId, Set<Integer> storageIds);
+
 
 	
 

@@ -20,12 +20,12 @@ public class BulkItem extends Item {
 
 	public BulkItem() {
 		super();
-		super.setUnit(AmountWithUnit.ONE_UNIT);
+		super.setUnit(AmountWithUnit.NEUTRAL);
 	}
 	
 	public BulkItem(MeasureUnit measureUnit) {
 		super();
-		super.setUnit(AmountWithUnit.ONE_UNIT);
+		super.setUnit(AmountWithUnit.NEUTRAL);
 		super.setMeasureUnit(measureUnit);
 	}
 	

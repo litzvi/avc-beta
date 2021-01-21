@@ -21,7 +21,7 @@ public abstract class ItemDraft {
 	
 	public ItemDraft() {
 		super();
-		setUnit(AmountWithUnit.ONE_UNIT);
+		setUnit(AmountWithUnit.NEUTRAL);
 		setDefaultMeasureUnit(MeasureUnit.UNIT);
 	}
 

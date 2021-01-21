@@ -30,7 +30,7 @@ public interface PORepository extends BaseRepository<PO> {
 	 * @param poCodeId po code id of the PO
 	 * @return PoDTO a DTO of a PO with all process information.
 	 */
-	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
+	@Query("select distinct new com.avc.mis.beta.dto.process.PoDTO("
 			+ "po.id, po.version, po.createdDate, p_user.username, "
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
@@ -49,8 +49,10 @@ public interface PORepository extends BaseRepository<PO> {
 				+ "left join approval.user u "
 		+ "where po.id = :processId or po_code.id = :poCodeId "
 			+ "and (:processId is null or :poCodeId is null) "
-		+ "group by po ")
-	Optional<PoDTO> findOrderById(Integer processId, Integer poCodeId);
+			+ "and lc.processStatus in :statuses "
+		+ "group by po "
+		+ "order by lc.processStatus ")
+	Optional<PoDTO> findOrderById(Integer processId, Integer poCodeId, ProcessStatus[] statuses);
 	
 	/**
 	 * Gets all OrderItems for a given process in a OrderItemDTO that contains order 

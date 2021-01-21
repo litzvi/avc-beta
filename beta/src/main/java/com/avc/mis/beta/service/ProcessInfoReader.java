@@ -60,6 +60,7 @@ public class ProcessInfoReader {
 	@Autowired private WarehouseManagement warehouseManagement;
 	@Autowired private ProductionProcesses productionProcesses;
 	@Autowired private Loading loading;
+	@Autowired private InventoryReports inventoryReports;
 	
 	
 	void setTransactionProcessCollections(TransactionProcessDTO<ProcessItemDTO> processDTO) {
@@ -256,6 +257,7 @@ public class ProcessInfoReader {
 	
 	public FinalReport getFinalReport(@NonNull Integer poCodeId) {
 		FinalReport report = new FinalReport();
+		report.setInventory(inventoryReports.getInventorySummary(poCodeId));
 		report.setReceipt(orderReceipts.getReceiptSummary(poCodeId));
 		report.setReceiptQC(qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, poCodeId));
 		report.setCleaning(productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, poCodeId));

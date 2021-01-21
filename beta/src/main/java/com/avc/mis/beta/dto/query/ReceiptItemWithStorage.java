@@ -51,6 +51,7 @@ public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDT
 			List<OrdinalAmount<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight, 
 			String groupName, String description, String remarks, boolean tableView,
 			BigDecimal receivedUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
+			Integer referencedOrder,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
 //		super(id);
 		this.receiptItem = new ReceiptItemDTO(id, version, ordinal,
@@ -58,7 +59,7 @@ public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDT
 				/* poCodeId, contractTypeCode, supplierName, */
 				groupName, description, remarks, tableView,
 				receivedUnits, orderMU, unitPrice, currency,
-				orderItemId, orderItemVersion, extraRequested, extraMU);
+				referencedOrder, orderItemId, orderItemVersion, extraRequested, extraMU);
 		if(ExtraAdded.class.equals(clazz)) {
 			this.storage = new ExtraAddedDTO(storageId, storageVersion, storageOrdinal, 
 					unitAmount, measureUnit, numberUnits, accessWeight,

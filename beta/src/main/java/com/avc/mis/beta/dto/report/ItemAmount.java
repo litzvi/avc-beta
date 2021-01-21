@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.report;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -57,6 +58,11 @@ public class ItemAmount {
 				amountWithUnit.convert(MeasureUnit.LBS),
 				amountWithUnit.convert(MeasureUnit.KG)};
 		AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
+	}
+	
+	@JsonIgnore
+	static AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
+		return itemAmounts.stream().map(i -> i.getWeight()[0]).reduce(AmountWithUnit::add).get();
 	}
 	
 

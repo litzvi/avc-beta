@@ -36,7 +36,9 @@ public class AmountWithUnit implements Cloneable {
 	public static final AmountWithUnit ZERO_KG = new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.KG);
 	public static final AmountWithUnit ZERO_LOT = new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.LOT);
 	public static final AmountWithUnit ZERO_LBS = new AmountWithUnit(BigDecimal.ZERO, MeasureUnit.LBS);
-	public static final AmountWithUnit ONE_UNIT = new AmountWithUnit(BigDecimal.ONE, MeasureUnit.UNIT);;
+	public static final AmountWithUnit ONE_UNIT = new AmountWithUnit(BigDecimal.ONE, MeasureUnit.UNIT);
+	public static final AmountWithUnit NEUTRAL = new AmountWithUnit(BigDecimal.ONE, MeasureUnit.NONE);;
+
 
 	@NotNull(message = "Amount is required")
 	@Positive(message = "Amount has to be positive", groups = PositiveAmount.class)

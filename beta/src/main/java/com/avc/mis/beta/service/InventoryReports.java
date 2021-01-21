@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.report.InventoryReportLine;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
@@ -24,6 +25,7 @@ import com.avc.mis.beta.repositories.InventoryRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * Service for various cashew reports
@@ -102,6 +104,17 @@ public class InventoryReports {
 //			}
 //		});
 		return inventoryRows;
+	}
+
+	/**
+	 * @param poCodeId
+	 * @return
+	 */
+	public InventoryReportLine getInventorySummary(@NonNull Integer poCodeId) {
+
+		InventoryReportLine reportLine = new InventoryReportLine();
+		reportLine.setInventory(inventoryRepository.findInventoryItemRows(false, null, ItemGroup.PRODUCT, null, poCodeId));
+		return reportLine;
 	}
 
 }

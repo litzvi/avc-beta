@@ -21,6 +21,7 @@ import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,9 +40,11 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 	private AmountWithCurrency unitPrice;
 	private DataObject<OrderItem> orderItem;
 	private AmountWithUnit extraRequested;
-//	private MeasureUnit measureUnit;
 
-//	private Set<StorageDTO> extraAdded; //can use a SortedSet like ContactDetails to maintain order	
+	@JsonIgnore
+	@EqualsAndHashCode.Exclude
+	private Integer referencedOrder;
+
 	
 	public ReceiptItemDTO(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ProductionUse productionUse, 
@@ -50,6 +53,7 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			String groupName, String description, String remarks, boolean tableView,
 			BigDecimal orderUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
+			Integer referencedOrder,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
 		super(id, version, ordinal, itemId, itemValue, productionUse, unitAmount, unitMeasureUnit, clazz, 
 				measureUnit,
@@ -60,6 +64,7 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 		if(unitPrice != null) {
 			this.unitPrice = new AmountWithCurrency(unitPrice, currency);
 		}
+		this.referencedOrder = referencedOrder;
 		if(orderItemId != null)
 			this.orderItem = new DataObject<OrderItem>(orderItemId, orderItemVersion);
 		if(extraRequested != null) {
@@ -91,8 +96,9 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 		else {
 			this.unitPrice = null;
 		}
-		if(receiptItem.getOrderItem() != null)
+		if(receiptItem.getOrderItem() != null) {
 			this.orderItem = new DataObject<OrderItem>(receiptItem.getOrderItem());
+		}
 		if(receiptItem.getExtraRequested() != null) {
 			this.extraRequested = receiptItem.getExtraRequested().setScale(MeasureUnit.SCALE);
 		}

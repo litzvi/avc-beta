@@ -48,7 +48,7 @@ public class LoadingReportLine extends ProcessStateInfo implements ListGroup<Ite
 	public void setProductIn(List<ItemAmount> productIn) {
 		boolean empty = productIn == null || productIn.isEmpty();
 		this.productIn = empty ? null : productIn;
-		this.totalProductIn = empty ? null : FinalReport.getTotalWeight(productIn);
+		this.totalProductIn = empty ? null : ItemAmount.getTotalWeight(productIn);
 	}
 
 	@Override

@@ -4,6 +4,8 @@
 package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
@@ -64,12 +66,22 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 		}
 		else 
 		{
-			throw new IllegalStateException("The class can only apply to weight items");
+			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);	
+			amountWithUnit = null;
 		}
-		this.weight = new AmountWithUnit[] {
-				amountWithUnit.convert(MeasureUnit.KG),
-				amountWithUnit.convert(MeasureUnit.LBS)};
-		AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
+//		{
+//			throw new IllegalStateException("The class can only apply to weight items");
+//		}
+		
+		if(amountWithUnit != null) {
+			this.weight = new AmountWithUnit[] {
+					amountWithUnit.convert(MeasureUnit.KG),
+					amountWithUnit.convert(MeasureUnit.LBS)};
+			AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
+		}
+		else {
+			this.weight = null;
+		}
 				
 	}
 	
@@ -78,10 +90,15 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 			String warehouses) {
 		super(id);
 		this.item = item;
-		this.weight = new AmountWithUnit[] {
-				weight.convert(MeasureUnit.KG),
-				weight.convert(MeasureUnit.LBS)};
-		AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);	
+		if(weight != null) {
+			this.weight = new AmountWithUnit[] {
+					weight.convert(MeasureUnit.KG),
+					weight.convert(MeasureUnit.LBS)};
+			AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
+		}
+		else {			
+			this.weight = null;
+		}
 		this.amount = amount;
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
@@ -89,6 +106,13 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 		else {
 			this.warehouses = null;
 		}
-	}	
+	}
+	
+	public static Optional<AmountWithUnit> getWeightSum(List<ProductionProcessWithItemAmount> items) {
+		return items.stream()
+				.filter(i -> i.getWeight() != null)
+				.map(i -> i.getWeight()[0])
+				.reduce(AmountWithUnit::add);
+	}
 	
 }

@@ -91,7 +91,8 @@ public class Orders {
 	 */
 	public List<PoRow> findOpenGeneralOrders() {
 		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
-		
+		System.out.println("PoItemRows size: " + itemRows.size());
+		getPoRows(itemRows).forEach(i -> System.out.println(i));
 		return getPoRows(itemRows);
 	}
 	
@@ -194,8 +195,8 @@ public class Orders {
 	 * @throws IllegalArgumentException if purchase order for given poCode dosen't exist.
 	 */
 	public PoDTO getOrder(int poCodeId) {
-		Optional<PoDTO> order = getPoRepository().findOrderById(null, poCodeId);
-		PoDTO po = order.orElseThrow(
+		Optional<PoDTO> orders = getPoRepository().findOrderById(null, poCodeId, new ProcessStatus[] {ProcessStatus.FINAL});
+		PoDTO po = orders.orElseThrow(
 				()->new IllegalArgumentException("No order with given PO code id"));
 		po.setOrderItems(getPoRepository().findPoOrderItemsById(po.getId()));
 		
@@ -210,7 +211,7 @@ public class Orders {
 	 * @throws IllegalArgumentException if purchase order for given process id dosen't exist.
 	 */
 	public PoDTO getOrderByProcessId(int processId) {
-		Optional<PoDTO> order = getPoRepository().findOrderById(processId, null);
+		Optional<PoDTO> order = getPoRepository().findOrderById(processId, null, ProcessStatus.values());
 		PoDTO po = order.orElseThrow(
 				()->new IllegalArgumentException("No order with given process id"));
 		po.setOrderItems(getPoRepository().findPoOrderItemsById(po.getId()));

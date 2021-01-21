@@ -17,6 +17,8 @@ import lombok.Data;
 @Data
 public class FinalReport {
 	
+	private InventoryReportLine inventory;
+	
 	private ReceiptReportLine receipt;
 	private List<QcReportLine> receiptQC;
 	private ProductionReportLine cleaning;
@@ -26,11 +28,11 @@ public class FinalReport {
 	private List<LoadingReportLine> loadings;
 	
 
-	@JsonIgnore
-	static AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
-		return itemAmounts.stream().map(i -> i.getWeight()[0]).reduce(AmountWithUnit::add).get();
+//	@JsonIgnore
+//	static AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
+//		return itemAmounts.stream().map(i -> i.getWeight()[0]).reduce(AmountWithUnit::add).get();
 //		return new AmountWithUnit[] {
 //				totalWeight.convert(MeasureUnit.KG),
 //				totalWeight.convert(MeasureUnit.LBS)};
-	}
+//	}
 }

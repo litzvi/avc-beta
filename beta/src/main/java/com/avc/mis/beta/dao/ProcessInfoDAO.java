@@ -364,7 +364,8 @@ public class ProcessInfoDAO extends DAO {
 			}
 			
 			//check that process items aren't used so can be cancelled
-			if(processStatus == ProcessStatus.CANCELLED && getProcessRepository().isProcessReferenced(processId)) {
+			if(processStatus == ProcessStatus.CANCELLED && 
+					(getProcessRepository().isProcessReferenced(processId) || getProcessRepository().isOrderReferenced(processId))) {
 				throw new IllegalStateException("Process can't be cancelled, is referenced by other not cancelled processes");			
 			}
 			

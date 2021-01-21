@@ -61,27 +61,30 @@ public class ProcessRow extends BasicDTO {
 	public void setUsedItems(List<ProductionProcessWithItemAmount> usedItems) {
 		this.usedItems = usedItems;
 		if(usedItems != null) {
-			this.usedAmounts = getUsedItems().stream()
-					.map(i -> i.getWeight()[0])
-					.reduce(AmountWithUnit::add);
+			this.usedAmounts = ProductionProcessWithItemAmount.getWeightSum(usedItems);
+//			this.usedAmounts = getUsedItems().stream()
+//					.map(i -> i.getWeight()[0])
+//					.reduce(AmountWithUnit::add);
 		}
 	}
 	
 	public void setProducedItems(List<ProductionProcessWithItemAmount> producedItems) {
 		this.producedItems = producedItems;
 		if(producedItems != null) {
-			this.producedAmounts = getProducedItems().stream()
-					.map(i -> i.getWeight()[0])
-					.reduce(AmountWithUnit::add);
+			this.producedAmounts = ProductionProcessWithItemAmount.getWeightSum(producedItems);
+//			this.producedAmounts = getProducedItems().stream()
+//					.map(i -> i.getWeight()[0])
+//					.reduce(AmountWithUnit::add);
 		}
 	}
 
 	public void setItemCounts(List<ProductionProcessWithItemAmount> itemCounts) {
 		this.itemCounts = itemCounts;
 		if(itemCounts != null) {
-			this.countAmounts = getItemCounts().stream()
-					.map(i -> i.getWeight()[0])
-					.reduce(AmountWithUnit::add);
+			this.countAmounts = ProductionProcessWithItemAmount.getWeightSum(itemCounts);
+//			this.countAmounts = getItemCounts().stream()
+//					.map(i -> i.getWeight()[0])
+//					.reduce(AmountWithUnit::add);
 		}
 	}
 	
