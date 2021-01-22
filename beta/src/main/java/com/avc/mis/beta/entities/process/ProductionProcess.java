@@ -14,9 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.ProductWeightedPo;
 
@@ -80,6 +82,12 @@ public class ProductionProcess extends TransactionProcess<ProcessItem> {
 	public void setProductWeightedPos(ProductWeightedPo[] productWeightedPos) {
 		Ordinal.setOrdinals(productWeightedPos);
 		this.productWeightedPos = Insertable.setReferences(productWeightedPos, (t) -> {t.setReference(this);	return t;});
+	}
+	
+	@NotNull(message = "Receipt has to reference a po code")
+	@Override
+	public BasePoCode getPoCode() {
+		return super.getPoCode();
 	}
 
 

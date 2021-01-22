@@ -14,11 +14,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Where;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.processinfo.ProcessGroup;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 
@@ -69,6 +71,12 @@ public class StorageRelocation extends PoProcess {
 	public void setStorageMovesGroups(StorageMovesGroup[] storageMovesGroups) {
 		Ordinal.setOrdinals(storageMovesGroups);
 		this.storageMovesGroups = Insertable.setReferences(storageMovesGroups, (t) -> {t.setReference(this);	return t;});
+	}
+	
+	@NotNull(message = "Receipt has to reference a po code")
+	@Override
+	public BasePoCode getPoCode() {
+		return super.getPoCode();
 	}
 	
 }

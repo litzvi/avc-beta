@@ -14,7 +14,6 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
  *
  */
 @Entity
-//@Table(name = "ITEMS")
 @DiscriminatorValue("bulk")
 public class BulkItem extends Item {
 

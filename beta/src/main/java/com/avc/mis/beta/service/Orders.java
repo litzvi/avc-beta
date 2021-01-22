@@ -18,10 +18,11 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.PoRow;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.repositories.PORepository;
 
 import lombok.AccessLevel;
@@ -168,9 +169,9 @@ public class Orders {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addPoCode(PoCode poCode) {
+	public void addPoCode(BasePoCode poCode) {
 		dao.addEntity(poCode);
-	}	
+	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addOrder(PO po) {
@@ -178,15 +179,18 @@ public class Orders {
 //		dao.addEntityWithFlexibleGenerator(po.getPoCode());
 //		Session session = getEntityManager().unwrap(Session.class);
 //		session.save(po.getPoCode());
-
-		//TODO check poCode is available
-		if(dao.isPoCodeFree(po.getPoCode())) {
-			dao.addGeneralProcessEntity(po);						
+		
+		if(po.getPoCode() instanceof PoCode) {
+			if(dao.isPoCodeFree((PoCode) po.getPoCode())) {
+				dao.addGeneralProcessEntity(po);						
+			}
+			else {
+				throw new IllegalArgumentException("Po Code is already used for another order or receipt");
+			}
 		}
 		else {
-			throw new IllegalArgumentException("Po Code is already used for another order or receipt");
-		}
-		
+			throw new ClassCastException("Order has to referenced a PoCode (not MixPoCode)");
+		}		
 	}
 
 	/**
@@ -253,7 +257,7 @@ public class Orders {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editPoCode(PoCode poCode) {
+	public void editPoCode(BasePoCode poCode) {
 		dao.editEntity(poCode);
 	}	
 	

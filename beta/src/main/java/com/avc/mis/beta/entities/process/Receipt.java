@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
@@ -59,9 +61,19 @@ public class Receipt extends ProcessWithProduct<ReceiptItem> {
 	
 	}
 	
+//	@Override
+//	public void setPoCode(BasePoCode poCode) {
+//		if(poCode instanceof PoCode) {
+//			super.setPoCode((PoCode)poCode);
+//		}
+//		else {
+//			throw new ClassCastException("Referenced object isn't a PoCode");
+//		}	
+//	}
+	
 	@NotNull(message = "Receipt has to reference a po code")
 	@Override
-	public PoCode getPoCode() {
+	public BasePoCode getPoCode() {
 		return super.getPoCode();
 	}
 	

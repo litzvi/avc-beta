@@ -20,6 +20,7 @@ import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -28,7 +29,7 @@ import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.GeneralProcess;
-import com.avc.mis.beta.entities.process.PoCode;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.TransactionProcess;
@@ -82,6 +83,17 @@ public class ProcessInfoDAO extends DAO {
 		addEntity(process);
 		addAlerts(process);
 	}
+	
+//	public void addPoProcessEntity(PoProcess process) {
+//		PoCode poCode = process.getPoCode();
+//		if(poCode != null) { 
+//			addEntity(process, poCode);
+//		}
+//		else {
+//			addEntity(process);
+//		}
+//		addAlerts(process);
+//	}
 	
 	/**
 	 * Adding (persisting) a transaction process (may have used and stored items). 
@@ -145,10 +157,10 @@ public class ProcessInfoDAO extends DAO {
 		if(status != EditStatus.EDITABLE) {
 			throw new AccessControlException("Process was closed for edit");
 		}
-		ProcessStatus processStatus = lifeCycle.getProcessStatus();
-		if(processStatus == ProcessStatus.CANCELLED) {
-			throw new AccessControlException("Cancelled process can't be edited");
-		}
+//		ProcessStatus processStatus = lifeCycle.getProcessStatus();
+//		if(processStatus == ProcessStatus.CANCELLED) {
+//			throw new AccessControlException("Cancelled process can't be edited");
+//		}
 //		if(getProcessRepository().isProcessReferenced(process.getId())) {
 //			throw new AccessControlException("Process can't be edited because it's already in use");
 //		}

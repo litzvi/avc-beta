@@ -4,7 +4,8 @@
 package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.entities.process.PoCode;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -37,7 +38,7 @@ public class PoCodeBasic extends BasicDTO {
 	}
 	
 	
-	public PoCodeBasic(@NonNull PoCode poCode) {
+	public PoCodeBasic(@NonNull BasePoCode poCode) {
 		super(poCode.getId());
 		this.code = poCode.getCode();
 		this.contractTypeCode = poCode.getContractType().getCode();

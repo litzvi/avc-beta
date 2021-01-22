@@ -21,6 +21,8 @@ import org.hibernate.annotations.FetchMode;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 
 import lombok.AccessLevel;
@@ -74,9 +76,19 @@ public class PO extends PoProcess {
 		this.orderItems = Insertable.setReferences(orderItems, (t) -> {t.setReference(this);	return t;});
 	}
 	
+//	@Override
+//	public void setPoCode(BasePoCode poCode) {
+//		if(poCode instanceof PoCode) {
+//			super.setPoCode((PoCode)poCode);
+//		}
+//		else {
+//			throw new ClassCastException("Referenced object isn't a PoCode");
+//		}	
+//	}
+	
 	@NotNull(message = "Purchase Order has to reference a po code")
 	@Override
-	public PoCode getPoCode() {
+	public BasePoCode getPoCode() {
 		return super.getPoCode();
 	}
 	

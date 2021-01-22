@@ -26,6 +26,7 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ReceiptItemRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -216,12 +217,16 @@ public class Receipts {
 //		dao.addEntityWithFlexibleGenerator(receipt.getPoCode());
 //		addOrderReceipt(receipt);
 
-		//TODO check poCode is available
-		if(dao.isPoCodeFree(receipt.getPoCode())) {
-			dao.addGeneralProcessEntity(receipt);
+		if(receipt.getPoCode() instanceof PoCode) {
+			if(dao.isPoCodeFree((PoCode) receipt.getPoCode())) {
+				dao.addGeneralProcessEntity(receipt);						
+			}
+			else {
+				throw new IllegalArgumentException("Po Code is already used for another order or receipt");
+			}
 		}
 		else {
-			throw new IllegalArgumentException("Po Code is already used for another order or receipt");
+			throw new ClassCastException("Receipt has to referenced a PoCode (not MixPoCode)");
 		}
 	}
 	

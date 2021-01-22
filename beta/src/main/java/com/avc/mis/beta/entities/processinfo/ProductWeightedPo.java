@@ -13,8 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.ProcessInfoEntity;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.PoCode;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

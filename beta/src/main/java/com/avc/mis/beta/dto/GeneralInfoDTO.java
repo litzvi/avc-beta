@@ -7,8 +7,9 @@ import java.time.Instant;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.entities.GeneralInfoEntity;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.PoProcess;
 
 import lombok.Data;
@@ -57,7 +58,7 @@ public abstract class GeneralInfoDTO extends DataDTO {
 	public GeneralInfoDTO(@NonNull GeneralInfoEntity infoEntity) {
 		super(infoEntity.getId(), infoEntity.getVersion());
 		if(infoEntity.getProcess() instanceof PoProcess) {
-			PoCode poCode = ((PoProcess)infoEntity.getProcess()).getPoCode();
+			BasePoCode poCode = ((PoProcess)infoEntity.getProcess()).getPoCode();
 			this.poCode = new PoCodeBasic(poCode);
 			this.supplierName = poCode.getSupplier().getName(); 
 		}

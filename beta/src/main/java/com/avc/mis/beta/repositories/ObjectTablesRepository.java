@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.ObjectDataEntity;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
@@ -21,7 +22,6 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.process.PoCode;
 
 /**
  * @author Zvi

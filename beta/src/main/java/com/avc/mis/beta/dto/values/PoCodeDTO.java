@@ -5,7 +5,8 @@ package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.entities.process.PoCode;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
@@ -49,7 +50,7 @@ public class PoCodeDTO extends ValueDTO {
 	/**
 	 * @param poCode
 	 */
-	public PoCodeDTO(PoCode poCode) {
+	public PoCodeDTO(BasePoCode poCode) {
 		super(poCode.getId());
 		this.code = poCode.getCode();
 		this.contractTypeCode = poCode.getContractType() != null ? poCode.getContractType().getCode(): null;

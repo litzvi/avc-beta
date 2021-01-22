@@ -22,6 +22,8 @@ import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -30,7 +32,6 @@ import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.PoCode;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
@@ -318,7 +319,7 @@ public class TestService {
 	}
 	
 	public void cleanup(PO po) {
-		PoCode poCode = po.getPoCode();
+		BasePoCode poCode = po.getPoCode();
 		Supplier supplier = poCode.getSupplier();
 		orders.removeOrder(po.getId());
 		suppliers.permenentlyRemoveEntity(poCode);

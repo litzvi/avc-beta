@@ -1,22 +1,29 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.process;
+package com.avc.mis.beta.entities.codes;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.validation.groups.OnPersist;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -40,8 +47,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @Entity
 @Table(name = "PO_CODES")
-public class PoCode extends BaseEntity {
-	
+@Inheritance(strategy=InheritanceType.JOINED)
+//@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
+//@DiscriminatorValue("abstract")
+public abstract class BasePoCode extends BaseEntity {
+
+//	@Column(nullable = false, insertable = false, updatable = false)
+//	private String dtype;
+
 //	@EqualsAndHashCode.Include
 //	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 //	private Integer id;
@@ -62,16 +75,20 @@ public class PoCode extends BaseEntity {
 	@NotNull(message = "PO code is required to have a contract type", groups = OnPersist.class)
 	private ContractType contractType;
 	
+	private String display;
+	
 	@JsonIgnore
 	@ToString.Exclude 
 	@OneToMany(mappedBy = "poCode", fetch = FetchType.LAZY)
 	private Set<PoProcess> processes = new HashSet<>();
 	
-	
 	/**
 	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
 	 */
 	public String getValue() {
+		if(this.display != null) {
+			return this.display;
+		}
 		return String.format("%s-%s%s", this.contractType.getCode(), this.code, this.contractType.getSuffix());
 	}
 

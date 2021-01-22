@@ -14,7 +14,6 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
  *
  */
 @Entity
-//@Table(name = "ITEMS")
 @DiscriminatorValue("packed")
 public class PackedItem extends Item {
 
@@ -25,9 +24,13 @@ public class PackedItem extends Item {
 	
 	@Override
 	public void setMeasureUnit(MeasureUnit measureUnit) {
-//		if(!measureUnit.equals(MeasureUnit.UNIT)) {
-//			throw new IllegalArgumentException("Packed item can't have a weight as default measure unit");
-//		}
+		
+		if(MeasureUnit.DISCRETE_UNITS.contains(measureUnit)) {
+			super.setMeasureUnit(measureUnit);
+		}
+		else if(measureUnit != null) {
+			throw new IllegalArgumentException("Packed item can't have a weight as default measure unit");			
+		}
 	}
 	
 	@Override

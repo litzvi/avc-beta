@@ -19,6 +19,7 @@ import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.processinfo.CashewItemQuality;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
@@ -106,6 +107,12 @@ public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 	public void setTestedItems(CashewItemQuality[] testedItems) {
 		Ordinal.setOrdinals(testedItems);
 		this.testedItems = Insertable.setReferences(testedItems, (t) -> {t.setReference(this);	return t;});
+	}
+	
+	@NotNull(message = "Receipt has to reference a po code")
+	@Override
+	public BasePoCode getPoCode() {
+		return super.getPoCode();
 	}
 
 }

@@ -67,7 +67,13 @@ public class OrdersTest {
 		//edit order status
 		po.setDuration(Duration.ofHours(15));
 		expected = new PoDTO(po);
-		orders.editOrder(po);
+		try {
+			orders.editOrder(po);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			throw e2;
+		}
 		actual = orders.getOrder(po.getPoCode().getId());
 		assertEquals(expected, actual, "failed test editing po order status");		
 		
