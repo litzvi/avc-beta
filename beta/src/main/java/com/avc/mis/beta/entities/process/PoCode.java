@@ -54,11 +54,11 @@ public class PoCode extends BaseEntity {
 	private String code;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "supplierId", updatable = false, nullable = false)
+	@JoinColumn(name = "supplierId", nullable = false)
 	private Supplier supplier; 
 		
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "contractTypeId", updatable = false, nullable = false)
+	@JoinColumn(name = "contractTypeId", nullable = false)
 	@NotNull(message = "PO code is required to have a contract type", groups = OnPersist.class)
 	private ContractType contractType;
 	
@@ -74,15 +74,5 @@ public class PoCode extends BaseEntity {
 	public String getValue() {
 		return String.format("%s-%s%s", this.contractType.getCode(), this.code, this.contractType.getSuffix());
 	}
-
-//	@Override
-//	public Integer getId() {
-//		return code;
-//	}
-//
-//	@Override
-//	public void setId(Integer id) {
-//		this.code = id;		
-//	}
 
 }

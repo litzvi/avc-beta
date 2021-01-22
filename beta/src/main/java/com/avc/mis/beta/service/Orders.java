@@ -252,6 +252,11 @@ public class Orders {
 		dao.editGeneralProcessEntity(po);
 	}
 	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editPoCode(PoCode poCode) {
+		dao.editEntity(poCode);
+	}	
+	
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	@Deprecated
