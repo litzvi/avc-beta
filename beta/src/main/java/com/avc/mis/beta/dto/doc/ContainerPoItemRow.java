@@ -34,11 +34,11 @@ public class ContainerPoItemRow extends BasicDTO {
 	public ContainerPoItemRow(@NonNull Integer id, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			BigDecimal total, MeasureUnit measureUnit) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		
 		AmountWithUnit totalRow;
 		if(itemClazz == BulkItem.class) {

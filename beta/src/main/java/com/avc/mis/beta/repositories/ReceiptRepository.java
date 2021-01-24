@@ -23,7 +23,7 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 
 	@Query("select new com.avc.mis.beta.dto.process.ReceiptDTO("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
+			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display, "
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
@@ -83,7 +83,7 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 	List<ReceiptItemWithStorage> findReceiptItemWithStorage(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.view.ReceiptItemRow( "
-				+ "r.id, po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
+				+ "r.id, po_code.id, po_code.code, ct.code, ct.suffix, s.name, po_code.display,  "
 				+ "i.id, i.value, "
 				+ "units.amount, units.measureUnit, "
 				+ "ro_units.amount, ro_units.measureUnit, "

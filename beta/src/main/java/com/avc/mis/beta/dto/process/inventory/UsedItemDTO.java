@@ -20,14 +20,14 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
 			MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal accessWeight, 
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
 		super(id, version, ordinal, numberUsedUnits,
 				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
 				measureUnit, itemProcessDate,
-				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName,
+				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display,
 				storageId, stoageVersion, storageOrdinal,
 				unitAmount, storageNumberUnits, storgeOtherUsedUnits, accessWeight,
 				warehouseLocationId,  warehouseLocationValue, storageRemarks);	

@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.BulkItem;
@@ -55,7 +56,7 @@ public class RelocationTest {
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
 		StorageRelocation relocation = new StorageRelocation();
-		relocation.setPoCode(receipt.getPoCode());
+		relocation.setPoCode((PoCode) receipt.getPoCode());
 		relocation.setRecordedTime(OffsetDateTime.now());
 
 

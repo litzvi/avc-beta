@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
 
 import lombok.AccessLevel;
@@ -45,6 +46,11 @@ public abstract class PoProcess extends GeneralProcess {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(updatable = false, name = "po_code_code")
 	private BasePoCode poCode;
+	
+	//temporary until fixed in front 
+	public void setPoCode(PoCode poCode) {
+		this.poCode = poCode;
+	}
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 

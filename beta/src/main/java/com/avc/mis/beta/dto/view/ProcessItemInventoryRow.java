@@ -40,7 +40,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 	 * All database fields (the fields in the form they are fetched from the db) arguments constructor.
 	 */
 	public ProcessItemInventoryRow(Integer id, Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			OffsetDateTime processDate, OffsetDateTime receiptDate,
 //			BigDecimal totalStoredAmount, BigDecimal totalUsedAmount, 
 			BigDecimal balance,
@@ -48,7 +48,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 			String warehouses) {
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		this.supplierName = supplierName;
 		this.processDate = processDate;
 		this.receiptDate = receiptDate;

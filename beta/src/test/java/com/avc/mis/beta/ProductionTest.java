@@ -19,6 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -50,7 +51,7 @@ public class ProductionTest {
 		infoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
 		ProductionProcess process = new ProductionProcess();
-		process.setPoCode(receipt.getPoCode());
+		process.setPoCode((PoCode) receipt.getPoCode());
 		process.setRecordedTime(OffsetDateTime.now());
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
 		process.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));

@@ -47,10 +47,10 @@ public class ProcessRow extends BasicDTO {
 	@JsonIgnore private Optional<AmountWithUnit> countAmounts;
 	
 	public ProcessRow(@NonNull Integer id, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			OffsetDateTime recordedTime, Duration duration, ProcessStatus status, String approvals) {
 		super(id);
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		this.supplierName = supplierName;
 		this.recordedTime = recordedTime;
 		this.duration = duration;

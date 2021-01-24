@@ -18,6 +18,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.Item;
@@ -47,7 +48,7 @@ public class TransferTest {
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
 		StorageTransfer transfer = new StorageTransfer();
-		transfer.setPoCode(receipt.getPoCode());
+		transfer.setPoCode((PoCode) receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
 
 
@@ -79,7 +80,7 @@ public class TransferTest {
 				
 		//TODO check if usedItems exceeds inventory should fail
 		transfer = new StorageTransfer();
-		transfer.setPoCode(receipt.getPoCode());
+		transfer.setPoCode((PoCode) receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
 		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		transfer.setProcessItems(service.getProcessItems(poInventory));
@@ -95,7 +96,7 @@ public class TransferTest {
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 				
 		transfer = new StorageTransfer();
-		transfer.setPoCode(receipt.getPoCode());
+		transfer.setPoCode((PoCode) receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
 		poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
@@ -126,7 +127,7 @@ public class TransferTest {
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 				
 		transfer = new StorageTransfer();
-		transfer.setPoCode(receipt.getPoCode());
+		transfer.setPoCode((PoCode) receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
 		poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
@@ -163,7 +164,7 @@ public class TransferTest {
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
 		StorageTransfer transfer = new StorageTransfer();
-		transfer.setPoCode(receipt.getPoCode());
+		transfer.setPoCode((PoCode) receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
 
 

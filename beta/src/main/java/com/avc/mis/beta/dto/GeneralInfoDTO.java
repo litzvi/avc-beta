@@ -40,12 +40,12 @@ public abstract class GeneralInfoDTO extends DataDTO {
 
 	
 	public GeneralInfoDTO(Integer id, Integer version, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			String title, Integer processId, ProcessName processName, String processType, 
 			Instant createdDate, String modifiedBy) {
 		super(id, version);
 		if(poCodeId != null)
-			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		this.supplierName = supplierName;
 		this.title = title;
 		this.processId = processId;

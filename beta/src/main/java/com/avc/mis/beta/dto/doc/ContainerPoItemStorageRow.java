@@ -33,11 +33,11 @@ public class ContainerPoItemStorageRow {
 	public ContainerPoItemStorageRow(
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz,  
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,  String display,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits) {
 		super();
 		this.itemWithUnit = new ItemWithUnit(itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz);
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		this.unitAmount = new AmountWithUnit(unitAmount, measureUnit);
 //		this.containerWeight = containerWeight;
 		this.numberUnits = numberUnits;

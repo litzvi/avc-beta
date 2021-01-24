@@ -44,7 +44,7 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 		
 	public PoProcessDTO(Integer id, Integer version, Instant createdDate, String staffRecording, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-			Integer supplierId, Integer supplierVersion, String supplierName, 
+			Integer supplierId, Integer supplierVersion, String supplierName, String display,
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, 
 			Duration duration, Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus,
@@ -54,7 +54,7 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 				recordedTime, startTime, endTime, 
 				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
 		if(poCodeId != null)
-			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		
 	}
 	

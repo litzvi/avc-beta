@@ -50,7 +50,7 @@ public class ContainerLoadingDTO extends TransactionProcessDTO<ProcessItemDTO> {
 	
 	public ContainerLoadingDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-			Integer supplierId, Integer supplierVersion, String supplierName,
+			Integer supplierId, Integer supplierVersion, String supplierName, String display,
 			ProcessName processName, ProductionLine productionLine, 
 			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
 			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
@@ -59,7 +59,7 @@ public class ContainerLoadingDTO extends TransactionProcessDTO<ProcessItemDTO> {
 			ContainerDetails containerDetails, ShipingDetails shipingDetails) {
 		super(id, version, createdDate, userRecording, 
 				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
-				supplierId, supplierVersion, supplierName,
+				supplierId, supplierVersion, supplierName, display,
 				processName, productionLine, recordedTime, startTime, endTime, 
 				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
 		this.shipmentCode = new ShipmentCodeDTO(shipmentCodeId, shipmentCodeCode, portOfDischargeId, portOfDischargeValue, portOfDischargeCode);
