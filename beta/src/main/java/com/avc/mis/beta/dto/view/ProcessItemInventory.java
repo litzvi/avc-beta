@@ -12,7 +12,7 @@ import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -41,7 +41,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 
 	private ItemDTO item;
 	private MeasureUnit measureUnit;
-	private PoCodeDTO poCode;
+	private PoCodeBasic poCode;
 	private OffsetDateTime itemProcessDate;
 	private OffsetDateTime receiptDate;
 	private AmountWithUnit[] totalBalanceAmount; //not calculated in method so won't be calculated repeatedly for totalLots
@@ -63,7 +63,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, defaultMeasureUnit, group, productionUse, clazz);
 		this.measureUnit = measureUnit;
-		this.poCode = new PoCodeDTO(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.itemProcessDate = processDate;
 		this.receiptDate = receiptDate;
 		this.tableView = tableView;
@@ -73,7 +73,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 	 * All class arguments constructor, excluding list of storage forms and calculated totals
 	 */
 	public ProcessItemInventory(Integer id, ItemDTO item, MeasureUnit measureUnit, 
-			PoCodeDTO poCode, 
+			PoCodeBasic poCode, 
 			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
 		super(id);
 		this.item = item;

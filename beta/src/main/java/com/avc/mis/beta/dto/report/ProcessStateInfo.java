@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 
 import lombok.Data;
-import lombok.Value;
 
 /**
  * @author zvi

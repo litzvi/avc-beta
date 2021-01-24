@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.dto.query.StorageBalance;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -29,7 +29,6 @@ import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.GeneralProcess;
-import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.TransactionProcess;
@@ -444,7 +443,7 @@ public class ProcessInfoDAO extends DAO {
 	 * @return true if given PO Code isn't used
 	 */
 	public boolean isPoCodeFree(PoCode poCode) {
-		List<PoCodeDTO> poCodes = getObjectTablesRepository().findFreePoCodes(poCode.getId());
+		List<PoCodeBasic> poCodes = getObjectTablesRepository().findFreePoCodes(poCode.getId());
 		if(poCodes == null || poCodes.size() == 0) {
 			return false;
 		}

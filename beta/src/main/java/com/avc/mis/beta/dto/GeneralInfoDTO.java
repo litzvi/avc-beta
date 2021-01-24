@@ -5,10 +5,9 @@ package com.avc.mis.beta.dto;
 
 import java.time.Instant;
 
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.GeneralInfoEntity;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoProcess;
 
@@ -30,6 +29,7 @@ import lombok.NonNull;
 public abstract class GeneralInfoDTO extends DataDTO {
 
 	private PoCodeBasic poCode;
+	//should remove
 	private String supplierName;
 	private String title;
 	private Integer processId;
@@ -45,7 +45,7 @@ public abstract class GeneralInfoDTO extends DataDTO {
 			Instant createdDate, String modifiedBy) {
 		super(id, version);
 		if(poCodeId != null)
-			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix);
+			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
 		this.title = title;
 		this.processId = processId;

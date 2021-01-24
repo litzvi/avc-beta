@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.BankAccount;
@@ -66,9 +66,9 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	 * Gets po code basic info for orders that are yet to be fully received 
 	 * and not cancelled. Can be used for choosing an order to receive.
 	 * @param processName
-	 * @return Set of PoCodeDTO
+	 * @return Set of PoCodeBasic
 	 */
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
 			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name) "
 		+ "from PO po "
 			+ "join po.lifeCycle lc "
@@ -100,15 +100,15 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 					+ "ELSE (rnu.amount * uom.multiplicand / uom.divisor) "
 				+ "END), "
 			+ "0) < units.amount ")
-	Set<PoCodeDTO> findOpenPoCodeByType(ProcessName processName);
+	Set<PoCodeBasic> findOpenPoCodeByType(ProcessName processName);
 	
 	/**
 	 * Gets po codes for given processes that are in one of the given process statuses
 	 * @param processNames
 	 * @param statuses
-	 * @return Set of PoCodeDTO
+	 * @return Set of PoCodeBasic
 	 */
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
@@ -118,7 +118,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ "join r.lifeCycle lc "
 		+ "where t.processName in :processNames "
 			+ "and lc.processStatus in :statuses ")
-	Set<PoCodeDTO> findAllPoCodeByType(ProcessName[] processNames, ProcessStatus[] statuses);
+	Set<PoCodeBasic> findAllPoCodeByType(ProcessName[] processNames, ProcessStatus[] statuses);
 	
 	/**
 	 * Gets set of All PoCodes that have item/s currently in available inventory 
@@ -127,9 +127,9 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	 * and it's not completely used by another using process where the using process isn't cancelled.
 	 * @param supplyGroup constrain to only this supply group, if null than any.
 	 * @param itemId constrain to only this item, if null than any.
-	 * @return Set of PoCodeDTO
+	 * @return Set of PoCodeBasic
 	 */
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
 			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name) "
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
@@ -161,9 +161,9 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 					+ "ELSE 0 "
 				+ "END)"
 			+ " ) ")
-	Set<PoCodeDTO> findAvailableInventoryPoCodeByType(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId);
+	Set<PoCodeBasic> findAvailableInventoryPoCodeByType(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId);
 
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
@@ -172,10 +172,10 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ "join r.processType t "
 		+ "where t.processName in ?1 "
 		+ "order by po_code.id desc ")
-	List<PoCodeDTO> findReceivedPoCodeByTypes(ProcessName[] processNames);
+	List<PoCodeBasic> findReceivedPoCodeByTypes(ProcessName[] processNames);
 
 	//will also give old (history) po_codes
-	@Query("select distinct new com.avc.mis.beta.dto.values.PoCodeDTO("
+	@Query("select distinct new com.avc.mis.beta.dto.values.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from PoCode po_code "
 				+ "join po_code.contractType c "
@@ -183,9 +183,9 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 //			+ "join p.processType t "
 //		+ "where t.processName in ?1 "
 		+ "order by po_code.id desc ")
-	List<PoCodeDTO> findAllPoCodeDTOs();
+	List<PoCodeBasic> findAllPoCodeBasics();
 
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO("
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from PoCode po_code "
 			+ "join po_code.contractType c "
@@ -206,7 +206,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 				+ ")"
 			+ ") "
 		+ "order by po_code.id desc ")
-	List<PoCodeDTO> findFreePoCodes(Integer poCodeId);
+	List<PoCodeBasic> findFreePoCodes(Integer poCodeId);
 
 	
 }

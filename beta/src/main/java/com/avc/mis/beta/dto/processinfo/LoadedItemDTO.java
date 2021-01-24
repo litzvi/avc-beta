@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 public class LoadedItemDTO extends SubjectDataDTO {
 	
 	private ItemDTO item; //change to itemDTO in order to get category
-	private PoCodeDTO poCode;
+	private PoCodeBasic poCode;
 	private AmountWithUnit declaredAmount;
 	
 	private String description;
@@ -40,7 +40,7 @@ public class LoadedItemDTO extends SubjectDataDTO {
 			String description, String remarks) {
 		super(id, version, ordinal);
 		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
-		this.poCode = new PoCodeDTO(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);	
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);	
 		this.declaredAmount = new AmountWithUnit(declaredAmount.setScale(MeasureUnit.SCALE), measureUnit);
 		this.description = description;
 		this.remarks = remarks;
@@ -51,14 +51,14 @@ public class LoadedItemDTO extends SubjectDataDTO {
 	 */
 	public LoadedItemDTO(LoadedItem loadedItem) {
 		super(loadedItem.getId(), loadedItem.getVersion(), loadedItem.getOrdinal());
-		this.poCode = new PoCodeDTO(loadedItem.getPoCode());
+		this.poCode = new PoCodeBasic(loadedItem.getPoCode());
 		this.declaredAmount = Optional.ofNullable(loadedItem.getDeclaredAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		this.description = loadedItem.getDescription();
 		this.remarks = loadedItem.getRemarks();
 	}
 
 	public LoadedItemDTO(Integer id, Integer version, Integer ordinal,
-			ItemDTO item, PoCodeDTO poCode, AmountWithUnit declaredAmount,
+			ItemDTO item, PoCodeBasic poCode, AmountWithUnit declaredAmount,
 			String description, String remarks) {
 		super(id, version, ordinal);
 		this.item = item;

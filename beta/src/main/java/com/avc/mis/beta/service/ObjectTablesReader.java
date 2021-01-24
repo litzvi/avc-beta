@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
@@ -89,7 +89,7 @@ public class ObjectTablesReader {
 	
 //---------------------------------DTOs---------------------------------------------------------
 	
-	public List<PoCodeDTO> findFreePoCodes() {
+	public List<PoCodeBasic> findFreePoCodes() {
 		return getObjectTablesRepository().findFreePoCodes(null);		
 	}
 	
@@ -97,9 +97,9 @@ public class ObjectTablesReader {
 	 * Gets the po code basic information of all open Cashew Orders  - id, poCode and supplier.
 	 * Open order - orders that are yet to be fully received and not cancelled. 
 	 * Can be used for choosing an order to receive.
-	 * @return Set of PoCodeDTO for all open Cashew orders.
+	 * @return Set of PoCodeBasic for all open Cashew orders.
 	 */
-	public Set<PoCodeDTO> findOpenCashewOrdersPoCodes() {
+	public Set<PoCodeBasic> findOpenCashewOrdersPoCodes() {
 		return getObjectTablesRepository().findOpenPoCodeByType(ProcessName.CASHEW_ORDER);		
 	}
 	
@@ -107,9 +107,9 @@ public class ObjectTablesReader {
 	 * Gets the po code basic information of all open General Orders  - id, poCode and supplier.
 	 * Open order - orders that are yet to be fully received and not cancelled. 
 	 * Can be used for choosing an order to receive.
-	 * @return Set of PoCodeDTO for all open General orders.
+	 * @return Set of PoCodeBasic for all open General orders.
 	 */
-	public Set<PoCodeDTO> findOpenGeneralOrdersPoCodes() {
+	public Set<PoCodeBasic> findOpenGeneralOrdersPoCodes() {
 		return getObjectTablesRepository().findOpenPoCodeByType(ProcessName.GENERAL_ORDER);
 	}
 	
@@ -117,10 +117,10 @@ public class ObjectTablesReader {
 	 * Gets the po code basic information of all open and pending Cashew Orders  - id, poCode and supplier.
 	 * Open and pending order - orders that aren't fully received(receipt finalized) and not cancelled. 
 	 * Can be used for choosing an order for receipt QC and samples.
-	 * @return Set of PoCodeDTO for all open or pending Cashew orders.
+	 * @return Set of PoCodeBasic for all open or pending Cashew orders.
 	 */
-	public Set<PoCodeDTO> findOpenAndPendingCashewOrdersPoCodes() {
-		Set<PoCodeDTO> poCodes = getObjectTablesRepository().findAllPoCodeByType(new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
+	public Set<PoCodeBasic> findOpenAndPendingCashewOrdersPoCodes() {
+		Set<PoCodeBasic> poCodes = getObjectTablesRepository().findAllPoCodeByType(new ProcessName[] {ProcessName.CASHEW_RECEIPT}, 
 				new ProcessStatus[] {ProcessStatus.PENDING});
 		poCodes.addAll(getObjectTablesRepository().findOpenPoCodeByType(ProcessName.CASHEW_ORDER));
 
@@ -131,9 +131,9 @@ public class ObjectTablesReader {
 	 * Gets the po code basic information of all Cashew in inventory - id, poCode and supplier.
 	 * Cashew in inventory - process outcomes that are finalized. 
 	 * Can be used for choosing a po for factory processing.
-	 * @return Set of PoCodeDTO for all inventory Cashew.
+	 * @return Set of PoCodeBasic for all inventory Cashew.
 	 */
-	public Set<PoCodeDTO> findCashewAvailableInventoryPoCodes() {
+	public Set<PoCodeBasic> findCashewAvailableInventoryPoCodes() {
 		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, ItemGroup.PRODUCT, null);		
 	}
 	
@@ -141,9 +141,9 @@ public class ObjectTablesReader {
 	 * Gets the po code basic information of all General items in inventory - id, poCode and supplier.
 	 * General inventory - process outcomes that are finalized. 
 	 * Can be used for choosing a po for factory processing.
-	 * @return Set of PoCodeDTO for all General inventory.
+	 * @return Set of PoCodeBasic for all General inventory.
 	 */
-	public Set<PoCodeDTO> findGeneralAvailableInventoryPoCodes() {
+	public Set<PoCodeBasic> findGeneralAvailableInventoryPoCodes() {
 		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, ItemGroup.GENERAL, null);		
 	}
 	
@@ -151,9 +151,9 @@ public class ObjectTablesReader {
 	 * Gets the basic information of all po codes for the given item in inventory - id, poCode and supplier.
 	 * Can be used for choosing a po for factory processing of a certain item.
 	 * @param itemId id of the item
-	 * @return Set of PoCodeDTO
+	 * @return Set of PoCodeBasic
 	 */
-	public Set<PoCodeDTO> findAvailableInventoryPoCodes(Integer itemId) {
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(Integer itemId) {
 		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false, null, null, itemId);		
 	}
 	
@@ -161,17 +161,17 @@ public class ObjectTablesReader {
 	 * Gets the basic information of all po codes for the given item category in inventory - id, poCode and supplier.
 	 * Can be used for choosing a po for factory processing at a certian process type.
 	 * @param itemCategories
-	 * @return Set of PoCodeDTO
+	 * @return Set of PoCodeBasic
 	 */
-	public Set<PoCodeDTO> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
 		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true, productionUses, null, null);		
 	}
 	
-	public Set<PoCodeDTO> findAvailableInventoryPoCodes(ItemGroup group) {
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ItemGroup group) {
 		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, group, null);		
 	}
 	
-	public Set<PoCodeDTO> findAvailableInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
 		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true,  productionUses, group, null);		
 	}
 	
@@ -180,8 +180,8 @@ public class ObjectTablesReader {
 	 * Can be used for searching reports for any PO.
 	 * @return Set of PoRow for po's that are still active - still in production.
 	 */
-	public List<PoCodeDTO> findAllPoCodes() {
-		return getObjectTablesRepository().findAllPoCodeDTOs();
+	public List<PoCodeBasic> findAllPoCodes() {
+		return getObjectTablesRepository().findAllPoCodeBasics();
 	}
 	
 	

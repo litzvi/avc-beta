@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -68,7 +68,7 @@ public class PoItemRow extends BasicDTO {
 			BigDecimal receivedAmount, ProcessStatus status, long receiptsCancelled) {
 		super(id);
 		this.personInCharge = personInCharge;
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		if(approvals != null) {
 			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
 		}

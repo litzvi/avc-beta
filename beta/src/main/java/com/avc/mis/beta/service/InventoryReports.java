@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.report.InventoryReportLine;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
@@ -83,7 +83,7 @@ public class InventoryReports {
 		
 		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(group, null, null, null);
 
-		Map<PoCodeDTO, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
+		Map<PoCodeBasic, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
 				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getPoCode, LinkedHashMap::new, Collectors.toList()));
 		
 		List<PoInventoryRow> inventoryRows = new ArrayList<PoInventoryRow>();

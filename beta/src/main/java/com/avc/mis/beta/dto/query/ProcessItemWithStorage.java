@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -28,7 +28,7 @@ import lombok.Data;
 public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDTO, ProcessItemDTO> {
 	
 	private ProcessItemDTO processItem;
-	private PoCodeDTO po;
+	private PoCodeBasic po;
 	private StorageDTO storage;
 	
 	/**
@@ -48,7 +48,7 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 		this.processItem = new ProcessItemDTO(id, version, ordinal,
 				itemId, itemValue, productionUse, itemUnitAmount, itemUnitMeasureUnit, ItemClazz, 
 				measureUnit, groupName, description, remarks, tableView);
-		this.po = new PoCodeDTO(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+		this.po = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.storage = new StorageDTO(storageId, storageVersion, storageOrdinal,
 				unitAmount, numberUnits, accessWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);

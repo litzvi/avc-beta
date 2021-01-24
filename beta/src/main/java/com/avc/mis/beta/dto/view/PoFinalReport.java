@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.ProcessName;
 
 import lombok.Data;
@@ -28,6 +28,7 @@ import lombok.ToString;
 public class PoFinalReport extends BasicDTO {
 	
 	private PoCodeBasic poCode;
+	//already in poCode
 	private String supplierName;
 	
 	//production dates
@@ -42,7 +43,7 @@ public class PoFinalReport extends BasicDTO {
 	
 	public PoFinalReport(@NonNull Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName) {
 		super(poCodeId);
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
 	}
 	

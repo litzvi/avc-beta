@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
+import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.entities.codes.BasePoCode;
@@ -254,6 +255,12 @@ public class Orders {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editOrder(PO po) {
 		dao.editGeneralProcessEntity(po);
+	}
+	
+	public PoCodeDTO getPoCode(int poCodeId) {
+		Optional<PoCodeDTO> poCode = getPoRepository().findPoCodeById(poCodeId);
+		return poCode.orElseThrow(
+				()->new IllegalArgumentException("No PO code with given id"));		
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnit;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.inventory.Storage;
@@ -43,7 +43,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	@EqualsAndHashCode.Exclude
 	private OffsetDateTime itemProcessDate;
 	@EqualsAndHashCode.Exclude
-	private PoCodeDTO itemPo;
+	private PoCodeBasic itemPo;
 	
 	//for equals comparing - since storage is excluded
 	private Integer storageId;
@@ -86,7 +86,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		this.measureUnit = measureUnit;
 		this.itemProcessDate = itemProcessDate;
 		if(poCodeId != null)
-			this.itemPo = new PoCodeDTO(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+			this.itemPo = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		else
 			this.itemPo = null;
 	
@@ -113,7 +113,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 			this.item = new ItemWithUnit(processItem.getItem());
 			this.measureUnit = processItem.getMeasureUnit();
 			this.itemProcessDate = processItem.getProcess().getRecordedTime();
-			this.itemPo = new PoCodeDTO((processItem.getProcess()).getPoCode());
+			this.itemPo = new PoCodeBasic((processItem.getProcess()).getPoCode());
 		}
 
 //		this.storageOrdinal = storage.getOrdinal();

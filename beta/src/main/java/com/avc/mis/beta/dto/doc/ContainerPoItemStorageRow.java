@@ -5,8 +5,8 @@ package com.avc.mis.beta.dto.doc;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.ItemWithUnit;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.BulkItem;
@@ -33,11 +33,11 @@ public class ContainerPoItemStorageRow {
 	public ContainerPoItemStorageRow(
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz,  
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits) {
 		super();
 		this.itemWithUnit = new ItemWithUnit(itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz);
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.unitAmount = new AmountWithUnit(unitAmount, measureUnit);
 //		this.containerWeight = containerWeight;
 		this.numberUnits = numberUnits;

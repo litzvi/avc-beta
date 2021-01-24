@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -29,7 +29,7 @@ import lombok.ToString;
 public class ProcessItemInventoryRow extends BasicDTO {
 
 	private ItemDTO item;
-	private PoCodeDTO poCode;
+	private PoCodeBasic poCode;
 	private String supplierName;
 	private OffsetDateTime processDate;
 	private OffsetDateTime receiptDate;
@@ -48,7 +48,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 			String warehouses) {
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
-		this.poCode = new PoCodeDTO(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
 		this.processDate = processDate;
 		this.receiptDate = receiptDate;

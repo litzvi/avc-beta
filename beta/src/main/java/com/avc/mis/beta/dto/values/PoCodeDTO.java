@@ -3,80 +3,52 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import com.avc.mis.beta.dto.ValueDTO;
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Currency;
 
+import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.entities.ObjectEntityWithName;
+import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.values.ContractType;
+
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
-import lombok.Value;
 
 /**
- * DTO for PoCode containing id and the fields needed 
- * for presenting the po code/id with it's initial and suffix.
- * 
- * @author Zvi
+ * @author zvi
  *
  */
-@Value
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@Data
+@EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class PoCodeDTO extends ValueDTO {
 
-	String code;
-	String contractTypeCode;
-//	Currency currency;
-	String contractTypeSuffix;
-	String supplierName;	
+	private String code;
+	private DataObjectWithName<Supplier> supplier; 
+	private ContractTypeDTO contractType;
+	private String display;
 	
-	/**
-	 * @param id
-	 * @param contractTypeCode
-	 * @param contractTypeSuffix
-	 * @param supplierName
-	 */
-	public PoCodeDTO(Integer id, String code,
-			String contractTypeCode, String contractTypeSuffix, String supplierName) {
+	public PoCodeDTO(@NonNull Integer id, String code, 
+			Integer supplierId, Integer supplierVersion, String supplierName,
+			Integer contractTypeId, String contractTypeValue, String contractTypeCode, Currency contractTypeCurrency, String contractTypeSuffix,
+			String display) {
 		super(id);
 		this.code = code;
-		this.contractTypeCode = contractTypeCode;
-		this.supplierName = supplierName;
-//		this.currency = currency;
-		this.contractTypeSuffix = contractTypeSuffix != null ? contractTypeSuffix : "";
-	}	
-	
-	/**
-	 * @param poCode
-	 */
-	public PoCodeDTO(BasePoCode poCode) {
-		super(poCode.getId());
-		this.code = poCode.getCode();
-		this.contractTypeCode = poCode.getContractType() != null ? poCode.getContractType().getCode(): null;
-		this.supplierName = poCode.getSupplier() != null ? poCode.getSupplier().getName(): null;
-//		this.currency = poCode.getContractType() != null ? poCode.getContractType().getCurrency(): null;
-		this.contractTypeSuffix = poCode.getContractType() != null ? poCode.getContractType().getSuffix(): "";
+		this.supplier = new DataObjectWithName<Supplier>(supplierId, supplierVersion, supplierName);
+		this.contractType = new ContractTypeDTO(contractTypeId, contractTypeValue, contractTypeCode, contractTypeCurrency, contractTypeSuffix);
+		this.display = display;
 	}
-	
-//	/**
-//	 * Used as a synonymous for getting id
-//	 * @return the code/id
-//	 */
-//	public Integer getCode() {
-//		return getId();
-//	}
 	
 	/**
 	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
 	 */
-	public String getValue() {		
-		return String.format("%s-%s%s", this.contractTypeCode, this.getCode(), this.contractTypeSuffix);
+	public String getValue() {
+		if(this.display != null) {
+			return this.display;
+		}
+		return String.format("%s-%s%s", this.contractType.getCode(), this.code, this.contractType.getSuffix());
 	}
-	
-	@JsonIgnore
-	public PoCodeBasic getPoCodeBasic() {
-		return new PoCodeBasic(this.getId(), this.getCode(), this.getContractTypeCode(), this.contractTypeSuffix);
-	}
-		
 }

@@ -9,8 +9,8 @@ import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -32,6 +32,7 @@ import lombok.Value;
 public class CashewQcRow extends BasicDTO {
 
 	PoCodeBasic poCode;
+	//already in poCode
 	String supplierName;
 	String checkedBy;
 //	Integer itemId;
@@ -60,7 +61,7 @@ public class CashewQcRow extends BasicDTO {
 			BigDecimal mold, BigDecimal dirty, BigDecimal lightDirty, 
 			BigDecimal decay, BigDecimal insectDamage, BigDecimal testa) {
 		super(id);
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
 		this.checkedBy = checkedBy.toString();
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);

@@ -3,8 +3,7 @@ package com.avc.mis.beta.dto.view;
 import java.util.List;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
@@ -27,15 +26,16 @@ import lombok.Value;
 public class PoInventoryRow extends BasicDTO {
 
 	PoCodeBasic poCode;
+	//already in poCode
 	String supplierName;
 	AmountWithUnit[] totalStock;
 
 	List<ProcessItemInventoryRow> poInventoryRows;
 
-	public PoInventoryRow(@NonNull PoCodeDTO poCode, AmountWithUnit totalStock, 
+	public PoInventoryRow(@NonNull PoCodeBasic poCode, AmountWithUnit totalStock, 
 			List<ProcessItemInventoryRow> poInventoryRows) {
 		super(poCode.getId());
-		this.poCode = poCode.getPoCodeBasic();
+		this.poCode = poCode;
 		this.supplierName = poCode.getSupplierName();
 		this.totalStock = new AmountWithUnit[2];
 		this.totalStock[0] = totalStock.setScale(MeasureUnit.SCALE);

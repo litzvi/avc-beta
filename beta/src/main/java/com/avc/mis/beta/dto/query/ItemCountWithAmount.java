@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.processinfo.CountAmountDTO;
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -25,7 +25,7 @@ import lombok.Data;
 public class ItemCountWithAmount implements CollectionItemWithGroup<CountAmountDTO, ItemCountDTO> {
 
 	private ItemCountDTO itemCount;
-	private PoCodeDTO po;
+	private PoCodeBasic po;
 	private CountAmountDTO amount;
 	
 	/**
@@ -39,7 +39,7 @@ public class ItemCountWithAmount implements CollectionItemWithGroup<CountAmountD
 //		super(id);
 		this.itemCount = new ItemCountDTO(id, version, ordinal, 
 				itemId, itemValue, productionUse, clazz, measureUnit, containerWeight, accessWeight);
-		this.po = new PoCodeDTO(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+		this.po = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.amount = new CountAmountDTO(amountId, amountVersion, amountOrdinal, amount);		
 	}
 	

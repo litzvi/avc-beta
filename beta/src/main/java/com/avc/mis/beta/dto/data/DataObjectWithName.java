@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.entities.ObjectEntityWithName;
+import com.avc.mis.beta.entities.ValueInterface;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
@@ -17,7 +18,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class DataObjectWithName extends DataObject {
+public class DataObjectWithName<T extends ObjectEntityWithName> extends DataObject<T> {
 	
 	@JsonIgnore
 	@ToString.Exclude

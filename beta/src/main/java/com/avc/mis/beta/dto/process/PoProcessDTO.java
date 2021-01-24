@@ -11,7 +11,7 @@ import java.util.List;
 
 import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -36,7 +36,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public abstract class PoProcessDTO extends GeneralProcessDTO {
 	
-	private PoCodeDTO poCode;
+	private PoCodeBasic poCode;
 	
 	private List<ItemCountDTO> itemCounts;
 	
@@ -54,14 +54,14 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 				recordedTime, startTime, endTime, 
 				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
 		if(poCodeId != null)
-			this.poCode = new PoCodeDTO(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		
 	}
 	
 	public PoProcessDTO(@NonNull PoProcess process) {
 		super(process);
 		if(process.getPoCode() != null)
-			this.poCode = new PoCodeDTO(process.getPoCode());
+			this.poCode = new PoCodeBasic(process.getPoCode());
 	}
 	
 }

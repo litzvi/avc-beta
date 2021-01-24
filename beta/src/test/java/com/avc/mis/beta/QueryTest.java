@@ -34,7 +34,7 @@ import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
@@ -106,21 +106,21 @@ public class QueryTest {
 
 		
 		//get list of cashew orders
-		Set<PoCodeDTO> openCashewOrdersBasic;
+		Set<PoCodeBasic> openCashewOrdersBasic;
 		openCashewOrdersBasic = objectTablesReader.findOpenCashewOrdersPoCodes();
 		openCashewOrdersBasic.forEach(row -> System.out.println(row));
 		
-		Set<PoCodeDTO> inventoryCashewBasic = objectTablesReader.findCashewAvailableInventoryPoCodes();
+		Set<PoCodeBasic> inventoryCashewBasic = objectTablesReader.findCashewAvailableInventoryPoCodes();
 		inventoryCashewBasic.forEach(row -> System.out.println(row));
 		
 		objectTablesReader.findOpenAndPendingCashewOrdersPoCodes().forEach(row -> System.out.println(row));
 		
 		//get list of cashew orders and receipts
-		List<PoCodeDTO> activeCashewBasic =  objectTablesReader.findAllPoCodes();
+		List<PoCodeBasic> activeCashewBasic =  objectTablesReader.findAllPoCodes();
 		activeCashewBasic.forEach(row -> System.out.println(row));
 		
 		//get active po codes - so we can add QC for them
-		Set<PoCodeDTO> openAndPendingCashewOrdersPoCodes = objectTablesReader.findOpenAndPendingCashewOrdersPoCodes();
+		Set<PoCodeBasic> openAndPendingCashewOrdersPoCodes = objectTablesReader.findOpenAndPendingCashewOrdersPoCodes();
 		if(openAndPendingCashewOrdersPoCodes.isEmpty()) {
 			fail("Couldn't test fetching purchase order by po code");
 		}
@@ -241,7 +241,7 @@ public class QueryTest {
 		//cashew inventory table by po
 		List<PoInventoryRow> poInventoryRows = cashewReports. getInventoryTableByPo(ItemGroup.PRODUCT);
 		poInventoryRows.forEach(r -> System.out.println(r));		
-		Set<PoCodeDTO> rawInventoryPos = objectTablesReader.findAvailableInventoryPoCodes(ItemGroup.PRODUCT);
+		Set<PoCodeBasic> rawInventoryPos = objectTablesReader.findAvailableInventoryPoCodes(ItemGroup.PRODUCT);
 		rawInventoryPos.forEach(r -> System.out.println(r));
 		assertTrue(rawInventoryPos.size() == rawInventoryPos.size(), "po codes and po inventory row for cashew aren't consistent");
 		
@@ -288,7 +288,7 @@ public class QueryTest {
 		List<LoadingRow> loadings = loading.getLoadings();
 		loadings.forEach(i -> System.out.println(i));
 		
-		Set<PoCodeDTO> inventoryPoCodes;
+		Set<PoCodeBasic> inventoryPoCodes;
 		try {
 			inventoryPoCodes = objectTablesReader.findAvailableInventoryPoCodes(new ProductionUse[]{ProductionUse.RAW_KERNEL, ProductionUse.CLEAN});
 		} catch (Exception e) {
@@ -317,7 +317,9 @@ public class QueryTest {
 		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocations();
 		relocationRows.forEach(i -> System.out.println(i));
 		
-		List<PoCodeDTO> poCodes = objectTablesReader.findAllPoCodes();
+		List<PoCodeBasic> poCodes = objectTablesReader.findAllPoCodes();
+		if(poCodes.isEmpty())
+			fail("No po codes to test");
 		poCodes.forEach(c -> {
 			Map<ProcessName, List<PoProcessDTO>> qcProcessesMap = qualityChecks.getAllQualityChecksByPo(c.getId());
 			qcProcessesMap.forEach((k, v) -> {
@@ -327,6 +329,8 @@ public class QueryTest {
 				}
 			});
 		});
+		
+		poCodes.forEach(c -> System.out.println(orders.getPoCode(c.getId())));
 		
 		poCodes = objectTablesReader.findFreePoCodes();
 		poCodes.forEach(i -> System.out.println(i));
@@ -367,7 +371,7 @@ public class QueryTest {
 		System.out.println(finalReport);
 		System.out.println(finalReport.getReceiptQC());
 		
-//		List<PoCodeDTO> poCodes = objectTablesReader.findFreePoCodes();
+//		List<PoCodeBasic> poCodes = objectTablesReader.findFreePoCodes();
 //		poCodes.forEach(i -> System.out.println(i));
 
 		

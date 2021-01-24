@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.BasePoCode;
@@ -252,8 +252,8 @@ public class TestService {
 		return warehouses.get(randNum.nextInt(warehouses.size()));
 	}
 	
-	public PoCodeDTO getPoCodeDTO() {
-		List<PoCodeDTO> poCodes = objectTablesReader.findAllPoCodes();
+	public PoCodeBasic getPoCodeBasic() {
+		List<PoCodeBasic> poCodes = objectTablesReader.findAllPoCodes();
 		if(poCodes.isEmpty())
 			fail("No po codes in database for running this test");
 		return poCodes.get(randNum.nextInt(poCodes.size()));
@@ -430,7 +430,7 @@ public class TestService {
 	
 	public PoCode getPoCode() {
 		PoCode poCode = new PoCode();
-		poCode.setId(getPoCodeDTO().getId());
+		poCode.setId(getPoCodeBasic().getId());
 		return poCode;
 	}
 
