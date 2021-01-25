@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.report;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -72,21 +73,25 @@ public class ProductionReportLine extends ProductReportLine {
 		this.qc = empty ? null : qc;
 		this.totalQC = empty ? null : ItemAmount.getTotalWeight(qc);
 	}
+	
+	private AmountWithUnit getTotalOut() {
+		return AmountWithUnit.addNullable(AmountWithUnit.addNullable(totalProductOut, totalWaste), totalQC);
+	}
+	
+	private AmountWithUnit getTotalIn() {
+		return AmountWithUnit.addNullable(totalProductIn, totalIngredients);
+	}
 
 	public AmountWithUnit getDifference() {		
-		AmountWithUnit totalOut = AmountWithUnit.addNullable(AmountWithUnit.addNullable(totalProductOut, totalWaste), totalQC);
-		AmountWithUnit totalIn = AmountWithUnit.addNullable(totalProductIn, totalIngredients);
-		
-		return AmountWithUnit.subtractNullable(totalOut, totalIn);
-//		if(totalWaste.isPresent()) {
-//			calculate(difference, totalWaste, (AmountWithUnit::add));
-//		}
-		
-//		return totalProductOut.orElse(AmountWithUnit.ZERO_KG)
-//				.add(totalWaste.orElse(AmountWithUnit.ZERO_KG))
-//				.add(totalQC.orElse(AmountWithUnit.ZERO_KG))
-//				.subtract(totalProductIn.orElse(AmountWithUnit.ZERO_KG))
-//				.subtract(totalIngredients.orElse(AmountWithUnit.ZERO_KG));
+		return AmountWithUnit.subtractNullable(getTotalOut(), getTotalIn());
+	}
+	
+	public BigDecimal getRatioLoss() {
+		return AmountWithUnit.divide(getTotalOut(), getTotalIn());
+	}
+	
+	public BigDecimal getProductRatioLoss() {
+		return AmountWithUnit.divide(totalProductOut, totalProductIn);
 	}
 
 

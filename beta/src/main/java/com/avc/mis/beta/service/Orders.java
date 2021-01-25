@@ -170,7 +170,7 @@ public class Orders {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addPoCode(BasePoCode poCode) {
+	public void addPoCode(PoCode poCode) {
 		dao.addEntity(poCode);
 	}
 	
@@ -264,7 +264,7 @@ public class Orders {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editPoCode(BasePoCode poCode) {
+	public void editPoCode(PoCode poCode) {
 		dao.editEntity(poCode);
 	}	
 	

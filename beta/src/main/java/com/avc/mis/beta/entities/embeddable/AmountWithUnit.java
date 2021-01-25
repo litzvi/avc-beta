@@ -5,6 +5,7 @@ package com.avc.mis.beta.entities.embeddable;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
@@ -189,6 +190,17 @@ public class AmountWithUnit implements Cloneable {
 			return subtrahend.negate();
 		}
 		return null;
+	}
+
+	public static BigDecimal divide(AmountWithUnit numerator, AmountWithUnit denominator) {
+		if(numerator == null || denominator == null || denominator.amount.equals(BigDecimal.ZERO)) {
+			return null;
+		}
+		BigDecimal denominatorAmount = MeasureUnit.convert(denominator, numerator.getMeasureUnit());
+		if(denominatorAmount == null)
+			throw new UnsupportedOperationException(
+					"Convertion from " + denominator.getMeasureUnit() + " to " + numerator.getMeasureUnit() + " not supported");
+		return numerator.getAmount().divide(denominatorAmount, MathContext.DECIMAL64).setScale(MeasureUnit.DIVISION_SCALE);
 	}
 
 	

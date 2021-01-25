@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.ObjectDataEntity;
+import com.avc.mis.beta.entities.codes.MixPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
@@ -207,6 +208,24 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ ") "
 		+ "order by po_code.id desc ")
 	List<PoCodeBasic> findFreePoCodes(Integer poCodeId);
+
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name, po_code.display) "
+		+ "from MixPoCode po_code "
+			+ "left join po_code.contractType c "
+			+ "left join po_code.supplier s "
+		+ "where (po_code.id = :poCodeId or :poCodeId is null) "
+			+ "and (po_code.processes is empty "
+				+ "or not exists ("
+					+ "select p_2 "
+					+ "from po_code.processes p_2 "
+						+ "join p_2.lifeCycle lc_2 "
+					+ "where "
+						+ "lc_2.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+				+ ")"
+			+ ") "
+		+ "order by po_code.id desc ")
+	List<PoCodeBasic> findMixFreePoCodes(Integer poCodeId);
 
 	
 }

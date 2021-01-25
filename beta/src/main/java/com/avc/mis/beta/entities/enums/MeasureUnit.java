@@ -54,6 +54,7 @@ public enum MeasureUnit {
 	 * Default scale when returning result from conversion
 	 */
 	public static final int SCALE = 3;
+	public static final int DIVISION_SCALE = 6;
 	public static final int CALCULATION_SCALE = 16;
 	
 	static {

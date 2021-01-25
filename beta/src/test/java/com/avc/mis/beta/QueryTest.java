@@ -342,6 +342,9 @@ public class QueryTest {
 				v.forEach(r -> System.out.println(r));
 			}
 		});
+		
+		List<PoCodeBasic> freePoCodes = objectTablesReader.findFreeMixPoCodes();
+		List<PoCodeBasic> freeMixPoCodes = objectTablesReader.findFreeMixPoCodes();
 
 		//final report
 		poCodes.forEach(c -> System.out.println(processInfoReader.getPoFinalReport(c.getId())));
@@ -370,6 +373,9 @@ public class QueryTest {
 		}
 		System.out.println(finalReport);
 		System.out.println(finalReport.getReceiptQC());
+
+		List<PoCodeBasic> poCodes = objectTablesReader.findAllPoCodes();
+		poCodes.forEach(c -> System.out.println(orders.getPoCode(c.getId())));
 		
 //		List<PoCodeBasic> poCodes = objectTablesReader.findFreePoCodes();
 //		poCodes.forEach(i -> System.out.println(i));
