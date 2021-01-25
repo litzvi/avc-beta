@@ -183,7 +183,7 @@ public class TestService {
 			receiptItems[i] = new ReceiptItem();
 			Item item = items.get(randNum.nextInt(items.size()));
 			receiptItems[i].setItem(item);
-			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), MeasureUnit.LBS));
+			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
 			receiptItems[i].setMeasureUnit(item.getMeasureUnit());
 			receiptItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			receiptItems[i].setStorageForms(new Storage[] {storageForms[i]});
@@ -225,7 +225,7 @@ public class TestService {
 			int itemId = oItem.getItem().getId();
 			Item item = getItems().stream().filter(j -> j.getId() == itemId).findAny().get();
 			items[i].setItem(item);
-			items[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), MeasureUnit.LBS));
+			items[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
 			items[i].setMeasureUnit(item.getMeasureUnit());
 			items[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			storageForms[i].setUnitAmount(BigDecimal.ONE);

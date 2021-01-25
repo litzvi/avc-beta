@@ -91,7 +91,7 @@ public class QueryTest {
 	@Autowired ProductionProcesses productionProcesses;
 	@Autowired Loading loading;
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void queryTest() {
 
@@ -162,7 +162,14 @@ public class QueryTest {
 		valueTablesReader.getItemsByGroup(ItemGroup.PRODUCT).forEach(i -> System.out.println(i));
 		
 		//print received orders
-		List<ReceiptRow> receiptRows = receipts.findFinalCashewReceipts();
+		List<ReceiptRow> receiptRows;
+		try {
+			receiptRows = receipts.findFinalCashewReceipts();
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			throw e2;
+		}
 		receiptRows.forEach(r -> System.out.println(r));
 		
 		
@@ -375,7 +382,9 @@ public class QueryTest {
 		System.out.println(finalReport.getReceiptQC());
 
 		List<PoCodeBasic> poCodes = objectTablesReader.findAllPoCodes();
+		System.out.println("findAllPoCodes");
 		poCodes.forEach(c -> System.out.println(orders.getPoCode(c.getId())));
+		poCodes.forEach(i -> System.out.println(i));
 		
 //		List<PoCodeBasic> poCodes = objectTablesReader.findFreePoCodes();
 //		poCodes.forEach(i -> System.out.println(i));

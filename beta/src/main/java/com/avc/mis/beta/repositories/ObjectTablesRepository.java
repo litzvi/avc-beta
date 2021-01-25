@@ -176,7 +176,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	List<PoCodeBasic> findReceivedPoCodeByTypes(ProcessName[] processNames);
 
 	//will also give old (history) po_codes
-	@Query("select distinct new com.avc.mis.beta.dto.values.PoCodeBasic("
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name, po_code.display) "
 		+ "from PoCode po_code "
 				+ "join po_code.contractType c "

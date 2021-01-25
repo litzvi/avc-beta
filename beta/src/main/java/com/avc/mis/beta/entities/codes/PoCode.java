@@ -24,11 +24,11 @@ import lombok.ToString;
 public class PoCode extends BasePoCode {
 
 	
-	/**
-	 * Does nothing - display should be empty for normal po code
-	 * @param display
-	 */
-	@Override
-	public void setDisplay(String display) {}
+//	/**
+//	 * Does nothing - display should be empty for normal po code
+//	 * @param display
+//	 */
+//	@Override
+//	public void setDisplay(String display) {}
 
 }

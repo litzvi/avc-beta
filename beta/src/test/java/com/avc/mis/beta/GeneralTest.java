@@ -148,7 +148,7 @@ public class GeneralTest {
 			Item item = orderItems[i].getItem();
 			receiptItems[i].setItem(item);
 			receiptItems[i].setMeasureUnit(item.getMeasureUnit());
-			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), "LBS"));
+			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
 			receiptItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
 			receiptItems[i].setOrderItem(orderItems[i]);
 			

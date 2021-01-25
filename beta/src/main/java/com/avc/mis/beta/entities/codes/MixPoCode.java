@@ -12,6 +12,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+
+import org.hibernate.validator.constraints.ISBN;
+
+import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.values.ContractType;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -40,6 +48,22 @@ public class MixPoCode extends BasePoCode {
 	@Override
 	public void setDisplay(String display) {
 		super.setDisplay(display);
+	}
+	
+	@NotNull(message = "Display is mandatory for mixed po code")
+	@Override
+	public String getDisplay() {
+		return super.getDisplay();
+	}
+	
+	@Null(message = "mixed po code doesn't have a supplier")
+	public Supplier getSupplier() {
+		return super.getSupplier();
+	}
+	
+	@Null(message = "mixed po code doesn't have a contract type")
+	public ContractType getContractType() {
+		return super.getContractType();
 	}
 
 }
