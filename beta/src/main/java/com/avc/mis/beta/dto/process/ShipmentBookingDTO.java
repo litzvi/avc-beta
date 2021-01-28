@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.GeneralProcessDTO;
+import com.avc.mis.beta.dto.embedable.PoInfo;
+import com.avc.mis.beta.dto.embedable.ShipmentBookingInfo;
 import com.avc.mis.beta.dto.processinfo.BookedContainerDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -45,22 +47,22 @@ public class ShipmentBookingDTO extends GeneralProcessDTO {
 	 * All arguments (besides for booked containers) Constructor ,
 	 * used to project directly from database without nested fetching.
 	 */
-	public ShipmentBookingDTO(Integer id, Integer version, Instant createdDate, String staffRecording, 
-//			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
-//			Integer supplierId, Integer supplierVersion, String supplierName,  
-			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration, Integer numOfWorkers, 
-			ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
-			String personInCharge) {
-		super(id, version, createdDate, staffRecording, 
-//				poCodeId, contractTypeCode, contractTypeSuffix,
-//				supplierId, supplierVersion, supplierName, 
-				processName, productionLine, 
-				recordedTime, startTime, endTime, duration, 
-				numOfWorkers, processStatus, editStatus, remarks, approvals);
-		this.personInCharge = personInCharge;
-
-	}
+//	public ShipmentBookingDTO(Integer id, Integer version, Instant createdDate, String staffRecording, 
+////			Integer poCodeId, String contractTypeCode, String contractTypeSuffix, 
+////			Integer supplierId, Integer supplierVersion, String supplierName,  
+//			ProcessName processName, ProductionLine productionLine, 
+//			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration, Integer numOfWorkers, 
+//			ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
+//			String personInCharge) {
+//		super(id, version, createdDate, staffRecording, 
+////				poCodeId, contractTypeCode, contractTypeSuffix,
+////				supplierId, supplierVersion, supplierName, 
+//				processName, productionLine, 
+//				recordedTime, startTime, endTime, duration, 
+//				numOfWorkers, processStatus, editStatus, remarks, approvals);
+//		this.personInCharge = personInCharge;
+//
+//	}
 	
 	/**
 	 * Constructor from ShipmentBooking object, used for testing.
@@ -72,6 +74,11 @@ public class ShipmentBookingDTO extends GeneralProcessDTO {
 		this.bookedContainers = Arrays.stream(booking.getBookedContainers()).map(i->{return new BookedContainerDTO(i);}).collect(Collectors.toList());
 
 	}
+	
+	public void setShipmentBookingInfo(ShipmentBookingInfo info) {
+		this.personInCharge = info.getPersonInCharge();		
+	}
+
 	
 	@Override
 	public String getProcessTypeDescription() {

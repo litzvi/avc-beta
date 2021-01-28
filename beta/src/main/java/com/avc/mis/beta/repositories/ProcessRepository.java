@@ -1,11 +1,14 @@
 package com.avc.mis.beta.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ProcessBasic;
+import com.avc.mis.beta.dto.embedable.GeneralProcessInfo;
+import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
@@ -20,6 +23,23 @@ import lombok.NonNull;
  *
  */
 public interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> {
+	
+	@Query("select new com.avc.mis.beta.dto.embedable.GeneralProcessInfo("
+			+ "r.id, r.version, r.createdDate, p_user.username, "
+			+ "pt.processName, p_line, "
+			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
+			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
+		+ "from PoProcess r "
+			+ "join r.processType pt "
+			+ "left join r.createdBy p_user "
+			+ "left join r.productionLine p_line "
+			+ "join r.lifeCycle lc "
+			+ "left join r.approvals approval "
+				+ "left join approval.user u "
+		+ "where type(r) = :clazz "
+			+ "and r.id = :processId "
+		+ "group by r ")
+	Optional<GeneralProcessInfo> findGeneralProcessInfoByProcessId(int processId, Class<? extends T> clazz);
 
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
 			+ "p.id, po_code.id, po_code.code, t.code, t.suffix, s.name, po_code.display, "

@@ -54,25 +54,25 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 		+ "where s.id in :storageIds ")
 	Stream<StorageBase> findStoragesById(int[] storageIds);
 	
-	@Query("select new com.avc.mis.beta.dto.process.StorageRelocationDTO("
-			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display, "
-			+ "pt.processName, p_line, "
-			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)) ) "
-		+ "from StorageRelocation r "
-			+ "join r.poCode po_code "
-				+ "join po_code.contractType t "
-				+ "join po_code.supplier s "
-			+ "join r.processType pt "
-			+ "left join r.createdBy p_user "
-			+ "left join r.productionLine p_line "
-			+ "join r.lifeCycle lc "
-			+ "left join r.approvals approval "
-				+ "left join approval.user u "
-		+ "where r.id = :processId "
-		+ "group by r ")
-	Optional<StorageRelocationDTO> findRelocationDTOByProcessId(int processId);
+//	@Query("select new com.avc.mis.beta.dto.process.StorageRelocationDTO("
+//			+ "r.id, r.version, r.createdDate, p_user.username, "
+//			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display, "
+//			+ "pt.processName, p_line, "
+//			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
+//			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)) ) "
+//		+ "from StorageRelocation r "
+//			+ "join r.poCode po_code "
+//				+ "join po_code.contractType t "
+//				+ "join po_code.supplier s "
+//			+ "join r.processType pt "
+//			+ "left join r.createdBy p_user "
+//			+ "left join r.productionLine p_line "
+//			+ "join r.lifeCycle lc "
+//			+ "left join r.approvals approval "
+//				+ "left join approval.user u "
+//		+ "where r.id = :processId "
+//		+ "group by r ")
+//	Optional<StorageRelocationDTO> findRelocationDTOByProcessId(int processId);
 
 //	@Query("select new com.avc.mis.beta.dto.processinfo.StorageMoveDTO( "
 //			+ "m.id, m.version, m.ordinal, m.numberUsedUnits, "

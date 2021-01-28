@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.SampleReceipt;
 import com.avc.mis.beta.repositories.SampleRepository;
 
@@ -42,9 +44,16 @@ public class Samples {
 	}
 	
 	public SampleReceiptDTO getSampleReceiptByProcessId(int processId) {
-		Optional<SampleReceiptDTO> sample = getSampleRepository().findSampleDTOByProcessId(processId);
-		SampleReceiptDTO sampleReceiptDTO = sample.orElseThrow(
-				()->new IllegalArgumentException("No receipt sample with given process id"));
+		SampleReceiptDTO sampleReceiptDTO = new SampleReceiptDTO();
+		sampleReceiptDTO.setPoProcessInfo(getSampleRepository()
+				.findPoProcessInfoByProcessId(processId, SampleReceipt.class)
+				.orElseThrow(
+						()->new IllegalArgumentException("No receipt sample with given process id")));
+
+		
+//		Optional<SampleReceiptDTO> sample = getSampleRepository().findSampleDTOByProcessId(processId);
+//		SampleReceiptDTO sampleReceiptDTO = sample.orElseThrow(
+//				()->new IllegalArgumentException("No receipt sample with given process id"));
 		sampleReceiptDTO.setSampleItems(getSampleRepository().findSampleItemsWithWeight(processId));
 		
 		return sampleReceiptDTO;

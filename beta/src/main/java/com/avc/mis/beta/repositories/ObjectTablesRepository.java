@@ -227,5 +227,11 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 		+ "order by po_code.id desc ")
 	List<PoCodeBasic> findMixFreePoCodes(Integer poCodeId);
 
+	@Query("select org_po.id "
+		+ "from MixPoCode po_code "
+			+ "join po_code.origionPoCodes org_po "
+		+ "where po_code.id = :poCodeId ")
+	List<Integer> findOrigionPoCodes(Integer poCodeId);
+
 	
 }

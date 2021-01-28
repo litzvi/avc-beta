@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.report.ItemAmount;
@@ -277,13 +278,15 @@ public class Receipts {
 //	}
 	
 	public ReceiptDTO getReceiptByProcessId(int processId) {
-//		Optional<Receipt> result = getReceiptRepository().findReceiptByProcessId(processId);
-//		Receipt receipt = result.orElseThrow(
+		ReceiptDTO receiptDTO = new ReceiptDTO();
+		receiptDTO.setPoProcessInfo(getReceiptRepository()
+				.findPoProcessInfoByProcessId(processId, Receipt.class)
+				.orElseThrow(
+						()->new IllegalArgumentException("No order receipt with given process id")));
+		
+//		Optional<ReceiptDTO> receipt = getReceiptRepository().findReceiptDTOByProcessId(processId);
+//		ReceiptDTO receiptDTO = receipt.orElseThrow(
 //				()->new IllegalArgumentException("No order receipt with given process id"));
-//		ReceiptDTO receiptDTO = new ReceiptDTO(receipt);
-		Optional<ReceiptDTO> receipt = getReceiptRepository().findReceiptDTOByProcessId(processId);
-		ReceiptDTO receiptDTO = receipt.orElseThrow(
-				()->new IllegalArgumentException("No order receipt with given process id"));
 		receiptDTO.setReceiptItems(
 				CollectionItemWithGroup.getFilledGroups(
 						getReceiptRepository()

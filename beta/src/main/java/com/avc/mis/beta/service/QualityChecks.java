@@ -18,8 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
+import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
+import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.report.ItemQc;
 import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
@@ -27,6 +29,7 @@ import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.process.QualityCheck;
+import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.repositories.QCRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
@@ -147,9 +150,16 @@ public class QualityChecks {
 	}
 	
 	public QualityCheckDTO getQcByProcessId(int processId) {
-		Optional<QualityCheckDTO> check = getQcRepository().findQcDTOByProcessId(processId);
-		QualityCheckDTO qualityCheckDTO = check.orElseThrow(
-				()->new IllegalArgumentException("No quality check with given process id"));
+		QualityCheckDTO qualityCheckDTO = new QualityCheckDTO();
+		qualityCheckDTO.setPoProcessInfo(getQcRepository()
+				.findPoProcessInfoByProcessId(processId, QualityCheck.class)
+				.orElseThrow(
+						()->new IllegalArgumentException("No quality check with given process id")));
+		qualityCheckDTO.setQualityCheckInfo(getQcRepository().findQualityCheckInfo(processId));
+
+//		Optional<QualityCheckDTO> check = getQcRepository().findQcDTOByProcessId(processId);
+//		QualityCheckDTO qualityCheckDTO = check.orElseThrow(
+//				()->new IllegalArgumentException("No quality check with given process id"));
 		qualityCheckDTO.setProcessItems(
 				CollectionItemWithGroup.getFilledGroups(
 						getQcRepository()

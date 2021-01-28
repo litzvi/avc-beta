@@ -144,7 +144,7 @@ public abstract class DAO extends ReadDAO {
 		return getEntityManager().find(entityClass, id);
 	}
 	
-	public int changeUserPassword(CharSequence password, String newPassword) {
+	public int changeUserPassword(String password, String newPassword) {
 		
 		UserLogin user = getCurrentUser();
 		String encodedPassword = user.getPassword();

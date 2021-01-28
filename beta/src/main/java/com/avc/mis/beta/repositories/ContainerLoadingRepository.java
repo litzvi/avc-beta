@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow;
 import com.avc.mis.beta.dto.doc.ExportInfo;
+import com.avc.mis.beta.dto.embedable.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine;
@@ -54,29 +55,39 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 
 
 
-	@Query("select new com.avc.mis.beta.dto.process.ContainerLoadingDTO("
-			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display, "
-			+ "pt.processName, p_line, "
-			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
+//	@Query("select new com.avc.mis.beta.dto.process.ContainerLoadingDTO("
+//			+ "r.id, r.version, r.createdDate, p_user.username, "
+//			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display, "
+//			+ "pt.processName, p_line, "
+//			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
+//			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
+//			+ "sc.id, sc.code, port.id, port.value, port.code, "
+//			+ "r.containerDetails, r.shipingDetails) "
+//		+ "from ContainerLoading r "
+//			+ "join r.shipmentCode sc "
+//				+ "join sc.portOfDischarge port "
+//			+ "left join r.poCode po_code "
+//				+ "left join po_code.contractType t "
+//				+ "left join po_code.supplier s "
+//			+ "join r.processType pt "
+//			+ "left join r.createdBy p_user "
+//			+ "left join r.productionLine p_line "
+//			+ "join r.lifeCycle lc "
+//			+ "left join r.approvals approval "
+//				+ "left join approval.user u "
+//		+ "where r.id = :processId "
+//		+ "group by r ")
+//	Optional<ContainerLoadingDTO> findContainerLoadingDTOById(int processId);
+
+	@Query("select new com.avc.mis.beta.dto.embedable.ContainerLoadingInfo( "
 			+ "sc.id, sc.code, port.id, port.value, port.code, "
 			+ "r.containerDetails, r.shipingDetails) "
 		+ "from ContainerLoading r "
 			+ "join r.shipmentCode sc "
 				+ "join sc.portOfDischarge port "
-			+ "left join r.poCode po_code "
-				+ "left join po_code.contractType t "
-				+ "left join po_code.supplier s "
-			+ "join r.processType pt "
-			+ "left join r.createdBy p_user "
-			+ "left join r.productionLine p_line "
-			+ "join r.lifeCycle lc "
-			+ "left join r.approvals approval "
-				+ "left join approval.user u "
-		+ "where r.id = :processId "
-		+ "group by r ")
-	Optional<ContainerLoadingDTO> findContainerLoadingDTOById(int processId);
+		+ "where r.id = :processId ")
+	ContainerLoadingInfo findContainerLoadingInfo(int processId);
+
 
 	/**
 	 * Gets the join of loaded item, process and storage information for the given container loading process.
@@ -248,6 +259,9 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "where p.id = :processId "
 		+ "group by item.id, itemPo.id, sf.unitAmount, pi.measureUnit ")
 	List<ContainerPoItemStorageRow> findLoadedStorages(int processId);
+
+
+
 
 
 	

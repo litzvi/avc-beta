@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
@@ -168,9 +169,15 @@ public class WarehouseManagement {
 	 * @return StorageTransferDTO
 	 */
 	public StorageTransferDTO getStorageTransfer(int processId) {
-		Optional<StorageTransferDTO> transfer = getTransferRepository().findTransferDTOByProcessId(processId);
-		StorageTransferDTO transferDTO = transfer.orElseThrow(
-				()->new IllegalArgumentException("No storage transfer with given process id"));
+		StorageTransferDTO transferDTO = new StorageTransferDTO();
+		transferDTO.setPoProcessInfo(getTransferRepository()
+				.findPoProcessInfoByProcessId(processId, StorageTransfer.class)
+				.orElseThrow(
+						()->new IllegalArgumentException("No storage transfer with given process id")));
+		
+//		Optional<StorageTransferDTO> transfer = getTransferRepository().findTransferDTOByProcessId(processId);
+//		StorageTransferDTO transferDTO = transfer.orElseThrow(
+//				()->new IllegalArgumentException("No storage transfer with given process id"));
 		transferDTO.setProcessItems(
 				CollectionItemWithGroup.getFilledGroups(
 						getTransferRepository()
@@ -195,9 +202,16 @@ public class WarehouseManagement {
 	}
 	
 	public StorageRelocationDTO getStorageRelocation(int processId) {
-		Optional<StorageRelocationDTO> relocation = getRelocationRepository().findRelocationDTOByProcessId(processId);
-		StorageRelocationDTO relocationDTO = relocation.orElseThrow(
-				()->new IllegalArgumentException("No storage relocation with given process id"));
+		StorageRelocationDTO relocationDTO = new StorageRelocationDTO();
+		relocationDTO.setPoProcessInfo(getRelocationRepository()
+				.findPoProcessInfoByProcessId(processId, StorageRelocation.class)
+				.orElseThrow(
+						()->new IllegalArgumentException("No storage relocation with given process id")));
+
+//		Optional<StorageRelocationDTO> relocation = getRelocationRepository().findRelocationDTOByProcessId(processId);
+//		StorageRelocationDTO relocationDTO = relocation.orElseThrow(
+//				()->new IllegalArgumentException("No storage relocation with given process id"));
+		
 		relocationDTO.setStorageMovesGroups(
 				CollectionItemWithGroup.getFilledGroups(
 						getRelocationRepository()
@@ -296,8 +310,16 @@ public class WarehouseManagement {
 	 */
 	public List<ProcessItemInventory> getAvailableInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
 		boolean checkProductionUses = (productionUses != null);
-		List<InventoryProcessItemWithStorage> processItemWithStorages =
-				getInventoryRepository().findAvailableInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, poCodeId);	
+		List<InventoryProcessItemWithStorage> processItemWithStorages;
+		if(poCodeId != null) {
+			List<Integer> poCodeIds = dao.getOrigionPoCodeIds(poCodeId);
+			processItemWithStorages =
+					getInventoryRepository().findAvailableInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, poCodeIds);
+		}
+		else {
+			processItemWithStorages =
+					getInventoryRepository().findAvailableInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, null);
+		}
 		return CollectionItemWithGroup.getFilledGroups(processItemWithStorages);
 		
 	}
@@ -315,7 +337,12 @@ public class WarehouseManagement {
 	 */
 	public List<ProcessItemInventoryRow> getInventoryRows(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
 		boolean checkProductionUses = (productionUses != null);
-		return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, poCodeId);	
+		if(poCodeId != null) {
+			List<Integer> poCodeIds = dao.getOrigionPoCodeIds(poCodeId);
+			return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, poCodeIds);			}
+		else {
+			return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, null);	
+		}
 	}
 
 }

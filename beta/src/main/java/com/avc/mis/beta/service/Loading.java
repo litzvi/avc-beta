@@ -20,12 +20,14 @@ import com.avc.mis.beta.dto.doc.ExportInfo;
 import com.avc.mis.beta.dto.doc.InventoryExportDoc;
 import com.avc.mis.beta.dto.doc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
+import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine;
 import com.avc.mis.beta.dto.report.LoadingReportLine;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ContainerLoading;
+import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
@@ -110,8 +112,15 @@ public class Loading {
 	 *                                  dosen't exist.
 	 */
 	public ContainerLoadingDTO getLoading(int processId) {
-		Optional<ContainerLoadingDTO> loading = getContainerLoadingRepository().findContainerLoadingDTOById(processId);
-		ContainerLoadingDTO loadingDTO = loading.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id"));
+		ContainerLoadingDTO loadingDTO = new ContainerLoadingDTO();
+		loadingDTO.setGeneralProcessInfo(getContainerLoadingRepository()
+				.findGeneralProcessInfoByProcessId(processId, ContainerLoading.class)
+				.orElseThrow(
+						()->new IllegalArgumentException("No container loading with given process id")));
+		loadingDTO.setContainerLoadingInfo(getContainerLoadingRepository().findContainerLoadingInfo(processId));
+		
+//		Optional<ContainerLoadingDTO> loading = getContainerLoadingRepository().findContainerLoadingDTOById(processId);
+//		ContainerLoadingDTO loadingDTO = loading.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id"));
 		
 		getProcessInfoReader().setTransactionProcessCollections(loadingDTO);
 		

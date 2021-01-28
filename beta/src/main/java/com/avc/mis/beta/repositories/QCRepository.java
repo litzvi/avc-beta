@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ValueEntityObject;
+import com.avc.mis.beta.dto.embedable.QualityCheckInfo;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
 import com.avc.mis.beta.dto.report.ItemQc;
@@ -24,28 +25,33 @@ import com.avc.mis.beta.entities.process.QualityCheck;
  * @author Zvi
  *
  */
-public interface QCRepository extends ProcessRepository<QualityCheck> {
+public interface QCRepository extends PoProcessRepository<QualityCheck> {
 
-	@Query("select new com.avc.mis.beta.dto.process.QualityCheckDTO("
-			+ "r.id, r.version, r.inspector, r.sampleTaker, r.checkedBy, "
-			+ "r.createdDate, p_user.username, "
-			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display, "
-			+ "pt.processName, p_line, "
-			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
+//	@Query("select new com.avc.mis.beta.dto.process.QualityCheckDTO("
+//			+ "r.id, r.version, r.inspector, r.sampleTaker, r.checkedBy, "
+//			+ "r.createdDate, p_user.username, "
+//			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display, "
+//			+ "pt.processName, p_line, "
+//			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
+//			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
+//		+ "from QualityCheck r "
+//			+ "join r.poCode po_code "
+//				+ "join po_code.contractType t "
+//				+ "join po_code.supplier s "
+//			+ "join r.processType pt "
+//			+ "left join r.createdBy p_user "
+//			+ "left join r.productionLine p_line "
+//			+ "join r.lifeCycle lc "
+//				+ "left join r.approvals approval "
+//					+ "left join approval.user u "
+//		+ "where r.id = :id "
+//		+ "group by r ")
+//	Optional<QualityCheckDTO> findQcDTOByProcessId(int id);
+	
+	@Query("select new com.avc.mis.beta.dto.embedable.QualityCheckInfo(r.checkedBy, r.inspector, r.sampleTaker) "
 		+ "from QualityCheck r "
-			+ "join r.poCode po_code "
-				+ "join po_code.contractType t "
-				+ "join po_code.supplier s "
-			+ "join r.processType pt "
-			+ "left join r.createdBy p_user "
-			+ "left join r.productionLine p_line "
-			+ "join r.lifeCycle lc "
-				+ "left join r.approvals approval "
-					+ "left join approval.user u "
-		+ "where r.id = :id "
-		+ "group by r ")
-	Optional<QualityCheckDTO> findQcDTOByProcessId(int id);
+		+ "where r.id = :processId ")
+	QualityCheckInfo findQualityCheckInfo(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO("
 			+ "i.id, i.version, i.ordinal, item.id, item.value, "
@@ -166,6 +172,8 @@ public interface QCRepository extends ProcessRepository<QualityCheck> {
 		+ "where qc.id in :processIds "
 		+ "order by ti.ordinal ")
 	Stream<ItemQc> findCashewQcItems(int[] processIds);
+
+	
 
 //	@Query("select com.avc.mis.beta.dto.query.ItemQcWithQcReportLine( "
 //			+ "qc.id, qc.checkedBy, "

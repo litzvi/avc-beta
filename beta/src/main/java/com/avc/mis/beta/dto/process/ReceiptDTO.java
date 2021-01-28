@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -40,18 +41,18 @@ public class ReceiptDTO extends ProcessWithProductDTO<ReceiptItemDTO> {
 	@EqualsAndHashCode.Exclude
 	private Integer referencedOrder;
 	
-	public ReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-			Integer supplierId, Integer supplierVersion, String supplierName, String display,
-			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
-			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
-		super(id, version, createdDate, userRecording, 
-				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
-				supplierId, supplierVersion, supplierName, display, 
-				processName, productionLine, recordedTime, startTime, endTime, duration,
-				numOfWorkers, processStatus, editStatus, remarks, approvals);
-	}
+//	public ReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
+//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
+//			Integer supplierId, Integer supplierVersion, String supplierName, String display,
+//			ProcessName processName, ProductionLine productionLine, 
+//			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
+//			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
+//		super(id, version, createdDate, userRecording, 
+//				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
+//				supplierId, supplierVersion, supplierName, display, 
+//				processName, productionLine, recordedTime, startTime, endTime, duration,
+//				numOfWorkers, processStatus, editStatus, remarks, approvals);
+//	}
 
 	public ReceiptDTO(@NonNull Receipt receipt) {
 		super(receipt);

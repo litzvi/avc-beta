@@ -11,8 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ShipmentBookingDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.process.ShipmentBooking;
 import com.avc.mis.beta.repositories.ShipmentBookingRepository;
 
@@ -55,12 +57,20 @@ public class ShipmentBookings {
 	 * @throws IllegalArgumentException if shipment booking for given process id dosen't exist.
 	 */
 	public ShipmentBookingDTO getBooking(int processId) {
-		Optional<ShipmentBookingDTO> booking = getShipmentBookingRepository().findBookingById(processId);
-		ShipmentBookingDTO bookingDTO = booking.orElseThrow(
-				()->new IllegalArgumentException("No shipment booking with given process id"));
-		bookingDTO.setBookedContainers(getShipmentBookingRepository().findBookedContainersByProcessId(processId));
+		ShipmentBookingDTO shipmentBookingDTO = new ShipmentBookingDTO();
+		shipmentBookingDTO.setGeneralProcessInfo(getShipmentBookingRepository()
+				.findGeneralProcessInfoByProcessId(processId, ShipmentBooking.class)
+				.orElseThrow(
+						()->new IllegalArgumentException("No shipment booking with given process id")));
+		shipmentBookingDTO.setShipmentBookingInfo(getShipmentBookingRepository().findShipmentBookingInfo(processId));
+
 		
-		return bookingDTO;
+//		Optional<ShipmentBookingDTO> booking = getShipmentBookingRepository().findBookingById(processId);
+//		ShipmentBookingDTO bookingDTO = booking.orElseThrow(
+//				()->new IllegalArgumentException("No shipment booking with given process id"));
+		shipmentBookingDTO.setBookedContainers(getShipmentBookingRepository().findBookedContainersByProcessId(processId));
+		
+		return shipmentBookingDTO;
 	}
 	
 	/**

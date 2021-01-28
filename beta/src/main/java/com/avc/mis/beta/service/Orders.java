@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
@@ -239,12 +240,20 @@ public class Orders {
 	 * @throws IllegalArgumentException if purchase order for given process id dosen't exist.
 	 */
 	public PoDTO getOrderByProcessId(int processId) {
-		Optional<PoDTO> order = getPoRepository().findOrderById(processId, null, ProcessStatus.values());
-		PoDTO po = order.orElseThrow(
-				()->new IllegalArgumentException("No order with given process id"));
-		po.setOrderItems(getPoRepository().findPoOrderItemsById(po.getId()));
+		PoDTO poDTO = new PoDTO();
+		poDTO.setPoProcessInfo(getPoRepository()
+				.findPoProcessInfoByProcessId(processId, PO.class)
+				.orElseThrow(
+						()->new IllegalArgumentException("No storage relocation with given process id")));
+		poDTO.setPoInfo(getPoRepository().findPoInfo(poDTO.getId()));
 		
-		return po;
+//		Optional<PoDTO> order = getPoRepository().findOrderById(processId, null, ProcessStatus.values());
+//		PoDTO po = order.orElseThrow(
+//				()->new IllegalArgumentException("No order with given process id"));
+		
+		poDTO.setOrderItems(getPoRepository().findPoOrderItemsById(poDTO.getId()));
+		
+		return poDTO;
 	}
 	
 	/**

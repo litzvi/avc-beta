@@ -17,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
 import org.hibernate.validator.constraints.ISBN;
+import org.hibernate.validator.internal.util.privilegedactions.GetClassLoader;
 
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.ContractType;
@@ -43,27 +44,30 @@ public class MixPoCode extends BasePoCode {
 			joinColumns = @JoinColumn(name = "mixedId", referencedColumnName = "id"), 
 			inverseJoinColumns = @JoinColumn(name = "poId", referencedColumnName = "id"))
 	@ManyToMany(fetch = FetchType.LAZY)
-	private Set<BasePoCode> poCodes = new HashSet<>();
+	private Set<BasePoCode> origionPoCodes = new HashSet<>();
 	
+	@Null(message = "mixed po code doesn't have a code")
 	@Override
-	public void setDisplay(String display) {
-		super.setDisplay(display);
+	public String getCode() {
+		return super.getCode();
+	}
+	
+	@Null(message = "mixed po code doesn't have a supplier")
+	@Override
+	public Supplier getSupplier() {
+		return super.getSupplier();
+	}
+	
+	@Null(message = "mixed po code doesn't have a contract type")
+	@Override
+	public ContractType getContractType() {
+		return super.getContractType();
 	}
 	
 	@NotNull(message = "Display is mandatory for mixed po code")
 	@Override
 	public String getDisplay() {
 		return super.getDisplay();
-	}
-	
-	@Null(message = "mixed po code doesn't have a supplier")
-	public Supplier getSupplier() {
-		return super.getSupplier();
-	}
-	
-	@Null(message = "mixed po code doesn't have a contract type")
-	public ContractType getContractType() {
-		return super.getContractType();
 	}
 
 }

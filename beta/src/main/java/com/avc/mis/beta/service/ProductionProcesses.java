@@ -14,7 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.report.ProductionReportLine;
 import com.avc.mis.beta.dto.view.ProcessRow;
@@ -22,6 +24,7 @@ import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
 
 import lombok.AccessLevel;
@@ -118,9 +121,16 @@ public class ProductionProcesses {
 	 * @return StorageTransferDTO
 	 */
 	public ProductionProcessDTO getProductionProcess(int processId) {
-		Optional<ProductionProcessDTO> process = getProcessRepository().findProductionProcessDTOById(processId);
-		ProductionProcessDTO processDTO = process.orElseThrow(
-				()->new IllegalArgumentException("No production process with given process id"));
+		ProductionProcessDTO processDTO = new ProductionProcessDTO();
+		processDTO.setPoProcessInfo(getProcessRepository()
+				.findPoProcessInfoByProcessId(processId, ProductionProcess.class)
+				.orElseThrow(
+						()->new IllegalArgumentException("No production process with given process id")));
+
+		
+//		Optional<ProductionProcessDTO> process = getProcessRepository().findProductionProcessDTOById(processId);
+//		ProductionProcessDTO processDTO = process.orElseThrow(
+//				()->new IllegalArgumentException("No production process with given process id"));
 		
 		getProcessInfoReader().setTransactionProcessCollections(processDTO);
 		

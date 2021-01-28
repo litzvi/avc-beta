@@ -200,7 +200,7 @@ public class AmountWithUnit implements Cloneable {
 		if(denominatorAmount == null)
 			throw new UnsupportedOperationException(
 					"Convertion from " + denominator.getMeasureUnit() + " to " + numerator.getMeasureUnit() + " not supported");
-		return numerator.getAmount().divide(denominatorAmount, MathContext.DECIMAL64).setScale(MeasureUnit.DIVISION_SCALE);
+		return numerator.getAmount().divide(denominatorAmount, MathContext.DECIMAL64);
 	}
 
 	

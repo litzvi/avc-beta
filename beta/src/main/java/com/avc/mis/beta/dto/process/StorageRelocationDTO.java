@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
 import com.avc.mis.beta.dto.processinfo.StorageMovesGroupDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -39,19 +40,19 @@ public class StorageRelocationDTO extends PoProcessDTO {
 	
 	private List<StorageMovesGroupDTO> storageMovesGroups;
 
-	public StorageRelocationDTO(Integer id, Integer version, Instant createdDate, String staffRecording,
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-			Integer supplierId, Integer supplierVersion, String supplierName, String display,
-			ProcessName processName, ProductionLine productionLine,
-			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
-			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks,
-			String approvals) {
-		super(id, version, createdDate, staffRecording, 
-				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, 
-				supplierId, supplierVersion, supplierName, display,
-				processName, productionLine, recordedTime, startTime, endTime, duration,
-				numOfWorkers, processStatus, editStatus, remarks, approvals);
-	}
+//	public StorageRelocationDTO(Integer id, Integer version, Instant createdDate, String staffRecording,
+//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
+//			Integer supplierId, Integer supplierVersion, String supplierName, String display,
+//			ProcessName processName, ProductionLine productionLine,
+//			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
+//			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks,
+//			String approvals) {
+//		super(id, version, createdDate, staffRecording, 
+//				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, 
+//				supplierId, supplierVersion, supplierName, display,
+//				processName, productionLine, recordedTime, startTime, endTime, duration,
+//				numOfWorkers, processStatus, editStatus, remarks, approvals);
+//	}
 
 
 

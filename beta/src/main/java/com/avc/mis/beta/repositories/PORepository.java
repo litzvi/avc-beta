@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.embedable.PoInfo;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
@@ -24,7 +25,7 @@ import com.avc.mis.beta.entities.processinfo.OrderItem;
  * @author Zvi
  *
  */
-public interface PORepository extends BaseRepository<PO> {
+public interface PORepository extends PoProcessRepository<PO> {
 	
 	/**
 	 * Gets the PO details in a PoDTO object by process id (exclusive) or po code id
@@ -55,6 +56,12 @@ public interface PORepository extends BaseRepository<PO> {
 		+ "group by po "
 		+ "order by lc.processStatus ")
 	Optional<PoDTO> findOrderById(Integer processId, Integer poCodeId, ProcessStatus[] statuses);
+	
+	@Query("select new com.avc.mis.beta.dto.embedable.PoInfo(po.personInCharge) "
+		+ "from PO po "
+		+ "where po.id = :processId ")
+	PoInfo findPoInfo(Integer processId);
+
 	
 	/**
 	 * Gets all OrderItems for a given process in a OrderItemDTO that contains order 
@@ -245,6 +252,7 @@ public interface PORepository extends BaseRepository<PO> {
 			+ "join po_code.contractType ct "
 		+ "where po_code.id = :poCodeId ")
 	Optional<PoCodeDTO> findPoCodeById(int poCodeId);
+
 
 
 //	@Query("select new com.avc.mis.beta.dto.process.PoDTO("

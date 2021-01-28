@@ -11,6 +11,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.embedable.PoInfo;
+import com.avc.mis.beta.dto.embedable.PoProcessInfo;
+import com.avc.mis.beta.dto.embedable.QualityCheckInfo;
 import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -45,22 +48,22 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 		
 	private List<CashewItemQualityDTO> testedItems; //can use a SortedSet like ContactDetails to maintain order
 	
-	public QualityCheckDTO(Integer id, Integer version, String inspector, String sampleTaker, QcCompany checkedBy,
-			Instant createdDate, String userRecording, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-			Integer supplierId, Integer supplierVersion, String supplierName, String display,
-			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
-			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
-		super(id, version, createdDate, userRecording, 
-				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
-				supplierId, supplierVersion, supplierName, display,
-				processName, productionLine, recordedTime, startTime, endTime, duration,
-				numOfWorkers, processStatus, editStatus, remarks, approvals);
-		this.checkedBy = checkedBy.toString();
-		this.inspector = inspector;
-		this.sampleTaker = sampleTaker;
-	}
+//	public QualityCheckDTO(Integer id, Integer version, String inspector, String sampleTaker, QcCompany checkedBy,
+//			Instant createdDate, String userRecording, 
+//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
+//			Integer supplierId, Integer supplierVersion, String supplierName, String display,
+//			ProcessName processName, ProductionLine productionLine, 
+//			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
+//			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
+//		super(id, version, createdDate, userRecording, 
+//				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
+//				supplierId, supplierVersion, supplierName, display,
+//				processName, productionLine, recordedTime, startTime, endTime, duration,
+//				numOfWorkers, processStatus, editStatus, remarks, approvals);
+//		this.checkedBy = checkedBy.toString();
+//		this.inspector = inspector;
+//		this.sampleTaker = sampleTaker;
+//	}
 	
 	public QualityCheckDTO(@NonNull QualityCheck check) {
 		super(check);
@@ -71,6 +74,12 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));
 		this.testedItems = Arrays.stream(check.getTestedItems())
 				.map(i->{return new CashewItemQualityDTO(i);}).collect(Collectors.toList());
+	}
+	
+	public void setQualityCheckInfo(QualityCheckInfo info) {
+		this.checkedBy = info.getCheckedBy();
+		this.inspector = info.getInspector();
+		this.sampleTaker = info.getSampleTaker();
 	}
 		
 	@Override

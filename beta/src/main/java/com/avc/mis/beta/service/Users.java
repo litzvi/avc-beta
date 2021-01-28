@@ -186,7 +186,7 @@ public class Users {
 		dao.editEntity(user);
 	}
 	
-	public void changePassword(CharSequence password, String newPassword) {
+	public void changePassword(String password, String newPassword) {
 		getDao().changeUserPassword(password, newPassword);			
 		
 	}

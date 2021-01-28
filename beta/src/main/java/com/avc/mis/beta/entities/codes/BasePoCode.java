@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.BaseEntity;
@@ -42,11 +43,12 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
 @Entity
-@Table(name = "PO_CODES")
+@Table(name = "PO_CODES", uniqueConstraints = 
+	{ @UniqueConstraint(columnNames = { "code", "display" }) })
 @Inheritance(strategy=InheritanceType.JOINED)
 //@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 //@DiscriminatorValue("abstract")
-public abstract class BasePoCode extends BaseEntity {
+public class BasePoCode extends BaseEntity {
 
 //	@Column(nullable = false, insertable = false, updatable = false)
 //	private String dtype;
@@ -58,7 +60,8 @@ public abstract class BasePoCode extends BaseEntity {
 //	@Id
 //	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
 //	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
-	@Column(nullable = false, updatable = false, unique = true)
+//	@Column(nullable = false, updatable = false, unique = true)
+	@Column(updatable = false)
 //	@EqualsAndHashCode.Include
 	private String code;
 	
@@ -68,7 +71,7 @@ public abstract class BasePoCode extends BaseEntity {
 		
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contractTypeId", nullable = false)
-	@NotNull(message = "PO code is required to have a contract type", groups = OnPersist.class)
+//	@NotNull(message = "PO code is required to have a contract type")
 	private ContractType contractType;
 	
 	private String display;

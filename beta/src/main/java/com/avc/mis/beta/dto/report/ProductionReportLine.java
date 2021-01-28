@@ -4,9 +4,11 @@
 package com.avc.mis.beta.dto.report;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -87,11 +89,11 @@ public class ProductionReportLine extends ProductReportLine {
 	}
 	
 	public BigDecimal getRatioLoss() {
-		return AmountWithUnit.divide(getTotalOut(), getTotalIn());
+		return AmountWithUnit.divide(getTotalOut(), getTotalIn()).setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_DOWN);
 	}
 	
 	public BigDecimal getProductRatioLoss() {
-		return AmountWithUnit.divide(totalProductOut, totalProductIn);
+		return AmountWithUnit.divide(totalProductOut, totalProductIn).setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_DOWN);
 	}
 
 

@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dao;
 
 import java.security.AccessControlException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -448,6 +449,21 @@ public class ProcessInfoDAO extends DAO {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Recursive method to get all underlying order pos
+	 * @param poCodeId
+	 * @return
+	 */
+	public List<Integer> getOrigionPoCodeIds(Integer poCodeId) {
+		List<Integer> poCodeIds = Arrays.asList(poCodeId);
+		
+		for(int origionPoCode: getObjectTablesRepository().findOrigionPoCodes(poCodeId)) {
+			poCodeIds.addAll(getOrigionPoCodeIds(origionPoCode));
+		}
+		
+		return poCodeIds;
 	}
 
 	

@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.embedable.ContainerLoadingInfo;
+import com.avc.mis.beta.dto.embedable.PoInfo;
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
@@ -48,24 +50,24 @@ public class ContainerLoadingDTO extends TransactionProcessDTO<ProcessItemDTO> {
 	private List<LoadedItemDTO> loadedItems; 
 	
 	
-	public ContainerLoadingDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-			Integer supplierId, Integer supplierVersion, String supplierName, String display,
-			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
-			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
-			Integer shipmentCodeId, String shipmentCodeCode,
-			Integer portOfDischargeId, String portOfDischargeValue, String portOfDischargeCode,
-			ContainerDetails containerDetails, ShipingDetails shipingDetails) {
-		super(id, version, createdDate, userRecording, 
-				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
-				supplierId, supplierVersion, supplierName, display,
-				processName, productionLine, recordedTime, startTime, endTime, 
-				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
-		this.shipmentCode = new ShipmentCodeDTO(shipmentCodeId, shipmentCodeCode, portOfDischargeId, portOfDischargeValue, portOfDischargeCode);
-		this.containerDetails = containerDetails;
-		this.shipingDetails = shipingDetails;
-	}
+//	public ContainerLoadingDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
+//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
+//			Integer supplierId, Integer supplierVersion, String supplierName, String display,
+//			ProcessName processName, ProductionLine productionLine, 
+//			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
+//			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
+//			Integer shipmentCodeId, String shipmentCodeCode,
+//			Integer portOfDischargeId, String portOfDischargeValue, String portOfDischargeCode,
+//			ContainerDetails containerDetails, ShipingDetails shipingDetails) {
+//		super(id, version, createdDate, userRecording, 
+//				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
+//				supplierId, supplierVersion, supplierName, display,
+//				processName, productionLine, recordedTime, startTime, endTime, 
+//				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
+//		this.shipmentCode = new ShipmentCodeDTO(shipmentCodeId, shipmentCodeCode, portOfDischargeId, portOfDischargeValue, portOfDischargeCode);
+//		this.containerDetails = containerDetails;
+//		this.shipingDetails = shipingDetails;
+//	}
 	
 	
 	public ContainerLoadingDTO(@NonNull ContainerLoading loading) {
@@ -77,6 +79,12 @@ public class ContainerLoadingDTO extends TransactionProcessDTO<ProcessItemDTO> {
 				.map(i->{return new LoadedItemDTO(i);}).collect(Collectors.toList());
 		super.setUsedItemGroups(Arrays.stream(loading.getUsedItemGroups())
 				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
+	}
+	
+	public void setContainerLoadingInfo(ContainerLoadingInfo info) {
+		this.shipmentCode = info.getShipmentCode();
+		this.containerDetails = info.getContainerDetails();
+		this.shipingDetails = info.getShipingDetails();
 	}
 	
 	@Override

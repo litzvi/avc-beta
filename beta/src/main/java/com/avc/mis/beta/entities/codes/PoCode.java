@@ -5,6 +5,11 @@ package com.avc.mis.beta.entities.codes;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+
+import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.values.ContractType;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -24,11 +29,29 @@ import lombok.ToString;
 public class PoCode extends BasePoCode {
 
 	
-//	/**
-//	 * Does nothing - display should be empty for normal po code
-//	 * @param display
-//	 */
-//	@Override
-//	public void setDisplay(String display) {}
+	@NotNull(message = "Po code code is mandatory")
+	@Override
+	public String getCode() {
+		return super.getCode();
+	}
+	
+	@NotNull(message = "Po code supplier is mandatory")
+	@Override
+	public Supplier getSupplier() {
+		return super.getSupplier();
+	}
+	
+	@NotNull(message = "Po code contract type is mandatory ")
+	@Override
+	public ContractType getContractType() {
+		return super.getContractType();
+	}
+	
+	@Null(message = "Po code doesn't have display ")
+	@Override
+	public String getDisplay() {
+		return super.getDisplay();
+	}
+
 
 }

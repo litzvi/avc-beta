@@ -168,7 +168,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.id = :itemId or :itemId is null) "
-			+ "and (poCode.id = :poCodeId or :poCodeId is null) "
+			+ "and (poCode.id in :poCodeIds or :poCodeIds is null) "
 		+ "group by sf "
 		+ "having sf.numberUnits > "
 			+ "SUM("
@@ -181,7 +181,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "order by p.recordedTime, pi.ordinal, sf.ordinal ")
 	List<InventoryProcessItemWithStorage> findAvailableInventoryProcessItemWithStorage(
 			boolean checkProductionUses, ProductionUse[] productionUses, 
-			ItemGroup itemGroup, Integer itemId, Integer poCodeId);
+			ItemGroup itemGroup, Integer itemId, List<Integer> poCodeIds);
 
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventoryRow( "
@@ -239,7 +239,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.id = :itemId or :itemId is null) "
-			+ "and (poCode.id = :poCodeId or :poCodeId is null) "
+			+ "and (poCode.id in :poCodeIds or :poCodeIds is null) "
 			+ "and"
 				+ "(sf.numberUnits > "
 					+ "coalesce("
@@ -255,7 +255,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "order by r.recordedTime, p.recordedTime " 
 		+ "")
 	List<ProcessItemInventoryRow> findInventoryProcessItemRows(
-			boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId, Integer poCodeId);
+			boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId, List<Integer> poCodeIds);
 
 	
 	/**

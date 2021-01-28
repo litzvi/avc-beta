@@ -5,10 +5,12 @@ package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.item.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
+import lombok.experimental.NonFinal;
 
 /**
  * DTO for PoCode containing id and the fields needed 
@@ -28,6 +30,8 @@ public class PoCodeBasic extends ValueDTO {
 	String contractTypeSuffix;
 	String supplierName;	
 	String display;
+//	@NonFinal
+//	Class<? extends BasePoCode> clazz;
 	
 	/**
 	 * @param id
@@ -46,6 +50,18 @@ public class PoCodeBasic extends ValueDTO {
 		this.contractTypeSuffix = contractTypeSuffix != null ? contractTypeSuffix : "";
 		this.display = display;
 	}	
+	
+//	public PoCodeBasic(Integer id, String code,
+//			String contractTypeCode, String contractTypeSuffix, String supplierName,
+//			String display, Class<? extends BasePoCode> clazz) {
+//		super(id);
+//		this.code = code;
+//		this.contractTypeCode = contractTypeCode;
+//		this.supplierName = supplierName;
+//		this.contractTypeSuffix = contractTypeSuffix != null ? contractTypeSuffix : "";
+//		this.display = display;
+//		this.clazz = clazz;
+//	}	
 	
 	/**
 	 * @param poCode

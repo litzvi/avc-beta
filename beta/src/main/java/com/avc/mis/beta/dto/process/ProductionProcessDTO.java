@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.ProductWeightedPoDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
@@ -31,20 +32,19 @@ import lombok.ToString;
 public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> {
 	
 	private List<ProductWeightedPoDTO> productWeightedPos;
-
 	
-	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-			Integer supplierId, Integer supplierVersion, String supplierName, String display,
-			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
-			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
-		super(id, version, createdDate, userRecording, 
-				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
-				supplierId, supplierVersion, supplierName, display,
-				processName, productionLine, recordedTime, startTime, endTime, 
-				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
-	}
+//	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
+//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
+//			Integer supplierId, Integer supplierVersion, String supplierName, String display,
+//			ProcessName processName, ProductionLine productionLine, 
+//			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
+//			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
+//		super(id, version, createdDate, userRecording, 
+//				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
+//				supplierId, supplierVersion, supplierName, display,
+//				processName, productionLine, recordedTime, startTime, endTime, 
+//				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
+//	}
 	
 	public ProductionProcessDTO(@NonNull ProductionProcess process) {
 		super(process);

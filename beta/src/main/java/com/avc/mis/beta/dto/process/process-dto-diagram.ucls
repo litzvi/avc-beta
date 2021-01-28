@@ -1,25 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="com.avc.mis.beta.dto.process.GeneralProcessDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/process/GeneralProcessDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="945" y="163"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="2" language="java" name="com.avc.mis.beta.dto.process.PoCodeDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/process/PoCodeDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="444" y="400"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="3" language="java" name="com.avc.mis.beta.dto.process.PoDTO" project="beta" 
+  <class id="1" language="java" name="com.avc.mis.beta.dto.process.PoDTO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/process/PoDTO.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="576" y="587"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -28,7 +10,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.avc.mis.beta.dto.process.PoProcessDTO" project="beta" 
+  <class id="2" language="java" name="com.avc.mis.beta.dto.process.PoProcessDTO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/process/PoProcessDTO.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="944" y="408"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -37,7 +19,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="com.avc.mis.beta.dto.process.ProductionProcessDTO" project="beta" 
+  <class id="3" language="java" name="com.avc.mis.beta.dto.process.ProductionProcessDTO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/process/ProductionProcessDTO.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="950" y="887"/>    
@@ -47,16 +29,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="com.avc.mis.beta.dto.process.ShipmentCodeDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/process/ShipmentCodeDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1814" y="893"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="7" language="java" name="com.avc.mis.beta.dto.process.StorageRelocationDTO" project="beta" 
+  <class id="4" language="java" name="com.avc.mis.beta.dto.process.StorageRelocationDTO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/process/StorageRelocationDTO.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1410" y="581"/>    
@@ -66,7 +39,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="com.avc.mis.beta.dto.process.TransactionProcessDTO" project="beta" 
+  <class id="5" language="java" name="com.avc.mis.beta.dto.process.TransactionProcessDTO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/process/TransactionProcessDTO.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="953" y="743"/>    
@@ -76,7 +49,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="com.avc.mis.beta.dto.process.ProcessWithProductDTO" project="beta" 
+  <class id="6" language="java" name="com.avc.mis.beta.dto.process.ProcessWithProductDTO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/process/ProcessWithProductDTO.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="952" y="581"/>    
@@ -86,7 +59,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="10" language="java" name="com.avc.mis.beta.dto.process.ReceiptDTO" project="beta" 
+  <class id="7" language="java" name="com.avc.mis.beta.dto.process.ReceiptDTO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/process/ReceiptDTO.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1325" y="743"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -95,7 +68,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="11" language="java" name="com.avc.mis.beta.dto.process.QualityCheckDTO" project="beta" 
+  <class id="8" language="java" name="com.avc.mis.beta.dto.process.QualityCheckDTO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/process/QualityCheckDTO.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="558" y="779"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -104,7 +77,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="12" language="java" name="com.avc.mis.beta.dto.process.ContainerLoadingDTO" project="beta" 
+  <class id="9" language="java" name="com.avc.mis.beta.dto.process.ContainerLoadingDTO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/process/ContainerLoadingDTO.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="113" width="278" x="1247" y="835"/>    
@@ -114,61 +87,50 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
+  <class id="10" language="java" name="com.avc.mis.beta.dto.GeneralProcessDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/GeneralProcessDTO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="945" y="143"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <generalization id="11">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="12">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
   <generalization id="13">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="4"/>  
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="5"/>  
   </generalization>  
   <generalization id="14">    
-    <end type="SOURCE" refId="10"/>    
-    <end type="TARGET" refId="9"/>  
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="6"/>  
   </generalization>  
-  <association id="15">    
-    <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="16" name="shipmentCode">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="17" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
+  <generalization id="15">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <generalization id="16">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="6"/>  
+  </generalization>  
+  <generalization id="17">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="10"/>  
+  </generalization>  
   <generalization id="18">    
-    <end type="SOURCE" refId="12"/>    
-    <end type="TARGET" refId="8"/>  
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="2"/>  
   </generalization>  
   <generalization id="19">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="4"/>  
-  </generalization>  
-  <generalization id="20">    
     <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="9"/>  
-  </generalization>  
-  <generalization id="21">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="8"/>  
-  </generalization>  
-  <association id="22">    
-    <end type="SOURCE" refId="4" navigable="false">      
-      <attribute id="23" name="poCode">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="24" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="2" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="25">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="4"/>  
-  </generalization>  
-  <generalization id="26">    
-    <end type="SOURCE" refId="11"/>    
-    <end type="TARGET" refId="9"/>  
+    <end type="TARGET" refId="6"/>  
   </generalization>  
   <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    

@@ -43,18 +43,18 @@ public class SampleReceiptDTO extends PoProcessDTO {
 	//not set because we can have doubles, order should be unimportant for testing - so bag needed
 	private List<SampleItemDTO> sampleItems; 	
 	
-	public SampleReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-			Integer supplierId, Integer supplierVersion, String supplierName, String display,
-			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
-			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
-		super(id, version, createdDate, userRecording, 
-				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
-				supplierId, supplierVersion, supplierName, display,
-				processName, productionLine, recordedTime, startTime, endTime, duration,
-				numOfWorkers, processStatus, editStatus, remarks, approvals);
-	}
+//	public SampleReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
+//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
+//			Integer supplierId, Integer supplierVersion, String supplierName, String display,
+//			ProcessName processName, ProductionLine productionLine, 
+//			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
+//			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
+//		super(id, version, createdDate, userRecording, 
+//				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
+//				supplierId, supplierVersion, supplierName, display,
+//				processName, productionLine, recordedTime, startTime, endTime, duration,
+//				numOfWorkers, processStatus, editStatus, remarks, approvals);
+//	}
 	
 	public SampleReceiptDTO(@NonNull SampleReceipt sample) {
 		super(sample);

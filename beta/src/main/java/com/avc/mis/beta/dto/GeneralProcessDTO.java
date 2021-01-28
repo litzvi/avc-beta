@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.embedable.GeneralProcessInfo;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -54,29 +55,28 @@ public abstract class GeneralProcessDTO extends DataDTO {
 	private String remarks;
 	@EqualsAndHashCode.Exclude // don't compare for testing
 	private String approvals;
-
-	
-	public GeneralProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration, Integer numOfWorkers, 
-			ProcessStatus processStatus, EditStatus editStatus,
-			String remarks, String approvals) {
-		super(id, version);
-		this.createdDate = createdDate;
-		this.userRecording = userRecording;
-		this.processName = processName;
-		this.productionLine = productionLine;
-		this.recordedTime = recordedTime;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.duration = duration;
-		this.numOfWorkers = numOfWorkers;
-		this.processStatus = processStatus;
-		this.editStatus = editStatus;
-		this.remarks = remarks;
-		this.approvals = approvals;
-
-	}
+		
+//	public GeneralProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
+//			ProcessName processName, ProductionLine productionLine, 
+//			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration, Integer numOfWorkers, 
+//			ProcessStatus processStatus, EditStatus editStatus,
+//			String remarks, String approvals) {
+//		super(id, version);
+//		this.createdDate = createdDate;
+//		this.userRecording = userRecording;
+//		this.processName = processName;
+//		this.productionLine = productionLine;
+//		this.recordedTime = recordedTime;
+//		this.startTime = startTime;
+//		this.endTime = endTime;
+//		this.duration = duration;
+//		this.numOfWorkers = numOfWorkers;
+//		this.processStatus = processStatus;
+//		this.editStatus = editStatus;
+//		this.remarks = remarks;
+//		this.approvals = approvals;
+//
+//	}
 	
 	public GeneralProcessDTO(@NonNull GeneralProcess process) {
 		super(process.getId(), process.getVersion());
@@ -97,6 +97,25 @@ public abstract class GeneralProcessDTO extends DataDTO {
 		this.approvals = process.getApprovals().stream().map(t -> t.getUser().getUsername()).collect(Collectors.joining());
 
 	}
+	
+	public void setGeneralProcessInfo(GeneralProcessInfo info) {
+		super.setId(info.getId());
+		super.setVersion(info.getVersion());
+		this.createdDate = info.getCreatedDate();
+		this.userRecording = info.getUserRecording();
+		this.processName = info.getProcessName();
+		this.productionLine = info.getProductionLine();
+		this.recordedTime = info.getRecordedTime();
+		this.startTime = info.getStartTime();
+		this.endTime = info.getEndTime();
+		this.duration = info.getDuration();
+		this.numOfWorkers = info.getNumOfWorkers();
+		this.processStatus = info.getProcessStatus();
+		this.editStatus = info.getEditStatus();
+		this.remarks = info.getRemarks();
+		this.approvals = info.getApprovals();
+	}
+
 	
 	public abstract String getProcessTypeDescription();
 
