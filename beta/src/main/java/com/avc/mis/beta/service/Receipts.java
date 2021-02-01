@@ -218,17 +218,13 @@ public class Receipts {
 //		dao.addEntityWithFlexibleGenerator(receipt.getPoCode());
 //		addOrderReceipt(receipt);
 
-		if(receipt.getPoCode() instanceof PoCode) {
-			if(dao.isPoCodeFree((PoCode) receipt.getPoCode())) {
-				dao.addGeneralProcessEntity(receipt);						
-			}
-			else {
-				throw new IllegalArgumentException("Po Code is already used for another order or receipt");
-			}
+		if(dao.isPoCodeFree(receipt.getPoCode().getId())) {
+			dao.addGeneralProcessEntity(receipt);						
 		}
 		else {
-			throw new ClassCastException("Receipt has to referenced a PoCode (not MixPoCode)");
+			throw new IllegalArgumentException("Po Code is already used for another order or receipt or it's a mixed po");
 		}
+		
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

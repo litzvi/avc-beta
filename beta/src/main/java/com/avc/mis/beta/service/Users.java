@@ -183,6 +183,7 @@ public class Users {
 	 * @param user to be edited
 	 */
 	public void editUser(UserEntity user) {
+		user.setPerson(null); // not editing person
 		dao.editEntity(user);
 	}
 	

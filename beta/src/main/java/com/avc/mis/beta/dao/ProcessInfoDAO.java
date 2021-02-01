@@ -443,8 +443,8 @@ public class ProcessInfoDAO extends DAO {
 	 * @param poCode po code to check
 	 * @return true if given PO Code isn't used
 	 */
-	public boolean isPoCodeFree(PoCode poCode) {
-		List<PoCodeBasic> poCodes = getObjectTablesRepository().findFreePoCodes(poCode.getId());
+	public boolean isPoCodeFree(Integer poCodeId) {
+		List<PoCodeBasic> poCodes = getObjectTablesRepository().findFreePoCodes(poCodeId);
 		if(poCodes == null || poCodes.size() == 0) {
 			return false;
 		}

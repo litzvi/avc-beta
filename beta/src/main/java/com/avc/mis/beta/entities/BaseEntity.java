@@ -37,7 +37,7 @@ public abstract class BaseEntity implements Insertable {
 	@Override 
 	public boolean equals(Object o) {
 	    if (o == this) return true;
-	    if (!(o instanceof BaseEntity)) return false;
+	    if (o == null || !(o instanceof BaseEntity)) return false;
 	    BaseEntity other = (BaseEntity) o;
 	    
 	    if(this.getId() == null && other.getId() == null) {

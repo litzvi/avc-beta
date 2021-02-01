@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.report;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
 
@@ -89,11 +90,13 @@ public class ProductionReportLine extends ProductReportLine {
 	}
 	
 	public BigDecimal getRatioLoss() {
-		return AmountWithUnit.divide(getTotalOut(), getTotalIn()).setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_DOWN);
+		return BigDecimal.ONE.subtract(AmountWithUnit.divide(getTotalOut(), getTotalIn()), MathContext.DECIMAL64)
+				.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_DOWN);
 	}
 	
 	public BigDecimal getProductRatioLoss() {
-		return AmountWithUnit.divide(totalProductOut, totalProductIn).setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_DOWN);
+		return BigDecimal.ONE.subtract(AmountWithUnit.divide(totalProductOut, totalProductIn), MathContext.DECIMAL64)
+				.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_DOWN);
 	}
 
 

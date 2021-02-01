@@ -99,7 +99,8 @@ public class UsersTest {
 		actual.setPassword(null);
 		assertEquals(expected, actual, "failed test of adding user");
 		users.permenentlyRemoveUser(user.getId());
-		users.permenentlyRemovePerson(user.getPerson().getId());
+		if(user.getPerson() != null)
+			users.permenentlyRemovePerson(user.getPerson().getId());
 		
 		//open user for existing person and then edit password
 		user = new UserEntity();

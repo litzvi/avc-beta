@@ -182,17 +182,12 @@ public class Orders {
 //		Session session = getEntityManager().unwrap(Session.class);
 //		session.save(po.getPoCode());
 		
-		if(po.getPoCode() instanceof PoCode) {
-			if(dao.isPoCodeFree((PoCode) po.getPoCode())) {
-				dao.addGeneralProcessEntity(po);						
-			}
-			else {
-				throw new IllegalArgumentException("Po Code is already used for another order or receipt");
-			}
+		if(dao.isPoCodeFree(po.getPoCode().getId())) {
+			dao.addGeneralProcessEntity(po);						
 		}
 		else {
-			throw new ClassCastException("Order has to referenced a PoCode (not MixPoCode)");
-		}		
+			throw new IllegalArgumentException("Po Code is already used for another order or receipt or it's a mixed po");
+		}
 	}
 
 	/**

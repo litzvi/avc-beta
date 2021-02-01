@@ -61,8 +61,8 @@ public class ProcessItem extends ProcessGroupWithStorages {
 	}
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "itemId", nullable = false)
 	@NotNull(message = "Item is mandatory")
+	@JoinColumn(name = "itemId", nullable = false)
 	private Item item;
 
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
