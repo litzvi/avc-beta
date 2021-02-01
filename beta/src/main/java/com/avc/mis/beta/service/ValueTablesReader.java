@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,8 +21,10 @@ import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
@@ -207,15 +210,19 @@ public class ValueTablesReader {
 //	}
 	
 	public List<ItemDTO> getItemsByPrudoctionUse(ProductionUse productionUse) {
-		return getValueTablesRepository().findItemsByGroupBasic(null, productionUse);
+		return getValueTablesRepository().findItemsByGroupBasic(null, productionUse, Arrays.asList(BulkItem.class, PackedItem.class));
 	}
 
 	public List<ItemDTO> getItemsByGroup(ItemGroup itemGroup) {
-		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, null);
+		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, null, Arrays.asList(BulkItem.class, PackedItem.class));
 	}
 	
 	public List<ItemDTO> getItems(ItemGroup itemGroup, ProductionUse productionUse) {
-		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, productionUse);
+		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, productionUse, Arrays.asList(BulkItem.class, PackedItem.class));
+	}
+	
+	public List<ItemDTO> getItems(ItemGroup itemGroup, ProductionUse productionUse, Class<? extends Item> clazz) {
+		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, productionUse, Arrays.asList(clazz));
 	}
 	
 	/**

@@ -159,7 +159,18 @@ public class QueryTest {
 		
 		
 		//get list of cashew items
-		valueTablesReader.getItemsByGroup(ItemGroup.PRODUCT).forEach(i -> System.out.println(i));
+		try {
+			if(valueTablesReader != null)
+				System.out.println("hello, i'm not null");
+			else
+				System.out.println("hello, i'm null");
+			System.out.println(valueTablesReader.getItemsByGroup(ItemGroup.PRODUCT) == null);
+			valueTablesReader.getItemsByGroup(ItemGroup.PRODUCT).forEach(i -> System.out.println(i));
+		} catch (Exception e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+			throw e3;
+		}
 		
 		//print received orders
 		List<ReceiptRow> receiptRows;
@@ -366,7 +377,7 @@ public class QueryTest {
 
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void oneQueryTest() {
 				
