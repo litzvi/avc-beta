@@ -21,6 +21,7 @@ import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.MixPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -176,6 +177,12 @@ public class Orders {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addMixPoCode(MixPoCode poCode) {
+		dao.addEntity(poCode);
+	}
+
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addOrder(PO po) {
 		//using save rather than persist in case POid was assigned by user
 //		dao.addEntityWithFlexibleGenerator(po.getPoCode());
@@ -272,6 +279,12 @@ public class Orders {
 		dao.editEntity(poCode);
 	}	
 	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editMixPoCode(MixPoCode poCode) {
+		dao.editEntity(poCode);
+	}	
+	
+
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	@Deprecated

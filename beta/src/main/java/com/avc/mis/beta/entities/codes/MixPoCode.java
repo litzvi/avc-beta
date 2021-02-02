@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -40,11 +41,12 @@ import lombok.ToString;
 public class MixPoCode extends BasePoCode {
 
 	@ToString.Exclude 
-	@JoinTable(name = "MIX_POS",
+	@JoinTable(name = "MIX_POS", 
+		uniqueConstraints = @UniqueConstraint(columnNames = { "mixedId", "poId" }),
 			joinColumns = @JoinColumn(name = "mixedId", referencedColumnName = "id"), 
 			inverseJoinColumns = @JoinColumn(name = "poId", referencedColumnName = "id"))
 	@ManyToMany(fetch = FetchType.LAZY)
-	private Set<BasePoCode> origionPoCodes = new HashSet<>();
+	private Set<PoCode> origionPoCodes = new HashSet<>();
 	
 	@Null(message = "mixed po code doesn't have a code")
 	@Override
