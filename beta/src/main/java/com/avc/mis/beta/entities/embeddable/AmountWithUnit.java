@@ -203,7 +203,15 @@ public class AmountWithUnit implements Cloneable {
 		return numerator.getAmount().divide(denominatorAmount, MathContext.DECIMAL64);
 	}
 
-	
+	public static BigDecimal percentageLoss(AmountWithUnit out, AmountWithUnit in) {
+		BigDecimal ratio = AmountWithUnit.divide(out, in);
+		if(ratio == null)
+			return null;
+		return ratio
+				.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_DOWN)
+				.subtract(BigDecimal.ONE)
+				.multiply(new BigDecimal("100"));
+	}
 	
 
 	

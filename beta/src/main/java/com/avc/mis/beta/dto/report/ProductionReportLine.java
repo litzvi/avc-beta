@@ -90,17 +90,11 @@ public class ProductionReportLine extends ProductReportLine {
 	}
 	
 	public BigDecimal getPercentageLoss() {
-		return (AmountWithUnit.divide(getTotalOut(), getTotalIn()))
-				.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_DOWN)
-				.subtract(BigDecimal.ONE)
-				.multiply(new BigDecimal("100"));
+		return AmountWithUnit.percentageLoss(getTotalOut(), getTotalIn());
 	}
 	
 	public BigDecimal getProductPercentageLoss() {
-		return (AmountWithUnit.divide(totalProductOut, totalProductIn))
-				.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_DOWN)
-				.subtract(BigDecimal.ONE)
-				.multiply(new BigDecimal("100"));
+		return AmountWithUnit.percentageLoss(totalProductOut, totalProductIn);
 	}
 
 
