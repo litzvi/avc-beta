@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
@@ -33,6 +34,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 	private String supplierName;
 	private OffsetDateTime processDate;
 	private OffsetDateTime receiptDate;
+	private BigDecimal weightCoefficient;
 	private AmountWithUnit[] totalBalance;
 	private String[] warehouses;
 
@@ -43,6 +45,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			OffsetDateTime processDate, OffsetDateTime receiptDate,
 //			BigDecimal totalStoredAmount, BigDecimal totalUsedAmount, 
+			BigDecimal weightCoefficient,
 			BigDecimal balance,
 			MeasureUnit measureUnit,
 			String warehouses) {
@@ -52,7 +55,8 @@ public class ProcessItemInventoryRow extends BasicDTO {
 		this.supplierName = supplierName;
 		this.processDate = processDate;
 		this.receiptDate = receiptDate;
-		AmountWithUnit balanceAmount = new AmountWithUnit(balance, measureUnit);
+		this.weightCoefficient = weightCoefficient;
+		AmountWithUnit balanceAmount = new AmountWithUnit(balance.multiply(this.weightCoefficient, MathContext.DECIMAL64), measureUnit);
 		this.totalBalance = new AmountWithUnit[] {
 				balanceAmount.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),
 				balanceAmount.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)

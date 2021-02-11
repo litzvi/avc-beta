@@ -19,9 +19,8 @@ import javax.persistence.Table;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.codes.MixPoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
+import com.avc.mis.beta.entities.processinfo.WeightedPo;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -48,6 +47,12 @@ public abstract class PoProcess extends GeneralProcess {
 	@JoinColumn(updatable = false, name = "po_code_code")
 	private BasePoCode poCode;
 	
+	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@OneToMany(mappedBy = "process", orphanRemoval = true, 
+		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	private Set<WeightedPo> weightedPos = new HashSet<>();
+
+	
 	//temporary until fixed in front 
 //	public void setPoCode(PoCode poCode) {
 //		this.poCode = poCode;
@@ -58,6 +63,20 @@ public abstract class PoProcess extends GeneralProcess {
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<ItemCount> itemCounts = new HashSet<>();
 
+	public WeightedPo[] getWeightedPos() {
+		if(this.weightedPos == null)
+			return null;
+		WeightedPo[] weightedPos = this.weightedPos.toArray(new WeightedPo[this.weightedPos.size()]);
+		Arrays.sort(weightedPos, Ordinal.ordinalComparator());
+		return weightedPos;
+	}
+
+	public void setWeightedPos(WeightedPo[] weightedPos) {
+		Ordinal.setOrdinals(weightedPos);
+		this.weightedPos = Insertable.setReferences(weightedPos, (t) -> {t.setReference(this);	return t;});
+	}
+
+	
 	/**
 	 * Gets the list of Item counts as an array (can be ordered).
 	 * @return the itemCounts

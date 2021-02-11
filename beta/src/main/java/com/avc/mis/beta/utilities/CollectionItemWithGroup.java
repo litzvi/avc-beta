@@ -7,7 +7,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import com.avc.mis.beta.dto.view.ProcessItemInventory;
+import com.avc.mis.beta.dto.view.StorageInventoryRow;
 
 /**
  * @author zvi
@@ -64,6 +69,23 @@ public interface CollectionItemWithGroup<S, G extends ListGroup<S>> {
 			k.setList(v);
 			processGroups.add(k);
 		});
+		return processGroups;
+	}
+
+	
+	public static <S, G extends ListGroup<S>> List<G> getFilledGroups(List<? extends CollectionItemWithGroup<S, G>> dataWithGroupsId, 
+			Function<Set<Integer>, List<G>> groupsFetchingFunction) {
+		if(dataWithGroupsId.isEmpty()) {
+			return null;
+		}
+		Map<Integer, List<S>> map = dataWithGroupsId.stream()
+				.collect(Collectors.groupingBy(CollectionItemWithGroup<S, G>::getGroupId, 
+						LinkedHashMap::new, 
+						Collectors.mapping(CollectionItemWithGroup<S, G>::getItem, Collectors.toList())));
+		List<G> processGroups = groupsFetchingFunction.apply(map.keySet());
+		for(G g: processGroups) {
+			g.setList(map.get(g.getId()));
+		}
 		return processGroups;
 	}
 }

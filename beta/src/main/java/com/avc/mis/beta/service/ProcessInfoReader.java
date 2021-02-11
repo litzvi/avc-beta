@@ -22,6 +22,7 @@ import com.avc.mis.beta.dto.process.TransactionProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
+import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.view.PoFinalReport;
@@ -84,12 +85,14 @@ public class ProcessInfoReader {
 //				ProcessItemDTO.getProcessItems(getProcessRepository()
 //						.findProcessItemWithStorage(processId)));
 
-		setProcessDTOCollections(processDTO);
+		setPoProcessCollections(processDTO);
 		
 	}
 
-	void setProcessDTOCollections(PoProcessDTO processDTO) {
-				
+	void setPoProcessCollections(PoProcessDTO processDTO) {
+		List<WeightedPoDTO> weightedPos = getProcessInfoRepository().findWeightedPos(processDTO.getId());
+		if(!weightedPos.isEmpty())
+			processDTO.setWeightedPos(weightedPos);
 	}
 
 	/**

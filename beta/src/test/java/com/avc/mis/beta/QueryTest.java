@@ -277,7 +277,14 @@ public class QueryTest {
 		}
 		
 		//test getting inventory storages by item
-		List<ProcessItemInventory> itemInventory = warehouseManagement.getAvailableInventoryByItem(service.getItem().getId());
+		List<ProcessItemInventory> itemInventory;
+		try {
+			itemInventory = warehouseManagement.getAvailableInventoryByItem(service.getItem().getId());
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			throw e2;
+		}
 		if(itemInventory != null)
 			itemInventory.forEach(i -> System.out.println(i));
 		

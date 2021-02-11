@@ -35,9 +35,11 @@ public class ItemAmountWithLoadingReportLine implements CollectionItemWithGroup<
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			ItemGroup itemGroup, ProductionUse productionUse, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz, 
-			BigDecimal amount) {
+			BigDecimal amount, BigDecimal weightCoefficient
+			) {
 		this.loadingReportLine = new LoadingReportLine(processId, shipmentId, shipmentCode, portOfDischargeCode, portOfDischargeValue, containerDetails, loadingDate, status, approvals);
-		this.itemAmount = new ItemAmount(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unitAmount, unitMeasureUnit, clazz, amount);
+		this.itemAmount = new ItemAmount(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unitAmount, unitMeasureUnit, clazz, amount, weightCoefficient
+				);
 	}
 
 	@Override

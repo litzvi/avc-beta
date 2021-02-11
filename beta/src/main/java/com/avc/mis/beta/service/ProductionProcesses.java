@@ -134,8 +134,8 @@ public class ProductionProcesses {
 		
 		getProcessInfoReader().setTransactionProcessCollections(processDTO);
 		
-		processDTO.setProductWeightedPos(
-				getProcessRepository().findProductWeightedPos(processDTO.getId()));
+//		processDTO.setWeightedPos(
+//				getProcessRepository().findWeightedPos(processDTO.getId()));
 
 		return processDTO;
 	}

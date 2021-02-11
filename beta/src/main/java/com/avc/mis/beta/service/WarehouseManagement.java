@@ -3,6 +3,7 @@ package com.avc.mis.beta.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +27,7 @@ import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
+import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -38,6 +40,7 @@ import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
+import com.avc.mis.beta.utilities.ListGroupImp;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -308,20 +311,21 @@ public class WarehouseManagement {
 	 * @param poCodeId constrain to only this po, if null than any.
 	 * @return List of ProcessItemInventory
 	 */
+	@Deprecated //next method - new one
+	public List<ProcessItemInventory> getAvailableInventory_old(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
+		boolean checkProductionUses = (productionUses != null);
+		List<InventoryProcessItemWithStorage> processItemWithStorages =
+					getInventoryRepository().findAvailableInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, poCodeId);
+
+		return CollectionItemWithGroup.getFilledGroups(processItemWithStorages);
+	}
+	
 	public List<ProcessItemInventory> getAvailableInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
 		boolean checkProductionUses = (productionUses != null);
-		List<InventoryProcessItemWithStorage> processItemWithStorages;
-		if(poCodeId != null) {
-			List<Integer> poCodeIds = dao.getOrigionPoCodeIds(poCodeId);
-			processItemWithStorages =
-					getInventoryRepository().findAvailableInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, poCodeIds);
-		}
-		else {
-			processItemWithStorages =
-					getInventoryRepository().findAvailableInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, null);
-		}
-		return CollectionItemWithGroup.getFilledGroups(processItemWithStorages);
-		
+		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()
+				.findAvailableInventoryStorages(checkProductionUses, productionUses, group, itemId, poCodeId);
+				
+		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventoryByProcessIds);
 	}
 
 	/**
@@ -337,12 +341,7 @@ public class WarehouseManagement {
 	 */
 	public List<ProcessItemInventoryRow> getInventoryRows(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
 		boolean checkProductionUses = (productionUses != null);
-		if(poCodeId != null) {
-			List<Integer> poCodeIds = dao.getOrigionPoCodeIds(poCodeId);
-			return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, poCodeIds);			}
-		else {
-			return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, null);	
-		}
+		return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, poCodeId);			
 	}
 
 }

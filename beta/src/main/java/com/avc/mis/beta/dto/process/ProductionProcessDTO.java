@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.processinfo.ProductWeightedPoDTO;
+import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -31,7 +31,6 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> {
 	
-	private List<ProductWeightedPoDTO> productWeightedPos;
 	
 //	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 //			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
@@ -52,8 +51,8 @@ public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> 
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));
 		super.setUsedItemGroups(Arrays.stream(process.getUsedItemGroups())
 				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
-		setProductWeightedPos(Arrays.stream(process.getProductWeightedPos())
-				.map(i->{return new ProductWeightedPoDTO(i);}).collect(Collectors.toList()));
+		super.setWeightedPos(Arrays.stream(process.getWeightedPos())
+				.map(i->{return new WeightedPoDTO(i);}).collect(Collectors.toList()));
 
 	}
 	
@@ -62,20 +61,20 @@ public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> 
 		return super.getProcessItems();
 	}
 	
-	@Override
-	public void setProcessItems(List<ProcessItemDTO> processItems) {
-		super.setProcessItems(processItems);
-	}
+//	@Override
+//	public void setProcessItems(List<ProcessItemDTO> processItems) {
+//		super.setProcessItems(processItems);
+//	}
 
 	@Override
 	public List<UsedItemsGroupDTO> getUsedItemGroups() {
 		return super.getUsedItemGroups();
 	}
 
-	@Override
-	public void setUsedItemGroups(List<UsedItemsGroupDTO> usedItemGroups) {
-		super.setUsedItemGroups(usedItemGroups);
-	}
+//	@Override
+//	public void setUsedItemGroups(List<UsedItemsGroupDTO> usedItemGroups) {
+//		super.setUsedItemGroups(usedItemGroups);
+//	}
 
 	@Override
 	public String getProcessTypeDescription() {

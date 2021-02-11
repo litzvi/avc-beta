@@ -31,7 +31,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "lc.processStatus, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((ui.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor)) "
+			+ "SUM((ui.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "coalesce(w_po_code_used_item.weight, 1)) "
 		+ "from ContainerLoading p "
 			+ "join p.shipmentCode sc "
 				+ "join sc.portOfDischarge port "
@@ -42,15 +43,19 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 							+ "join pi.item item "
 								+ "join item.unit item_unit "
 							+ "join pi.process p_used_item "
-								+ "join p_used_item.poCode po_code_used_item "
+								+ "left join p_used_item.poCode po_code_used_item "
+								+ "left join p_used_item.weightedPos w_po_code_used_item "
 						+ "join UOM uom "
 							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
 			+ "join p.lifeCycle lc "
 			+ "left join p.approvals approval "
 				+ "left join approval.user u "
-		+ "where po_code_used_item.id = :poCodeId "
+		+ "where "
+			+ "((po_code_used_item is not null and po_code_used_item.id = :poCodeId) "
+				+ "or (w_po_code_used_item is not null and w_po_code_used_item.id = :poCodeId)) "
+			+ ""
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
-		+ "group by p, item ")
+		+ "group by p, item, w_po_code_used_item ")
 	List<ItemAmountWithLoadingReportLine> findLoadingsByItemsPoCode(Integer poCodeId, boolean cancelled);
 
 

@@ -56,7 +56,7 @@ public class ProductionTest {
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
 		process.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		process.setProcessItems(service.getProcessItems(poInventory));
-		process.setProductWeightedPos(service.getProductWeightedPos(2));
+		process.setWeightedPos(service.getProductWeightedPos(2));
 		
 		productionService.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
 		

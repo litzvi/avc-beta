@@ -10,6 +10,7 @@ import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.embedable.GeneralProcessInfo;
 import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
+import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.view.ProcessRow;
@@ -171,6 +172,18 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 		+ "")
 	List<ProcessItemWithStorage> findProcessItemWithStorage(int processId);
 
+	@Query("select new com.avc.mis.beta.dto.processinfo.WeightedPoDTO( "
+			+ "weighted_po.id, weighted_po.version, weighted_po.ordinal, "
+			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, po_code.display, "
+			+ "weighted_po.weight) "
+		+ "from PoProcess p "
+			+ "join p.weightedPos weighted_po "
+				+ "join weighted_po.poCode po_code "
+					+ "join po_code.contractType ct "
+					+ "join po_code.supplier s "
+		+ "where p.id = :processId "
+		+ "order by weighted_po.ordinal ")
+	List<WeightedPoDTO> findWeightedPos(Integer processId);
 
 
 	/**

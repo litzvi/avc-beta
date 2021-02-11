@@ -10,6 +10,10 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
+import com.avc.mis.beta.utilities.ListGroup;
+import com.avc.mis.beta.utilities.ListGroupImp;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -25,7 +29,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class StorageInventoryRow  extends BasicSubjectDataDTO {
+public class StorageInventoryRow extends BasicSubjectDataDTO implements CollectionItemWithGroup<StorageInventoryRow, ProcessItemInventory> {
 
 	Integer processItemId;
 	BigDecimal unitAmount;
@@ -77,4 +81,19 @@ public class StorageInventoryRow  extends BasicSubjectDataDTO {
 	public BigDecimal getNumberAvailableUnits() {
 		return this.numberUnits.subtract(this.numberUsedUnits);
 	}
+	
+	@JsonIgnore
+	@Override
+	public StorageInventoryRow getItem() {
+		return this;
+	}
+
+	@JsonIgnore
+	@Override
+	public ProcessItemInventory getGroup() {
+		ProcessItemInventory group = new ProcessItemInventory();
+		group.setId(getProcessItemId());
+		return group;
+	}
+
 }

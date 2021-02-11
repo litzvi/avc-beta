@@ -42,7 +42,7 @@ import com.avc.mis.beta.entities.processinfo.CountAmount;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.ProductWeightedPo;
+import com.avc.mis.beta.entities.processinfo.WeightedPo;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.BankBranch;
@@ -435,11 +435,11 @@ public class TestService {
 	}
 
 	
-	public ProductWeightedPo[] getProductWeightedPos(int size) {
+	public WeightedPo[] getProductWeightedPos(int size) {
 		
-		ProductWeightedPo[] productWeightedPos = new ProductWeightedPo[size];
+		WeightedPo[] productWeightedPos = new WeightedPo[size];
 		for(int i=0; i < productWeightedPos.length; i++) {
-			productWeightedPos[i] = new ProductWeightedPo();
+			productWeightedPos[i] = new WeightedPo();
 			productWeightedPos[i].setPoCode(getPoCode());
 			productWeightedPos[i].setWeight(new BigDecimal((i+1)/(Double.valueOf(productWeightedPos.length))));
 			
