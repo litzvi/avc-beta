@@ -66,7 +66,9 @@ public class ProductionProcesses {
 		for(ProcessRow row: processRows) {
 			row.setUsedItems(usedMap.get(row.getId()));
 			row.setProducedItems(producedMap.get(row.getId()));
-		}		
+		}	
+		System.out.println("production rows:");
+		processRows.forEach(i->System.out.println(i));
 		return processRows;
 	}
 	

@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.report;
 
 import java.time.LocalDate;
+import java.util.stream.Stream;
 
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 
@@ -18,15 +19,20 @@ public class ProcessStateInfo {
 
 	LocalDate date;
 	ProcessStatus status;
-	String approvals;
+	String[] approvals;
 	
-	public ProcessStateInfo(LocalDate date, ProcessStatus status, String approvals) {
+	public ProcessStateInfo(LocalDate date, ProcessStatus status, String[] approvals) {
 		super();
 		this.date = date;
 		this.status = status;
 		this.approvals = approvals;
 	}
 
-	
+	public ProcessStateInfo(LocalDate date, ProcessStatus status, String approvals) {
+		super();
+		this.date = date;
+		this.status = status;
+		this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
+	}
 	
 }

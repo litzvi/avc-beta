@@ -8,6 +8,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
@@ -31,11 +32,12 @@ import lombok.ToString;
 public class ProcessRow extends BasicDTO {
 
 	private PoCodeBasic poCode;
+	private String[] poCodes;
 	private String supplierName;
 	private OffsetDateTime recordedTime;
 	private Duration duration;
 	private ProcessStatus status;
-	private String approvals;
+	private String[] approvals;
 	 
 	private List<ProductionProcessWithItemAmount> usedItems;
 	@JsonIgnore private Optional<AmountWithUnit> usedAmounts;
@@ -48,14 +50,19 @@ public class ProcessRow extends BasicDTO {
 	
 	public ProcessRow(@NonNull Integer id, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
+			String poCodes,
 			OffsetDateTime recordedTime, Duration duration, ProcessStatus status, String approvals) {
 		super(id);
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+		if(poCodeId != null)
+			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+		if(poCodes != null)
+			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);;
 		this.supplierName = supplierName;
 		this.recordedTime = recordedTime;
 		this.duration = duration;
 		this.status = status;
-		this.approvals = approvals;
+		if(approvals != null)
+			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
 	}
 	
 	public void setUsedItems(List<ProductionProcessWithItemAmount> usedItems) {

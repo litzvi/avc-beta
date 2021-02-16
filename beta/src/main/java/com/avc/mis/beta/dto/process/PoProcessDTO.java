@@ -50,7 +50,8 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 	}
 	
 	public void setPoProcessInfo(PoProcessInfo info) {
-		this.poCode = info.getPoCode();
+		if(info != null)
+			this.poCode = info.getPoCode();
 	}
 
 	
