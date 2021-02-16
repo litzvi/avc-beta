@@ -28,6 +28,7 @@ import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.QcCompany;
+import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.repositories.QCRepository;
@@ -151,10 +152,14 @@ public class QualityChecks {
 	
 	public QualityCheckDTO getQcByProcessId(int processId) {
 		QualityCheckDTO qualityCheckDTO = new QualityCheckDTO();
-		qualityCheckDTO.setPoProcessInfo(getQcRepository()
-				.findPoProcessInfoByProcessId(processId, QualityCheck.class)
+		qualityCheckDTO.setGeneralProcessInfo(getQcRepository()
+				.findGeneralProcessInfoByProcessId(processId, QualityCheck.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No quality check with given process id")));
+		qualityCheckDTO.setPoProcessInfo(getQcRepository()
+				.findPoProcessInfoByProcessId(processId)
+				.orElseThrow(
+						()->new IllegalArgumentException("No po code with given process id")));
 		qualityCheckDTO.setQualityCheckInfo(getQcRepository().findQualityCheckInfo(processId));
 
 //		Optional<QualityCheckDTO> check = getQcRepository().findQcDTOByProcessId(processId);

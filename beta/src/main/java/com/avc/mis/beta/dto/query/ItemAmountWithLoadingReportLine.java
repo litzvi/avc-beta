@@ -23,7 +23,6 @@ import lombok.Value;
  *
  */
 @Value
-//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ItemAmountWithLoadingReportLine implements CollectionItemWithGroup<ItemAmount, LoadingReportLine> {
 	
 	LoadingReportLine loadingReportLine;
@@ -38,8 +37,8 @@ public class ItemAmountWithLoadingReportLine implements CollectionItemWithGroup<
 			BigDecimal amount, BigDecimal weightCoefficient
 			) {
 		this.loadingReportLine = new LoadingReportLine(processId, shipmentId, shipmentCode, portOfDischargeCode, portOfDischargeValue, containerDetails, loadingDate, status, approvals);
-		this.itemAmount = new ItemAmount(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unitAmount, unitMeasureUnit, clazz, amount, weightCoefficient
-				);
+		this.itemAmount = new ItemAmount(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unitAmount, unitMeasureUnit, clazz, 
+				amount, weightCoefficient);
 	}
 
 	@Override

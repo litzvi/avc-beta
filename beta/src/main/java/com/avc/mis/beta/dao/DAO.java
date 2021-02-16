@@ -70,18 +70,7 @@ public abstract class DAO extends ReadDAO {
 	public void addEntity(BaseEntity entity) {
 		getEntityManager().persist(entity);
 	}
-	
-
-	/**
-	 * Adds an entity with Hibernate session.save().
-	 * Used in {@link Orders.addOrder} in order to let Hibernate to decide if to auto generate key.
-	 * @param entity to be persisted
-	 */
-	public void addEntityWithFlexibleGenerator(BaseEntity entity) {
-		Session session = getEntityManager().unwrap(Session.class);
-		session.save(entity);
-	}
-	
+		
 	/**
 	 * Sets the reference for the entity so it's ready for manipulation by the persistence manager.
 	 * @param <T>
@@ -96,11 +85,11 @@ public abstract class DAO extends ReadDAO {
 	}
 
 	/**
+	 * EDIT (MERGE) ENTITY
 	 * @param entity the entity with edited state information including id.
 	 * @return the newly edited entity
 	 * @throws IllegalArgumentException if instance is not an entity,  
 	 * dosen't have an id set or is a removed entity.
-	 * TransactionRequiredException
 	 */
 	public <T extends BaseEntity> T editEntity(T entity) {
 		if(entity.getId() == null) {
@@ -144,6 +133,13 @@ public abstract class DAO extends ReadDAO {
 		return getEntityManager().find(entityClass, id);
 	}
 	
+	/**
+	 * Changes password for current user.
+	 * Provided with the correct current password and the new pasword.
+	 * @param password the current password
+	 * @param newPassword the new password
+	 * @return number of rows changed
+	 */
 	public int changeUserPassword(String password, String newPassword) {
 		
 		UserLogin user = getCurrentUser();
@@ -158,9 +154,18 @@ public abstract class DAO extends ReadDAO {
 		else {
 			throw new AccessControlException("Couldn't change password: wrong password");
 		}
+	}	
 
-		
-
+	/**
+	 * Adds an entity with Hibernate session.save().
+	 * Used in {@link Orders.addOrder} in order to let Hibernate to decide if to auto generate key.
+	 * @param entity to be persisted
+	 */
+	@Deprecated
+	public void addEntityWithFlexibleGenerator(BaseEntity entity) {
+		Session session = getEntityManager().unwrap(Session.class);
+		session.save(entity);
 	}
+
 
 }

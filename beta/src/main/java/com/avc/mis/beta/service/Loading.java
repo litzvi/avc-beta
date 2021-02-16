@@ -119,19 +119,9 @@ public class Loading {
 						()->new IllegalArgumentException("No container loading with given process id")));
 		loadingDTO.setContainerLoadingInfo(getContainerLoadingRepository().findContainerLoadingInfo(processId));
 		
-//		Optional<ContainerLoadingDTO> loading = getContainerLoadingRepository().findContainerLoadingDTOById(processId);
-//		ContainerLoadingDTO loadingDTO = loading.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id"));
-		
 		getProcessInfoReader().setTransactionProcessCollections(loadingDTO);
 		
 		loadingDTO.setLoadedItems(getContainerLoadingRepository().findLoadedItems(processId));
-//		loadingDTO.setUsedItemGroups(
-//				CollectionItemWithGroup.getFilledGroups(
-//						getContainerLoadingRepository()
-//						.findUsedItemsWithGroup(processId)));
-////				UsedItemsGroupDTO.getUsedItemsGroups(
-////						getContainerLoadingRepository()
-////						.findUsedItemsWithGroup(processId)));
 
 		return loadingDTO; 
 	}
@@ -155,10 +145,6 @@ public class Loading {
 	
 	public List<LoadingReportLine> getLoadingSummary(Integer poCodeId) {
 		List<ItemAmountWithLoadingReportLine> lines = getContainerLoadingRepository().findLoadingsByItemsPoCode(poCodeId, false);
-
-		if(lines == null || lines.isEmpty()) {
-			return null;
-		}
 		
 		return CollectionItemWithGroup.getFilledGroups(lines);
 	}

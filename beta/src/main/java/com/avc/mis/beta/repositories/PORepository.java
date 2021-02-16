@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.embedable.PoInfo;
+import com.avc.mis.beta.dto.embedable.OrderProcessInfo;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
@@ -26,42 +26,12 @@ import com.avc.mis.beta.entities.processinfo.OrderItem;
  *
  */
 public interface PORepository extends PoProcessRepository<PO> {
+
 	
-	/**
-	 * Gets the PO details in a PoDTO object by process id (exclusive) or po code id
-	 * @param processId the process id of the PO
-	 * @param poCodeId po code id of the PO
-	 * @return PoDTO a DTO of a PO with all process information.
-	 */
-	@Query("select distinct new com.avc.mis.beta.dto.process.PoDTO("
-			+ "po.id, po.version, po.createdDate, p_user.username, "
-			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display, "
-			+ "pt.processName, p_line, "
-			+ "po.recordedTime, po.startTime, po.endTime, po.duration, po.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, po.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
-			+ "po.personInCharge) "
-		+ "from PO po "
-			+ "join po.poCode po_code "
-				+ "join po_code.contractType t "
-				+ "join po_code.supplier s "
-			+ "join po.processType pt "
-			+ "left join po.createdBy p_user "
-			+ "left join po.productionLine p_line "
-			+ "join po.lifeCycle lc "
-			+ "left join po.approvals approval "
-				+ "left join approval.user u "
-		+ "where po.id = :processId or po_code.id = :poCodeId "
-			+ "and (:processId is null or :poCodeId is null) "
-			+ "and lc.processStatus in :statuses "
-		+ "group by po "
-		+ "order by lc.processStatus ")
-	Optional<PoDTO> findOrderById(Integer processId, Integer poCodeId, ProcessStatus[] statuses);
-	
-	@Query("select new com.avc.mis.beta.dto.embedable.PoInfo(po.personInCharge) "
+	@Query("select new com.avc.mis.beta.dto.embedable.OrderProcessInfo(po.personInCharge) "
 		+ "from PO po "
 		+ "where po.id = :processId ")
-	PoInfo findPoInfo(Integer processId);
-
+	OrderProcessInfo findPoInfo(Integer processId);
 	
 	/**
 	 * Gets all OrderItems for a given process in a OrderItemDTO that contains order 
@@ -93,6 +63,36 @@ public interface PORepository extends PoProcessRepository<PO> {
 		+ "group by i "
 		+ "order by i.ordinal ")
 	List<OrderItemDTO> findPoOrderItemsById(Integer processId);
+
+	/**
+	 * Gets the PO details in a PoDTO object by process id (exclusive) or po code id
+	 * @param processId the process id of the PO
+	 * @param poCodeId po code id of the PO
+	 * @return PoDTO a DTO of a PO with all process information.
+	 */
+	@Query("select distinct new com.avc.mis.beta.dto.process.PoDTO("
+			+ "po.id, po.version, po.createdDate, p_user.username, "
+			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display, "
+			+ "pt.processName, p_line, "
+			+ "po.recordedTime, po.startTime, po.endTime, po.duration, po.numOfWorkers, "
+			+ "lc.processStatus, lc.editStatus, po.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
+			+ "po.personInCharge) "
+		+ "from PO po "
+			+ "join po.poCode po_code "
+				+ "join po_code.contractType t "
+				+ "join po_code.supplier s "
+			+ "join po.processType pt "
+			+ "left join po.createdBy p_user "
+			+ "left join po.productionLine p_line "
+			+ "join po.lifeCycle lc "
+			+ "left join po.approvals approval "
+				+ "left join approval.user u "
+		+ "where po.id = :processId or po_code.id = :poCodeId "
+			+ "and (:processId is null or :poCodeId is null) "
+			+ "and lc.processStatus in :statuses "
+		+ "group by po "
+		+ "order by lc.processStatus ")
+	Optional<PoDTO> findOrderById(Integer processId, Integer poCodeId, ProcessStatus[] statuses);
 	
 	/**
 	 * Gets rows of open orders for the given order type - 

@@ -14,6 +14,9 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import lombok.Data;
 
 /**
+ * Final report for cashew receiving through processing to export.
+ * Includes summary details for each process and summary of percentage losses.
+ * 
  * @author zvi
  *
  */
@@ -30,15 +33,10 @@ public class FinalReport {
 	private ProductionReportLine packing;
 	private List<LoadingReportLine> loadings;
 	
-
-//	@JsonIgnore
-//	static AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
-//		return itemAmounts.stream().map(i -> i.getWeight()[0]).reduce(AmountWithUnit::add).get();
-//		return new AmountWithUnit[] {
-//				totalWeight.convert(MeasureUnit.KG),
-//				totalWeight.convert(MeasureUnit.LBS)};
-//	}
 	
+	/**
+	 * @return List of percentage loss compared to receipt after every process stage.
+	 */
 	public List<ProductPercentage> getProductPercentageLoss() {
 		List<ProductPercentage> productPercentageLoss = new ArrayList<>();
 		if(receipt == null) {

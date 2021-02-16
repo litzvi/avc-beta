@@ -122,20 +122,14 @@ public class ProductionProcesses {
 	 */
 	public ProductionProcessDTO getProductionProcess(int processId) {
 		ProductionProcessDTO processDTO = new ProductionProcessDTO();
-		processDTO.setPoProcessInfo(getProcessRepository()
-				.findPoProcessInfoByProcessId(processId, ProductionProcess.class)
+		processDTO.setGeneralProcessInfo(getProcessRepository()
+				.findGeneralProcessInfoByProcessId(processId, ProductionProcess.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No production process with given process id")));
-
-		
-//		Optional<ProductionProcessDTO> process = getProcessRepository().findProductionProcessDTOById(processId);
-//		ProductionProcessDTO processDTO = process.orElseThrow(
-//				()->new IllegalArgumentException("No production process with given process id"));
+		processDTO.setPoProcessInfo(getProcessRepository()
+				.findPoProcessInfoByProcessId(processId).orElse(null));
 		
 		getProcessInfoReader().setTransactionProcessCollections(processDTO);
-		
-//		processDTO.setWeightedPos(
-//				getProcessRepository().findWeightedPos(processDTO.getId()));
 
 		return processDTO;
 	}

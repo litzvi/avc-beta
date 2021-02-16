@@ -28,6 +28,7 @@ import lombok.Getter;
 @Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
+@Deprecated
 public class Samples {
 	
 	@Autowired private ProcessInfoDAO dao;
@@ -45,10 +46,14 @@ public class Samples {
 	
 	public SampleReceiptDTO getSampleReceiptByProcessId(int processId) {
 		SampleReceiptDTO sampleReceiptDTO = new SampleReceiptDTO();
-		sampleReceiptDTO.setPoProcessInfo(getSampleRepository()
-				.findPoProcessInfoByProcessId(processId, SampleReceipt.class)
+		sampleReceiptDTO.setGeneralProcessInfo(getSampleRepository()
+				.findGeneralProcessInfoByProcessId(processId, SampleReceipt.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No receipt sample with given process id")));
+		sampleReceiptDTO.setPoProcessInfo(getSampleRepository()
+				.findPoProcessInfoByProcessId(processId)
+				.orElseThrow(
+						()->new IllegalArgumentException("No po code for given process id")));
 
 		
 //		Optional<SampleReceiptDTO> sample = getSampleRepository().findSampleDTOByProcessId(processId);

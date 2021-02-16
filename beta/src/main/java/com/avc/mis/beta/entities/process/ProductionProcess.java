@@ -66,13 +66,5 @@ public class ProductionProcess extends TransactionProcess<ProcessItem> {
 		return super.getProcessItems();
 	}
 	
-	
-	
-	@NotNull(message = "Receipt has to reference a po code")
-	@Override
-	public BasePoCode getPoCode() {
-		return super.getPoCode();
-	}
-
 
 }

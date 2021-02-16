@@ -28,6 +28,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
+ * Represents a system user with username, password and roles.
+ * Every user is associated with a Person.
+ * 
  * @author Zvi
  *
  */
@@ -59,7 +62,12 @@ public class UserEntity extends ObjectDataEntity {
 	
 	@Override
 	public void setReference(Object person) {
-		this.setPerson((Person)person);
+		if(person instanceof Person) {
+			this.setPerson((Person)person);
+		}
+		else {
+			throw new ClassCastException("Referenced object isn't instance of Person class");
+		}	
 	}
 
 }

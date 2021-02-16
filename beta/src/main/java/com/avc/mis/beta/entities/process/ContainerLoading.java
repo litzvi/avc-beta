@@ -62,7 +62,7 @@ public class ContainerLoading extends TransactionProcess<ProcessItem> {
 	@NotNull(message = "Shipping details is mandatory")
 	private ShipingDetails shipingDetails;
 
-	
+	//not used for now
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)

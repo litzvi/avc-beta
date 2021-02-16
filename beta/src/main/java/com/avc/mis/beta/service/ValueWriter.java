@@ -53,16 +53,6 @@ public class ValueWriter {
 	}
 	
 	/**
-	 * Sets the entity as not active, dosen't permanently remove from database.
-	 * @param entity the ValueEntity to be removed - CAUTION if any other editable field is changed it will be edited.
-	 */
-	@Deprecated
-	public <T extends ValueEntity> void remove(T entity) {
-		//check if it's one of the permitted classes
-		dao.removeEntity(entity, (Class<T>)entity.getClass());
-	}
-	
-	/**
 	 * For testing only, needed because calling DAO directly has no transaction
 	 * @param entity to be permanently removed.
 	 */

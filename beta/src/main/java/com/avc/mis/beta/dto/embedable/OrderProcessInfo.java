@@ -10,7 +10,7 @@ import lombok.Value;
  *
  */
 @Value
-public class PoInfo {
+public class OrderProcessInfo {
 
 	String personInCharge;
 	

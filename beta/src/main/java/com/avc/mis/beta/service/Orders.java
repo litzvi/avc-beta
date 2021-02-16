@@ -49,60 +49,6 @@ public class Orders {
 	
 	@Autowired private PORepository poRepository;	
 	
-	/**
-	 * Get all cashew orders with the order status - pending, received, rejected but not cancelled.
-	 * @return list of PoRow for all orders
-	 */
-	@Deprecated
-	public List<PoRow> findAllCashewOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER,
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
-		return getPoRows(itemRows);
-	}
-	
-	/**
-	 * Get all cashew orders with the order status - pending, received, rejected or cancelled.
-	 * @return list of PoRow for all orders
-	 */
-	@Deprecated
-	public List<PoRow> findAllCashewOrdersHistory() {
-		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values());
-		return getPoRows(itemRows);
-	}
-	
-	/**
-	 * Gat all General orders with the order status - pending, received, rejected but not cancelled.
-	 * @return list of PoRow for all orders
-	 */
-	@Deprecated
-	public List<PoRow> findAllGeneralOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER,
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
-		return getPoRows(itemRows);
-	}
-	
-	/**
-	 * Get the table of all Cashew purchase orders that are active and where not received.
-	 * @return list of PoRow for orders that are yet to be received
-	 */
-	@Deprecated
-	public List<PoRow> findOpenCashewOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
-		
-		return getPoRows(itemRows);
-	}
-	
-	/**
-	 * Get the table of all General purchase orders that are active and where not received.
-	 * @return list of PoRow for orders that are yet to be received
-	 */
-	@Deprecated
-	public List<PoRow> findOpenGeneralOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
-		System.out.println("PoItemRows size: " + itemRows.size());
-		getPoRows(itemRows).forEach(i -> System.out.println(i));
-		return getPoRows(itemRows);
-	}
 	
 	private List<PoRow> getPoRows(List<PoItemRow> itemRows) {
 		Map<Integer, List<PoItemRow>> poMap = itemRows.stream()
@@ -177,6 +123,7 @@ public class Orders {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Deprecated
 	public void addMixPoCode(MixPoCode poCode) {
 		dao.addEntity(poCode);
 	}
@@ -243,15 +190,15 @@ public class Orders {
 	 */
 	public PoDTO getOrderByProcessId(int processId) {
 		PoDTO poDTO = new PoDTO();
-		poDTO.setPoProcessInfo(getPoRepository()
-				.findPoProcessInfoByProcessId(processId, PO.class)
+		poDTO.setGeneralProcessInfo(getPoRepository()
+				.findGeneralProcessInfoByProcessId(processId, PO.class)
 				.orElseThrow(
-						()->new IllegalArgumentException("No storage relocation with given process id")));
-		poDTO.setPoInfo(getPoRepository().findPoInfo(poDTO.getId()));
-		
-//		Optional<PoDTO> order = getPoRepository().findOrderById(processId, null, ProcessStatus.values());
-//		PoDTO po = order.orElseThrow(
-//				()->new IllegalArgumentException("No order with given process id"));
+						()->new IllegalArgumentException("No PO with given process id")));
+		poDTO.setPoProcessInfo(getPoRepository()
+				.findPoProcessInfoByProcessId(processId)
+				.orElseThrow(
+						()->new IllegalArgumentException("No po code for given process id")));
+		poDTO.setOrderProcessInfo(getPoRepository().findPoInfo(poDTO.getId()));
 		
 		poDTO.setOrderItems(getPoRepository().findPoOrderItemsById(poDTO.getId()));
 		
@@ -284,6 +231,60 @@ public class Orders {
 		dao.editEntity(poCode);
 	}	
 	
+	/**
+	 * Get all cashew orders with the order status - pending, received, rejected but not cancelled.
+	 * @return list of PoRow for all orders
+	 */
+	@Deprecated
+	public List<PoRow> findAllCashewOrders() {
+		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER,
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
+		return getPoRows(itemRows);
+	}
+	
+	/**
+	 * Get all cashew orders with the order status - pending, received, rejected or cancelled.
+	 * @return list of PoRow for all orders
+	 */
+	@Deprecated
+	public List<PoRow> findAllCashewOrdersHistory() {
+		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values());
+		return getPoRows(itemRows);
+	}
+	
+	/**
+	 * Gat all General orders with the order status - pending, received, rejected but not cancelled.
+	 * @return list of PoRow for all orders
+	 */
+	@Deprecated
+	public List<PoRow> findAllGeneralOrders() {
+		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER,
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
+		return getPoRows(itemRows);
+	}
+	
+	/**
+	 * Get the table of all Cashew purchase orders that are active and where not received.
+	 * @return list of PoRow for orders that are yet to be received
+	 */
+	@Deprecated
+	public List<PoRow> findOpenCashewOrders() {
+		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
+		
+		return getPoRows(itemRows);
+	}
+	
+	/**
+	 * Get the table of all General purchase orders that are active and where not received.
+	 * @return list of PoRow for orders that are yet to be received
+	 */
+	@Deprecated
+	public List<PoRow> findOpenGeneralOrders() {
+		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
+		System.out.println("PoItemRows size: " + itemRows.size());
+		getPoRows(itemRows).forEach(i -> System.out.println(i));
+		return getPoRows(itemRows);
+	}
 
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -291,5 +292,8 @@ public class Orders {
 	public void removeOrder(int orderId) {
 		getDeletableDAO().permenentlyRemoveEntity(PO.class, orderId);
 	}
+	
+	
+	
 	
 }

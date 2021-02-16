@@ -20,27 +20,9 @@ import com.avc.mis.beta.entities.SoftDeleted;
 @Repository
 public class SoftDeletableDAO extends DAO {
 
-	/**
-	 * Soft remove (delete) of entity - only flags the entity as not active without physically deleting.
-	 * @param entity the entity to be removed.
-	 * @param entityClass the class of entity to be removed.
-	 * @throws IllegalArgumentException
-	 */
-	@Deprecated
-	public <T extends BaseEntity & SoftDeleted> void removeEntity(T entity, Class<T> entityClass) {
-		if(entity.getId() == null) {
-			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");
-		}
-		
-	    CriteriaUpdate<T> update = 
-	    		getEntityManager().getCriteriaBuilder().createCriteriaUpdate(entityClass);
-	    Root<T> root = update.from(entityClass);
-	    getEntityManager().createQuery(update.
-	    		set("active", false).where(root.get("id").in(entity.getId()))).executeUpdate();
-	   
-	}
 	
 	/**
+	 * SOFT DELETE ENTITY BY CLASS AND ID
 	 * Soft remove (delete) of entity - only flags the entity as not active without physically deleting.
 	 * @param entityClass the class of entity to be removed.
 	 * @param entityId id of entity to be removed.
@@ -59,6 +41,7 @@ public class SoftDeletableDAO extends DAO {
 	    		set("active", false).where(root.get("id").in(entityId))).executeUpdate();
 	   	
 	}
+
 
 	
 }

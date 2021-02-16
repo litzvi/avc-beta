@@ -21,7 +21,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 @MappedSuperclass
-public abstract class DataEntity extends BaseEntity {
+public abstract class DataEntity extends BaseEntity implements DataInterface {
 	
 	@Version
 	private Integer version;

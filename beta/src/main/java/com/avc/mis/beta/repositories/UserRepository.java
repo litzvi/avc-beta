@@ -30,50 +30,35 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 				+ "and u.active = true")
 	Optional<UserLogin> findByUsername(String username);
 	
-	@Query("select u from UserEntity u "
-				+ "left join fetch u.person p "
-					+ "left join fetch p.idCard idCard "
-					+ "left join fetch p.contactDetails cd "
-			+ "where u.username = :username "
-				+ "and u.active = true")
-	Optional<UserEntity> findUserByUsername(String username);
+	/**
+	 * @return table of all users information except their roles.
+	 */
+	@Query("select new com.avc.mis.beta.dto.view.UserRow(u.id, p.name, u.username, u.active) "
+			+ "from UserEntity u "
+				+ "join u.person p ")
+	List<UserRow> findUserRowTable();
 	
-	@Query("select u from UserEntity u "
-				+ "left join fetch u.person p "
-					+ "left join fetch p.idCard idCard "
-					+ "left join fetch p.contactDetails cd "
-			+ "where u.id = :id "
-				+ "and u.active = true")
-	Optional<UserEntity> findById(Integer id);
+	/**
+	 * @return (user id, role) pairs of joining all users with their corresponding role
+	 */
+	@Query("select new com.avc.mis.beta.dto.basic.ValueObject(u.id, r) "
+			+ "from UserEntity u "
+				+ "join u.roles r ")
+	Stream<ValueObject<Role>> findAllRolesByUsers();
 
 	@Query("select new com.avc.mis.beta.dto.basic.UserBasic(u.id, u.version, u.username) "
 			+ "from UserEntity u "
 			+ "where u.active = true")
 	List<UserBasic> findAllBasic();
-
-//	@Query("update UserEntity u "
-//			+ "set u.password = :newPassword "
-//			+ "where u.id := userId and u.password = :oldPassword")
-//	void changePassword(Integer userId, String oldPassword, String newPassword);
 	
-	@Query("select new com.avc.mis.beta.dto.view.UserRow(u.id, p.name, u.username, u.active) "
-			+ "from UserEntity u "
-				+ "join u.person p "
-			+ "where u.active = true")
-	List<UserRow> findUserRowTable();
-	
-//	@org.springframework.data.jdbc.repository.query.Query(
-//			"select new com.avc.mis.beta.dto.values.UserRow(u.id, p.name, u.username, u.roles, u.active) "
-//			+ "from UserEntity u "
-//				+ "join u.person p "
-//			+ "where u.active = true")
-//	List<UserRow> findUserRowTable();
-	
-	@Query("select new com.avc.mis.beta.dto.basic.ValueObject(u.id, r) "
-			+ "from UserEntity u "
-				+ "join u.roles r "
-			+ "where u.active = true")
-	Stream<ValueObject<Role>> findAllRolesByUsers();
+	@Query("select u from UserEntity u "
+				+ "left join fetch u.person p "
+					+ "left join fetch p.idCard idCard "
+					+ "left join fetch p.contactDetails cd "
+			+ "where (u.id = :id or :id is null) "
+				+ "and (u.username = :username or :username is null) "
+				+ "and u.active = true")
+	Optional<UserEntity> findUserByIdOrUsername(Integer id, String username);
 
 	@Query("select new java.lang.Boolean(count(*) > 0) "
 			+ "from UserEntity u "

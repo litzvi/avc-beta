@@ -26,6 +26,12 @@ import com.avc.mis.beta.entities.process.ContainerLoading;
  */
 public interface ContainerLoadingRepository  extends TransactionProcessRepository<ContainerLoading> {
 	
+	/**
+	 * Gets loading summary for final report by 'PO code' (also if product is from a combination of other POs besides the given one). 
+	 * @param poCodeId id of 'PO code' for whom to get the loading data summary.
+	 * @param cancelled, if to include cancelled loadings in summary.
+	 * @return List of ItemAmountWithLoadingReportLine which is pair of LoadingReportLine and ItemAmount for one item.
+	 */
 	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine("
 			+ "p.id, sc.id, sc.code, port.code, port.value, p.containerDetails, p.recordedTime, "
 			+ "lc.processStatus, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
@@ -53,37 +59,15 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "where "
 			+ "((po_code_used_item is not null and po_code_used_item.id = :poCodeId) "
 				+ "or (w_po_code_used_item is not null and w_po_code_used_item.id = :poCodeId)) "
-			+ ""
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "group by p, item, w_po_code_used_item ")
 	List<ItemAmountWithLoadingReportLine> findLoadingsByItemsPoCode(Integer poCodeId, boolean cancelled);
 
-
-
-//	@Query("select new com.avc.mis.beta.dto.process.ContainerLoadingDTO("
-//			+ "r.id, r.version, r.createdDate, p_user.username, "
-//			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display, "
-//			+ "pt.processName, p_line, "
-//			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
-//			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
-//			+ "sc.id, sc.code, port.id, port.value, port.code, "
-//			+ "r.containerDetails, r.shipingDetails) "
-//		+ "from ContainerLoading r "
-//			+ "join r.shipmentCode sc "
-//				+ "join sc.portOfDischarge port "
-//			+ "left join r.poCode po_code "
-//				+ "left join po_code.contractType t "
-//				+ "left join po_code.supplier s "
-//			+ "join r.processType pt "
-//			+ "left join r.createdBy p_user "
-//			+ "left join r.productionLine p_line "
-//			+ "join r.lifeCycle lc "
-//			+ "left join r.approvals approval "
-//				+ "left join approval.user u "
-//		+ "where r.id = :processId "
-//		+ "group by r ")
-//	Optional<ContainerLoadingDTO> findContainerLoadingDTOById(int processId);
-
+	/**
+	 * Gets the access loading information (over the general process information assumed to be fetched).
+	 * @param processId id of loading process info to be fetched.
+	 * @return ContainerLoadingInfo object that contains loading process information.
+	 */
 	@Query("select new com.avc.mis.beta.dto.embedable.ContainerLoadingInfo( "
 			+ "sc.id, sc.code, port.id, port.value, port.code, "
 			+ "r.containerDetails, r.shipingDetails) "
@@ -92,7 +76,6 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 				+ "join sc.portOfDischarge port "
 		+ "where r.id = :processId ")
 	ContainerLoadingInfo findContainerLoadingInfo(int processId);
-
 
 	/**
 	 * Gets the join of loaded item, process and storage information for the given container loading process.

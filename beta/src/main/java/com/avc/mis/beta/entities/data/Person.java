@@ -12,6 +12,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.ObjectDataEntity;
+import com.avc.mis.beta.entities.ObjectWithNameInterface;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name = "PERSONS")
-public class Person extends ObjectDataEntity {
+public class Person extends ObjectDataEntity implements ObjectWithNameInterface {
 	
 	@Column(nullable = false, updatable = false)
 	@NotBlank(message = "Person name is mandetory")

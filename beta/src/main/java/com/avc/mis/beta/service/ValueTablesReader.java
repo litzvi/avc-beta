@@ -21,6 +21,7 @@ import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
@@ -160,7 +161,7 @@ public class ValueTablesReader {
 	 * @return List of SupplierBasic of all existing suppliers.
 	 */
 	@Transactional(readOnly = true)
-	public List<DataObjectWithName> getSuppliersBasic() {
+	public List<DataObjectWithName<Supplier>> getSuppliersBasic() {
 		return getSupplierRepository().findAllSuppliersBasic();
 	}
 			
@@ -170,7 +171,7 @@ public class ValueTablesReader {
 	 * @return List of SupplierBasic of all suppliers with given SupplyCategory
 	 */
 	@Transactional(readOnly = true)
-	public List<DataObjectWithName> getSuppliersBasic(Integer categoryId) {
+	public List<DataObjectWithName<Supplier>> getSuppliersBasic(Integer categoryId) {
 		return getSupplierRepository().findSuppliersByCategoryBasic(categoryId);
 	}
 	
@@ -179,7 +180,7 @@ public class ValueTablesReader {
 	 * @return List of SupplierBasic of all CASHEW suppliers.
 	 */
 //	@Transactional(readOnly = true)
-	public List<DataObjectWithName> getCashewSuppliersBasic() {
+	public List<DataObjectWithName<Supplier>> getCashewSuppliersBasic() {
 		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.CASHEW);
 	}
 	
@@ -188,7 +189,7 @@ public class ValueTablesReader {
 	 * @return List of SupplierBasic of all GENERAL suppliers.
 	 */
 //	@Transactional(readOnly = true)
-	public List<DataObjectWithName> getGeneralSuppliersBasic() {
+	public List<DataObjectWithName<Supplier>> getGeneralSuppliersBasic() {
 		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.GENERAL);
 	}
 	

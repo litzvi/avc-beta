@@ -52,6 +52,7 @@ public class Users {
 	@Autowired private PasswordEncoder encoder;
 	
 	/**
+	 * USERS TABLE DISPLAY.
 	 * Gets the table of all system users
 	 * @return List of UserRow - id, username, password, roles and if the user is active.
 	 */
@@ -67,15 +68,17 @@ public class Users {
 	}
 	
 	/**
+	 * PERSONS DROP DOWN
 	 * Gets a list of existing people in the database, in basic form for referencing - id, version and name
 	 * @return List of PersonBasic for all persons.
 	 */
 	@Transactional(readOnly = true)
-	public List<DataObjectWithName> getPersonsBasic() {
+	public List<DataObjectWithName<Person>> getPersonsBasic() {
 		return getPersonRepository().findAllPersonsBasic();		
 	}
 	
 	/**
+	 * USERS DROP DOWN
 	 * Gets a list of existing users in the database, in basic form for referencing - id, version and name
 	 * @return List of UserBasic for all users.
 	 */
@@ -85,6 +88,7 @@ public class Users {
 	}
 	
 	/**
+	 * ADD NEW USER - WITH ADDING PERSON (name = username)
 	 * Adds a new login user not connected to existing person.
 	 * Might have or not have the person's details.
 	 * @param user UserEntity with person field null.
@@ -94,16 +98,14 @@ public class Users {
 		if(person == null) {
 			person = new Person();
 			person.setName(user.getUsername());
+			user.setPerson(person);
 		}		
-		user.setPerson(person);
 		dao.addEntity(user.getPerson());
-//		String generatedPass = RandomStringUtils.random(8, true, true);
-		//perhaps send email
-		user.setPassword(encoder.encode(user.getPassword()));
-		dao.addEntity(user);
+		openUserForPerson(user);
 	}
 	
 	/**
+	 * ADD NEW USER - FOR EXISTING PERSON
 	 * Opening a login user account for an existing person
 	 * @param user UserEntity referencing an existing person
 	 */
@@ -118,6 +120,7 @@ public class Users {
 	}
 	
 	/**
+	 * GET USER FULL DETAILS - BY USERNAME
 	 * Find user with full details with given username - including id card and contact details if exist.
 	 * @param username of the user to find
 	 * @return UserDTO with full details 
@@ -125,12 +128,13 @@ public class Users {
 	 */
 	@Transactional(readOnly = true)
 	public UserDTO getUserByUsername(String username) {
-		Optional<UserEntity> user = getUserRepository().findUserByUsername(username);
-		user.orElseThrow(() -> new IllegalArgumentException("No User with given username"));
-		return new UserDTO(user.get());
+		Optional<UserEntity> user = getUserRepository().findUserByIdOrUsername(null, username);
+		return new UserDTO(user.orElseThrow(
+				() -> new IllegalArgumentException("No User with given username")));
 	}
 	
 	/**
+	 * GET USER FULL DETAILS - BY USER ID
 	 * Find user with full details with given id - including id card and contact details if exist.
 	 * @param userId of the user to find
 	 * @return UserDTO with full details 
@@ -138,28 +142,64 @@ public class Users {
 	 */
 	@Transactional(readOnly = true)
 	public UserDTO getUserById(Integer userId) {
-		Optional<UserEntity> user = getUserRepository().findById(userId);
-		user.orElseThrow(() -> new IllegalArgumentException("No User with given ID"));
-		return new UserDTO(user.get());
+		Optional<UserEntity> user = getUserRepository().findUserByIdOrUsername(userId, null);
+		return new UserDTO(user.orElseThrow(
+				() -> new IllegalArgumentException("No User with given ID")));
 	}
 	
 	/**
-	 * @param string
-	 * @return
+	 * CHECK IF USER WAS ALREADY ADDED - BY USERNAME
+	 * Check if there is a user with the given username.
+	 * @param string the username
+	 * @return true if there is a User with the given username, otherwise false.
 	 */
 	public boolean contains(String username) {
 		return getUserRepository().containsUsername(username);
 	}
 	
 	/**
+	 * SOFT DELETE USER
 	 * Sets the user as not active
 	 * @param userId of UserEntity to be set
 	 */
 	public void removeUser(int userId) {
-//		SoftDeleted entity = getEntityManager().getReference(UserEntity.class, userId);
 		dao.removeEntity(UserEntity.class, userId);
 	}
 	
+	/**
+	 * EDIT USER (DOES NOT EDIT PERSON)
+	 * Edit the user details, dosen't edit the person details for this user.
+	 * @param user to be edited
+	 */
+	public void editUser(UserEntity user) {
+		user.setPerson(null); // not editing person
+		dao.editEntity(user);
+	}
+	
+	/**
+	 * EDIT USER (EDITS CONTAINED PERSON AS WELL)
+	 * Edits all the personal details of this user, will edit user and person details.
+	 * @param user to be edited
+	 */
+	public void editPersonalDetails(UserEntity user) {
+		Person person = user.getPerson();
+		dao.editEntity(user);
+		if(person != null)
+			dao.editEntity(person);
+		
+	}
+	
+	/**
+	 * CHANGE CURRENT USER'S PASSWORD
+	 * Changes password for current user - from current to new - given both the current and new passwords.
+	 * @param password the current password
+	 * @param newPassword the new password
+	 */
+	public void changePassword(String password, String newPassword) {
+		getDao().changeUserPassword(password, newPassword);			
+		
+	}
+
 	/**
 	 * For testing only
 	 * @param userId
@@ -177,32 +217,5 @@ public class Users {
 	public void permenentlyRemovePerson(int personId) {
 		getDeletableDAO().permenentlyRemoveEntity(Person.class, personId);
 	}	
-	
-	/**
-	 * Edit the user details, dosen't edit the person details for this user.
-	 * @param user to be edited
-	 */
-	public void editUser(UserEntity user) {
-		user.setPerson(null); // not editing person
-		dao.editEntity(user);
-	}
-	
-	public void changePassword(String password, String newPassword) {
-		getDao().changeUserPassword(password, newPassword);			
-		
-	}
-	
-	/**
-	 * Edits all the personal details of this user, will edit user and person details.
-	 * @param user to be edited
-	 */
-	public void editPersonalDetails(UserEntity user) {
-		Person person = user.getPerson();
-		dao.editEntity(user);
-		if(person != null)
-			dao.editEntity(person);
-		
-	}
-
 	
 }

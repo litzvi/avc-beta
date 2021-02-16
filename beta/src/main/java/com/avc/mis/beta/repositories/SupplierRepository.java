@@ -29,7 +29,7 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "left join s.supplyCategories c "
 			+ "where c.id = :categoryId "
 				+ "and s.active = true")
-	List<DataObjectWithName> findSuppliersByCategoryBasic(Integer categoryId);
+	List<DataObjectWithName<Supplier>> findSuppliersByCategoryBasic(Integer categoryId);
 	
 	@Query("select distinct new com.avc.mis.beta.dto.data.DataObjectWithName(s.id, s.version, s.name) "
 			+ "from Supplier s "
@@ -37,12 +37,12 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "where c.supplyGroup = :supplyGroup "
 				+ "and s.active = true "
 			+ "ORDER BY s.name")
-	List<DataObjectWithName> findSuppliersByGroupBasic(SupplyGroup supplyGroup);
+	List<DataObjectWithName<Supplier>> findSuppliersByGroupBasic(SupplyGroup supplyGroup);
 		
 	@Query("select new com.avc.mis.beta.dto.data.DataObjectWithName(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "where s.active = true")
-	List<DataObjectWithName> findAllSuppliersBasic();
+	List<DataObjectWithName<Supplier>> findAllSuppliersBasic();
 	
 //	@Query("select s from Supplier s "
 //			+ "left join fetch s.contactDetails cd "

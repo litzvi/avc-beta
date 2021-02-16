@@ -30,6 +30,7 @@ import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
@@ -266,19 +267,16 @@ public class Receipts {
 		Arrays.stream(added).forEach(r -> dao.addEntity(r));
 	}
 	
-	
-		
-	//maybe has a few
-//	public ReceiptDTO getReceipt(int poCode) {
-//		
-//	}
-	
 	public ReceiptDTO getReceiptByProcessId(int processId) {
 		ReceiptDTO receiptDTO = new ReceiptDTO();
-		receiptDTO.setPoProcessInfo(getReceiptRepository()
-				.findPoProcessInfoByProcessId(processId, Receipt.class)
+		receiptDTO.setGeneralProcessInfo(getReceiptRepository()
+				.findGeneralProcessInfoByProcessId(processId, Receipt.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No order receipt with given process id")));
+		receiptDTO.setPoProcessInfo(getReceiptRepository()
+				.findPoProcessInfoByProcessId(processId)
+				.orElseThrow(
+						()->new IllegalArgumentException("No po code for given process id")));
 		
 //		Optional<ReceiptDTO> receipt = getReceiptRepository().findReceiptDTOByProcessId(processId);
 //		ReceiptDTO receiptDTO = receipt.orElseThrow(

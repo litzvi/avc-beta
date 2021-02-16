@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.GeneralProcessDTO;
-import com.avc.mis.beta.dto.embedable.PoInfo;
+import com.avc.mis.beta.dto.embedable.OrderProcessInfo;
 import com.avc.mis.beta.dto.embedable.ShipmentBookingInfo;
 import com.avc.mis.beta.dto.processinfo.BookedContainerDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;

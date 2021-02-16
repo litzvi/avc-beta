@@ -25,21 +25,11 @@ import lombok.Value;
 @Value
 public class PoProcessInfo {
 
-	GeneralProcessInfo generalProcessInfo;
 	PoCodeBasic poCode;
 
-	public PoProcessInfo(Integer id, Integer version, Instant createdDate, String staffRecording, 
+	public PoProcessInfo(
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-			Integer supplierId, Integer supplierVersion, String supplierName, String display,
-			ProcessName processName, ProductionLine productionLine, 
-			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, 
-			Duration duration, Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus,
-			String remarks , String approvals) {
-		this.generalProcessInfo = new GeneralProcessInfo(id, version, createdDate, staffRecording, 
-				processName, productionLine, 
-				recordedTime, startTime, endTime, 
-				duration, numOfWorkers, processStatus, editStatus, 
-				remarks, approvals);
+			Integer supplierId, Integer supplierVersion, String supplierName, String display) {
 		if(poCodeId != null) {
 			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		}

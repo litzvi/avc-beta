@@ -31,6 +31,7 @@ import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
@@ -173,8 +174,12 @@ public class WarehouseManagement {
 	 */
 	public StorageTransferDTO getStorageTransfer(int processId) {
 		StorageTransferDTO transferDTO = new StorageTransferDTO();
+		transferDTO.setGeneralProcessInfo(getTransferRepository()
+				.findGeneralProcessInfoByProcessId(processId, StorageTransfer.class)
+				.orElseThrow(
+						()->new IllegalArgumentException("No storage transfer with given process id")));
 		transferDTO.setPoProcessInfo(getTransferRepository()
-				.findPoProcessInfoByProcessId(processId, StorageTransfer.class)
+				.findPoProcessInfoByProcessId(processId)
 				.orElseThrow(
 						()->new IllegalArgumentException("No storage transfer with given process id")));
 		
@@ -206,10 +211,14 @@ public class WarehouseManagement {
 	
 	public StorageRelocationDTO getStorageRelocation(int processId) {
 		StorageRelocationDTO relocationDTO = new StorageRelocationDTO();
-		relocationDTO.setPoProcessInfo(getRelocationRepository()
-				.findPoProcessInfoByProcessId(processId, StorageRelocation.class)
+		relocationDTO.setGeneralProcessInfo(getRelocationRepository()
+				.findGeneralProcessInfoByProcessId(processId, StorageRelocation.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No storage relocation with given process id")));
+		relocationDTO.setPoProcessInfo(getRelocationRepository()
+				.findPoProcessInfoByProcessId(processId)
+				.orElseThrow(
+						()->new IllegalArgumentException("No po code for given process id")));
 
 //		Optional<StorageRelocationDTO> relocation = getRelocationRepository().findRelocationDTOByProcessId(processId);
 //		StorageRelocationDTO relocationDTO = relocation.orElseThrow(

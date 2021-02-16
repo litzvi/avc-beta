@@ -39,7 +39,6 @@ import com.avc.mis.beta.entities.values.Warehouse;
  * @param <T>
  * 
  */
-//@RestResource(exported = false)
 @NoRepositoryBean
 public interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 	
@@ -54,10 +53,6 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	
 	@Query("select t from ProcessType t where t.processName = :value")
 	Optional<ProcessType> findProcessTypeByValue(ProcessName value);
-	
-	//for inserting contract type in testing
-	@Query("select t from ContractType t where t.code = :code and t.currency = :currency")
-	ContractType findContractTypeByCodeAndCurrency(String code, Currency currency);
 		
 	@Query("select b from Bank b where b.active = true")
 	List<Bank> findAllBanks();
@@ -94,14 +89,10 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	
 	@Query("select i from ShippingPort i where i.active = true")
 	List<ShippingPort> findAllShippingPorts();
-
 	
 	@Query("select t from ContractType t where t.active = true "
 			+ "order by t.value ")
 	List<ContractType> findAllContractTypes();
-
-//	@Query("select t from ProcessStatus t where t.active = true")
-//	List<ProcessStatus> findAllProcessStatuses();
 
 	@Query("select t from ProcessType t where t.active = true")
 	List<ProcessType> findAllProcessTypes();
@@ -112,5 +103,9 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	@Query("select t from CashewStandard t "
 			+ "where t.active = true ")
 	List<CashewStandard> findAllCashewStandard();
+	
+	//for inserting contract type in testing
+	@Query("select t from ContractType t where t.code = :code and t.currency = :currency")
+	ContractType findContractTypeByCodeAndCurrency(String code, Currency currency);
 
 }

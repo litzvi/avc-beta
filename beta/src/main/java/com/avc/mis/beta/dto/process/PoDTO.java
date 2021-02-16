@@ -11,9 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.embedable.PoInfo;
+import com.avc.mis.beta.dto.embedable.GeneralProcessInfo;
+import com.avc.mis.beta.dto.embedable.OrderProcessInfo;
 import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -58,12 +60,11 @@ public class PoDTO extends PoProcessDTO {
 			ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
 			String personInCharge) {
 		super();
-		super.setPoProcessInfo(new PoProcessInfo(id, version, createdDate, staffRecording, 
-				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
-				supplierId, supplierVersion, supplierName, display,
+		super.setGeneralProcessInfo(new GeneralProcessInfo(id, version, createdDate, staffRecording, 
 				processName, productionLine, 
 				recordedTime, startTime, endTime, 
-				duration, numOfWorkers, processStatus, editStatus, remarks, approvals));		
+				duration, numOfWorkers, processStatus, editStatus, remarks, approvals));
+		super.setPoCode(new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display));
 		this.personInCharge = personInCharge;
 
 	}
@@ -79,7 +80,7 @@ public class PoDTO extends PoProcessDTO {
 
 	}
 	
-	public void setPoInfo(PoInfo info) {
+	public void setOrderProcessInfo(OrderProcessInfo info) {
 		this.personInCharge = info.getPersonInCharge();		
 	}
 	

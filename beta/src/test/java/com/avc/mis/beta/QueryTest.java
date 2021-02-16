@@ -27,9 +27,6 @@ import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.dto.report.FinalReport;
-import com.avc.mis.beta.dto.report.ProductionReportLine;
-import com.avc.mis.beta.dto.report.QcReportLine;
-import com.avc.mis.beta.dto.report.ReceiptReportLine;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
@@ -39,13 +36,16 @@ import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
+import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.dto.view.UserRow;
+import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessManagement;
+import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -127,9 +127,9 @@ public class QueryTest {
 		openAndPendingCashewOrdersPoCodes.forEach(row -> System.out.println(row));
 		
 		//get order by process id
-		List<PoRow> poRows;
+		List<PoItemRow> poRows;
 		try {
-			poRows = orders.findOpenCashewOrders();
+			poRows = orders.findOpenCashewOrderItems();
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -150,12 +150,12 @@ public class QueryTest {
 		cityList.forEach(c -> System.out.println(c));
 		
 		//get list of persons basic
-		List<DataObjectWithName> personsBasic = users.getPersonsBasic();
+		List<DataObjectWithName<Person>> personsBasic = users.getPersonsBasic();
 		personsBasic.forEach(m -> System.out.println(m));
 		
 		
 		//find table of open cashew orders
-		orders.findOpenCashewOrders().forEach(i -> System.out.println(i));
+		orders.findOpenCashewOrderItems().forEach(i -> System.out.println(i));
 		
 		
 		//get list of cashew items
@@ -239,7 +239,7 @@ public class QueryTest {
 		//get suppliers by supply category
 		List<SupplyCategory> supplyCategories = valueTablesReader.getAllSupplyCategories();
 		for(SupplyCategory supplyCategory: supplyCategories) {
-			List<DataObjectWithName> suppliersByCategory = 
+			List<DataObjectWithName<Supplier>> suppliersByCategory = 
 					valueTablesReader.getSuppliersBasic(supplyCategory.getId());
 			suppliersByCategory.forEach(s -> System.out.println(s));
 		}
