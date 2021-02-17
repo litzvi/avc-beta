@@ -4,35 +4,46 @@
 package com.avc.mis.beta.dto.report;
 
 import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
+import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Value;
 
 /**
  * @author zvi
  *
  */
 @Data
-public class ProcessStateInfo {
+@EqualsAndHashCode(callSuper = true)
+public class ProcessStateInfo extends BasicDTO {
 
-	LocalDate date;
-	ProcessStatus status;
-	String[] approvals;
+	private LocalDate date;
+	private ProcessStatus status;
+	private String[] approvals;
 	
-	public ProcessStateInfo(LocalDate date, ProcessStatus status, String[] approvals) {
-		super();
+	public ProcessStateInfo(Integer id, LocalDate date, ProcessStatus status, String[] approvals) {
+		super(id);
 		this.date = date;
 		this.status = status;
 		this.approvals = approvals;
 	}
 
-	public ProcessStateInfo(LocalDate date, ProcessStatus status, String approvals) {
-		super();
-		this.date = date;
+	public ProcessStateInfo(Integer id, OffsetDateTime date, ProcessStatus status, String approvals) {
+		super(id);
+		this.date = date.toLocalDate();
 		this.status = status;
-		this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
+		if(approvals != null) {
+			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
+		}
+		else {
+			this.approvals = null;
+		}
 	}
+	
 	
 }

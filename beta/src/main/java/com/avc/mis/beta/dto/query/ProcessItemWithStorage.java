@@ -28,7 +28,8 @@ import lombok.Data;
 public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDTO, ProcessItemDTO> {
 	
 	private ProcessItemDTO processItem;
-	private PoCodeBasic po;
+//	private PoCodeBasic po;//should be removed
+
 	private StorageDTO storage;
 	
 	/**
@@ -38,7 +39,7 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 	public ProcessItemWithStorage(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ProductionUse productionUse, BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> ItemClazz,
 			MeasureUnit measureUnit, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
+//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
@@ -48,7 +49,7 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 		this.processItem = new ProcessItemDTO(id, version, ordinal,
 				itemId, itemValue, productionUse, itemUnitAmount, itemUnitMeasureUnit, ItemClazz, 
 				measureUnit, groupName, description, remarks, tableView);
-		this.po = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+//		this.po = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		this.storage = new StorageDTO(storageId, storageVersion, storageOrdinal,
 				unitAmount, numberUnits, accessWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);

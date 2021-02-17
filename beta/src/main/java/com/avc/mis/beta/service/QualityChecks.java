@@ -86,8 +86,9 @@ public class QualityChecks {
 	public List<QcReportLine> getQcSummary(ProcessName processName, Integer poCodeId) {
 		
 		List<QcReportLine> lines = getQcRepository().findCashewQCReportLines(processName, poCodeId, QcCompany.AVC_LAB);
+		
+		
 		int[] processIds = lines.stream().mapToInt(QcReportLine::getId).toArray();
-//		System.out.println("lines: " + lines.size());
 		if(lines == null || lines.isEmpty()) {
 			return null;
 		}
@@ -102,7 +103,6 @@ public class QualityChecks {
 		
 		return lines;
 		
-//		return CollectionItemWithGroup.getFilledGroups(lines);
 	}
 			
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -165,10 +165,11 @@ public class QualityChecks {
 //		Optional<QualityCheckDTO> check = getQcRepository().findQcDTOByProcessId(processId);
 //		QualityCheckDTO qualityCheckDTO = check.orElseThrow(
 //				()->new IllegalArgumentException("No quality check with given process id"));
-		qualityCheckDTO.setProcessItems(
-				CollectionItemWithGroup.getFilledGroups(
-						getQcRepository()
-						.findProcessItemWithStorage(processId)));
+		getProcessInfoReader().setProcessWithProductCollections(qualityCheckDTO);
+//		qualityCheckDTO.setProcessItems(
+//				CollectionItemWithGroup.getFilledGroups(
+//						getQcRepository()
+//						.findProcessItemWithStorage(processId)));
 //				ProcessItemDTO.getProcessItems(getQcRepository()
 //						.findProcessItemWithStorage(processId)));
 		qualityCheckDTO.setTestedItems(getQcRepository().findCheckItemsById(processId));

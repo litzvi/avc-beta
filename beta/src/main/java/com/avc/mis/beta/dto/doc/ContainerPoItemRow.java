@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.doc;
 
 import java.math.BigDecimal;
+import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
@@ -27,7 +28,8 @@ import lombok.Value;
 public class ContainerPoItemRow extends BasicDTO {
 
 	BasicValueEntity<Item> item;
-	PoCodeBasic poCode;
+	PoCodeBasic poCode;//should be removed
+	String[] poCodes;
 
 	AmountWithUnit[] totalRow;
 
@@ -35,11 +37,15 @@ public class ContainerPoItemRow extends BasicDTO {
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
+			String poCodes,
 			BigDecimal total, MeasureUnit measureUnit) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
-		
+		if(poCodes != null)
+			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
+		else
+			this.poCodes = null;
 		AmountWithUnit totalRow;
 		if(itemClazz == BulkItem.class) {
 			totalRow = new AmountWithUnit(total, measureUnit);

@@ -25,6 +25,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
+@Deprecated
 public class PoFinalReport extends BasicDTO {
 	
 	private PoCodeBasic poCode;

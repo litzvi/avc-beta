@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.QcCompany;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 import com.avc.mis.beta.utilities.ListGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -25,18 +26,17 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class QcReportLine extends ProcessStateInfo implements ListGroup<ItemQc> {
 
-	@JsonIgnore
-	private Integer processId;
+//	@JsonIgnore
+//	private Integer processId;
 	private QcCompany checkedBy;
 //	OffsetDateTime checkDate;
 
 	private List<ItemQc> itemQcs;
 	
-	public QcReportLine(@NonNull Integer processId, 
+	public QcReportLine(@NonNull Integer id, 
 			QcCompany checkedBy, 
 			OffsetDateTime date, ProcessStatus status, String approvals) {
-		super(date.toLocalDate(), status, approvals);
-		this.processId = processId;
+		super(id, date, status, approvals);
 		this.checkedBy = checkedBy;
 //		setProcesses(new ProcessStateInfo(date.toLocalDate(), status, approvals));
 	}
@@ -46,10 +46,10 @@ public class QcReportLine extends ProcessStateInfo implements ListGroup<ItemQc> 
 		this.itemQcs = empty ? null : itemQcs;
 	}
 
-	@Override
-	public Integer getId() {
-		return getProcessId();
-	}
+//	@Override
+//	public Integer getId() {
+//		return getProcessId();
+//	}
 
 	@Override
 	public void setList(List<ItemQc> list) {

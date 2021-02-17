@@ -18,6 +18,7 @@ import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.report.ProductionReportLine;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
@@ -45,16 +46,22 @@ public class ProductionProcesses {
 	
 	@Autowired private ProcessInfoReader processInfoReader;
 	
+	/**
+	 * @param processName the process name. e.g. CASHEW_CLEANING
+	 * @return List of ProcessRow for given type of process
+	 */
 	public List<ProcessRow> getProductionProcessesByType(ProcessName processName) {
 		return getProductionProcessesByTypeAndPoCode(processName, null);
 	}
 	
 	/**
-	 * @param cashewCleaning
-	 * @param poCodeId
-	 * @return
+	 * @param processName the process name. e.g. CASHEW_CLEANING
+	 * @param poCodeId id of po code, to fetch processes that process the given po code.
+	 * If poCodeId argument is null, so will get a list of all process of the given type.
+	 * In case of a mixed process will only show the given po code in the process row.
+	 * @return List of ProcessRow for all processes that match the given arguments
 	 */
-	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
+	private List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
 		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId, true);
 		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getProcessRepository()
@@ -67,22 +74,21 @@ public class ProductionProcesses {
 			row.setUsedItems(usedMap.get(row.getId()));
 			row.setProducedItems(producedMap.get(row.getId()));
 		}	
-		System.out.println("production rows:");
-		processRows.forEach(i->System.out.println(i));
 		return processRows;
 	}
 	
 	public ProductionReportLine getProductionSummary(ProcessName processName, Integer poCodeId) {
-		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId, false);
-		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
+//		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId, false);
+		
+		List<ProcessStateInfo> processes = getProcessRepository().findProcessReportLines(processName, poCodeId, false);
+		int[] processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
 
-		if(processRows.isEmpty()) {
+		if(processes.isEmpty()) {
 			return null;
 		}
 		
 		ProductionReportLine reportLine = new ProductionReportLine();
-		reportLine.setProcesses(processRows.stream());
-//		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
+		reportLine.setProcesses(processes);
 		
 		Stream<ItemAmount> itemAmounts = getProcessRepository().findSummaryUsedItemAmounts(processIds);
 		Map<ItemGroup, List<ItemAmount>> itemsMap = itemAmounts.collect(Collectors.groupingBy(ItemAmount::getItemGroup));
@@ -100,8 +106,9 @@ public class ProductionProcesses {
 		List<ItemAmount> producedAmounts = null;
 		if(reportLine.getProductOut() != null) {
 			int[] productItemsIds = reportLine.getProductOut().stream().mapToInt(i -> i.getItem().getId()).toArray();
-			processRows = getProcessRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, false);
-			processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
+//			List<ProcessRow> processRows = getProcessRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, false);
+			processes = getProcessRepository().findProcessReportLines(ProcessName.STORAGE_RELOCATION, poCodeId, false);
+			processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
 			for(int i=0; i < processIds.length && (producedAmounts == null || producedAmounts.isEmpty()); i++) {
 				producedAmounts = getProcessRepository().findProductCountItemAmountsByProcessId(processIds[i], productItemsIds);
 			}

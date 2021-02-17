@@ -25,10 +25,10 @@ public class ReceiptReportLine extends ProductReportLine {
 //		super(id);
 //	}
 	
-	private PoCodeBasic poCode;
-	private String supplierName;
+//	private PoCodeBasic poCode;
+//	private String supplierName;
 	
-	AmountWithUnit receivedOrderUnits;
+	private AmountWithUnit receivedOrderUnits;
 
 	private List<ItemAmount> received;
 

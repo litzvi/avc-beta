@@ -177,6 +177,10 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "join p.lifeCycle lc "
 		+ "order by p.recordedTime desc ")
 	List<LoadingRow> findContainerLoadings();
+	
+	//TODO
+//	List<LoadingRow> findContainerLoadingsByPoCode(int[] processIds);
+
 
 	@Query("select new com.avc.mis.beta.dto.view.LoadingRow( "
 			+ "p.id, shipment_code.id, shipment_code.code, pod.code, pod.value, "
@@ -204,7 +208,12 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "p.id, "
 			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "itemPo.id, itemPo.code, ct.code, ct.suffix, s.name, itemPo.display, "
+			+ "item_po_code.id, item_po_code.code, t.code, t.suffix, s.name, item_po_code.display, "
+			+ "CASE "
+				+ "WHEN item_po_code is null "
+					+ "THEN function('GROUP_CONCAT', concat(w_t.code, '-', w_po_code.code, w_t.suffix)) "
+				+ "ELSE function('GROUP_CONCAT', concat(t.code, '-', item_po_code.code, t.suffix)) "
+			+ "END, "
 			+ "sum((sf.unitAmount * i.numberUnits - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit) "
 		+ "from ContainerLoading p "
@@ -213,16 +222,19 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 					+ "join i.storage sf "
 						+ "join sf.processItem pi "
 							+ "join pi.process used_p "
-								+ "left join used_p.poCode itemPo "
-									+ "left join itemPo.contractType ct "
-									+ "left join itemPo.supplier s "
+								+ "left join used_p.poCode item_po_code "
+									+ "left join item_po_code.contractType t "
+									+ "left join item_po_code.supplier s "
+								+ "left join used_p.weightedPos w_item_po "
+									+ "left join w_item_po.poCode w_po_code "
+										+ "left join w_po_code.contractType w_t "
+										+ "left join w_po_code.supplier w_s "
 							+ "join pi.item item "
 								+ "join item.unit item_unit "
-//						+ "join sf.unitAmount unit "
 							+ "join UOM uom "
 								+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "				
 		+ "where p.id = :processId or :processId is null "
-		+ "group by p, item.id, itemPo.id ")
+		+ "group by p, item.id, item_po_code.id, w_po_code.id ")
 	List<ContainerPoItemRow> findLoadedTotals(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow( "

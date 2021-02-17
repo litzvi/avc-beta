@@ -86,6 +86,14 @@ public class Loading {
 		
 		return loadingRows;
 	}
+	
+	public List<LoadingReportLine> getLoadingSummary(Integer poCodeId) {
+		
+		
+		List<ItemAmountWithLoadingReportLine> lines = getContainerLoadingRepository().findLoadingsByItemsPoCode(poCodeId, false);
+		
+		return CollectionItemWithGroup.getFilledGroups(lines);
+	}
 
 
 	/**
@@ -142,12 +150,6 @@ public class Loading {
 	@Deprecated public void removeLoading(int loadingId) {
 		getDeletableDAO().permenentlyRemoveEntity(ContainerLoading.class, loadingId);
 	} 
-	
-	public List<LoadingReportLine> getLoadingSummary(Integer poCodeId) {
-		List<ItemAmountWithLoadingReportLine> lines = getContainerLoadingRepository().findLoadingsByItemsPoCode(poCodeId, false);
-		
-		return CollectionItemWithGroup.getFilledGroups(lines);
-	}
 	
 	public InventoryExportDoc getInventoryExportDoc(int processId) {
 		InventoryExportDoc doc = new InventoryExportDoc();

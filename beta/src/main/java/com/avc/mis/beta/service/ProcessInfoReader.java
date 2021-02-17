@@ -243,20 +243,20 @@ public class ProcessInfoReader {
 		return getProcessInfoRepository().findAllProcessesByPoAndName(poCodeId, processNames);
 	}
 	
-	public PoFinalReport getPoFinalReport(@NonNull Integer poCodeId) {
-		PoFinalReport report = getProcessInfoRepository().findFinalReportBasic(poCodeId);
-		report.setReceipt(orderReceipts.findFinalCashewReceiptsByPoCode(poCodeId));
-		report.setReceiptQC(qualityChecks.getRawQualityChecksByPoCode(poCodeId));
-		report.setCleaning(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.CASHEW_CLEANING, poCodeId));
-		report.setRelocationCounts(warehouseManagement.getStorageTransfersByPoCode(poCodeId));
-//		report.setMoveToRoaster(warehouseManagement.getStorageRelocations());
-		report.setRoasting(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.CASHEW_ROASTING, poCodeId));
-		report.setRoastQC(qualityChecks.getRoastedQualityChecksByPoCode(poCodeId));
-		report.setPacking(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.PACKING, poCodeId));
-		report.setLoading(loading.getLoadingsByPoCode(poCodeId));
-		
-		return report;
-	}
+//	public PoFinalReport getPoFinalReport(@NonNull Integer poCodeId) {
+//		PoFinalReport report = getProcessInfoRepository().findFinalReportBasic(poCodeId);
+//		report.setReceipt(orderReceipts.findFinalCashewReceiptsByPoCode(poCodeId));
+//		report.setReceiptQC(qualityChecks.getRawQualityChecksByPoCode(poCodeId));
+//		report.setCleaning(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.CASHEW_CLEANING, poCodeId));
+//		report.setRelocationCounts(warehouseManagement.getStorageTransfersByPoCode(poCodeId));
+////		report.setMoveToRoaster(warehouseManagement.getStorageRelocations());
+//		report.setRoasting(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.CASHEW_ROASTING, poCodeId));
+//		report.setRoastQC(qualityChecks.getRoastedQualityChecksByPoCode(poCodeId));
+//		report.setPacking(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.PACKING, poCodeId));
+//		report.setLoading(loading.getLoadingsByPoCode(poCodeId));
+//		
+//		return report;
+//	}
 	
 	public FinalReport getFinalReport(@NonNull Integer poCodeId) {
 		FinalReport report = new FinalReport();

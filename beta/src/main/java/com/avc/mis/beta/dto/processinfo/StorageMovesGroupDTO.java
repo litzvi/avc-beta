@@ -92,7 +92,7 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 				.map(m -> m.getTotal())
 				.reduce(AmountWithUnit::add);
 //		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
-		System.out.println("total: " + totalAmount.orElse(null));
+//		System.out.println("total: " + totalAmount.orElse(null));
 
 		return totalAmount.orElse(null);
 //		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),

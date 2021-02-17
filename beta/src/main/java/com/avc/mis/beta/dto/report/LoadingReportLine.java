@@ -26,19 +26,19 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class LoadingReportLine extends ProcessStateInfo implements ListGroup<ItemAmount> {
 
-	@JsonIgnore
-	private Integer processId;
+//	@JsonIgnore
+//	private Integer processId;
 	private ShipmentCodeBasic shipmentCode;
 	private ContainerDetails containerDetails;
 
 	private List<ItemAmount> productIn;
 	private AmountWithUnit totalProductIn;
 	
-	public LoadingReportLine(Integer processId, 
+	public LoadingReportLine(Integer id, 
 			Integer shipmentId, String shipmentCode, String portOfDischargeCode, String portOfDischargeValue, 
 			ContainerDetails containerDetails, OffsetDateTime loadingDate, ProcessStatus status, String approvals) {
-		super(loadingDate.toLocalDate(), status, approvals);
-		this.processId = processId;
+		super(id, loadingDate, status, approvals);
+//		this.processId = processId;
 		this.shipmentCode = new ShipmentCodeBasic(shipmentId, shipmentCode,  portOfDischargeCode, portOfDischargeValue);
 		this.containerDetails = containerDetails;
 //		super.setProcesses(new ProcessStateInfo(loadingDate.toLocalDate(), status, approvals));
@@ -51,10 +51,10 @@ public class LoadingReportLine extends ProcessStateInfo implements ListGroup<Ite
 		this.totalProductIn = empty ? null : ItemAmount.getTotalWeight(productIn);
 	}
 
-	@Override
-	public Integer getId() {
-		return getProcessId();
-	}
+//	@Override
+//	public Integer getId() {
+//		return getProcessId();
+//	}
 
 	@Override
 	public void setList(List<ItemAmount> list) {

@@ -13,6 +13,7 @@ import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
+import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.GeneralProcess;
@@ -41,6 +42,28 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "and r.id = :processId "
 		+ "group by r ")
 	Optional<GeneralProcessInfo> findGeneralProcessInfoByProcessId(int processId, Class<? extends T> clazz);
+	
+	@Query("select new com.avc.mis.beta.dto.report.ProcessStateInfo("
+			+ "p.id, p.recordedTime, lc.processStatus, "
+			+ "function('GROUP_CONCAT', concat(u.username, ':', approval.decision)) ) "
+		+ "from PoProcess p "
+			+ "left join p.poCode po_code "
+			+ "left join p.weightedPos w_po "
+				+ "left join w_po.poCode w_po_code "
+			+ "join p.processType pt "
+			+ "join p.lifeCycle lc "
+			+ "left join p.approvals approval "
+				+ "left join approval.user u "
+		+ "where pt.processName = :processName "
+			+ "and ("
+				+ " :poCodeId is null "
+				+ "or (coalesce(po_code.id, null) = :poCodeId) "
+				+ "or (coalesce(w_po_code.id, null) = :poCodeId) "
+			+ ") "
+			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
+		+ "group by p "
+		+ "order by p.recordedTime desc ")
+	List<ProcessStateInfo> findProcessReportLines(ProcessName processName, Integer poCodeId, boolean cancelled);
 
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
 			+ "p.id, po_code.id, po_code.code, t.code, t.suffix, s.name, po_code.display, "
@@ -48,6 +71,11 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "WHEN po_code is null "
 					+ "THEN function('GROUP_CONCAT', concat(w_t.code, '-', w_po_code.code, w_t.suffix)) "
 				+ "ELSE function('GROUP_CONCAT', concat(t.code, '-', po_code.code, t.suffix)) "
+			+ "END, "
+			+ "CASE "
+				+ "WHEN po_code is null "
+					+ "THEN function('GROUP_CONCAT', w_s.name) "
+				+ "ELSE function('GROUP_CONCAT', s.name) "
 			+ "END, "
 			+ "p.recordedTime, p.duration, lc.processStatus, "
 			+ "function('GROUP_CONCAT', concat(u.username, ':', approval.decision)) ) "
@@ -64,7 +92,11 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "left join p.approvals approval "
 				+ "left join approval.user u "
 		+ "where pt.processName = :processName "
-			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
+			+ "and ("
+				+ " :poCodeId is null "
+				+ "or (coalesce(po_code.id, null) = :poCodeId) "
+				+ "or (coalesce(w_po_code.id, null) = :poCodeId) "
+			+ ") "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
@@ -122,7 +154,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ " i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), sf_group.measureUnit, "
-			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, poCode.display, "
+//			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, poCode.display, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "sf.unitAmount, sf.numberUnits, sf.accessWeight, "
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks, type(sf), "
@@ -131,9 +163,9 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "join i.item item "
 				+ "join item.unit item_unit "
 			+ "join i.process p "
-				+ "join p.poCode poCode "
-					+ "join poCode.contractType ct "
-					+ "join poCode.supplier s "
+//				+ "join p.poCode poCode "
+//					+ "join poCode.contractType ct "
+//					+ "join poCode.supplier s "
 			+ "join i.storageForms sf "
 				+ "join sf.group sf_group "
 				+ "left join sf.warehouseLocation warehouseLocation "
@@ -157,6 +189,19 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	List<WeightedPoDTO> findWeightedPos(Integer processId);
 
 
+//	/**
+//	 * Gets all processes done for given PoCode
+//	 * @param poCodeId id of PoCode
+//	 * @return List of ProcessBasic
+//	 */
+//	@Query("select new com.avc.mis.beta.dto.basic.ProcessBasic( "
+//			+ "p.id, t.processName, type(p)) "
+//		+ "from PoCode c "
+//			+ "join c.processes p "
+//				+ "join p.processType t "
+//		+ "where c.id = :poCodeId ")
+//	List<ProcessBasic> findAllProcessesByPo(Integer poCodeId);
+//	
 	/**
 	 * Gets all processes done for given PoCode
 	 * @param poCodeId id of PoCode
@@ -164,11 +209,16 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	 */
 	@Query("select new com.avc.mis.beta.dto.basic.ProcessBasic( "
 			+ "p.id, t.processName, type(p)) "
-		+ "from PoCode c "
-			+ "join c.processes p "
-				+ "join p.processType t "
-		+ "where c.id = :poCodeId ")
-	List<ProcessBasic> findAllProcessesByPo(Integer poCodeId);
+		+ "from PoProcess p "
+			+ "join p.processType t "
+			+ "left join p.poCode po_code "
+			+ "left join p.weightedPos w_po "
+				+ "left join w_po.poCode w_po_code "
+		+ "where po_code.id = :poCodeId "
+			+ "or w_po_code.id = :poCodeId "
+		+ "group by p ")
+	List<ProcessBasic> findAllProcessesByPo(@NonNull Integer poCodeId);
+
 	
 	/**
 	 * Gets all processes done for given PoCode

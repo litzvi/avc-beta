@@ -47,7 +47,6 @@ public interface PoProcessRepository<T extends PoProcess> extends ProcessReposit
 				+ "join item_count.amounts count_amount "
 			+ "join p.processType pt "
 		+ "where "
-//			+ "pt.processName = :processName "
 			+ "p.id in :processIds "
 		+ "group by item_count ")
 	Stream<ProductionProcessWithItemAmount> findAllItemsCountsByProcessIds(int[] processIds);

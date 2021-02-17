@@ -372,7 +372,7 @@ public class QueryTest {
 		List<PoCodeBasic> freeMixPoCodes = objectTablesReader.findFreeMixPoCodes();
 
 		//final report
-		poCodes.forEach(c -> System.out.println(processInfoReader.getPoFinalReport(c.getId())));
+		poCodes.forEach(c -> System.out.println(processInfoReader.getFinalReport(c.getId())));
 		poCodes.forEach(c -> System.out.println(qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, c.getId())));
 		poCodes.forEach(c -> System.out.println(productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, c.getId())));
 		poCodes.forEach(c -> System.out.println(receipts.getReceiptSummary(c.getId())));
@@ -384,7 +384,7 @@ public class QueryTest {
 
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void oneQueryTest() {
 				

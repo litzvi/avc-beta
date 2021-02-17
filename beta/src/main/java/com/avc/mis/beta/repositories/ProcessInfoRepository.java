@@ -212,13 +212,13 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 		+ "where u.id = :currentUserId ")
 	List<ProcessManagementDTO> findAllUserProcessPrivilige(Integer currentUserId);
 
-	@Query("select new com.avc.mis.beta.dto.view.PoFinalReport("
-			+ "po_code.id, po_code.code, c.code, c.suffix, s.name, po_code.display) "
-		+ "from PoCode po_code "
-				+ "join po_code.contractType c "
-				+ "join po_code.supplier s "
-		+ "where po_code.id = :poCodeId ")
-	PoFinalReport findFinalReportBasic(@NonNull Integer poCodeId);
+//	@Query("select new com.avc.mis.beta.dto.view.PoFinalReport("
+//			+ "po_code.id, po_code.code, c.code, c.suffix, s.name, po_code.display) "
+//		+ "from PoCode po_code "
+//				+ "join po_code.contractType c "
+//				+ "join po_code.supplier s "
+//		+ "where po_code.id = :poCodeId ")
+//	PoFinalReport findFinalReportBasic(@NonNull Integer poCodeId);
 
 	//TODO check if can change number of units
 	@Query("select new java.lang.Boolean(count(*) > 0) "

@@ -22,6 +22,7 @@ import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.report.ReceiptReportLine;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ReceiptItemRow;
@@ -61,18 +62,19 @@ public class Receipts {
 	@Autowired private DeletableDAO deletableDAO;
 		
 	public ReceiptReportLine getReceiptSummary(Integer poCodeId) {
-		List<ProcessRow> processRows = getReceiptRepository().findProcessByType(ProcessName.CASHEW_RECEIPT, poCodeId, false);
-		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
+//		List<ProcessRow> processRows = getReceiptRepository().findProcessByType(ProcessName.CASHEW_RECEIPT, poCodeId, false);
+		List<ProcessStateInfo> processes = getReceiptRepository().findProcessReportLines(ProcessName.CASHEW_RECEIPT, poCodeId, false);
+		int[] processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
 
-		if(processRows.isEmpty()) {
+		if(processes.isEmpty()) {
 			return null;
 		}
 		
 		ReceiptReportLine reportLine = new ReceiptReportLine();
 //		reportLine.set
-		reportLine.setPoCode(processRows.get(0).getPoCode());
-		reportLine.setSupplierName(processRows.get(0).getSupplierName());
-		reportLine.setProcesses(processRows.stream());
+//		reportLine.setPoCode(processRows.get(0).getPoCode());
+//		reportLine.setSupplierName(processRows.get(0).getSupplierName());
+		reportLine.setProcesses(processes);
 //		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
 		
 		Stream<ItemAmount> itemAmounts = getReceiptRepository().findSummaryProducedItemAmounts(processIds);
@@ -81,8 +83,8 @@ public class Receipts {
 		List<ItemAmount> countAmounts = null;
 		if(reportLine.getReceived() != null) {
 			int[] productItemsIds = reportLine.getReceived().stream().mapToInt(i -> i.getItem().getId()).toArray();
-			processRows = getReceiptRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, false);
-			processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
+			processes = getReceiptRepository().findProcessReportLines(ProcessName.STORAGE_RELOCATION, poCodeId, false);
+			processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
 			for(int i=0; i < processIds.length && (countAmounts == null || countAmounts.isEmpty()); i++) {
 				countAmounts = getReceiptRepository().findProductCountItemAmountsByProcessId(processIds[i], productItemsIds);
 			}

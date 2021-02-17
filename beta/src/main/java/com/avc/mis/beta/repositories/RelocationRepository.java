@@ -111,12 +111,10 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 						+ "join sf.processItem pi "
 							+ "join pi.item item "
 								+ "join item.unit item_unit "
-//							+ "join sf.group sf_group "
 							+ "join UOM uom "
 								+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
 							+ "left join sf.warehouseLocation wh "
-		+ "where "
-			+ "p.id in :processIds "
+		+ "where p.id in :processIds "
 		+ "group by p, item ")
 	Stream<ProductionProcessWithItemAmount> findAllMovedItemsByProcessIds(int[] processIds);
 

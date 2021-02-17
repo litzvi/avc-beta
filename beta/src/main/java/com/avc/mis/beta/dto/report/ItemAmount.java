@@ -42,7 +42,12 @@ public class ItemAmount {
 		super();
 		this.item = new BasicValueEntity<Item>(id, value);
 		this.itemGroup = itemGroup;
-		this.weightCoefficient = weightCoefficient;
+		if(weightCoefficient != null) {
+			this.weightCoefficient = weightCoefficient;
+		}
+		else {
+			this.weightCoefficient = BigDecimal.ONE;
+		}
 		AmountWithUnit weight;
 		if(clazz == BulkItem.class) {
 			this.amount = null;
