@@ -67,6 +67,8 @@ import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
 
+import lombok.NonNull;
+
 /**
  * @author Zvi
  *
@@ -279,7 +281,7 @@ public class QueryTest {
 		//test getting inventory storages by item
 		List<ProcessItemInventory> itemInventory;
 		try {
-			itemInventory = warehouseManagement.getAvailableInventoryByItem(service.getItem().getId());
+			itemInventory = warehouseManagement.getAvailableInventory(null, null, service.getItem().getId(), null);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -353,6 +355,7 @@ public class QueryTest {
 					v.forEach(r -> System.out.println(r));
 				}
 			});
+			System.out.println(loading.getLoadingsByPoCode(c.getId()));
 		});
 		
 		poCodes.forEach(c -> System.out.println(orders.getPoCode(c.getId())));
@@ -384,7 +387,7 @@ public class QueryTest {
 
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void oneQueryTest() {
 				

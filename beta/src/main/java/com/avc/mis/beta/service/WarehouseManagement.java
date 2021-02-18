@@ -273,6 +273,19 @@ public class WarehouseManagement {
 		});
 	}
 	
+	public List<ProcessItemInventory> getAvailableInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, List<Integer> poCodeIds) {
+		boolean checkProductionUses = (productionUses != null);
+		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()
+				.findAvailableInventoryByStorage(checkProductionUses, productionUses, group, itemId, poCodeIds);
+				
+		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
+	}	
+	
+//	public List<ProcessItemInventory> getAvailableInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, int poCodeId) {
+//		int[] poCodeIds = new int[] {poCodeId};
+//		return getAvailableInventory(group, productionUses, itemId, poCodeIds);
+//	}
+	
 //	//need to make sure currently in inventory - used for test
 //	@Deprecated
 //	public List<PoProcessItemEntry> getProcessItemsWithPoByPo(Integer poCodeId) {		
@@ -285,72 +298,49 @@ public class WarehouseManagement {
 //		return ProcessItemDTO.getProcessItemsWithPo(getInventoryRepository().findProcessItemWithStorageByItem(itemId));
 //	}
 
-	public List<ProcessItemInventory> getCashewAvailableInventoryByPo(Integer poCodeId) {		
-		return getAvailableInventory(ItemGroup.PRODUCT, null, null, poCodeId);		
-	}
+//	public List<ProcessItemInventory> getCashewAvailableInventoryByPo(Integer poCodeId) {		
+//		return getAvailableInventory(ItemGroup.PRODUCT, null, null, poCodeId);		
+//	}
 	
-	/**
-	 * Gets inventory for all item groups (Product, General, Waste etc.)
-	 * @param poCodeId
-	 * @return
-	 */
-	public List<ProcessItemInventory> getAllAvailableInventoryByPo(Integer poCodeId) {		
-		return getAvailableInventory(null, null, null, poCodeId);		
-	}
+//	/**
+//	 * Gets inventory for all item groups (Product, General, Waste etc.)
+//	 * @param poCodeId
+//	 * @return
+//	 */
+//	public List<ProcessItemInventory> getAllAvailableInventoryByPo(Integer poCodeId) {		
+//		return getAvailableInventory(null, null, null, poCodeId);		
+//	}
 	
-	public List<ProcessItemInventory> getAvailableInventoryByItem(Integer itemId) {		
-		return getAvailableInventory(null, null, itemId, null);
-	}
+//	public List<ProcessItemInventory> getAvailableInventoryByItem(Integer itemId) {		
+//		return getAvailableInventory(null, null, itemId, null);
+//	}
 	
-	public List<ProcessItemInventory> getAvailableInventoryByItemProductionUses(@NonNull ProductionUse[] productionUses) {		
-		return getAvailableInventory(null, productionUses, null, null);
-	}
+//	public List<ProcessItemInventory> getAvailableInventoryByItemProductionUses(@NonNull ProductionUse[] productionUses) {		
+//		return getAvailableInventory(null, productionUses, null, null);
+//	}
 	
-	/**
-	 * Gets all information of items in available inventory, for provided supply group, item or po code.
-	 * If one of the parameters are null than will ignore that constraint.
-	 * For each stored item in inventory, provides information on the process item and balances,
-	 * with list of storages that contain amounts used and totals.
-	 * Available inventory for querying what items are available for use by a process.
-	 * Items are considered available inventory if the producing process status is final 
-	 * and it's not completely used by another using process where the using process isn't cancelled.
-	 * @param supplyGroup constrain to only this supply group, if null than any.
-	 * @param itemCategories constrain to only items from given category, if null than any.
-	 * @param itemId constrain to only this item, if null than any.
-	 * @param poCodeId constrain to only this po, if null than any.
-	 * @return List of ProcessItemInventory
-	 */
-	@Deprecated //next method - new one
-	public List<ProcessItemInventory> getAvailableInventory_old(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
-		boolean checkProductionUses = (productionUses != null);
-		List<InventoryProcessItemWithStorage> processItemWithStorages =
-					getInventoryRepository().findAvailableInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, poCodeId);
+//	/**
+//	 * Gets all information of items in available inventory, for provided supply group, item or po code.
+//	 * If one of the parameters are null than will ignore that constraint.
+//	 * For each stored item in inventory, provides information on the process item and balances,
+//	 * with list of storages that contain amounts used and totals.
+//	 * Available inventory for querying what items are available for use by a process.
+//	 * Items are considered available inventory if the producing process status is final 
+//	 * and it's not completely used by another using process where the using process isn't cancelled.
+//	 * @param supplyGroup constrain to only this supply group, if null than any.
+//	 * @param itemCategories constrain to only items from given category, if null than any.
+//	 * @param itemId constrain to only this item, if null than any.
+//	 * @param poCodeId constrain to only this po, if null than any.
+//	 * @return List of ProcessItemInventory
+//	 */
+//	@Deprecated //next method - new one
+//	public List<ProcessItemInventory> getAvailableInventory_old(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
+//		boolean checkProductionUses = (productionUses != null);
+//		List<InventoryProcessItemWithStorage> processItemWithStorages =
+//					getInventoryRepository().findAvailableInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, poCodeId);
+//
+//		return CollectionItemWithGroup.getFilledGroups(processItemWithStorages);
+//	}
 
-		return CollectionItemWithGroup.getFilledGroups(processItemWithStorages);
-	}
-	
-	public List<ProcessItemInventory> getAvailableInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
-		boolean checkProductionUses = (productionUses != null);
-		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()
-				.findAvailableInventoryStorages(checkProductionUses, productionUses, group, itemId, poCodeId);
-				
-		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventoryByProcessIds);
-	}
-
-	/**
-	 * Gets all information of items in the inventory, for provided supply group, item or po code.
-	 * If one of the parameters are null than will ignore that constraint.
-	 * For each stored item in inventory, provides information on the process item and balances.
-	 * Items are considered in inventory if process status is final and it's not completely used.
-	 * @param supplyGroup constrain to only this supply group, if null than any.
-	 * @param itemCategory constrain to only items from given category, if null than any.
-	 * @param itemId constrain to only this item, if null than any.
-	 * @param poCodeId constrain to only this po, if null than any.
-	 * @return List of ProcessItemInventoryRow
-	 */
-	public List<ProcessItemInventoryRow> getInventoryRows(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
-		boolean checkProductionUses = (productionUses != null);
-		return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, poCodeId);			
-	}
 
 }

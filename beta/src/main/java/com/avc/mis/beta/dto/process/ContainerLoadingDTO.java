@@ -87,10 +87,10 @@ public class ContainerLoadingDTO extends TransactionProcessDTO<ProcessItemDTO> {
 		this.shipingDetails = info.getShipingDetails();
 	}
 	
-	@Override
-	public List<UsedItemsGroupDTO> getUsedItemGroups() {
-		return super.getUsedItemGroups();
-	}
+//	@Override
+//	public List<UsedItemsGroupDTO> getUsedItemGroups() {
+//		return super.getUsedItemGroups();
+//	}
 
 	@Override
 	public void setUsedItemGroups(List<UsedItemsGroupDTO> usedItemGroups) {

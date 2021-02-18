@@ -44,7 +44,7 @@ public class ApprovalTask extends GeneralInfoEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	@NotNull(message = "Decision is mandatory")
-	private DecisionType decision = DecisionType.NOT_ATTENDED;
+	private DecisionType decision;
 	
 	@Lob
 	private String processSnapshot;

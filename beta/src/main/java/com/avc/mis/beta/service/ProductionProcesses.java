@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,13 +19,16 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
+import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.report.ProductionReportLine;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
@@ -139,6 +144,24 @@ public class ProductionProcesses {
 				.findPoProcessInfoByProcessId(processId).orElse(null));
 		
 		getProcessInfoReader().setTransactionProcessCollections(processDTO);
+		
+		
+		return processDTO;
+	}
+	
+	public ProductionProcessDTO getProductionProcessWithAvilableInventory(
+			int processId, ItemGroup group, ProductionUse[] productionUses, Integer itemId) {
+		
+		ProductionProcessDTO processDTO = getProductionProcess(processId);
+		
+		List<Integer> poCodeIds = Arrays.asList(Optional.ofNullable(processDTO.getPoCode()).map(i -> i.getId()).orElse(null));		
+		if(processDTO.getWeightedPos() != null) {
+			poCodeIds.addAll(processDTO.getWeightedPos().stream()
+					.map(WeightedPoDTO::getPoCode)
+					.filter(i -> i != null)
+					.map(PoCodeBasic::getId).collect(Collectors.toList()));
+		}		
+		getProcessInfoReader().setAvailableInventory(processDTO, group, productionUses, itemId, poCodeIds);
 
 		return processDTO;
 	}

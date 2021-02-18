@@ -216,6 +216,7 @@ public class ProcessInfoDAO extends DAO {
 				ApprovalTask processApproval = new ApprovalTask();
 				processApproval.setProcess(process);
 				processApproval.setUser(a.getUser());
+				processApproval.setDecision(DecisionType.NOT_ATTENDED);
 				processApproval.setDescription("Process added");
 				addEntity(processApproval); //user already in the persistence context
 			case REVIEW:

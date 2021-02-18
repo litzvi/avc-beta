@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,6 +32,8 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
@@ -73,6 +76,7 @@ public class ProcessInfoReader {
 //						getProcessRepository()
 //						.findUsedItemsWithGroup(processId)));
 //		
+		
 		setProcessWithProductCollections(processDTO);
 		
 	}
@@ -93,6 +97,11 @@ public class ProcessInfoReader {
 		List<WeightedPoDTO> weightedPos = getProcessInfoRepository().findWeightedPos(processDTO.getId());
 		if(!weightedPos.isEmpty())
 			processDTO.setWeightedPos(weightedPos);
+	}
+	
+	void setAvailableInventory(TransactionProcessDTO<ProcessItemDTO> processDTO,
+			ItemGroup group, ProductionUse[] productionUses, Integer itemId, List<Integer> poCodeIds) {
+		processDTO.setAvailableInventory(warehouseManagement.getAvailableInventory(group, productionUses, itemId, poCodeIds));
 	}
 
 	/**
@@ -126,12 +135,12 @@ public class ProcessInfoReader {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<UserMessageDTO> getAllMessages() {		
-		return getProcessInfoRepository().findAllMessagesByUser(dao.getCurrentUserId());
+		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), null);
 	}
 	
 	@Deprecated
 	public List<UserMessageDTO> getAllUserMessages(Integer userId) {		
-		return getProcessInfoRepository().findAllMessagesByUser(userId);
+		return getProcessInfoRepository().findAllMessages(userId, null);
 	}
 	
 	/**
@@ -140,8 +149,8 @@ public class ProcessInfoReader {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<UserMessageDTO> getAllNewMessages() {
-		return getProcessInfoRepository().findAllMessagesByUserAndLable(dao.getCurrentUserId(), 
-				new MessageLabel[] {MessageLabel.NEW});
+		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), 
+				Arrays.asList(MessageLabel.NEW));
 	}
 	
 	/**
@@ -150,7 +159,7 @@ public class ProcessInfoReader {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<ApprovalTaskDTO> getAllRequiredApprovals() {
-		return getProcessInfoRepository().findAllRequiredApprovalsByUser(dao.getCurrentUserId(), 
+		return getProcessInfoRepository().findApprovals(dao.getCurrentUserId(), 
 				new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED});
 	}
 	
@@ -160,7 +169,7 @@ public class ProcessInfoReader {
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
 	public List<ApprovalTaskDTO> getAllApprovals() {
-		return getProcessInfoRepository().findAllApprovalsByUser(dao.getCurrentUserId());
+		return getProcessInfoRepository().findApprovals(dao.getCurrentUserId(), DecisionType.values());
 	}
 		
 	/**

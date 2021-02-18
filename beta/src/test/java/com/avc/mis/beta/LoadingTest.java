@@ -6,6 +6,7 @@ package com.avc.mis.beta;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -78,7 +79,7 @@ public class LoadingTest {
 		loading.setShipingDetails(shipingDetails);
 
 		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, Arrays.asList(receipt.getPoCode().getId()));
 		loading.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 //		loading.setLoadedItems(getLoadedItems(poInventory));
 		

@@ -8,7 +8,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -103,5 +106,26 @@ public interface CollectionItemWithGroup<I, G extends ListGroup<I>> {
 			g.setList(map.get(g.getId()));
 		}
 		return processGroups;
+	}
+	
+	
+	public static <R, G, I> List<G> getFilledGroups(
+			List<R> dataWithGroups, 
+			Function<R, G> groupSupplier, 
+			Function<R, I> itemSupplier,
+			BiConsumer<G, List<I>> groupSetter) {
+		if(dataWithGroups == null || dataWithGroups.isEmpty()) {
+			return null;
+		}
+		Map<G, List<I>> map = dataWithGroups.stream()
+				.collect(Collectors.groupingBy(groupSupplier, 
+						LinkedHashMap::new, 
+						Collectors.mapping(itemSupplier, Collectors.toList())));
+		List<G> groups = new ArrayList<>();
+		map.forEach((k, v) -> {
+			groupSetter.accept(k, v);
+			groups.add(k);
+		});
+		return groups;
 	}
 }

@@ -32,6 +32,7 @@ import lombok.ToString;
 public class ProcessRow extends BasicDTO {
 
 	private PoCodeBasic poCode;//should be removed
+	private int[] poCodeIds;
 	private String[] poCodes;
 	private String[] suppliers;
 	private String supplierName;//should be removed
@@ -51,11 +52,13 @@ public class ProcessRow extends BasicDTO {
 	
 	public ProcessRow(@NonNull Integer id, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
-			String poCodes, String suppliers,
+			String poCodeIds, String poCodes, String suppliers,
 			OffsetDateTime recordedTime, Duration duration, ProcessStatus status, String approvals) {
 		super(id);
 		if(poCodeId != null)
 			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+		if(poCodeIds != null)
+			this.poCodeIds = Stream.of(poCodeIds.split(",")).filter(i -> i != null).mapToInt(j -> Integer.valueOf(j)).distinct().toArray();
 		if(poCodes != null)
 			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
 		if(suppliers != null)

@@ -12,6 +12,7 @@ import java.util.List;
 import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
+import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -37,8 +38,10 @@ import lombok.ToString;
 @NoArgsConstructor
 public abstract class TransactionProcessDTO<T extends ProcessItemDTO> extends ProcessWithProductDTO<T> {
 	
-	@Setter(value = AccessLevel.PUBLIC) @Getter(value = AccessLevel.PROTECTED)
 	private List<UsedItemsGroupDTO> usedItemGroups;
+	
+	@EqualsAndHashCode.Exclude
+	private List<ProcessItemInventory> availableInventory;
 	
 //	public TransactionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 //			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 

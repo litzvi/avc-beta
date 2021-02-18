@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -53,7 +54,7 @@ public class TransferTest {
 
 
 		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, Arrays.asList(receipt.getPoCode().getId()));
 		
 //		List<ProcessItemDTO> poInventory = warehouseManagement
 //				.getProcessItemsWithPoByPo(receipt.getPoCode().getId())
@@ -99,7 +100,7 @@ public class TransferTest {
 		transfer.setPoCode((PoCode) receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
-		poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
+		poInventory = warehouseManagement.getAvailableInventory(null, null, null, Arrays.asList(receipt.getPoCode().getId()));
 		
 		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		ProcessItem[] processItems = service.getProcessItems(poInventory);
@@ -130,7 +131,7 @@ public class TransferTest {
 		transfer.setPoCode((PoCode) receipt.getPoCode());
 		transfer.setRecordedTime(OffsetDateTime.now());
 		
-		poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
+		poInventory = warehouseManagement.getAvailableInventory(null, null, null, Arrays.asList(receipt.getPoCode().getId()));
 		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		processItems = service.getProcessItems(poInventory);
 		for(ProcessItem i: processItems) {
@@ -169,7 +170,7 @@ public class TransferTest {
 
 
 		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, Arrays.asList(receipt.getPoCode().getId()));
 		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		transfer.setProcessItems(service.getProcessItems(poInventory));
 		transfer.setItemCounts(service.getItemCounts(poInventory));

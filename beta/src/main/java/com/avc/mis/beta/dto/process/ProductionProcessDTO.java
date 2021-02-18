@@ -66,10 +66,10 @@ public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> 
 //		super.setProcessItems(processItems);
 //	}
 
-	@Override
-	public List<UsedItemsGroupDTO> getUsedItemGroups() {
-		return super.getUsedItemGroups();
-	}
+//	@Override
+//	public List<UsedItemsGroupDTO> getUsedItemGroups() {
+//		return super.getUsedItemGroups();
+//	}
 
 //	@Override
 //	public void setUsedItemGroups(List<UsedItemsGroupDTO> usedItemGroups) {

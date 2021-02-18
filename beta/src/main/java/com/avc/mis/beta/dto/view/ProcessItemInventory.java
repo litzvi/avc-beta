@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.view;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
@@ -44,6 +45,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 	private ItemDTO item;
 	private MeasureUnit measureUnit;
 	private PoCodeBasic poCode;
+	private String[] poCodes;
 	private OffsetDateTime itemProcessDate;
 	private OffsetDateTime receiptDate;
 	private AmountWithUnit[] totalBalanceAmount; //not calculated in method so won't be calculated repeatedly for totalLots
@@ -61,11 +63,14 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 			ItemGroup group, ProductionUse productionUse, Class<? extends Item> clazz,
 			MeasureUnit measureUnit, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
+			String poCodes, 
 			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, defaultMeasureUnit, group, productionUse, clazz);
 		this.measureUnit = measureUnit;
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+		if(poCodes != null)
+			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
 		this.itemProcessDate = processDate;
 		this.receiptDate = receiptDate;
 		this.tableView = tableView;
@@ -74,17 +79,18 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 	/**
 	 * All class arguments constructor, excluding list of storage forms and calculated totals
 	 */
-	public ProcessItemInventory(Integer id, ItemDTO item, MeasureUnit measureUnit, 
-			PoCodeBasic poCode, 
-			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
-		super(id);
-		this.item = item;
-		this.measureUnit = measureUnit;
-		this.poCode = poCode;
-		this.itemProcessDate = processDate;
-		this.receiptDate = receiptDate;
-		this.tableView = tableView;
-	}
+//	public ProcessItemInventory(Integer id, ItemDTO item, MeasureUnit measureUnit, 
+//			PoCodeBasic poCode, String[] poCodes,
+//			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
+//		super(id);
+//		this.item = item;
+//		this.measureUnit = measureUnit;
+//		this.poCode = poCode;
+//		this.poCodes = poCodes;
+//		this.itemProcessDate = processDate;
+//		this.receiptDate = receiptDate;
+//		this.tableView = tableView;
+//	}
 	
 	
 	
@@ -135,31 +141,6 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 		return null;
 	}
 	
-	/**
-	 * Transforms List of InventoryProcessItemWithStorage as fetched from db,
-	 * to List of ProcessItemInventoryRows as used for view
-	 * @param processItemWithStorages
-	 * @return
-	 */
-//	public static List<ProcessItemInventory> getProcessItemInventoryRows(
-//			List<InventoryProcessItemWithStorage> processItemWithStorages) {
-//		Map<ProcessItemInventory, List<StorageInventoryRow>> processItemStorageMap = processItemWithStorages
-//			.stream()
-//			.collect(Collectors.groupingBy(
-//					InventoryProcessItemWithStorage::getProcessItemInventoryRow, 
-//					LinkedHashMap::new, 
-//					Collectors.mapping(InventoryProcessItemWithStorage::getStorageInventoryRow,
-//							Collectors.toList())));
-//		
-//		List<ProcessItemInventory> processItemInventoryRow = new ArrayList<ProcessItemInventory>();
-//		processItemStorageMap.forEach((k, v) -> {
-//			k.setStorageForms(v);
-//			processItemInventoryRow.add(k);
-//		});
-//		
-//		return processItemInventoryRow;
-//	}
-
 	@JsonIgnore
 	@Override
 	public void setList(List<StorageInventoryRow> list) {

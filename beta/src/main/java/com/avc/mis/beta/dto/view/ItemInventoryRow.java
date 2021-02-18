@@ -10,6 +10,7 @@ import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
@@ -23,28 +24,24 @@ import lombok.Value;
  * @author Zvi
  *
  */
-@Value
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class ItemInventoryRow extends BasicDTO {
 	
-	ItemDTO item;
-	AmountWithUnit[] totalStock;
+	private ItemDTO item;
 	
-	List<ProcessItemInventoryRow> poInventoryRows;
+	private AmountWithUnit[] totalStock;	
+	private List<ProcessItemInventoryRow> poInventoryRows;
 
-	public ItemInventoryRow(@NonNull ItemDTO item, @NonNull AmountWithUnit totalStock,
-			List<ProcessItemInventoryRow> poInventoryRows) {
+	public ItemInventoryRow(@NonNull ItemDTO item) {
 		super(item.getId());
 		this.item = item;
-		this.totalStock = new AmountWithUnit[] {
-				totalStock.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),
-				totalStock.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)
-		};
-
-		this.poInventoryRows = poInventoryRows;
 	}
 	
-
+	public void setPoInventoryRows(List<ProcessItemInventoryRow> poInventoryRows) {
+		this.poInventoryRows = poInventoryRows;
+		this.totalStock = ProcessItemInventoryRow.getTotalStock(poInventoryRows);
+	}
 	
 }

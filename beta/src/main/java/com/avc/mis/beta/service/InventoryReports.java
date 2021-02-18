@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,12 @@ import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.InventoryRepository;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,42 +41,32 @@ import lombok.NonNull;
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
 public class InventoryReports {
-	
-//	private static ItemCategory[] itemCategoies = new ItemCategory[] {ItemCategory.CLEAN, ItemCategory.PACKED, ItemCategory.RAW, ItemCategory.ROAST};
-
-	
+		
 	@Autowired private InventoryRepository inventoryRepository;
-	
-	@Autowired private WarehouseManagement warehouseManagement;
-	
+		
 	/**
 	 * Gets report of all items that are currently in the inventory with full information needed for report display.
 	 * @return List of ItemInventoryRow that have a balance in inventory
 	 */
 	public List<ItemInventoryRow> getInventoryTableByItem(ItemGroup group) {
 
-		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(group, null, null, null);
+		List<ProcessItemInventoryRow> processItemRows = getInventoryRows(group, null, null, null);
 		
-		Map<ItemDTO, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
-				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getItem, LinkedHashMap::new, Collectors.toList()));
+//		Map<ItemInventoryRow, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
+//				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getItemInventoryRow, LinkedHashMap::new, Collectors.toList()));
+//		
+//		List<ItemInventoryRow> inventoryRows = new ArrayList<ItemInventoryRow>();
+//		piMap.forEach((k, v) -> {
+//			k.setPoInventoryRows(v);
+//			inventoryRows.add(k);
+//		});
+//		
+//		return inventoryRows;
 		
-		List<ItemInventoryRow> inventoryRows = new ArrayList<ItemInventoryRow>(piMap.size());
-		piMap.forEach((k, v) -> {
-			AmountWithUnit totalStock = v.stream()
-					.map(pi -> pi.getTotalBalance()[0])
-					.reduce(AmountWithUnit::add).get();
-//			v.sort(new Comparator<ProcessItemInventoryRow>() {	
-//				
-//				@Override
-//				public int compare(ProcessItemInventoryRow o1, ProcessItemInventoryRow o2) {
-//					return o1.getReceiptDate().compareTo(o2.getReceiptDate());
-//				}
-//			});
-			ItemInventoryRow inventoryRow = new ItemInventoryRow(k, totalStock, v);
-			inventoryRows.add(inventoryRow);
-		});
-		
-		return inventoryRows;
+		return CollectionItemWithGroup.getFilledGroups(processItemRows, 
+				ProcessItemInventoryRow::getItemInventoryRow, 
+				Function.identity(), 
+				ItemInventoryRow::setPoInventoryRows);
 	}
 	
 	/**
@@ -81,35 +75,43 @@ public class InventoryReports {
 	 */
 	public List<PoInventoryRow> getInventoryTableByPo(ItemGroup group) {
 		
-		List<ProcessItemInventoryRow> processItemRows = warehouseManagement.getInventoryRows(group, null, null, null);
+		List<ProcessItemInventoryRow> processItemRows = getInventoryRows(group, null, null, null);
 
-		Map<PoCodeBasic, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
-				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getPoCode, LinkedHashMap::new, Collectors.toList()));
-		
-		List<PoInventoryRow> inventoryRows = new ArrayList<PoInventoryRow>();
-		piMap.forEach((k, v) -> {
-			AmountWithUnit totalStock = v.stream()
-					.map(pi -> pi.getTotalBalance()[0])
-					.reduce(AmountWithUnit::add).get();
-			PoInventoryRow inventoryRow = new PoInventoryRow(k, totalStock, v);
-			inventoryRows.add(inventoryRow);
-		});
-//		inventoryRows.sort(new Comparator<PoInventoryRow>() {	
-//			
-//			@Override
-//			public int compare(PoInventoryRow o1, PoInventoryRow o2) {
-//				OffsetDateTime t1 = o1.getPoInventoryRows().get(0).getReceiptDate();
-//				OffsetDateTime t2 = o2.getPoInventoryRows().get(0).getReceiptDate();
-//				return t1.compareTo(t2);
-//			}
+//		Map<PoInventoryRow, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
+//				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getPoInventoryRow, LinkedHashMap::new, Collectors.toList()));
+//		
+//		List<PoInventoryRow> inventoryRows = new ArrayList<PoInventoryRow>();
+//		piMap.forEach((k, v) -> {
+//			k.setPoInventoryRows(v);
+//			inventoryRows.add(k);
 //		});
-		return inventoryRows;
+//		return inventoryRows;
+		
+		return CollectionItemWithGroup.getFilledGroups(processItemRows, 
+				ProcessItemInventoryRow::getPoInventoryRow, 
+				Function.identity(), 
+				PoInventoryRow::setPoInventoryRows);
+
+	}
+	
+	/**
+	 * LIST OF INVENTORY ITEMS FOR REPORT
+	 * (SHOWN IF PRODUCING PROCESS IS FINAL AND NOT USED BY FINAL PROCESS)
+	 * Gets all information of items in the inventory, for provided supply group, item or po code.
+	 * If one of the parameters are null than will ignore that constraint.
+	 * For each stored item in inventory, provides information on the process item and balances.
+	 * Items are considered in inventory if process status is final and it's not completely used.
+	 * @param supplyGroup constrain to only this supply group, if null than any.
+	 * @param itemCategory constrain to only items from given category, if null than any.
+	 * @param itemId constrain to only this item, if null than any.
+	 * @param poCodeId constrain to only this po, if null than any.
+	 * @return List of ProcessItemInventoryRow
+	 */
+	private List<ProcessItemInventoryRow> getInventoryRows(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
+		boolean checkProductionUses = (productionUses != null);
+		return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, poCodeId);			
 	}
 
-	/**
-	 * @param poCodeId
-	 * @return
-	 */
 	public InventoryReportLine getInventorySummary(@NonNull Integer poCodeId) {
 
 		InventoryReportLine reportLine = new InventoryReportLine();

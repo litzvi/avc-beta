@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -53,7 +54,7 @@ public class ProductionTest {
 		ProductionProcess process = new ProductionProcess();
 		process.setPoCode((PoCode) receipt.getPoCode());
 		process.setRecordedTime(OffsetDateTime.now());
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAllAvailableInventoryByPo(receipt.getPoCode().getId());
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, Arrays.asList(receipt.getPoCode().getId()));
 		process.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		process.setProcessItems(service.getProcessItems(poInventory));
 		process.setWeightedPos(service.getProductWeightedPos(2));
