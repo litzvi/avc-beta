@@ -41,7 +41,10 @@ public class ContainerPoItemRow extends BasicDTO {
 			BigDecimal total, MeasureUnit measureUnit) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+		if(poCodeId != null)
+			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+		else
+			this.poCode = null;
 		if(poCodes != null)
 			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
 		else

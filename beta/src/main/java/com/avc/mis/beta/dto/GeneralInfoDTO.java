@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto;
 
 import java.time.Instant;
+import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.GeneralInfoEntity;
@@ -28,9 +29,8 @@ import lombok.NonNull;
 @NoArgsConstructor
 public abstract class GeneralInfoDTO extends DataDTO {
 
-	private PoCodeBasic poCode;
-	//should remove
-	private String supplierName;
+	private String[] poCodes;
+	private String[] suppliers;
 	private String title;
 	private Integer processId;
 	private ProcessName processName;
@@ -40,13 +40,14 @@ public abstract class GeneralInfoDTO extends DataDTO {
 
 	
 	public GeneralInfoDTO(Integer id, Integer version, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
+			String poCodes, String suppliers,
 			String title, Integer processId, ProcessName processName, String processType, 
 			Instant createdDate, String modifiedBy) {
 		super(id, version);
-		if(poCodeId != null)
-			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
-		this.supplierName = supplierName;
+		if(poCodes != null)
+			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
+		if(suppliers != null)
+			this.suppliers = Stream.of(suppliers.split(",")).distinct().toArray(String[]::new);
 		this.title = title;
 		this.processId = processId;
 		this.processName = processName;
@@ -59,8 +60,8 @@ public abstract class GeneralInfoDTO extends DataDTO {
 		super(infoEntity.getId(), infoEntity.getVersion());
 		if(infoEntity.getProcess() instanceof PoProcess) {
 			BasePoCode poCode = ((PoProcess)infoEntity.getProcess()).getPoCode();
-			this.poCode = new PoCodeBasic(poCode);
-			this.supplierName = poCode.getSupplier().getName(); 
+			this.poCodes = new String[] {poCode.getValue()};
+			this.suppliers = new String[] {poCode.getSupplier().getName()}; 
 		}
 		this.title = infoEntity.getDescription();
 		this.processId = infoEntity.getProcess().getId();

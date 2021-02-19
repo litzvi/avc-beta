@@ -30,11 +30,11 @@ public class UserMessageDTO extends GeneralInfoDTO {
 	private String label;
 	
 	public UserMessageDTO(Integer id, Integer version, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
+			String poCodes, String suppliers,
 			String title, Integer processId, ProcessName processName, String processType, 
 			Instant createdDate, String modifiedBy, String userName, MessageLabel label) {
 		super(id, version, 
-				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display,
+				poCodes, suppliers,
 				title, processId, processName, processType, 
 				createdDate, modifiedBy);
 		this.userName = userName;

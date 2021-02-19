@@ -52,32 +52,18 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	@Query("select p.approvals from GeneralProcess p where p.id = ?1")
 	List<ApprovalTask> findProcessApprovals(Integer processId);
 
-//	@Query("select new com.avc.mis.beta.dto.processinfo.UserMessageDTO("
-//				+ "m.id, m.version, c.id, c.code, t.code, t.suffix, s.name, c.display, "
-//				+ "m.description, p.id, pt.processName, pt.value, m.createdDate, prm.name,  pr.name, m.label) "
-//			+ "from UserMessage m "
-//				+ "left join m.process p "
-//					+ "left join p.processType pt "
-//					+ "left join p.poCode c "
-//						+ "left join c.contractType t "
-//						+ "left join c.supplier s "
-//				+ "join m.modifiedBy um "
-//					+ "join um.person prm "
-//				+ "join m.user u "
-//					+ "join u.person pr "
-//			+ "where u.id = ?1 "
-//			+ "ORDER BY m.createdDate DESC ")
-//	List<UserMessageDTO> findAllMessagesByUser(Integer userId);
-
 	@Query("select new com.avc.mis.beta.dto.processinfo.UserMessageDTO("
 			+ "m.id, m.version, "
-			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, po_code.display, "
+			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, t.suffix)), "
+			+ "function('GROUP_CONCAT', s.name), "
 			+ "m.description, p.id, pt.processName, pt.value, m.createdDate, prm.name, pr.name, m.label) "
 		+ "from UserMessage m "
 			+ "left join m.process p "
 				+ "left join p.processType pt "
-			+ "left join p.poCode p_po_code "
-			+ "left join p.weightedPos w_po "
+			+ "left join PoProcess po_p "
+				+ "on p.id = po_p.id "
+			+ "left join po_p.poCode p_po_code "
+			+ "left join po_p.weightedPos w_po "
 				+ "left join w_po.poCode w_po_code "
 				+ "left join PoCode po_code "
 					+ "on (po_code = p_po_code or po_code = w_po_code) "
@@ -89,39 +75,24 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "join u.person pr "
 		+ "where u.id = :userId "
 			+ "and (:lables is null or m.label in :lables) "
+		+ "group by m "
 		+ "ORDER BY m.createdDate DESC ")
 	List<UserMessageDTO> findAllMessages(Integer userId, List<MessageLabel> lables);
 	
-//	@Query("select new com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO("
-//			+ "pa.id, pa.version, c.id, c.code, t.code, t.suffix, s.name, c.display, "
-//			+ "pa.description, p.id, pt.processName, pt.value, pa.createdDate, "
-//			+ "prm.name, pr.name, pa.decision, pa.processSnapshot) "
-//		+ "from ApprovalTask pa "
-//			+ "join pa.process p "
-//				+ "join p.processType pt "
-//				+ "left join p.poCode c "
-//					+ "left join c.contractType t "
-//					+ "left join c.supplier s "
-//			+ "join pa.modifiedBy um "
-//				+ "join um.person prm "
-//			+ "join pa.user u "
-//				+ "join u.person pr "
-//		+ "where pa.decision in :decisions "
-//			+ "and u.id = :userId "
-//		+ "ORDER BY p.modifiedDate DESC ")
-//	List<ApprovalTaskDTO> findAllRequiredApprovalsByUser(Integer userId, DecisionType[] decisions);
-
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO("
 			+ "pa.id, pa.version, "
-			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, po_code.display, "
+			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, t.suffix)), "
+			+ "function('GROUP_CONCAT', s.name), "
 			+ "pa.description, p.id, pt.processName, pt.value, pa.createdDate, "
 			+ "prm.name, pr.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "
 			+ "join pa.process p "
 				+ "join p.processType pt "
-				+ "left join p.poCode p_po_code "
-				+ "left join p.weightedPos w_po "
+			+ "left join PoProcess po_p "
+				+ "on p.id = po_p.id "
+				+ "left join po_p.poCode p_po_code "
+				+ "left join po_p.weightedPos w_po "
 					+ "left join w_po.poCode w_po_code "
 					+ "left join PoCode po_code "
 							+ "on (po_code = p_po_code or po_code = w_po_code) "
@@ -133,27 +104,9 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "join u.person pr "
 			+ "where pa.decision in :decisions "
 				+ "and u.id = :userId "
+			+ "group by pa "
 			+ "ORDER BY p.modifiedDate DESC ")
-		List<ApprovalTaskDTO> findApprovals(Integer userId, DecisionType[] decisions);
-
-//	@Query("select new com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO("
-//			+ "pa.id, pa.version, "
-//			+ "c.id, c.code, t.code, t.suffix, s.name, c.display, "
-//			+ "pa.description, p.id, pt.processName, pt.value, "
-//			+ "pa.createdDate, prm.name, pr.name, pa.decision, pa.processSnapshot) "
-//		+ "from ApprovalTask pa "
-//			+ "join pa.process p "
-//				+ "join p.processType pt "
-//				+ "left join p.poCode c "
-//					+ "left join c.contractType t "
-//					+ "left join c.supplier s "
-//			+ "join pa.modifiedBy um "
-//				+ "join um.person prm "
-//			+ "join pa.user u "
-//				+ "join u.person pr "
-//		+ "where u.id = :userId "
-//		+ "ORDER BY p.modifiedDate DESC ")
-//	List<ApprovalTaskDTO> findAllApprovalsByUser(Integer userId);
+	List<ApprovalTaskDTO> findApprovals(Integer userId, DecisionType[] decisions);
 
 	@Query("select a "
 			+ "from ProcessManagement a "

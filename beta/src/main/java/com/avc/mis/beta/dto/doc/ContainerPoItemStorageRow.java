@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.doc;
 
 import java.math.BigDecimal;
+import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.values.ItemWithUnit;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
@@ -26,6 +27,7 @@ public class ContainerPoItemStorageRow {
 	@JsonIgnore
 	ItemWithUnit itemWithUnit;
 	PoCodeBasic poCode;
+	String[] poCodes;
 	AmountWithUnit unitAmount;
 //	BigDecimal containerWeight;
 	BigDecimal numberUnits;	
@@ -34,10 +36,18 @@ public class ContainerPoItemStorageRow {
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz,  
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,  String display,
+			String poCodes,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits) {
 		super();
 		this.itemWithUnit = new ItemWithUnit(itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz);
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+		if(poCodeId != null)
+			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+		else
+			this.poCode = null;
+		if(poCodes != null)
+			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
+		else
+			this.poCodes = null;
 		this.unitAmount = new AmountWithUnit(unitAmount, measureUnit);
 //		this.containerWeight = containerWeight;
 		this.numberUnits = numberUnits;

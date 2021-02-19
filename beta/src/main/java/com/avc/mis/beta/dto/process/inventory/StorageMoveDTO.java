@@ -41,6 +41,7 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
 			MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
+			String itemPoCodes, String itemSuppliers,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 
 			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
@@ -50,6 +51,7 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
 				measureUnit, itemProcessDate,
 				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display,
+				itemPoCodes, itemSuppliers,
 				storageId, stoageVersion, storageOrdinal, 
 				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks);

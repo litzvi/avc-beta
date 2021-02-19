@@ -43,6 +43,7 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.dto.view.UserRow;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.Supplier;
@@ -269,12 +270,9 @@ public class QueryTest {
 		
 		
 		//get all processes by po code/id
-		for(UserMessageDTO message: messages) {
-			if(message.getPoCode() != null) {
-				Integer poId = message.getPoCode().getId();
-				List<ProcessBasic> processBasics = processInfoReader.getAllProcessesByPo(poId);
-				processBasics.forEach(s -> System.out.println(s));
-			}
+		for(PoCode poCode: objectTablesReader.getAllPoCodes()) {
+			List<ProcessBasic> processBasics = processInfoReader.getAllProcessesByPo(poCode.getId());
+			processBasics.forEach(s -> System.out.println(s));
 			
 		}
 		
