@@ -114,7 +114,7 @@ public class AmountWithUnit implements Cloneable {
 	}
 	
 	public AmountWithUnit multiply(BigDecimal multiplicand) {
-		return new AmountWithUnit(this.amount.multiply(multiplicand), this.measureUnit);
+		return new AmountWithUnit(this.amount.multiply(multiplicand, MathContext.DECIMAL64), this.measureUnit);
 	}
 			
 	@Override

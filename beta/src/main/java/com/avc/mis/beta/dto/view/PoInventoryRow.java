@@ -30,7 +30,7 @@ public class PoInventoryRow extends BasicDTO {
 	//already in poCode
 	private String supplierName;
 	
-	private AmountWithUnit[] totalStock;
+	private AmountWithUnit[] totalStock;//change to totalWeight
 	private List<ProcessItemInventoryRow> poInventoryRows;
 
 	public PoInventoryRow(@NonNull PoCodeBasic poCode) {
@@ -45,7 +45,7 @@ public class PoInventoryRow extends BasicDTO {
 	
 	public void setPoInventoryRows(List<ProcessItemInventoryRow> poInventoryRows) {
 		this.poInventoryRows = poInventoryRows;
-		this.totalStock = ProcessItemInventoryRow.getTotalStock(poInventoryRows);
+		this.totalStock = ProcessItemInventoryRow.getTotalWeight(poInventoryRows);
 	}
 
 }

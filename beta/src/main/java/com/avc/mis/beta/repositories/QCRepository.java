@@ -114,7 +114,7 @@ public interface QCRepository extends PoProcessRepository<QualityCheck> {
 
 
 	@Query("select new com.avc.mis.beta.dto.view.CashewQcRow( "
-			+ "qc.id, po_code.id, po_code.code, ct.code, ct.suffix, s.name, po_code.display, "
+			+ "qc.id, po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
 			+ "qc.checkedBy, i.id, i.value, qc.recordedTime, "
 			+ "ti.numberOfSamples, ti.sampleWeight, ti.precentage, "
 			+ "ti.humidity, ti.breakage,"

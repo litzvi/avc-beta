@@ -29,26 +29,23 @@ public class PoCodeDTO extends ValueDTO {
 	private String code;
 	private DataObjectWithName<Supplier> supplier; 
 	private ContractTypeDTO contractType;
-	private String display;
 	
 	public PoCodeDTO(@NonNull Integer id, String code, 
 			Integer supplierId, Integer supplierVersion, String supplierName,
-			Integer contractTypeId, String contractTypeValue, String contractTypeCode, Currency contractTypeCurrency, String contractTypeSuffix,
-			String display) {
+			Integer contractTypeId, String contractTypeValue, String contractTypeCode, Currency contractTypeCurrency, String contractTypeSuffix) {
 		super(id);
 		this.code = code;
 		this.supplier = new DataObjectWithName<Supplier>(supplierId, supplierVersion, supplierName);
 		this.contractType = new ContractTypeDTO(contractTypeId, contractTypeValue, contractTypeCode, contractTypeCurrency, contractTypeSuffix);
-		this.display = display;
 	}
 	
 	/**
 	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
 	 */
 	public String getValue() {
-		if(this.display != null) {
-			return this.display;
-		}
+//		if(this.display != null) {
+//			return this.display;
+//		}
 		return String.format("%s-%s%s", this.contractType.getCode(), this.code, this.contractType.getSuffix());
 	}
 }

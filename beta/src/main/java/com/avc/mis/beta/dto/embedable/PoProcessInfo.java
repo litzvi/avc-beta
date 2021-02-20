@@ -29,9 +29,9 @@ public class PoProcessInfo {
 
 	public PoProcessInfo(
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-			Integer supplierId, Integer supplierVersion, String supplierName, String display) {
+			Integer supplierId, Integer supplierVersion, String supplierName) {
 		if(poCodeId != null) {
-			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		}
 		else {
 			this.poCode = null;

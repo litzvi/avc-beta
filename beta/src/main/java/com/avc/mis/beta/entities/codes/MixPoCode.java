@@ -66,10 +66,10 @@ public class MixPoCode extends BasePoCode {
 		return super.getContractType();
 	}
 	
-	@NotNull(message = "Display is mandatory for mixed po code")
-	@Override
-	public String getDisplay() {
-		return super.getDisplay();
-	}
+//	@NotNull(message = "Display is mandatory for mixed po code")
+//	@Override
+//	public String getDisplay() {
+//		return super.getDisplay();
+//	}
 
 }

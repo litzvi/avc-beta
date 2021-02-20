@@ -24,7 +24,7 @@ import com.avc.mis.beta.entities.process.PoProcess;
 public interface PoProcessRepository<T extends PoProcess> extends ProcessRepository<T> {
 	
 	@Query("select new com.avc.mis.beta.dto.embedable.PoProcessInfo("
-			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display) "
+			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name) "
 		+ "from PoProcess p "
 			+ "join p.poCode po_code "
 				+ "join po_code.contractType t "

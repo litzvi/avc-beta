@@ -70,7 +70,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	 * @return Set of PoCodeBasic
 	 */
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
-			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, po_code.display) "
+			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name) "
 		+ "from PO po "
 			+ "join po.lifeCycle lc "
 			+ "join po.poCode po_code "
@@ -110,7 +110,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	 * @return Set of PoCodeBasic
 	 */
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
-			+ "po_code.id, po_code.code, c.code, c.suffix, s.name, po_code.display) "
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType c "
@@ -131,7 +131,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	 * @return Set of PoCodeBasic
 	 */
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
-			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, poCode.display) "
+			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name) "
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
 			+ "join pi.process p "
@@ -165,7 +165,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	Set<PoCodeBasic> findAvailableInventoryPoCodeByType(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId);
 
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
-			+ "po_code.id, po_code.code, c.code, c.suffix, s.name, po_code.display) "
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
 				+ "join po_code.contractType c "
@@ -177,7 +177,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 
 	//will also give old (history) po_codes
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
-			+ "po_code.id, po_code.code, c.code, c.suffix, s.name, po_code.display) "
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from PoCode po_code "
 				+ "join po_code.contractType c "
 				+ "join po_code.supplier s "
@@ -187,7 +187,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	List<PoCodeBasic> findAllPoCodeBasics();
 
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
-			+ "po_code.id, po_code.code, c.code, c.suffix, s.name, po_code.display) "
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from PoCode po_code "
 			+ "join po_code.contractType c "
 			+ "join po_code.supplier s "
@@ -210,7 +210,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	List<PoCodeBasic> findFreePoCodes(Integer poCodeId);
 
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
-			+ "po_code.id, po_code.code, c.code, c.suffix, s.name, po_code.display) "
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from MixPoCode po_code "
 			+ "left join po_code.contractType c "
 			+ "left join po_code.supplier s "

@@ -71,7 +71,7 @@ public class Receipts {
 		}
 		
 		ReceiptReportLine reportLine = new ReceiptReportLine();
-//		reportLine.set
+//		reportLine.setReceivedOrderUnits(getReceiptRepository().);
 //		reportLine.setPoCode(processRows.get(0).getPoCode());
 //		reportLine.setSupplierName(processRows.get(0).getSupplierName());
 		reportLine.setProcesses(processes);

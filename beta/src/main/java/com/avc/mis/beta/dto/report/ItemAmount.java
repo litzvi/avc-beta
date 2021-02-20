@@ -33,6 +33,7 @@ public class ItemAmount {
 	ItemGroup itemGroup;
 	AmountWithUnit[] weight;
 	AmountWithUnit amount;
+	@JsonIgnore
 	BigDecimal weightCoefficient;
 	
 	public ItemAmount(Integer id, String value, MeasureUnit defaultMeasureUnit, 

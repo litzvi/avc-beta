@@ -47,11 +47,11 @@ public class PoCode extends BasePoCode {
 		return super.getContractType();
 	}
 	
-	@Null(message = "Po code doesn't have display ")
-	@Override
-	public String getDisplay() {
-		return super.getDisplay();
-	}
+//	@Null(message = "Po code doesn't have display ")
+//	@Override
+//	public String getDisplay() {
+//		return super.getDisplay();
+//	}
 
 
 }

@@ -44,8 +44,9 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
 @Entity
-@Table(name = "PO_CODES", uniqueConstraints = 
-	{ @UniqueConstraint(columnNames = { "code", "display" }) })
+@Table(name = "PO_CODES")
+//@Table(name = "PO_CODES", uniqueConstraints = 
+//	{ @UniqueConstraint(columnNames = { "code", "display" }) })
 @Inheritance(strategy=InheritanceType.JOINED)
 //@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 //@DiscriminatorValue("abstract")
@@ -62,7 +63,7 @@ public class BasePoCode extends BaseEntity {
 //	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
 //	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
 //	@Column(nullable = false, updatable = false, unique = true)
-	@Column(updatable = false)
+	@Column(updatable = false, unique = true)
 //	@EqualsAndHashCode.Include
 	private String code;
 	
@@ -75,7 +76,7 @@ public class BasePoCode extends BaseEntity {
 //	@NotNull(message = "PO code is required to have a contract type")
 	private ContractType contractType;
 	
-	private String display;
+//	private String display;
 	
 	@JsonIgnore
 	@ToString.Exclude 
@@ -91,9 +92,9 @@ public class BasePoCode extends BaseEntity {
 	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
 	 */
 	public String getValue() {
-		if(this.display != null) {
-			return this.display;
-		}
+//		if(this.display != null) {
+//			return this.display;
+//		}
 		return String.format("%s-%s%s", this.contractType.getCode(), this.code, this.contractType.getSuffix());
 	}
 

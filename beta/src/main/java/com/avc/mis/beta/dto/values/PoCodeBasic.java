@@ -29,7 +29,7 @@ public class PoCodeBasic extends ValueDTO {
 //	Currency currency;
 	String contractTypeSuffix;
 	String supplierName;	
-	String display;
+//	String display;
 //	@NonFinal
 //	Class<? extends BasePoCode> clazz;
 	
@@ -40,15 +40,15 @@ public class PoCodeBasic extends ValueDTO {
 	 * @param supplierName
 	 */
 	public PoCodeBasic(Integer id, String code,
-			String contractTypeCode, String contractTypeSuffix, String supplierName,
-			String display) {
+			String contractTypeCode, String contractTypeSuffix, String supplierName
+			) {
 		super(id);
 		this.code = code;
 		this.contractTypeCode = contractTypeCode;
 		this.supplierName = supplierName;
 //		this.currency = currency;
 		this.contractTypeSuffix = contractTypeSuffix != null ? contractTypeSuffix : "";
-		this.display = display;
+//		this.display = display;
 	}	
 	
 //	public PoCodeBasic(Integer id, String code,
@@ -73,16 +73,16 @@ public class PoCodeBasic extends ValueDTO {
 		this.supplierName = poCode.getSupplier() != null ? poCode.getSupplier().getName(): null;
 //		this.currency = poCode.getContractType() != null ? poCode.getContractType().getCurrency(): null;
 		this.contractTypeSuffix = poCode.getContractType() != null ? poCode.getContractType().getSuffix(): "";
-		this.display = poCode.getDisplay();
+//		this.display = poCode.getDisplay();
 	}
 	
 	/**
 	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
 	 */
 	public String getValue() {	
-		if(this.display != null) {
-			return this.display;
-		}
+//		if(this.display != null) {
+//			return this.display;
+//		}
 		return String.format("%s-%s%s", this.contractTypeCode, this.getCode(), this.contractTypeSuffix);
 	}
 		

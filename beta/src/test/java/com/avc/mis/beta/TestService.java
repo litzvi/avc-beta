@@ -441,7 +441,7 @@ public class TestService {
 		for(int i=0; i < productWeightedPos.length; i++) {
 			productWeightedPos[i] = new WeightedPo();
 			productWeightedPos[i].setPoCode(getPoCode());
-			productWeightedPos[i].setWeight(new BigDecimal((i+1)/(Double.valueOf(productWeightedPos.length))));
+			productWeightedPos[i].setWeight(new BigDecimal((1)/(Double.valueOf(productWeightedPos.length))));
 			
 		}
 				

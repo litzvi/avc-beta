@@ -50,7 +50,7 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 	List<ReceiptItemWithStorage> findReceiptItemWithStorage(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.view.ReceiptItemRow( "
-				+ "r.id, po_code.id, po_code.code, ct.code, ct.suffix, s.name, po_code.display,  "
+				+ "r.id, po_code.id, po_code.code, ct.code, ct.suffix, s.name,  "
 				+ "i.id, i.value, "
 				+ "units.amount, units.measureUnit, "
 				+ "ro_units.amount, ro_units.measureUnit, "

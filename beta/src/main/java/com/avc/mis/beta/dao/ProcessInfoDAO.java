@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dao;
 
+import java.math.BigDecimal;
 import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +31,7 @@ import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.TransactionProcess;
@@ -37,6 +39,7 @@ import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
+import com.avc.mis.beta.entities.processinfo.WeightedPo;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
@@ -85,14 +88,7 @@ public class ProcessInfoDAO extends DAO {
 	}
 	
 //	public void addPoProcessEntity(PoProcess process) {
-//		PoCode poCode = process.getPoCode();
-//		if(poCode != null) { 
-//			addEntity(process, poCode);
-//		}
-//		else {
-//			addEntity(process);
-//		}
-//		addAlerts(process);
+//		
 //	}
 	
 	/**
@@ -107,17 +103,6 @@ public class ProcessInfoDAO extends DAO {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
 	}
-	
-//	public void addRelocationProcessEntity(StorageRelocation process) {
-//		addGeneralProcessEntity(process);
-//		//check used items amounts () don't exceed the storage amounts
-//		checkRelocationBalance(process);
-//	}
-//	
-//	public  void editRelocationProcessEntity(StorageRelocation process) {
-//		editGeneralProcessEntity(process);
-//		checkRelocationBalance(process);
-//	}
 		
 	/**
 	 * Checks if for given array used items, used item storages total don't exceed storage amounts.
@@ -125,22 +110,12 @@ public class ProcessInfoDAO extends DAO {
 	 * @param usedItems array of UsedItem
 	 * @return true if for all storages, used amounts are equal or less than storage amount, false otherwise
 	 */
-	private boolean isUsedInventorySufficiant(Integer processId) {
-		
+	private boolean isUsedInventorySufficiant(Integer processId) {		
 		Stream<StorageBalance> storageBalances = getInventoryRepository().findUsedStorageBalances(processId);
 		return storageBalances.allMatch(b -> b.isLegal());
-//		Map<Integer, StorageBalance> storageBalanceMap = storageBalances.collect(Collectors.toMap(StorageBalance::getId, o -> o));
-//		for(UsedItem i: usedItems) {
-//			if(i.getNumberUnits().compareTo(storageBalanceMap.get(i.getStorage().getId()).getBalance()) > 0) {
-//				return false;
-//			}
-//		}
-//		
-//		return true;
 	}
 	
-	private boolean isProducedInventorySufficiant(Integer processId) {
-		
+	private boolean isProducedInventorySufficiant(Integer processId) {		
 		Stream<StorageBalance> storageBalances = getInventoryRepository().findProducedStorageBalances(processId);
 		return storageBalances.allMatch(b -> b.isLegal());
 	}

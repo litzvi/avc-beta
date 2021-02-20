@@ -62,13 +62,13 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			ItemGroup group, ProductionUse productionUse, Class<? extends Item> clazz,
 			MeasureUnit measureUnit, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String poCodes, 
 			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
 		super(id);
 		this.item = new ItemDTO(itemId, itemValue, defaultMeasureUnit, group, productionUse, clazz);
 		this.measureUnit = measureUnit;
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		if(poCodes != null)
 			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
 		this.itemProcessDate = processDate;

@@ -3,8 +3,10 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,12 +15,15 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
 import com.avc.mis.beta.entities.processinfo.WeightedPo;
 
@@ -100,5 +105,22 @@ public abstract class PoProcess extends GeneralProcess {
 		this.itemCounts = Insertable.setReferences(itemCounts, (t) -> {t.setReference(this);	return t;});
 	}
 	
-	
+	@PrePersist
+	@Override
+	public void prePersist() {
+		super.prePersist();
+		preUpdate();
+	}
+
+	@PreUpdate
+	public void preUpdate() {
+		Set<WeightedPo> weightedPos = this.weightedPos;
+		if(weightedPos != null && weightedPos.size() > 0) {
+			Optional<BigDecimal> totalWeights = weightedPos.stream().map(WeightedPo::getWeight).reduce(BigDecimal::add);
+			if(totalWeights.get().compareTo(BigDecimal.ONE) != 0) {
+				throw new IllegalArgumentException("Total mixed po weights have to add up to one");
+			}
+		}
+		
+	}
 }

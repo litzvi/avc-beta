@@ -64,7 +64,7 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 			+ " i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.productionUse, type(item), "
 			+ "i.measureUnit, i.containerWeight, i.accessWeight, "
-			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, poCode.display, "
+			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, "
 			+ "count_amount.id, count_amount.version, count_amount.ordinal, count_amount.amount) "
 		+ "from ItemCount i "
 			+ "join i.item item "

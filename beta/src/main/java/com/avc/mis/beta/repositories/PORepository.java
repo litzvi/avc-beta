@@ -72,7 +72,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 	 */
 	@Query("select distinct new com.avc.mis.beta.dto.process.PoDTO("
 			+ "po.id, po.version, po.createdDate, p_user.username, "
-			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, po_code.display, "
+			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line, "
 			+ "po.recordedTime, po.startTime, po.endTime, po.duration, po.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, po.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
@@ -101,7 +101,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 	 * @return List of PoItemRow for all open orders sorted by delivery date.
 	 */
 	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, "
-			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, po_code.display, "
+			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
 			+ "function('GROUP_CONCAT', concat(coalesce(user.username, ''), ' - ', coalesce(approval.decision, ''))), "
 			+ "i.id, i.value, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency, "
@@ -169,7 +169,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 	 * @return List of PoItemRow for all orders.
 	 */
 	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, "
-			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, po_code.display, "
+			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
 			+ "function('GROUP_CONCAT', concat(coalesce(user.username, ''), ':', coalesce(approval.decision, ''))), "
 			+ "i.id, i.value, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency, "
@@ -245,8 +245,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO( "
 			+ "po_code.id, po_code.code, "
 			+ "s.id, s.version, s.name, "
-			+ "ct.id, ct.value, ct.code, ct.currency, ct.suffix, "
-			+ "po_code.display) "
+			+ "ct.id, ct.value, ct.code, ct.currency, ct.suffix) "
 		+ "from BasePoCode po_code "
 			+ "join po_code.supplier s "
 			+ "join po_code.contractType ct "

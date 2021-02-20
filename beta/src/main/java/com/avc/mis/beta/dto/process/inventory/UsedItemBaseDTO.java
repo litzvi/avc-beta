@@ -75,7 +75,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
 			MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemPoCodes, String itemSuppliers,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal storageContainerWeight,
@@ -92,7 +92,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		this.measureUnit = measureUnit;
 		this.itemProcessDate = itemProcessDate;
 		if(poCodeId != null)
-			this.itemPo = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+			this.itemPo = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		else
 			this.itemPo = null;
 		if(itemPoCodes != null)

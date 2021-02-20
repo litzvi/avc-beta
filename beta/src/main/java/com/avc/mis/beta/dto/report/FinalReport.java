@@ -42,25 +42,25 @@ public class FinalReport {
 		if(receipt == null) {
 			return null;
 		}
-		AmountWithUnit receivedOrderUnits = receipt.getReceivedOrderUnits();
+		AmountWithUnit receivedAmount = receipt.getTotalReceived();
 		AmountWithUnit totalReceiptCount = receipt.getTotalProductCount();
 		
 		ProductPercentage productPercentage;
 		if(cleaning != null) {			
 			productPercentage = new ProductPercentage("cleaning",
-					AmountWithUnit.percentageLoss(cleaning.getTotalProductOut(), receivedOrderUnits),
+					AmountWithUnit.percentageLoss(cleaning.getTotalProductOut(), receivedAmount),
 					AmountWithUnit.percentageLoss(cleaning.getTotalProductOut(), totalReceiptCount));
 			productPercentageLoss.add(productPercentage);
 		}
 		if(roasting != null) {			
 			productPercentage = new ProductPercentage("roasting",
-					AmountWithUnit.percentageLoss(roasting.getTotalProductOut(), receivedOrderUnits),
+					AmountWithUnit.percentageLoss(roasting.getTotalProductOut(), receivedAmount),
 					AmountWithUnit.percentageLoss(roasting.getTotalProductOut(), totalReceiptCount));
 			productPercentageLoss.add(productPercentage);
 		}
 		if(packing != null) {			
 			productPercentage = new ProductPercentage("packing",
-					AmountWithUnit.percentageLoss(packing.getTotalProductOut(), receivedOrderUnits),
+					AmountWithUnit.percentageLoss(packing.getTotalProductOut(), receivedAmount),
 					AmountWithUnit.percentageLoss(packing.getTotalProductOut(), totalReceiptCount));
 			productPercentageLoss.add(productPercentage);
 		}

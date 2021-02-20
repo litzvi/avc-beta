@@ -6,15 +6,22 @@ package com.avc.mis.beta.dto.view;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ItemWithUnit;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -22,6 +29,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
+import lombok.Value;
 
 /**
  * Contains full information for displaying weight balances in Inventory.
@@ -31,41 +39,69 @@ import lombok.ToString;
  * @author zvi
  *
  */
-@Data
+@Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class ProcessItemInventoryRow extends BasicDTO {
 
-	private ItemDTO item;
+	private ItemWithUnit item;
 	private PoCodeBasic poCode;
 	private String supplierName;
 	private OffsetDateTime processDate;
 	private OffsetDateTime receiptDate;
-//	private BigDecimal weightCoefficient;
-	private AmountWithUnit[] totalBalance;
+	private BigDecimal weightCoefficient;
+	private AmountWithUnit amount;
+	private AmountWithUnit[] totalBalance; //change to weight
 	private String[] warehouses;
 
 	/**
 	 * All database fields (the fields in the form they are fetched from the db) arguments constructor.
 	 */
 	public ProcessItemInventoryRow(Integer id, 
-			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
+			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
+			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			OffsetDateTime processDate, OffsetDateTime receiptDate,
-			BigDecimal weightCoefficient, BigDecimal balance, MeasureUnit measureUnit,
+			BigDecimal weightCoefficient, BigDecimal amount, 
 			String warehouses) {
 		super(id);
-		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+		this.item = new ItemWithUnit(itemId, itemValue, defaultMeasureUnit, unitAmount, unitMeasureUnit, clazz);
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
 		this.processDate = processDate;
 		this.receiptDate = receiptDate;
-//		this.weightCoefficient = weightCoefficient;
-		AmountWithUnit balanceAmount = new AmountWithUnit(balance.multiply(weightCoefficient, MathContext.DECIMAL64), measureUnit);
+		this.weightCoefficient = weightCoefficient;
+//		AmountWithUnit balanceAmount = new AmountWithUnit(totalAmount.multiply(weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
+//		this.totalWeight = new AmountWithUnit[] {
+//				balanceAmount.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),
+//				balanceAmount.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
+//		};
+		
+		AmountWithUnit weight;
+		if(clazz == BulkItem.class) {
+			this.amount = null;
+			weight = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
+		}
+		else if(clazz == PackedItem.class){
+			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
+			this.amount.setScale(MeasureUnit.SCALE);
+			weight = new AmountWithUnit(
+					amount
+					.multiply(unitAmount, MathContext.DECIMAL64)
+					.multiply(this.weightCoefficient, MathContext.DECIMAL64), 
+					unitMeasureUnit);
+		}
+		else 
+		{
+			throw new IllegalStateException("The class can only apply to weight items");
+		}
 		this.totalBalance = new AmountWithUnit[] {
-				balanceAmount.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),
-				balanceAmount.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
-		};
+				weight.convert(MeasureUnit.KG),
+				weight.convert(MeasureUnit.LBS)};
+		AmountWithUnit.setScales(this.totalBalance, MeasureUnit.SCALE);
+
+		
+		
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
 		}
@@ -85,15 +121,31 @@ public class ProcessItemInventoryRow extends BasicDTO {
 	}
 	
 	
-	public static AmountWithUnit[] getTotalStock(List<ProcessItemInventoryRow> poInventoryRows) {
+	public static AmountWithUnit[] getTotalWeight(List<ProcessItemInventoryRow> poInventoryRows) {
 		if(poInventoryRows == null) {
 			return null;
 		}
-		AmountWithUnit totalStock = poInventoryRows.stream()
+		AmountWithUnit totalWeight = poInventoryRows.stream()
 				.map(pi -> pi.getTotalBalance()[0])
 				.reduce(AmountWithUnit::add).get();
 		return new AmountWithUnit[] {
-				totalStock.setScale(MeasureUnit.SCALE),
-				totalStock.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
+				totalWeight.setScale(MeasureUnit.SCALE),
+				totalWeight.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
+	}
+	
+	public static AmountWithUnit getTotalAmount(List<ProcessItemInventoryRow> poInventoryRows) {
+		if(poInventoryRows == null) {
+			return null;
+		}
+		Map<ItemWithUnit, AmountWithUnit> itemAmountmap = poInventoryRows.stream().collect(
+				Collectors.groupingBy(ProcessItemInventoryRow::getItem, 
+						Collectors.reducing(null, 
+								i -> i.getAmount().multiply(i.getWeightCoefficient()), 
+								AmountWithUnit::addNullable)));
+		Collection<AmountWithUnit> amountCollection = itemAmountmap.values();
+		if(amountCollection.size() > 1) {
+			throw new IllegalStateException("Total units amounts need to refer to a single item");
+		}
+		return amountCollection.stream().findAny().get();
 	}
 }

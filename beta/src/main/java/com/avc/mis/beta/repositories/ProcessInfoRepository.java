@@ -54,7 +54,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.UserMessageDTO("
 			+ "m.id, m.version, "
-			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, t.suffix)), "
+			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
 			+ "function('GROUP_CONCAT', s.name), "
 			+ "m.description, p.id, pt.processName, pt.value, m.createdDate, prm.name, pr.name, m.label) "
 		+ "from UserMessage m "
@@ -82,7 +82,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO("
 			+ "pa.id, pa.version, "
-			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, t.suffix)), "
+			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
 			+ "function('GROUP_CONCAT', s.name), "
 			+ "pa.description, p.id, pt.processName, pt.value, pa.createdDate, "
 			+ "prm.name, pr.name, pa.decision, pa.processSnapshot) "

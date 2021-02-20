@@ -25,11 +25,11 @@ public class WeightedPoDTO extends SubjectDataDTO {
 	private BigDecimal weight;
 	
 	public WeightedPoDTO(Integer id, Integer version, Integer ordinal,
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
+			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			BigDecimal weight) {
 		super(id, version, ordinal);
 		if(poCodeId != null)
-			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
+			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.weight = weight;
 	}
 	
