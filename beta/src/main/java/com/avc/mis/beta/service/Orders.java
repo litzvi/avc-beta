@@ -88,6 +88,8 @@ public class Orders {
 	public List<PoItemRow> findAllGeneralOrderItems() {
 		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER, 
 				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
+		poItemRows.forEach(i->System.out.println("orser row" + i.getNumberUnits()));
+
 		return poItemRows;
 	}
 	

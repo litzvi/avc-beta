@@ -5,14 +5,18 @@ package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
@@ -31,7 +35,7 @@ public class ReceiptItemRow extends BasicDTO {
 	
 	PoCodeBasic poCode;
 	String supplierName;
-	BasicValueEntity<Item> item;
+	ItemWithUnitDTO item;
 //	String itemName;
 	AmountWithUnit receivedOrderUnits;
 	@JsonIgnore
@@ -47,7 +51,8 @@ public class ReceiptItemRow extends BasicDTO {
 	
 	public ReceiptItemRow(@NonNull Integer id, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			Integer itemId, String itemValue,
+			Integer itemId, String itemValue, MeasureUnit itemeasureUnit, ItemGroup itemGroup, 
+			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
 			BigDecimal orderAmount, MeasureUnit orderMU, 
 			BigDecimal receivedOrderAmount, MeasureUnit receivedOrderMU, 			
 			OffsetDateTime receiptDate, ProcessStatus status,
@@ -56,7 +61,7 @@ public class ReceiptItemRow extends BasicDTO {
 		super(id);
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
-		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, itemeasureUnit, itemGroup, null, unitAmount, unitMeasureUnit, clazz);
 //		this.itemName = itemName;
 
 		this.receivedOrderUnits = new AmountWithUnit(receivedOrderAmount, receivedOrderMU);
@@ -87,13 +92,14 @@ public class ReceiptItemRow extends BasicDTO {
 		}
 	}
 	
-	public AmountWithUnit[] getReceiptAmount() {
-		if(MeasureUnit.WEIGHT_UNITS.contains(this.receiptAmt.getMeasureUnit())) {
-			return new AmountWithUnit[] {
-					this.receiptAmt.setScale(MeasureUnit.SCALE),
-					this.receiptAmt.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
-		}
-		return null;
+	public List<AmountWithUnit> getReceiptAmount() {
+		return AmountWithUnit.amountDisplay(this.receiptAmt, this.item, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+//		if(MeasureUnit.WEIGHT_UNITS.contains(this.receiptAmt.getMeasureUnit())) {
+//			return new AmountWithUnit[] {
+//					this.receiptAmt.setScale(MeasureUnit.SCALE),
+//					this.receiptAmt.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
+//		}
+//		return null;
 	}
 	
 }

@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.view;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -101,14 +102,11 @@ public class ProcessRow extends BasicDTO {
 		}
 	}
 	
-	public AmountWithUnit[] getProcessGain() {
+	public List<AmountWithUnit> getProcessGain() {
 		
 		try {
 			AmountWithUnit processGain = producedAmounts.get().subtract(usedAmounts.get());
-			return new AmountWithUnit[] {
-					processGain.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),                        
-					processGain.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
-			};
+			return AmountWithUnit.weightDisplay(processGain, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
 		}
@@ -118,28 +116,22 @@ public class ProcessRow extends BasicDTO {
 	
 		
 	//perhaps change to getCountDifference
-	public AmountWithUnit[] getUsedCountDifference() {
+	public List<AmountWithUnit> getUsedCountDifference() {
 		
 		try {
 			AmountWithUnit countDifference = countAmounts.get().subtract(usedAmounts.get());
-			return new AmountWithUnit[] {
-					countDifference.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),                        
-					countDifference.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
-			};
+			return AmountWithUnit.weightDisplay(countDifference, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
 		}
 		
 	}
 	
-	public AmountWithUnit[] getProducedCountDifference() {
+	public List<AmountWithUnit> getProducedCountDifference() {
 		
 		try {
 			AmountWithUnit countDifference = countAmounts.get().subtract(producedAmounts.get());
-			return new AmountWithUnit[] {
-					countDifference.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),                        
-					countDifference.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
-			};
+			return AmountWithUnit.weightDisplay(countDifference, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
 		}

@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.view;
 
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import com.avc.mis.beta.dto.BasicDTO;
@@ -49,15 +50,24 @@ public class ReceiptRow extends BasicDTO {
 	}
 
 	//perhaps total weight
-	public AmountWithUnit[] getTotalAmount() {
-		AmountWithUnit totalAmount = receiptRows.stream()
-				.map(pi -> pi.getReceiptAmt())
-				.filter(u -> MeasureUnit.WEIGHT_UNITS.contains(u.getMeasureUnit()))
-				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+	public List<AmountWithUnit> getTotalAmount() {
+		if(receiptRows == null || receiptRows.isEmpty()) {
+			return null;
+		}
+		AmountWithUnit totalAmount;
+		if(receiptRows.stream().map(pi -> pi.getReceiptAmt()).anyMatch(u -> !MeasureUnit.WEIGHT_UNITS.contains(u.getMeasureUnit()))) {
+			return null;
+		}
+		try {
+			totalAmount = receiptRows.stream()
+					.map(pi -> pi.getReceiptAmt())
+					.reduce(AmountWithUnit::add).get();
+		} catch (UnsupportedOperationException e) {
+			return null;
+		}
+		
+		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(totalAmount.getMeasureUnit(), MeasureUnit.LOT));
 
-		return new AmountWithUnit[] {
-				totalAmount.setScale(MeasureUnit.SCALE),
-				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 
 	}
 

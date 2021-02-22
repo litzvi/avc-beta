@@ -4,6 +4,8 @@
 package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -30,7 +32,7 @@ import lombok.experimental.NonFinal;
 public class ProductionProcessWithItemAmount extends BasicDTO {
 
 	BasicValueEntity<Item> item;
-	AmountWithUnit[] weight;
+	AmountWithUnit weight;
 	AmountWithUnit amount;
 	@NonFinal
 	String[] warehouses;
@@ -55,51 +57,32 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 			BigDecimal amount) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		AmountWithUnit amountWithUnit;
 		if(clazz == BulkItem.class) {
 			this.amount = null;
-			amountWithUnit = new AmountWithUnit(amount, defaultMeasureUnit);
+			this.weight = new AmountWithUnit(amount, defaultMeasureUnit);
 		}
 		else if(clazz == PackedItem.class){
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
-			amountWithUnit = new AmountWithUnit(amount.multiply(unitAmount), unitMeasureUnit);
+			this.weight = new AmountWithUnit(amount.multiply(unitAmount), unitMeasureUnit);
 		}
 		else 
 		{
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);	
-			amountWithUnit = null;
+			this.weight = null;
 		}
 //		{
 //			throw new IllegalStateException("The class can only apply to weight items");
 //		}
-		
-		if(amountWithUnit != null) {
-			this.weight = new AmountWithUnit[] {
-					amountWithUnit.convert(MeasureUnit.KG),
-					amountWithUnit.convert(MeasureUnit.LBS)};
-			AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
-		}
-		else {
-			this.weight = null;
-		}
 				
 	}
 	
 	public ProductionProcessWithItemAmount(@NonNull Integer id, 
-			BasicValueEntity<Item> item, AmountWithUnit weight, AmountWithUnit amount,
+			BasicValueEntity<Item> item, AmountWithUnit amount, AmountWithUnit weight, 
 			String warehouses) {
 		super(id);
 		this.item = item;
-		if(weight != null) {
-			this.weight = new AmountWithUnit[] {
-					weight.convert(MeasureUnit.KG),
-					weight.convert(MeasureUnit.LBS)};
-			AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
-		}
-		else {			
-			this.weight = null;
-		}
 		this.amount = amount;
+		this.weight = weight;
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
 		}
@@ -108,10 +91,22 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 		}
 	}
 	
+	public List<AmountWithUnit> getAmountList() {
+		List<AmountWithUnit> amountList = new ArrayList<>();
+		if(this.amount != null) {
+			amountList.add(this.amount);
+		}
+		if(this.weight != null) {
+			amountList.addAll(AmountWithUnit.weightDisplay(this.weight, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS)));
+		}
+		return amountList;
+
+	}
+	
 	public static Optional<AmountWithUnit> getWeightSum(List<ProductionProcessWithItemAmount> items) {
 		return items.stream()
 				.filter(i -> i.getWeight() != null)
-				.map(i -> i.getWeight()[0])
+				.map(i -> i.getWeight())
 				.reduce(AmountWithUnit::add);
 	}
 	

@@ -8,6 +8,12 @@ import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
@@ -15,12 +21,18 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.BulkItem;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
 /**
  * @author Zvi
@@ -165,6 +177,12 @@ public class AmountWithUnit implements Cloneable {
 		}
 		
 	}
+	
+	public static void setScales(List<AmountWithUnit> amountsWithUnit, int newScale) {
+		for(AmountWithUnit i: amountsWithUnit) {
+			i.setScale(newScale);
+		}		
+	}
 
 	public static AmountWithUnit addNullable(AmountWithUnit base, AmountWithUnit augend) {
 		if(base != null && augend != null) {
@@ -213,8 +231,48 @@ public class AmountWithUnit implements Cloneable {
 				.multiply(new BigDecimal("100"));
 	}
 	
-
+	public static Optional<AmountWithUnit> convert(@NonNull AmountWithUnit units, @NonNull MeasureUnit toUnit) {
+		BigDecimal amount = MeasureUnit.convert(units.getAmount(), units.getMeasureUnit(), toUnit);
+		if(amount == null) {
+			return Optional.empty();
+		}
+		return Optional.of(new AmountWithUnit(amount, toUnit));
+	}
 	
+	public static List<AmountWithUnit> amountDisplay(AmountWithUnit units, ItemWithUnitDTO item , List<MeasureUnit> displayMeasureUnits) {
+		List<AmountWithUnit> amounts = new ArrayList<>();
+		if(item.getGroup()  == ItemGroup.PRODUCT && 
+				displayMeasureUnits != null && !displayMeasureUnits.isEmpty()) {
+			displayMeasureUnits.forEach(mu -> {
+				AmountWithUnit.convert(units, mu).ifPresent(e -> amounts.add(e));
+				if(item.getClazz() == PackedItem.class) {
+					convert(item.getUnit().multiply(units.getAmount()), mu).ifPresent(e -> amounts.add(e));
+				}
+			});
+		}
+		else {
+			amounts.add(units);
+			if(item.getClazz() == PackedItem.class) {
+				amounts.add(item.getUnit().multiply(units.getAmount()));
+			}
+		}
+		AmountWithUnit.setScales(amounts, MeasureUnit.SCALE);
+		return amounts;
+	}
+	
+	public static List<AmountWithUnit> weightDisplay(AmountWithUnit units, List<MeasureUnit> displayMeasureUnits) {
+		List<AmountWithUnit> weights = new ArrayList<>();
+		if(displayMeasureUnits != null && !displayMeasureUnits.isEmpty()) {
+			displayMeasureUnits.forEach(mu -> {
+				AmountWithUnit.convert(units, mu).ifPresent(e -> weights.add(e));
+			});
+		}
+		if(weights.isEmpty()) {
+			weights.add(units);
+		}
+		AmountWithUnit.setScales(weights, MeasureUnit.SCALE);
+		return weights;
+	}
 
 
 }

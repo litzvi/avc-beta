@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.view;
 
 import java.math.MathContext;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.avc.mis.beta.dto.BasicDTO;
@@ -67,8 +68,7 @@ public class ItemInventoryRow extends BasicDTO {
 			totalStock.add(this.totalAmount);
 		}
 		if(this.totalWeight != null) {
-			totalStock.add(this.totalWeight.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE));
-			totalStock.add(this.totalWeight.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE));
+			totalStock.addAll(AmountWithUnit.weightDisplay(this.totalWeight, Arrays.asList(MeasureUnit.LBS, MeasureUnit.LOT)));
 		}
 		return totalStock;
 	}

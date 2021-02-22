@@ -27,19 +27,8 @@ public class BulkItem extends Item {
 		super.setUnit(AmountWithUnit.NEUTRAL);
 		super.setMeasureUnit(measureUnit);
 	}
-	
-	@Override
-	public void setMeasureUnit(MeasureUnit measureUnit) {
-		super.setMeasureUnit(measureUnit);
-	}
-	
+		
 	@Override
 	public void setUnit(AmountWithUnit unit) {
-//		if(!unit.getAmount().equals(BigDecimal.ONE)) {
-//			throw new IllegalArgumentException("Bulk item has to have 1 unit");
-//		}
-//		if(!unit.getMeasureUnit().equals(MeasureUnit.UNIT)) {
-//			throw new IllegalArgumentException("Bulk item can't have a weight as unit");
-//		}
 	}
 }

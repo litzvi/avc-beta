@@ -52,13 +52,11 @@ public class Item extends ValueEntity implements ValueInterface {
 	@Column(nullable = false, insertable = false, updatable = false)
 	private String dtype;
 		
-	@Setter(value = AccessLevel.PROTECTED)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "defaultMeasureUnit", nullable = false)
 	@NotNull(message = "Item has to have a default measure unit")
 	private MeasureUnit measureUnit;
 	
-	@Setter(value = AccessLevel.PROTECTED)
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
                            column=@Column(name="unitAmount", nullable = false, 
@@ -94,5 +92,6 @@ public class Item extends ValueEntity implements ValueInterface {
 			}
 		}
 	}
+	
 
 }

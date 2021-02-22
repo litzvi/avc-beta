@@ -7,18 +7,24 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Currency;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
@@ -42,7 +48,7 @@ public class PoItemRow extends BasicDTO {
 	PoCodeBasic poCode;
 	String[] approvals;
 	String supplierName;
-	BasicValueEntity<Item> item;
+	ItemWithUnitDTO item;
 //	String itemName;
 	@JsonIgnore
 	AmountWithUnit numUnits;
@@ -61,7 +67,9 @@ public class PoItemRow extends BasicDTO {
 	public PoItemRow(@NonNull Integer id, String personInCharge,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String approvals,
-			Integer itemId, String itemValue, BigDecimal amount, MeasureUnit measureUnit, 
+			Integer itemId, String itemValue, MeasureUnit itemeasureUnit, ItemGroup itemGroup, 
+			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
+			BigDecimal amount, MeasureUnit measureUnit, 
 			OffsetDateTime contractDate, LocalDate deliveryDate, 
 			String defects, BigDecimal unitPrice, Currency currency, 
 			BigDecimal receivedOrderUnits,
@@ -76,7 +84,7 @@ public class PoItemRow extends BasicDTO {
 			this.approvals = null;
 		}
 		this.supplierName = supplierName;
-		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, itemeasureUnit, itemGroup, null, unitAmount, unitMeasureUnit, clazz);
 //		this.itemName = itemName;
 		this.numUnits = new AmountWithUnit(amount, measureUnit);
 //		this.numberUnits = new AmountWithUnit[] {
@@ -122,13 +130,8 @@ public class PoItemRow extends BasicDTO {
 		}
 	}
 	
-	public AmountWithUnit[] getNumberUnits() {
-		if(MeasureUnit.WEIGHT_UNITS.contains(this.numUnits.getMeasureUnit())) {
-			return new AmountWithUnit[] {
-					this.numUnits.setScale(MeasureUnit.SCALE),
-					this.numUnits.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
-		}
-		return null;
+	public List<AmountWithUnit> getNumberUnits() {
+		return AmountWithUnit.amountDisplay(this.numUnits, this.item, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
 	}
 		
 	/**
