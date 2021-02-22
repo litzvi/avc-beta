@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.view;
 
 import java.math.MathContext;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.avc.mis.beta.dto.BasicDTO;
@@ -36,7 +37,7 @@ public class ItemInventoryRow extends BasicDTO {
 	private ItemWithUnit item;
 	
 	private AmountWithUnit totalAmount;
-	private AmountWithUnit[] totalStock; //change to totalWeight
+	private AmountWithUnit totalWeight;
 	private List<ProcessItemInventoryRow> poInventoryRows;
 
 	public ItemInventoryRow(@NonNull ItemWithUnit item) {
@@ -46,7 +47,7 @@ public class ItemInventoryRow extends BasicDTO {
 	
 	public void setPoInventoryRows(List<ProcessItemInventoryRow> poInventoryRows) {
 		this.poInventoryRows = poInventoryRows;
-		this.totalStock = ProcessItemInventoryRow.getTotalWeight(poInventoryRows);
+		this.totalWeight = ProcessItemInventoryRow.getTotalWeight(poInventoryRows);
 		
 		if(item.getClazz() == BulkItem.class) {
 			this.totalAmount = null;
@@ -58,6 +59,18 @@ public class ItemInventoryRow extends BasicDTO {
 		{
 			throw new IllegalStateException("The class can only apply to weight items");
 		}
+	}
+	
+	public List<AmountWithUnit> getTotalStock() {
+		List<AmountWithUnit> totalStock = new ArrayList<>();
+		if(this.totalAmount != null) {
+			totalStock.add(this.totalAmount);
+		}
+		if(this.totalWeight != null) {
+			totalStock.add(this.totalWeight.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE));
+			totalStock.add(this.totalWeight.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE));
+		}
+		return totalStock;
 	}
 	
 }

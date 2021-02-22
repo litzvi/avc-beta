@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.view;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 	private OffsetDateTime receiptDate;
 	private BigDecimal weightCoefficient;
 	private AmountWithUnit amount;
-	private AmountWithUnit[] totalBalance; //change to weight
+	private AmountWithUnit weight; //change to weight
 	private String[] warehouses;
 
 	/**
@@ -77,15 +78,14 @@ public class ProcessItemInventoryRow extends BasicDTO {
 //				balanceAmount.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
 //		};
 		
-		AmountWithUnit weight;
 		if(clazz == BulkItem.class) {
 			this.amount = null;
-			weight = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
+			this.weight = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
 		}
 		else if(clazz == PackedItem.class){
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			this.amount.setScale(MeasureUnit.SCALE);
-			weight = new AmountWithUnit(
+			this.weight = new AmountWithUnit(
 					amount
 					.multiply(unitAmount, MathContext.DECIMAL64)
 					.multiply(this.weightCoefficient, MathContext.DECIMAL64), 
@@ -95,19 +95,25 @@ public class ProcessItemInventoryRow extends BasicDTO {
 		{
 			throw new IllegalStateException("The class can only apply to weight items");
 		}
-		this.totalBalance = new AmountWithUnit[] {
-				weight.convert(MeasureUnit.KG),
-				weight.convert(MeasureUnit.LBS)};
-		AmountWithUnit.setScales(this.totalBalance, MeasureUnit.SCALE);
-
-		
-		
+				
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
 		}
 		else {
 			this.warehouses = null;
 		}
+	}
+	
+	public List<AmountWithUnit> getTotalBalance() {
+		List<AmountWithUnit> totalBalance = new ArrayList<>();
+		if(this.amount != null) {
+			totalBalance.add(this.amount);
+		}
+		if(this.weight != null) {
+			totalBalance.add(weight.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE));
+			totalBalance.add(weight.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE));
+		}
+		return totalBalance;
 	}
 	
 	@JsonIgnore
@@ -121,16 +127,13 @@ public class ProcessItemInventoryRow extends BasicDTO {
 	}
 	
 	
-	public static AmountWithUnit[] getTotalWeight(List<ProcessItemInventoryRow> poInventoryRows) {
+	public static AmountWithUnit getTotalWeight(List<ProcessItemInventoryRow> poInventoryRows) {
 		if(poInventoryRows == null) {
 			return null;
 		}
-		AmountWithUnit totalWeight = poInventoryRows.stream()
-				.map(pi -> pi.getTotalBalance()[0])
+		return poInventoryRows.stream()
+				.map(pi -> pi.getWeight())
 				.reduce(AmountWithUnit::add).get();
-		return new AmountWithUnit[] {
-				totalWeight.setScale(MeasureUnit.SCALE),
-				totalWeight.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 	}
 	
 	public static AmountWithUnit getTotalAmount(List<ProcessItemInventoryRow> poInventoryRows) {
