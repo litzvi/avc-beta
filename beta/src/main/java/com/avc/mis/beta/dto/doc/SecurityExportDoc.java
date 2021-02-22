@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.doc;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -21,7 +22,7 @@ public class SecurityExportDoc {
 	
 	private ExportInfo exportInfo;
 
-	private AmountWithUnit[] grossTotal;
+	private List<AmountWithUnit> grossTotal;
 	private List<ContainerPoItemStorageRow> loadedStorages;
 
 	public void setLoadedStorages(List<ContainerPoItemStorageRow> loadedStorages) {
@@ -29,10 +30,7 @@ public class SecurityExportDoc {
 		AmountWithUnit totalLbs = loadedStorages.stream()
 				.map(i -> i.getTotalWeight())
 				.reduce(AmountWithUnit.ZERO_LBS, AmountWithUnit::add);
-		this.grossTotal = new AmountWithUnit[] {
-				totalLbs.setScale(MeasureUnit.SCALE),
-				totalLbs.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE)
-		};
+		this.grossTotal = AmountWithUnit.weightDisplay(totalLbs, Arrays.asList(MeasureUnit.LBS, MeasureUnit.KG));
 	}
 	
 	

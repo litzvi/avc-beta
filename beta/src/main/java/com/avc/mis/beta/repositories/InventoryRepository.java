@@ -105,7 +105,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventory( "
 			+ "pi.id, "
-			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, type(item), pi.measureUnit, "
+			+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "pi.measureUnit, "
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
 			+ "p.recordedTime, r.recordedTime, pi.tableView) "

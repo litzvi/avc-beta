@@ -3,7 +3,9 @@
  */
 package com.avc.mis.beta.dto.view;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,6 +15,7 @@ import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -42,13 +45,13 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageInventoryRow> {
 
-	private ItemDTO item;
+	private ItemWithUnitDTO item;
 	private MeasureUnit measureUnit;
 	private PoCodeBasic poCode;
 	private String[] poCodes;
 	private OffsetDateTime itemProcessDate;
 	private OffsetDateTime receiptDate;
-	private AmountWithUnit[] totalBalanceAmount; //not calculated in method so won't be calculated repeatedly for totalLots
+	private List<AmountWithUnit> totalBalanceAmount; //not calculated in method so won't be calculated repeatedly for totalLots
 	
 	@JsonIgnore
 	private boolean tableView;
@@ -59,15 +62,15 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 	 * excluding list of storage forms and calculated totals.
 	 */
 	public ProcessItemInventory(Integer id, 
-			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
-			ItemGroup group, ProductionUse productionUse, Class<? extends Item> clazz,
-			MeasureUnit measureUnit, 
+			Integer itemId, String itemValue, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, 
+			BigDecimal unitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> clazz,
+			MeasureUnit processItemMeasureUnit, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String poCodes, 
 			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
 		super(id);
-		this.item = new ItemDTO(itemId, itemValue, defaultMeasureUnit, group, productionUse, clazz);
-		this.measureUnit = measureUnit;
+		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unitAmount, itemUnitMeasureUnit, clazz);
+		this.measureUnit = processItemMeasureUnit;
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		if(poCodes != null)
 			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
@@ -100,18 +103,17 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 	 * @param storageForms List of StorageInventoryRow
 	 */
 	public void setStorageForms(List<StorageInventoryRow> storageForms) {
+		this.storageForms = storageForms;
 		if(storageForms.size() > 0) {
-			this.totalBalanceAmount = new AmountWithUnit[2];
 			AmountWithUnit totalBalanceAmount = storageForms.stream()
 					.map(StorageInventoryRow::getTotalBalance)
 					.reduce(AmountWithUnit::add).get();
-			this.totalBalanceAmount[0] = totalBalanceAmount.setScale(MeasureUnit.SCALE);
-			this.totalBalanceAmount[1] = totalBalanceAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
+			this.totalBalanceAmount = AmountWithUnit.amountDisplay(
+					totalBalanceAmount, this.item, Arrays.asList(totalBalanceAmount.getMeasureUnit(), MeasureUnit.LOT));
 		}
 		else {
 			this.totalBalanceAmount = null;
 		}
-		this.storageForms = storageForms;
 		
 	}
 	

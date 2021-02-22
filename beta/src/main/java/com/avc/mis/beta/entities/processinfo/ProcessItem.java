@@ -129,7 +129,6 @@ public class ProcessItem extends ProcessGroupWithStorages {
 	 */
 	public void setStorage(StorageTableDTO storageTable) {
 		
-//		System.out.println("edit storage table: " + storageTable);
 		
 		setTableView(true);
 		

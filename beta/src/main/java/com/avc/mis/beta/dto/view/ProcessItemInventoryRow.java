@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -110,8 +111,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 			totalBalance.add(this.amount);
 		}
 		if(this.weight != null) {
-			totalBalance.add(weight.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE));
-			totalBalance.add(weight.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE));
+			totalBalance.addAll(AmountWithUnit.weightDisplay(this.weight, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS)));
 		}
 		return totalBalance;
 	}

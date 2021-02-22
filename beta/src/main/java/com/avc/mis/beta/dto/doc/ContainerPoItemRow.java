@@ -4,6 +4,8 @@
 package com.avc.mis.beta.dto.doc;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
@@ -31,7 +33,7 @@ public class ContainerPoItemRow extends BasicDTO {
 	PoCodeBasic poCode;//should be removed
 	String[] poCodes;
 
-	AmountWithUnit[] totalRow;
+	AmountWithUnit total;
 
 	public ContainerPoItemRow(@NonNull Integer id, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
@@ -49,25 +51,21 @@ public class ContainerPoItemRow extends BasicDTO {
 			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
 		else
 			this.poCodes = null;
-		AmountWithUnit totalRow;
 		if(itemClazz == BulkItem.class) {
-			totalRow = new AmountWithUnit(total, measureUnit);
+			this.total = new AmountWithUnit(total, measureUnit);
 		}
 		else if(itemClazz == PackedItem.class){
-			totalRow = new AmountWithUnit(total.multiply(itemUnitAmount), itemMeasureUnit);
+			this.total = new AmountWithUnit(total.multiply(itemUnitAmount), itemMeasureUnit);
 		}
 		else 
 		{
 			throw new IllegalStateException("The class can only apply to weight items");
 		}
 		
-		
-		this.totalRow = new AmountWithUnit[] {
-				totalRow.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE),
-				totalRow.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE)
-		};
 	}
 	
-	
+	public List<AmountWithUnit> getTotalRow() {
+		return AmountWithUnit.weightDisplay(this.total, Arrays.asList(MeasureUnit.LBS, MeasureUnit.KG));
+	}
 
 }

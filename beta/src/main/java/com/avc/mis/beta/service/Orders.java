@@ -88,8 +88,6 @@ public class Orders {
 	public List<PoItemRow> findAllGeneralOrderItems() {
 		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER, 
 				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
-		poItemRows.forEach(i->System.out.println("orser row" + i.getNumberUnits()));
-
 		return poItemRows;
 	}
 	
@@ -283,8 +281,6 @@ public class Orders {
 	@Deprecated
 	public List<PoRow> findOpenGeneralOrders() {
 		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
-		System.out.println("PoItemRows size: " + itemRows.size());
-		getPoRows(itemRows).forEach(i -> System.out.println(i));
 		return getPoRows(itemRows);
 	}
 

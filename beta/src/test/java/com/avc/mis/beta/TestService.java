@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
@@ -413,18 +414,18 @@ public class TestService {
 		return processItems;
 	}
 	
-	public Item getItem(ItemDTO itemDTO) {
+	public Item getItem(ItemWithUnitDTO itemWithUnitDTO) {
 		Item item;
-		if(itemDTO.getClazz() == BulkItem.class) {
-			item = new BulkItem(itemDTO.getMeasureUnit());			
+		if(itemWithUnitDTO.getClazz() == BulkItem.class) {
+			item = new BulkItem(itemWithUnitDTO.getMeasureUnit());			
 		}
-		else if(itemDTO.getClazz() == PackedItem.class) {
+		else if(itemWithUnitDTO.getClazz() == PackedItem.class) {
 			item = new PackedItem();
 		}
 		else {
 			throw new NullPointerException();
 		}
-		item.setId(itemDTO.getId());
+		item.setId(itemWithUnitDTO.getId());
 		return item;
 	}
 	

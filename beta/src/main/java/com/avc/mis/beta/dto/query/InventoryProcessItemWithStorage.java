@@ -38,8 +38,8 @@ public class InventoryProcessItemWithStorage implements CollectionItemWithGroup<
 	 */
 	public InventoryProcessItemWithStorage(
 			Integer processItemId, 
-			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
-			ItemGroup group, ProductionUse productionUse, Class<? extends Item> clazz,
+			Integer itemId, String itemValue, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, 
+			BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> clazz,
 			MeasureUnit measureUnit, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String poCodes,
@@ -51,8 +51,9 @@ public class InventoryProcessItemWithStorage implements CollectionItemWithGroup<
 			BigDecimal totalBalance, MeasureUnit totalBalanceMU) {
 
 		this.processItemInventoryRow = new ProcessItemInventory(
-				processItemId, itemId, itemValue, defaultMeasureUnit, group, productionUse, clazz, measureUnit,
-				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, 
+				processItemId, 
+				itemId, itemValue, itemMeasureUnit, itemGroup, itemUnitAmount, itemUnitMeasureUnit, clazz, 
+				measureUnit, poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, 
 				poCodes,
 				processDate, receiptDate, tableView);
 		this.storageInventoryRow = new StorageInventoryRow(

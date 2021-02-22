@@ -1,6 +1,7 @@
 package com.avc.mis.beta.dto.view;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.avc.mis.beta.dto.BasicDTO;
@@ -46,12 +47,10 @@ public class PoInventoryRow extends BasicDTO {
 	}
 	
 	public List<AmountWithUnit> getTotalStock() {
-		List<AmountWithUnit> totalStock = new ArrayList<>();
 		if(this.totalWeight != null) {
-			totalStock.add(this.totalWeight.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE));
-			totalStock.add(this.totalWeight.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE));
+			return AmountWithUnit.weightDisplay(this.totalWeight, Arrays.asList(MeasureUnit.LBS, MeasureUnit.LOT));
 		}
-		return totalStock;
+		return null;
 	}
 
 }

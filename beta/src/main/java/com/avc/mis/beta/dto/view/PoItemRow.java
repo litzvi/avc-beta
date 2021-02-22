@@ -67,7 +67,7 @@ public class PoItemRow extends BasicDTO {
 	public PoItemRow(@NonNull Integer id, String personInCharge,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String approvals,
-			Integer itemId, String itemValue, MeasureUnit itemeasureUnit, ItemGroup itemGroup, 
+			Integer itemId, String itemValue, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
 			BigDecimal amount, MeasureUnit measureUnit, 
 			OffsetDateTime contractDate, LocalDate deliveryDate, 
@@ -84,7 +84,7 @@ public class PoItemRow extends BasicDTO {
 			this.approvals = null;
 		}
 		this.supplierName = supplierName;
-		this.item = new ItemWithUnitDTO(itemId, itemValue, itemeasureUnit, itemGroup, null, unitAmount, unitMeasureUnit, clazz);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unitAmount, unitMeasureUnit, clazz);
 //		this.itemName = itemName;
 		this.numUnits = new AmountWithUnit(amount, measureUnit);
 //		this.numberUnits = new AmountWithUnit[] {
