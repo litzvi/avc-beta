@@ -51,7 +51,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 	private String[] poCodes;
 	private OffsetDateTime itemProcessDate;
 	private OffsetDateTime receiptDate;
-	private List<AmountWithUnit> totalBalanceAmount; //not calculated in method so won't be calculated repeatedly for totalLots
+//	private List<AmountWithUnit> totalBalanceAmount; //not used now
 	
 	@JsonIgnore
 	private boolean tableView;
@@ -78,44 +78,27 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 		this.receiptDate = receiptDate;
 		this.tableView = tableView;
 	}
-	
-	/**
-	 * All class arguments constructor, excluding list of storage forms and calculated totals
-	 */
-//	public ProcessItemInventory(Integer id, ItemDTO item, MeasureUnit measureUnit, 
-//			PoCodeBasic poCode, String[] poCodes,
-//			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
-//		super(id);
-//		this.item = item;
-//		this.measureUnit = measureUnit;
-//		this.poCode = poCode;
-//		this.poCodes = poCodes;
-//		this.itemProcessDate = processDate;
-//		this.receiptDate = receiptDate;
-//		this.tableView = tableView;
-//	}
-	
-	
-	
+		
 	/**
 	 * Setter for storageForms, sets the storages for this process item 
 	 * and updates total balance accordingly.
 	 * @param storageForms List of StorageInventoryRow
 	 */
-	public void setStorageForms(List<StorageInventoryRow> storageForms) {
-		this.storageForms = storageForms;
-		if(storageForms.size() > 0) {
-			AmountWithUnit totalBalanceAmount = storageForms.stream()
-					.map(StorageInventoryRow::getTotalBalance)
-					.reduce(AmountWithUnit::add).get();
-			this.totalBalanceAmount = AmountWithUnit.amountDisplay(
-					totalBalanceAmount, this.item, Arrays.asList(totalBalanceAmount.getMeasureUnit(), MeasureUnit.LOT));
-		}
-		else {
-			this.totalBalanceAmount = null;
-		}
-		
-	}
+	//not used now
+//	public void setStorageForms(List<StorageInventoryRow> storageForms) {
+//		this.storageForms = storageForms;
+//		if(storageForms.size() > 0) {
+//			AmountWithUnit totalBalanceAmount = storageForms.stream()
+//					.map(StorageInventoryRow::getTotalBalance)
+//					.reduce(AmountWithUnit::add).get();
+//			this.totalBalanceAmount = AmountWithUnit.amountDisplay(
+//					totalBalanceAmount, this.item, Arrays.asList(totalBalanceAmount.getMeasureUnit(), MeasureUnit.LOT));
+//		}
+//		else {
+//			this.totalBalanceAmount = null;
+//		}
+//		
+//	}
 	
 	public List<StorageInventoryRow> getStorageForms() {
 		if(tableView) {
