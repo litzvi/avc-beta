@@ -76,8 +76,9 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.id = :itemId or :itemId is null) "
 			+ "and "
-			+ "(:poCodeIds is null "
-			+ "or EXISTS "
+			+ "(:checkPoCodes = false "
+			+ "or "
+			+ "EXISTS "
 					+ "(select r_po_code.id "
 					+ " from pi.process p_2 "
 						+ "left join p_2.poCode po_code "
@@ -101,7 +102,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "order by p.recordedTime, pi.ordinal, sf.ordinal ")
 	List<StorageInventoryRow> findAvailableInventoryByStorage(
 			boolean checkProductionUses, ProductionUse[] productionUses, 
-			ItemGroup itemGroup, Integer itemId, List<Integer> poCodeIds);
+			ItemGroup itemGroup, Integer itemId, 
+			boolean checkPoCodes, Integer[] poCodeIds);
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventory( "
 			+ "pi.id, "

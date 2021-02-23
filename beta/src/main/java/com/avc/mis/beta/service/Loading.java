@@ -138,7 +138,7 @@ public class Loading {
 					.filter(i -> i != null)
 					.map(PoCodeBasic::getId).collect(Collectors.toList()));
 		}
-		getProcessInfoReader().setAvailableInventory(loadingDTO, group, productionUses, itemId, poCodeIds);
+		getProcessInfoReader().setAvailableInventory(loadingDTO, group, productionUses, itemId, poCodeIds.toArray(new Integer[poCodeIds.size()]));
 
 		return loadingDTO;
 	}

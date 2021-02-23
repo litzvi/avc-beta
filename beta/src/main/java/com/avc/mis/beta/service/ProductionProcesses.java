@@ -160,8 +160,9 @@ public class ProductionProcesses {
 					.map(WeightedPoDTO::getPoCode)
 					.filter(i -> i != null)
 					.map(PoCodeBasic::getId).collect(Collectors.toList()));
-		}		
-		getProcessInfoReader().setAvailableInventory(processDTO, group, productionUses, itemId, poCodeIds);
+		}
+		
+		getProcessInfoReader().setAvailableInventory(processDTO, group, productionUses, itemId, poCodeIds.toArray(new Integer[poCodeIds.size()]));
 
 		return processDTO;
 	}

@@ -118,7 +118,7 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 		return null;
 	}
 	
-	public AmountWithUnit[] getTotalAmount() {
+	public List<AmountWithUnit> getTotalAmount() {
 		BigDecimal total = this.storageForms.stream()
 				.map(sf -> sf.getTotal())
 				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
@@ -135,10 +135,7 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 			throw new IllegalStateException("The class can only apply to weight items");
 		}
 		
-		return new AmountWithUnit[] {
-				totalAmount.setScale(MeasureUnit.SCALE),
-				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)
-		};	
+		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
 	}
 
 	

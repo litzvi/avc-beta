@@ -273,10 +273,11 @@ public class WarehouseManagement {
 		});
 	}
 	
-	public List<ProcessItemInventory> getAvailableInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, List<Integer> poCodeIds) {
+	public List<ProcessItemInventory> getAvailableInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer[] poCodeIds) {
 		boolean checkProductionUses = (productionUses != null);
+		boolean checkPoCodes = (poCodeIds != null);
 		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()
-				.findAvailableInventoryByStorage(checkProductionUses, productionUses, group, itemId, poCodeIds);
+				.findAvailableInventoryByStorage(checkProductionUses, productionUses, group, itemId, checkPoCodes, poCodeIds);
 				
 		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
 	}	

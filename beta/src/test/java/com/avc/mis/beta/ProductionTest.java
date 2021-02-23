@@ -54,7 +54,7 @@ public class ProductionTest {
 		ProductionProcess process = new ProductionProcess();
 		process.setPoCode((PoCode) receipt.getPoCode());
 		process.setRecordedTime(OffsetDateTime.now());
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, Arrays.asList(receipt.getPoCode().getId()));
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, new Integer[] {receipt.getPoCode().getId()});
 		process.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		process.setProcessItems(service.getProcessItems(poInventory));
 		process.setWeightedPos(service.getProductWeightedPos(2));

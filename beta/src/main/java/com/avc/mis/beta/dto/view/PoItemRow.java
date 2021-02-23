@@ -77,11 +77,11 @@ public class PoItemRow extends BasicDTO {
 		super(id);
 		this.personInCharge = personInCharge;
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
-		if(approvals != null) {
-			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
+		if(approvals == null || approvals.startsWith(":")) {
+			this.approvals = null;
 		}
 		else {
-			this.approvals = null;
+			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
 		}
 		this.supplierName = supplierName;
 		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unitAmount, unitMeasureUnit, clazz);

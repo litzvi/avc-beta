@@ -100,7 +100,7 @@ public class ProcessInfoReader {
 	}
 	
 	void setAvailableInventory(TransactionProcessDTO<ProcessItemDTO> processDTO,
-			ItemGroup group, ProductionUse[] productionUses, Integer itemId, List<Integer> poCodeIds) {
+			ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer[] poCodeIds) {
 		processDTO.setAvailableInventory(warehouseManagement.getAvailableInventory(group, productionUses, itemId, poCodeIds));
 	}
 
