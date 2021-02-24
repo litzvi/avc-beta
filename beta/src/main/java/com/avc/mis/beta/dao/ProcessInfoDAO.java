@@ -426,6 +426,12 @@ public class ProcessInfoDAO extends DAO {
 		}
 		return true;
 	}
+	
+	public boolean isPoCodeReceived(Integer poCodeId) {
+		// TODO Auto-generated method stub
+		return getObjectTablesRepository().isPoCodeReceived(poCodeId);
+	}
+
 
 	/**
 	 * Recursive method to get all underlying order pos
@@ -441,6 +447,7 @@ public class ProcessInfoDAO extends DAO {
 		
 		return poCodeIds;
 	}
+
 
 	
 

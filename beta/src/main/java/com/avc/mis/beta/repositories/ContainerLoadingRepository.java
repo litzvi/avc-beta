@@ -177,7 +177,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
 			+ "function('GROUP_CONCAT', s.name), "
 			+ "p.recordedTime, p.duration, lc.processStatus, "
-			+ "function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
+			+ "function('GROUP_CONCAT', concat(u.username, ': ', approval.decision)), "
 			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, "
 			+ "ship.eta, cont.containerNumber, cont.sealNumber, cont.containerType) "
 		+ "from ContainerLoading p "

@@ -77,7 +77,7 @@ public class Receipts {
 		reportLine.setProcesses(processes);
 //		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
 		
-		Stream<ItemAmount> itemAmounts = getReceiptRepository().findSummaryProducedItemAmounts(processIds);
+		Stream<ItemAmount> itemAmounts = getReceiptRepository().findSummaryProducedItemAmounts(processIds, poCodeId);
 		reportLine.setReceived(itemAmounts.collect(Collectors.toList()));
 		
 		List<ItemAmount> countAmounts = null;
@@ -225,7 +225,7 @@ public class Receipts {
 			dao.addGeneralProcessEntity(receipt);						
 		}
 		else {
-			throw new IllegalArgumentException("Po Code is already used for another order or receipt or it's a mixed po");
+			throw new IllegalArgumentException("Po Code is already used for another order or receipt");
 		}
 		
 	}
@@ -238,6 +238,11 @@ public class Receipts {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewOrderReceipt(Receipt receipt) {
+		//check that there wasn't another receipt for the same po
+		if(dao.isPoCodeReceived(receipt.getPoCode().getId())) {
+			throw new IllegalArgumentException("Po Code of Product can only be received once, "
+					+ "in order to correctly reference receipt date by po code");
+		}
 		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT));
 		addOrderReceipt(receipt);
 	}

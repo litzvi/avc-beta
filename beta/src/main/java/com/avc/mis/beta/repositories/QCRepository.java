@@ -139,7 +139,7 @@ public interface QCRepository extends PoProcessRepository<QualityCheck> {
 	@Query("select new com.avc.mis.beta.dto.report.QcReportLine( "
 			+ "qc.id, qc.checkedBy, "
 			+ "qc.recordedTime, "
-			+ "lc.processStatus, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
+			+ "lc.processStatus, function('GROUP_CONCAT', concat(u.username, ': ', approval.decision))) "
 		+ "from QualityCheck qc "
 			+ "join qc.poCode po_code "
 			+ "join qc.processType pt "

@@ -45,7 +45,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	
 	@Query("select new com.avc.mis.beta.dto.report.ProcessStateInfo("
 			+ "p.id, p.recordedTime, lc.processStatus, "
-			+ "function('GROUP_CONCAT', concat(u.username, ':', approval.decision)) ) "
+			+ "function('GROUP_CONCAT', concat(u.username, ': ', approval.decision)) ) "
 		+ "from PoProcess p "
 			+ "left join p.poCode po_code "
 			+ "left join p.weightedPos w_po "
@@ -72,7 +72,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
 			+ "function('GROUP_CONCAT', s.name), "
 			+ "p.recordedTime, p.duration, lc.processStatus, "
-			+ "function('GROUP_CONCAT', concat(u.username, ':', approval.decision)) ) "
+			+ "function('GROUP_CONCAT', concat(u.username, ': ', approval.decision)) ) "
 		+ "from PoProcess p "
 			+ "left join p.poCode p_po_code "
 			+ "left join p.weightedPos w_po "

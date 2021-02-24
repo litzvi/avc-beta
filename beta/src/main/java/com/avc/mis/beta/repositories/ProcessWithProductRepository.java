@@ -22,8 +22,10 @@ public interface ProcessWithProductRepository<T extends ProcessWithProduct<?>> e
 	@Query("select new com.avc.mis.beta.dto.report.ItemAmount("
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((sf.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor) "
-			+ ") "
+			+ "SUM( "
+				+ "((sf.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor) "
+				+ " * coalesce(w_po.weight, 1)) "
+			+ ")"
 		+ "from PoProcess p "
 			+ "join p.processItems pi "
 				+ "join pi.item item "
@@ -31,10 +33,16 @@ public interface ProcessWithProductRepository<T extends ProcessWithProduct<?>> e
 				+ "join pi.storageForms sf "
 						+ "join UOM uom "
 							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
+				+ "left join p.poCode p_po_code "
+					+ "left join p_po_code.weightedPos w_po "
+						+ "left join w_po.poCode w_po_code "
+					+ "join PoCode po_code "
+						+ "on (po_code = p_po_code or po_code = w_po_code) "
 		+ "where "
 			+ "p.id in :processIds "
+			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
 		+ "group by item.id ")
-	Stream<ItemAmount> findSummaryProducedItemAmounts(int[] processIds);
+	Stream<ItemAmount> findSummaryProducedItemAmounts(int[] processIds, Integer poCodeId);
 
 
 }

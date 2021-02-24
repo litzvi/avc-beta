@@ -101,7 +101,7 @@ public class ProductionProcesses {
 		reportLine.setProductIn(itemsMap.get(ItemGroup.PRODUCT));
 		reportLine.setIngredients(itemsMap.get(ItemGroup.GENERAL));
 		
-		itemAmounts = getProcessRepository().findSummaryProducedItemAmounts(processIds);
+		itemAmounts = getProcessRepository().findSummaryProducedItemAmounts(processIds, poCodeId);
 		itemsMap = itemAmounts.collect(Collectors.groupingBy(ItemAmount::getItemGroup));
 
 		reportLine.setProductOut(itemsMap.get(ItemGroup.PRODUCT));

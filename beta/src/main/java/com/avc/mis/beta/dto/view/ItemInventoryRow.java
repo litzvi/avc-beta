@@ -11,9 +11,11 @@ import java.util.List;
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnit;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.BulkItem;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.PackedItem;
 
 import lombok.Data;
@@ -35,13 +37,13 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class ItemInventoryRow extends BasicDTO {
 	
-	private ItemWithUnit item;
+	private ItemWithUnitDTO item;
 	
 	private AmountWithUnit totalAmount;
 	private AmountWithUnit totalWeight;
 	private List<ProcessItemInventoryRow> poInventoryRows;
 
-	public ItemInventoryRow(@NonNull ItemWithUnit item) {
+	public ItemInventoryRow(@NonNull ItemWithUnitDTO item) {
 		super(item.getId());
 		this.item = item;
 	}
@@ -68,7 +70,12 @@ public class ItemInventoryRow extends BasicDTO {
 			totalStock.add(this.totalAmount);
 		}
 		if(this.totalWeight != null) {
-			totalStock.addAll(AmountWithUnit.weightDisplay(this.totalWeight, Arrays.asList(MeasureUnit.LBS, MeasureUnit.LOT)));
+			if(item.getGroup() == ItemGroup.PRODUCT) {
+				totalStock.addAll(AmountWithUnit.weightDisplay(this.totalWeight, Arrays.asList(MeasureUnit.LBS, MeasureUnit.LOT)));
+			}
+			else {
+				totalStock.add(this.totalWeight.setScale(MeasureUnit.SCALE));
+			}
 		}
 		return totalStock;
 	}

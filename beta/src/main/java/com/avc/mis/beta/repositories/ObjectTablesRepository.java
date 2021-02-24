@@ -156,7 +156,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null)  "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses)  "
 			+ "and (item.id = :itemId or :itemId is null)  "
-		+ "group by sf, sf.numberUnits "
+		+ "group by sf.id, sf.numberUnits, po_code.id "
 //		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) "
 		+ "having sf.numberUnits > "
 			+ "SUM("
@@ -212,6 +212,17 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ ") "
 		+ "order by po_code.id desc ")
 	List<PoCodeBasic> findFreePoCodes(Integer poCodeId);
+	
+
+	@Query("select count(*) > 0 "
+		+ "from PoCode po_code "
+			+ "join Receipt r "
+				+ "on r.poCode = po_code "
+				+ "join r.lifeCycle lc "
+		+ "where po_code.id = :poCodeId "
+			+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED ")
+	boolean isPoCodeReceived(Integer poCodeId);
+
 
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "

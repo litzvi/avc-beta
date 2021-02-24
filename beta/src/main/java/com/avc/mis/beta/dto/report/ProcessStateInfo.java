@@ -37,11 +37,11 @@ public class ProcessStateInfo extends BasicDTO {
 		super(id);
 		this.date = date.toLocalDate();
 		this.status = status;
-		if(approvals != null) {
-			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
+		if(approvals == null || approvals.startsWith(":")) {
+			this.approvals = null;
 		}
 		else {
-			this.approvals = null;
+			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
 		}
 	}
 	

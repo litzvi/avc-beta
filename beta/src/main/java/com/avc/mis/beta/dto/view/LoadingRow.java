@@ -67,8 +67,12 @@ public class LoadingRow extends BasicDTO {
 		this.recordedTime = recordedTime;
 		this.duration = duration;
 		this.status = status;
-		if(approvals != null)
+		if(approvals == null || approvals.startsWith(":")) {
+			this.approvals = null;
+		}
+		else {
 			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
+		}
 		
 		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, shipmentCodeCode, portOfDischargeCode, portOfDischargeValue);
 		this.eta = eta;

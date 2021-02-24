@@ -23,6 +23,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -46,7 +47,7 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class ProcessItemInventoryRow extends BasicDTO {
 
-	private ItemWithUnit item;
+	private ItemWithUnitDTO item;
 	private PoCodeBasic poCode;
 	private String supplierName;
 	private OffsetDateTime processDate;
@@ -61,13 +62,14 @@ public class ProcessItemInventoryRow extends BasicDTO {
 	 */
 	public ProcessItemInventoryRow(Integer id, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
+			ItemGroup group, ProductionUse productionUse, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			OffsetDateTime processDate, OffsetDateTime receiptDate,
 			BigDecimal weightCoefficient, BigDecimal amount, 
 			String warehouses) {
 		super(id);
-		this.item = new ItemWithUnit(itemId, itemValue, defaultMeasureUnit, unitAmount, unitMeasureUnit, clazz);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, group, productionUse, unitAmount, unitMeasureUnit, clazz);
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
 		this.processDate = processDate;
@@ -140,7 +142,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 		if(poInventoryRows == null) {
 			return null;
 		}
-		Map<ItemWithUnit, AmountWithUnit> itemAmountmap = poInventoryRows.stream().collect(
+		Map<ItemWithUnitDTO, AmountWithUnit> itemAmountmap = poInventoryRows.stream().collect(
 				Collectors.groupingBy(ProcessItemInventoryRow::getItem, 
 						Collectors.reducing(null, 
 								i -> i.getAmount().multiply(i.getWeightCoefficient()), 
