@@ -132,7 +132,7 @@ public class ProcessItem extends ProcessGroupWithStorages {
 		
 		setTableView(true);
 		
-		BigDecimal accessWeight = storageTable.getAccessWeight();
+//		BigDecimal accessWeight = storageTable.getAccessWeight();
 		Warehouse warehouse = storageTable.getWarehouseLocation();
 		List<BasicStorageDTO> amounts = storageTable.getAmounts();
 		Storage[] storageForms = new Storage[amounts.size()];
@@ -143,7 +143,7 @@ public class ProcessItem extends ProcessGroupWithStorages {
 			storageForms[i].setVersion(amount.getVersion());
 			storageForms[i].setOrdinal(amount.getOrdinal());
 			storageForms[i].setNumberUnits(amount.getAmount());
-			storageForms[i].setAccessWeight(accessWeight);
+//			storageForms[i].setAccessWeight(accessWeight);
 			storageForms[i].setWarehouseLocation(warehouse);
 		}
 		setStorageForms(storageForms);

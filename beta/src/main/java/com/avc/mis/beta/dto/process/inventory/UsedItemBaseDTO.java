@@ -78,13 +78,14 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemPoCodes, String itemSuppliers,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
-			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal storageContainerWeight,
+			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, //BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId,  String storageWarehouseLocationValue, String storageRemarks) {
 		super(id, version, ordinal);
 		this.numberUsedUnits = numberUsedUnits;
 //		this.storage = new DataObject<StorageBase>(storageId, stoageVersion);
 		this.storage = new StorageDTO(storageId, stoageVersion, storageOrdinal, 
-				storageUnitAmount, storageNumberUnits, storageContainerWeight, storageWarehouseLocationId, storageWarehouseLocationValue, 
+				storageUnitAmount, storageNumberUnits, //storageContainerWeight, 
+				storageWarehouseLocationId, storageWarehouseLocationValue, 
 				storageRemarks, null);
 
 		this.storageId = storageId;
@@ -161,7 +162,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		StorageDTO storageDTO = this.getStorage();
 		storage.setOrdinal(storageDTO.getOrdinal());
 		storage.setUnitAmount(storageDTO.getUnitAmount());
-		storage.setAccessWeight(storageDTO.getAccessWeight());
+//		storage.setAccessWeight(storageDTO.getAccessWeight());
 		storage.setNumberUnits(this.getNumberUsedUnits());
 		storage.setWarehouseLocation(this.getNewLocation());
 

@@ -14,6 +14,7 @@ import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.utilities.ListGroup;
@@ -68,7 +69,7 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 				if(warehouse != null)
 					movedItemTable.setNewWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 				StorageDTO storage = m.getStorage();
-				movedItemTable.setAccessWeight(storage.getAccessWeight());
+//				movedItemTable.setAccessWeight(storage.getAccessWeight());
 				warehouse = storage.getWarehouseLocation();
 				if(warehouse != null)
 					movedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
@@ -86,14 +87,16 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 		return null;
 	}
 	
-	public AmountWithUnit getTotalAmount() {
+	public List<AmountWithUnit> getTotalAmount() {
 		
-		Optional<AmountWithUnit> totalAmount = this.storageMoves.stream()
+		AmountWithUnit totalAmount = this.storageMoves.stream()
 				.map(m -> m.getTotal())
-				.reduce(AmountWithUnit::add);
+				.reduce(AmountWithUnit::add).orElse(null);
 //		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
-
-		return totalAmount.orElse(null);
+		if(totalAmount == null) {
+			return null;
+		}
+		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
 //		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
 //				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 	}

@@ -87,7 +87,7 @@ public class ProductionProcesses {
 		
 		List<ProcessStateInfo> processes = getProcessRepository().findProcessReportLines(processName, poCodeId, false);
 		int[] processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
-
+		System.out.println("p ids:" + processIds[0]);
 		if(processes.isEmpty()) {
 			return null;
 		}
@@ -95,7 +95,7 @@ public class ProductionProcesses {
 		ProductionReportLine reportLine = new ProductionReportLine();
 		reportLine.setProcesses(processes);
 		
-		Stream<ItemAmount> itemAmounts = getProcessRepository().findSummaryUsedItemAmounts(processIds);
+		Stream<ItemAmount> itemAmounts = getProcessRepository().findSummaryUsedItemAmounts(processIds, poCodeId);
 		Map<ItemGroup, List<ItemAmount>> itemsMap = itemAmounts.collect(Collectors.groupingBy(ItemAmount::getItemGroup));
 
 		reportLine.setProductIn(itemsMap.get(ItemGroup.PRODUCT));

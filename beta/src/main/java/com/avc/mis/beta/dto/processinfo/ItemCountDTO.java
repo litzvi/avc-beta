@@ -64,7 +64,7 @@ public class ItemCountDTO extends SubjectDataDTO implements ListGroup<CountAmoun
 				.collect(Collectors.toList()));
 	}
 	
-	public AmountWithUnit getTotalAmount() {
+	public List<AmountWithUnit> getTotalAmount() {
 		if(this.amounts == null) {
 			return null;
 		}
@@ -78,7 +78,7 @@ public class ItemCountDTO extends SubjectDataDTO implements ListGroup<CountAmoun
 			total = total.subtract(this.accessWeight);
 		}
 		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
-		return totalAmount;
+		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
 //		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
 //				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 	}

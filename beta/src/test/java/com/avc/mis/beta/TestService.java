@@ -371,7 +371,7 @@ public class TestService {
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
 			StorageInventoryRow randStorage = storagesRows.get(0);
 			itemCounts[i].setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
-			itemCounts[i].setContainerWeight(randStorage.getAccessWeight());
+//			itemCounts[i].setContainerWeight(randStorage.getAccessWeight());
 			countAmounts = new CountAmount[storagesRows.size()];
 			int j=0;
 			for(StorageInventoryRow storageRow: storagesRows) {

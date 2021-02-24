@@ -19,7 +19,7 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, item.measureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((ui.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "SUM((ui.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor), "
 			+ "function('GROUP_CONCAT', wh.value)) "
 		+ "from TransactionProcess p "
 			+ "join p.usedItemGroups grp "
@@ -43,7 +43,7 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, item.measureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((sf.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "SUM((sf.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor), "
 			+ "function('GROUP_CONCAT', wh.value)) "
 		+ "from TransactionProcess p "
 			+ "join p.processItems pi "
@@ -62,9 +62,11 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 	@Query("select new com.avc.mis.beta.dto.report.ItemAmount("
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((ui.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor)) "
+			+ "SUM("
+				+ "((ui.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor) "
+				+ " * coalesce(w_po.weight, 1))"
+			+ ") "
 		+ "from TransactionProcess p "
-			+ "join p.poCode po_code "
 			+ "join p.usedItemGroups grp "
 				+ "join grp.usedItems ui "
 					+ "join ui.storage sf "
@@ -73,9 +75,15 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 								+ "join item.unit item_unit "
 						+ "join UOM uom "
 							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
+			+ "left join p.poCode p_po_code "
+			+ "left join p.weightedPos w_po "
+				+ "left join w_po.poCode w_po_code "
+				+ "join PoCode po_code "
+					+ "on (po_code = p_po_code or po_code = w_po_code) "
 		+ "where "
 			+ "p.id in :processIds "
+			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
 		+ "group by item.id ")
-	Stream<ItemAmount> findSummaryUsedItemAmounts(int[] processIds);
+	Stream<ItemAmount> findSummaryUsedItemAmounts(int[] processIds, Integer poCodeId);
 
 }

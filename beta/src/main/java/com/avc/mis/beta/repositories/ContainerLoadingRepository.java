@@ -37,7 +37,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "lc.processStatus, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((ui.numberUnits * sf.unitAmount - coalesce(sf.accessWeight, 0)) * uom.multiplicand / uom.divisor), "
+			+ "SUM((ui.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor), "
 			+ "coalesce(w_po_used_item.weight, 1)) "
 		+ "from ContainerLoading p "
 			+ "join p.shipmentCode sc "
@@ -237,7 +237,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
 			+ "sum("
-				+ "(sf.unitAmount * i.numberUnits - coalesce(sf.accessWeight, 0)) "
+				+ "(sf.unitAmount * i.numberUnits) "
 				+ " * coalesce(w_po.weight, 1) * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit) "
 		+ "from ContainerLoading p "
@@ -284,7 +284,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 							+ "join pi.item item "
 								+ "join item.unit item_unit "
 		+ "where p.id = :processId "
-		+ "group by item.id, sf.unitAmount, pi.measureUnit, used_p.id ")
+		+ "group by item.id, sf.unitAmount, pi.measureUnit ")
 	List<ContainerPoItemStorageRow> findLoadedStorages(int processId);
 
 

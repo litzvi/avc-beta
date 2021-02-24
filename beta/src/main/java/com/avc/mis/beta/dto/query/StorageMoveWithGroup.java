@@ -37,9 +37,9 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemPoCodes, String itemSuppliers,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 
-			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal storageContainerWeight,
+			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, //BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, //BigDecimal accessWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
 //		super(id);
 		this.storageMovesGroup = new StorageMovesGroupDTO(id, version, ordinal, groupName, tableView);
@@ -49,9 +49,9 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, 
 				itemPoCodes, itemSuppliers,
 				storageId, stoageVersion, storageOrdinal, 
-				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, storageContainerWeight,
+				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, //storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks,
-				unitAmount, numberUnits, accessWeight,
+				unitAmount, numberUnits, //accessWeight,
 				warehouseLocationId, warehouseLocationValue, clazz);
 	}
 	

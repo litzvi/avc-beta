@@ -44,7 +44,7 @@ public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDT
 			MeasureUnit measureUnit,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, //BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
 			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, 
@@ -62,13 +62,13 @@ public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDT
 				referencedOrder, orderItemId, orderItemVersion, extraRequested, extraMU);
 		if(ExtraAdded.class.equals(clazz)) {
 			this.storage = new ExtraAddedDTO(storageId, storageVersion, storageOrdinal, 
-					unitAmount, measureUnit, numberUnits, accessWeight,
+					unitAmount, measureUnit, numberUnits, //accessWeight,
 					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
 					numberOfSamples, avgTestedWeight);
 		}
 		else {
 			this.storage = new StorageWithSampleDTO(storageId, storageVersion, storageOrdinal, 
-					unitAmount, numberUnits, accessWeight,
+					unitAmount, numberUnits, //accessWeight,
 					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
 					sampleContainerWeights, sampleWeights, numberOfSamples, avgTestedWeight);
 		}		

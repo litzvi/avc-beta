@@ -34,7 +34,7 @@ public class UsedItemWithGroup implements CollectionItemWithGroup<UsedItemDTO, U
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemPoCodes, String itemSuppliers, 
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, BigDecimal storageNumberUnits, BigDecimal otherUsedUnits, BigDecimal accessWeight,
+			BigDecimal unitAmount, BigDecimal storageNumberUnits, BigDecimal otherUsedUnits, //BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
 //		super(id);
 		this.usedItemsGroup = new UsedItemsGroupDTO(id, version, ordinal, groupName, tableView);
@@ -44,7 +44,7 @@ public class UsedItemWithGroup implements CollectionItemWithGroup<UsedItemDTO, U
 				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, 
 				itemPoCodes, itemSuppliers,
 				storageId, stoageVersion, storageOrdinal,
-				unitAmount, storageNumberUnits, otherUsedUnits, accessWeight,
+				unitAmount, storageNumberUnits, otherUsedUnits, //accessWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks);
 	}
 	

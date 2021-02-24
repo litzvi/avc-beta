@@ -23,7 +23,7 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemPoCodes, String itemSuppliers,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal accessWeight, 
+			BigDecimal unitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, //BigDecimal accessWeight, 
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
 		super(id, version, ordinal, numberUsedUnits,
 				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
@@ -31,7 +31,7 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, 
 				itemPoCodes, itemSuppliers,
 				storageId, stoageVersion, storageOrdinal,
-				unitAmount, storageNumberUnits, storgeOtherUsedUnits, accessWeight,
+				unitAmount, storageNumberUnits, storgeOtherUsedUnits, //accessWeight,
 				warehouseLocationId,  warehouseLocationValue, storageRemarks);	
 	}
 

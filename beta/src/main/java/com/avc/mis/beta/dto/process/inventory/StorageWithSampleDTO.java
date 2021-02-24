@@ -40,12 +40,12 @@ public class StorageWithSampleDTO extends StorageDTO {
 
 		
 	public StorageWithSampleDTO(Integer id, Integer version, Integer ordinal,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, //BigDecimal accessWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, 
 			String remarks, Class<? extends Storage> clazz, 
 			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, 
 			List<OrdinalAmount<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
-		super(id, version, ordinal, unitAmount, numberUnits, accessWeight, 
+		super(id, version, ordinal, unitAmount, numberUnits, //accessWeight, 
 				warehouseLocationId, warehouseLocationValue, remarks,
 				clazz);
 		this.sampleContainerWeights = sampleContainerWeights;
@@ -74,7 +74,8 @@ public class StorageWithSampleDTO extends StorageDTO {
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz, 
 			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, 
 			List<OrdinalAmount<BigDecimal>> sampleWeights, BigInteger numberOfSamples, BigDecimal avgTestedWeight) {
-		super(id, version, ordinal, unitAmount, numberUnits, accessWeight, warehouseLocation, remarks, clazz);
+		super(id, version, ordinal, unitAmount, numberUnits, //accessWeight, 
+				warehouseLocation, remarks, clazz);
 		this.sampleContainerWeights = sampleContainerWeights;
 //		this.sampleContainerWeight = sampleContainerWeight;
 		this.sampleWeights = sampleWeights;

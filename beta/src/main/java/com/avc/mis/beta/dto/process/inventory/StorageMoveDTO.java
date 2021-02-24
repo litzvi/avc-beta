@@ -29,7 +29,7 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 
 	private BigDecimal unitAmount;
 	private BigDecimal numberUnits;	
-	private BigDecimal accessWeight;	
+//	private BigDecimal accessWeight;	
 	private BasicValueEntity<Warehouse> warehouseLocation;
 
 	private String className; //to differentiate between storage to ExtraAdded nad perhaps storageMoves
@@ -43,9 +43,9 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemPoCodes, String itemSuppliers,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 
-			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, BigDecimal storageContainerWeight,
+			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, //BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, //BigDecimal accessWeight,
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
 		super(id, version, ordinal, numberUsedUnits, 
 				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
@@ -53,11 +53,11 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, 
 				itemPoCodes, itemSuppliers,
 				storageId, stoageVersion, storageOrdinal, 
-				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, storageContainerWeight,
+				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, //storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks);
 		this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
-		this.accessWeight = accessWeight;
+//		this.accessWeight = accessWeight;
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else
@@ -72,7 +72,7 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 		super(storage);
 		this.unitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
 		this.numberUnits = Optional.ofNullable(storage.getNumberUnits()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
-		this.accessWeight = storage.getAccessWeight();
+//		this.accessWeight = storage.getAccessWeight();
 		if(storage.getWarehouseLocation() != null) {
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(
 					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
@@ -91,8 +91,8 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 		else {
 			return new AmountWithUnit(getUnitAmount()
 				.multiply(getNumberUnits())
-				.subtract(Optional.ofNullable(getAccessWeight()).orElse(BigDecimal.ZERO)), 
-				getMeasureUnit());
+//				.subtract(Optional.ofNullable(getAccessWeight()).orElse(BigDecimal.ZERO))
+				, getMeasureUnit());
 		}
 	}
 

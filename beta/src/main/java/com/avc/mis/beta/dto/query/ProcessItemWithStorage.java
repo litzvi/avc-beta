@@ -41,7 +41,7 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 			MeasureUnit measureUnit, 
 //			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, BigDecimal numberUnits, BigDecimal accessWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, //BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
 			String groupName, String description, String remarks, boolean tableView) {
@@ -51,7 +51,7 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 				measureUnit, groupName, description, remarks, tableView);
 //		this.po = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		this.storage = new StorageDTO(storageId, storageVersion, storageOrdinal,
-				unitAmount, numberUnits, accessWeight,
+				unitAmount, numberUnits, //accessWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 		
 	}

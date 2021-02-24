@@ -60,8 +60,8 @@ public class StorageBase extends UsedItemBase {
 //	@Positive(message = "Number of units has to be positive")
 //	private BigDecimal numberUnits;	
 	
-	@Column(precision = 19, scale = MeasureUnit.SCALE)
-	private BigDecimal accessWeight;	
+//	@Column(precision = 19, scale = MeasureUnit.SCALE)
+//	private BigDecimal accessWeight;	
 		
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "warehouseLocationId")

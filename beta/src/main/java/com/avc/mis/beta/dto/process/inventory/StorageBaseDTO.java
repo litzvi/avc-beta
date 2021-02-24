@@ -18,7 +18,7 @@ public interface StorageBaseDTO {
 	
 	public BigDecimal getNumberUnits();
 	
-	public BigDecimal getAccessWeight();
+//	public BigDecimal getAccessWeight();
 	
 	public BasicValueEntity<Warehouse> getWarehouseLocation();
 	
