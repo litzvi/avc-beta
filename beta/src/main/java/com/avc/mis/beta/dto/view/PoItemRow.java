@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -132,6 +133,22 @@ public class PoItemRow extends BasicDTO {
 	
 	public List<AmountWithUnit> getNumberUnits() {
 		return AmountWithUnit.amountDisplay(this.numUnits, this.item, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+	}
+	
+	public AmountWithUnit getNumberLots() {
+		if(item.getGroup()  == ItemGroup.PRODUCT) {
+			AmountWithUnit numberLots;
+			if(item.getClazz() == PackedItem.class) {
+				numberLots = item.getUnit().multiply(this.numUnits.getAmount());
+			}
+			else {
+				numberLots = this.numUnits;
+			}
+			return numberLots.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
+		}
+		else {
+			return null;			
+		}
 	}
 		
 	/**

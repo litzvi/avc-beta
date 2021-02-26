@@ -22,6 +22,7 @@ import org.hibernate.annotations.FetchMode;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 
 import lombok.AccessLevel;
@@ -53,6 +54,10 @@ public class PO extends PoProcess {
 	private Set<OrderItem> orderItems = new HashSet<>();
 	
 	private String personInCharge;
+	
+	public void setGeneralPoCode(GeneralPoCode poCode) {
+		super.setPoCode(poCode);
+	}
 	
 	/**
 	 * Gets the list of Items as an array (can be ordered).

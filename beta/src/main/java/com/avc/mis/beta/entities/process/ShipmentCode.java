@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.BaseEntity;
@@ -31,7 +32,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
 @Entity
-@Table(name = "SHIPMENT_CODES")
+@Table(name = "SHIPMENT_CODES", uniqueConstraints = 
+	{ @UniqueConstraint(columnNames = { "code", "portOfDischargeId" }) })
 public class ShipmentCode extends BaseEntity {
 
 //	@EqualsAndHashCode.Include

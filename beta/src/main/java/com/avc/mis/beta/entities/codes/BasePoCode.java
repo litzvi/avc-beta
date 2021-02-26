@@ -44,9 +44,9 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
 @Entity
-@Table(name = "PO_CODES")
-//@Table(name = "PO_CODES", uniqueConstraints = 
-//	{ @UniqueConstraint(columnNames = { "code", "display" }) })
+//@Table(name = "PO_CODES")
+@Table(name = "PO_CODES", uniqueConstraints = 
+	{ @UniqueConstraint(columnNames = { "code", "contractTypeId" }) })
 @Inheritance(strategy=InheritanceType.JOINED)
 //@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 //@DiscriminatorValue("abstract")
@@ -63,7 +63,8 @@ public class BasePoCode extends BaseEntity {
 //	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
 //	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
 //	@Column(nullable = false, updatable = false, unique = true)
-	@Column(updatable = false, unique = true)
+//	@Column(updatable = false, unique = true)
+	@Column(updatable = false)
 //	@EqualsAndHashCode.Include
 	private String code;
 	

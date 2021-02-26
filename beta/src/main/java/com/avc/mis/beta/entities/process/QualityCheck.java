@@ -109,7 +109,7 @@ public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 		this.testedItems = Insertable.setReferences(testedItems, (t) -> {t.setReference(this);	return t;});
 	}
 	
-	@NotNull(message = "Receipt has to reference a po code")
+	@NotNull(message = "QC has to reference a po code")
 	@Override
 	public BasePoCode getPoCode() {
 		return super.getPoCode();

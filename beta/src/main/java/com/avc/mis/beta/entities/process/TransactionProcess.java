@@ -19,6 +19,7 @@ import org.hibernate.annotations.Where;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.processinfo.ProcessGroup;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
@@ -54,6 +55,15 @@ public abstract class TransactionProcess<T extends ProcessItem> extends ProcessW
 	@NotEmpty(message = "Has to containe at least one used/origion storage item")
 	private Set<UsedItemsGroup> usedItemGroups = new HashSet<>();
 
+	/**
+	 * Setter of poCode for transaction processes.
+	 * Has to be PoCode of a product process (not GeneralPoCode)
+	 * @param poCode
+	 */
+	public void setPoCode(PoCode poCode) {
+		super.setPoCode(poCode);
+	}
+	
 	/**
 	 * @return array of UsedItemsGroup in order
 	 */

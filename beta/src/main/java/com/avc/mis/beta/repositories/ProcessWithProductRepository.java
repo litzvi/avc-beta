@@ -24,7 +24,9 @@ public interface ProcessWithProductRepository<T extends ProcessWithProduct<?>> e
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "SUM( "
 				+ "((sf.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor) "
-				+ " * coalesce(w_po.weight, 1)) "
+//				+ " * coalesce(w_po.weight, 1))"
+				+ "), "
+			+ "coalesce(w_po.weight, 1) "
 			+ ")"
 		+ "from PoProcess p "
 			+ "join p.processItems pi "
@@ -41,7 +43,7 @@ public interface ProcessWithProductRepository<T extends ProcessWithProduct<?>> e
 		+ "where "
 			+ "p.id in :processIds "
 			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
-		+ "group by item.id ")
+		+ "group by item.id, w_po.weight ")
 	Stream<ItemAmount> findSummaryProducedItemAmounts(int[] processIds, Integer poCodeId);
 
 

@@ -152,7 +152,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 //					+ "ELSE (coalesce(sf.accessWeight, 0) / size(sf.usedItems)) "
 //				+ "END)"
 			+ " ) AS balance, "
-			+ "coalesce(w_po_code.weight, 1) "
+			+ "coalesce(w_po.weight, 1) "
 			+ ") "
 		+ "from ProcessItem pi "
 			+ "left join ReceiptItem ri "
@@ -164,7 +164,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "join pi.process p "
 				+ "join p.lifeCycle lc "
 				+ "left join p.poCode p_po_code "
-				+ "left join p.weightedPos w_po_code "
+				+ "left join p.weightedPos w_po "
+					+ "left join w_po.poCode w_po_code "
 				+ "join PoCode po_code "
 					+ "on (po_code = p_po_code or po_code = w_po_code) "
 				+ "join Receipt r "
@@ -197,7 +198,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
 					+ ", 0)"
 				+ ") "
-		+ "group by item, w_po_code "
+		+ "group by item, w_po.weight "
 //		+ "order by r.recordedTime, p.recordedTime " 
 		+ "")
 	List<ItemAmount> findInventoryItemRows(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId, Integer poCodeId);

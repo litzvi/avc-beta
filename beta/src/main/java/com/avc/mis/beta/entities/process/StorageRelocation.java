@@ -73,7 +73,7 @@ public class StorageRelocation extends PoProcess {
 		this.storageMovesGroups = Insertable.setReferences(storageMovesGroups, (t) -> {t.setReference(this);	return t;});
 	}
 	
-	@NotNull(message = "Receipt has to reference a po code")
+	@NotNull(message = "Storage relocation has to reference a po code")
 	@Override
 	public BasePoCode getPoCode() {
 		return super.getPoCode();
