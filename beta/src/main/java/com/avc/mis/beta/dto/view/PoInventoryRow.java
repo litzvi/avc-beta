@@ -9,9 +9,11 @@ import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.Value;
 
@@ -33,6 +35,8 @@ public class PoInventoryRow extends BasicDTO {
 	private String supplierName;
 	
 	private AmountWithUnit totalWeight;
+	
+	@Setter(value = AccessLevel.NONE)
 	private List<ProcessItemInventoryRow> poInventoryRows;
 
 	public PoInventoryRow(@NonNull PoCodeBasic poCode) {
@@ -41,9 +45,14 @@ public class PoInventoryRow extends BasicDTO {
 		this.supplierName = poCode.getSupplierName();
 	}
 	
-	public void setPoInventoryRows(List<ProcessItemInventoryRow> poInventoryRows) {
+	public void setProductPoInventoryRows(List<ProcessItemInventoryRow> poInventoryRows) {
 		this.poInventoryRows = poInventoryRows;
 		this.totalWeight = ProcessItemInventoryRow.getTotalWeight(poInventoryRows);
+	}
+	
+	public void setGeneralPoInventoryRows(List<ProcessItemInventoryRow> poInventoryRows) {
+		this.poInventoryRows = poInventoryRows;
+		this.totalWeight = null;
 	}
 	
 	public List<AmountWithUnit> getTotalStock() {

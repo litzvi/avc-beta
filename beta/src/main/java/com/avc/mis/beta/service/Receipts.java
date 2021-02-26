@@ -175,7 +175,7 @@ public class Receipts {
 				poCodeId);
 	}
 	
-	private List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses, Integer poCodeId) {
+	public List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses, Integer poCodeId) {
 		List<ReceiptItemRow> itemRows = getReceiptRepository().findAllReceiptsByType(processNames, statuses, poCodeId);
 		Map<Integer, List<ReceiptItemRow>> receiptMap = itemRows.stream()
 				.collect(Collectors.groupingBy(ReceiptItemRow::getId, LinkedHashMap::new, Collectors.toList()));

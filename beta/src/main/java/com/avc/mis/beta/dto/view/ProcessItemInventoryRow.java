@@ -62,14 +62,14 @@ public class ProcessItemInventoryRow extends BasicDTO {
 	 */
 	public ProcessItemInventoryRow(Integer id, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
-			ItemGroup group, ProductionUse productionUse, 
+			ItemGroup itemGroup, ProductionUse productionUse, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			OffsetDateTime processDate, OffsetDateTime receiptDate,
 			BigDecimal weightCoefficient, BigDecimal amount, 
 			String warehouses) {
 		super(id);
-		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, group, productionUse, unitAmount, unitMeasureUnit, clazz);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unitAmount, unitMeasureUnit, clazz);
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
 		this.processDate = processDate;
@@ -81,6 +81,10 @@ public class ProcessItemInventoryRow extends BasicDTO {
 //				balanceAmount.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
 //		};
 		
+//		if(itemGroup == ItemGroup.GENERAL) {
+//			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
+//			this.weight = null;
+//		} else
 		if(clazz == BulkItem.class) {
 			this.amount = null;
 			this.weight = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
@@ -133,6 +137,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 		if(poInventoryRows == null) {
 			return null;
 		}
+		
 		return poInventoryRows.stream()
 				.map(pi -> pi.getWeight())
 				.reduce(AmountWithUnit::add).get();

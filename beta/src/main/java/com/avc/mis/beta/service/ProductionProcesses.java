@@ -66,7 +66,7 @@ public class ProductionProcesses {
 	 * In case of a mixed process will only show the given po code in the process row.
 	 * @return List of ProcessRow for all processes that match the given arguments
 	 */
-	private List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
+	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
 		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId, true);
 		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getProcessRepository()
@@ -87,7 +87,6 @@ public class ProductionProcesses {
 		
 		List<ProcessStateInfo> processes = getProcessRepository().findProcessReportLines(processName, poCodeId, false);
 		int[] processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
-		System.out.println("p ids:" + processIds[0]);
 		if(processes.isEmpty()) {
 			return null;
 		}

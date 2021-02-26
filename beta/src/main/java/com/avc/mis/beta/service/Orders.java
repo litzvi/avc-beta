@@ -76,9 +76,8 @@ public class Orders {
 	 * @return list of PoRow for all orders (not cancelled)
 	 */
 	public List<PoItemRow> findAllCashewOrderItems() {
-		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
-		return poItemRows;
+		return getAllOrdersByType(ProcessName.CASHEW_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null);
 	}
 	
 	/**
@@ -86,9 +85,8 @@ public class Orders {
 	 * @return list of PoRow for all orders (not cancelled)
 	 */
 	public List<PoItemRow> findAllGeneralOrderItems() {
-		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
-		return poItemRows;
+		return getAllOrdersByType(ProcessName.GENERAL_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null);
 	}
 	
 	/**
@@ -96,8 +94,7 @@ public class Orders {
 	 * @return list of PoRow for all orders
 	 */
 	public List<PoItemRow> findAllCashewOrderItemsHistory() {
-		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values());
-		return poItemRows;
+		return getAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null);
 	}
 	
 	/**
@@ -105,8 +102,11 @@ public class Orders {
 	 * @return list of PoRow for all orders
 	 */
 	public List<PoItemRow> findAllGeneralOrderItemsHistory() {
-		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER, ProcessStatus.values());
-		return poItemRows;
+		return getAllOrdersByType(ProcessName.GENERAL_ORDER, ProcessStatus.values(), null);
+	}
+	
+	public List<PoItemRow> getAllOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId) {
+		return getPoRepository().findAllOrdersByType(orderType, processStatuses, poCodeId);
 	}
 	
 	/**
@@ -238,7 +238,7 @@ public class Orders {
 	@Deprecated
 	public List<PoRow> findAllCashewOrders() {
 		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER,
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null);
 		return getPoRows(itemRows);
 	}
 	
@@ -248,7 +248,7 @@ public class Orders {
 	 */
 	@Deprecated
 	public List<PoRow> findAllCashewOrdersHistory() {
-		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values());
+		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null);
 		return getPoRows(itemRows);
 	}
 	
@@ -259,7 +259,7 @@ public class Orders {
 	@Deprecated
 	public List<PoRow> findAllGeneralOrders() {
 		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER,
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING});
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null);
 		return getPoRows(itemRows);
 	}
 	

@@ -33,8 +33,7 @@ import lombok.Setter;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
 @Table(name="CONTRACT_TYPES", uniqueConstraints = 
-	{ @UniqueConstraint(columnNames = { "code", "currency" }), 
-			@UniqueConstraint(columnNames = { "code", "suffix" }) })
+	{ @UniqueConstraint(columnNames = { "code", "currency", "suffix"})})
 public class ContractType extends ValueEntity {
 	
 	@Column(name = "code", nullable = false)

@@ -220,11 +220,12 @@ public interface PORepository extends PoProcessRepository<PO> {
 						+ "left join UOM rou_uom "
 							+ "on rou_uom.fromUnit = rou.measureUnit and rou_uom.toUnit = units.measureUnit "
 		+ "where "
-			+ "t.processName = ?1 "
-			+ "and lc.processStatus in ?2 "
+			+ "t.processName = :orderType "
+			+ "and lc.processStatus in :processStatuses "
+			+ "and (po_code.id = :poCodeId or :poCodeId is null)"
 		+ "group by oi "
 		+ "ORDER BY oi.deliveryDate, po.id ")
-	List<PoItemRow> findAllOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses);
+	List<PoItemRow> findAllOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId);
 
 	@Query("select oi "
 			+ "from OrderItem oi "

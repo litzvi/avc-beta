@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -77,20 +78,18 @@ public class InventoryReports {
 		
 		List<ProcessItemInventoryRow> processItemRows = getInventoryRows(group, null, null, null);
 
-//		Map<PoInventoryRow, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
-//				.collect(Collectors.groupingBy(ProcessItemInventoryRow::getPoInventoryRow, LinkedHashMap::new, Collectors.toList()));
-//		
-//		List<PoInventoryRow> inventoryRows = new ArrayList<PoInventoryRow>();
-//		piMap.forEach((k, v) -> {
-//			k.setPoInventoryRows(v);
-//			inventoryRows.add(k);
-//		});
-//		return inventoryRows;
+		BiConsumer<PoInventoryRow, List<ProcessItemInventoryRow>> setter = PoInventoryRow::setProductPoInventoryRows;
+		if(group == ItemGroup.GENERAL) {
+			setter = PoInventoryRow::setGeneralPoInventoryRows;			
+		}
+		else {
+			setter = PoInventoryRow::setProductPoInventoryRows;			
+		}
 		
 		return CollectionItemWithGroup.getFilledGroups(processItemRows, 
 				ProcessItemInventoryRow::getPoInventoryRow, 
 				Function.identity(), 
-				PoInventoryRow::setPoInventoryRows);
+				setter);
 
 	}
 	

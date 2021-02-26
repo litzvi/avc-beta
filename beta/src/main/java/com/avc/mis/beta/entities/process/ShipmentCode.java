@@ -41,7 +41,7 @@ public class ShipmentCode extends BaseEntity {
 //	@Id
 //	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
 //	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
-	@Column(nullable = false, updatable = false, unique = true)
+	@Column(nullable = false, updatable = false)
 //	@EqualsAndHashCode.Include
 	private String code;
 	
