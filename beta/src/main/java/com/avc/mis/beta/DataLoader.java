@@ -16,9 +16,11 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.Role;
+import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.service.SettingsWriter;
 import com.avc.mis.beta.service.Users;
+import com.avc.mis.beta.utilities.ProgramSequence;
 
 /**
  * @author Zvi
@@ -59,6 +61,15 @@ public class DataLoader implements ApplicationRunner {
 					processTypes.add(processType);
 				}
 				settingsWriter.addAll(processTypes);
+				
+				//add program sequences
+				List<ProgramSequence> programSequences = new ArrayList<>();
+				for(SequenceIdentifier identifier: SequenceIdentifier.values()) {
+					ProgramSequence programSequence = new ProgramSequence();
+					programSequence.setIdentifier(identifier);
+					programSequences.add(programSequence);
+				}
+				settingsWriter.addAll(programSequences);
 			}			
 		}
 		

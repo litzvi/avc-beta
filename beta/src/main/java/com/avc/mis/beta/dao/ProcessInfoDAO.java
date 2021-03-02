@@ -30,6 +30,7 @@ import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
@@ -44,6 +45,7 @@ import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
+import com.avc.mis.beta.utilities.ProgramSequence;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -446,6 +448,10 @@ public class ProcessInfoDAO extends DAO {
 		}
 		
 		return poCodeIds;
+	}
+
+	public ProgramSequence getSequnce(SequenceIdentifier sequenceIdentifier) {
+		return getObjectTablesRepository().findSequence(sequenceIdentifier);
 	}
 
 

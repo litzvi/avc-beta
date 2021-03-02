@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.report.InventoryReportLine;
+import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
@@ -112,9 +113,14 @@ public class InventoryReports {
 	}
 
 	public InventoryReportLine getInventorySummary(@NonNull Integer poCodeId) {
-
+		List<ItemAmount> inventory = inventoryRepository.findInventoryItemRows(false, null, ItemGroup.PRODUCT, null, poCodeId);
+		
+		if(inventory == null || inventory.isEmpty()) {
+			return null;
+		}
+		
 		InventoryReportLine reportLine = new InventoryReportLine();
-		reportLine.setInventory(inventoryRepository.findInventoryItemRows(false, null, ItemGroup.PRODUCT, null, poCodeId));
+		reportLine.setInventory(inventory);
 		return reportLine;
 	}
 

@@ -8,6 +8,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.ContractType;
 
@@ -28,7 +30,6 @@ import lombok.ToString;
 //@DiscriminatorValue("po_code")
 public class PoCode extends BasePoCode {
 
-	
 	@NotNull(message = "Po code code is mandatory")
 	@Override
 	public String getCode() {

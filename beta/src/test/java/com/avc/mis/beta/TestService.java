@@ -24,6 +24,7 @@ import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
@@ -117,6 +118,26 @@ public class TestService {
 		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS);				
 		po.setOrderItems(items);
 		orders.addCashewOrder(po);
+		return po;
+	}
+	
+	public PO addBasicGeneralOrder() {
+		
+		//build purchase order
+		PO po = new PO();
+		GeneralPoCode poCode = new GeneralPoCode();
+		Supplier supplier = addBasicSupplier();
+		poCode.setSupplier(supplier);
+		poCode.setContractType(getContractType());
+		po.setPoCode(poCode);
+		
+		//build process
+		po.setRecordedTime(OffsetDateTime.now());
+		
+		//add order items
+		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS);				
+		po.setOrderItems(items);
+		orders.addGeneralOrder(po);
 		return po;
 	}
 	

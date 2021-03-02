@@ -21,12 +21,15 @@ import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.MixPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.repositories.PORepository;
+import com.avc.mis.beta.utilities.ProgramSequence;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -127,22 +130,25 @@ public class Orders {
 	public void addMixPoCode(MixPoCode poCode) {
 		dao.addEntity(poCode);
 	}
-
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	private void addOrder(PO po) {
-		//using save rather than persist in case POid was assigned by user
-//		dao.addEntityWithFlexibleGenerator(po.getPoCode());
-//		Session session = getEntityManager().unwrap(Session.class);
-//		session.save(po.getPoCode());
-		
-		if(dao.isPoCodeFree(po.getPoCode().getId())) {
-			dao.addGeneralProcessEntity(po);						
-		}
-		else {
-			throw new IllegalArgumentException("Po Code is already used for another order or receipt or it's a mixed po");
-		}
+	private void addGeneralPoCode(GeneralPoCode poCode) {
+		ProgramSequence sequence = dao.getSequnce(SequenceIdentifier.GENERAL_PO_CODE);
+		poCode.setCode(String.valueOf(sequence.getSequance()));	
+		sequence.advance();
+		dao.addEntity(poCode);
 	}
+
+	
+//	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+//	private void addOrder(PO po) {
+//		//using save rather than persist in case POid was assigned by user
+////		dao.addEntityWithFlexibleGenerator(po.getPoCode());
+////		Session session = getEntityManager().unwrap(Session.class);
+////		session.save(po.getPoCode());
+//		
+//		
+//	}
 
 	/**
 	 * Adds a new Cashew purchase order
@@ -152,7 +158,15 @@ public class Orders {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewOrder(PO po) {
 		po.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_ORDER));
-		addOrder(po);		
+		if(po.getPoCode() == null) {
+			throw new IllegalArgumentException("Purchase Order has to reference a po code");
+		}
+		if(dao.isPoCodeFree(po.getPoCode().getId())) {
+			dao.addGeneralProcessEntity(po);						
+		}
+		else {
+			throw new IllegalArgumentException("Po Code is already used for another order or receipt");
+		}		
 	}
 	
 	/**
@@ -163,7 +177,13 @@ public class Orders {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addGeneralOrder(PO po) {		
 		po.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_ORDER));
-		addOrder(po);	
+		if(po.getPoCode() == null) {
+			throw new IllegalArgumentException("Purchase Order has to reference a po code");
+		}
+		addGeneralPoCode((GeneralPoCode) po.getPoCode());
+				
+		dao.addGeneralProcessEntity(po);						
+	
 	}
 	
 	/**

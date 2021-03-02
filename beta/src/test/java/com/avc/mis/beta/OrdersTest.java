@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,4 +125,19 @@ public class OrdersTest {
 		service.cleanup(po);
 
 	}	
+	
+	@Test
+	void generalOrdersTest() {
+		PO po;
+		try {
+			po = service.addBasicGeneralOrder();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+		PoDTO expected = new PoDTO(po);
+		PoDTO actual = orders.getOrder(po.getPoCode().getId());
+		assertEquals(expected, actual, "failed test adding po");
+	}
 }

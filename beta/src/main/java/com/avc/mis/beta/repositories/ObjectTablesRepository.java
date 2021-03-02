@@ -21,8 +21,10 @@ import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.utilities.ProgramSequence;
 
 /**
  * @author Zvi
@@ -247,6 +249,9 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ "join po_code.origionPoCodes org_po "
 		+ "where po_code.id = :poCodeId ")
 	List<Integer> findOrigionPoCodes(Integer poCodeId);
+
+	@Query("select s from ProgramSequence s where s.identifier = :sequenceIdentifier ")
+	ProgramSequence findSequence(SequenceIdentifier sequenceIdentifier);
 
 	
 }
