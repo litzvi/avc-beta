@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
@@ -90,9 +91,11 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	@Query("select i from ShippingPort i where i.active = true")
 	List<ShippingPort> findAllShippingPorts();
 	
-	@Query("select t from ContractType t where t.active = true "
+	@Query("select t from ContractType t "
+			+ "where t.active = true "
+			+ "and t.supplyGroup in :supplyGroups "
 			+ "order by t.value ")
-	List<ContractType> findAllContractTypes();
+	List<ContractType> findAllContractTypes(SupplyGroup[] supplyGroups);
 
 	@Query("select t from ProcessType t where t.active = true")
 	List<ProcessType> findAllProcessTypes();

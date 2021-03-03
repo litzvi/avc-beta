@@ -122,17 +122,16 @@ public class ProcessItemInventoryRow extends BasicDTO {
 		return totalBalance;
 	}
 	
-	@JsonIgnore
-	public PoInventoryRow getPoInventoryRow() {
-		return new PoInventoryRow(getPoCode());
-	}
+//	@JsonIgnore
+//	public PoInventoryRow getPoInventoryRow() {
+//		return new PoInventoryRow(getPoCode());
+//	}
 	
-	@JsonIgnore
-	public ItemInventoryRow getItemInventoryRow() {
-		return new ItemInventoryRow(getItem());
-	}
-	
-	
+//	@JsonIgnore
+//	public ItemInventoryRow getItemInventoryRow() {
+//		return new ItemInventoryRow(getItem());
+//	}
+		
 	public static AmountWithUnit getTotalWeight(List<ProcessItemInventoryRow> poInventoryRows) {
 		if(poInventoryRows == null) {
 			return null;

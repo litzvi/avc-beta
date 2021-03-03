@@ -70,7 +70,7 @@ public class Orders {
 	 * @return list of PoRow for orders that are yet to be received
 	 */
 	public List<PoItemRow> findOpenCashewOrderItems() {
-		List<PoItemRow> poItemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
+		List<PoItemRow> poItemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER, null);
 		return poItemRows;
 	}
 	
@@ -117,7 +117,7 @@ public class Orders {
 	 * @return list of PoRow for orders that are yet to be received
 	 */
 	public List<PoItemRow> findOpenGeneralOrderItems() {
-		return getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
+		return getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER, null);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -289,7 +289,7 @@ public class Orders {
 	 */
 	@Deprecated
 	public List<PoRow> findOpenCashewOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER);
+		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER, null);
 		
 		return getPoRows(itemRows);
 	}
@@ -300,7 +300,7 @@ public class Orders {
 	 */
 	@Deprecated
 	public List<PoRow> findOpenGeneralOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER);
+		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER, null);
 		return getPoRows(itemRows);
 	}
 

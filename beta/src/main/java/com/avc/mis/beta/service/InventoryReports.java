@@ -18,15 +18,20 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dto.report.InventoryReportLine;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
+import com.avc.mis.beta.dto.view.ItemInventoryWithOrderRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
+import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.InventoryRepository;
+import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
@@ -45,6 +50,8 @@ import lombok.NonNull;
 public class InventoryReports {
 		
 	@Autowired private InventoryRepository inventoryRepository;
+	@Autowired private PORepository poRepository;
+	@Autowired private ValueTablesReader valueTablesReader;
 		
 	/**
 	 * Gets report of all items that are currently in the inventory with full information needed for report display.
@@ -66,7 +73,7 @@ public class InventoryReports {
 //		return inventoryRows;
 		
 		return CollectionItemWithGroup.getFilledGroups(processItemRows, 
-				ProcessItemInventoryRow::getItemInventoryRow, 
+				(i -> {return new ItemInventoryRow(i.getItem());}), 
 				Function.identity(), 
 				ItemInventoryRow::setPoInventoryRows);
 	}
@@ -88,7 +95,7 @@ public class InventoryReports {
 		}
 		
 		return CollectionItemWithGroup.getFilledGroups(processItemRows, 
-				ProcessItemInventoryRow::getPoInventoryRow, 
+				(i -> {return new PoInventoryRow(i.getPoCode());}), 
 				Function.identity(), 
 				setter);
 
@@ -122,6 +129,34 @@ public class InventoryReports {
 		InventoryReportLine reportLine = new InventoryReportLine();
 		reportLine.setInventory(inventory);
 		return reportLine;
+	}
+	
+	public List<ItemInventoryWithOrderRow> getInventoryWithOrderTableByItem(ItemGroup group) {
+		
+		List<ProcessItemInventoryRow> processItemRows = getInventoryRows(group, null, null, null);
+		List<PoItemRow> poItemRows = getPoRepository().findOpenOrdersByType(null, group);
+		
+//		List<ItemWithUnitDTO> items = getValueTablesReader().getItemsByGroup(group);
+		List<ItemInventoryWithOrderRow> itemInventoryWithOrderRows = getValueTablesReader().getItemsByGroup(group).stream()
+				.map(i -> new ItemInventoryWithOrderRow(i))
+				.collect(Collectors.toList());
+		
+		CollectionItemWithGroup.fillGroups(
+				itemInventoryWithOrderRows, 
+				processItemRows, 
+				(i -> {return new ItemInventoryWithOrderRow(i.getItem());}), 
+				Function.identity(), 
+				ItemInventoryWithOrderRow::setPoInventoryRows);
+		
+		CollectionItemWithGroup.fillGroups(
+				itemInventoryWithOrderRows, 
+				poItemRows, 
+				(i -> {return new ItemInventoryWithOrderRow(i.getItem());}), 
+				Function.identity(), 
+				ItemInventoryWithOrderRow::setOrderItemRows);
+
+		
+		return itemInventoryWithOrderRows;
 	}
 
 }

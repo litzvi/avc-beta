@@ -150,6 +150,13 @@ public class PoItemRow extends BasicDTO {
 			return null;			
 		}
 	}
+	
+	public AmountWithUnit getBalance() {
+		if(this.receivedOrderUnits == null) {
+			return this.numUnits;
+		}
+		return this.numUnits.subtract(this.receivedOrderUnits);
+	}
 		
 	/**
 	 * @return a string representing full PO code. e.g. VAT-900001, PO-900002V

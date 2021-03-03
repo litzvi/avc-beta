@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.processinfo.WeightedPo;
 import com.avc.mis.beta.entities.values.ContractType;
@@ -76,9 +77,7 @@ public class BasePoCode extends BaseEntity {
 	@JoinColumn(name = "contractTypeId", nullable = false)
 //	@NotNull(message = "PO code is required to have a contract type")
 	private ContractType contractType;
-	
-//	private String display;
-	
+		
 	@JsonIgnore
 	@ToString.Exclude 
 	@OneToMany(mappedBy = "poCode", fetch = FetchType.LAZY)

@@ -8,7 +8,9 @@ import java.util.Currency;
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.entities.ObjectEntityWithName;
+import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.ContractType;
 
@@ -32,11 +34,20 @@ public class PoCodeDTO extends ValueDTO {
 	
 	public PoCodeDTO(@NonNull Integer id, String code, 
 			Integer supplierId, Integer supplierVersion, String supplierName,
-			Integer contractTypeId, String contractTypeValue, String contractTypeCode, Currency contractTypeCurrency, String contractTypeSuffix) {
+			Integer contractTypeId, String contractTypeValue, String contractTypeCode, 
+			Currency contractTypeCurrency, String contractTypeSuffix, SupplyGroup supplyGroup) {
 		super(id);
 		this.code = code;
 		this.supplier = new DataObjectWithName<Supplier>(supplierId, supplierVersion, supplierName);
-		this.contractType = new ContractTypeDTO(contractTypeId, contractTypeValue, contractTypeCode, contractTypeCurrency, contractTypeSuffix);
+		this.contractType = new ContractTypeDTO(contractTypeId, contractTypeValue, contractTypeCode, 
+				contractTypeCurrency, contractTypeSuffix, supplyGroup);
+	}
+	
+	public PoCodeDTO(@NonNull BasePoCode poCode) {
+		super(poCode.getId());
+		this.code = poCode.getCode();
+		this.supplier = new DataObjectWithName<Supplier>(poCode.getSupplier());
+		this.contractType = new ContractTypeDTO(poCode.getContractType());
 	}
 	
 	/**

@@ -99,7 +99,15 @@ public class ValueTablesReader {
 	}
 	
 	public List<ContractType> getAllContractTypes() {
-		return getValueTablesRepository().findAllContractTypes();
+		return getValueTablesRepository().findAllContractTypes(SupplyGroup.values());
+	}
+	
+	public List<ContractType> getCashewContractTypes() {
+		return getValueTablesRepository().findAllContractTypes(new SupplyGroup[]{SupplyGroup.CASHEW});
+	}
+	
+	public List<ContractType> getGeneralContractTypes() {
+		return getValueTablesRepository().findAllContractTypes(new SupplyGroup[]{SupplyGroup.GENERAL});
 	}
 	
 	public List<ProcessType> getAllProcessTypes() {

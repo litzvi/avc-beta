@@ -34,6 +34,7 @@ import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
+import com.avc.mis.beta.dto.view.ItemInventoryWithOrderRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.PoItemRow;
@@ -379,6 +380,16 @@ public class QueryTest {
 		poCodes.forEach(c -> System.out.println(receipts.getReceiptSummary(c.getId())));
 
 		poCodes.forEach(c -> System.out.println(processInfoReader.getFinalReport(c.getId())));
+		
+		List<ItemInventoryWithOrderRow> inventoryWithOrderRows;
+		try {
+			inventoryWithOrderRows = cashewReports.getInventoryWithOrderTableByItem(ItemGroup.PRODUCT);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+		inventoryWithOrderRows.forEach(i -> System.out.println(i));
 
 		
 		service.cleanup(po);

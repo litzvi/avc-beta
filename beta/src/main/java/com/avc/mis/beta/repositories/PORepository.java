@@ -16,6 +16,8 @@ import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.processinfo.OrderItem;
 
@@ -150,7 +152,8 @@ public interface PORepository extends PoProcessRepository<PO> {
 						+ "left join UOM rou_uom "
 							+ "on rou_uom.fromUnit = rou.measureUnit and rou_uom.toUnit = units.measureUnit "
 			+ "where "
-				+ "t.processName = ?1 "
+				+ "(t.processName = :orderType or :orderType is null) "
+				+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 				+ "and (lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.PENDING "
 					+ "or lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
 			+ "group by oi "
@@ -163,7 +166,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 					+ "END), "
 				+ "0) < units.amount "
 			+ "ORDER BY oi.deliveryDate, po.id ") // done in the java code if aggregated
-	List<PoItemRow> findOpenOrdersByType(ProcessName orderType);
+	List<PoItemRow> findOpenOrdersByType(ProcessName orderType, ItemGroup itemGroup);
 
 	/**
 	 * Gets rows of all orders (history) for the given order type with their order status. 
@@ -250,7 +253,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO( "
 			+ "po_code.id, po_code.code, "
 			+ "s.id, s.version, s.name, "
-			+ "ct.id, ct.value, ct.code, ct.currency, ct.suffix) "
+			+ "ct.id, ct.value, ct.code, ct.currency, ct.suffix, ct.supplyGroup) "
 		+ "from BasePoCode po_code "
 			+ "join po_code.supplier s "
 			+ "join po_code.contractType ct "
