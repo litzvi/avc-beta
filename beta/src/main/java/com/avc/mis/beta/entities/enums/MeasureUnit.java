@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.settings.UOM;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.NonNull;
 
@@ -25,17 +26,31 @@ import lombok.NonNull;
  */
 public enum MeasureUnit {
 	
-	NONE,
-	KG,
-	LBS,
-	LOT,
-	OZ,
-	GRAM, 
-	UNIT,
-	BOX,
-	TANK,
-	BAG,
-	ROLL;
+	NONE(""),
+	PERCENT("%"),
+	KG("KG"),
+	LBS("LBS"),
+	LOT("LOT"),
+	OZ("OZ"),
+	GRAM("GRAM"), 
+	UNIT("UNIT"),
+	BOX("BOX"),
+	TANK("TANK"),
+	BAG("BAG"),
+	ROLL("ROLL");
+	
+	private String value;
+	
+	private MeasureUnit(String value)
+	{
+		this.value = value;
+	}
+
+	@JsonValue
+	public String toString()
+	{
+		return this.value;
+	}
 	
 	/**
 	 * Nested map with full Cartesian product for converting from every unit to any other unit.

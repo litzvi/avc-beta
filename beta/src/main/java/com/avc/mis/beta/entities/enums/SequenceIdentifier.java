@@ -9,5 +9,5 @@ package com.avc.mis.beta.entities.enums;
  */
 public enum SequenceIdentifier {
 
-	GENERAL_PO_CODE
+	GENERAL_PO_CODE;
 }

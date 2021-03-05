@@ -30,7 +30,7 @@ public class ProgramSequence extends BaseEntity {
 	@Column(nullable = false, updatable = false, unique = true)
 	private SequenceIdentifier identifier;
 	
-	private int sequance;
+	private int sequance = 1;
 
 	public void advance() {
 		this.sequance++;

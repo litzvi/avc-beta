@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.TransactionProcess;
 
 /**
@@ -55,6 +56,7 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 					+ "left join sf.warehouseLocation wh "
 		+ "where "
 			+ "p.id in :processIds "
+//			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 		+ "group by p, item "
 		+ "order by pi.ordinal ")
 	Stream<ProductionProcessWithItemAmount> findAllProducedItemsByProcessIds(int[] processIds);

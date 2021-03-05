@@ -3,8 +3,10 @@
  */
 package com.avc.mis.beta.dto.view;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -110,7 +112,9 @@ public class ProcessRow extends BasicDTO {
 		
 		try {
 			AmountWithUnit processGain = producedAmounts.get().subtract(usedAmounts.get());
-			return AmountWithUnit.weightDisplay(processGain, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+			List<AmountWithUnit> diff =  AmountWithUnit.weightDisplay(processGain, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+			diff.add(0, new AmountWithUnit(getProcessPercentageGain(), MeasureUnit.PERCENT));
+			return diff;
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
 		}
@@ -118,28 +122,55 @@ public class ProcessRow extends BasicDTO {
 
 	}
 	
+	public BigDecimal getProcessPercentageGain() {
+		try {
+			return AmountWithUnit.percentageLoss(producedAmounts.get(), usedAmounts.get());
+		} catch (NullPointerException | NoSuchElementException e) {
+			return null;
+		}
+	}	
 		
 	//perhaps change to getCountDifference
 	public List<AmountWithUnit> getUsedCountDifference() {
 		
 		try {
-			AmountWithUnit countDifference = countAmounts.get().subtract(usedAmounts.get());
-			return AmountWithUnit.weightDisplay(countDifference, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+			AmountWithUnit countDifference = countAmounts.get().subtract(usedAmounts.get());			
+			List<AmountWithUnit> diff = AmountWithUnit.weightDisplay(countDifference, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+			diff.add(0, new AmountWithUnit(getUsedCountPercentageDifference(), MeasureUnit.PERCENT));
+			return diff;
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
 		}
 		
 	}
 	
+	public BigDecimal getUsedCountPercentageDifference() {
+		try {
+			return AmountWithUnit.percentageLoss(countAmounts.get(), usedAmounts.get());
+		} catch (NullPointerException | NoSuchElementException e) {
+			return null;
+		}
+	}
+	
 	public List<AmountWithUnit> getProducedCountDifference() {
 		
 		try {
 			AmountWithUnit countDifference = countAmounts.get().subtract(producedAmounts.get());
-			return AmountWithUnit.weightDisplay(countDifference, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+			List<AmountWithUnit> diff =  AmountWithUnit.weightDisplay(countDifference, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+			diff.add(0, new AmountWithUnit(getProducedCountPercentageDifference(), MeasureUnit.PERCENT));
+			return diff;
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
 		}
 		
+	}
+	
+	public BigDecimal getProducedCountPercentageDifference() {
+		try {
+			return AmountWithUnit.percentageLoss(countAmounts.get(), producedAmounts.get());
+		} catch (NullPointerException | NoSuchElementException e) {
+			return null;
+		}
 	}
 	
 	

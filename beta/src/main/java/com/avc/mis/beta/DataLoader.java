@@ -70,7 +70,8 @@ public class DataLoader implements ApplicationRunner {
 					programSequences.add(programSequence);
 				}
 				settingsWriter.addAll(programSequences);
-			}			
+			}
+			
 		}
 		
 		//supply group

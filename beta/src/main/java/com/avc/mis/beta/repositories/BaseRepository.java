@@ -93,7 +93,7 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	
 	@Query("select t from ContractType t "
 			+ "where t.active = true "
-			+ "and t.supplyGroup in :supplyGroups "
+				+ "and t.supplyGroup in :supplyGroups "
 			+ "order by t.value ")
 	List<ContractType> findAllContractTypes(SupplyGroup[] supplyGroups);
 
