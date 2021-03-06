@@ -4,6 +4,7 @@
 package com.avc.mis.beta.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.report.InventoryReportLine;
 import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.ItemInventoryWithOrderRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
@@ -28,6 +31,7 @@ import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.InventoryRepository;
@@ -58,7 +62,7 @@ public class InventoryReports {
 	 * @return List of ItemInventoryRow that have a balance in inventory
 	 */
 	public List<ItemInventoryRow> getInventoryTableByItem(ItemGroup group) {
-
+		
 		List<ProcessItemInventoryRow> processItemRows = getInventoryRows(group, null, null, null);
 		
 //		Map<ItemInventoryRow, List<ProcessItemInventoryRow>> piMap = processItemRows.stream()
@@ -71,6 +75,7 @@ public class InventoryReports {
 //		});
 //		
 //		return inventoryRows;
+		
 		
 		return CollectionItemWithGroup.getFilledGroups(processItemRows, 
 				(i -> {return new ItemInventoryRow(i.getItem());}), 
@@ -120,7 +125,7 @@ public class InventoryReports {
 	}
 
 	public InventoryReportLine getInventorySummary(@NonNull Integer poCodeId) {
-		List<ItemAmount> inventory = inventoryRepository.findInventoryItemRows(false, null, ItemGroup.PRODUCT, null, poCodeId);
+		List<ItemAmount> inventory = inventoryRepository.findInventoryItemAmounts(false, null, ItemGroup.PRODUCT, null, poCodeId);
 		
 		if(inventory == null || inventory.isEmpty()) {
 			return null;
@@ -131,6 +136,56 @@ public class InventoryReports {
 		return reportLine;
 	}
 	
+	public List<ItemInventoryAmountWithOrder> getInventoryWithOrderByItem(ItemGroup group) {
+		
+		//TODO giving all items in product - but only relevant to raw
+		List<ItemAmount> inventory = inventoryRepository.findInventoryItemAmounts(false, null, group, null, null);
+		List<ItemAmount> openOrders = poRepository.findOpenOrdersItemAmounts(null, group);
+		
+		System.out.println("open orders:" + openOrders.size());
+		System.out.println(openOrders.get(0));
+		
+		List<ItemInventoryAmountWithOrder> inventoryAmountWithOrders = getValueTablesReader().getBasicItemsByGroup(group).stream()
+				.map(i -> new ItemInventoryAmountWithOrder(i))
+				.collect(Collectors.toList());
+		
+		CollectionItemWithGroup.fillGroups(
+				inventoryAmountWithOrders, 
+				inventory, 
+				(i -> i.getItem()), 
+				(i -> i.getItem()), 
+				Function.identity(), 
+				ItemInventoryAmountWithOrder::setInventory);
+		
+		CollectionItemWithGroup.fillGroups(
+				inventoryAmountWithOrders, 
+				openOrders, 
+				(i -> i.getItem()), 
+				(i -> i.getItem()), 
+				Function.identity(), 
+				ItemInventoryAmountWithOrder::setOrder);
+		
+		return inventoryAmountWithOrders;
+
+		
+//		List<BasicValueEntity<Item>> items = getValueTablesReader().getBasicItemsByGroup(group);
+//		
+//		Map<BasicValueEntity<Item>, ItemInventoryAmountWithOrder> itemsMap = new HashMap<>();
+//		items.forEach(i -> {
+//			itemsMap.put(i, new ItemInventoryAmountWithOrder(i));
+//		});
+//
+//		inventory.forEach(i -> {
+//			ItemInventoryAmountWithOrder amountWithOrder = itemsMap.get(i.getItem());
+//			amountWithOrder.addInventory(i);
+//		});
+		
+
+		
+//		return itemsMap.values().stream().collect(Collectors.toList());
+	}
+	
+	@Deprecated
 	public List<ItemInventoryWithOrderRow> getInventoryWithOrderTableByItem(ItemGroup group) {
 		
 		List<ProcessItemInventoryRow> processItemRows = getInventoryRows(group, null, null, null);

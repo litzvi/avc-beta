@@ -82,7 +82,7 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 								+ "left join u_p.poCode p_po_code "
 								+ "left join u_p.weightedPos w_po "
 									+ "left join w_po.poCode w_po_code "
-									+ "join PoCode po_code "
+									+ "join BasePoCode po_code "
 										+ "on (po_code = p_po_code or po_code = w_po_code) "
 		+ "where "
 			+ "p.id in :processIds "

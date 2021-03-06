@@ -88,7 +88,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "left join p_2.poCode p_po_code "
 						+ "left join p_2.weightedPos w_po "
 							+ "left join w_po.poCode w_po_code "
-						+ "join PoCode po_code "
+						+ "join BasePoCode po_code "
 							+ "on (po_code = p_po_code or po_code = w_po_code) "
 					+ "where po_code.id in :poCodeIds)) "
 		+ "group by sf "
@@ -123,7 +123,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "left join p.poCode p_po_code "
 					+ "left join p.weightedPos w_po "
 						+ "left join w_po.poCode w_po_code "
-					+ "join PoCode po_code "
+					+ "join BasePoCode po_code "
 						+ "on (po_code = p_po_code or po_code = w_po_code) "
 						+ "join po_code.contractType t "
 						+ "join po_code.supplier s "
@@ -170,7 +170,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "left join p.poCode p_po_code "
 				+ "left join p.weightedPos w_po "
 					+ "left join w_po.poCode w_po_code "
-				+ "join PoCode po_code "
+				+ "join BasePoCode po_code "
 					+ "on (po_code = p_po_code or po_code = w_po_code) "
 				+ "join Receipt r "
 					+ "on r.poCode = po_code "
@@ -205,7 +205,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "group by item, w_po.weight "
 //		+ "order by r.recordedTime, p.recordedTime " 
 		+ "")
-	List<ItemAmount> findInventoryItemRows(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId, Integer poCodeId);
+	List<ItemAmount> findInventoryItemAmounts(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId, Integer poCodeId);
 
 
 	
@@ -250,7 +250,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "left join p.poCode p_po_code "
 				+ "left join p.weightedPos w_po "
 					+ "left join w_po.poCode w_po_code "
-					+ "join PoCode po_code "
+					+ "join BasePoCode po_code "
 						+ "on (po_code = p_po_code or po_code = w_po_code) "
 						+ "join po_code.contractType t "
 						+ "join po_code.supplier s "

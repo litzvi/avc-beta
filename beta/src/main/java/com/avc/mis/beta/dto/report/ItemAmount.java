@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.report;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Arrays;
 import java.util.List;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
@@ -31,7 +32,8 @@ public class ItemAmount {
 
 	@ToString.Exclude @JsonIgnore
 	ItemGroup itemGroup;
-	AmountWithUnit[] weight;
+	@JsonIgnore
+	AmountWithUnit weightAmount;
 	AmountWithUnit amount;
 	@JsonIgnore
 	BigDecimal weightCoefficient;
@@ -49,28 +51,28 @@ public class ItemAmount {
 		else {
 			this.weightCoefficient = BigDecimal.ONE;
 		}
-		AmountWithUnit weight;
 		if(clazz == BulkItem.class) {
 			this.amount = null;
-			weight = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
+			this.weightAmount = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
 		}
 		else if(clazz == PackedItem.class){
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			this.amount.setScale(MeasureUnit.SCALE);
-			weight = new AmountWithUnit(
+			this.weightAmount = new AmountWithUnit(
 					amount
 					.multiply(unitAmount, MathContext.DECIMAL64)
 					.multiply(this.weightCoefficient, MathContext.DECIMAL64), 
 					unitMeasureUnit);
+//			this.weight = new AmountWithUnit[] {
+//					weight.convert(MeasureUnit.LBS),
+//					weight.convert(MeasureUnit.KG)};
+//			AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
+
 		}
 		else 
 		{
 			throw new IllegalStateException("The class can only apply to weight items");
 		}
-		this.weight = new AmountWithUnit[] {
-				weight.convert(MeasureUnit.LBS),
-				weight.convert(MeasureUnit.KG)};
-		AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
 	}
 	
 	public ItemAmount(Integer id, String value, MeasureUnit defaultMeasureUnit, 
@@ -83,9 +85,13 @@ public class ItemAmount {
 				amount, BigDecimal.ONE);
 	}
 	
+	public List<AmountWithUnit> getWeight() {
+		return AmountWithUnit.weightDisplay(this.weightAmount, Arrays.asList(MeasureUnit.LBS, MeasureUnit.KG));
+	}
+	
 	@JsonIgnore
 	static AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
-		return itemAmounts.stream().map(i -> i.getWeight()[0]).reduce(AmountWithUnit::add).get();
+		return itemAmounts.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
 	}
 	
 

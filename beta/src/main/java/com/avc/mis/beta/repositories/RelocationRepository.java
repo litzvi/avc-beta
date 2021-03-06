@@ -151,7 +151,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 						+ "left join used_p.poCode p_po_code "
 						+ "left join used_p.weightedPos w_po "
 							+ "left join w_po.poCode w_po_code "
-						+ "left join PoCode po_code "
+						+ "left join BasePoCode po_code "
 							+ "on (po_code = p_po_code or po_code = w_po_code) "
 							+ "left join po_code.contractType t "
 							+ "left join po_code.supplier s "

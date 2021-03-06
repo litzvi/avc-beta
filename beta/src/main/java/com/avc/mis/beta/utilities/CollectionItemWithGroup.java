@@ -129,6 +129,7 @@ public interface CollectionItemWithGroup<I, G extends ListGroup<I>> {
 		return groups;
 	}
 	
+	@Deprecated
 	public static <R, G, I> void fillGroups(
 			List<G> groups,
 			List<R> dataWithGroups, 
@@ -145,6 +146,27 @@ public interface CollectionItemWithGroup<I, G extends ListGroup<I>> {
 							Collectors.mapping(itemSupplier, Collectors.toList())));
 			groups.forEach(g -> {
 				groupSetter.accept(g, map.get(g));
+			});
+		}
+	}
+	
+	public static <K, R, G, I> void fillGroups(
+			List<G> groups,
+			List<R> dataWithGroups, 
+			Function<G, K> groupKeySupplier, 
+			Function<R, K> dataKeySupplier, 
+			Function<R, I> itemSupplier,
+			BiConsumer<G, List<I>> groupSetter) {
+		if(dataWithGroups == null || dataWithGroups.isEmpty()) {
+			return;
+		}
+		else {
+			Map<K, List<I>> map = dataWithGroups.stream()
+					.collect(Collectors.groupingBy(dataKeySupplier, 
+							LinkedHashMap::new, 
+							Collectors.mapping(itemSupplier, Collectors.toList())));
+			groups.forEach(g -> {
+				groupSetter.accept(g, map.get(groupKeySupplier.apply(g)));
 			});
 		}
 	}

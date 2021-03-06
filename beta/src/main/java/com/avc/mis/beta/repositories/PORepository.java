@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.embedable.OrderProcessInfo;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
+import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -168,6 +169,40 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "ORDER BY oi.deliveryDate, po.id ") // done in the java code if aggregated
 	List<PoItemRow> findOpenOrdersByType(ProcessName orderType, ItemGroup itemGroup);
 
+	@Query("select new com.avc.mis.beta.dto.report.ItemAmount("
+			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
+			+ "item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "SUM(units.amount * uom.multiplicand / uom.divisor)) "
+		+ "from PO po "
+			+ "join po.lifeCycle lc "
+			+ "join po.processType t "
+			+ "join po.orderItems oi "
+				+ "join oi.numberUnits units "
+				+ "join oi.item item "
+					+ "join item.unit item_unit "
+				+ "join UOM uom "
+					+ "on uom.fromUnit = units.measureUnit and uom.toUnit = item.measureUnit "
+				+ "left join oi.receiptItems ri "
+					+ "left join ri.process r "
+						+ "left join r.lifeCycle rlc "		
+					+ "left join ri.receivedOrderUnits rou "
+						+ "left join UOM rou_uom "
+							+ "on rou_uom.fromUnit = rou.measureUnit and rou_uom.toUnit = units.measureUnit "
+		+ "where "
+			+ "(t.processName = :orderType or :orderType is null) "
+			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
+			+ "and (lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.PENDING "
+				+ "or lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+		+ "group by oi, units "
+		+ "having coalesce("
+			+ "SUM("
+				+ "CASE "
+					+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN null  "
+					+ "ELSE (rou.amount * rou_uom.multiplicand / rou_uom.divisor) " 
+				+ "END), "
+			+ "0) < units.amount ")
+	List<ItemAmount> findOpenOrdersItemAmounts(ProcessName orderType, ItemGroup itemGroup);
+
 	/**
 	 * Gets rows of all orders (history) for the given order type with their order status. 
 	 * @param orderType e.g. GENERAL_ORDER, CASHEW_ORDER
@@ -230,6 +265,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 		+ "ORDER BY oi.deliveryDate, po.id ")
 	List<PoItemRow> findAllOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId);
 
+
 	@Query("select oi "
 			+ "from OrderItem oi "
 				+ "join oi.numberUnits nu "
@@ -259,6 +295,8 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "join po_code.contractType ct "
 		+ "where po_code.id = :poCodeId ")
 	Optional<PoCodeDTO> findPoCodeById(int poCodeId);
+
+	
 
 
 

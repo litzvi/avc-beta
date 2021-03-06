@@ -26,13 +26,13 @@ import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
-import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.CashewQcRow;
+import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.ItemInventoryWithOrderRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
@@ -69,8 +69,6 @@ import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
 
-import lombok.NonNull;
-
 /**
  * @author Zvi
  *
@@ -89,7 +87,7 @@ public class QueryTest {
 	@Autowired Suppliers suppliers;
 	@Autowired Orders orders;
 	@Autowired Receipts receipts;
-	@Autowired InventoryReports cashewReports;
+	@Autowired InventoryReports inventoryReports;
 	@Autowired QualityChecks qualityChecks;
 	@Autowired WarehouseManagement warehouseManagement;
 	@Autowired ProductionProcesses productionProcesses;
@@ -251,7 +249,7 @@ public class QueryTest {
 		//cashew inventory table by item
 		List<ItemInventoryRow> inventoryRows;
 		try {
-			inventoryRows = cashewReports.getInventoryTableByItem(ItemGroup.PRODUCT);
+			inventoryRows = inventoryReports.getInventoryTableByItem(ItemGroup.PRODUCT);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -261,7 +259,7 @@ public class QueryTest {
 		
 		
 		//cashew inventory table by po
-		List<PoInventoryRow> poInventoryRows = cashewReports. getInventoryTableByPo(ItemGroup.PRODUCT);
+		List<PoInventoryRow> poInventoryRows = inventoryReports. getInventoryTableByPo(ItemGroup.PRODUCT);
 		poInventoryRows.forEach(r -> System.out.println(r));		
 		Set<PoCodeBasic> rawInventoryPos = objectTablesReader.findAvailableInventoryPoCodes(ItemGroup.PRODUCT);
 		rawInventoryPos.forEach(r -> System.out.println(r));
@@ -383,44 +381,33 @@ public class QueryTest {
 		
 		List<ItemInventoryWithOrderRow> inventoryWithOrderRows;
 		try {
-			inventoryWithOrderRows = cashewReports.getInventoryWithOrderTableByItem(ItemGroup.PRODUCT);
+			inventoryWithOrderRows = inventoryReports.getInventoryWithOrderTableByItem(ItemGroup.PRODUCT);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw e;
 		}
 		inventoryWithOrderRows.forEach(i -> System.out.println(i));
+		
+		List<ItemInventoryAmountWithOrder> inventoryWithOrder = inventoryReports.getInventoryWithOrderByItem(ItemGroup.GENERAL);	
+		inventoryWithOrder.forEach(i -> System.out.println(i));
 
+		inventoryWithOrder = inventoryReports.getInventoryWithOrderByItem(ItemGroup.PRODUCT);	
+		inventoryWithOrder.forEach(i -> System.out.println(i));
 		
 		service.cleanup(po);
 
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void oneQueryTest() {
-				
-		FinalReport finalReport;
 		try {
-			finalReport = processInfoReader.getFinalReport(5);
+			List<ItemInventoryAmountWithOrder> inventoryWithOrder = inventoryReports.getInventoryWithOrderByItem(ItemGroup.PRODUCT);	
+			inventoryWithOrder.forEach(i -> System.out.println(i));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw e;
 		}
-		System.out.println(finalReport);
-		System.out.println(finalReport.getReceiptQC());
-
-		List<PoCodeBasic> poCodes = objectTablesReader.findAllPoCodes();
-		System.out.println("findAllPoCodes");
-		poCodes.forEach(c -> System.out.println(orders.getPoCode(c.getId())));
-		poCodes.forEach(i -> System.out.println(i));
-		
-//		List<PoCodeBasic> poCodes = objectTablesReader.findFreePoCodes();
-//		poCodes.forEach(i -> System.out.println(i));
-
-		
-//		List<QcReportLine> qcReportLines = qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, 1234);
-//		qcReportLines.forEach(c -> System.out.println(c));
 	}
 }
