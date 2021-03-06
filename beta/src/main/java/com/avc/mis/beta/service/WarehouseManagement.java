@@ -29,6 +29,7 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -273,11 +274,18 @@ public class WarehouseManagement {
 		});
 	}
 	
-	public List<ProcessItemInventory> getAvailableInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer[] poCodeIds) {
+	public List<ProcessItemInventory> getAvailableInventory(
+			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
+			Integer itemId, Integer[] poCodeIds) {
+		
 		boolean checkProductionUses = (productionUses != null);
+		boolean checkFunctionalities = (functionalities != null);
 		boolean checkPoCodes = (poCodeIds != null);
 		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()
-				.findAvailableInventoryByStorage(checkProductionUses, productionUses, group, itemId, checkPoCodes, poCodeIds);
+				.findAvailableInventoryByStorage(checkProductionUses, productionUses, 
+						checkFunctionalities, functionalities, 
+						group, itemId, 
+						checkPoCodes, poCodeIds);
 				
 		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
 	}	

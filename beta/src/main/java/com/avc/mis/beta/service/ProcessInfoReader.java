@@ -99,10 +99,10 @@ public class ProcessInfoReader {
 			processDTO.setWeightedPos(weightedPos);
 	}
 	
-	void setAvailableInventory(TransactionProcessDTO<ProcessItemDTO> processDTO,
-			ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer[] poCodeIds) {
-		processDTO.setAvailableInventory(warehouseManagement.getAvailableInventory(group, productionUses, itemId, poCodeIds));
-	}
+//	void setAvailableInventory(TransactionProcessDTO<ProcessItemDTO> processDTO,
+//			ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer[] poCodeIds) {
+//		processDTO.setAvailableInventory(warehouseManagement.getAvailableInventory(group, productionUses, itemId, poCodeIds));
+//	}
 
 	/**
 	 * Gets a ProcessManagement that contains a user to be notified, 

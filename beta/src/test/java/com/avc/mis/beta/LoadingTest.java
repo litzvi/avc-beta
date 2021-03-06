@@ -79,7 +79,7 @@ public class LoadingTest {
 		loading.setShipingDetails(shipingDetails);
 
 		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, new Integer[] {receipt.getPoCode().getId()});
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
 		loading.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 //		loading.setLoadedItems(getLoadedItems(poInventory));
 		

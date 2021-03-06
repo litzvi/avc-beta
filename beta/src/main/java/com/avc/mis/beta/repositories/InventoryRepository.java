@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 
@@ -61,6 +62,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "join UOM uom "
 				+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
 			+ "join pi.process p "
+				+ "left join p.productionLine p_line "
 				+ "join p.lifeCycle lc "
 			+ "join pi.allStorages sf "
 				+ "join sf.group sf_group "
@@ -75,6 +77,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
+			+ "and (:checkFunctionalities = false or p_line.productionFunctionality in :functionalities) "
 			+ "and (item.id = :itemId or :itemId is null) "
 			+ "and "
 			+ "(:checkPoCodes = false "
@@ -100,6 +103,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "order by p.recordedTime, pi.ordinal, sf.ordinal ")
 	List<StorageInventoryRow> findAvailableInventoryByStorage(
 			boolean checkProductionUses, ProductionUse[] productionUses, 
+			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
 			ItemGroup itemGroup, Integer itemId, 
 			boolean checkPoCodes, Integer[] poCodeIds);
 	

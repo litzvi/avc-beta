@@ -22,6 +22,7 @@ import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
@@ -115,7 +116,11 @@ public class ValueTablesReader {
 	}
 	
 	public List<ProductionLine> getAllProductionLines() {
-		return getValueTablesRepository().findAllProductionLines();
+		return getValueTablesRepository().findProductionLinesByFuncionality(ProductionFunctionality.values());
+	}
+	
+	public List<ProductionLine> getProductionLinesByFuncionality(ProductionFunctionality[] functionalities) {
+		return getValueTablesRepository().findProductionLinesByFuncionality(functionalities);
 	}
 	
 	public List<CashewStandard> getAllCashewStandards() {

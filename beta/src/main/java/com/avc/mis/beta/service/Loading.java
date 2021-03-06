@@ -126,22 +126,22 @@ public class Loading {
 		return loadingDTO; 
 	}
 	
-	public ContainerLoadingDTO getLoadingWithAvilableInventory(
-			int processId, ItemGroup group, ProductionUse[] productionUses, Integer itemId) {
-		
-		ContainerLoadingDTO loadingDTO = getLoading(processId);
-		
-		List<Integer> poCodeIds = Arrays.asList(Optional.ofNullable(loadingDTO.getPoCode()).map(i -> i.getId()).orElse(null));		
-		if(loadingDTO.getWeightedPos() != null) {
-			poCodeIds.addAll(loadingDTO.getWeightedPos().stream()
-					.map(WeightedPoDTO::getPoCode)
-					.filter(i -> i != null)
-					.map(PoCodeBasic::getId).collect(Collectors.toList()));
-		}
-		getProcessInfoReader().setAvailableInventory(loadingDTO, group, productionUses, itemId, poCodeIds.toArray(new Integer[poCodeIds.size()]));
-
-		return loadingDTO;
-	}
+//	public ContainerLoadingDTO getLoadingWithAvilableInventory(
+//			int processId, ItemGroup group, ProductionUse[] productionUses, Integer itemId) {
+//		
+//		ContainerLoadingDTO loadingDTO = getLoading(processId);
+//		
+//		List<Integer> poCodeIds = Arrays.asList(Optional.ofNullable(loadingDTO.getPoCode()).map(i -> i.getId()).orElse(null));		
+//		if(loadingDTO.getWeightedPos() != null) {
+//			poCodeIds.addAll(loadingDTO.getWeightedPos().stream()
+//					.map(WeightedPoDTO::getPoCode)
+//					.filter(i -> i != null)
+//					.map(PoCodeBasic::getId).collect(Collectors.toList()));
+//		}
+//		getProcessInfoReader().setAvailableInventory(loadingDTO, group, productionUses, itemId, poCodeIds.toArray(new Integer[poCodeIds.size()]));
+//
+//		return loadingDTO;
+//	}
 
 	/**
 	 * Update the given ContainerLoading with the set data - Process information and

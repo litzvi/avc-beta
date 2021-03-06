@@ -15,9 +15,11 @@ import org.springframework.stereotype.Component;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.enums.Role;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.values.ProcessType;
+import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.service.SettingsWriter;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.utilities.ProgramSequence;
@@ -53,7 +55,7 @@ public class DataLoader implements ApplicationRunner {
 				settingsWriter.addAll(MeasureUnit.getAllUOM());
 				
 				//add process types
-				List<ProcessType> processTypes = new ArrayList<ProcessType>();
+				List<ProcessType> processTypes = new ArrayList<>();
 				for(ProcessName processName: ProcessName.values()) {
 					ProcessType processType = new ProcessType();
 					processType.setProcessName(processName);
@@ -61,6 +63,17 @@ public class DataLoader implements ApplicationRunner {
 					processTypes.add(processType);
 				}
 				settingsWriter.addAll(processTypes);
+				
+				//TODO should eventually be removed, so users can add there own production lines.
+				//add production lines - temporary
+//				List<ProductionLine> productionLines = new ArrayList<>();
+//				for(ProductionFunctionality productionFunctionality: ProductionFunctionality.values()) {
+//					ProductionLine productionLine = new ProductionLine();
+//					productionLine.setProductionFunctionality(productionFunctionality);
+//					productionLine.setValue(WordUtils.capitalizeFully(productionFunctionality.name().replace('_', ' ')));
+//					productionLines.add(productionLine);
+//				}
+//				settingsWriter.addAll(productionLines);
 				
 				//add program sequences
 				List<ProgramSequence> programSequences = new ArrayList<>();

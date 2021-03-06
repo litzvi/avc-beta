@@ -280,7 +280,7 @@ public class QueryTest {
 		//test getting inventory storages by item
 		List<ProcessItemInventory> itemInventory;
 		try {
-			itemInventory = warehouseManagement.getAvailableInventory(null, null, service.getItem().getId(), null);
+			itemInventory = warehouseManagement.getAvailableInventory(null, null, null, service.getItem().getId(), null);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();

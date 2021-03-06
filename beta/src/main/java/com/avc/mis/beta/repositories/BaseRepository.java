@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.Bank;
@@ -100,9 +101,15 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	@Query("select t from ProcessType t where t.active = true")
 	List<ProcessType> findAllProcessTypes();
 
-	@Query("select t from ProductionLine t where t.active = true")
-	List<ProductionLine> findAllProductionLines();
-	
+//	@Query("select t from ProductionLine t where t.active = true")
+//	List<ProductionLine> findAllProductionLines();
+
+	@Query("select t from ProductionLine t "
+			+ "where t.active = true "
+				+ "and t.productionFunctionality in :functionalities "
+			+ "order by t.value ")
+	List<ProductionLine> findProductionLinesByFuncionality(ProductionFunctionality[] functionalities);
+
 	@Query("select t from CashewStandard t "
 			+ "where t.active = true ")
 	List<CashewStandard> findAllCashewStandard();

@@ -62,7 +62,7 @@ public class RelocationTest {
 
 
 		//get inventory storages for relocation
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, new Integer[] {receipt.getPoCode().getId()});
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
 		relocation.setStorageMovesGroups(getStorageMoves(poInventory));
 		relocation.setItemCounts(getItemCounts(poInventory));
 

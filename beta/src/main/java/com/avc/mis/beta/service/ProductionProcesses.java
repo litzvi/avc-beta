@@ -148,23 +148,23 @@ public class ProductionProcesses {
 		return processDTO;
 	}
 	
-	public ProductionProcessDTO getProductionProcessWithAvilableInventory(
-			int processId, ItemGroup group, ProductionUse[] productionUses, Integer itemId) {
-		
-		ProductionProcessDTO processDTO = getProductionProcess(processId);
-		
-		List<Integer> poCodeIds = Arrays.asList(Optional.ofNullable(processDTO.getPoCode()).map(i -> i.getId()).orElse(null));		
-		if(processDTO.getWeightedPos() != null) {
-			poCodeIds.addAll(processDTO.getWeightedPos().stream()
-					.map(WeightedPoDTO::getPoCode)
-					.filter(i -> i != null)
-					.map(PoCodeBasic::getId).collect(Collectors.toList()));
-		}
-		
-		getProcessInfoReader().setAvailableInventory(processDTO, group, productionUses, itemId, poCodeIds.toArray(new Integer[poCodeIds.size()]));
-
-		return processDTO;
-	}
+//	public ProductionProcessDTO getProductionProcessWithAvilableInventory(
+//			int processId, ItemGroup group, ProductionUse[] productionUses, Integer itemId) {
+//		
+//		ProductionProcessDTO processDTO = getProductionProcess(processId);
+//		
+//		List<Integer> poCodeIds = Arrays.asList(Optional.ofNullable(processDTO.getPoCode()).map(i -> i.getId()).orElse(null));		
+//		if(processDTO.getWeightedPos() != null) {
+//			poCodeIds.addAll(processDTO.getWeightedPos().stream()
+//					.map(WeightedPoDTO::getPoCode)
+//					.filter(i -> i != null)
+//					.map(PoCodeBasic::getId).collect(Collectors.toList()));
+//		}
+//		
+//		getProcessInfoReader().setAvailableInventory(processDTO, group, productionUses, itemId, poCodeIds.toArray(new Integer[poCodeIds.size()]));
+//
+//		return processDTO;
+//	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editProductionProcess(ProductionProcess process) {
