@@ -18,16 +18,18 @@ public class ContainerLoadingInfo {
 
 	ShipmentCodeDTO shipmentCode;
 	
-	ContainerDetails containerDetails;
-	ShipingDetails shipingDetails;
+//	ContainerDetails containerDetails;
+//	ShipingDetails shipingDetails;
 	
 	
 	public ContainerLoadingInfo(Integer shipmentCodeId, String shipmentCodeCode,
-			Integer portOfDischargeId, String portOfDischargeValue, String portOfDischargeCode,
-			ContainerDetails containerDetails, ShipingDetails shipingDetails) {
+			Integer portOfDischargeId, String portOfDischargeValue, String portOfDischargeCode
+//			,
+//			ContainerDetails containerDetails, ShipingDetails shipingDetails
+			) {
 		this.shipmentCode = new ShipmentCodeDTO(shipmentCodeId, shipmentCodeCode, portOfDischargeId, portOfDischargeValue, portOfDischargeCode);
-		this.containerDetails = containerDetails;
-		this.shipingDetails = shipingDetails;
+//		this.containerDetails = containerDetails;
+//		this.shipingDetails = shipingDetails;
 	}
 	
 	

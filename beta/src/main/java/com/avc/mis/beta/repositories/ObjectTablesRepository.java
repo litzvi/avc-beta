@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.codes.MixPoCode;
@@ -214,7 +215,23 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ ") "
 		+ "order by po_code.id desc ")
 	List<PoCodeBasic> findFreePoCodes(Integer poCodeId);
-	
+
+	@Query("select new com.avc.mis.beta.dto.basic.ShipmentCodeBasic("
+			+ "s_code.id, s_code.code, port.code, port.value) "
+		+ "from ShipmentCode s_code "
+			+ "join s_code.portOfDischarge port "
+		+ "where (s_code.id = :shipmentCodeId or :shipmentCodeId is null) "
+			+ "and (s_code.loadings is empty "
+				+ "or not exists ("
+					+ "select p_2 "
+					+ "from s_code.loadings p_2 "
+						+ "join p_2.lifeCycle lc_2 "
+					+ "where "
+						+ "lc_2.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+				+ ")"
+			+ ") "
+		+ "order by s_code.id desc ")
+	List<ShipmentCodeBasic> findFreeShipmentCodes(Integer shipmentCodeId);
 
 	@Query("select count(*) > 0 "
 		+ "from PoCode po_code "
@@ -252,6 +269,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 
 	@Query("select s from ProgramSequence s where s.identifier = :sequenceIdentifier ")
 	ProgramSequence findSequence(SequenceIdentifier sequenceIdentifier);
+
 
 	
 }

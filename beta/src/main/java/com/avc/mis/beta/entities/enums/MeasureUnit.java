@@ -47,6 +47,7 @@ public enum MeasureUnit {
 	}
 
 	@JsonValue
+	@Override
 	public String toString()
 	{
 		return this.value;

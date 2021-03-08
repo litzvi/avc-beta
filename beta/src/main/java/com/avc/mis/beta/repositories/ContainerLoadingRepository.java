@@ -33,7 +33,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	 * @return List of ItemAmountWithLoadingReportLine which is pair of LoadingReportLine and ItemAmount for one item.
 	 */
 	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine("
-			+ "p.id, sc.id, sc.code, port.code, port.value, p.containerDetails, p.recordedTime, "
+			+ "p.id, sc.id, sc.code, port.code, port.value, cont_arrival.containerDetails, p.recordedTime, "
 			+ "lc.processStatus, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
@@ -42,6 +42,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "from ContainerLoading p "
 			+ "join p.shipmentCode sc "
 				+ "join sc.portOfDischarge port "
+			+ "join p.booking b "
+				+ "left join b.containerArrival cont_arrival "
 			+ "join p.usedItemGroups grp "
 				+ "join grp.usedItems ui "
 					+ "join ui.storage sf "
@@ -71,11 +73,11 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	 * @return ContainerLoadingInfo object that contains loading process information.
 	 */
 	@Query("select new com.avc.mis.beta.dto.embedable.ContainerLoadingInfo( "
-			+ "sc.id, sc.code, port.id, port.value, port.code, "
-			+ "r.containerDetails, r.shipingDetails) "
+			+ "sc.id, sc.code, port.id, port.value, port.code) "
 		+ "from ContainerLoading r "
-			+ "join r.shipmentCode sc "
-				+ "join sc.portOfDischarge port "
+//			+ "join r.booking b "
+				+ "join r.shipmentCode sc "
+					+ "join sc.portOfDischarge port "
 		+ "where r.id = :processId ")
 	ContainerLoadingInfo findContainerLoadingInfo(int processId);
 
@@ -183,8 +185,10 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "from ContainerLoading p "
 			+ "join p.shipmentCode shipment_code "
 				+ "join shipment_code.portOfDischarge pod "
-			+ "join p.containerDetails cont "
-			+ "join p.shipingDetails ship "
+			+ "join p.booking b "
+				+ "join b.shipingDetails ship "
+				+ "left join b.containerArrival cont_arrival "
+					+ "left join cont_arrival.containerDetails cont "
 			+ "join p.processType pt "
 			+ "join p.lifeCycle lc "
 			+ "left join p.approvals approval "
@@ -225,8 +229,9 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	@Query("select new com.avc.mis.beta.dto.doc.ExportInfo( "
 			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, p.recordedTime) "
 		+ "from ContainerLoading p "
-			+ "join p.shipmentCode shipment_code "
-				+ "join shipment_code.portOfDischarge pod "
+//			+ "join p.booking b "
+				+ "join p.shipmentCode shipment_code "
+					+ "join shipment_code.portOfDischarge pod "
 		+ "where p.id = :processId ")
 	Optional<ExportInfo> findInventoryExportDocById(int processId);
 

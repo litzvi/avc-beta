@@ -19,15 +19,20 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.doc.InventoryExportDoc;
 import com.avc.mis.beta.dto.doc.SecurityExportDoc;
+import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
+import com.avc.mis.beta.dto.process.ContainerBookingDTO;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.process.ContainerArrival;
+import com.avc.mis.beta.entities.process.ContainerBooking;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.ShipmentCode;
+import com.avc.mis.beta.service.ContainerBookings;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
@@ -45,11 +50,12 @@ public class LoadingTest {
 	@Autowired TestService service;	
 	@Autowired WarehouseManagement warehouseManagement;
 
+	@Autowired ContainerBookings bookings;
 	@Autowired Loading loadingService;
 	@Autowired ProcessInfoWriter processInfoWriter;
-
+	
 	@Test
-	void loadingTest() {
+	void bookingTest() {
 		Receipt receipt;
 		try {
 			receipt = service.addBasicCashewReceipt();
@@ -61,9 +67,75 @@ public class LoadingTest {
 		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
+		//test container booking
+		ContainerBooking booking = service.addBasicContainerBooking();		
+		bookings.addBooking(booking);		
+		ContainerBookingDTO expectedBooking = new ContainerBookingDTO(booking);		
+		ContainerBookingDTO actualBooking = bookings.getBooking(booking.getId());		
+		bookings.editBooking(booking);		
+		assertEquals(expectedBooking, actualBooking, "Failed test adding container loading");
+		
+		//test container arrival
+		ContainerArrival arrival = new ContainerArrival();
+		arrival.setBooking(booking);
+		arrival.setRecordedTime(OffsetDateTime.now());
+		ContainerDetails containerDetails = new ContainerDetails();
+		containerDetails.setContainerNumber("CONT01");
+		containerDetails.setSealNumber("SEAL01");
+		containerDetails.setContainerType("20'");		
+		arrival.setContainerDetails(containerDetails);
+		bookings.addArrival(arrival);
+		ContainerArrivalDTO expectedArrival = new ContainerArrivalDTO(arrival);
+		ContainerArrivalDTO actualArrival = bookings.getArrival(arrival.getId());		
+		bookings.editArrival(arrival);		
+		assertEquals(expectedArrival, actualArrival, "Failed test adding container loading");
+
+		
+		//test loading
 		ContainerLoading loading = new ContainerLoading();
-		ShipmentCode shipmentCode = service.getShipmentCode();
-		shipmentCode.setPortOfDischarge(service.getShippingPort());
+//		ContainerBooking refBooking = new ContainerBooking();
+//		refBooking.setId(booking.getId());
+//		refBooking.setVersion(booking.getVersion());
+		loading.setBooking(booking);
+		loading.setShipmentCode(service.addShipmentCode());
+		loading.setRecordedTime(OffsetDateTime.now());
+
+		//get inventory storages for transfer
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
+		loading.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+		
+		loadingService.addLoading(loading);		
+		ContainerLoadingDTO expectedLoading = new ContainerLoadingDTO(loading);
+		ContainerLoadingDTO actualLoading = loadingService.getLoading(loading.getId());
+
+		InventoryExportDoc inventoryExportDoc = loadingService.getInventoryExportDoc(loading.getId());
+		System.out.println(inventoryExportDoc);
+		
+		SecurityExportDoc securityExportDoc =loadingService.getSecurityExportDoc(loading.getId());
+		System.out.println(securityExportDoc);
+		
+		loadingService.editLoading(loading);		
+		assertEquals(expectedLoading, actualLoading, "Failed test adding container loading");
+
+
+	}
+
+	@Test
+	void loadingTest() {
+		/*
+		Receipt receipt;
+		try {
+			receipt = service.addBasicCashewReceipt();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
+		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
+		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
+				
+		ContainerLoading loading = new ContainerLoading();
+		ShipmentCode shipmentCode = service.addShipmentCode();
 		loading.setShipmentCode(shipmentCode);
 		loading.setRecordedTime(OffsetDateTime.now());
 		
@@ -81,7 +153,6 @@ public class LoadingTest {
 		//get inventory storages for transfer
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
 		loading.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-//		loading.setLoadedItems(getLoadedItems(poInventory));
 		
 		loadingService.addLoading(loading);
 		
@@ -105,6 +176,6 @@ public class LoadingTest {
 		loadingService.editLoading(loading);
 		
 		assertEquals(expected, actual, "Failed test adding container loading");
-
+	*/
 	}	
 }

@@ -3,21 +3,16 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.embedable.ShipmentBookingInfo;
-import com.avc.mis.beta.dto.process.ShipmentBookingDTO;
-import com.avc.mis.beta.dto.processinfo.BookedContainerDTO;
-import com.avc.mis.beta.entities.process.ShipmentBooking;
+import com.avc.mis.beta.dto.embedable.ContainerBookingInfo;
+import com.avc.mis.beta.entities.process.ContainerBooking;
 
 /**
  * @author zvi
  *
  */
-public interface ShipmentBookingRepository extends ProcessRepository<ShipmentBooking> {
+public interface ContainerBookingRepository extends ProcessRepository<ContainerBooking> {
 
 //	@Query("select new com.avc.mis.beta.dto.process.ShipmentBookingDTO("
 //			+ "booking.id, booking.version, booking.createdDate, p_user.username, "
@@ -39,20 +34,15 @@ public interface ShipmentBookingRepository extends ProcessRepository<ShipmentBoo
 //		+ "where booking.id = :processId ")
 //	Optional<ShipmentBookingDTO> findBookingById(int processId);
 
-	@Query("select new com.avc.mis.beta.dto.processinfo.BookedContainerDTO("
-			+ "c.id, c.version, c.ordinal, c.billNumber, c.vessel, c.shippingCompany, "
-			+ "port.id, port.value, "
-			+ "c.etd, c.containerType) "
-		+ "from BookedContainer c "
-			+ "join c.destinationPort port "
-			+ "join c.booking booking "
-		+ "where booking.id = :processId "
-		+ "order by c.ordinal ")
-	List<BookedContainerDTO> findBookedContainersByProcessId(int processId);
 
-	@Query("select new com.avc.mis.beta.dto.embedable.ShipmentBookingInfo(r.personInCharge) "
-			+ "from ShipmentBooking r "
-			+ "where r.id = :processId ")
-	ShipmentBookingInfo findShipmentBookingInfo(int processId);
+	@Query("select new com.avc.mis.beta.dto.embedable.ContainerBookingInfo("
+//			+ "s_code.id, s_code.code, "
+//			+ "port.id, port.value, port.code, "
+			+ "p.bookingDate, p.shipingDetails, p.personInCharge) "
+		+ "from ContainerBooking p "
+//			+ "join p.shipmentCode s_code "
+//				+ "join s_code.portOfDischarge port "
+		+ "where p.id = :processId ")
+	ContainerBookingInfo findContainerBookingInfo(int processId);
 
 }

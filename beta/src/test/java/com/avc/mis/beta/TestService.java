@@ -29,10 +29,12 @@ import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.PackedItem;
+import com.avc.mis.beta.entities.process.ContainerBooking;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.ShipmentCode;
@@ -53,6 +55,7 @@ import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.service.ContainerBookings;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.Receipts;
@@ -71,6 +74,7 @@ public class TestService {
 	@Autowired ObjectTablesReader objectTablesReader;
 	@Autowired Orders orders;
 	@Autowired Receipts receipts;
+	@Autowired ContainerBookings bookings;
 	
 	private int randCode = LocalDateTime.now().hashCode();
 	private Random randNum = new Random();
@@ -80,6 +84,23 @@ public class TestService {
 		supplier.setName("service supplier " + randCode++);
 		suppliers.addSupplier(supplier);
 		return supplier;
+	}
+	
+	public ContainerBooking addBasicContainerBooking() {
+		ContainerBooking booking = new ContainerBooking();
+		booking.setBookingNumber("booking_no " + randCode++);
+		booking.setBookingDate("1983-11-23");
+		booking.setShipingDetails(getShipingDetails());
+		booking.setRecordedTime(OffsetDateTime.now());
+		return booking;
+	}
+	
+	public ShipingDetails getShipingDetails() {
+		ShipingDetails shipingDetails = new ShipingDetails();
+		shipingDetails.setEtd("2007-12-03");
+		shipingDetails.setEta("2008-12-03");
+		shipingDetails.setContainerType("20'");
+		return shipingDetails;
 	}
 
 	PoCode addPoCode() {
@@ -92,10 +113,11 @@ public class TestService {
 		return poCode;
 	}
 
-	public ShipmentCode getShipmentCode() {
+	public ShipmentCode addShipmentCode() {
 		ShipmentCode shipmentCode = new ShipmentCode();
 		shipmentCode.setCode(Integer.toString(randCode++));
-
+		shipmentCode.setPortOfDischarge(getShippingPort());
+		bookings.addShipmentCode(shipmentCode);
 		return shipmentCode;
 	}
 

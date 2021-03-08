@@ -8,11 +8,14 @@ import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.utilities.LocalDateToLong;
 
@@ -30,9 +33,13 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class ShipingDetails {
 
-	private String bookingNumber;
 	private String vessel;
 	private String shippingCompany;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	@NotNull(message = "Container type/size is mandatory")
+	private ShippingContainerType containerType;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "destinationPortId")
@@ -60,5 +67,13 @@ public class ShipingDetails {
 	public void setEta(String eta) {
 		if(eta != null)
 			this.eta = LocalDate.parse(eta);
+	}
+	
+	public void setContainerType(String containerType) {
+		this.containerType = ShippingContainerType.valueOfLabel(containerType);
+	}
+	
+	public String getContainerType() {
+		return this.containerType.toString();
 	}
 }

@@ -79,7 +79,8 @@ public class LoadingRow extends BasicDTO {
 		
 		this.containerNumber = containerNumber;
 		this.sealNumber = sealNumber;
-		this.containerSize = containerType.toString();
+		if(containerType != null)
+			this.containerSize = containerType.toString();
 		
 	}
 	

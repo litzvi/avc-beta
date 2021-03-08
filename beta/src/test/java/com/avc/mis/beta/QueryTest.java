@@ -309,7 +309,14 @@ public class QueryTest {
 		processReport.forEach(i -> System.out.println(i));
 					
 		//loading table
-		List<LoadingRow> loadings = loading.getLoadings();
+		List<LoadingRow> loadings;
+		try {
+			loadings = loading.getLoadings();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		loadings.forEach(i -> System.out.println(i));
 		
 		Set<PoCodeBasic> inventoryPoCodes;

@@ -3,21 +3,27 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.values.ShippingPort;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * Basic immutable information that serves as identification for container shipment.
@@ -52,6 +58,11 @@ public class ShipmentCode extends BaseEntity {
 	@NotNull(message = "Port of discharge is mandatory")
 	private ShippingPort portOfDischarge;
 	
+	@JsonIgnore
+	@ToString.Exclude 
+	@OneToMany(mappedBy = "shipmentCode", fetch = FetchType.LAZY)
+	private Set<ContainerLoading> loadings = new HashSet<>();
+	
 	/**
 	 * @return a string representing full Shipment code. e.g. TAN-51284
 	 */
@@ -59,14 +70,5 @@ public class ShipmentCode extends BaseEntity {
 		return String.format("%s-%s", this.portOfDischarge.getCode(), this.code);
 	}
 
-//	@Override
-//	public Integer getId() {
-//		return code;
-//	}
-//
-//	@Override
-//	public void setId(Integer id) {
-//		this.code = id;		
-//	}
-
+	
 }

@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.entities.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 /**
  * @author zvi
  *
@@ -18,6 +20,7 @@ public enum ShippingContainerType {
         this.label = label;
     }
     
+	@JsonValue
     @Override 
     public String toString() { 
         return this.label; 

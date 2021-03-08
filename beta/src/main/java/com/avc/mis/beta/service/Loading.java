@@ -97,10 +97,12 @@ public class Loading {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false) 
 	public void addLoading(ContainerLoading loading) {
 		loading.setProcessType(dao.getProcessTypeByValue(ProcessName.CONTAINER_LOADING)); 
-		//using save rather than persist in case POid was assigned by user
-//		dao.addEntityWithFlexibleGenerator(loading.getShipmentCode());
-				
-		dao.addTransactionProcessEntity(loading); 
+		if(dao.isShippingCodeFree(loading.getShipmentCode().getId())) {
+			dao.addTransactionProcessEntity(loading); 
+		}
+		else {
+			throw new IllegalArgumentException("Shipment Code is already used for another shipping");
+		}
 	}
 
 	/**

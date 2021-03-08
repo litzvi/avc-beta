@@ -12,6 +12,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -44,23 +45,26 @@ import lombok.Setter;
 @Table(name = "CONTAINER_LOADINGS")
 @PrimaryKeyJoinColumn(name = "processId")
 public class ContainerLoading extends TransactionProcess<ProcessItem> {
+
+	@NotNull(message = "Booking is mandatory")
+	@OneToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "bookingId")
+	private ContainerBooking booking;
 	
-	@Valid
 	@NotNull(message = "Shipment code is mandatory")
-	@OneToOne(orphanRemoval = true, 
-			cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false, updatable = false, name = "shipment_code_code")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(nullable = false, name = "shipment_code_code")
 	private ShipmentCode shipmentCode;
+
+//	@Valid
+//	@Embedded
+//	@NotNull(message = "Container details is mandatory")
+//	private ContainerDetails containerDetails;
 	
-	@Valid
-	@Embedded
-	@NotNull(message = "Container details is mandatory")
-	private ContainerDetails containerDetails;
-	
-	@Valid
-	@Embedded
-	@NotNull(message = "Shipping details is mandatory")
-	private ShipingDetails shipingDetails;
+//	@Valid
+//	@Embedded
+//	@NotNull(message = "Shipping details is mandatory")
+//	private ShipingDetails shipingDetails;
 
 	//not used for now
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)

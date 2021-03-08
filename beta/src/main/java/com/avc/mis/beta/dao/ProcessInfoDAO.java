@@ -20,6 +20,7 @@ import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.codes.PoCode;
@@ -429,6 +430,14 @@ public class ProcessInfoDAO extends DAO {
 		return true;
 	}
 	
+	public boolean isShippingCodeFree(Integer shipmentCodeId) {
+		List<ShipmentCodeBasic> shipmentCodes = getObjectTablesRepository().findFreeShipmentCodes(shipmentCodeId);
+		if(shipmentCodes == null || shipmentCodes.size() == 0) {
+			return false;
+		}
+		return true;
+	}
+	
 	public boolean isPoCodeReceived(Integer poCodeId) {
 		// TODO Auto-generated method stub
 		return getObjectTablesRepository().isPoCodeReceived(poCodeId);
@@ -453,6 +462,7 @@ public class ProcessInfoDAO extends DAO {
 	public ProgramSequence getSequnce(SequenceIdentifier sequenceIdentifier) {
 		return getObjectTablesRepository().findSequence(sequenceIdentifier);
 	}
+
 
 
 	

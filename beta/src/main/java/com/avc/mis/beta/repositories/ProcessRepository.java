@@ -31,7 +31,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "pt.processName, p_line, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
-		+ "from PoProcess r "
+		+ "from GeneralProcess r "
 			+ "join r.processType pt "
 			+ "left join r.createdBy p_user "
 			+ "left join r.productionLine p_line "

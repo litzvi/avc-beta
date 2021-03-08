@@ -142,9 +142,6 @@ public class InventoryReports {
 		List<ItemAmount> inventory = inventoryRepository.findInventoryItemAmounts(false, null, group, null, null);
 		List<ItemAmount> openOrders = poRepository.findOpenOrdersItemAmounts(null, group);
 		
-		System.out.println("open orders:" + openOrders.size());
-		System.out.println(openOrders.get(0));
-		
 		List<ItemInventoryAmountWithOrder> inventoryAmountWithOrders = getValueTablesReader().getBasicItemsByGroup(group).stream()
 				.map(i -> new ItemInventoryAmountWithOrder(i))
 				.collect(Collectors.toList());
@@ -167,22 +164,6 @@ public class InventoryReports {
 		
 		return inventoryAmountWithOrders;
 
-		
-//		List<BasicValueEntity<Item>> items = getValueTablesReader().getBasicItemsByGroup(group);
-//		
-//		Map<BasicValueEntity<Item>, ItemInventoryAmountWithOrder> itemsMap = new HashMap<>();
-//		items.forEach(i -> {
-//			itemsMap.put(i, new ItemInventoryAmountWithOrder(i));
-//		});
-//
-//		inventory.forEach(i -> {
-//			ItemInventoryAmountWithOrder amountWithOrder = itemsMap.get(i.getItem());
-//			amountWithOrder.addInventory(i);
-//		});
-		
-
-		
-//		return itemsMap.values().stream().collect(Collectors.toList());
 	}
 	
 	@Deprecated
