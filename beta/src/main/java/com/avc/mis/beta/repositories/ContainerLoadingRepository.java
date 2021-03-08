@@ -43,7 +43,9 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "join p.shipmentCode sc "
 				+ "join sc.portOfDischarge port "
 			+ "join p.booking b "
-				+ "left join b.containerArrival cont_arrival "
+			+ "left join ContainerArrival cont_arrival "
+				+ "on (cont_arrival.booking = b) "
+				+ "left join cont_arrival.lifeCycle arrival_lc "
 			+ "join p.usedItemGroups grp "
 				+ "join grp.usedItems ui "
 					+ "join ui.storage sf "
@@ -64,6 +66,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "where "
 			+ "po_code.id = :poCodeId "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
+			+ "and ((arrival_lc is null) or (arrival_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "group by p, item, w_po_code_used_item ")
 	List<ItemAmountWithLoadingReportLine> findLoadingsItemsAmounts(Integer poCodeId, boolean cancelled);
 
@@ -187,8 +190,10 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 				+ "join shipment_code.portOfDischarge pod "
 			+ "join p.booking b "
 				+ "join b.shipingDetails ship "
-				+ "left join b.containerArrival cont_arrival "
-					+ "left join cont_arrival.containerDetails cont "
+			+ "left join ContainerArrival cont_arrival "
+				+ "on (cont_arrival.booking = b) "
+				+ "left join cont_arrival.lifeCycle arrival_lc "
+				+ "left join cont_arrival.containerDetails cont "
 			+ "join p.processType pt "
 			+ "join p.lifeCycle lc "
 			+ "left join p.approvals approval "
@@ -208,6 +213,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "where "
 			+ "(po_code.id = :poCodeId or :poCodeId is null) "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
+			+ "and ((arrival_lc is null) or (arrival_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
 	List<LoadingRow> findContainerLoadings(Integer poCodeId, boolean cancelled);

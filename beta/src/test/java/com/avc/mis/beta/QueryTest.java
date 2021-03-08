@@ -20,6 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.basic.ProcessBasic;
+import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.basic.UserBasic;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.data.UserDTO;
@@ -410,8 +411,8 @@ public class QueryTest {
 	@Test
 	void oneQueryTest() {
 		try {
-			List<ItemInventoryAmountWithOrder> inventoryWithOrder = inventoryReports.getInventoryWithOrderByItem(ItemGroup.PRODUCT);	
-			inventoryWithOrder.forEach(i -> System.out.println(i));
+			List<ShipmentCodeBasic> shipmentCodes = objectTablesReader.findFreeShipmentCodes();
+			shipmentCodes.forEach(i -> System.out.println(i));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

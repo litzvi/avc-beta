@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities.process;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -63,17 +65,17 @@ public class ContainerBooking extends GeneralProcess {
 //	@JoinColumn(name = "logisticsCompanyId")
 //	private Supplier logisticsCompany;
 	
+	private String personInCharge;
+	
 	public void setBookingDate(String bookingDate) {
 		if(bookingDate != null)
 			this.bookingDate = LocalDate.parse(bookingDate);
 	}
 		
-	private String personInCharge;
+	@OneToMany(mappedBy = "booking", fetch = FetchType.LAZY)
+	private Set<ContainerArrival> containerArrivals;
 	
-	@OneToOne(mappedBy = "booking", fetch = FetchType.LAZY)
-	private ContainerArrival containerArrival;
-	
-	@OneToOne(mappedBy = "booking", fetch = FetchType.LAZY)
-	private ContainerLoading containerLoading;
+	@OneToMany(mappedBy = "booking", fetch = FetchType.LAZY)
+	private Set<ContainerLoading> containerLoadings;
 	
 }

@@ -18,6 +18,7 @@ import lombok.Value;
 public class ContainerBookingInfo {
 
 //	ShipmentCodeDTO shipmentCode;
+	String bookingNumber;
 	LocalDate bookingDate;
 	ShipingDetails shipingDetails;
 	String personInCharge;
@@ -26,8 +27,9 @@ public class ContainerBookingInfo {
 	public ContainerBookingInfo(
 //			Integer shipmentCodeId, String shipmentCodeCode,
 //			Integer portOfDischargeId, String portOfDischargeValue, String portOfDischargeCode,
-			LocalDate bookingDate, ShipingDetails shipingDetails, String personInCharge) {
+			String bookingNumber, LocalDate bookingDate, ShipingDetails shipingDetails, String personInCharge) {
 //		this.shipmentCode = new ShipmentCodeDTO(shipmentCodeId, shipmentCodeCode, portOfDischargeId, portOfDischargeValue, portOfDischargeCode);
+		this.bookingNumber = bookingNumber;
 		this.bookingDate = bookingDate;
 		this.shipingDetails = shipingDetails;
 		this.personInCharge = personInCharge;

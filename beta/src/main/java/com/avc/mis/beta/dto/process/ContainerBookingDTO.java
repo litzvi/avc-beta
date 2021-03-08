@@ -28,6 +28,7 @@ import lombok.ToString;
 public class ContainerBookingDTO extends GeneralProcessDTO {
 
 //	private ShipmentCodeDTO shipmentCode;
+	private String bookingNumber;
 	private LocalDate bookingDate;
 	private ShipingDetails shipingDetails;
 	
@@ -42,6 +43,7 @@ public class ContainerBookingDTO extends GeneralProcessDTO {
 	public ContainerBookingDTO(@NonNull ContainerBooking booking) {
 		super(booking);
 //		this.shipmentCode = new ShipmentCodeDTO(booking.getShipmentCode());
+		this.bookingNumber = booking.getBookingNumber();
 		this.bookingDate = booking.getBookingDate();
 		this.shipingDetails = booking.getShipingDetails();
 		this.personInCharge = booking.getPersonInCharge();
@@ -50,6 +52,7 @@ public class ContainerBookingDTO extends GeneralProcessDTO {
 	
 	public void setContainerBookingInfo(ContainerBookingInfo info) {
 //		this.shipmentCode = info.getShipmentCode();
+		this.bookingNumber = info.getBookingNumber();
 		this.bookingDate = info.getBookingDate();
 		this.shipingDetails = info.getShipingDetails();
 		this.personInCharge = info.getPersonInCharge();		

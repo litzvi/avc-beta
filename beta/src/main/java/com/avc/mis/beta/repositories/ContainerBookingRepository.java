@@ -3,8 +3,11 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.util.Set;
+
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.basic.BookingBasic;
 import com.avc.mis.beta.dto.embedable.ContainerBookingInfo;
 import com.avc.mis.beta.entities.process.ContainerBooking;
 
@@ -38,11 +41,39 @@ public interface ContainerBookingRepository extends ProcessRepository<ContainerB
 	@Query("select new com.avc.mis.beta.dto.embedable.ContainerBookingInfo("
 //			+ "s_code.id, s_code.code, "
 //			+ "port.id, port.value, port.code, "
-			+ "p.bookingDate, p.shipingDetails, p.personInCharge) "
+			+ "p.bookingNumber, p.bookingDate, p.shipingDetails, p.personInCharge) "
 		+ "from ContainerBooking p "
 //			+ "join p.shipmentCode s_code "
 //				+ "join s_code.portOfDischarge port "
 		+ "where p.id = :processId ")
 	ContainerBookingInfo findContainerBookingInfo(int processId);
+
+	@Query("select new com.avc.mis.beta.dto.basic.BookingBasic("
+			+ "id, version, bookingNumber) "
+		+ "from ContainerBooking p "
+		+ "where p.containerArrivals is empty "
+			+ "or not exists ("
+				+ "select p_2 "
+				+ "from p.containerArrivals p_2 "
+					+ "join p_2.lifeCycle lc_2 "
+				+ "where "
+					+ "lc_2.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+			+ ") "
+		+ "order by p.bookingDate ")
+	Set<BookingBasic> getNonArrivedBookings();
+
+	@Query("select new com.avc.mis.beta.dto.basic.BookingBasic("
+			+ "id, version, bookingNumber) "
+		+ "from ContainerBooking p "
+		+ "where p.containerLoadings is empty "
+			+ "or not exists ("
+				+ "select p_2 "
+				+ "from p.containerLoadings p_2 "
+					+ "join p_2.lifeCycle lc_2 "
+				+ "where "
+					+ "lc_2.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+			+ ") "
+		+ "order by p.bookingDate ")
+	Set<BookingBasic> getNonLoadedBookings();
 
 }

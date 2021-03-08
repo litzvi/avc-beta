@@ -4,6 +4,7 @@
 package com.avc.mis.beta.service;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
+import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.BookingBasic;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
 import com.avc.mis.beta.dto.process.ContainerBookingDTO;
 import com.avc.mis.beta.entities.codes.PoCode;
@@ -45,6 +48,13 @@ public class ContainerBookings {
 	@Autowired private ContainerBookingRepository containerBookingRepository;
 	@Autowired private ContainerArrivalRepository containerArrivalRepository;
 	
+	public Set<BookingBasic> getNonArrivedBookings() {
+		return getContainerBookingRepository().getNonArrivedBookings();		
+	}
+	
+	public Set<BookingBasic> getNonLoadedBookings() {
+		return getContainerBookingRepository().getNonLoadedBookings();		
+	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addShipmentCode(ShipmentCode shipmentCode) {

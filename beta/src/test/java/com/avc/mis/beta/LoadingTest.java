@@ -116,6 +116,10 @@ public class LoadingTest {
 		
 		loadingService.editLoading(loading);		
 		assertEquals(expectedLoading, actualLoading, "Failed test adding container loading");
+		
+		loadingService.removeLoading(loading.getId());
+		bookings.removeArrival(arrival.getId());
+		bookings.removeBooking(booking.getId());
 
 
 	}
