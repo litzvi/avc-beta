@@ -14,7 +14,7 @@ import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
-import com.avc.mis.beta.dto.basic.BookingBasic;
+import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
 import com.avc.mis.beta.dto.process.ContainerBookingDTO;
 import com.avc.mis.beta.entities.codes.PoCode;
@@ -38,6 +38,7 @@ import lombok.Getter;
 @Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
+@Deprecated
 public class ContainerBookings {
 	
 	@Autowired private ProcessInfoDAO dao;
@@ -48,25 +49,10 @@ public class ContainerBookings {
 	@Autowired private ContainerBookingRepository containerBookingRepository;
 	@Autowired private ContainerArrivalRepository containerArrivalRepository;
 	
-	public Set<BookingBasic> getNonArrivedBookings() {
-		return getContainerBookingRepository().getNonArrivedBookings();		
-	}
+//	public Set<BookingBasic> getNonArrivedBookings() {
+//		return getContainerBookingRepository().getNonArrivedBookings();		
+//	}
 	
-	public Set<BookingBasic> getNonLoadedBookings() {
-		return getContainerBookingRepository().getNonLoadedBookings();		
-	}
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addShipmentCode(ShipmentCode shipmentCode) {
-		dao.addEntity(shipmentCode);
-	}
-
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editShipmentCode(ShipmentCode shipmentCode) {
-		dao.editEntity(shipmentCode);
-	}	
-
-
 	/**
 	 * Adds a new container booking
 	 * @param booking shipment booking with all required details
@@ -95,23 +81,6 @@ public class ContainerBookings {
 		return containerBookingDTO;
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addArrival(ContainerArrival arrival) {
-		arrival.setProcessType(dao.getProcessTypeByValue(ProcessName.CONTAINER_ARRIVAL));
-		dao.addGeneralProcessEntity(arrival);			
-	}
-	
-	public ContainerArrivalDTO getArrival(int processId) {
-		ContainerArrivalDTO containerArrivalDTO = new ContainerArrivalDTO();
-		containerArrivalDTO.setGeneralProcessInfo(getContainerArrivalRepository()
-				.findGeneralProcessInfoByProcessId(processId, ContainerArrival.class)
-				.orElseThrow(
-						()->new IllegalArgumentException("No container arrival with given process id")));
-		containerArrivalDTO.setContainerArrivalInfo(getContainerArrivalRepository().findContainerArrivalInfo(processId));
-		
-		return containerArrivalDTO;
-	}
-	
 	/**
 	 * Update the given ShipmentBooking with the set data - Process information, containers booked and remarks.
 	 * Ignores changed non editable fields.
@@ -123,21 +92,9 @@ public class ContainerBookings {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editArrival(ContainerArrival arrival) {
-		dao.editGeneralProcessEntity(arrival);
-	}
-
-		
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	@Deprecated
 	public void removeBooking(int bookingId) {
 		getDeletableDAO().permenentlyRemoveEntity(ContainerBooking.class, bookingId);
-	}
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	@Deprecated
-	public void removeArrival(int arrivalId) {
-		getDeletableDAO().permenentlyRemoveEntity(ContainerArrival.class, arrivalId);
 	}
 	
 }

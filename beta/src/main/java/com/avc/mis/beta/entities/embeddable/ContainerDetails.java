@@ -25,9 +25,11 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class ContainerDetails {
 
+	@Column(nullable = false)
 	@NotNull(message = "Container number is mandatory")
 	private String containerNumber;
 
+	@Column(nullable = false)
 	@NotNull(message = "Seal number is mandatory")
 	private String sealNumber;
 	
@@ -35,16 +37,7 @@ public class ContainerDetails {
 	@Column(nullable = false)
 	@NotNull(message = "Container type/size is mandatory")
 	private ShippingContainerType containerType;
-	
-	
-//	//@Many to one, verify, cascade
-//	@NotNull(message = "Container arrival has to record vehicle information")
-//	private Vehicle vehicle;
-//	
-//	//@Many to one, verify, cascade
-//	@NotNull(message = "Container arrival has to record driver information")
-//	private Driver driver;
-	
+		
 	public void setContainerType(String containerType) {
 		this.containerType = ShippingContainerType.valueOfLabel(containerType);
 	}

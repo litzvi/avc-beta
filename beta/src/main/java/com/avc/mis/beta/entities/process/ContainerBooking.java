@@ -39,6 +39,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "CONTAINER_BOOKINGS")
 @PrimaryKeyJoinColumn(name = "processId")
+@Deprecated
 public class ContainerBooking extends GeneralProcess {
 	
 //	@Valid
@@ -47,7 +48,7 @@ public class ContainerBooking extends GeneralProcess {
 //	@JoinColumn(nullable = false, name = "shipment_code_code")
 //	private ShipmentCode shipmentCode;
 	
-	@NotNull(message = "Shipment code is mandatory")
+	@NotNull(message = "Booking number is mandatory")
 	@Column(nullable = false, unique = true)
 	private String bookingNumber;
 	
@@ -55,16 +56,7 @@ public class ContainerBooking extends GeneralProcess {
 	@NotNull(message = "Booking date date is mandatory")
 	@Convert(converter = LocalDateToLong.class)
 	private LocalDate bookingDate;
-	
-	@Valid
-	@Embedded
-	@NotNull(message = "Shipping details is mandatory")
-	private ShipingDetails shipingDetails;
 		
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "logisticsCompanyId")
-//	private Supplier logisticsCompany;
-	
 	private String personInCharge;
 	
 	public void setBookingDate(String bookingDate) {
@@ -72,10 +64,8 @@ public class ContainerBooking extends GeneralProcess {
 			this.bookingDate = LocalDate.parse(bookingDate);
 	}
 		
-	@OneToMany(mappedBy = "booking", fetch = FetchType.LAZY)
-	private Set<ContainerArrival> containerArrivals;
+//	@OneToMany(mappedBy = "booking", fetch = FetchType.LAZY)
+//	private Set<ContainerArrival> containerArrivals;
 	
-	@OneToMany(mappedBy = "booking", fetch = FetchType.LAZY)
-	private Set<ContainerLoading> containerLoadings;
-	
+		
 }

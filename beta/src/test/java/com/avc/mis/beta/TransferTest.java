@@ -7,7 +7,9 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,122 +46,130 @@ public class TransferTest {
 //	@Disabled
 	@Test
 	void transferTest() {
-		Receipt receipt = service.addBasicCashewReceipt();
-		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
-		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
-		
-		StorageTransfer transfer = new StorageTransfer();
-		transfer.setPoCode((PoCode) receipt.getPoCode());
-		transfer.setRecordedTime(OffsetDateTime.now());
+		try {
+			Receipt receipt = service.addBasicCashewReceipt();
+			processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
+			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
+			
+			StorageTransfer transfer = new StorageTransfer();
+			transfer.setPoCode((PoCode) receipt.getPoCode());
+			transfer.setRecordedTime(OffsetDateTime.now());
 
 
-		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
-		
+			//get inventory storages for transfer
+			List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
+			
 //		List<ProcessItemDTO> poInventory = warehouseManagement
 //				.getProcessItemsWithPoByPo(receipt.getPoCode().getId())
 //				.stream()
 //				.map(PoProcessItemEntry::getProcessItem)
 //				.collect(Collectors.toList());
-		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-		transfer.setProcessItems(service.getProcessItems(poInventory));
-		
-				
+			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+			transfer.setProcessItems(service.getProcessItems(poInventory));
+			
+					
 //		System.out.println(transfer.getUsedItems().length);
 //		System.out.println(transfer.getProcessItems().length);
 //		for(ProcessItem processItem: transfer.getProcessItems()) {
 //			System.out.println(processItem.getItem() + ", " + processItem.getStorageForms().length);
 //		}
 
-		try {
-			warehouseManagement.addStorageTransfer(transfer);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw e1;
-		}
-				
-		//TODO check if usedItems exceeds inventory should fail
-		transfer = new StorageTransfer();
-		transfer.setPoCode((PoCode) receipt.getPoCode());
-		transfer.setRecordedTime(OffsetDateTime.now());
-		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-		transfer.setProcessItems(service.getProcessItems(poInventory));
-		
-		try {
-			warehouseManagement.addStorageTransfer(transfer);
-			fail("should fail on using items that are already used");
-		} catch (IllegalArgumentException|InvalidDataAccessApiUsageException e) {}
-		
-		//check fail on changing items
-		receipt = service.addOneItemCashewReceipt();
-		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
-		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
-				
-		transfer = new StorageTransfer();
-		transfer.setPoCode((PoCode) receipt.getPoCode());
-		transfer.setRecordedTime(OffsetDateTime.now());
-		
-		poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
-		
-		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-		ProcessItem[] processItems = service.getProcessItems(poInventory);
-
-		List<Item> items = service.getItems();
-		if(items.size() < 2) {
-			fail("not enough items for test");
-		}
-		Item item = items.get(0);
-		if(item.equals(processItems[0].getItem())) {
-			item = items.get(1);
-		}	
-		for(ProcessItem i: processItems) {
-			i.setItem(item);
-		}
-		transfer.setProcessItems(processItems);
-		try {
-			warehouseManagement.addStorageTransfer(transfer);
-			fail("should fail on out item different than in item");
-		} catch (IllegalArgumentException|InvalidDataAccessApiUsageException e) {}
-		
-		//check fail on changing items
-		receipt = service.addOneItemCashewReceipt();
-		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
-		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
-				
-		transfer = new StorageTransfer();
-		transfer.setPoCode((PoCode) receipt.getPoCode());
-		transfer.setRecordedTime(OffsetDateTime.now());
-		
-		poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
-		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-		processItems = service.getProcessItems(poInventory);
-		for(ProcessItem i: processItems) {
-			Storage[] storages = i.getStorageForms();
-			for(Storage s: storages) {
-				s.setNumberUnits(s.getNumberUnits().divide(BigDecimal.TEN));
+			try {
+				warehouseManagement.addStorageTransfer(transfer);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				throw e1;
 			}
-		}
-		transfer.setProcessItems(processItems);
-		try {
-			warehouseManagement.addStorageTransfer(transfer);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			throw e1;
-		}
-		
-		StorageTransferDTO expected;
-		try {
-			expected = new StorageTransferDTO(transfer);
+					
+			//TODO check if usedItems exceeds inventory should fail
+			transfer = new StorageTransfer();
+			transfer.setPoCode((PoCode) receipt.getPoCode());
+			transfer.setRecordedTime(OffsetDateTime.now());
+			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+			transfer.setProcessItems(service.getProcessItems(poInventory));
+			
+			try {
+				warehouseManagement.addStorageTransfer(transfer);
+				fail("should fail on using items that are already used");
+			} catch (IllegalArgumentException|InvalidDataAccessApiUsageException e) {}
+			
+			//check fail on changing items
+			receipt = service.addOneItemCashewReceipt();
+			processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
+			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
+					
+			transfer = new StorageTransfer();
+			transfer.setPoCode((PoCode) receipt.getPoCode());
+			transfer.setRecordedTime(OffsetDateTime.now());
+			
+			poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
+			
+			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+			ProcessItem[] processItems = service.getProcessItems(poInventory);
+
+			List<Item> items = service.getItems();
+			if(items.size() < 2) {
+				fail("not enough items for test");
+			}
+			Item item = items.get(0);
+			if(item.equals(processItems[0].getItem())) {
+				item = items.get(1);
+			}	
+			for(ProcessItem i: processItems) {
+				i.setItem(item);
+			}
+			transfer.setProcessItems(processItems);
+			try {
+				warehouseManagement.addStorageTransfer(transfer);
+				fail("should fail on out item different than in item");
+			} 
+			catch (IllegalArgumentException|InvalidDataAccessApiUsageException e) {}
+			
+			
+			//check fail on changing items
+			receipt = service.addOneItemCashewReceipt();
+			processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
+			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
+					
+			transfer = new StorageTransfer();
+			transfer.setPoCode((PoCode) receipt.getPoCode());
+			transfer.setRecordedTime(OffsetDateTime.now());
+			
+			poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
+			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+			processItems = service.getProcessItems(poInventory);
+			for(ProcessItem i: processItems) {
+				Storage[] storages = i.getStorageForms();
+				for(Storage s: storages) {
+					s.setNumberUnits(s.getNumberUnits().divide(BigDecimal.TEN));
+				}
+			}
+			transfer.setProcessItems(processItems);
+			try {
+				warehouseManagement.addStorageTransfer(transfer);
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				throw e1;
+			}
+			
+			StorageTransferDTO expected;
+			try {
+				expected = new StorageTransferDTO(transfer);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				throw e;
+			}
+			StorageTransferDTO actual = warehouseManagement.getStorageTransfer(transfer.getId());
+			
+			assertEquals(expected, actual, "Failed test adding storageTransfer");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw e;
 		}
-		StorageTransferDTO actual = warehouseManagement.getStorageTransfer(transfer.getId());
-		
-		assertEquals(expected, actual, "Failed test adding storageTransfer");
 		
 	}
 	

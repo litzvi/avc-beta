@@ -119,31 +119,34 @@ public class ProcessInfoDAO extends DAO {
 	}
 	
 	private void setPoWeights(TransactionProcess<?> process) {
-		List<WeightedPo> weightedPos = getProcessRepository().findWeightedPoReferences(process.getId());
-		for(WeightedPo weightedPo: weightedPos) {
+		List<WeightedPo> oldWeightedPos = getProcessRepository().findWeightedPoReferences(process.getId());
+		for(WeightedPo weightedPo: oldWeightedPos) {
 			getEntityManager().remove(weightedPo);
 		}
 //		if(process.getPoCode() == null) {
 		List<ItemAmountWithPoCode> poWeights = getProcessRepository().generateWeightedPos(process.getId());
-		AmountWithUnit usedWeight = poWeights.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
-		System.out.println("hello");
-		System.out.println("used weight: " + usedWeight);
-		poWeights.forEach(i -> System.out.println(i.getWeightAmount()));
-//		WeightedPo[] weightedPos = new WeightedPo[poWeights.size()];
-		int ordinal = 0;
-		for(ItemAmountWithPoCode poWeight: poWeights) {
-			WeightedPo weightedPo = new WeightedPo();
-//			weightedPos[ordinal] = weightedPo;
-			PoCode poCode = new PoCode();
-			poCode.setId(poWeight.getPoCode().getId());
-			weightedPo.setPoCode(poCode);
-			weightedPo.setWeight(
-					poWeight.getWeightAmount()
-					.divide(usedWeight)
-					.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_EVEN));
-			weightedPo.setOrdinal(ordinal++);
-//			weightedPo.setProcess(process);
-			addEntity(weightedPo, process);
+		System.out.println("hello1");
+		if(poWeights != null && !poWeights.isEmpty()) {
+			AmountWithUnit usedWeight = poWeights.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
+			System.out.println("hello");
+			System.out.println("used weight: " + usedWeight);
+			poWeights.forEach(i -> System.out.println(i.getWeightAmount()));
+	//		WeightedPo[] weightedPos = new WeightedPo[poWeights.size()];
+			int ordinal = 0;
+			for(ItemAmountWithPoCode poWeight: poWeights) {
+				WeightedPo weightedPo = new WeightedPo();
+	//			weightedPos[ordinal] = weightedPo;
+				PoCode poCode = new PoCode();
+				poCode.setId(poWeight.getPoCode().getId());
+				weightedPo.setPoCode(poCode);
+				weightedPo.setWeight(
+						poWeight.getWeightAmount()
+						.divide(usedWeight)
+						.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_EVEN));
+				weightedPo.setOrdinal(ordinal++);
+	//			weightedPo.setProcess(process);
+				addEntity(weightedPo, process);
+			}
 		}
 //		process.setWeightedPos(weightedPos);
 //		getEntityManager().flush();

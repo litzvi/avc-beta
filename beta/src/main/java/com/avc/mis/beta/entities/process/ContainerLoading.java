@@ -46,10 +46,10 @@ import lombok.Setter;
 @PrimaryKeyJoinColumn(name = "processId")
 public class ContainerLoading extends TransactionProcess<ProcessItem> {
 
-	@NotNull(message = "Booking is mandatory")
+	@NotNull(message = "Container is mandatory")
 	@OneToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "bookingId")
-	private ContainerBooking booking;
+	@JoinColumn(name = "arrivalId")
+	private ContainerArrival arrival;
 	
 	@NotNull(message = "Shipment code is mandatory")
 	@ManyToOne(fetch = FetchType.LAZY)

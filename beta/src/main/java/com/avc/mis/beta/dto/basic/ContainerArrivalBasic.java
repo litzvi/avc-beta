@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.BasicDataDTO;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.process.ContainerArrival;
 import com.avc.mis.beta.entities.process.ContainerBooking;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -20,26 +21,26 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class BookingBasic extends BasicDataDTO {
+public class ContainerArrivalBasic extends BasicDataDTO {
 
 	@JsonIgnore
 	@ToString.Exclude
 	@EqualsAndHashCode.Include
-	String bookingNumber;
+	String containerNumber;
 		
-	public BookingBasic(Integer id, Integer version, String bookingNumber) {
+	public ContainerArrivalBasic(Integer id, Integer version, String containerNumber) {
 		super(id, version);
-		this.bookingNumber = bookingNumber;
+		this.containerNumber = containerNumber;
 	}
 	
-	public BookingBasic(@NonNull ContainerBooking booking) {
-		super(booking.getId(), booking.getVersion());
-		this.bookingNumber = booking.getBookingNumber();
+	public ContainerArrivalBasic(@NonNull ContainerArrival arrival) {
+		super(arrival.getId(), arrival.getVersion());
+		this.containerNumber = arrival.getContainerDetails().getContainerNumber();
 	}
 	
 	@ToString.Include(name = "value")
 	public String getValue() {
-		return getBookingNumber();
+		return getContainerNumber();
 	}
 	
 }

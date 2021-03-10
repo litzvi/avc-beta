@@ -36,10 +36,6 @@ public class ShipingDetails {
 	private String vessel;
 	private String shippingCompany;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	@NotNull(message = "Container type/size is mandatory")
-	private ShippingContainerType containerType;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "destinationPortId")
@@ -69,11 +65,4 @@ public class ShipingDetails {
 			this.eta = LocalDate.parse(eta);
 	}
 	
-	public void setContainerType(String containerType) {
-		this.containerType = ShippingContainerType.valueOfLabel(containerType);
-	}
-	
-	public String getContainerType() {
-		return this.containerType.toString();
-	}
 }

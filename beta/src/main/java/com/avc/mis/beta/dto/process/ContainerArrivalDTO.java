@@ -33,6 +33,7 @@ public class ContainerArrivalDTO extends GeneralProcessDTO {
 //	private ShipmentCodeDTO shipmentCode;
 
 	private ContainerDetails containerDetails;
+	private ShipingDetails shipingDetails;
 	
 	/**
 	 * Constructor from ShipmentBooking object, used for testing.
@@ -42,11 +43,13 @@ public class ContainerArrivalDTO extends GeneralProcessDTO {
 		super(containerArrival);
 //		this.shipmentCode = new ShipmentCodeDTO(containerArrival.getBooking().getShipmentCode());
 		this.containerDetails = containerArrival.getContainerDetails();
+		this.shipingDetails = containerArrival.getShipingDetails();
 	}
 	
 	public void setContainerArrivalInfo(ContainerArrivalInfo info) {
 //		this.shipmentCode = info.getShipmentCode();
 		this.containerDetails = info.getContainerDetails();
+		this.shipingDetails = info.getShipingDetails();		
 	}
 
 	

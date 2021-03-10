@@ -32,6 +32,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.ContainerLoading;
+import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
@@ -86,7 +87,17 @@ public class Loading {
 		
 		return CollectionItemWithGroup.getFilledGroups(lines);
 	}
+	
 
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addShipmentCode(ShipmentCode shipmentCode) {
+		dao.addEntity(shipmentCode);
+	}
+
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editShipmentCode(ShipmentCode shipmentCode) {
+		dao.editEntity(shipmentCode);
+	}	
 
 	/**
 	 * Adds a new container loading

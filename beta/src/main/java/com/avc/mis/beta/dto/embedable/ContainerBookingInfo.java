@@ -20,18 +20,16 @@ public class ContainerBookingInfo {
 //	ShipmentCodeDTO shipmentCode;
 	String bookingNumber;
 	LocalDate bookingDate;
-	ShipingDetails shipingDetails;
 	String personInCharge;
 	
 	
 	public ContainerBookingInfo(
 //			Integer shipmentCodeId, String shipmentCodeCode,
 //			Integer portOfDischargeId, String portOfDischargeValue, String portOfDischargeCode,
-			String bookingNumber, LocalDate bookingDate, ShipingDetails shipingDetails, String personInCharge) {
+			String bookingNumber, LocalDate bookingDate, String personInCharge) {
 //		this.shipmentCode = new ShipmentCodeDTO(shipmentCodeId, shipmentCodeCode, portOfDischargeId, portOfDischargeValue, portOfDischargeCode);
 		this.bookingNumber = bookingNumber;
 		this.bookingDate = bookingDate;
-		this.shipingDetails = shipingDetails;
 		this.personInCharge = personInCharge;
 	}
 }

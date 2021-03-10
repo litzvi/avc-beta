@@ -32,6 +32,7 @@ import com.avc.mis.beta.entities.process.ContainerBooking;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.ShipmentCode;
+import com.avc.mis.beta.service.ContainerArrivals;
 import com.avc.mis.beta.service.ContainerBookings;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ProcessInfoWriter;
@@ -51,6 +52,7 @@ public class LoadingTest {
 	@Autowired WarehouseManagement warehouseManagement;
 
 	@Autowired ContainerBookings bookings;
+	@Autowired ContainerArrivals arrivals;
 	@Autowired Loading loadingService;
 	@Autowired ProcessInfoWriter processInfoWriter;
 	
@@ -77,17 +79,17 @@ public class LoadingTest {
 		
 		//test container arrival
 		ContainerArrival arrival = new ContainerArrival();
-		arrival.setBooking(booking);
 		arrival.setRecordedTime(OffsetDateTime.now());
 		ContainerDetails containerDetails = new ContainerDetails();
 		containerDetails.setContainerNumber("CONT01");
 		containerDetails.setSealNumber("SEAL01");
 		containerDetails.setContainerType("20'");		
 		arrival.setContainerDetails(containerDetails);
-		bookings.addArrival(arrival);
+		arrival.setShipingDetails(service.getShipingDetails());
+		arrivals.addArrival(arrival);
 		ContainerArrivalDTO expectedArrival = new ContainerArrivalDTO(arrival);
-		ContainerArrivalDTO actualArrival = bookings.getArrival(arrival.getId());		
-		bookings.editArrival(arrival);		
+		ContainerArrivalDTO actualArrival = arrivals.getArrival(arrival.getId());		
+		arrivals.editArrival(arrival);		
 		assertEquals(expectedArrival, actualArrival, "Failed test adding container loading");
 
 		
@@ -96,7 +98,7 @@ public class LoadingTest {
 //		ContainerBooking refBooking = new ContainerBooking();
 //		refBooking.setId(booking.getId());
 //		refBooking.setVersion(booking.getVersion());
-		loading.setBooking(booking);
+		loading.setArrival(arrival);
 		loading.setShipmentCode(service.addShipmentCode());
 		loading.setRecordedTime(OffsetDateTime.now());
 
@@ -125,7 +127,7 @@ public class LoadingTest {
 		assertEquals(expectedLoading, actualLoading, "Failed test adding container loading");
 		
 		loadingService.removeLoading(loading.getId());
-		bookings.removeArrival(arrival.getId());
+		arrivals.removeArrival(arrival.getId());
 		bookings.removeBooking(booking.getId());
 
 

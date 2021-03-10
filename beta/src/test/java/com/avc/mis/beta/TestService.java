@@ -56,6 +56,7 @@ import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.service.ContainerBookings;
+import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.Receipts;
@@ -74,6 +75,7 @@ public class TestService {
 	@Autowired ObjectTablesReader objectTablesReader;
 	@Autowired Orders orders;
 	@Autowired Receipts receipts;
+	@Autowired Loading loadings;
 	@Autowired ContainerBookings bookings;
 	
 	private int randCode = LocalDateTime.now().hashCode();
@@ -90,7 +92,6 @@ public class TestService {
 		ContainerBooking booking = new ContainerBooking();
 		booking.setBookingNumber("booking_no " + randCode++);
 		booking.setBookingDate("1983-11-23");
-		booking.setShipingDetails(getShipingDetails());
 		booking.setRecordedTime(OffsetDateTime.now());
 		return booking;
 	}
@@ -99,7 +100,6 @@ public class TestService {
 		ShipingDetails shipingDetails = new ShipingDetails();
 		shipingDetails.setEtd("2007-12-03");
 		shipingDetails.setEta("2008-12-03");
-		shipingDetails.setContainerType("20'");
 		return shipingDetails;
 	}
 
@@ -117,7 +117,7 @@ public class TestService {
 		ShipmentCode shipmentCode = new ShipmentCode();
 		shipmentCode.setCode(Integer.toString(randCode++));
 		shipmentCode.setPortOfDischarge(getShippingPort());
-		bookings.addShipmentCode(shipmentCode);
+		loadings.addShipmentCode(shipmentCode);
 		return shipmentCode;
 	}
 
