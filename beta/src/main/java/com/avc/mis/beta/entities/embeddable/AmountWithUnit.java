@@ -209,6 +209,11 @@ public class AmountWithUnit implements Cloneable {
 		}
 		return null;
 	}
+	
+	public BigDecimal divide(AmountWithUnit denominator) {
+		return divide(this, denominator);
+	}
+
 
 	public static BigDecimal divide(AmountWithUnit numerator, AmountWithUnit denominator) {
 		if(numerator == null || denominator == null || denominator.amount.equals(BigDecimal.ZERO)) {
@@ -273,6 +278,7 @@ public class AmountWithUnit implements Cloneable {
 		AmountWithUnit.setScales(weights, MeasureUnit.SCALE);
 		return weights;
 	}
+
 
 
 }

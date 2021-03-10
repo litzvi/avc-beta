@@ -4,6 +4,8 @@
 package com.avc.mis.beta.dao;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,18 +18,25 @@ import java.util.stream.Stream;
 
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
+import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
+import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.EditStatus;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -101,12 +110,54 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public void addTransactionProcessEntity(TransactionProcess<?> process) {
 		addGeneralProcessEntity(process);
+		//set weightedPos weight
+		setPoWeights(process);
 		//check used items amounts () don't exceed the storage amounts
 		if(!isUsedInventorySufficiant(process.getId())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
 	}
-		
+	
+	private void setPoWeights(TransactionProcess<?> process) {
+		List<WeightedPo> weightedPos = getProcessRepository().findWeightedPoReferences(process.getId());
+		for(WeightedPo weightedPo: weightedPos) {
+			getEntityManager().remove(weightedPo);
+		}
+//		if(process.getPoCode() == null) {
+		List<ItemAmountWithPoCode> poWeights = getProcessRepository().generateWeightedPos(process.getId());
+		AmountWithUnit usedWeight = poWeights.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
+		System.out.println("hello");
+		System.out.println("used weight: " + usedWeight);
+		poWeights.forEach(i -> System.out.println(i.getWeightAmount()));
+//		WeightedPo[] weightedPos = new WeightedPo[poWeights.size()];
+		int ordinal = 0;
+		for(ItemAmountWithPoCode poWeight: poWeights) {
+			WeightedPo weightedPo = new WeightedPo();
+//			weightedPos[ordinal] = weightedPo;
+			PoCode poCode = new PoCode();
+			poCode.setId(poWeight.getPoCode().getId());
+			weightedPo.setPoCode(poCode);
+			weightedPo.setWeight(
+					poWeight.getWeightAmount()
+					.divide(usedWeight)
+					.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_EVEN));
+			weightedPo.setOrdinal(ordinal++);
+//			weightedPo.setProcess(process);
+			addEntity(weightedPo, process);
+		}
+//		process.setWeightedPos(weightedPos);
+//		getEntityManager().flush();
+//		}
+//		else if(process.getWeightedPos() != null && process.getWeightedPos().length > 0){
+//			throw new IllegalStateException("Po code and weighted po codes shouldn't both be set together");
+//		}
+	}
+	
+//	private void permenentlyRemoveEntity(Class<? extends BaseEntity> entityClass, Integer id) {
+//		Insertable entity = getEntityManager().getReference(entityClass, id);
+//		getEntityManager().remove(entity); 
+//	}
+
 	/**
 	 * Checks if for given array used items, used item storages total don't exceed storage amounts.
 	 * Checks only for storages that where used by given UsedItems.
@@ -174,6 +225,8 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public <T extends TransactionProcess<?>> void editTransactionProcessEntity(T process) {
 		editProcessWithProductEntity(process);
+		//set weightedPos weight
+		setPoWeights(process);
 		//check used items amounts (after edit) don't exceed the storage amounts
 		if(!isUsedInventorySufficiant(process.getId())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");

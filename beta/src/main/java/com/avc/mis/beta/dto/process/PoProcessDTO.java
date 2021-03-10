@@ -39,6 +39,8 @@ import lombok.ToString;
 public abstract class PoProcessDTO extends GeneralProcessDTO {
 	
 	private PoCodeBasic poCode;	
+	
+	@EqualsAndHashCode.Exclude
 	private List<WeightedPoDTO> weightedPos;
 	
 	private List<ItemCountDTO> itemCounts;

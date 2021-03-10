@@ -17,6 +17,7 @@ import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.processinfo.WeightedPo;
 
 import lombok.NonNull;
 
@@ -183,6 +184,12 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 		+ "where p.id = :processId "
 		+ "order by weighted_po.ordinal ")
 	List<WeightedPoDTO> findWeightedPos(Integer processId);
+
+	@Query("select weighted_po "
+		+ "from PoProcess p "
+			+ "join p.weightedPos weighted_po "
+		+ "where p.id = :processId")
+	List<WeightedPo> findWeightedPoReferences(Integer processId);
 
 
 //	/**

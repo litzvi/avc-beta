@@ -12,16 +12,19 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
+import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.view.PoFinalReport;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
+import com.avc.mis.beta.entities.processinfo.WeightedPo;
 
 import lombok.NonNull;
 
@@ -217,6 +220,38 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "and sf.id not in :storageIds ")
 	Boolean isRemovingUsedProduct(Integer processId, Set<Integer> storageIds);
 
+	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithPoCode("
+				+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
+				+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
+				+ "item_unit.amount, item_unit.measureUnit, type(item), "
+				+ "SUM( "
+					+ "((ui.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor) "
+					+ " * coalesce(w_po.weight, 1)"
+				+ ") as po_item_amount ) "
+			+ "from TransactionProcess p "
+				+ "join p.usedItemGroups grp "
+					+ "join grp.usedItems ui "
+						+ "join ui.storage sf "
+							+ "join sf.processItem pi "
+								+ "join pi.item item "
+									+ "join item.unit item_unit "
+								+ "join UOM uom "
+									+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
+								+ "join pi.process used_p "
+									+ "left join used_p.poCode p_po_code "
+									+ "left join used_p.weightedPos w_po "
+										+ "left join w_po.poCode w_po_code "
+									+ "join BasePoCode po_code "
+										+ "on (po_code = p_po_code or po_code = w_po_code) "
+										+ "join po_code.contractType t "
+										+ "join po_code.supplier s "
+			+ "where p.id = :processId "
+				+ "and item.itemGroup = com.avc.mis.beta.entities.item.ItemGroup.PRODUCT "
+			+ "group by po_code, item "
+			+ "order by po_item_amount desc ")
+	List<ItemAmountWithPoCode> generateWeightedPos(Integer processId);
+
+	
 
 	
 

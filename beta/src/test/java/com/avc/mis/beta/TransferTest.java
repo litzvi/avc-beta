@@ -141,7 +141,13 @@ public class TransferTest {
 			}
 		}
 		transfer.setProcessItems(processItems);
-		warehouseManagement.addStorageTransfer(transfer);
+		try {
+			warehouseManagement.addStorageTransfer(transfer);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		
 		StorageTransferDTO expected;
 		try {

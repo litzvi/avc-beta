@@ -57,9 +57,15 @@ public class ProductionTest {
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
 		process.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		process.setProcessItems(service.getProcessItems(poInventory));
-		process.setWeightedPos(service.getProductWeightedPos(2));
+//		process.setWeightedPos(service.getProductWeightedPos(2));
 		
-		productionService.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
+		try {
+			productionService.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		
 		ProductionProcessDTO expected = new ProductionProcessDTO(process);		
 		ProductionProcessDTO actual = productionService.getProductionProcess(process.getId());		

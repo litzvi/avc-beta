@@ -32,9 +32,16 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "PRUDUCT_WEIGHTED_POS")
 public class WeightedPo extends ProcessInfoEntity {
-	
+		
+//	public WeightedPo(@NotNull PoCode poCode, @NotNull BigDecimal weight) {
+//		super();
+//		this.poCode = poCode;
+//		this.weight = weight;
+//	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "poCodeId", nullable = false)
+	@NotNull(message = "Po code is mandatory")
 	private PoCode poCode;
 	
 	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)

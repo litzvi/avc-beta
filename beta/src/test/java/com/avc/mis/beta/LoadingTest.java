@@ -104,7 +104,8 @@ public class LoadingTest {
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
 		loading.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		
-		loadingService.addLoading(loading);		
+		loadingService.addLoading(loading);
+
 		ContainerLoadingDTO expectedLoading = new ContainerLoadingDTO(loading);
 		ContainerLoadingDTO actualLoading = loadingService.getLoading(loading.getId());
 
@@ -114,7 +115,13 @@ public class LoadingTest {
 		SecurityExportDoc securityExportDoc =loadingService.getSecurityExportDoc(loading.getId());
 		System.out.println(securityExportDoc);
 		
-		loadingService.editLoading(loading);		
+		try {
+			loadingService.editLoading(loading);		
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}		
 		assertEquals(expectedLoading, actualLoading, "Failed test adding container loading");
 		
 		loadingService.removeLoading(loading.getId());
