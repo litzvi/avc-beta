@@ -33,6 +33,7 @@ import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.CashewQcRow;
+import com.avc.mis.beta.dto.view.ContainerArrivalRow;
 import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.ItemInventoryWithOrderRow;
@@ -57,6 +58,7 @@ import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.SupplyCategory;
+import com.avc.mis.beta.service.ContainerArrivals;
 import com.avc.mis.beta.service.InventoryReports;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
@@ -93,6 +95,7 @@ public class QueryTest {
 	@Autowired WarehouseManagement warehouseManagement;
 	@Autowired ProductionProcesses productionProcesses;
 	@Autowired Loading loading;
+	@Autowired ContainerArrivals containerArrivals;
 	
 //	@Disabled
 	@Test
@@ -403,6 +406,12 @@ public class QueryTest {
 		inventoryWithOrder = inventoryReports.getInventoryWithOrderByItem(ItemGroup.PRODUCT);	
 		inventoryWithOrder.forEach(i -> System.out.println(i));
 		
+		List<ShipmentCodeBasic> shipmentCodes = objectTablesReader.findFreeShipmentCodes();
+		shipmentCodes.forEach(i -> System.out.println(i));
+
+		List<ContainerArrivalRow> containerArrivalRows = containerArrivals.getContainerArrivals();
+		containerArrivalRows.forEach(i -> System.out.println(i));
+		
 		service.cleanup(po);
 
 	}
@@ -410,12 +419,6 @@ public class QueryTest {
 //	@Disabled
 	@Test
 	void oneQueryTest() {
-		try {
-			List<ShipmentCodeBasic> shipmentCodes = objectTablesReader.findFreeShipmentCodes();
-			shipmentCodes.forEach(i -> System.out.println(i));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 	}
 }

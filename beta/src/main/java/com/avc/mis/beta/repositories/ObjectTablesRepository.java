@@ -22,9 +22,11 @@ import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.utilities.ProgramSequence;
 
 /**
@@ -37,6 +39,10 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	
 	@Query("select e from PoCode e")
 	List<PoCode> findAllPoCodes();
+	
+	@Query("select e from PoCode e")
+	List<ShipmentCode> findAllShipmentCodes();
+
 	
 //-----------Finding all Object entities with active=true--------------
 
@@ -138,6 +144,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
 			+ "join pi.process p "
+				+ "left join p.productionLine p_line "
 				+ "left join p.poCode p_po_code "
 				+ "left join p.weightedPos w_po "
 					+ "left join w_po.poCode w_po_code "
@@ -158,6 +165,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null)  "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses)  "
+			+ "and (:checkFunctionalities = false or p_line.productionFunctionality in :functionalities) "
 			+ "and (item.id = :itemId or :itemId is null)  "
 		+ "group by sf.id, sf.numberUnits, po_code.id "
 //		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) "
@@ -169,7 +177,10 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 					+ "ELSE 0 "
 				+ "END)"
 			+ " ) ")
-	Set<PoCodeBasic> findAvailableInventoryPoCodeByType(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId);
+	Set<PoCodeBasic> findAvailableInventoryPoCodeByType(
+			boolean checkProductionUses, ProductionUse[] productionUses, 
+			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
+			ItemGroup itemGroup, Integer itemId);
 
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
@@ -192,6 +203,14 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 //		+ "where t.processName in ?1 "
 		+ "order by po_code.id desc ")
 	List<PoCodeBasic> findAllPoCodeBasics();
+	
+	//will also give old (history) shipment codes
+	@Query("select new com.avc.mis.beta.dto.basic.ShipmentCodeBasic("
+			+ "s_code.id, s_code.code, port.code, port.value) "
+		+ "from ShipmentCode s_code "
+			+ "join s_code.portOfDischarge port "
+		+ "order by s_code.id desc ")
+	List<ShipmentCodeBasic> findAllShipmentCodeBasics();
 
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
@@ -269,6 +288,8 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 
 	@Query("select s from ProgramSequence s where s.identifier = :sequenceIdentifier ")
 	ProgramSequence findSequence(SequenceIdentifier sequenceIdentifier);
+
+
 
 
 	

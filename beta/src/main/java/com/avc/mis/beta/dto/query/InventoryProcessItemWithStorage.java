@@ -42,7 +42,7 @@ public class InventoryProcessItemWithStorage implements CollectionItemWithGroup<
 			BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> clazz,
 			MeasureUnit measureUnit, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			String poCodes,
+			String poCodes, String suppliers,
 			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, BigDecimal numberUnits, //BigDecimal accessWeight,
@@ -54,7 +54,7 @@ public class InventoryProcessItemWithStorage implements CollectionItemWithGroup<
 				processItemId, 
 				itemId, itemValue, itemMeasureUnit, itemGroup, itemUnitAmount, itemUnitMeasureUnit, clazz, 
 				measureUnit, poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, 
-				poCodes,
+				poCodes, suppliers,
 				processDate, receiptDate, tableView);
 		this.storageInventoryRow = new StorageInventoryRow(
 				storageId, storageVersion, storageOrdinal,

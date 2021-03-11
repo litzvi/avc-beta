@@ -113,6 +113,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "pi.measureUnit, "
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
+			+ "function('GROUP_CONCAT', s.name), "
 			+ "p.recordedTime, r.recordedTime, pi.tableView) "
 		+ "from ProcessItem pi "
 			+ "left join ReceiptItem ri "

@@ -322,7 +322,7 @@ class SuppliersTest {
 //	}
 			
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void insertSupplierIsSuccessfulTest() {	
 		

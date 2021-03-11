@@ -23,8 +23,10 @@ import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 
 import lombok.AccessLevel;
@@ -64,6 +66,10 @@ public class ObjectTablesReader {
 	
 	public List<PoCode> getAllPoCodes() {
 		return getObjectTablesRepository().findAllPoCodes();		
+	}
+	
+	public List<ShipmentCode> getAllShipmentCodes() {
+		return getObjectTablesRepository().findAllShipmentCodes();		
 	}
 	
 //-----------------------------Dependent Objects--------------------------------------------
@@ -144,7 +150,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeBasic for all inventory Cashew.
 	 */
 	public Set<PoCodeBasic> findCashewAvailableInventoryPoCodes() {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, ItemGroup.PRODUCT, null);		
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, false, null, ItemGroup.PRODUCT, null);		
 	}
 	
 	/**
@@ -154,7 +160,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeBasic for all General inventory.
 	 */
 	public Set<PoCodeBasic> findGeneralAvailableInventoryPoCodes() {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, ItemGroup.GENERAL, null);		
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, false, null, ItemGroup.GENERAL, null);		
 	}
 	
 	/**
@@ -164,7 +170,7 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeBasic
 	 */
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(Integer itemId) {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false, null, null, itemId);		
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false, null, false, null, null, itemId);		
 	}
 	
 	/**
@@ -174,24 +180,37 @@ public class ObjectTablesReader {
 	 * @return Set of PoCodeBasic
 	 */
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true, productionUses, null, null);		
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true, productionUses, false, null, null, null);		
+	}
+	
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses, ProductionFunctionality[] functionalities) {
+		boolean checkFunctionalities = (functionalities != null);
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true, productionUses, checkFunctionalities, functionalities, null, null);		
 	}
 	
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ItemGroup group) {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, group, null);		
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, false, null, group, null);		
 	}
 	
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true,  productionUses, group, null);		
+		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true,  productionUses, false, null, group, null);		
 	}
 	
 	/**
 	 * Get the table of all po codes.
 	 * Can be used for searching reports for any PO.
-	 * @return Set of PoRow for po's that are still active - still in production.
+	 * @return List of PoCodeBasic
 	 */
 	public List<PoCodeBasic> findAllPoCodes() {
 		return getObjectTablesRepository().findAllPoCodeBasics();
+	}
+	
+	/**
+	 * Get the table of all shipment codes.
+	 * @return List of ShipmentCodeBasic
+	 */
+	public List<ShipmentCodeBasic> findAllShipmentCodes() {
+		return getObjectTablesRepository().findAllShipmentCodeBasics();
 	}
 	
 	

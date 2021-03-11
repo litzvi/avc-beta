@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -14,6 +15,8 @@ import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.view.ContainerArrivalRow;
+import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
 import com.avc.mis.beta.dto.process.ContainerBookingDTO;
@@ -46,6 +49,10 @@ public class ContainerArrivals {
 	@Autowired private DeletableDAO deletableDAO;
 
 	@Autowired private ContainerArrivalRepository containerArrivalRepository;
+	
+	public List<ContainerArrivalRow> getContainerArrivals() {
+		return getContainerArrivalRepository().findContainerArrivals();
+	}
 	
 	public Set<ContainerArrivalBasic> getNonLoadedArrivals() {
 		return getContainerArrivalRepository().getNonLoadedArrivals();		

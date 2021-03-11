@@ -125,12 +125,8 @@ public class ProcessInfoDAO extends DAO {
 		}
 //		if(process.getPoCode() == null) {
 		List<ItemAmountWithPoCode> poWeights = getProcessRepository().generateWeightedPos(process.getId());
-		System.out.println("hello1");
 		if(poWeights != null && !poWeights.isEmpty()) {
 			AmountWithUnit usedWeight = poWeights.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
-			System.out.println("hello");
-			System.out.println("used weight: " + usedWeight);
-			poWeights.forEach(i -> System.out.println(i.getWeightAmount()));
 	//		WeightedPo[] weightedPos = new WeightedPo[poWeights.size()];
 			int ordinal = 0;
 			for(ItemAmountWithPoCode poWeight: poWeights) {
