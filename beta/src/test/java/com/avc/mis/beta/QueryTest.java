@@ -19,6 +19,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.basic.UserBasic;
@@ -31,7 +32,6 @@ import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.dto.view.ContainerArrivalRow;
 import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
@@ -349,7 +349,7 @@ public class QueryTest {
 		}
 		transferRows.forEach(i -> System.out.println(i));
 						
-		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocations();
+		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocations(ProcessName.STORAGE_RELOCATION);
 		relocationRows.forEach(i -> System.out.println(i));
 		
 		List<PoCodeBasic> poCodes = objectTablesReader.findAllPoCodes();

@@ -9,8 +9,8 @@ import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;

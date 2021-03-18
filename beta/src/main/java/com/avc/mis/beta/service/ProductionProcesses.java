@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
@@ -23,7 +24,6 @@ import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.report.ProductionReportLine;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;

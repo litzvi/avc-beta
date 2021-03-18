@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.values;
+package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.codes.BasePoCode;

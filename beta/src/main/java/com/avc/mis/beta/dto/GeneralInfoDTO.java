@@ -6,7 +6,7 @@ package com.avc.mis.beta.dto;
 import java.time.Instant;
 import java.util.stream.Stream;
 
-import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.entities.GeneralInfoEntity;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.doc.ExportInfo;
 import com.avc.mis.beta.dto.doc.InventoryExportDoc;
@@ -25,7 +26,6 @@ import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine;
 import com.avc.mis.beta.dto.report.LoadingReportLine;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;

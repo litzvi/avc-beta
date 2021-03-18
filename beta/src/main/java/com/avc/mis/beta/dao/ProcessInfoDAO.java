@@ -23,11 +23,11 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.StorageBalance;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.codes.PoCode;

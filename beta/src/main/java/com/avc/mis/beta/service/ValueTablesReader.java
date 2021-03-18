@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.basic.ValueEntityObject;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
@@ -249,6 +250,14 @@ public class ValueTablesReader {
 	
 	public List<BasicValueEntity<Item>> getBasicItems(ItemGroup itemGroup, ProductionUse productionUse) {
 		return getValueTablesRepository().findBasicItems(itemGroup, productionUse);
+	}
+	
+	public List<ProductionLineBasic> getAllBasicProductionLines() {
+		return getValueTablesRepository().findBasicProductionLines(ProductionFunctionality.values());
+	}
+	
+	public List<ProductionLineBasic> getAllBasicProductionLinesByFuncionality(ProductionFunctionality[] functionalities) {
+		return getValueTablesRepository().findBasicProductionLines(functionalities);
 	}
 	
 }

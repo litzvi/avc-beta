@@ -93,12 +93,12 @@ public class WarehouseManagement {
 	}
 
 	
-	public List<ProcessRow> getStorageRelocations() {
-		return getStorageRelocationsByPoCode(null);
+	public List<ProcessRow> getStorageRelocations(ProcessName processName) {
+		return getStorageRelocationsByPoCode(processName, null);
 	}
 	
-	public List<ProcessRow> getStorageRelocationsByPoCode(Integer poCodeId) {
-		List<ProcessRow> relocationRows = getRelocationRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, true);
+	public List<ProcessRow> getStorageRelocationsByPoCode(ProcessName processName, Integer poCodeId) {
+		List<ProcessRow> relocationRows = getRelocationRepository().findProcessByType(processName, poCodeId, true);
 		int[] processIds = relocationRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getRelocationRepository()
 				.findAllMovedItemsByProcessIds(processIds)
@@ -128,8 +128,8 @@ public class WarehouseManagement {
 	
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addStorageRelocation(StorageRelocation relocation) {
-		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
+	public void addStorageRelocation(StorageRelocation relocation, ProcessName processName) {
+		relocation.setProcessType(dao.getProcessTypeByValue(processName));
 		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		dao.addGeneralProcessEntity(relocation);
 		//check if storage moves match the amounts of the used item

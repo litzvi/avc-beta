@@ -7,10 +7,12 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.ValueEntity;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -49,6 +51,13 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 				+ "and i.active = true "
 			+ "order by i.value ")
 	List<BasicValueEntity<Item>> findBasicItems(ItemGroup itemGroup, ProductionUse productionUse);
+
+	@Query("select new com.avc.mis.beta.dto.basic.ProductionLineBasic(t.id, t.value, t.productionFunctionality) "
+			+ "from ProductionLine t "
+			+ "where t.active = true "
+				+ "and t.productionFunctionality in :functionalities "
+			+ "order by t.value ")
+	List<ProductionLineBasic> findBasicProductionLines(ProductionFunctionality[] functionalities);
 
 //	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
 //			+ "from Item i "

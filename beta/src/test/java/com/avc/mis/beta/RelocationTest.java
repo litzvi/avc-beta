@@ -22,6 +22,7 @@ import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
@@ -67,7 +68,7 @@ public class RelocationTest {
 		relocation.setItemCounts(getItemCounts(poInventory));
 
 		try {
-			warehouseManagement.addStorageRelocation(relocation);
+			warehouseManagement.addStorageRelocation(relocation, ProcessName.STORAGE_RELOCATION);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

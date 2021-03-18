@@ -8,8 +8,8 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.codes.MixPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
@@ -78,7 +78,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	 * @param processName
 	 * @return Set of PoCodeBasic
 	 */
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
+	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name) "
 		+ "from PO po "
 			+ "join po.lifeCycle lc "
@@ -118,7 +118,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	 * @param statuses
 	 * @return Set of PoCodeBasic
 	 */
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
+	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
@@ -139,12 +139,11 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	 * @param itemId constrain to only this item, if null than any.
 	 * @return Set of PoCodeBasic
 	 */
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
+	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name) "
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
 			+ "join pi.process p "
-				+ "left join p.productionLine p_line "
 				+ "left join p.poCode p_po_code "
 				+ "left join p.weightedPos w_po "
 					+ "left join w_po.poCode w_po_code "
@@ -156,6 +155,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ "join pi.allStorages sf "
 				+ "join sf.group sf_group "
 					+ "join sf_group.process sf_p "
+						+ "left join sf_p.productionLine sf_p_line "
 						+ "join sf_p.lifeCycle sf_lc "
 				+ "left join sf.usedItems ui "
 					+ "left join ui.group used_g "
@@ -165,7 +165,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null)  "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses)  "
-			+ "and (:checkFunctionalities = false or p_line.productionFunctionality in :functionalities) "
+			+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
 			+ "and (item.id = :itemId or :itemId is null)  "
 		+ "group by sf.id, sf.numberUnits, po_code.id "
 //		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) "
@@ -182,7 +182,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
 			ItemGroup itemGroup, Integer itemId);
 
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
+	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from Receipt r "
 			+ "join r.poCode po_code "
@@ -194,7 +194,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	List<PoCodeBasic> findReceivedPoCodeByTypes(ProcessName[] processNames);
 
 	//will also give old (history) po_codes
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
+	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from PoCode po_code "
 				+ "join po_code.contractType c "
@@ -212,7 +212,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 		+ "order by s_code.id desc ")
 	List<ShipmentCodeBasic> findAllShipmentCodeBasics();
 
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
+	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from PoCode po_code "
 			+ "join po_code.contractType c "
@@ -262,7 +262,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	boolean isPoCodeReceived(Integer poCodeId);
 
 
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeBasic("
+	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from MixPoCode po_code "
 			+ "left join po_code.contractType c "

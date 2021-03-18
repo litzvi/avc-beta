@@ -5,9 +5,9 @@ package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.processinfo.CountAmountDTO;
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;

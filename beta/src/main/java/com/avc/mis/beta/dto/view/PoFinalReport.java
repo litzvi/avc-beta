@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.values.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.entities.enums.ProcessName;
 
 import lombok.Data;
