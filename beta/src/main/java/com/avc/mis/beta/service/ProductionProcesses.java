@@ -67,7 +67,7 @@ public class ProductionProcesses {
 	 * @return List of ProcessRow for all processes that match the given arguments
 	 */
 	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
-		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId, true);
+		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId, null, true);
 		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getProcessRepository()
 				.findAllUsedItemsByProcessIds(processIds)

@@ -50,6 +50,18 @@ public class RelocationTest {
 
 	@Autowired WarehouseManagement warehouseManagement;
 	@Autowired ProcessInfoWriter processInfoWriter;
+	
+//	@Test
+//	void rawStationRelocationTest() {
+//		Receipt receipt = service.addBasicCashewReceipt();
+//		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
+//		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
+//		
+//		StorageRelocation relocation = new StorageRelocation();
+//		relocation.setPoCode((PoCode) receipt.getPoCode());
+//		relocation.setRecordedTime(OffsetDateTime.now());
+//		relocation.setProductionLine(productionLine);
+//	}
 
 	@Test
 	void transferWithCountTest() {
@@ -68,7 +80,7 @@ public class RelocationTest {
 		relocation.setItemCounts(getItemCounts(poInventory));
 
 		try {
-			warehouseManagement.addStorageRelocation(relocation, ProcessName.STORAGE_RELOCATION);
+			warehouseManagement.addStorageRelocation(relocation);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

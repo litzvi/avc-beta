@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.processinfo.WeightedPo;
 
@@ -84,14 +85,16 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 					+ "join po_code.supplier s "
 			+ "join p.processType pt "
 			+ "join p.lifeCycle lc "
+			+ "left join p.productionLine p_line "
 			+ "left join p.approvals approval "
 				+ "left join approval.user u "
 		+ "where pt.processName = :processName "
 			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
+			+ "and (p_line.productionFunctionality = :functionality or :functionality is null) "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
-	List<ProcessRow> findProcessByType(ProcessName processName, Integer poCodeId, boolean cancelled);
+	List<ProcessRow> findProcessByType(ProcessName processName, Integer poCodeId, ProductionFunctionality functionality, boolean cancelled);
 		
 	@Query("select new com.avc.mis.beta.dto.query.UsedItemWithGroup( "
 			+ "g.id, g.version, g.ordinal, g.groupName, g.tableView, "

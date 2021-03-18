@@ -349,7 +349,7 @@ public class QueryTest {
 		}
 		transferRows.forEach(i -> System.out.println(i));
 						
-		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocations(ProcessName.STORAGE_RELOCATION);
+		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocations(null);
 		relocationRows.forEach(i -> System.out.println(i));
 		
 		List<PoCodeBasic> poCodes = objectTablesReader.findAllPoCodes();
