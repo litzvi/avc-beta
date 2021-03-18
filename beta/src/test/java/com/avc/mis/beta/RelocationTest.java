@@ -72,6 +72,7 @@ public class RelocationTest {
 		StorageRelocation relocation = new StorageRelocation();
 		relocation.setPoCode((PoCode) receipt.getPoCode());
 		relocation.setRecordedTime(OffsetDateTime.now());
+		relocation.setProductionLine(service.getProductionLine());
 
 
 		//get inventory storages for relocation

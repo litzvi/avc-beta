@@ -52,6 +52,7 @@ import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.ContractType;
+import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -356,6 +357,13 @@ public class TestService {
 		if(ports.isEmpty())
 			fail("No Shipping Ports in database");
 		return ports.get(randNum.nextInt(ports.size()));
+	}
+	
+	public ProductionLine getProductionLine() {
+		List<ProductionLine> productionLines = valueTableReader.getAllProductionLines();
+		if(productionLines.isEmpty())
+			fail("No production Lines in database");
+		return productionLines.get(randNum.nextInt(productionLines.size()));
 	}
 
 	public void cleanup(Supplier supplier) {

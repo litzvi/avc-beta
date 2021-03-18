@@ -30,7 +30,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 	
 	@Query("select new com.avc.mis.beta.dto.embedable.GeneralProcessInfo("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
-			+ "pt.processName, p_line, "
+			+ "pt.processName, p_line.id, p_line.value, p_line.productionFunctionality, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision))) "
 		+ "from GeneralProcess r "

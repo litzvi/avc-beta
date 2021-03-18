@@ -19,6 +19,7 @@ import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
@@ -54,14 +55,14 @@ public class PoDTO extends PoProcessDTO {
 	public PoDTO(Integer id, Integer version, Instant createdDate, String staffRecording, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName, 
-			ProcessName processName, ProductionLine productionLine, 
+			ProcessName processName, Integer productionLineId, String productionLineValue, ProductionFunctionality productionFunctionality,
 			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, 
 			Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
 			String personInCharge) {
 		super();
 		super.setGeneralProcessInfo(new GeneralProcessInfo(id, version, createdDate, staffRecording, 
-				processName, productionLine, 
+				processName, productionLineId, productionLineValue, productionFunctionality,
 				recordedTime, startTime, endTime, 
 				duration, numOfWorkers, processStatus, editStatus, remarks, approvals));
 		super.setPoCode(new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName));

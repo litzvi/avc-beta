@@ -10,9 +10,11 @@ import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.GeneralProcessDTO;
+import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.EqualsAndHashCode;
@@ -29,7 +31,7 @@ public class GeneralProcessInfo extends DataDTO {
 	Instant createdDate;
 	String userRecording;
 	ProcessName processName;
-	ProductionLine productionLine;
+	ProductionLineBasic productionLine;
 	OffsetDateTime recordedTime;
 	LocalTime startTime;
 	LocalTime endTime;
@@ -42,7 +44,7 @@ public class GeneralProcessInfo extends DataDTO {
 
 	
 	public GeneralProcessInfo(Integer id, Integer version, Instant createdDate, String userRecording, 
-			ProcessName processName, ProductionLine productionLine, 
+			ProcessName processName, Integer productionLineId, String productionLineValue, ProductionFunctionality productionFunctionality,
 			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, EditStatus editStatus,
 			String remarks, String approvals) {
@@ -50,7 +52,10 @@ public class GeneralProcessInfo extends DataDTO {
 		this.createdDate = createdDate;
 		this.userRecording = userRecording;
 		this.processName = processName;
-		this.productionLine = productionLine;
+		if(productionLineId != null)
+			this.productionLine = new ProductionLineBasic(productionLineId, productionLineValue, productionFunctionality);
+		else
+			this.productionLine = null;
 		this.recordedTime = recordedTime;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -60,6 +65,5 @@ public class GeneralProcessInfo extends DataDTO {
 		this.editStatus = editStatus;
 		this.remarks = remarks;
 		this.approvals = approvals;
-
 	}
 }

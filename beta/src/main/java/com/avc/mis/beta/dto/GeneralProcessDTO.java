@@ -9,6 +9,7 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.embedable.GeneralProcessInfo;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -42,7 +43,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 	@EqualsAndHashCode.Exclude //if poCode is the same than it's enough, because might be null when testing.
 	private ProcessName processName;
 	
-	private ProductionLine productionLine;
+	private ProductionLineBasic productionLine;
 	private OffsetDateTime recordedTime;
 
 	private LocalTime startTime;
@@ -85,7 +86,8 @@ public abstract class GeneralProcessDTO extends DataDTO {
 			this.userRecording = process.getCreatedBy().getUsername();
 		if(process.getProcessType() != null)
 			this.processName = process.getProcessType().getProcessName();
-		this.productionLine = process.getProductionLine();
+		if(process.getProductionLine() != null)
+			this.productionLine = new ProductionLineBasic(process.getProductionLine());
 		this.recordedTime = process.getRecordedTime();
 		this.startTime = process.getStartTime();
 		this.endTime = process.getEndTime();

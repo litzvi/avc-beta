@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -26,6 +27,13 @@ public class ProductionLineBasic extends ValueDTO {
 		super(id);
 		this.value = value;
 		this.productionFunctionality = productionFunctionality;
+	}
+
+	
+	public ProductionLineBasic(ProductionLine productionLine) {
+		super(productionLine.getId());
+		this.value = productionLine.getValue();
+		this.productionFunctionality = productionLine.getProductionFunctionality();		
 	}
 
 }
