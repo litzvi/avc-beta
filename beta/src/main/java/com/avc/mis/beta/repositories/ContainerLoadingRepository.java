@@ -72,11 +72,13 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	 * @return ContainerLoadingInfo object that contains loading process information.
 	 */
 	@Query("select new com.avc.mis.beta.dto.embedable.ContainerLoadingInfo( "
-			+ "sc.id, sc.code, port.id, port.value, port.code) "
+			+ "sc.id, sc.code, port.id, port.value, port.code, "
+			+ "arrival.id, arrival.version, cd.containerNumber) "
 		+ "from ContainerLoading r "
-//			+ "join r.booking b "
-				+ "join r.shipmentCode sc "
-					+ "join sc.portOfDischarge port "
+			+ "join r.arrival arrival "
+				+ "join arrival.containerDetails cd "
+			+ "join r.shipmentCode sc "
+				+ "join sc.portOfDischarge port "
 		+ "where r.id = :processId ")
 	ContainerLoadingInfo findContainerLoadingInfo(int processId);
 

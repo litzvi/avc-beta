@@ -40,7 +40,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	@Query("select e from PoCode e")
 	List<PoCode> findAllPoCodes();
 	
-	@Query("select e from PoCode e")
+	@Query("select e from ShipmentCode e")
 	List<ShipmentCode> findAllShipmentCodes();
 
 	

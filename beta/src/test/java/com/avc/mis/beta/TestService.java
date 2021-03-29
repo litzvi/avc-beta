@@ -31,6 +31,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.PackedItem;
@@ -359,8 +360,8 @@ public class TestService {
 		return ports.get(randNum.nextInt(ports.size()));
 	}
 	
-	public ProductionLine getProductionLine() {
-		List<ProductionLine> productionLines = valueTableReader.getAllProductionLines();
+	public ProductionLine getProductionLine(ProductionFunctionality functionality) {
+		List<ProductionLine> productionLines = valueTableReader.getProductionLinesByFuncionality(new ProductionFunctionality[] {functionality});
 		if(productionLines.isEmpty())
 			fail("No production Lines in database");
 		return productionLines.get(randNum.nextInt(productionLines.size()));

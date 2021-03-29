@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -72,7 +73,7 @@ public class RelocationTest {
 		StorageRelocation relocation = new StorageRelocation();
 		relocation.setPoCode((PoCode) receipt.getPoCode());
 		relocation.setRecordedTime(OffsetDateTime.now());
-		relocation.setProductionLine(service.getProductionLine());
+		relocation.setProductionLine(service.getProductionLine(ProductionFunctionality.RAW_STATION));
 
 
 		//get inventory storages for relocation

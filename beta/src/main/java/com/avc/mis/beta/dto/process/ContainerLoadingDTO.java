@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
 import com.avc.mis.beta.dto.embedable.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
@@ -31,12 +32,14 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ContainerLoadingDTO extends TransactionProcessDTO<ProcessItemDTO> {
 	
+	private ContainerArrivalBasic arrival;
 	private ShipmentCodeDTO shipmentCode;
 	
 	private List<LoadedItemDTO> loadedItems; 
 	
 	public ContainerLoadingDTO(@NonNull ContainerLoading loading) {
 		super(loading);
+		this.arrival = new ContainerArrivalBasic(loading.getArrival());
 		this.shipmentCode = new ShipmentCodeDTO(loading.getShipmentCode());
 		this.loadedItems = Arrays.stream(loading.getLoadedItems())
 				.map(i->{return new LoadedItemDTO(i);}).collect(Collectors.toList());
@@ -45,6 +48,7 @@ public class ContainerLoadingDTO extends TransactionProcessDTO<ProcessItemDTO> {
 	}
 	
 	public void setContainerLoadingInfo(ContainerLoadingInfo info) {
+		this.arrival = info.getArrival();
 		this.shipmentCode = info.getShipmentCode();
 	}
 
