@@ -55,6 +55,17 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 		if(info != null)
 			this.poCode = info.getPoCode();
 	}
+	
+	/**
+	 * @return List<WeightedPoDTO> if poCode is null, otherwise null
+	 * because no need to present weighted pos if it's only one po.
+	 */
+	public List<WeightedPoDTO> getWeightedPos() {
+		if(poCode != null) {
+			return null;
+		}
+		return this.weightedPos;
+	}
 
 	
 }

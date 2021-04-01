@@ -26,10 +26,17 @@ import lombok.ToString;
 public class BasicStorageDTO extends SubjectDataDTO {
 
 	private BigDecimal amount;
+	private BigDecimal numberAvailableUnits;
 	
 	public BasicStorageDTO(Integer id, Integer version, Integer ordinal, BigDecimal amount) {
 		super(id, version, ordinal);
 		this.amount = amount;
+	}
+
+	public BasicStorageDTO(Integer id, Integer version, Integer ordinal, BigDecimal amount, BigDecimal numberAvailableUnits) {
+		super(id, version, ordinal);
+		this.amount = amount;
+		this.numberAvailableUnits = numberAvailableUnits;
 	}
 	
 	public BasicStorageDTO(Integer id, Integer version) {

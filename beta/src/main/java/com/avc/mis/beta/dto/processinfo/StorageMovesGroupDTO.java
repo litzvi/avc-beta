@@ -79,7 +79,8 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 			List<BasicUsedStorageDTO> used = this.storageMoves.stream().map((m) -> {
 				StorageDTO storage = m.getStorage();
 				return new BasicUsedStorageDTO(m.getId(), m.getVersion(), 
-						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits());
+						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits(), 
+						m.getNumberUsedUnits(), m.getNumberAvailableUnits());
 			}).collect(Collectors.toList());
 			movedItemTable.setAmounts(used);
 			return movedItemTable;

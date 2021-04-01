@@ -67,7 +67,8 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 			List<BasicUsedStorageDTO> used = this.usedItems.stream().map((i) -> {
 				StorageDTO storage = i.getStorage();
 				return new BasicUsedStorageDTO(i.getId(), i.getVersion(), 
-						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits());
+						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits(), 
+						i.getNumberUsedUnits(), i.getNumberAvailableUnits());
 			}).collect(Collectors.toList());
 			usedItemTable.setAmounts(used);
 			return usedItemTable;

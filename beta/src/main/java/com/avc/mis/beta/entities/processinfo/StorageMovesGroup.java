@@ -92,7 +92,7 @@ public class StorageMovesGroup extends ProcessGroup {
 			storageMoves[i] = new StorageMove();
 			storageMoves[i].setId(basicUsedStorage.getId());
 			storageMoves[i].setVersion(basicUsedStorage.getVersion());
-			storageMoves[i].setNumberUsedUnits(basicUsedStorage.getAmount());
+			storageMoves[i].setNumberUsedUnits(basicUsedStorage.getNumberUsedUnits());
 			Storage storage = new Storage();
 			storage.setId(basicUsedStorage.getStorageId());
 			storage.setVersion(basicUsedStorage.getStorageVersion());

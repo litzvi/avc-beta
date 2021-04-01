@@ -32,7 +32,6 @@ import lombok.NoArgsConstructor;
 @Table(name="PRODUCTION_LINES")
 public class ProductionLine extends ValueEntity {
 
-	@JsonIgnore
 	@Enumerated(EnumType.STRING)
 	@Column(name = "productionFunctionality", nullable = false)
 //	@Column(name = "productionFunctionality")
