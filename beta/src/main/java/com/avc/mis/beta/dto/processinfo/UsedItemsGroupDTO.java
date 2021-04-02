@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.processinfo;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,6 +13,11 @@ import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemTableDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.item.BulkItem;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.utilities.ListGroup;
@@ -76,20 +82,24 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 		return null;
 	}
 	
-	//not matched for packed items
-//	public AmountWithUnit[] getTotalAmount() {
-//		AmountWithUnit totalAmount = usedItems.stream()
-//				.map(ui -> {
-//					StorageDTO storage = ui.getStorage();
-//					return new AmountWithUnit(storage.getUnitAmount()
-//							.subtract(Optional.ofNullable(storage.getContainerWeight()).orElse(BigDecimal.ZERO))
-//							.multiply(ui.getNumberUsedUnits()), 
-//						ui.getMeasureUnit());
-//				})
-//				.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
-//		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
-//				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
-//	}
+	public List<AmountWithUnit> getTotalAmount() {
+		AmountWithUnit totalAmount = usedItems.stream()
+			.map(ui -> {
+				Class<? extends Item> itemClass = ui.getItem().getClazz();
+				if(itemClass == BulkItem.class) {
+					return new AmountWithUnit(ui.getTotal(), ui.getMeasureUnit());
+				}
+				else if(itemClass == PackedItem.class){
+					return ui.getItem().getUnit().multiply(ui.getTotal());
+				}
+				else 
+				{
+					throw new IllegalStateException("The class can only apply to weight items");
+				}
+			})
+			.reduce(AmountWithUnit::add).orElse(AmountWithUnit.ZERO_KG);
+		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+	}
 	
 	@JsonIgnore
 	@Override

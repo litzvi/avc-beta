@@ -126,19 +126,6 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 			this.itemProcessDate = processItem.getProcess().getRecordedTime();
 			this.itemPo = new PoCodeBasic((processItem.getProcess()).getPoCode());
 		}
-
-//		this.storageOrdinal = storage.getOrdinal();
-//		this.storageUnitAmount = Optional.ofNullable(storage.getUnitAmount()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
-//		this.storageNumberUnits = Optional.ofNullable(storage.getNumberUnits()).map(i -> i.setScale(MeasureUnit.SCALE)).orElse(null);
-//		
-//		this.storageContainerWeight = storage.getContainerWeight();
-//		if(storage.getWarehouseLocation() != null) {
-//			this.storageWarehouseLocation = new BasicValueEntity<Warehouse>(
-//					storage.getWarehouseLocation().getId(),  storage.getWarehouseLocation().getValue());
-//		}
-//		else {
-//			this.storageWarehouseLocation = null;
-//		}
 		
 		this.storgeOtherUsedUnits = null;//not used for testing
 
@@ -147,7 +134,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	
 	public BigDecimal getNumberAvailableUnits() {
 		return this.storage.getNumberUnits().subtract(this.storgeOtherUsedUnits);
-	}
+	}	
 	
 	/**
 	 * Gets a new Storage with all user set fields in the DTO (excluding id, version) 

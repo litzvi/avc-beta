@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.inventory.UsedItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,6 +38,19 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 
 	public UsedItemDTO(UsedItem usedItem) {
 		super(usedItem);
+	}
+	
+	@JsonIgnore
+	public BigDecimal getTotal() {
+		if(getStorage() == null || getStorage().getUnitAmount() == null || getNumberUsedUnits() == null) {
+			return null;
+		}
+		else {
+			return getStorage()
+				.getUnitAmount()
+				.multiply(getNumberUsedUnits());
+//				.subtract(Optional.ofNullable(getAccessWeight()).orElse(BigDecimal.ZERO));
+		}
 	}
 
 	

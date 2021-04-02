@@ -7,8 +7,11 @@ import java.security.AccessControlException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,6 +158,16 @@ public abstract class DAO extends ReadDAO {
 			throw new AccessControlException("Couldn't change password: wrong password");
 		}
 	}	
+	
+//	<T extends BaseEntity> boolean isEmpty(Class<T> entityClass) {
+//		
+//		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+//		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+//		cq.select(cb.count(cq.from(entityClass)));
+//		return entityManager.createQuery(cq).getSingleResult() == 0L;
+//		
+//	
+//	}
 
 	/**
 	 * Adds an entity with Hibernate session.save().
