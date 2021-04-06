@@ -315,7 +315,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 									+ "join used_g.process used_p "
 										+ "join used_p.lifeCycle used_lc "
 			+ "where p.id = :processId "
-			+ "group by s ")
+			+ "group by i, s ")
 	Stream<StorageBalance> findUsedStorageBalances(Integer processId);
 	
 	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("

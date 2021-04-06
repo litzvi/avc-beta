@@ -139,7 +139,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "join i.group g "
 				+ "join g.process p "
 		+ "where p.id = :processId "
-		+ "group by sf "
+		+ "group by i "
 		+ "order by g.ordinal, i.ordinal ")
 	List<UsedItemWithGroup> findUsedItemsWithGroup(int processId);
 	
