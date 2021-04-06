@@ -37,7 +37,6 @@ import lombok.Getter;
 @Getter(value = AccessLevel.PACKAGE)
 public abstract class DAO extends ReadDAO {
 
-	@Autowired private EntityManager entityManager;
 	@Autowired private PasswordEncoder encoder;
 
 		
@@ -159,16 +158,6 @@ public abstract class DAO extends ReadDAO {
 		}
 	}	
 	
-//	<T extends BaseEntity> boolean isEmpty(Class<T> entityClass) {
-//		
-//		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-//		CriteriaQuery<Long> cq = cb.createQuery(Long.class);
-//		cq.select(cb.count(cq.from(entityClass)));
-//		return entityManager.createQuery(cq).getSingleResult() == 0L;
-//		
-//	
-//	}
-
 	/**
 	 * Adds an entity with Hibernate session.save().
 	 * Used in {@link Orders.addOrder} in order to let Hibernate to decide if to auto generate key.

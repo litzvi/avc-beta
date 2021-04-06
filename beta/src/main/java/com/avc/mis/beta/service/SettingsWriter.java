@@ -5,6 +5,9 @@ package com.avc.mis.beta.service;
 
 import java.util.List;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,5 +44,9 @@ public class SettingsWriter {
 	 */
 	public <T extends BaseEntity> void addAll(List<T> entityList) {
 		dao.addAll(entityList);
+	}
+	
+	public <T extends BaseEntity> boolean isTableEmpty(Class<T> entityClass) {
+		return dao.isTableEmpty(entityClass);	
 	}
 }

@@ -205,6 +205,7 @@ public class ProcessInfoReader {
 		case GENERAL_ORDER:
 			return orders.getOrderByProcessId(processId);
 		case CASHEW_RECEIPT:
+		case GENERAL_RECEIPT:
 			return orderReceipts.getReceiptByProcessId(processId);
 		case CASHEW_RECEIPT_QC:
 		case SUPPLIER_QC:

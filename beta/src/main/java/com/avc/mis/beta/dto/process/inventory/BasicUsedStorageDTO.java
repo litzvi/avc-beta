@@ -28,9 +28,9 @@ public class BasicUsedStorageDTO extends SubjectDataDTO {
 	Integer storageId;
 	Integer storageVersion;
 //	Integer ordinal; //the storage ordinal
-	BigDecimal storageAmount;
+	BigDecimal storageAmount; 
 	
-	BigDecimal numberUsedUnits;
+	BigDecimal amount; //this is numberUsedUnits change for Mei
 	BigDecimal numberAvailableUnits;
 	
 //	StorageDTO storage;
@@ -51,7 +51,7 @@ public class BasicUsedStorageDTO extends SubjectDataDTO {
 		this.storageVersion = storageVersion;
 //		this.ordinal = ordinal;
 		this.storageAmount = storageAmount;
-		this.numberUsedUnits = numberUsedUnits;
+		this.amount = numberUsedUnits;
 		this.numberAvailableUnits = numberAvailableUnits;
 	}
 	
@@ -67,24 +67,5 @@ public class BasicUsedStorageDTO extends SubjectDataDTO {
 //		this.storageAmount = storageAmount;
 //	}
 	
-	
-
-//	public BasicUsedStorageDTO(@NonNull UsedItem usedItem) {
-//		super(usedItem.getId(), usedItem.getVersion());
-//		StorageBase storage = usedItem.getStorage();
-//		this.storageId = storage.getId();
-//		this.storageVersion = storage.getVersion();
-//		setOrdinal(storage.getOrdinal());
-//		this.storageAmount = storage.getNumberUnits();
-//	}
-//	
-//	public BasicUsedStorageDTO(@NonNull StorageMove storageMove) {
-//		super(storageMove.getId(), storageMove.getVersion());
-//		StorageBase storage = storageMove.getStorage();
-//		this.storageId = storage.getId();
-//		this.storageVersion = storage.getVersion();
-//		setOrdinal(storageMove.getOrdinal());
-//		this.storageAmount = storageMove.getNumberUnits();
-//	}
 
 }
