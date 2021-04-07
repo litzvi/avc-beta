@@ -58,7 +58,7 @@ public class ContainerBookingDTO extends GeneralProcessDTO {
 	
 	@Override
 	public String getProcessTypeDescription() {
-		return getProcessName().toString();	
+		return "Container Booking";	
 	}
 
 

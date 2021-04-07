@@ -54,7 +54,7 @@ public class ContainerLoadingDTO extends TransactionProcessDTO<ProcessItemDTO> {
 
 	@Override
 	public String getProcessTypeDescription() {
-		return getProcessName().toString();	
+		return "Container Loading";	
 	}
 	
 }

@@ -20,6 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -108,16 +109,16 @@ public class TransferTest {
 			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 			ProcessItem[] processItems = service.getProcessItems(poInventory);
 
-			List<Item> items = service.getItems();
+			List<ItemWithUnitDTO> items = service.getItemsByGroup(null);
 			if(items.size() < 2) {
 				fail("not enough items for test");
 			}
-			Item item = items.get(0);
+			ItemWithUnitDTO item = items.get(0);
 			if(item.equals(processItems[0].getItem())) {
 				item = items.get(1);
 			}	
 			for(ProcessItem i: processItems) {
-				i.setItem(item);
+				i.setItem(service.getItem(item));
 			}
 			transfer.setProcessItems(processItems);
 			try {

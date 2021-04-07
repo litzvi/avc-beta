@@ -72,7 +72,7 @@ public class Item extends ValueEntity implements ValueInterface {
 
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(nullable = false, updatable = false) //shouldn't update because Inventory use is only allowed for general
 	@NotNull(message = "Item group is mandatory")
 	private ItemGroup itemGroup;
 

@@ -34,6 +34,7 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.process.ContainerBooking;
 import com.avc.mis.beta.entities.process.PO;
@@ -139,7 +140,7 @@ public class TestService {
 		po.setRecordedTime(OffsetDateTime.now());
 		
 		//add order items
-		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS);				
+		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS, ItemGroup.PRODUCT);				
 		po.setOrderItems(items);
 		orders.addCashewOrder(po);
 		return po;
@@ -159,18 +160,17 @@ public class TestService {
 		po.setRecordedTime(OffsetDateTime.now());
 		
 		//add order items
-		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS);				
+		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS, ItemGroup.GENERAL);				
 		po.setOrderItems(items);
 		orders.addGeneralOrder(po);
 		return po;
 	}
 	
-	private OrderItem[] getOrderItems(int numOfItems) {
+	private OrderItem[] getOrderItems(int numOfItems, ItemGroup group) {
 		OrderItem[] orderItems = new OrderItem[numOfItems];
-		List<Item> items = getItems();
 		for(int i=0; i<orderItems.length; i++) {
 			orderItems[i] = new OrderItem();
-			Item item = items.get(randNum.nextInt(items.size()));
+			Item item = getItemByGroup(group);
 			orderItems[i].setItem(item);
 			orderItems[i].setNumberUnits(new AmountWithUnit(new BigDecimal(i+1), item.getMeasureUnit()));
 			orderItems[i].setUnitPrice(new AmountWithCurrency("1.16", "USD"));
@@ -214,7 +214,6 @@ public class TestService {
 		ReceiptItem[] receiptItems = new ReceiptItem[numOfItems];
 		StorageWithSample[] storageForms = new StorageWithSample[receiptItems.length];
 		ExtraAdded[] added = new ExtraAdded[receiptItems.length];
-		List<Item> items = getItems();
 		Warehouse storage = getWarehouse();
 		for(int i=0; i<receiptItems.length; i++) {
 			storageForms[i] = new StorageWithSample();
@@ -227,7 +226,7 @@ public class TestService {
 			storageForms[i].setAvgTestedWeight(BigDecimal.valueOf(50.01));
 			//build receipt item
 			receiptItems[i] = new ReceiptItem();
-			Item item = items.get(randNum.nextInt(items.size()));
+			Item item = getItem();
 			receiptItems[i].setItem(item);
 			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
 			receiptItems[i].setMeasureUnit(item.getMeasureUnit());
@@ -257,6 +256,21 @@ public class TestService {
 		return receipt;		
 	}
 	
+	public Receipt getGeneralOrderReceipt(int orderPoCode) {
+		//build order receipt
+		Receipt receipt = new Receipt();
+		PoCode poCode = new PoCode();
+		poCode.setId(orderPoCode);
+		receipt.setPoCode(poCode);
+		//build process
+		receipt.setRecordedTime(OffsetDateTime.now());
+		//add order items
+		PoDTO poDTO = orders.getOrder(orderPoCode);
+		receipt.setReceiptItems(getOrderReceiptItems(poDTO));
+		receipts.addGeneralOrderReceipt(receipt);
+		return receipt;		
+	}
+	
 	private ReceiptItem[] getOrderReceiptItems(PoDTO poDTO) {
 		List<OrderItemDTO> orderItems = poDTO.getOrderItems();
 
@@ -269,8 +283,8 @@ public class TestService {
 			items[i] = new ReceiptItem();
 			storageForms[i] = new StorageWithSample();
 			int itemId = oItem.getItem().getId();
-			Item item = getItems().stream().filter(j -> j.getId() == itemId).findAny().get();
-			items[i].setItem(item);
+			ItemWithUnitDTO item = getItemsByGroup(null).stream().filter(j -> j.getId() == itemId).findAny().get();
+			items[i].setItem(getItem(item));
 			items[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
 			items[i].setMeasureUnit(item.getMeasureUnit());
 			items[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
@@ -307,8 +321,8 @@ public class TestService {
 	
 	
 
-	public List<Item> getItems() {
-		List<Item> items = valueTableReader.getAllItems();
+	public List<ItemWithUnitDTO> getItemsByGroup(ItemGroup group) {
+		List<ItemWithUnitDTO> items = valueTableReader.getItemsByGroup(group);
 		if(items.isEmpty())
 			fail("No items in database for running this test");
 		return items;
@@ -316,8 +330,14 @@ public class TestService {
 	}
 	
 	public Item getItem() {
-		List<Item> items = getItems();
-		return items.get(randNum.nextInt(items.size()));
+		return getItemByGroup(null);
+	}
+	
+	public Item getItemByGroup(ItemGroup group) {
+		List<ItemWithUnitDTO> items = getItemsByGroup(group);
+		ItemWithUnitDTO item = items.get(randNum.nextInt(items.size()));
+		
+		return getItem(item);
 	}
 	
 	private ContractType getContractType() {

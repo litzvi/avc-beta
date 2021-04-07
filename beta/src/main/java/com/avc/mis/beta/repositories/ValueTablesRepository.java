@@ -3,7 +3,9 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
@@ -58,6 +60,17 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 				+ "and t.productionFunctionality in :functionalities "
 			+ "order by t.value ")
 	List<ProductionLineBasic> findBasicProductionLines(ProductionFunctionality[] functionalities);
+
+	@Query("select new com.avc.mis.beta.dto.values.ItemWithUnitDTO("
+			+ "i.id, i.value, i.measureUnit, i.itemGroup, i.productionUse, "
+			+ "u.amount, u.measureUnit, type(i)) "
+		+ "from StorageBase s "
+			+ "join s.processItem pi "
+				+ "join pi.item i "
+					+ "join i.unit u "
+		+ "where s.id in :storageIds "
+		+ "group by i ")
+	List<ItemWithUnitDTO>  findStoragesItems(Set<Integer> storageIds);
 
 //	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
 //			+ "from Item i "

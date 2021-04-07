@@ -3,10 +3,12 @@ package com.avc.mis.beta.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,12 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.embedable.PoProcessInfo;
+import com.avc.mis.beta.dto.process.InventoryUseDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageBalance;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessRow;
@@ -35,12 +39,19 @@ import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
+import com.avc.mis.beta.entities.process.InventoryUse;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
+import com.avc.mis.beta.entities.process.inventory.UsedItem;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
+import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.repositories.InventoryRepository;
+import com.avc.mis.beta.repositories.InventoryUseRepository;
 import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
+import com.avc.mis.beta.repositories.ValueTablesRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 import com.avc.mis.beta.utilities.ListGroupImp;
 
@@ -64,6 +75,8 @@ public class WarehouseManagement {
 	@Autowired private InventoryRepository inventoryRepository;
 	@Autowired private TransferRepository transferRepository;
 	@Autowired private RelocationRepository relocationRepository;
+	@Autowired private InventoryUseRepository inventoryUseRepository;
+	@Autowired private ValueTablesRepository valueTablesRepository;
 
 	
 	public List<ProcessRow> getStorageTransfers() {
@@ -113,8 +126,23 @@ public class WarehouseManagement {
 			row.setUsedItems(usedMap.get(row.getId()));
 			row.setItemCounts(countMap.get(row.getId()));
 		}		
-		
 		return relocationRows;
+	}
+	
+	public List<ProcessRow> getInventoryUses() {
+		return getInventoryUses(null);
+	}
+	
+	public List<ProcessRow> getInventoryUses(Integer poCodeId) {
+		List<ProcessRow> inventoryUseRows = getInventoryUseRepository().findProcessByType(ProcessName.GENERAL_USE, poCodeId, null, true);
+		int[] processIds = inventoryUseRows.stream().mapToInt(ProcessRow::getId).toArray();
+		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getInventoryUseRepository()
+				.findAllUsedItemsByProcessIds(processIds)
+				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+		for(ProcessRow row: inventoryUseRows) {
+			row.setUsedItems(usedMap.get(row.getId()));
+		}		
+		return inventoryUseRows;
 	}
 
 	/**
@@ -137,6 +165,37 @@ public class WarehouseManagement {
 		dao.addGeneralProcessEntity(relocation);
 		//check if storage moves match the amounts of the used item
 		checkRelocationBalance(relocation);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addGeneralInventoryUse(InventoryUse inventoryUse) {
+		//Check that used items are from general
+		Set<Integer> usedStorageIds = null;
+		for(UsedItemsGroup uig: inventoryUse.getUsedItemGroups()) {
+			usedStorageIds = Arrays.stream(uig.getUsedItems()).map(UsedItem::getStorage).map(StorageBase::getId).collect(Collectors.toSet());
+		}
+		if(usedStorageIds != null) {
+			List<ItemWithUnitDTO> items = getValueTablesRepository().findStoragesItems(usedStorageIds);
+			if(items.stream().anyMatch(i -> i.getGroup() != ItemGroup.GENERAL)) {
+				throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
+			}
+		}
+				
+		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_USE));
+		dao.addTransactionProcessEntity(inventoryUse);
+		
+	}
+	
+	public InventoryUseDTO getInventoryUse(int processId) {
+		InventoryUseDTO inventoryUseDTO = new InventoryUseDTO();
+		inventoryUseDTO.setGeneralProcessInfo(getInventoryUseRepository()
+				.findGeneralProcessInfoByProcessId(processId, InventoryUse.class)
+				.orElseThrow(
+						()->new IllegalArgumentException("No inventory use with given process id")));
+		inventoryUseDTO.setPoProcessInfo(getRelocationRepository()
+				.findPoProcessInfoByProcessId(processId).orElse(null));
+		
+		return inventoryUseDTO;
 	}
 		
 	/**
