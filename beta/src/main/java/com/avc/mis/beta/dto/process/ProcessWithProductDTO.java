@@ -3,19 +3,10 @@
  */
 package com.avc.mis.beta.dto.process;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 
-import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.entities.enums.EditStatus;
-import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
-import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.AccessLevel;
 import lombok.Data;

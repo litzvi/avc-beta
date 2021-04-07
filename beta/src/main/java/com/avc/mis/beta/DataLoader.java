@@ -12,8 +12,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import com.avc.mis.beta.dao.DAO;
-import com.avc.mis.beta.dao.ReadDAO;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -25,7 +23,6 @@ import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.service.SettingsWriter;
 import com.avc.mis.beta.service.Users;
-import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.utilities.ProgramSequence;
 
 /**

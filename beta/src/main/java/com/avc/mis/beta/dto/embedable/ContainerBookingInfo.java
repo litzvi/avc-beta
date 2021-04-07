@@ -5,9 +5,6 @@ package com.avc.mis.beta.dto.embedable;
 
 import java.time.LocalDate;
 
-import com.avc.mis.beta.dto.values.ShipmentCodeDTO;
-import com.avc.mis.beta.entities.embeddable.ShipingDetails;
-
 import lombok.Value;
 
 /**

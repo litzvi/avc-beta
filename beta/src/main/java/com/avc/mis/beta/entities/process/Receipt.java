@@ -13,7 +13,6 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.ReceiptItem;

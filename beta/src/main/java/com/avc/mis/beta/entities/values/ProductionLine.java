@@ -11,9 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

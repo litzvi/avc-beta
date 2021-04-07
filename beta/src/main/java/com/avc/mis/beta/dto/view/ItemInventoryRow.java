@@ -3,14 +3,11 @@
  */
 package com.avc.mis.beta.dto.view;
 
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.ItemWithUnit;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -20,10 +17,8 @@ import com.avc.mis.beta.entities.item.PackedItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.Value;
 
 /**
  * DTO of inventory for one item. 

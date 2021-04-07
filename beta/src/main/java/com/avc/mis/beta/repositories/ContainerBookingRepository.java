@@ -3,11 +3,8 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.util.Set;
-
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
 import com.avc.mis.beta.dto.embedable.ContainerBookingInfo;
 import com.avc.mis.beta.entities.process.ContainerBooking;
 

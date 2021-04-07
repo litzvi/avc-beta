@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.embedable.GeneralProcessInfo;
-import com.avc.mis.beta.dto.embedable.PoProcessInfo;
-import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;

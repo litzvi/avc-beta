@@ -20,7 +20,6 @@ import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
-import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;

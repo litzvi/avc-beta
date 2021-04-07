@@ -14,7 +14,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ProcessInfoEntity;
-import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 

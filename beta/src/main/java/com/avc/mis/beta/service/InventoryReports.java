@@ -3,11 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -16,22 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.report.InventoryReportLine;
 import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.ItemInventoryWithOrderRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
-import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.InventoryRepository;

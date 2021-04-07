@@ -13,20 +13,15 @@ import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
-import com.avc.mis.beta.dto.view.PoFinalReport;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
-import com.avc.mis.beta.entities.processinfo.WeightedPo;
-
-import lombok.NonNull;
 
 /**
  * Spring repository for accessing all notification information and requirements of production processes.

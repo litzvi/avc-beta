@@ -4,11 +4,9 @@
 package com.avc.mis.beta.repositories;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.process.SampleReceiptDTO;
 import com.avc.mis.beta.dto.query.SampleItemWithWeight;
 import com.avc.mis.beta.entities.process.SampleReceipt;
 

@@ -3,11 +3,8 @@
  */
 package com.avc.mis.beta.dao;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.security.AccessControlException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -18,18 +15,14 @@ import java.util.stream.Stream;
 
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
-import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.StorageBalance;
-import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -42,7 +35,6 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.process.GeneralProcess;
-import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.TransactionProcess;

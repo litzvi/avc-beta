@@ -3,30 +3,15 @@
  */
 package com.avc.mis.beta.entities.process;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.WeightedPo;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 /**

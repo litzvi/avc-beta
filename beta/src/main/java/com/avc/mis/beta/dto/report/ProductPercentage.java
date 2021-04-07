@@ -5,7 +5,6 @@ package com.avc.mis.beta.dto.report;
 
 import java.math.BigDecimal;
 
-import lombok.Data;
 import lombok.Value;
 
 /**

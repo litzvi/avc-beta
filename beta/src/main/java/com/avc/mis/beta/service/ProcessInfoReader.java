@@ -26,14 +26,11 @@ import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.view.PoFinalReport;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 

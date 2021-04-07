@@ -8,9 +8,7 @@ import java.util.List;
 
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.QcCompany;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 import com.avc.mis.beta.utilities.ListGroup;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

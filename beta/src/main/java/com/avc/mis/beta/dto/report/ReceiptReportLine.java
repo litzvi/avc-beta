@@ -5,7 +5,6 @@ package com.avc.mis.beta.dto.report;
 
 import java.util.List;
 
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 
 import lombok.Data;

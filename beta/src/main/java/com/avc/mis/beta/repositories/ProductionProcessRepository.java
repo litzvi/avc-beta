@@ -3,13 +3,6 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.jpa.repository.Query;
-
-import com.avc.mis.beta.dto.process.ProductionProcessDTO;
-import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 
 /**

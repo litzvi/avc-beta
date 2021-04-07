@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -17,13 +16,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.embeddable.ContainerDetails;
-import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.processinfo.LoadedItem;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
 

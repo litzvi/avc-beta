@@ -5,9 +5,7 @@ package com.avc.mis.beta.entities.embeddable;
 
 import javax.persistence.Embeddable;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @author Zvi

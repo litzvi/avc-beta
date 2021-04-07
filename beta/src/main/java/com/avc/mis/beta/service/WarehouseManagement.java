@@ -3,11 +3,8 @@ package com.avc.mis.beta.service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -18,17 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
-import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
-import com.avc.mis.beta.dto.query.InventoryProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
-import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
@@ -36,15 +30,12 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.process.InventoryUse;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
-import com.avc.mis.beta.entities.process.InventoryUse;
-import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.entities.process.inventory.UsedItem;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.repositories.InventoryRepository;
@@ -53,11 +44,9 @@ import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
-import com.avc.mis.beta.utilities.ListGroupImp;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 
 /**
  * Service for recording and receiving Warehouse activity and information

@@ -16,8 +16,6 @@ import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.ItemWithUnit;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -26,11 +24,8 @@ import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
 

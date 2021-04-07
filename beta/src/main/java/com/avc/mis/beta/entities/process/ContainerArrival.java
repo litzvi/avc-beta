@@ -9,16 +9,17 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import com.avc.mis.beta.entities.data.Company;
+import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
-import com.avc.mis.beta.entities.embeddable.TruckDetails;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -68,6 +69,11 @@ public class ContainerArrival extends GeneralProcess {
 //	@ManyToOne(fetch = FetchType.LAZY)
 //	@JoinColumn(name = "logisticsCompanyId")
 //	private Supplier logisticsCompany;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "productCompanyId")
+	private Supplier productCompany;
+
 
 	@OneToMany(mappedBy = "arrival", fetch = FetchType.LAZY)
 	private Set<ContainerLoading> containerLoadings;

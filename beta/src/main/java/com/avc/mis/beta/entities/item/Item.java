@@ -27,10 +27,8 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
 
 /**
  * Item entity, has a name-value, item's default measure unit, 

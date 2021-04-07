@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -11,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;

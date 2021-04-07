@@ -6,9 +6,6 @@ package com.avc.mis.beta.entities.codes;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-
-import org.hibernate.validator.constraints.UniqueElements;
 
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.ContractType;

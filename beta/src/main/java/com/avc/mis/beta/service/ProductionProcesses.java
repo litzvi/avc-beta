@@ -3,11 +3,8 @@
  */
 package com.avc.mis.beta.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -16,11 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.embedable.PoProcessInfo;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
-import com.avc.mis.beta.dto.process.StorageRelocationDTO;
-import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.report.ProductionReportLine;
@@ -28,9 +21,7 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.ProductionProcess;
-import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
 
 import lombok.AccessLevel;

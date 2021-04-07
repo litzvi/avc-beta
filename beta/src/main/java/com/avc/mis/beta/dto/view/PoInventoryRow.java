@@ -1,6 +1,5 @@
 package com.avc.mis.beta.dto.view;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +14,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.Value;
 
 /**
  * DTO of inventory for one po code. 

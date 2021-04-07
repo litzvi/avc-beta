@@ -3,10 +3,6 @@
  */
 package com.avc.mis.beta.dto.process;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -17,11 +13,7 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.processinfo.SampleItemDTO;
 import com.avc.mis.beta.dto.query.SampleItemWithWeight;
 import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.enums.EditStatus;
-import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.SampleReceipt;
-import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

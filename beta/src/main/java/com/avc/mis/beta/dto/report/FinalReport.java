@@ -3,11 +3,8 @@
  */
 package com.avc.mis.beta.dto.report;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 

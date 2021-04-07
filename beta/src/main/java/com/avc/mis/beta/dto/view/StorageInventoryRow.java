@@ -11,8 +11,6 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
-import com.avc.mis.beta.utilities.ListGroup;
-import com.avc.mis.beta.utilities.ListGroupImp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;

@@ -1,9 +1,5 @@
 package com.avc.mis.beta.dto.process;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,13 +7,9 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
-import com.avc.mis.beta.entities.enums.EditStatus;
-import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
 import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
-import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

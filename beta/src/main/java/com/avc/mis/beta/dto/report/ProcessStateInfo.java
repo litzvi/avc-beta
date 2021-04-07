@@ -12,7 +12,6 @@ import com.avc.mis.beta.entities.enums.ProcessStatus;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Value;
 
 /**
  * @author zvi

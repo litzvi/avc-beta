@@ -15,10 +15,8 @@ import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 

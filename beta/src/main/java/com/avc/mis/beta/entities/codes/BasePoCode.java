@@ -16,16 +16,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.ValueInterface;
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.processinfo.WeightedPo;
 import com.avc.mis.beta.entities.values.ContractType;
-import com.avc.mis.beta.validation.groups.OnPersist;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;

@@ -5,13 +5,10 @@ package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.Arrays;
 import java.util.List;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.BulkItem;

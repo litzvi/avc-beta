@@ -10,10 +10,8 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
 import com.avc.mis.beta.dto.embedable.ContainerArrivalInfo;
-import com.avc.mis.beta.dto.embedable.ContainerBookingInfo;
 import com.avc.mis.beta.dto.view.ContainerArrivalRow;
 import com.avc.mis.beta.entities.process.ContainerArrival;
-import com.avc.mis.beta.entities.process.ContainerBooking;
 
 /**
  * @author zvi
@@ -22,15 +20,19 @@ import com.avc.mis.beta.entities.process.ContainerBooking;
 public interface ContainerArrivalRepository extends ProcessRepository<ContainerArrival> {
 
 	@Query("select new com.avc.mis.beta.dto.embedable.ContainerArrivalInfo("
-			+ "p.containerDetails, p.shipingDetails) "
+			+ "p.containerDetails, p.shipingDetails, "
+			+ "pc.id, pc.version, pc.name) "
 		+ "from ContainerArrival p "
+			+ "left join p.productCompany pc "
 		+ "where p.id = :processId ")
 	ContainerArrivalInfo findContainerArrivalInfo(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.basic.ContainerArrivalBasic("
-			+ "p.id, p.version, cd.containerNumber) "
+			+ "p.id, p.version, cd.containerNumber, "
+			+ "pc.id, pc.version, pc.name) "
 		+ "from ContainerArrival p "
 			+ "join p.containerDetails cd "
+			+ "left join p.productCompany pc "
 		+ "where p.containerLoadings is empty "
 			+ "or not exists ("
 				+ "select p_2 "
@@ -46,10 +48,12 @@ public interface ContainerArrivalRepository extends ProcessRepository<ContainerA
 			+ "p.id, "
 			+ "p.recordedTime, p.duration, lc.processStatus, "
 			+ "function('GROUP_CONCAT', concat(u.username, ': ', approval.decision)), "
-			+ "ship.eta, cont.containerNumber, cont.sealNumber, cont.containerType) "
+			+ "ship.eta, cont.containerNumber, cont.sealNumber, cont.containerType, "
+			+ "pc.id, pc.version, pc.name) "
 		+ "from ContainerArrival p "
 			+ "join p.containerDetails cont "
 			+ "join p.shipingDetails ship "
+			+ "left join p.productCompany pc "
 			+ "join p.processType pt "
 			+ "join p.lifeCycle lc "
 			+ "left join p.approvals approval "

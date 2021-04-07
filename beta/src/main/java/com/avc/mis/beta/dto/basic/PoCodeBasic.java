@@ -5,12 +5,10 @@ package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.item.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
-import lombok.experimental.NonFinal;
 
 /**
  * DTO for PoCode containing id and the fields needed 

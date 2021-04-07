@@ -6,13 +6,8 @@ package com.avc.mis.beta.dto.process.inventory;
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
-import com.avc.mis.beta.entities.process.inventory.StorageBase;
-import com.avc.mis.beta.entities.process.inventory.StorageMove;
-import com.avc.mis.beta.entities.process.inventory.UsedItem;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
 

@@ -4,7 +4,6 @@
 
 package com.avc.mis.beta.service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -16,21 +15,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.doc.ExportInfo;
 import com.avc.mis.beta.dto.doc.InventoryExportDoc;
 import com.avc.mis.beta.dto.doc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
-import com.avc.mis.beta.dto.process.ProductionProcessDTO;
-import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine;
 import com.avc.mis.beta.dto.report.LoadingReportLine;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
@@ -38,7 +32,6 @@ import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 
 /**
  * @author zvi

@@ -9,13 +9,11 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.DataDTO;
-import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;

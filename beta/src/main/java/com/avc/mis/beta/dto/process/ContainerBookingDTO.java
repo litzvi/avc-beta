@@ -7,8 +7,6 @@ import java.time.LocalDate;
 
 import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.embedable.ContainerBookingInfo;
-import com.avc.mis.beta.dto.values.ShipmentCodeDTO;
-import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.process.ContainerBooking;
 
 import lombok.Data;

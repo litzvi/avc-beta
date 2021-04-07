@@ -4,14 +4,12 @@
 package com.avc.mis.beta.repositories;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ValueEntityObject;
 import com.avc.mis.beta.dto.embedable.QualityCheckInfo;
-import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
 import com.avc.mis.beta.dto.report.ItemQc;
 import com.avc.mis.beta.dto.report.QcReportLine;

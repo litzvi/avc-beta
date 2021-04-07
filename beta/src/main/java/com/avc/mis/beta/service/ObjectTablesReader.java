@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
-import com.avc.mis.beta.entities.codes.MixPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;

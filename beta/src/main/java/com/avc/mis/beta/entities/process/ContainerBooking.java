@@ -4,25 +4,14 @@
 package com.avc.mis.beta.entities.process;
 
 import java.time.LocalDate;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.utilities.LocalDateToLong;
 
 import lombok.Data;

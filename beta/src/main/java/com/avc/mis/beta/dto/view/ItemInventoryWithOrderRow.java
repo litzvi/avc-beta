@@ -7,12 +7,9 @@ import java.util.List;
 
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
-import com.avc.mis.beta.entities.item.PackedItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 

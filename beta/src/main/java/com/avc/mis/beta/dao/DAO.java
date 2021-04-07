@@ -6,12 +6,8 @@ package com.avc.mis.beta.dao;
 import java.security.AccessControlException;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Selection;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;

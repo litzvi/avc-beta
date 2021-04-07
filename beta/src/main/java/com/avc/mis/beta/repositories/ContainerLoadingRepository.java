@@ -5,7 +5,6 @@ package com.avc.mis.beta.repositories;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
@@ -13,11 +12,9 @@ import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow;
 import com.avc.mis.beta.dto.doc.ExportInfo;
 import com.avc.mis.beta.dto.embedable.ContainerLoadingInfo;
-import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine;
 import com.avc.mis.beta.dto.view.LoadingRow;
-import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 
 /**
@@ -73,10 +70,12 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	 */
 	@Query("select new com.avc.mis.beta.dto.embedable.ContainerLoadingInfo( "
 			+ "sc.id, sc.code, port.id, port.value, port.code, "
-			+ "arrival.id, arrival.version, cd.containerNumber) "
+			+ "arrival.id, arrival.version, cd.containerNumber, "
+			+ "pc.id, pc.version, pc.name) "
 		+ "from ContainerLoading r "
 			+ "join r.arrival arrival "
 				+ "join arrival.containerDetails cd "
+				+ "left join arrival.productCompany pc "
 			+ "join r.shipmentCode sc "
 				+ "join sc.portOfDischarge port "
 		+ "where r.id = :processId ")

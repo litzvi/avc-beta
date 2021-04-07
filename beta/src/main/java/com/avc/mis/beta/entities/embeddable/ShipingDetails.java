@@ -8,14 +8,11 @@ import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.utilities.LocalDateToLong;
 

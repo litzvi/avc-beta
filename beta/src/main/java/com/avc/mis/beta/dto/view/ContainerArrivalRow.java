@@ -6,12 +6,11 @@ package com.avc.mis.beta.dto.view;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
-import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
+import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.values.ShippingPort;
@@ -40,10 +39,14 @@ public class ContainerArrivalRow extends BasicDTO {
 	private String sealNumber;
 	private String containerSize;
 	private ShippingPort portOfDischarge;
+	
+	private DataObjectWithName<Supplier> productCompany; 
+
 
 	public ContainerArrivalRow(@NonNull Integer id, 
 			OffsetDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, 			
-			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType) {
+			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType,
+			Integer productCompanyId, Integer productCompanyVersion, String productCompanyName) {
 		super(id);
 		this.recordedTime = recordedTime;
 		this.duration = duration;
@@ -62,6 +65,9 @@ public class ContainerArrivalRow extends BasicDTO {
 		if(containerType != null)
 			this.containerSize = containerType.toString();
 		
+		if(productCompanyId != null)
+			this.productCompany = new DataObjectWithName<Supplier>(productCompanyId, productCompanyVersion, productCompanyName);
+
 	}
 
 }

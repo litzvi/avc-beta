@@ -13,12 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
-
-import org.hibernate.validator.constraints.ISBN;
-import org.hibernate.validator.internal.util.privilegedactions.GetClassLoader;
 
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.values.ContractType;
