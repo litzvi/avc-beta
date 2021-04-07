@@ -58,11 +58,20 @@ public class ItemAmount {
 		else if(clazz == PackedItem.class){
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			this.amount.setScale(MeasureUnit.SCALE);
-			this.weightAmount = new AmountWithUnit(
+			AmountWithUnit weightAmount = new AmountWithUnit(
 					amount
 					.multiply(unitAmount, MathContext.DECIMAL64)
 					.multiply(this.weightCoefficient, MathContext.DECIMAL64), 
 					unitMeasureUnit);
+			
+			//not display oz, gram
+			MeasureUnit systemMainMU = MeasureUnit.getSystemMainUnit(unitMeasureUnit);
+			if(unitMeasureUnit != systemMainMU) {
+				this.weightAmount = weightAmount.convert(systemMainMU);
+			}
+			else {
+				this.weightAmount = weightAmount;
+			}
 //			this.weight = new AmountWithUnit[] {
 //					weight.convert(MeasureUnit.LBS),
 //					weight.convert(MeasureUnit.KG)};

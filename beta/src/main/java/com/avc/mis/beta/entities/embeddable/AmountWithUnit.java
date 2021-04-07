@@ -261,7 +261,7 @@ public class AmountWithUnit implements Cloneable {
 				amounts.add(item.getUnit().multiply(units.getAmount()));
 			}
 		}
-		AmountWithUnit.setScales(amounts, MeasureUnit.SCALE);
+		AmountWithUnit.setScales(amounts, MeasureUnit.SUM_DISPLAY_SCALE);
 		return amounts;
 	}
 	
@@ -275,7 +275,7 @@ public class AmountWithUnit implements Cloneable {
 		if(weights.isEmpty()) {
 			weights.add(units);
 		}
-		AmountWithUnit.setScales(weights, MeasureUnit.SCALE);
+		AmountWithUnit.setScales(weights, MeasureUnit.SUM_DISPLAY_SCALE);
 		return weights;
 	}
 

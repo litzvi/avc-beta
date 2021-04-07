@@ -70,6 +70,7 @@ public enum MeasureUnit {
 	 * Default scale when returning result from conversion
 	 */
 	public static final int SCALE = 3;
+	public static final int SUM_DISPLAY_SCALE = 2;
 	public static final int DIVISION_SCALE = 6;
 	public static final int CALCULATION_SCALE = 16;
 	
@@ -143,6 +144,21 @@ public enum MeasureUnit {
 		return CONVERTION_MAP.values().stream()
 				.flatMap(map -> map.values().stream())
 				.collect(Collectors.toList());
+	}
+
+	/**
+	 * @param unitMeasureUnit
+	 * @return
+	 */
+	public static MeasureUnit getSystemMainUnit(MeasureUnit measureUnit) {
+		switch(measureUnit) {
+		case GRAM:
+			return KG;
+		case OZ:
+			return LBS;
+		default:
+			return measureUnit;
+		}
 	}
 
 //	private static final BigDecimal LBS_IN_KG = new BigDecimal("0.4536");

@@ -11,7 +11,7 @@ import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
  * Version: 13.8
- * issues 312
+ * issues 402, 416
  * 
  * @author zvi
  *
