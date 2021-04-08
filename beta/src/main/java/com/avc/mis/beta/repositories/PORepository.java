@@ -170,7 +170,15 @@ public interface PORepository extends PoProcessRepository<PO> {
 	@Query("select new com.avc.mis.beta.dto.report.ItemAmount("
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM(units.amount * uom.multiplicand / uom.divisor)) "
+//			+ "SUM(units.amount * uom.multiplicand / uom.divisor)) "
+			+ "(units.amount "
+				+ " - "
+				+ "coalesce(SUM("
+					+ "CASE "
+						+ "WHEN rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.FINAL THEN null  "
+						+ "ELSE (rou.amount * rou_uom.multiplicand / rou_uom.divisor) " 
+					+ "END), "
+				+ "0)) * uom.multiplicand / uom.divisor) "
 		+ "from PO po "
 			+ "join po.lifeCycle lc "
 			+ "join po.processType t "
@@ -189,17 +197,18 @@ public interface PORepository extends PoProcessRepository<PO> {
 		+ "where "
 			+ "(t.processName = :orderType or :orderType is null) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
-			+ "and (lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.PENDING "
-				+ "or lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+			+ "and (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
+//			+ "and (rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
 		+ "group by oi, units "
 		+ "having coalesce("
 			+ "SUM("
 				+ "CASE "
-					+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN null  "
+					+ "WHEN rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.FINAL THEN null  "
 					+ "ELSE (rou.amount * rou_uom.multiplicand / rou_uom.divisor) " 
 				+ "END), "
+//				+ "(rou.amount * rou_uom.multiplicand / rou_uom.divisor)), "
 			+ "0) < units.amount ")
-	List<ItemAmount> findOpenOrdersItemAmounts(ProcessName orderType, ItemGroup itemGroup);
+	List<ItemAmount> findOpenOrPendingReceiptOrdersItemAmounts(ProcessName orderType, ItemGroup itemGroup);
 
 	/**
 	 * Gets rows of all orders (history) for the given order type with their order status. 

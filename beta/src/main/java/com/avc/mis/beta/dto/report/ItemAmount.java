@@ -100,7 +100,7 @@ public class ItemAmount {
 	
 	@JsonIgnore
 	static AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
-		return itemAmounts.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
+		return itemAmounts.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get().setScale(MeasureUnit.SUM_DISPLAY_SCALE);
 	}
 	
 

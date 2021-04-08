@@ -124,6 +124,18 @@ public enum MeasureUnit {
 		Map<MeasureUnit, UOM> boxMap = new HashMap<MeasureUnit, UOM>();
 		boxMap.put(BOX, new UOM(BOX, BOX, BigDecimal.ONE, BigDecimal.ONE));
 		CONVERTION_MAP.put(BOX, boxMap);
+		
+		Map<MeasureUnit, UOM> tankMap = new HashMap<MeasureUnit, UOM>();
+		tankMap.put(TANK, new UOM(TANK, TANK, BigDecimal.ONE, BigDecimal.ONE));
+		CONVERTION_MAP.put(TANK, tankMap);
+		
+		Map<MeasureUnit, UOM> bagMap = new HashMap<MeasureUnit, UOM>();
+		bagMap.put(BAG, new UOM(BAG, BAG, BigDecimal.ONE, BigDecimal.ONE));
+		CONVERTION_MAP.put(BAG, bagMap);
+		
+		Map<MeasureUnit, UOM> rollMap = new HashMap<MeasureUnit, UOM>();
+		rollMap.put(ROLL, new UOM(ROLL, ROLL, BigDecimal.ONE, BigDecimal.ONE));
+		CONVERTION_MAP.put(ROLL, rollMap);
 
 	}
 	

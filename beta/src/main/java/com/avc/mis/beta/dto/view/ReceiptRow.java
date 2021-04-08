@@ -55,9 +55,9 @@ public class ReceiptRow extends BasicDTO {
 			return null;
 		}
 		AmountWithUnit totalAmount;
-		if(receiptRows.stream().map(pi -> pi.getReceiptAmt()).anyMatch(u -> !MeasureUnit.WEIGHT_UNITS.contains(u.getMeasureUnit()))) {
-			return null;
-		}
+//		if(receiptRows.stream().map(pi -> pi.getReceiptAmt()).anyMatch(u -> !MeasureUnit.WEIGHT_UNITS.contains(u.getMeasureUnit()))) {
+//			return null;
+//		}
 		try {
 			totalAmount = receiptRows.stream()
 					.map(pi -> pi.getReceiptAmt())
@@ -66,6 +66,9 @@ public class ReceiptRow extends BasicDTO {
 			return null;
 		}
 		
+		if(!MeasureUnit.WEIGHT_UNITS.contains(totalAmount.getMeasureUnit())) {
+			return Arrays.asList(totalAmount);
+		}
 		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(totalAmount.getMeasureUnit(), MeasureUnit.LOT));
 
 

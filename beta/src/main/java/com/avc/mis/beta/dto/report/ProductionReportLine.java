@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -83,7 +84,7 @@ public class ProductionReportLine extends ProductReportLine {
 	}
 
 	public AmountWithUnit getDifference() {		
-		return AmountWithUnit.subtractNullable(getTotalOut(), getTotalIn());
+		return AmountWithUnit.subtractNullable(getTotalOut(), getTotalIn()).setScale(MeasureUnit.SUM_DISPLAY_SCALE);
 	}
 	
 	public BigDecimal getPercentageLoss() {

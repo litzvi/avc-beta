@@ -17,6 +17,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
@@ -118,7 +119,7 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 		return null;
 	}
 	
-	public List<AmountWithUnit> getTotalAmount() {
+	public List<AmountWithUnit> getTotalAmount() {		
 		BigDecimal total = this.storageForms.stream()
 				.map(sf -> sf.getTotal())
 				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
@@ -135,7 +136,11 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 			throw new IllegalStateException("The class can only apply to weight items");
 		}
 		
-		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+		if(this.item.getGroup() == ItemGroup.PRODUCT) {
+			return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+		}
+		return Arrays.asList(totalAmount);
+
 	}
 
 	

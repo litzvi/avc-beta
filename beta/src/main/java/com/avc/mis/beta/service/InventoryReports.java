@@ -128,7 +128,7 @@ public class InventoryReports {
 		
 		//TODO giving all items in product - but only relevant to raw
 		List<ItemAmount> inventory = inventoryRepository.findInventoryItemAmounts(false, null, group, null, null);
-		List<ItemAmount> openOrders = poRepository.findOpenOrdersItemAmounts(null, group);
+		List<ItemAmount> openOrders = poRepository.findOpenOrPendingReceiptOrdersItemAmounts(null, group);
 		
 		List<ItemInventoryAmountWithOrder> inventoryAmountWithOrders = getValueTablesReader().getBasicItemsByGroup(group).stream()
 				.map(i -> new ItemInventoryAmountWithOrder(i))
