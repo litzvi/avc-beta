@@ -6,6 +6,7 @@ package com.avc.mis.beta;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -93,6 +94,13 @@ public class InventoryUseTest {
 		
 		assertEquals(expected, actual, "Failed test adding InventoryUse");
 		
+		OffsetDateTime time =OffsetDateTime.of(1983, 11, 23, 1, 1, 1, 0, ZoneOffset.ofHours(7));
+		inventoryUse.setRecordedTime(time);
+		expected.setRecordedTime(time);		
+		warehouseManagement.editGeneralInventoryUse(inventoryUse);
+		actual = warehouseManagement.getInventoryUse(inventoryUse.getId());
+		
+		assertEquals(expected, actual, "Failed test edditing InventoryUse");
 		
 		List<ProcessRow> inventoryUses = warehouseManagement.getInventoryUses();
 		inventoryUses.forEach(i -> System.out.println(i));

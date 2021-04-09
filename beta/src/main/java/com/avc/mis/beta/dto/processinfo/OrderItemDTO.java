@@ -9,6 +9,7 @@ import java.util.Currency;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemWithMeasureUnit;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -35,7 +36,8 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 public class OrderItemDTO extends SubjectDataDTO {
 
-	BasicValueEntity<Item> item;
+//	BasicValueEntity<Item> item;
+	ItemWithMeasureUnit item;
 	AmountWithUnit numberUnits;
 	AmountWithCurrency unitPrice;
 	LocalDate deliveryDate;
@@ -48,11 +50,13 @@ public class OrderItemDTO extends SubjectDataDTO {
 	 * All arguments Constructor ,
 	 * used to project directly from database without nested fetching.
 	 */
-	public OrderItemDTO(Integer id, Integer version, Integer ordinal, Integer itemId, String itemValue, 
+	public OrderItemDTO(Integer id, Integer version, Integer ordinal, 
+			Integer itemId, String itemValue, MeasureUnit itemMeasureUnit, 
 			BigDecimal numberUnits, MeasureUnit measureUnit, BigDecimal unitPrice, Currency currency,
 			LocalDate deliveryDate, String defects, String remarks, BigDecimal amountReceived) {
 		super(id, version, ordinal);
-		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+//		this.item = new BasicValueEntity<Item>(itemId, itemValue);
+		this.item = new ItemWithMeasureUnit(itemId, itemValue, itemMeasureUnit);
 		this.numberUnits = new AmountWithUnit(numberUnits.setScale(MeasureUnit.SCALE), measureUnit);
 		if(unitPrice != null) {
 			this.unitPrice = new AmountWithCurrency(unitPrice, currency);
@@ -72,7 +76,8 @@ public class OrderItemDTO extends SubjectDataDTO {
 	 */
 	public OrderItemDTO(@NonNull OrderItem orderItem) {
 		super(orderItem.getId(), orderItem.getVersion(), orderItem.getOrdinal());
-		this.item = new BasicValueEntity<Item>(orderItem.getItem());
+//		this.item = new BasicValueEntity<Item>(orderItem.getItem());
+		this.item = new ItemWithMeasureUnit(orderItem.getItem());
 		this.numberUnits = orderItem.getNumberUnits().setScale(MeasureUnit.SCALE);
 		if(orderItem.getUnitPrice() != null) {
 			this.unitPrice = orderItem.getUnitPrice().clone();

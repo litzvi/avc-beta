@@ -47,6 +47,7 @@ import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 import com.avc.mis.beta.utilities.ProgramSequence;
 
 import lombok.AccessLevel;
@@ -195,7 +196,7 @@ public class ProcessInfoDAO extends DAO {
 	public <T extends ProcessWithProduct<?>> void editProcessWithProductEntity(T process) {
 		//TODO check if can change number of units, if balance after change is legal
 		HashSet<Integer> storageIds = new HashSet<Integer>();
-		for(ProcessItem pi: process.getProcessItems()) {
+		for(ProcessItem pi: CollectionItemWithGroup.safeCollection(Arrays.asList(process.getProcessItems()))) {
 			storageIds.addAll(Arrays.stream(pi.getStorageForms()).map(Storage::getId).collect(Collectors.toSet()));
 		}
 		if(getProcessRepository().isRemovingUsedProduct(process.getId(), storageIds)) {

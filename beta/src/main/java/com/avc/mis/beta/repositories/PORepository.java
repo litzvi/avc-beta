@@ -41,7 +41,9 @@ public interface PORepository extends PoProcessRepository<PO> {
 	 * @return Set of OrderItemDTOs for the given process
 	 */
 	@Query("select new com.avc.mis.beta.dto.processinfo.OrderItemDTO("
-			+ "i.id, i.version, i.ordinal, item.id, item.value, units.amount, units.measureUnit, "
+			+ "i.id, i.version, i.ordinal, "
+			+ "item.id, item.value, item.measureUnit, "
+			+ "units.amount, units.measureUnit, "
 			+ "price.amount, price.currency, i.deliveryDate, i.defects, i.remarks, "
 			+ "SUM( "
 				+ "CASE "

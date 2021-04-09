@@ -138,6 +138,7 @@ public class WarehouseManagement {
 	 * Adding a record about a storage transfer process
 	 * @param transfer StorageTransfer entity object
 	 */
+	@Deprecated
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addStorageTransfer(StorageTransfer transfer) {
 		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
@@ -159,22 +160,29 @@ public class WarehouseManagement {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addGeneralInventoryUse(InventoryUse inventoryUse) {
 		//Check that used items are from general
-		Set<Integer> usedStorageIds = null;
-		for(UsedItemsGroup uig: inventoryUse.getUsedItemGroups()) {
-			usedStorageIds = Arrays.stream(uig.getUsedItems()).map(UsedItem::getStorage).map(StorageBase::getId).collect(Collectors.toSet());
-		}
-		if(usedStorageIds != null) {
-			List<ItemWithUnitDTO> items = getValueTablesRepository().findStoragesItems(usedStorageIds);
-			if(items.stream().anyMatch(i -> i.getGroup() != ItemGroup.GENERAL)) {
-				throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
-			}
-		}
+		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.GENERAL)) {
+			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
+		}		
 				
 		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_USE));
 		dao.addTransactionProcessEntity(inventoryUse);
 		
-	}
+	}	
 	
+	private boolean isUsedInItemGroup(UsedItemsGroup[] usedItemGroups, ItemGroup itemGroup) {
+		Set<Integer> usedStorageIds = null;
+		for(UsedItemsGroup uig: usedItemGroups) {
+			usedStorageIds = Arrays.stream(uig.getUsedItems()).map(UsedItem::getStorage).map(StorageBase::getId).collect(Collectors.toSet());
+		}
+		if(usedStorageIds != null) {
+			List<ItemWithUnitDTO> items = getValueTablesRepository().findStoragesItems(usedStorageIds);
+			if(items.stream().anyMatch(i -> i.getGroup() != itemGroup)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public InventoryUseDTO getInventoryUse(int processId) {
 		InventoryUseDTO inventoryUseDTO = new InventoryUseDTO();
 		inventoryUseDTO.setGeneralProcessInfo(getInventoryUseRepository()
@@ -308,6 +316,15 @@ public class WarehouseManagement {
 		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		dao.editGeneralProcessEntity(relocation);
 		checkRelocationBalance(relocation);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editGeneralInventoryUse(InventoryUse inventoryUse) {
+		//Check that used items are from general
+		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.GENERAL)) {
+			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
+		}			
+		dao.editTransactionProcessEntity(inventoryUse);
 	}
 	
 	private void setStorageMovesProcessItem(StorageMovesGroup[] storageMovesGroups) {

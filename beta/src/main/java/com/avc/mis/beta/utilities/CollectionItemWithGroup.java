@@ -4,6 +4,8 @@
 package com.avc.mis.beta.utilities;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,10 @@ public interface CollectionItemWithGroup<I, G extends ListGroup<I>> {
 	public abstract I getItem();
 	
 	public abstract G getGroup();
+	
+	public static <E> Collection<E> safeCollection(Collection<E> collection) {
+		return collection == null ? Collections.emptyList() : collection;
+	}
 	
 	
 	/**
