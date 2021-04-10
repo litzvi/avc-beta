@@ -13,6 +13,8 @@ import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -245,6 +247,22 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			+ "group by po_code, item "
 			+ "order by po_item_amount desc ")
 	List<ItemAmountWithPoCode> generateWeightedPos(Integer processId);
+
+	@Query("select po_code.id "
+		+ "from TransactionProcess p "
+			+ "join p.usedItemGroups grp "
+				+ "join grp.usedItems ui "
+					+ "join ui.storage sf "
+						+ "join sf.processItem pi "
+							+ "join pi.process used_p "
+								+ "left join used_p.poCode p_po_code "
+								+ "left join used_p.weightedPos w_po "
+									+ "left join w_po.poCode w_po_code "
+								+ "join BasePoCode po_code "
+									+ "on (po_code = p_po_code or po_code = w_po_code) "
+		+ "where p.id = :processId "
+		+ "group by po_code")
+	List<Integer> getUsedPoIds(Integer processId);
 
 	
 

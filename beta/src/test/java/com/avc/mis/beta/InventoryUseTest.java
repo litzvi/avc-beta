@@ -68,6 +68,9 @@ public class InventoryUseTest {
 		
 		InventoryUse inventoryUse = new InventoryUse();
 		inventoryUse.setRecordedTime(OffsetDateTime.now());
+		PoCode poCode = new PoCode();
+		poCode.setId(receipt.getPoCode().getId());
+		inventoryUse.setPoCode(receipt.getPoCode());
 
 
 		//get inventory storages for use
@@ -104,6 +107,8 @@ public class InventoryUseTest {
 		
 		List<ProcessRow> inventoryUses = warehouseManagement.getInventoryUses();
 		inventoryUses.forEach(i -> System.out.println(i));
+		
+		System.out.println(actual.getUsedItemGroups().size());
 				
 	}
 

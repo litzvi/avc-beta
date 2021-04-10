@@ -26,8 +26,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.Value;
+import lombok.experimental.NonFinal;
 
 /**
  * DTO used for report/table to represent essential order-item information,
@@ -47,15 +49,18 @@ public class PoItemRow extends BasicDTO {
 	String supplierName;
 	ItemWithUnitDTO item;
 //	String itemName;
+	Integer orderItemId;
 	@JsonIgnore
 	AmountWithUnit numUnits;
 	OffsetDateTime contractDate;
 	LocalDate deliveryDate;
 	String defects;
 	AmountWithCurrency unitPrice;
-	BigDecimal receivedOrderUnits;
-	BigDecimal receivedAmount;
-	List<String> orderStatus;
+	@NonFinal @Setter BigDecimal receivedOrderUnits;
+	@NonFinal @Setter BigDecimal receivedAmount;
+	ProcessStatus status;
+	@NonFinal @Setter Long receiptsCancelled;
+//	List<String> orderStatus;
 	
 	/**
 	 * All arguments Constructor ,
@@ -66,11 +71,13 @@ public class PoItemRow extends BasicDTO {
 			String approvals,
 			Integer itemId, String itemValue, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
-			BigDecimal amount, MeasureUnit measureUnit, 
+			Integer orderItemId, BigDecimal amount, MeasureUnit measureUnit, 
 			OffsetDateTime contractDate, LocalDate deliveryDate, 
 			String defects, BigDecimal unitPrice, Currency currency, 
-			BigDecimal receivedOrderUnits,
-			BigDecimal receivedAmount, ProcessStatus status, long receiptsCancelled) {
+//			BigDecimal receivedOrderUnits,
+//			BigDecimal receivedAmount, 
+			ProcessStatus status) {
+//			, long receiptsCancelled) {
 		super(id);
 		this.personInCharge = personInCharge;
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
@@ -83,6 +90,7 @@ public class PoItemRow extends BasicDTO {
 		this.supplierName = supplierName;
 		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unitAmount, unitMeasureUnit, clazz);
 //		this.itemName = itemName;
+		this.orderItemId = orderItemId;
 		this.numUnits = new AmountWithUnit(amount, measureUnit);
 //		this.numberUnits = new AmountWithUnit[] {
 //				numberUnits.setScale(MeasureUnit.SCALE), 
@@ -96,35 +104,41 @@ public class PoItemRow extends BasicDTO {
 		else {
 			this.unitPrice = null;
 		}
-		this.receivedOrderUnits = receivedOrderUnits;
-		this.receivedAmount = receivedAmount;
+//		this.receivedOrderUnits = receivedOrderUnits;
+//		this.receivedAmount = receivedAmount;
+		this.status = status;
+//		this.receiptsCancelled = receiptsCancelled;
+	}
+	
+	public List<String> getOrderStatus() {
 		
-		this.orderStatus = new ArrayList<String>();
-		
-		if(status == ProcessStatus.CANCELLED) {
-			this.orderStatus.add("CANCELLED");
+		List<String> orderStatus = new ArrayList<String>();
+		if(this.status == ProcessStatus.CANCELLED) {
+			orderStatus.add("CANCELLED");
 		}
-		else if(receivedOrderUnits == null) {
-			this.orderStatus.add("OPEN");
+		else if(this.receivedOrderUnits == null) {
+			orderStatus.add("OPEN");
 		}
 		else {
-			switch(receivedOrderUnits.compareTo(numUnits.getAmount())) {
+			switch(this.receivedOrderUnits.compareTo(this.numUnits.getAmount())) {
 			case -1:
-				this.orderStatus.add("OPEN");
-				if(receivedOrderUnits.signum() > 0) {
-					this.orderStatus.add("PARTLY RECEIVED");
+				orderStatus.add("OPEN");
+				if(this.receivedOrderUnits.signum() > 0) {
+					orderStatus.add("PARTLY RECEIVED");
 				}
 				break;
 			case 0:
 			case 1:
-				this.orderStatus.add("RECEIVED");
+				orderStatus.add("RECEIVED");
 				break;
 			}
 		}
 		
-		if(receiptsCancelled > 0) {
-			this.orderStatus.add("REJECTED");
+		if(this.receiptsCancelled > 0) {
+			orderStatus.add("REJECTED");
 		}
+		
+		return orderStatus;
 	}
 	
 	public List<AmountWithUnit> getNumberUnits() {

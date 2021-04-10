@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ProcessInfoEntity;
+import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
@@ -41,10 +42,11 @@ public class WeightedPo extends ProcessInfoEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "poCodeId", nullable = false)
 	@NotNull(message = "Po code is mandatory")
-	private PoCode poCode;
+	private BasePoCode poCode;
 	
-	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
-	@NotNull(message = "weight for every po is mandatory")
+//	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
+//	@NotNull(message = "weight for every po is mandatory") set by code when needed
+	@Column(precision = 19, scale = MeasureUnit.SCALE)
 	private BigDecimal weight;
 
 }

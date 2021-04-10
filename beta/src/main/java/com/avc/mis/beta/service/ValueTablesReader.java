@@ -166,7 +166,6 @@ public class ValueTablesReader {
 	 * Usually used for referencing a supplier in another process.
 	 * @return List of SupplierBasic of all existing suppliers.
 	 */
-	@Transactional(readOnly = true)
 	public List<DataObjectWithName<Supplier>> getSuppliersBasic() {
 		return getSupplierRepository().findAllSuppliersBasic();
 	}
@@ -176,16 +175,18 @@ public class ValueTablesReader {
 	 * @param categoryId id of SupplyCategory
 	 * @return List of SupplierBasic of all suppliers with given SupplyCategory
 	 */
-	@Transactional(readOnly = true)
 	public List<DataObjectWithName<Supplier>> getSuppliersBasic(Integer categoryId) {
 		return getSupplierRepository().findSuppliersByCategoryBasic(categoryId);
+	}
+	
+	public List<DataObjectWithName<Supplier>> getSuppliersBasicByGroup(SupplyGroup supplyGroup) {
+		return getSupplierRepository().findSuppliersByGroupBasic(supplyGroup);
 	}
 	
 	/**
 	 * Get a list of CASHEW suppliers basic information -  id, name and version.
 	 * @return List of SupplierBasic of all CASHEW suppliers.
 	 */
-//	@Transactional(readOnly = true)
 	public List<DataObjectWithName<Supplier>> getCashewSuppliersBasic() {
 		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.CASHEW);
 	}
@@ -194,7 +195,6 @@ public class ValueTablesReader {
 	 * Get a list of GENERAL suppliers basic information -  id, name and version.
 	 * @return List of SupplierBasic of all GENERAL suppliers.
 	 */
-//	@Transactional(readOnly = true)
 	public List<DataObjectWithName<Supplier>> getGeneralSuppliersBasic() {
 		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.GENERAL);
 	}

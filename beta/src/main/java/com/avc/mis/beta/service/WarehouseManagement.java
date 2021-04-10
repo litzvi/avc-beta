@@ -66,6 +66,7 @@ public class WarehouseManagement {
 	@Autowired private RelocationRepository relocationRepository;
 	@Autowired private InventoryUseRepository inventoryUseRepository;
 	@Autowired private ValueTablesRepository valueTablesRepository;
+	@Autowired private ProcessInfoReader processInfoReader;
 
 	
 	public List<ProcessRow> getStorageTransfers() {
@@ -143,6 +144,8 @@ public class WarehouseManagement {
 	public void addStorageTransfer(StorageTransfer transfer) {
 		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
 		dao.addTransactionProcessEntity(transfer);
+		//set weightedPos weight
+		dao.setPoWeights(transfer);
 		//check if process items match the used item (items are equal, perhaps also check amounts difference and send warning)
 		checkTransferBalance(transfer);
 	}
@@ -166,7 +169,8 @@ public class WarehouseManagement {
 				
 		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_USE));
 		dao.addTransactionProcessEntity(inventoryUse);
-		
+//		set weightedPos weight for general (no weight)
+		dao.setGeneralPos(inventoryUse);
 	}	
 	
 	private boolean isUsedInItemGroup(UsedItemsGroup[] usedItemGroups, ItemGroup itemGroup) {
@@ -191,6 +195,8 @@ public class WarehouseManagement {
 						()->new IllegalArgumentException("No inventory use with given process id")));
 		inventoryUseDTO.setPoProcessInfo(getRelocationRepository()
 				.findPoProcessInfoByProcessId(processId).orElse(null));
+		
+		getProcessInfoReader().setTransactionProcessCollections(inventoryUseDTO);
 		
 		return inventoryUseDTO;
 	}
@@ -307,6 +313,8 @@ public class WarehouseManagement {
 	public void editStorageTransfer(StorageTransfer transfer) {
 		//check used items amounts don't exceed the storage amounts
 		dao.editTransactionProcessEntity(transfer);
+		//set weightedPos weight
+		dao.setPoWeights(transfer);
 		checkTransferBalance(transfer);
 	}
 	
@@ -325,6 +333,8 @@ public class WarehouseManagement {
 			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
 		}			
 		dao.editTransactionProcessEntity(inventoryUse);
+//		set weightedPos weight for general
+		dao.setGeneralPos(inventoryUse);
 	}
 	
 	private void setStorageMovesProcessItem(StorageMovesGroup[] storageMovesGroups) {

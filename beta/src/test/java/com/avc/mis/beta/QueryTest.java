@@ -333,8 +333,8 @@ public class QueryTest {
 		}
 		inventoryPoCodes.forEach(i -> System.out.println(i));
 
-		List<PoRow> allCashewOrders = orders.findAllCashewOrders();
-		allCashewOrders.forEach(i -> System.out.println(i));
+//		List<PoRow> allCashewOrders = orders.findAllCashewOrders();
+//		allCashewOrders.forEach(i -> System.out.println(i));
 		
 		List<BasicValueEntity<Item>> wasteItems = valueTablesReader.getBasicItemsByPrudoctionUse(ProductionUse.RAW_KERNEL);
 		wasteItems.forEach(i->System.out.println(i));
@@ -419,6 +419,11 @@ public class QueryTest {
 //	@Disabled
 	@Test
 	void oneQueryTest() {
-		
+		List<ProcessRow> inventoryUsesTable = warehouseManagement.getInventoryUses();
+		if(inventoryUsesTable.isEmpty())
+			fail("No inventory uses to test");
+		else
+			System.out.println(inventoryUsesTable.size());
+			
 	}
 }

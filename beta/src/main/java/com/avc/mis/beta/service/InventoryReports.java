@@ -20,6 +20,7 @@ import com.avc.mis.beta.dto.view.ItemInventoryWithOrderRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.InventoryRepository;
@@ -158,7 +159,8 @@ public class InventoryReports {
 	public List<ItemInventoryWithOrderRow> getInventoryWithOrderTableByItem(ItemGroup group) {
 		
 		List<ProcessItemInventoryRow> processItemRows = getInventoryRows(group, null, null, null);
-		List<PoItemRow> poItemRows = getPoRepository().findOpenOrdersByType(null, group);
+		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(
+				null, new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, group, true);
 		
 //		List<ItemWithUnitDTO> items = getValueTablesReader().getItemsByGroup(group);
 		List<ItemInventoryWithOrderRow> itemInventoryWithOrderRows = getValueTablesReader().getItemsByGroup(group).stream()

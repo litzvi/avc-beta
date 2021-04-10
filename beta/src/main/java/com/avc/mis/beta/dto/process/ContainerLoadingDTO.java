@@ -43,8 +43,8 @@ public class ContainerLoadingDTO extends TransactionProcessDTO<ProcessItemDTO> {
 		this.shipmentCode = new ShipmentCodeDTO(loading.getShipmentCode());
 		this.loadedItems = Arrays.stream(loading.getLoadedItems())
 				.map(i->{return new LoadedItemDTO(i);}).collect(Collectors.toList());
-		super.setUsedItemGroups(Arrays.stream(loading.getUsedItemGroups())
-				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
+//		super.setUsedItemGroups(Arrays.stream(loading.getUsedItemGroups())
+//				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
 	}
 	
 	public void setContainerLoadingInfo(ContainerLoadingInfo info) {

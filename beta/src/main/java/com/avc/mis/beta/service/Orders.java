@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,16 +16,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.PoRow;
+import com.avc.mis.beta.dto.view.ProcessRow;
+import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.MixPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.utilities.ProgramSequence;
@@ -68,7 +73,8 @@ public class Orders {
 	 * @return list of PoRow for orders that are yet to be received
 	 */
 	public List<PoItemRow> findOpenCashewOrderItems() {
-		List<PoItemRow> poItemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER, null);
+		List<PoItemRow> poItemRows = getOrdersByType(ProcessName.CASHEW_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
 		return poItemRows;
 	}
 	
@@ -77,8 +83,8 @@ public class Orders {
 	 * @return list of PoRow for all orders (not cancelled)
 	 */
 	public List<PoItemRow> findAllCashewOrderItems() {
-		return getAllOrdersByType(ProcessName.CASHEW_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null);
+		return getOrdersByType(ProcessName.CASHEW_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false);
 	}
 	
 	/**
@@ -86,8 +92,8 @@ public class Orders {
 	 * @return list of PoRow for all orders (not cancelled)
 	 */
 	public List<PoItemRow> findAllGeneralOrderItems() {
-		return getAllOrdersByType(ProcessName.GENERAL_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null);
+		return getOrdersByType(ProcessName.GENERAL_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false);
 	}
 	
 	/**
@@ -95,7 +101,7 @@ public class Orders {
 	 * @return list of PoRow for all orders
 	 */
 	public List<PoItemRow> findAllCashewOrderItemsHistory() {
-		return getAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null);
+		return getOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null, null, false);
 	}
 	
 	/**
@@ -103,11 +109,33 @@ public class Orders {
 	 * @return list of PoRow for all orders
 	 */
 	public List<PoItemRow> findAllGeneralOrderItemsHistory() {
-		return getAllOrdersByType(ProcessName.GENERAL_ORDER, ProcessStatus.values(), null);
+		return getOrdersByType(ProcessName.GENERAL_ORDER, ProcessStatus.values(), null, null, false);
 	}
 	
-	public List<PoItemRow> getAllOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId) {
-		return getPoRepository().findAllOrdersByType(orderType, processStatuses, poCodeId);
+	public List<PoItemRow> getOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId) {
+		return getOrdersByType(orderType, processStatuses, poCodeId, null, false);
+	}
+	
+	public List<PoItemRow> getOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId, ItemGroup itemGroup, boolean onlyOpen) {
+		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(orderType, processStatuses, poCodeId, itemGroup, onlyOpen);
+		int[] orderItemIds = poItemRows.stream().mapToInt(PoItemRow::getOrderItemId).toArray();
+		Map<Integer, BigDecimal> receivedAmountMap = getPoRepository()
+				.findReceivedAmountByOrderItemIds(orderItemIds)
+				.collect(Collectors.toMap(ValueObject<BigDecimal>::getId, ValueObject<BigDecimal>::getValue));
+		Map<Integer, BigDecimal> receivedOrderUnitsMap = getPoRepository()
+				.findReceivedOrderUnitsByOrderItemIds(orderItemIds)
+				.collect(Collectors.toMap(ValueObject<BigDecimal>::getId, ValueObject<BigDecimal>::getValue));
+		Map<Integer, Long> numReceiptsCancelledMap = getPoRepository()
+				.findumReceiptsCancelledByOrderItemIds(orderItemIds)
+				.collect(Collectors.toMap(ValueObject<Long>::getId, ValueObject<Long>::getValue));
+		for(PoItemRow row: poItemRows) {
+			row.setReceivedAmount(receivedAmountMap.get(row.getOrderItemId()));
+			row.setReceivedOrderUnits(receivedOrderUnitsMap.get(row.getOrderItemId()));
+			
+			Optional<Long> numCancelled = Optional.ofNullable(numReceiptsCancelledMap.get(row.getOrderItemId()));
+			row.setReceiptsCancelled(numCancelled.orElse(0L));
+		}	
+		return poItemRows;
 	}
 	
 	/**
@@ -115,7 +143,8 @@ public class Orders {
 	 * @return list of PoRow for orders that are yet to be received
 	 */
 	public List<PoItemRow> findOpenGeneralOrderItems() {
-		return getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER, null);
+		return getOrdersByType(ProcessName.GENERAL_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -253,33 +282,33 @@ public class Orders {
 	 * Get all cashew orders with the order status - pending, received, rejected but not cancelled.
 	 * @return list of PoRow for all orders
 	 */
-	@Deprecated
-	public List<PoRow> findAllCashewOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER,
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null);
-		return getPoRows(itemRows);
-	}
+//	@Deprecated
+//	public List<PoRow> findAllCashewOrders() {
+//		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER,
+//				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null);
+//		return getPoRows(itemRows);
+//	}
 	
 	/**
 	 * Get all cashew orders with the order status - pending, received, rejected or cancelled.
 	 * @return list of PoRow for all orders
 	 */
-	@Deprecated
-	public List<PoRow> findAllCashewOrdersHistory() {
-		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null);
-		return getPoRows(itemRows);
-	}
+//	@Deprecated
+//	public List<PoRow> findAllCashewOrdersHistory() {
+//		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null);
+//		return getPoRows(itemRows);
+//	}
 	
 	/**
 	 * Gat all General orders with the order status - pending, received, rejected but not cancelled.
 	 * @return list of PoRow for all orders
 	 */
-	@Deprecated
-	public List<PoRow> findAllGeneralOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER,
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null);
-		return getPoRows(itemRows);
-	}
+//	@Deprecated
+//	public List<PoRow> findAllGeneralOrders() {
+//		List<PoItemRow> itemRows = getPoRepository().findAllOrdersByType(ProcessName.GENERAL_ORDER,
+//				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null);
+//		return getPoRows(itemRows);
+//	}
 	
 	/**
 	 * Get the table of all Cashew purchase orders that are active and where not received.
@@ -287,7 +316,8 @@ public class Orders {
 	 */
 	@Deprecated
 	public List<PoRow> findOpenCashewOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.CASHEW_ORDER, null);
+		List<PoItemRow> itemRows = getOrdersByType(ProcessName.CASHEW_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
 		
 		return getPoRows(itemRows);
 	}
@@ -298,7 +328,8 @@ public class Orders {
 	 */
 	@Deprecated
 	public List<PoRow> findOpenGeneralOrders() {
-		List<PoItemRow> itemRows = getPoRepository().findOpenOrdersByType(ProcessName.GENERAL_ORDER, null);
+		List<PoItemRow> itemRows = getOrdersByType(ProcessName.GENERAL_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
 		return getPoRows(itemRows);
 	}
 

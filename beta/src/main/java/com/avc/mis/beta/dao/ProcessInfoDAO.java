@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dao;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.AccessControlException;
 import java.util.Arrays;
@@ -23,6 +24,9 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.StorageBalance;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -103,15 +107,33 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public void addTransactionProcessEntity(TransactionProcess<?> process) {
 		addGeneralProcessEntity(process);
-		//set weightedPos weight
-		setPoWeights(process);
 		//check used items amounts () don't exceed the storage amounts
 		if(!isUsedInventorySufficiant(process.getId())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
 	}
 	
-	private void setPoWeights(TransactionProcess<?> process) {
+	public void setGeneralPos(TransactionProcess<?> process) {
+		List<WeightedPo> oldWeightedPos = getProcessRepository().findWeightedPoReferences(process.getId());
+		for(WeightedPo weightedPo: oldWeightedPos) {
+			getEntityManager().remove(weightedPo);
+		}
+		List<Integer> poIds = getProcessRepository().getUsedPoIds(process.getId());
+		if(poIds != null && !poIds.isEmpty()) {
+			int ordinal = 0;
+			for(Integer poId: poIds) {
+				WeightedPo weightedPo = new WeightedPo();
+				GeneralPoCode poCode = new GeneralPoCode();
+				poCode.setId(poId);
+				weightedPo.setPoCode(poCode);
+//				weightedPo.setWeight(BigDecimal.ZERO);
+				weightedPo.setOrdinal(ordinal++);
+				addEntity(weightedPo, process);
+			}
+		}
+	}
+	
+	public void setPoWeights(TransactionProcess<?> process) {
 		List<WeightedPo> oldWeightedPos = getProcessRepository().findWeightedPoReferences(process.getId());
 		for(WeightedPo weightedPo: oldWeightedPos) {
 			getEntityManager().remove(weightedPo);
@@ -217,8 +239,6 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public <T extends TransactionProcess<?>> void editTransactionProcessEntity(T process) {
 		editProcessWithProductEntity(process);
-		//set weightedPos weight
-		setPoWeights(process);
 		//check used items amounts (after edit) don't exceed the storage amounts
 		if(!isUsedInventorySufficiant(process.getId())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");

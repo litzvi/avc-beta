@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.ValueInterface;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.processinfo.WeightedPo;
@@ -48,7 +49,7 @@ import lombok.ToString;
 @Inheritance(strategy=InheritanceType.JOINED)
 //@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 //@DiscriminatorValue("abstract")
-public class BasePoCode extends BaseEntity {
+public class BasePoCode extends BaseEntity implements ValueInterface {
 
 //	@Column(nullable = false, insertable = false, updatable = false)
 //	private String dtype;
