@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Index;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
@@ -33,7 +34,9 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 @Entity
-@Table(name = "PROCESS_GROUPS")
+@Table(name = "PROCESS_GROUPS"
+, indexes = @Index(columnList = "dtype")
+)
 @Inheritance(strategy=InheritanceType.JOINED)
 //@MappedSuperclass
 public abstract class ProcessGroup extends ProcessInfoEntity {

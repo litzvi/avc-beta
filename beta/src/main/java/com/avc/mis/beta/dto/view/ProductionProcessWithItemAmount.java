@@ -18,6 +18,7 @@ import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.PackedItem;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
@@ -27,15 +28,14 @@ import lombok.experimental.NonFinal;
  * @author zvi
  *
  */
-@Value
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ProductionProcessWithItemAmount extends BasicDTO {
 
-	BasicValueEntity<Item> item;
-	AmountWithUnit weight;
-	AmountWithUnit amount;
-	@NonFinal
-	String[] warehouses;
+	private BasicValueEntity<Item> item;
+	private AmountWithUnit weight;
+	private AmountWithUnit amount;
+	private String[] warehouses;
 	
 	public ProductionProcessWithItemAmount(@NonNull Integer id, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 

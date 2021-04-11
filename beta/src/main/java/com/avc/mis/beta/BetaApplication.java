@@ -10,8 +10,8 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
- * Version: 14.3
- * check slow loading
+ * Version: 14.4
+ * fix slow container loadings table
  * 
  * @author zvi
  *

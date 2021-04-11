@@ -37,7 +37,7 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 		+ "where "
 			+ "p.id in :processIds "
 //			+ "and po_code_used_item.id = po_code.id "
-		+ "group by p, item "
+		+ "group by p.id, item "
 		+ "order by grp.ordinal ")
 	Stream<ProductionProcessWithItemAmount> findAllUsedItemsByProcessIds(int[] processIds);
 

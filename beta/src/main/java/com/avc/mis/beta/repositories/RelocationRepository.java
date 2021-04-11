@@ -98,13 +98,15 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 //		+ "order by m.ordinal ")
 //	List<StorageMoveDTO> findStorageMoveDTOsByProcessId(int processId);
 
-	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
+	@Query("select new com.avc.mis.beta.dto.view.RelocationWithItemAmount("
 			+ "p.id, item.id, item.value, item.measureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "SUM((m.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor), "
-			+ "function('GROUP_CONCAT', wh.value)) "
+			+ "function('GROUP_CONCAT', wh.value), "
+			+ "function('GROUP_CONCAT', new_wh.value)) "
 		+ "from StorageRelocation p "
 			+ "join p.storageMovesGroups g "
 				+ "join g.storageMoves m "
+					+ "left join m.warehouseLocation new_wh "
 					+ "join m.storage sf "
 						+ "join sf.processItem pi "
 							+ "join pi.item item "

@@ -19,6 +19,7 @@ import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemTableDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.UsedItem;
 import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
@@ -51,7 +52,7 @@ public class UsedItemsGroup extends ProcessGroup {
 	{
 		setDtype("UsedItemsGroup");
 	}
-
+	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "group", targetEntity = UsedItemBase.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)

@@ -17,6 +17,6 @@ public enum ProductionFunctionality {
 	PACKING,
 	FINAL_PRODUCT,
 	LOADING,
-	GENERAL_STORAGE,
+	PRODUCT_STORAGE,
 	PACKING_STATION;
 }

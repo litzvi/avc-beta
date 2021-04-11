@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -66,10 +68,11 @@ public class InventoryReports {
 //		return inventoryRows;
 		
 		
-		return CollectionItemWithGroup.getFilledGroups(processItemRows, 
+		return (List<ItemInventoryRow>) CollectionItemWithGroup.safeCollection(
+				CollectionItemWithGroup.getFilledGroups(processItemRows, 
 				(i -> {return new ItemInventoryRow(i.getItem());}), 
 				Function.identity(), 
-				ItemInventoryRow::setPoInventoryRows);
+				ItemInventoryRow::setPoInventoryRows));
 	}
 	
 	/**
@@ -88,10 +91,11 @@ public class InventoryReports {
 			setter = PoInventoryRow::setProductPoInventoryRows;			
 		}
 		
-		return CollectionItemWithGroup.getFilledGroups(processItemRows, 
+		return (List<PoInventoryRow>) CollectionItemWithGroup.safeCollection(
+				CollectionItemWithGroup.getFilledGroups(processItemRows, 
 				(i -> {return new PoInventoryRow(i.getPoCode());}), 
 				Function.identity(), 
-				setter);
+				setter));
 
 	}
 	
@@ -151,7 +155,9 @@ public class InventoryReports {
 				Function.identity(), 
 				ItemInventoryAmountWithOrder::setOrder);
 		
-		return inventoryAmountWithOrders;
+		
+		
+		return (List<ItemInventoryAmountWithOrder>) CollectionItemWithGroup.safeCollection(inventoryAmountWithOrders);
 
 	}
 	
