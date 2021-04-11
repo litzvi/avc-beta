@@ -95,5 +95,9 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 				, getMeasureUnit());
 		}
 	}
+	
+//	public BasicValueEntity<Warehouse> getOldWarehouseLocation() {
+//		return getStorage() == null ? null: getStorage().getWarehouseLocation();
+//	}
 
 }

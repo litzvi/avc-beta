@@ -30,7 +30,8 @@ import lombok.Value;
 public class ContainerPoItemRow extends BasicDTO {
 
 	BasicValueEntity<Item> item;
-	PoCodeBasic poCode;//should be removed
+//	PoCodeBasic poCode;//should be removed
+//	String poCodes;
 	String[] poCodes;
 
 	AmountWithUnit total;
@@ -38,17 +39,18 @@ public class ContainerPoItemRow extends BasicDTO {
 	public ContainerPoItemRow(@NonNull Integer id, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
+//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String poCodes,
 			BigDecimal total, MeasureUnit measureUnit) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		if(poCodeId != null)
-			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
-		else
-			this.poCode = null;
+//		if(poCodeId != null)
+//			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+//		else
+//			this.poCode = null;
+//		this.poCodes = poCodes;
 		if(poCodes != null)
-			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
+			this.poCodes = Stream.of(poCodes.split(",")).toArray(String[]::new);
 		else
 			this.poCodes = null;
 		if(itemClazz == BulkItem.class) {

@@ -31,12 +31,19 @@ public class LoadingRow extends BasicDTO {
 	
 //	private PoCodeBasic poCode;
 	private int[] poCodeIds;
-	private String[] poCodes;
-	private String[] suppliers;
+//	private String[] poCodes;
+//	private String[] suppliers;
 	private OffsetDateTime recordedTime;
 	private Duration duration;
 	private ProcessStatus status;
-	private String[] approvals;
+//	private String[] approvals;
+	
+	
+	//---test
+	private String poCodes;
+	private String suppliers;
+	private String approvals;
+	//---end test
 	
 	private ShipmentCodeBasic shipmentCode;
 	private LocalDate eta;
@@ -57,20 +64,26 @@ public class LoadingRow extends BasicDTO {
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType) {
 		super(id);
 		if(poCodeIds != null)
-			this.poCodeIds = Stream.of(poCodeIds.split(",")).filter(i -> i != null).mapToInt(j -> Integer.valueOf(j)).distinct().toArray();
-		if(poCodes != null)
-			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
-		if(suppliers != null)
-			this.suppliers = Stream.of(suppliers.split(",")).distinct().toArray(String[]::new);
+			this.poCodeIds = Stream.of(poCodeIds.split(",")).filter(i -> i != null).mapToInt(j -> Integer.valueOf(j)).toArray();
+//		if(poCodes != null)
+//			this.poCodes = Stream.of(poCodes.split(",")).toArray(String[]::new);
+//		if(suppliers != null)
+//			this.suppliers = Stream.of(suppliers.split(",")).toArray(String[]::new);
 		this.recordedTime = recordedTime;
 		this.duration = duration;
 		this.status = status;
-		if(approvals == null || approvals.startsWith(":")) {
-			this.approvals = null;
-		}
-		else {
-			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
-		}
+//		if(approvals == null || approvals.startsWith(":")) {
+//			this.approvals = null;
+//		}
+//		else {
+//			this.approvals = Stream.of(approvals.split(",")).toArray(String[]::new);
+//		}
+		
+		//---test
+		this.poCodes = poCodes;
+		this.suppliers = suppliers ;
+		this.approvals = approvals;
+		//---end test
 		
 		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, shipmentCodeCode, portOfDischargeCode, portOfDischargeValue);
 		this.eta = eta;
