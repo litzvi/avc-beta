@@ -49,7 +49,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			+ "where p.id = ?1")
 	Set<UserEntity> findProcessTypeAlertsUsersByProcess(Integer processId);
 	
-	@Query("select p.approvals from GeneralProcess p where p.id = ?1")
+	@Query("select p.approvals from GeneralProcess p where p.id = :processId")
 	List<ApprovalTask> findProcessApprovals(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.processinfo.UserMessageDTO("

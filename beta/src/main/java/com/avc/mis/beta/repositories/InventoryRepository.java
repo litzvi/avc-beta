@@ -352,7 +352,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 									+ "join used_g.process used_p "
 										+ "join used_p.lifeCycle used_lc "
 			+ "where p.id = :processId "
-			+ "group by s ")
+			+ "group by storageMove, s ")
 	Stream<StorageBalance> findStorageMoveBalances(Integer processId);
 
 

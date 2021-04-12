@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
+import com.avc.mis.beta.dto.view.RelocationWithItemAmount;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 
@@ -116,7 +117,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 							+ "left join sf.warehouseLocation wh "
 		+ "where p.id in :processIds "
 		+ "group by p, item ")
-	Stream<ProductionProcessWithItemAmount> findAllMovedItemsByProcessIds(int[] processIds);
+	Stream<RelocationWithItemAmount> findAllMovedItemsByProcessIds(int[] processIds);
 
 	@Query("select new com.avc.mis.beta.dto.query.StorageMoveWithGroup( "
 			+ "g.id, g.version, g.ordinal, g.groupName, g.tableView, "
