@@ -76,7 +76,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
 			+ "and (item.id = :itemId or :itemId is null) "
-			+ "and (sf_p.id <> :excludeProcessId or :excludeProcessId is null) "
+			+ "and (:checkExcludedProcessIds = false or sf_p.id not in :excludedProcessIds) "
 			+ "and "
 			+ "(:checkPoCodes = false "
 			+ "or "
@@ -104,7 +104,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
 			ItemGroup itemGroup, Integer itemId, 
 			boolean checkPoCodes, Integer[] poCodeIds,
-			Integer excludeProcessId);
+			boolean checkExcludedProcessIds, Integer[] excludedProcessIds);
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventory( "
 			+ "pi.id, "

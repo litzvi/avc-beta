@@ -301,7 +301,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "join w_po.poCode w_po_code "
 			+ "where w_po_code.id in :poCodeIds "
 			+ "group by used_p.id, using_p.id ")
-	List<Integer[]> findTransactionProcessVertices(int[] poCodeIds);	
+	List<Integer[]> findTransactionProcessVertices(Integer[] poCodeIds);	
 		
 
 	

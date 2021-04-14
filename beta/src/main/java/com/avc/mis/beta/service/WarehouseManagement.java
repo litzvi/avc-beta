@@ -365,12 +365,17 @@ public class WarehouseManagement {
 		boolean checkProductionUses = (productionUses != null);
 		boolean checkFunctionalities = (functionalities != null);
 		boolean checkPoCodes = (poCodeIds != null);
+		Integer[] excludedProcessIds = null;
+		if(poCodeIds != null && excludeProcessId != null) {
+			excludedProcessIds = (Integer[]) getProcessInfoReader().getProcessDescendants(poCodeIds, excludeProcessId).toArray();
+		}
+		boolean checkExcludedProcessIds = (excludedProcessIds != null);
 		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()
 				.findAvailableInventoryByStorage(checkProductionUses, productionUses, 
 						checkFunctionalities, functionalities, 
 						group, itemId, 
 						checkPoCodes, poCodeIds,
-						excludeProcessId);
+						checkExcludedProcessIds, excludedProcessIds);
 				
 		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
 	}	

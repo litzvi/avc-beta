@@ -108,10 +108,10 @@ public class ProcessInfoReader {
 	
 	//call for edit of a TransactionProcess or StorageRelocation
 	public void checkDAGmaintained(List<UsedProcessWithPoCode> usedProcesses, Integer processId) {
-		getProcessDescendants(usedProcesses.stream().mapToInt(i -> i.getPoCode().getId()).toArray(), processId);
+		getProcessDescendants((Integer[]) usedProcesses.stream().map(i -> i.getPoCode().getId()).toArray(), processId);
 	}
 	
-	private Set<Integer> getProcessDescendants (int[] poCodeIds, Integer processId) {
+	public Set<Integer> getProcessDescendants (Integer[] poCodeIds, Integer processId) {
 		List<Integer[]> processVertices = getProcessInfoRepository().findTransactionProcessVertices(poCodeIds);
 		Map<Integer, List<Integer>> map = processVertices.stream().collect(Collectors.groupingBy(i -> i[0], Collectors.mapping(i -> i[1], Collectors.toList())));
 		List<Integer> addedProcesses = null;
