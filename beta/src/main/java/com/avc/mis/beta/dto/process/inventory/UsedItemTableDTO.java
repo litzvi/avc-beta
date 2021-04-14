@@ -13,6 +13,7 @@ import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author zvi
@@ -31,5 +32,10 @@ public class UsedItemTableDTO {
 //	private BigDecimal accessWeight;	
 	
 	private Warehouse warehouseLocation;
+	
+	@EqualsAndHashCode.Exclude
+	private String[] itemPoCodes;
+	@EqualsAndHashCode.Exclude
+	private String[] itemSuppliers;
 	
 }

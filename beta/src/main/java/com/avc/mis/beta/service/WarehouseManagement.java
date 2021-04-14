@@ -367,7 +367,7 @@ public class WarehouseManagement {
 		boolean checkPoCodes = (poCodeIds != null);
 		Integer[] excludedProcessIds = null;
 		if(poCodeIds != null && excludeProcessId != null) {
-			excludedProcessIds = (Integer[]) getProcessInfoReader().getProcessDescendants(poCodeIds, excludeProcessId).toArray();
+			excludedProcessIds = getProcessInfoReader().getProcessDescendants(poCodeIds, excludeProcessId);
 		}
 		boolean checkExcludedProcessIds = (excludedProcessIds != null);
 		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()

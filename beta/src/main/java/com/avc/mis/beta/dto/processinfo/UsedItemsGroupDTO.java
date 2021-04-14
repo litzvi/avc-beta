@@ -69,6 +69,9 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 				BasicValueEntity<Warehouse> warehouse = storage.getWarehouseLocation();
 				if(warehouse != null)
 					usedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+				
+				usedItemTable.setItemPoCodes(ui.getItemPoCodes());
+				usedItemTable.setItemSuppliers(ui.getItemSuppliers());
 			});
 			List<BasicUsedStorageDTO> used = this.usedItems.stream().map((i) -> {
 				StorageDTO storage = i.getStorage();
