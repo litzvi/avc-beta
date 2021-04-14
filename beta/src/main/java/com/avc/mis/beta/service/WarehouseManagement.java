@@ -323,6 +323,7 @@ public class WarehouseManagement {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editStorageRelocation(StorageRelocation relocation) {
+		dao.checkRelocationRemovingUsedProduct(relocation);
 		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		dao.editGeneralProcessEntity(relocation);
 		List<UsedProcessWithPoCode> usedProcesses = dao.setRelocationPos(relocation);

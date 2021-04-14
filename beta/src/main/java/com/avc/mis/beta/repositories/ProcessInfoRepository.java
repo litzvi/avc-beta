@@ -217,6 +217,19 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "and ui_p_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
 				+ "and sf.id not in :storageIds ")
 	Boolean isRemovingUsedProduct(Integer processId, Set<Integer> storageIds);
+	
+	@Query("select new java.lang.Boolean(count(*) > 0) "
+			+ "from StorageRelocation p "
+				+ "join p.storageMovesGroups grp "
+					+ "join grp.storageMoves sf "
+						+ "join sf.usedItems using_items "
+							+ "join using_items.group ui_g "
+								+ "join ui_g.process ui_origion_p "
+									+ "join ui_origion_p.lifeCycle ui_p_lc "
+			+ "where p.id = :processId "
+				+ "and ui_p_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+				+ "and sf.id not in :storageIds ")
+	Boolean isRelocationRemovingUsedProduct(Integer processId, Set<Integer> storageIds);
 
 	@Query("select new com.avc.mis.beta.dto.query.UsedItemAmountWithPoCode("
 				+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "

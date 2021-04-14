@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dao;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.AccessControlException;
 import java.util.Arrays;
@@ -22,13 +21,9 @@ import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
+import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.query.UsedItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.UsedProcessWithPoCode;
-import com.avc.mis.beta.dto.query.StorageBalance;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.codes.GeneralPoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -40,14 +35,15 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.process.GeneralProcess;
-import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 import com.avc.mis.beta.entities.processinfo.WeightedPo;
 import com.avc.mis.beta.entities.values.ProcessType;
@@ -246,6 +242,16 @@ public class ProcessInfoDAO extends DAO {
 		if(!isProducedInventorySufficiant(process.getId())) {
 			throw new IllegalArgumentException("Process produced amounts can't be reduced because already in use");
 		}
+	}
+	
+	public void checkRelocationRemovingUsedProduct(StorageRelocation relocation) {
+		HashSet<Integer> storageIds = new HashSet<Integer>();
+		for(StorageMovesGroup pi: CollectionItemWithGroup.safeCollection(Arrays.asList(relocation.getStorageMovesGroups()))) {
+			storageIds.addAll(Arrays.stream(pi.getStorageMoves()).map(StorageBase::getId).collect(Collectors.toSet()));
+		}
+		if(getProcessRepository().isRelocationRemovingUsedProduct(relocation.getId(), storageIds)) {
+			throw new AccessControlException("Process items can't be edited because they are already in use");
+		}		
 	}
 	
 	/**
@@ -540,6 +546,9 @@ public class ProcessInfoDAO extends DAO {
 	public ProgramSequence getSequnce(SequenceIdentifier sequenceIdentifier) {
 		return getObjectTablesRepository().findSequence(sequenceIdentifier);
 	}
+
+	
+	
 
 
 
