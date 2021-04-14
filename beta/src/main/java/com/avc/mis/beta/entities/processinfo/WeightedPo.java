@@ -17,6 +17,7 @@ import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.PoProcess;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -43,6 +44,10 @@ public class WeightedPo extends ProcessInfoEntity {
 	@JoinColumn(name = "poCodeId", nullable = false)
 	@NotNull(message = "Po code is mandatory")
 	private BasePoCode poCode;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "usedProcessId")
+	private PoProcess usedProcess;
 	
 //	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 //	@NotNull(message = "weight for every po is mandatory") set by code when needed

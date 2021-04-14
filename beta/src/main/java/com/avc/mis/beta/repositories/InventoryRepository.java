@@ -76,6 +76,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
 			+ "and (item.id = :itemId or :itemId is null) "
+			+ "and (sf_p.id <> :excludeProcessId or :excludeProcessId is null) "
 			+ "and "
 			+ "(:checkPoCodes = false "
 			+ "or "
@@ -102,7 +103,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
 			ItemGroup itemGroup, Integer itemId, 
-			boolean checkPoCodes, Integer[] poCodeIds);
+			boolean checkPoCodes, Integer[] poCodeIds,
+			Integer excludeProcessId);
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventory( "
 			+ "pi.id, "
@@ -312,8 +314,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 									+ "join used_g.process used_p "
 										+ "join used_p.lifeCycle used_lc "
 			+ "where p.id = :processId "
-			+ "group by i, s ")
-	Stream<StorageBalance> findUsedStorageBalances(Integer processId);
+			+ "group by s ")
+	List<StorageBalance> findUsedStorageBalances(Integer processId);
 	
 	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
 			+ "s.id, s.numberUnits, "
@@ -334,9 +336,28 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "group by s ")
 	Stream<StorageBalance> findProducedStorageBalances(Integer processId);
 
-
 	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
-			+ "s.id, s.numberUnits, "
+			+ "i.id, i.numberUnits, "
+			+ "SUM("
+			+ "(CASE "
+				+ "WHEN (used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
+					+ "THEN ui.numberUnits "
+				+ "ELSE 0 "
+			+ "END))) "
+			+ "from StorageRelocation p "
+				+ "join p.storageMovesGroups grp "
+					+ "join grp.storageMoves i "
+//						+ "join i.storage s "
+							+ "join i.usedItems ui "
+								+ "join ui.group used_g "
+									+ "join used_g.process used_p "
+										+ "join used_p.lifeCycle used_lc "
+			+ "where p.id = :processId "
+			+ "group by i ")
+	List<StorageBalance> findRelocationUseBalances(Integer processId);
+	
+	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
+			+ "storageMove.id, storageMove.numberUnits, "
 			+ "SUM("
 			+ "(CASE "
 				+ "WHEN (used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
@@ -346,13 +367,15 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "from StorageRelocation p "
 				+ "join p.storageMovesGroups g "
 					+ "join g.storageMoves storageMove "
-						+ "join storageMove.storage s "
-							+ "left join s.usedItems ui "
+//						+ "join storageMove.storage s "
+							+ "left join storageMove.usedItems ui "
 								+ "join ui.group used_g "
 									+ "join used_g.process used_p "
 										+ "join used_p.lifeCycle used_lc "
 			+ "where p.id = :processId "
-			+ "group by storageMove, s ")
+			+ "group by storageMove "
+//			+ ", s"
+			+ "")
 	Stream<StorageBalance> findStorageMoveBalances(Integer processId);
 
 

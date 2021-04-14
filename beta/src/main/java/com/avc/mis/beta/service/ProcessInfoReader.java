@@ -3,7 +3,9 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +26,7 @@ import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
+import com.avc.mis.beta.dto.query.UsedProcessWithPoCode;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.data.ProcessManagement;
@@ -31,6 +34,8 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
@@ -100,6 +105,42 @@ public class ProcessInfoReader {
 //			ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer[] poCodeIds) {
 //		processDTO.setAvailableInventory(warehouseManagement.getAvailableInventory(group, productionUses, itemId, poCodeIds));
 //	}
+	
+	//call for edit of a TransactionProcess or StorageRelocation
+	public void checkDAGmaintained(List<UsedProcessWithPoCode> usedProcesses, Integer processId) {
+		getProcessDescendants(usedProcesses.stream().mapToInt(i -> i.getPoCode().getId()).toArray(), processId);
+	}
+	
+	private Set<Integer> getProcessDescendants (int[] poCodeIds, Integer processId) {
+		List<Integer[]> processVertices = getProcessInfoRepository().findTransactionProcessVertices(poCodeIds);
+		Map<Integer, List<Integer>> map = processVertices.stream().collect(Collectors.groupingBy(i -> i[0], Collectors.mapping(i -> i[1], Collectors.toList())));
+		List<Integer> addedProcesses = null;
+		Set<Integer> processDescendants = new HashSet<>();
+		int numDescendants;
+		do {
+			if(addedProcesses == null) {
+				if(map.containsKey(processId))
+					addedProcesses = map.get(processId);
+			}
+			else {
+				addedProcesses = addedProcesses.stream()
+						.filter(i -> map.containsKey(i))
+						.flatMap(i -> map.get(i).stream())
+						.collect(Collectors.toList());
+			}
+			
+			if(addedProcesses != null) {
+				int numToAdd = addedProcesses.size();
+				numDescendants = processDescendants.size();
+				processDescendants.addAll(addedProcesses);
+				if(processDescendants.size() != (numDescendants + numToAdd)) {
+					throw new IllegalArgumentException("Process using it's descendant");
+				}
+			}
+		} while(addedProcesses != null && !addedProcesses.isEmpty());
+		
+		return processDescendants;
+	}
 
 	/**
 	 * Gets a ProcessManagement that contains a user to be notified, 
@@ -231,11 +272,11 @@ public class ProcessInfoReader {
 	 * @param poCodeId id of PoCode
 	 * @return List of ProcessBasic
 	 */
-	public List<ProcessBasic> getAllProcessesByPo(@NonNull Integer poCodeId) {
+	public List<ProcessBasic<GeneralProcess>> getAllProcessesByPo(@NonNull Integer poCodeId) {
 		return getProcessInfoRepository().findAllProcessesByPo(poCodeId);
 	}
 	
-	public ProcessBasic getProcessesBasic(@NonNull Integer processId) {
+	public ProcessBasic<GeneralProcess> getProcessesBasic(@NonNull Integer processId) {
 		return getProcessInfoRepository().findProcessBasic(processId);
 	}
 	
@@ -246,7 +287,7 @@ public class ProcessInfoReader {
 	 * @param processNames all process types (by name) to get
 	 * @return List of ProcessBasic
 	 */
-	public List<ProcessBasic> getAllProcessesByPoAndName(@NonNull Integer poCodeId, Set<ProcessName> processNames) {
+	public List<ProcessBasic<PoProcess>> getAllProcessesByPoAndName(@NonNull Integer poCodeId, Set<ProcessName> processNames) {
 		return getProcessInfoRepository().findAllProcessesByPoAndName(poCodeId, processNames);
 	}
 	

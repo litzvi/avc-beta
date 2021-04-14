@@ -56,6 +56,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.ContainerArrivals;
@@ -274,7 +275,7 @@ public class QueryTest {
 		
 		//get all processes by po code/id
 		for(PoCode poCode: objectTablesReader.getAllPoCodes()) {
-			List<ProcessBasic> processBasics = processInfoReader.getAllProcessesByPo(poCode.getId());
+			List<ProcessBasic<GeneralProcess>> processBasics = processInfoReader.getAllProcessesByPo(poCode.getId());
 			processBasics.forEach(s -> System.out.println(s));
 			
 		}
@@ -282,7 +283,7 @@ public class QueryTest {
 		//test getting inventory storages by item
 		List<ProcessItemInventory> itemInventory;
 		try {
-			itemInventory = warehouseManagement.getAvailableInventory(null, null, null, service.getItem().getId(), null);
+			itemInventory = warehouseManagement.getAvailableInventory(null, null, null, service.getItem().getId(), null, null);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();

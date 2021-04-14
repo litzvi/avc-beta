@@ -28,16 +28,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.avc.mis.beta.dto.basic.PoCodeBasic_1" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/basic/PoCodeBasic_1.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1659" y="381"/>    
-    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="com.avc.mis.beta.dto.basic.ProcessBasic" project="beta" 
+  <class id="4" language="java" name="com.avc.mis.beta.dto.basic.ProcessBasic" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/basic/ProcessBasic.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1518" y="493"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -46,7 +37,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="com.avc.mis.beta.dto.basic.ShipmentCodeBasic" project="beta" 
+  <class id="5" language="java" name="com.avc.mis.beta.dto.basic.ShipmentCodeBasic" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/basic/ShipmentCodeBasic.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1774" y="262"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -55,7 +46,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="com.avc.mis.beta.dto.basic.UserBasic" project="beta" 
+  <class id="6" language="java" name="com.avc.mis.beta.dto.basic.UserBasic" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/basic/UserBasic.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="740" y="788"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -64,7 +55,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="com.avc.mis.beta.dto.basic.ValueEntityObject" project="beta" 
+  <class id="7" language="java" name="com.avc.mis.beta.dto.basic.ValueEntityObject" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/basic/ValueEntityObject.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="132" y="428"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -73,7 +64,7 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="com.avc.mis.beta.dto.basic.ValueObject" project="beta" 
+  <class id="8" language="java" name="com.avc.mis.beta.dto.basic.ValueObject" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/basic/ValueObject.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="272" y="526"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
@@ -82,32 +73,28 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <dependency id="10">    
+  <dependency id="9">    
     <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="11">    
-    <end type="SOURCE" refId="9"/>    
+    <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="12">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="2"/>  
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="13">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <dependency id="14">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="15">    
     <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="16">    
-    <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 

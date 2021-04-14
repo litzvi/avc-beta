@@ -74,7 +74,7 @@ public class InventoryUseTest {
 
 
 		//get inventory storages for use
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
 		inventoryUse.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 
 		try {

@@ -25,6 +25,7 @@ import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.QcCompany;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.repositories.QCRepository;
 
@@ -136,7 +137,7 @@ public class QualityChecks {
 				checksMap.put(processName, new ArrayList<PoProcessDTO>());
 			}
 		}
-		List<ProcessBasic> basicProcesses = getProcessInfoReader().getAllProcessesByPoAndName(poCodeId, checksMap.keySet());
+		List<ProcessBasic<PoProcess>> basicProcesses = getProcessInfoReader().getAllProcessesByPoAndName(poCodeId, checksMap.keySet());
 		basicProcesses.forEach(p -> checksMap.get(p.getProcessName()).add(getProcessInfoReader().getProcess(p.getId(), p.getProcessName())));
 		
 		

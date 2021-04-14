@@ -12,7 +12,8 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
 import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
-import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
+import com.avc.mis.beta.dto.query.UsedItemAmountWithPoCode;
+import com.avc.mis.beta.dto.query.UsedProcessWithPoCode;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
@@ -217,8 +218,9 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "and sf.id not in :storageIds ")
 	Boolean isRemovingUsedProduct(Integer processId, Set<Integer> storageIds);
 
-	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithPoCode("
+	@Query("select new com.avc.mis.beta.dto.query.UsedItemAmountWithPoCode("
 				+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
+				+ "used_p.id, used_p.version, used_type.processName, type(used_p), "
 				+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 				+ "item_unit.amount, item_unit.measureUnit, type(item), "
 				+ "SUM( "
@@ -234,7 +236,9 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 									+ "join item.unit item_unit "
 								+ "join UOM uom "
 									+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
-								+ "join pi.process used_p "
+							+ "join sf.group used_grp "
+								+ "join used_grp.process used_p "
+									+ "join used_p.processType used_type "
 									+ "left join used_p.poCode p_po_code "
 									+ "left join used_p.weightedPos w_po "
 										+ "left join w_po.poCode w_po_code "
@@ -244,25 +248,63 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 										+ "join po_code.supplier s "
 			+ "where p.id = :processId "
 				+ "and item.itemGroup = com.avc.mis.beta.entities.item.ItemGroup.PRODUCT "
-			+ "group by po_code, item "
+			+ "group by used_p, po_code, item "
 			+ "order by po_item_amount desc ")
-	List<ItemAmountWithPoCode> generateWeightedPos(Integer processId);
+	List<UsedItemAmountWithPoCode> generateWeightedPos(Integer processId);
 
-	@Query("select po_code.id "
+	@Query("select new com.avc.mis.beta.dto.query.UsedProcessWithPoCode( "
+			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
+			+ "used_p.id, used_p.version, used_type.processName, type(used_p)) "
 		+ "from TransactionProcess p "
 			+ "join p.usedItemGroups grp "
 				+ "join grp.usedItems ui "
 					+ "join ui.storage sf "
-						+ "join sf.processItem pi "
-							+ "join pi.process used_p "
+						+ "join sf.group used_grp "
+							+ "join used_grp.process used_p "
+								+ "join used_p.processType used_type "
 								+ "left join used_p.poCode p_po_code "
 								+ "left join used_p.weightedPos w_po "
 									+ "left join w_po.poCode w_po_code "
 								+ "join BasePoCode po_code "
 									+ "on (po_code = p_po_code or po_code = w_po_code) "
+									+ "join po_code.contractType t "
+									+ "join po_code.supplier s "
 		+ "where p.id = :processId "
 		+ "group by po_code")
-	List<Integer> getUsedPoIds(Integer processId);
+	List<UsedProcessWithPoCode> getUsedProcessWithPoCodes(Integer processId);
+	
+	@Query("select new com.avc.mis.beta.dto.query.UsedProcessWithPoCode( "
+			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
+			+ "used_p.id, used_p.version, used_type.processName, type(used_p)) "
+		+ "from StorageRelocation p "
+			+ "join p.storageMovesGroups grp "
+				+ "join grp.storageMoves ui "
+					+ "join ui.storage sf "
+						+ "join sf.group used_grp "
+							+ "join used_grp.process used_p "
+								+ "join used_p.processType used_type "
+								+ "left join used_p.poCode p_po_code "
+								+ "left join used_p.weightedPos w_po "
+									+ "left join w_po.poCode w_po_code "
+								+ "join BasePoCode po_code "
+									+ "on (po_code = p_po_code or po_code = w_po_code) "
+									+ "join po_code.contractType t "
+									+ "join po_code.supplier s "
+		+ "where p.id = :processId "
+		+ "group by po_code, used_p ")
+	List<UsedProcessWithPoCode> getRelocationUsedProcessWithPoCodes(Integer processId);
+	
+	@Query("select used_p.id, using_p.id  "
+			+ "from WeightedPo w_po "
+				+ "join w_po.process using_p "
+				+ "join w_po.usedProcess used_p "
+				+ "join w_po.poCode w_po_code "
+			+ "where w_po_code.id in :poCodeIds "
+			+ "group by used_p.id, using_p.id ")
+	List<Integer[]> findTransactionProcessVertices(int[] poCodeIds);	
+		
+
+	
 
 	
 

@@ -7,17 +7,25 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;
 
+import com.avc.mis.beta.dto.BasicDataDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.ProcessBasic;
+import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.PoProcess;
+import com.avc.mis.beta.entities.processinfo.WeightedPo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
@@ -26,9 +34,10 @@ import lombok.Value;
  *
  */
 @Value
-public class ItemAmountWithPoCode {
+@EqualsAndHashCode(callSuper = true)
+public class UsedItemAmountWithPoCode extends UsedProcessWithPoCode {
 
-	PoCodeBasic poCode;
+	
 	BasicValueEntity<Item> item;
 
 	@ToString.Exclude @JsonIgnore
@@ -36,15 +45,17 @@ public class ItemAmountWithPoCode {
 	AmountWithUnit weightAmount;
 	AmountWithUnit amount;
 	
-	public ItemAmountWithPoCode(
+	public UsedItemAmountWithPoCode(
 			Integer poCodeId, String poCodeCode, 
 			String contractTypeCode, String contractTypeSuffix, String supplierName, 
+			Integer usedProcessId, Integer usedProcessVersion, ProcessName processName, Class<? extends PoProcess> ProcessClazz, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			ItemGroup itemGroup, ProductionUse productionUse, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz, 
 			BigDecimal amount) {
-		super();
-		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+		super(poCodeId, poCodeCode, 
+				contractTypeCode, contractTypeSuffix, supplierName, 
+				usedProcessId, usedProcessVersion, processName, ProcessClazz);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.itemGroup = itemGroup;
 		if(clazz == BulkItem.class) {
@@ -63,9 +74,9 @@ public class ItemAmountWithPoCode {
 			throw new IllegalStateException("The class can only apply to weight items");
 		}
 	}
-		
+	
 	@JsonIgnore
-	static AmountWithUnit getTotalWeight(List<ItemAmountWithPoCode> itemAmounts) {
+	static AmountWithUnit getTotalWeight(List<UsedItemAmountWithPoCode> itemAmounts) {
 		return itemAmounts.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
 	}
 	

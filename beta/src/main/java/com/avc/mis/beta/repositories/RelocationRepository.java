@@ -133,7 +133,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 			+ "SUM("
 				+ "(CASE "
 					+ "WHEN (sf_ui <> m AND sf_used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
-						+ "THEN (sf_ui.numberUnits / coalesce(size(used_p.weightedPos), 1)) "
+						+ "THEN (coalesce(sf_ui.numberUnits / size(used_p.weightedPos), sf_ui.numberUnits)) "
 					+ "ELSE 0 "
 				+ "END) "
 			+ "), "
@@ -164,7 +164,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 			+ "join m.group g "
 				+ "join g.process p "
 		+ "where p.id = :processId "
-		+ "group by used_sf "
+		+ "group by m, used_sf "
 		+ "order by g.ordinal, m.ordinal ")
 	List<StorageMoveWithGroup> findStorageMovesWithGroup(int processId);
 

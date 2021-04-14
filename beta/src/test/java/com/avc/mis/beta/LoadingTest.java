@@ -103,7 +103,7 @@ public class LoadingTest {
 		loading.setRecordedTime(OffsetDateTime.now());
 
 		//get inventory storages for transfer
-		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()});
+		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
 		loading.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 		
 		loadingService.addLoading(loading);

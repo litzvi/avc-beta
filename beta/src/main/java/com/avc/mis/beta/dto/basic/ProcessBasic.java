@@ -4,8 +4,10 @@
 package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.BasicDataDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -19,15 +21,32 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class ProcessBasic extends BasicDTO {
+public class ProcessBasic <T extends GeneralProcess> extends BasicDataDTO {
 	
 	ProcessName processName;
-	Class<? extends GeneralProcess> ProcessClazz;
+	Class<? extends T> processClazz;
 
-	public ProcessBasic(@NonNull Integer id, ProcessName processName, Class<? extends GeneralProcess> ProcessClazz) {
-		super(id);
+	public ProcessBasic(@NonNull Integer id, ProcessName processName, Class<? extends T> processClazz) {
+		this(id, null, processName, processClazz);
+	}
+	
+	public ProcessBasic(@NonNull Integer id, Integer version, ProcessName processName, Class<? extends T> processClazz) {
+		super(id, version);
 		this.processName = processName;
-		this.ProcessClazz = ProcessClazz;
+		this.processClazz = processClazz;
+	}
+	
+	@JsonIgnore
+	public T getProcess() {
+		T process;
+		try {
+			process = (T) processClazz.newInstance();
+			process.setId(getId());
+			process.setVersion(getVersion());
+			return process;
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new IllegalStateException(e.getMessage());
+		} 
 	}
 	
 }

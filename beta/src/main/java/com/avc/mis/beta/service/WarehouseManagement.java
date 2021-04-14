@@ -21,6 +21,7 @@ import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageBalance;
+import com.avc.mis.beta.dto.query.UsedProcessWithPoCode;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
@@ -156,6 +157,7 @@ public class WarehouseManagement {
 		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
 		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		dao.addGeneralProcessEntity(relocation);
+		dao.setRelocationPos(relocation);
 		//check if storage moves match the amounts of the used item
 		checkRelocationBalance(relocation);
 	}
@@ -204,19 +206,20 @@ public class WarehouseManagement {
 	/**
 	 * @param relocation
 	 */
-	private void checkRelocationBalance(StorageRelocation relocation) {
+	private void checkRelocationOutputSufficent(StorageRelocation relocation) {
 		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageMoveBalances(relocation.getId());
 		if(!storageBalances.allMatch(b -> b.isLegal())) {
-			throw new IllegalArgumentException("Process used item amounts relocated exceed actual amount in inventory");
-		}
-		
+			throw new IllegalArgumentException("Process moved amounts can't be reduced because already in use");
+		}	
+	}
+	
+	private void checkRelocationBalance(StorageRelocation relocation) {
 		List<ProcessItemTransactionDifference> differences = getRelocationRepository().findRelocationDifferences(relocation.getId());		
 		for(ProcessItemTransactionDifference d: differences) {
 			if(d.getDifference().signum() != 0) {
 				dao.sendMessageAlerts(relocation, "Relocated process items don't have matching amounts");
 			}
 		}
-		
 	}
 	
 	private void checkTransferBalance(StorageTransfer transfer) {
@@ -323,6 +326,9 @@ public class WarehouseManagement {
 		//check used items amounts don't exceed the storage amounts
 		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		dao.editGeneralProcessEntity(relocation);
+		List<UsedProcessWithPoCode> usedProcesses = dao.setRelocationPos(relocation);
+		getProcessInfoReader().checkDAGmaintained(usedProcesses, relocation.getId());
+		checkRelocationOutputSufficent(relocation);
 		checkRelocationBalance(relocation);
 	}
 	
@@ -354,7 +360,7 @@ public class WarehouseManagement {
 	
 	public List<ProcessItemInventory> getAvailableInventory(
 			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
-			Integer itemId, Integer[] poCodeIds) {
+			Integer itemId, Integer[] poCodeIds, Integer excludeProcessId) {
 		
 		boolean checkProductionUses = (productionUses != null);
 		boolean checkFunctionalities = (functionalities != null);
@@ -363,7 +369,8 @@ public class WarehouseManagement {
 				.findAvailableInventoryByStorage(checkProductionUses, productionUses, 
 						checkFunctionalities, functionalities, 
 						group, itemId, 
-						checkPoCodes, poCodeIds);
+						checkPoCodes, poCodeIds,
+						excludeProcessId);
 				
 		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
 	}	

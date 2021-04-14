@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.processinfo.WeightedPo;
 
 import lombok.NonNull;
@@ -221,7 +222,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 		+ "where po_code.id = :poCodeId "
 			+ "or w_po_code.id = :poCodeId "
 		+ "group by p ")
-	List<ProcessBasic> findAllProcessesByPo(@NonNull Integer poCodeId);
+	List<ProcessBasic<GeneralProcess>> findAllProcessesByPo(@NonNull Integer poCodeId);
 
 	
 	/**
@@ -236,7 +237,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "join p.processType t "
 		+ "where c.id = :poCodeId "
 			+ "and t.processName in :processNames ")
-	List<ProcessBasic> findAllProcessesByPoAndName(@NonNull Integer poCodeId, Set<ProcessName> processNames);
+	List<ProcessBasic<PoProcess>> findAllProcessesByPoAndName(@NonNull Integer poCodeId, Set<ProcessName> processNames);
 
 
 	@Query("select new com.avc.mis.beta.dto.basic.ProcessBasic( "
@@ -244,7 +245,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 		+ "from GeneralProcess p "
 			+ "join p.processType t "
 		+ "where p.id = :processId ")
-	ProcessBasic findProcessBasic(@NonNull Integer processId);
+	ProcessBasic<GeneralProcess> findProcessBasic(@NonNull Integer processId);
 
 //	@Query("select new com.avc.mis.beta.dto.process.inventory.UsedItemDTO( "
 //			+ "i.id, i.version, i.ordinal, i.numberUnits, "

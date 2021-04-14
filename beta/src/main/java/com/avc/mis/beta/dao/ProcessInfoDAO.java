@@ -22,7 +22,8 @@ import org.springframework.stereotype.Repository;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
-import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
+import com.avc.mis.beta.dto.query.UsedItemAmountWithPoCode;
+import com.avc.mis.beta.dto.query.UsedProcessWithPoCode;
 import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.codes.BasePoCode;
@@ -39,8 +40,10 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
+import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
@@ -92,7 +95,13 @@ public class ProcessInfoDAO extends DAO {
 	 * @param process GeneralProcess to be added.
 	 */
 	public void addGeneralProcessEntity(GeneralProcess process) {
-		addEntity(process);
+		
+		addEntity(process);		
+		//check used items amounts () don't exceed the storage amounts
+		if(!isUsedInventorySufficiant(process.getId())) {
+			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+		}
+		
 		addAlerts(process);
 	}
 	
@@ -107,64 +116,61 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public void addTransactionProcessEntity(TransactionProcess<?> process) {
 		addGeneralProcessEntity(process);
-		//check used items amounts () don't exceed the storage amounts
-		if(!isUsedInventorySufficiant(process.getId())) {
-			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
-		}
+		
 	}
 	
-	public void setGeneralPos(TransactionProcess<?> process) {
-		List<WeightedPo> oldWeightedPos = getProcessRepository().findWeightedPoReferences(process.getId());
-		for(WeightedPo weightedPo: oldWeightedPos) {
-			getEntityManager().remove(weightedPo);
-		}
-		List<Integer> poIds = getProcessRepository().getUsedPoIds(process.getId());
-		if(poIds != null && !poIds.isEmpty()) {
+	public List<UsedProcessWithPoCode> setGeneralPos(TransactionProcess<?> process) {
+		removeOldWeightedPos(process.getId());
+		List<UsedProcessWithPoCode> usedProcesses = getProcessRepository().getUsedProcessWithPoCodes(process.getId());
+		if(usedProcesses != null && !usedProcesses.isEmpty()) {
 			int ordinal = 0;
-			for(Integer poId: poIds) {
-				WeightedPo weightedPo = new WeightedPo();
-				GeneralPoCode poCode = new GeneralPoCode();
-				poCode.setId(poId);
-				weightedPo.setPoCode(poCode);
-//				weightedPo.setWeight(BigDecimal.ZERO);
+			for(UsedProcessWithPoCode usedProcess: usedProcesses) {
+				WeightedPo weightedPo = usedProcess.getWeightedPo();
 				weightedPo.setOrdinal(ordinal++);
 				addEntity(weightedPo, process);
 			}
 		}
+		return usedProcesses;
 	}
 	
-	public void setPoWeights(TransactionProcess<?> process) {
-		List<WeightedPo> oldWeightedPos = getProcessRepository().findWeightedPoReferences(process.getId());
-		for(WeightedPo weightedPo: oldWeightedPos) {
-			getEntityManager().remove(weightedPo);
+	public List<UsedProcessWithPoCode> setRelocationPos(StorageRelocation process) {
+		removeOldWeightedPos(process.getId());
+		List<UsedProcessWithPoCode> usedProcesses = getProcessRepository().getRelocationUsedProcessWithPoCodes(process.getId());
+		if(usedProcesses != null && !usedProcesses.isEmpty()) {
+			int ordinal = 0;
+			for(UsedProcessWithPoCode usedProcess: usedProcesses) {
+				WeightedPo weightedPo = usedProcess.getWeightedPo();
+				weightedPo.setOrdinal(ordinal++);
+				addEntity(weightedPo, process);
+			}
 		}
-//		if(process.getPoCode() == null) {
-		List<ItemAmountWithPoCode> poWeights = getProcessRepository().generateWeightedPos(process.getId());
+		return usedProcesses;
+	}
+	
+	public List<UsedItemAmountWithPoCode> setPoWeights(TransactionProcess<?> process) {
+		removeOldWeightedPos(process.getId());
+		List<UsedItemAmountWithPoCode> poWeights = getProcessRepository().generateWeightedPos(process.getId());
 		if(poWeights != null && !poWeights.isEmpty()) {
 			AmountWithUnit usedWeight = poWeights.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
-	//		WeightedPo[] weightedPos = new WeightedPo[poWeights.size()];
 			int ordinal = 0;
-			for(ItemAmountWithPoCode poWeight: poWeights) {
-				WeightedPo weightedPo = new WeightedPo();
-	//			weightedPos[ordinal] = weightedPo;
-				PoCode poCode = new PoCode();
-				poCode.setId(poWeight.getPoCode().getId());
-				weightedPo.setPoCode(poCode);
+			for(UsedItemAmountWithPoCode poWeight: poWeights) {
+				WeightedPo weightedPo = poWeight.getWeightedPo();
 				weightedPo.setWeight(
 						poWeight.getWeightAmount()
 						.divide(usedWeight)
 						.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_EVEN));
 				weightedPo.setOrdinal(ordinal++);
-	//			weightedPo.setProcess(process);
 				addEntity(weightedPo, process);
 			}
 		}
-//		process.setWeightedPos(weightedPos);
-//		getEntityManager().flush();
-//		}
-//		else if(process.getWeightedPos() != null && process.getWeightedPos().length > 0){
-//			throw new IllegalStateException("Po code and weighted po codes shouldn't both be set together");
-//		}
+		return poWeights;
+	}
+	
+	private void removeOldWeightedPos(Integer processId) {
+		List<WeightedPo> oldWeightedPos = getProcessRepository().findWeightedPoReferences(processId);
+		for(WeightedPo weightedPo: oldWeightedPos) {
+			getEntityManager().remove(weightedPo);
+		}
 	}
 	
 //	private void permenentlyRemoveEntity(Class<? extends BaseEntity> entityClass, Integer id) {
@@ -179,10 +185,13 @@ public class ProcessInfoDAO extends DAO {
 	 * @return true if for all storages, used amounts are equal or less than storage amount, false otherwise
 	 */
 	private boolean isUsedInventorySufficiant(Integer processId) {		
-		Stream<StorageBalance> storageBalances = getInventoryRepository().findUsedStorageBalances(processId);
-		return storageBalances.allMatch(b -> b.isLegal());
+		List<StorageBalance> storageBalances = getInventoryRepository().findUsedStorageBalances(processId);
+		if(storageBalances == null || storageBalances.isEmpty()) {
+			storageBalances = getInventoryRepository().findRelocationUseBalances(processId);
+		}
+		return storageBalances.stream().allMatch(b -> b.isLegal());
 	}
-	
+		
 	private boolean isProducedInventorySufficiant(Integer processId) {		
 		Stream<StorageBalance> storageBalances = getInventoryRepository().findProducedStorageBalances(processId);
 		return storageBalances.allMatch(b -> b.isLegal());
@@ -210,6 +219,10 @@ public class ProcessInfoDAO extends DAO {
 		process.setModifiedDate(null);
 		editEntity(process);
 
+		//check used items amounts (after edit) don't exceed the storage amounts
+		if(!isUsedInventorySufficiant(process.getId())) {
+			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+		}
 		
 		editAlerts(process);
 
@@ -239,10 +252,7 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public <T extends TransactionProcess<?>> void editTransactionProcessEntity(T process) {
 		editProcessWithProductEntity(process);
-		//check used items amounts (after edit) don't exceed the storage amounts
-		if(!isUsedInventorySufficiant(process.getId())) {
-			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
-		}
+		
 	}
 		
 	/**
