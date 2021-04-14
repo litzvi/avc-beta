@@ -189,6 +189,9 @@ public class ProcessInfoDAO extends DAO {
 		if(storageBalances == null || storageBalances.isEmpty()) {
 			storageBalances = getInventoryRepository().findRelocationUseBalances(processId);
 		}
+		if(storageBalances == null || storageBalances.isEmpty()) {
+			return true;
+		}
 		return storageBalances.stream().allMatch(b -> b.isLegal());
 	}
 		
