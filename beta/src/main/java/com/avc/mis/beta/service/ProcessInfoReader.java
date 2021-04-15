@@ -114,11 +114,12 @@ public class ProcessInfoReader {
 				.stream().toArray(Integer[]::new), processId);
 	}
 	
-	public Integer[] getProcessDescendants (Integer[] poCodeIds, Integer processId) {
+	public Integer[] getProcessDescendants (Integer[] poCodeIds, @NonNull Integer processId) {
 		List<Integer[]> processVertices = getProcessInfoRepository().findTransactionProcessVertices(poCodeIds);
 		Map<Integer, List<Integer>> map = processVertices.stream().collect(Collectors.groupingBy(i -> i[0], Collectors.mapping(i -> i[1], Collectors.toList())));
 		List<Integer> addedProcesses = null;
 		Set<Integer> processDescendants = new HashSet<>();
+		processDescendants.add(processId);
 		int numDescendants;
 		do {
 			if(addedProcesses == null) {

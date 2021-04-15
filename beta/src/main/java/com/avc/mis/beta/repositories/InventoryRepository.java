@@ -318,7 +318,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 									+ "join used_g.process used_p "
 										+ "join used_p.lifeCycle used_lc "
 			+ "where p.id = :processId "
-			+ "group by s ")
+			+ "group by grp, i, s ")
 	List<StorageBalance> findUsedStorageBalances(Integer processId);
 	
 	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
@@ -337,7 +337,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 								+ "join used_g.process used_p "
 									+ "join used_p.lifeCycle used_lc "
 			+ "where p.id = :processId "
-			+ "group by s ")
+			+ "group by pi, s ")
 	Stream<StorageBalance> findProducedStorageBalances(Integer processId);
 
 	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
@@ -357,7 +357,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 									+ "join used_g.process used_p "
 										+ "join used_p.lifeCycle used_lc "
 			+ "where p.id = :processId "
-			+ "group by s ")
+			+ "group by grp, i, s ")
 	List<StorageBalance> findRelocationUseBalances(Integer processId);
 	
 	@Query("select new com.avc.mis.beta.dto.query.StorageBalance("
@@ -376,7 +376,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 									+ "join used_g.process used_p "
 										+ "join used_p.lifeCycle used_lc "
 			+ "where p.id = :processId "
-			+ "group by i "
+			+ "group by g, i "
 //			+ ", s"
 			+ "")
 	Stream<StorageBalance> findStorageMoveBalances(Integer processId);
