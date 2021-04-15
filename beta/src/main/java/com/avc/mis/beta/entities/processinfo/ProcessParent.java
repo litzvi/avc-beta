@@ -31,17 +31,10 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
 @Entity
-@Table(name = "PRUDUCT_WEIGHTED_POS")
-public class WeightedPo extends ProcessInfoEntity {
-
+@Table(name = "PROCESS_PARENTS")
+public class ProcessParent extends ProcessInfoEntity {
+		
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "poCodeId", nullable = false)
-	@NotNull(message = "Po code is mandatory")
-	private BasePoCode poCode;
-	
-//	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
-//	@NotNull(message = "weight for every po is mandatory") set by code when needed
-	@Column(precision = 19, scale = MeasureUnit.SCALE)
-	private BigDecimal weight;
-
+	@JoinColumn(name = "usedProcessId", nullable = false, updatable = false)
+	private PoProcess usedProcess;
 }

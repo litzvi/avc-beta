@@ -12,15 +12,23 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
+import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.enums.Role;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
+import com.avc.mis.beta.entities.process.PoProcess;
+import com.avc.mis.beta.entities.process.StorageRelocation;
+import com.avc.mis.beta.entities.process.TransactionProcess;
+import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.entities.processinfo.ProcessParent;
 import com.avc.mis.beta.entities.settings.UOM;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
+import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.SettingsWriter;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.utilities.ProgramSequence;
@@ -37,7 +45,7 @@ public class DataLoader implements ApplicationRunner {
 	@Autowired private SettingsWriter settingsWriter;
 	
 //	@Autowired private ReadDAO dao;
-	
+
 	
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
@@ -100,7 +108,10 @@ public class DataLoader implements ApplicationRunner {
 		}
 		
 		
-		//supply group
+		//setup or rearange processes tree (process parent)
+		if (!settingsWriter.isTableEmpty(PoProcess.class) && settingsWriter.isTableEmpty(ProcessParent.class)) {
+			settingsWriter.refillAllProcessParents();			
+		}
 
 	}
 

@@ -116,9 +116,7 @@ public class ProductionProcesses {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addProductionProcess(ProductionProcess process, ProcessName processName) {
 		process.setProcessType(dao.getProcessTypeByValue(processName));
-		dao.addTransactionProcessEntity(process);
-		//set weightedPos weight
-		dao.setPoWeights(process);
+		dao.addTransactionProcessEntity(process);	
 	}
 	
 	/**
@@ -165,8 +163,6 @@ public class ProductionProcesses {
 //			throw new NullPointerException();
 		//check used items amounts don't exceed the storage amounts
 		dao.editTransactionProcessEntity(process);
-		//set weightedPos weight
-		dao.setPoWeights(process);
 	}
 
 	

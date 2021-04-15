@@ -34,10 +34,10 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(callSuper = true)
-public class UsedItemAmountWithPoCode extends UsedProcessWithPoCode {
+public class ItemAmountWithPoCode {
 
-	
+	PoCodeBasic poCode;
+
 	BasicValueEntity<Item> item;
 
 	@ToString.Exclude @JsonIgnore
@@ -45,17 +45,15 @@ public class UsedItemAmountWithPoCode extends UsedProcessWithPoCode {
 	AmountWithUnit weightAmount;
 	AmountWithUnit amount;
 	
-	public UsedItemAmountWithPoCode(
+	public ItemAmountWithPoCode(
 			Integer poCodeId, String poCodeCode, 
 			String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			Integer usedProcessId, Integer usedProcessVersion, ProcessName processName, Class<? extends PoProcess> ProcessClazz, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			ItemGroup itemGroup, ProductionUse productionUse, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz, 
 			BigDecimal amount) {
-		super(poCodeId, poCodeCode, 
-				contractTypeCode, contractTypeSuffix, supplierName, 
-				usedProcessId, usedProcessVersion, processName, ProcessClazz);
+		super();
+		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.itemGroup = itemGroup;
 		if(clazz == BulkItem.class) {
@@ -76,7 +74,16 @@ public class UsedItemAmountWithPoCode extends UsedProcessWithPoCode {
 	}
 	
 	@JsonIgnore
-	static AmountWithUnit getTotalWeight(List<UsedItemAmountWithPoCode> itemAmounts) {
+	public WeightedPo getWeightedPo() {
+		WeightedPo weightedPo = new WeightedPo();
+		GeneralPoCode poCode = new GeneralPoCode();
+		poCode.setId(getPoCode().getId());
+		weightedPo.setPoCode(poCode);
+		return weightedPo;
+	}
+	
+	@JsonIgnore
+	static AmountWithUnit getTotalWeight(List<ItemAmountWithPoCode> itemAmounts) {
 		return itemAmounts.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
 	}
 	

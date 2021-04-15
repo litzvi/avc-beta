@@ -18,10 +18,11 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
+import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageBalance;
-import com.avc.mis.beta.dto.query.UsedProcessWithPoCode;
+import com.avc.mis.beta.dto.query.UsedProcess;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
@@ -145,8 +146,6 @@ public class WarehouseManagement {
 	public void addStorageTransfer(StorageTransfer transfer) {
 		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
 		dao.addTransactionProcessEntity(transfer);
-		//set weightedPos weight
-		dao.setPoWeights(transfer);
 		//check if process items match the used item (items are equal, perhaps also check amounts difference and send warning)
 		checkTransferBalance(transfer);
 	}
@@ -157,7 +156,8 @@ public class WarehouseManagement {
 		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
 		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		dao.addGeneralProcessEntity(relocation);
-		dao.setRelocationPos(relocation);
+		dao.setPoWeights(relocation);
+		dao.setUsedProcesses(relocation);
 		//check if storage moves match the amounts of the used item
 		checkRelocationBalance(relocation);
 	}
@@ -170,9 +170,9 @@ public class WarehouseManagement {
 		}		
 				
 		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_USE));
-		dao.addTransactionProcessEntity(inventoryUse);
+		dao.addGeneralProcessEntity(inventoryUse);
 //		set weightedPos weight for general (no weight)
-		dao.setGeneralPos(inventoryUse);
+		dao.setUsedProcesses(inventoryUse);
 	}	
 	
 	private boolean isUsedInItemGroup(UsedItemsGroup[] usedItemGroups, ItemGroup itemGroup) {
@@ -316,8 +316,6 @@ public class WarehouseManagement {
 	public void editStorageTransfer(StorageTransfer transfer) {
 		//check used items amounts don't exceed the storage amounts
 		dao.editTransactionProcessEntity(transfer);
-		//set weightedPos weight
-		dao.setPoWeights(transfer);
 		checkTransferBalance(transfer);
 	}
 	
@@ -326,8 +324,9 @@ public class WarehouseManagement {
 		dao.checkRelocationRemovingUsedProduct(relocation);
 		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		dao.editGeneralProcessEntity(relocation);
-		List<UsedProcessWithPoCode> usedProcesses = dao.setRelocationPos(relocation);
-		getProcessInfoReader().checkDAGmaintained(usedProcesses, relocation.getId());
+		dao.setUsedProcesses(relocation);;
+		List<ItemAmountWithPoCode> usedPos = dao.setPoWeights(relocation);
+		getProcessInfoReader().checkDAGmaintained(usedPos, relocation.getId());
 		checkRelocationOutputSufficent(relocation);
 		checkRelocationBalance(relocation);
 	}
@@ -338,9 +337,9 @@ public class WarehouseManagement {
 		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.GENERAL)) {
 			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
 		}			
-		dao.editTransactionProcessEntity(inventoryUse);
+		dao.editGeneralProcessEntity(inventoryUse);
 //		set weightedPos weight for general
-		dao.setGeneralPos(inventoryUse);
+		dao.setUsedProcesses(inventoryUse);
 	}
 	
 	private void setStorageMovesProcessItem(StorageMovesGroup[] storageMovesGroups) {

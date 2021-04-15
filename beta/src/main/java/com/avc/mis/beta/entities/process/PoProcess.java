@@ -19,8 +19,11 @@ import javax.persistence.Table;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
 import com.avc.mis.beta.entities.processinfo.ItemCount;
+import com.avc.mis.beta.entities.processinfo.ProcessParent;
 import com.avc.mis.beta.entities.processinfo.WeightedPo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -49,17 +52,20 @@ public abstract class PoProcess extends GeneralProcess {
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", 
-//		orphanRemoval = true, 
 		cascade = {CascadeType.REMOVE}, 
 		fetch = FetchType.LAZY)
 	private Set<WeightedPo> weightedPos = new HashSet<>();
-
 	
-	//temporary until fixed in front 
-//	public void setPoCode(PoCode poCode) {
-//		this.poCode = poCode;
-//	}
+	@JsonIgnore
+	@ToString.Exclude 
+	@OneToMany(mappedBy = "process", cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	private Set<ProcessParent> processParents = new HashSet<>();
 	
+	@JsonIgnore
+	@ToString.Exclude 
+	@OneToMany(mappedBy = "usedProcess", cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
+	private Set<ProcessParent> processChildren;
+		
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)

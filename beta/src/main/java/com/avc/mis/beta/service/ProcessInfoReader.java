@@ -26,7 +26,8 @@ import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
-import com.avc.mis.beta.dto.query.UsedProcessWithPoCode;
+import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
+import com.avc.mis.beta.dto.query.UsedProcess;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.data.ProcessManagement;
@@ -107,8 +108,10 @@ public class ProcessInfoReader {
 //	}
 	
 	//call for edit of a TransactionProcess or StorageRelocation
-	public void checkDAGmaintained(List<UsedProcessWithPoCode> usedProcesses, Integer processId) {
-		getProcessDescendants(usedProcesses.stream().map(i -> i.getPoCode().getId()).toArray(Integer[]::new), processId);
+	public void checkDAGmaintained(List<ItemAmountWithPoCode> usedPos, Integer processId) {
+		getProcessDescendants(usedPos.stream()
+				.map(i -> i.getPoCode().getId()).collect(Collectors.toSet())
+				.stream().toArray(Integer[]::new), processId);
 	}
 	
 	public Integer[] getProcessDescendants (Integer[] poCodeIds, Integer processId) {
@@ -289,6 +292,10 @@ public class ProcessInfoReader {
 	 */
 	public List<ProcessBasic<PoProcess>> getAllProcessesByPoAndName(@NonNull Integer poCodeId, Set<ProcessName> processNames) {
 		return getProcessInfoRepository().findAllProcessesByPoAndName(poCodeId, processNames);
+	}
+	
+	public List<ProcessBasic<PoProcess>> getAllProcesses() {
+		return getProcessInfoRepository().findAllProcessesByPoAndName();
 	}
 	
 //	public PoFinalReport getPoFinalReport(@NonNull Integer poCodeId) {

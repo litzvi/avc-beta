@@ -103,8 +103,6 @@ public class Loading {
 		loading.setProcessType(dao.getProcessTypeByValue(ProcessName.CONTAINER_LOADING)); 
 		if(dao.isShippingCodeFree(loading.getShipmentCode().getId())) {
 			dao.addTransactionProcessEntity(loading); 
-			//set weightedPos weight
-			dao.setPoWeights(loading);
 		}
 		else {
 			throw new IllegalArgumentException("Shipment Code is already used for another shipping");
@@ -160,8 +158,6 @@ public class Loading {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false) 
 	public void editLoading(ContainerLoading loading) {
 		dao.editTransactionProcessEntity(loading); 
-		//set weightedPos weight
-		dao.setPoWeights(loading);
 	}
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

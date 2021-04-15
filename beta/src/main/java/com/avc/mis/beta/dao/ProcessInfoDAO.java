@@ -22,8 +22,8 @@ import org.springframework.stereotype.Repository;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.query.StorageBalance;
-import com.avc.mis.beta.dto.query.UsedItemAmountWithPoCode;
-import com.avc.mis.beta.dto.query.UsedProcessWithPoCode;
+import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
+import com.avc.mis.beta.dto.query.UsedProcess;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -35,6 +35,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.StorageRelocation;
@@ -43,6 +44,7 @@ import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.entities.processinfo.ProcessParent;
 import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.entities.processinfo.UserMessage;
 import com.avc.mis.beta.entities.processinfo.WeightedPo;
@@ -112,44 +114,51 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public void addTransactionProcessEntity(TransactionProcess<?> process) {
 		addGeneralProcessEntity(process);
+		setPoWeights(process);
+		setUsedProcesses(process);
+	}
 		
+	public void setUsedProcesses(StorageRelocation process) {
+		removeOldWeightedPos(process.getId());
+		List<UsedProcess> usedProcesses = getProcessRepository().findRelocationUsedProcess(process.getId());
+		addUsedProcesses(usedProcesses, process);
 	}
 	
-	public List<UsedProcessWithPoCode> setGeneralPos(TransactionProcess<?> process) {
+	public void setUsedProcesses(TransactionProcess<?> process) {
 		removeOldWeightedPos(process.getId());
-		List<UsedProcessWithPoCode> usedProcesses = getProcessRepository().getUsedProcessWithPoCodes(process.getId());
+		List<UsedProcess> usedProcesses = getProcessRepository().findTransactionUsedProcess(process.getId());
+		addUsedProcesses(usedProcesses, process);
+	}	
+	
+	private void addUsedProcesses(List<UsedProcess> usedProcesses, PoProcess process) {
 		if(usedProcesses != null && !usedProcesses.isEmpty()) {
 			int ordinal = 0;
-			for(UsedProcessWithPoCode usedProcess: usedProcesses) {
-				WeightedPo weightedPo = usedProcess.getWeightedPo();
-				weightedPo.setOrdinal(ordinal++);
-				addEntity(weightedPo, process);
+			for(UsedProcess usedProcess: usedProcesses) {
+				ProcessParent processParent = usedProcess.getProcessParent();
+				processParent.setOrdinal(ordinal++);
+				addEntity(processParent, process);
 			}
 		}
-		return usedProcesses;
 	}
 	
-	public List<UsedProcessWithPoCode> setRelocationPos(StorageRelocation process) {
+	public List<ItemAmountWithPoCode> setPoWeights(StorageRelocation process) {
 		removeOldWeightedPos(process.getId());
-		List<UsedProcessWithPoCode> usedProcesses = getProcessRepository().getRelocationUsedProcessWithPoCodes(process.getId());
-		if(usedProcesses != null && !usedProcesses.isEmpty()) {
-			int ordinal = 0;
-			for(UsedProcessWithPoCode usedProcess: usedProcesses) {
-				WeightedPo weightedPo = usedProcess.getWeightedPo();
-				weightedPo.setOrdinal(ordinal++);
-				addEntity(weightedPo, process);
-			}
-		}
-		return usedProcesses;
+		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findRelocationWeightedPos(process.getId());
+		addPoWeights(poWeights, process);
+		return poWeights;
+	}	
+	
+	public void setPoWeights(TransactionProcess<?> process) {
+		removeOldWeightedPos(process.getId());
+		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findTransactionWeightedPos(process.getId());
+		addPoWeights(poWeights, process);		
 	}
 	
-	public List<UsedItemAmountWithPoCode> setPoWeights(TransactionProcess<?> process) {
-		removeOldWeightedPos(process.getId());
-		List<UsedItemAmountWithPoCode> poWeights = getProcessRepository().generateWeightedPos(process.getId());
+	private void addPoWeights(List<ItemAmountWithPoCode> poWeights, PoProcess process) {
 		if(poWeights != null && !poWeights.isEmpty()) {
 			AmountWithUnit usedWeight = poWeights.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
 			int ordinal = 0;
-			for(UsedItemAmountWithPoCode poWeight: poWeights) {
+			for(ItemAmountWithPoCode poWeight: poWeights) {
 				WeightedPo weightedPo = poWeight.getWeightedPo();
 				weightedPo.setWeight(
 						poWeight.getWeightAmount()
@@ -159,8 +168,8 @@ public class ProcessInfoDAO extends DAO {
 				addEntity(weightedPo, process);
 			}
 		}
-		return poWeights;
 	}
+
 	
 	private void removeOldWeightedPos(Integer processId) {
 		List<WeightedPo> oldWeightedPos = getProcessRepository().findWeightedPoReferences(processId);
@@ -261,7 +270,8 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public <T extends TransactionProcess<?>> void editTransactionProcessEntity(T process) {
 		editProcessWithProductEntity(process);
-		
+		setPoWeights(process);
+		setUsedProcesses(process);
 	}
 		
 	/**
