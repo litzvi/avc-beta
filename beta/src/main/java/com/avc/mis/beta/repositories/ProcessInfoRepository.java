@@ -25,6 +25,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
+import com.avc.mis.beta.entities.processinfo.ProcessParent;
 
 /**
  * Spring repository for accessing all notification information and requirements of production processes.
@@ -333,7 +334,8 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "join w_po.poCode w_po_code "
 			+ "where w_po_code.id in :poCodeIds "
 			+ "group by used_p.id, using_p.id ")
-	List<Integer[]> findTransactionProcessVertices(Integer[] poCodeIds);	
+	List<Integer[]> findTransactionProcessVertices(Integer[] poCodeIds);
+
 		
 
 	

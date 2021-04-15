@@ -178,6 +178,13 @@ public class ProcessInfoDAO extends DAO {
 		}
 	}
 	
+	private void removeOldProcessParents(Integer processId) {
+		List<ProcessParent> oldProcessParents = getProcessRepository().findProcessParentReferences(processId);
+		for(ProcessParent processParent: oldProcessParents) {
+			getEntityManager().remove(processParent);
+		}
+	}
+	
 //	private void permenentlyRemoveEntity(Class<? extends BaseEntity> entityClass, Integer id) {
 //		Insertable entity = getEntityManager().getReference(entityClass, id);
 //		getEntityManager().remove(entity); 

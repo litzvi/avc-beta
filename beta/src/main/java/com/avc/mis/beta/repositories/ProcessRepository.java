@@ -17,6 +17,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
+import com.avc.mis.beta.entities.processinfo.ProcessParent;
 import com.avc.mis.beta.entities.processinfo.WeightedPo;
 
 import lombok.NonNull;
@@ -193,6 +194,12 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 		+ "where p.id = :processId")
 	List<WeightedPo> findWeightedPoReferences(Integer processId);
 
+	@Query("select process_parent "
+			+ "from PoProcess p "
+				+ "join p.processParents process_parent "
+			+ "where p.id = :processId")
+	List<ProcessParent> findProcessParentReferences(Integer processId);	
+	
 
 //	/**
 //	 * Gets all processes done for given PoCode
