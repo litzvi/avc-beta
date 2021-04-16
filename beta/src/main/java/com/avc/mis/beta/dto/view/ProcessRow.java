@@ -43,13 +43,13 @@ public class ProcessRow extends BasicDTO {
 	private String[] approvals;
 	 
 	private List<ProductionProcessWithItemAmount> usedItems;
-	@JsonIgnore private Optional<AmountWithUnit> usedAmounts;
+	private Optional<AmountWithUnit> usedAmounts;
 	
 	private List<ProductionProcessWithItemAmount> producedItems;
-	@JsonIgnore private Optional<AmountWithUnit> producedAmounts;
+	private Optional<AmountWithUnit> producedAmounts;
 		
 	private List<ProductionProcessWithItemAmount> itemCounts;
-	@JsonIgnore private Optional<AmountWithUnit> countAmounts;
+	private Optional<AmountWithUnit> countAmounts;
 	
 	public ProcessRow(@NonNull Integer id, 
 //			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
