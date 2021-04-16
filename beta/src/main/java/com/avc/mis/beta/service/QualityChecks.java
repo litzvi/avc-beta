@@ -80,7 +80,7 @@ public class QualityChecks {
 	
 	public List<QcReportLine> getQcSummary(ProcessName processName, Integer poCodeId) {
 		
-		List<QcReportLine> lines = getQcRepository().findCashewQCReportLines(processName, poCodeId, QcCompany.AVC_LAB);
+		List<QcReportLine> lines = getQcRepository().findCashewQCReportLines(processName, poCodeId, QcCompany.AVC_LAB, false);
 		
 		
 		int[] processIds = lines.stream().mapToInt(QcReportLine::getId).toArray();

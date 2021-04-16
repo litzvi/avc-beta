@@ -147,9 +147,10 @@ public interface QCRepository extends PoProcessRepository<QualityCheck> {
 		+ "where pt.processName = :processName "
 			+ "and po_code.id = :poId "
 			+ "and qc.checkedBy = :qcCompany "
+			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "group by qc "
 		+ "order by qc.recordedTime desc ")
-	List<QcReportLine> findCashewQCReportLines(ProcessName processName, Integer poId, QcCompany qcCompany);
+	List<QcReportLine> findCashewQCReportLines(ProcessName processName, Integer poId, QcCompany qcCompany, boolean cancelled);
 
 	@Query("select new com.avc.mis.beta.dto.report.ItemQc( "
 			+ "qc.id, "

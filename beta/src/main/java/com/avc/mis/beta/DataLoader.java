@@ -110,9 +110,9 @@ public class DataLoader implements ApplicationRunner {
 		
 		//setup or rearange processes tree (process parent)
 		// TODO ONLY NEEDED FOR NEXT UPDATE
-		if (!settingsWriter.isTableEmpty(PoProcess.class) && settingsWriter.isTableEmpty(ProcessParent.class)) {
-			settingsWriter.refillAllProcessParents();			
-		}
+//		if (!settingsWriter.isTableEmpty(PoProcess.class) && settingsWriter.isTableEmpty(ProcessParent.class)) {
+//			settingsWriter.refillAllProcessParents();			
+//		}
 
 	}
 

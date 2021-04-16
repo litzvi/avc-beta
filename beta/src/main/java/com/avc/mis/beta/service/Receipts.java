@@ -75,13 +75,13 @@ public class Receipts {
 		Stream<ItemAmount> itemAmounts = getReceiptRepository().findSummaryProducedItemAmounts(processIds, poCodeId);
 		reportLine.setReceived(itemAmounts.collect(Collectors.toList()));
 		
-		List<ItemAmount> countAmounts = null;
+		List<ItemAmount> countAmounts = new ArrayList<>();
 		if(reportLine.getReceived() != null) {
 			int[] productItemsIds = reportLine.getReceived().stream().mapToInt(i -> i.getItem().getId()).toArray();
 			processes = getReceiptRepository().findProcessReportLines(ProcessName.STORAGE_RELOCATION, poCodeId, false);
 			processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
-			for(int i=0; i < processIds.length && (countAmounts == null || countAmounts.isEmpty()); i++) {
-				countAmounts = getReceiptRepository().findProductCountItemAmountsByProcessId(processIds[i], productItemsIds);
+			for(int i=0; i < processIds.length; i++) {
+				countAmounts.addAll(getReceiptRepository().findProductCountItemAmountsByProcessId(processIds[i], productItemsIds));
 			}
 			reportLine.setProductCount(countAmounts);						
 		}
