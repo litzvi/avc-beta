@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -98,14 +99,14 @@ public class ProductionProcesses {
 		reportLine.setWaste(itemsMap.get(ItemGroup.WASTE));
 		reportLine.setQc(itemsMap.get(ItemGroup.QC));
 		
-		List<ItemAmount> producedAmounts = null;
+		List<ItemAmount> producedAmounts = new ArrayList<>();
 		if(reportLine.getProductOut() != null) {
 			int[] productItemsIds = reportLine.getProductOut().stream().mapToInt(i -> i.getItem().getId()).toArray();
 //			List<ProcessRow> processRows = getProcessRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, false);
 			processes = getProcessRepository().findProcessReportLines(ProcessName.STORAGE_RELOCATION, poCodeId, false);
 			processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
-			for(int i=0; i < processIds.length && (producedAmounts == null || producedAmounts.isEmpty()); i++) {
-				producedAmounts = getProcessRepository().findProductCountItemAmountsByProcessId(processIds[i], productItemsIds);
+			for(int i=0; i < processIds.length; i++) {
+				producedAmounts.addAll(getProcessRepository().findProductCountItemAmountsByProcessId(processIds[i], productItemsIds));
 			}
 			reportLine.setProductCount(producedAmounts);						
 		}

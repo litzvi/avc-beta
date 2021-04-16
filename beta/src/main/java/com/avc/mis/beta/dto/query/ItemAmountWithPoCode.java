@@ -12,6 +12,7 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -76,7 +77,7 @@ public class ItemAmountWithPoCode {
 	@JsonIgnore
 	public WeightedPo getWeightedPo() {
 		WeightedPo weightedPo = new WeightedPo();
-		GeneralPoCode poCode = new GeneralPoCode();
+		BasePoCode poCode = new BasePoCode();
 		poCode.setId(getPoCode().getId());
 		weightedPo.setPoCode(poCode);
 		return weightedPo;

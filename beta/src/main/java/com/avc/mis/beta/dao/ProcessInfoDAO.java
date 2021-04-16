@@ -119,13 +119,13 @@ public class ProcessInfoDAO extends DAO {
 	}
 		
 	public void setUsedProcesses(StorageRelocation process) {
-		removeOldWeightedPos(process.getId());
+		removeOldProcessParents(process.getId());
 		List<UsedProcess> usedProcesses = getProcessRepository().findRelocationUsedProcess(process.getId());
 		addUsedProcesses(usedProcesses, process);
 	}
 	
 	public void setUsedProcesses(TransactionProcess<?> process) {
-		removeOldWeightedPos(process.getId());
+		removeOldProcessParents(process.getId());
 		List<UsedProcess> usedProcesses = getProcessRepository().findTransactionUsedProcess(process.getId());
 		addUsedProcesses(usedProcesses, process);
 	}	
