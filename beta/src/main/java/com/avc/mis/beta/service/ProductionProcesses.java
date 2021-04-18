@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,8 +23,11 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.repositories.ProcessRepository;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
+import com.avc.mis.beta.serviceinterface.ProductionProcessService;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,46 +36,37 @@ import lombok.Getter;
  * @author zvi
  *
  */
-@Service
+@Service @Primary
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
-public class ProductionProcesses {
+public class ProductionProcesses implements ProductionProcessService {
 
 	@Autowired private ProcessInfoDAO dao;
 
 	@Autowired private ProductionProcessRepository processRepository;
 	
 	@Autowired private ProcessInfoReader processInfoReader;
-	
-	/**
-	 * @param processName the process name. e.g. CASHEW_CLEANING
-	 * @return List of ProcessRow for given type of process
-	 */
+		
 	public List<ProcessRow> getProductionProcessesByType(ProcessName processName) {
-		return getProductionProcessesByTypeAndPoCode(processName, null);
+//		return getProductionProcessesByTypeAndPoCode(processName, null);
+		return dao.getProcessesByTypeAndPoCode(processName, null);
 	}
 	
-	/**
-	 * @param processName the process name. e.g. CASHEW_CLEANING
-	 * @param poCodeId id of po code, to fetch processes that process the given po code.
-	 * If poCodeId argument is null, so will get a list of all process of the given type.
-	 * In case of a mixed process will only show the given po code in the process row.
-	 * @return List of ProcessRow for all processes that match the given arguments
-	 */
 	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
-		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId, null, true);
-		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
-		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getProcessRepository()
-				.findAllUsedItemsByProcessIds(processIds)
-				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-		Map<Integer, List<ProductionProcessWithItemAmount>> producedMap = getProcessRepository()
-				.findAllProducedItemsByProcessIds(processIds)
-				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-		for(ProcessRow row: processRows) {
-			row.setUsedItems(usedMap.get(row.getId()));
-			row.setProducedItems(producedMap.get(row.getId()));
-		}	
-		return processRows;
+		return dao.getProcessesByTypeAndPoCode(processName, poCodeId);
+//		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId, null, true);
+//		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
+//		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getProcessRepository()
+//				.findAllUsedItemsByProcessIds(processIds)
+//				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+//		Map<Integer, List<ProductionProcessWithItemAmount>> producedMap = getProcessRepository()
+//				.findAllProducedItemsByProcessIds(processIds)
+//				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+//		for(ProcessRow row: processRows) {
+//			row.setUsedItems(usedMap.get(row.getId()));
+//			row.setProducedItems(producedMap.get(row.getId()));
+//		}	
+//		return processRows;
 	}
 	
 	public ProductionReportLine getProductionSummary(ProcessName processName, Integer poCodeId) {
@@ -132,7 +127,7 @@ public class ProductionProcesses {
 				.orElseThrow(
 						()->new IllegalArgumentException("No production process with given process id")));
 		processDTO.setPoProcessInfo(getProcessRepository()
-				.findPoProcessInfoByProcessId(processId).orElse(null));
+				.findPoProcessInfoByProcessId(processId, ProductionProcess.class).orElse(null));
 		
 		getProcessInfoReader().setTransactionProcessCollections(processDTO);
 		
@@ -160,8 +155,6 @@ public class ProductionProcesses {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editProductionProcess(ProductionProcess process) {
-//		if(true)
-//			throw new NullPointerException();
 		//check used items amounts don't exceed the storage amounts
 		dao.editTransactionProcessEntity(process);
 	}

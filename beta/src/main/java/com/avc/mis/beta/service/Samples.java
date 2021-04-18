@@ -47,7 +47,7 @@ public class Samples {
 				.orElseThrow(
 						()->new IllegalArgumentException("No receipt sample with given process id")));
 		sampleReceiptDTO.setPoProcessInfo(getSampleRepository()
-				.findPoProcessInfoByProcessId(processId)
+				.findPoProcessInfoByProcessId(processId, SampleReceipt.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No po code for given process id")));
 

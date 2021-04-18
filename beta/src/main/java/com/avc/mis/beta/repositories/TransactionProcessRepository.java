@@ -28,37 +28,14 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 						+ "join sf.processItem pi "
 							+ "join pi.item item "
 								+ "join item.unit item_unit "
-//							+ "join pi.process p_used_item "
-//								+ "join p_used_item.poCode po_code_used_item "
-//						+ "join sf.group sf_group "
 						+ "join UOM uom "
 							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
 						+ "left join sf.warehouseLocation wh "
 		+ "where "
 			+ "p.id in :processIds "
-//			+ "and po_code_used_item.id = po_code.id "
 		+ "group by p.id, item "
 		+ "order by grp.ordinal ")
 	Stream<ProductionProcessWithItemAmount> findAllUsedItemsByProcessIds(int[] processIds);
-
-	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
-			+ "p.id, item.id, item.value, item.measureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((sf.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor), "
-			+ "function('GROUP_CONCAT', wh.value)) "
-		+ "from TransactionProcess p "
-			+ "join p.processItems pi "
-				+ "join pi.item item "
-					+ "join item.unit item_unit "
-				+ "join pi.storageForms sf "
-						+ "join UOM uom "
-							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
-					+ "left join sf.warehouseLocation wh "
-		+ "where "
-			+ "p.id in :processIds "
-//			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
-		+ "group by p, item "
-		+ "order by pi.ordinal ")
-	Stream<ProductionProcessWithItemAmount> findAllProducedItemsByProcessIds(int[] processIds);
 	
 	@Query("select new com.avc.mis.beta.dto.report.ItemAmount("
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "

@@ -64,11 +64,11 @@ public class ProcessRow extends BasicDTO {
 //		if(poCodeId != null)
 //			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		if(poCodeIds != null)
-			this.poCodeIds = Stream.of(poCodeIds.split(",")).filter(i -> i != null).mapToInt(j -> Integer.valueOf(j)).distinct().toArray();
+			this.poCodeIds = Stream.of(poCodeIds.split(",")).mapToInt(j -> Integer.valueOf(j)).toArray();
 		if(poCodes != null)
-			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
+			this.poCodes = Stream.of(poCodes.split(",")).toArray(String[]::new);
 		if(suppliers != null)
-			this.suppliers = Stream.of(suppliers.split(",")).distinct().toArray(String[]::new);
+			this.suppliers = Stream.of(suppliers.split(",")).toArray(String[]::new);
 //		this.supplierName = supplierName;
 		this.recordedTime = recordedTime;
 		this.duration = duration;
@@ -77,7 +77,7 @@ public class ProcessRow extends BasicDTO {
 			this.approvals = null;
 		}
 		else {
-			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
+			this.approvals = Stream.of(approvals.split(",")).toArray(String[]::new);
 		}
 	}
 	
@@ -178,11 +178,11 @@ public class ProcessRow extends BasicDTO {
 	
 	public Ratio getUniformTotals() {
 		Ratio ratio = new Ratio();
-		if(getUsedAmounts().isPresent())
+		if(getUsedAmounts() != null && getUsedAmounts().isPresent())
 			ratio.setUsed(getUsedAmounts().get().convert(ProcessRow.totalMeasureUnit).getAmount());
-		if(getProducedAmounts().isPresent())
+		if(getProducedAmounts() != null && getProducedAmounts().isPresent())
 			ratio.setProduced(getProducedAmounts().get().convert(ProcessRow.totalMeasureUnit).getAmount());
-		if(getCountAmounts().isPresent())
+		if(getCountAmounts() != null && getCountAmounts().isPresent())
 			ratio.setCount(getCountAmounts().get().convert(ProcessRow.totalMeasureUnit).getAmount());
 		return ratio;
 	}

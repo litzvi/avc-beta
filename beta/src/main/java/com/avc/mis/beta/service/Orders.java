@@ -242,7 +242,7 @@ public class Orders {
 				.orElseThrow(
 						()->new IllegalArgumentException("No PO with given process id")));
 		poDTO.setPoProcessInfo(getPoRepository()
-				.findPoProcessInfoByProcessId(processId)
+				.findPoProcessInfoByProcessId(processId, PO.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No po code for given process id")));
 		poDTO.setOrderProcessInfo(getPoRepository().findPoInfo(poDTO.getId()));

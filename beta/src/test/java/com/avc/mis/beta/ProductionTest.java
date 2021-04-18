@@ -29,6 +29,7 @@ import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.ProductionProcesses;
 import com.avc.mis.beta.service.WarehouseManagement;
+import com.avc.mis.beta.serviceinterface.ProductionProcessService;
 
 /**
  * @author Zvi
@@ -42,7 +43,7 @@ public class ProductionTest {
 	
 	@Autowired TestService service;
 	@Autowired ProcessInfoWriter infoWriter;
-	@Autowired ProductionProcesses productionService;
+	@Autowired ProductionProcessService productionService;
 	@Autowired WarehouseManagement warehouseManagement;
 	
 	@Test

@@ -152,7 +152,7 @@ public class QualityChecks {
 				.orElseThrow(
 						()->new IllegalArgumentException("No quality check with given process id")));
 		qualityCheckDTO.setPoProcessInfo(getQcRepository()
-				.findPoProcessInfoByProcessId(processId)
+				.findPoProcessInfoByProcessId(processId, QualityCheck.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No po code with given process id")));
 		qualityCheckDTO.setQualityCheckInfo(getQcRepository().findQualityCheckInfo(processId));

@@ -69,7 +69,7 @@ import lombok.Getter;
  */
 @Getter(value = AccessLevel.PRIVATE)
 @Repository
-public class ProcessInfoDAO extends DAO {
+public class ProcessInfoDAO extends ProcessInfoReaderDAO {
 	
 	@Autowired private ProcessInfoRepository processRepository;
 	@Autowired private InventoryRepository inventoryRepository;

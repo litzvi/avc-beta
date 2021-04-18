@@ -43,7 +43,7 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 			BigDecimal amount, String warehouses) {
 		this(id, itemId, itemValue, defaultMeasureUnit, unitAmount, unitMeasureUnit, clazz, amount);
 		if(warehouses != null) {
-			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
+			this.warehouses = Stream.of(warehouses.split(",")).toArray(String[]::new);
 		}
 		else {
 			this.warehouses = null;
@@ -70,27 +70,9 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);	
 			this.weight = null;
 		}
-//		{
-//			throw new IllegalStateException("The class can only apply to weight items");
-//		}
 				
 	}
-	
-	public ProductionProcessWithItemAmount(@NonNull Integer id, 
-			BasicValueEntity<Item> item, AmountWithUnit amount, AmountWithUnit weight, 
-			String warehouses) {
-		super(id);
-		this.item = item;
-		this.amount = amount;
-		this.weight = weight;
-		if(warehouses != null) {
-			this.warehouses = Stream.of(warehouses.split(",")).distinct().toArray(String[]::new);
-		}
-		else {
-			this.warehouses = null;
-		}
-	}
-	
+		
 	public List<AmountWithUnit> getAmountList() {
 		List<AmountWithUnit> amountList = new ArrayList<>();
 		if(this.amount != null) {

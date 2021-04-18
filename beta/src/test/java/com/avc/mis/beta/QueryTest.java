@@ -72,6 +72,7 @@ import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
+import com.avc.mis.beta.serviceinterface.ProductionProcessService;
 
 /**
  * @author Zvi
@@ -94,7 +95,7 @@ public class QueryTest {
 	@Autowired InventoryReports inventoryReports;
 	@Autowired QualityChecks qualityChecks;
 	@Autowired WarehouseManagement warehouseManagement;
-	@Autowired ProductionProcesses productionProcesses;
+	@Autowired ProductionProcessService productionProcesses;
 	@Autowired Loading loading;
 	@Autowired ContainerArrivals containerArrivals;
 	
@@ -308,7 +309,14 @@ public class QueryTest {
 		cashewStandards.forEach(i -> System.out.println(i));
 		
 		//get report of cleaning and roasting processes
-		List<ProcessRow> processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_CLEANING);
+		List<ProcessRow> processReport;
+		try {
+			processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_CLEANING);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			throw e2;
+		}
 		processReport.forEach(i -> System.out.println(i));
 		processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_ROASTING);
 		processReport.forEach(i -> System.out.println(i));

@@ -28,9 +28,10 @@ public interface PoProcessRepository<T extends PoProcess> extends ProcessReposit
 			+ "join p.poCode po_code "
 				+ "join po_code.contractType t "
 				+ "join po_code.supplier s "
-		+ "where p.id = :processId "
+		+ "where type(p) = :clazz "
+			+ "and p.id = :processId "
 		+ "group by p ")
-	Optional<PoProcessInfo> findPoProcessInfoByProcessId(int processId);
+	Optional<PoProcessInfo> findPoProcessInfoByProcessId(int processId, Class<? extends T> clazz);
 
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("

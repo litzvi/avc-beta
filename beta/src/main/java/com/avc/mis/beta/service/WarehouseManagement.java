@@ -195,8 +195,8 @@ public class WarehouseManagement {
 				.findGeneralProcessInfoByProcessId(processId, InventoryUse.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No inventory use with given process id")));
-		inventoryUseDTO.setPoProcessInfo(getRelocationRepository()
-				.findPoProcessInfoByProcessId(processId).orElse(null));
+		inventoryUseDTO.setPoProcessInfo(getInventoryUseRepository()
+				.findPoProcessInfoByProcessId(processId, InventoryUse.class).orElse(null));
 		
 		getProcessInfoReader().setTransactionProcessCollections(inventoryUseDTO);
 		
@@ -248,7 +248,7 @@ public class WarehouseManagement {
 				.orElseThrow(
 						()->new IllegalArgumentException("No storage transfer with given process id")));
 		transferDTO.setPoProcessInfo(getTransferRepository()
-				.findPoProcessInfoByProcessId(processId)
+				.findPoProcessInfoByProcessId(processId, StorageTransfer.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No storage transfer with given process id")));
 		
@@ -285,7 +285,7 @@ public class WarehouseManagement {
 				.orElseThrow(
 						()->new IllegalArgumentException("No storage relocation with given process id")));
 		relocationDTO.setPoProcessInfo(getRelocationRepository()
-				.findPoProcessInfoByProcessId(processId)
+				.findPoProcessInfoByProcessId(processId, StorageRelocation.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No po code for given process id")));
 

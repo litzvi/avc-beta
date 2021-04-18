@@ -67,7 +67,7 @@ public class LoadingRow extends BasicDTO {
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType) {
 		super(id);
 		if(poCodeIds != null)
-			this.poCodeIds = Stream.of(poCodeIds.split(",")).filter(i -> i != null).mapToInt(j -> Integer.valueOf(j)).toArray();
+			this.poCodeIds = Stream.of(poCodeIds.split(",")).mapToInt(j -> Integer.valueOf(j)).toArray();
 		if(poCodes != null)
 			this.poCodes = Stream.of(poCodes.split(",")).toArray(String[]::new);
 		if(suppliers != null)

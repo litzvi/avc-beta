@@ -276,7 +276,7 @@ public class Receipts {
 				.orElseThrow(
 						()->new IllegalArgumentException("No order receipt with given process id")));
 		receiptDTO.setPoProcessInfo(getReceiptRepository()
-				.findPoProcessInfoByProcessId(processId)
+				.findPoProcessInfoByProcessId(processId, Receipt.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No po code for given process id")));
 		
