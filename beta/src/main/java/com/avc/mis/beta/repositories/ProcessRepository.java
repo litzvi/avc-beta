@@ -94,7 +94,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
-	List<ProcessRow> findProcessByType(ProcessName processName, Integer poCodeId, ProductionFunctionality functionality, boolean cancelled);
+	List<ProcessRow> findProcessByType(@NonNull ProcessName processName, Integer poCodeId, ProductionFunctionality functionality, boolean cancelled);
 		
 	@Query("select new com.avc.mis.beta.dto.query.UsedItemWithGroup( "
 			+ "g.id, g.version, g.ordinal, g.groupName, g.tableView, "

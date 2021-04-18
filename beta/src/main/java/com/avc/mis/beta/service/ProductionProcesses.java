@@ -48,12 +48,11 @@ public class ProductionProcesses implements ProductionProcessService {
 	@Autowired private ProcessInfoReader processInfoReader;
 		
 	public List<ProcessRow> getProductionProcessesByType(ProcessName processName) {
-//		return getProductionProcessesByTypeAndPoCode(processName, null);
-		return dao.getProcessesByTypeAndPoCode(processName, null);
+		return getProductionProcessesByTypeAndPoCode(processName, null);
 	}
 	
 	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
-		return dao.getProcessesByTypeAndPoCode(processName, poCodeId);
+		return dao.getProcessesByTypeAndPoCode(ProductionProcess.class, processName, poCodeId, null, true);
 //		List<ProcessRow> processRows = getProcessRepository().findProcessByType(processName, poCodeId, null, true);
 //		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
 //		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getProcessRepository()

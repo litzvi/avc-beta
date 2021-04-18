@@ -76,25 +76,7 @@ public class WarehouseManagement {
 	}
 	
 	public List<ProcessRow> getStorageTransfersByPoCode(Integer poCodeId) {
-		List<ProcessRow> transferRows = getTransferRepository().findProcessByType(ProcessName.STORAGE_TRANSFER, poCodeId, null,  true);
-		int[] processIds = transferRows.stream().mapToInt(ProcessRow::getId).toArray();
-		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getTransferRepository()
-				.findAllUsedItemsByProcessIds(processIds)
-				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-		Map<Integer, List<ProductionProcessWithItemAmount>> producedMap = getTransferRepository()
-				.findAllProducedItemsByProcessIds(processIds)
-				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = getTransferRepository()
-				.findAllItemsCountsByProcessIds(processIds)
-				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-		for(ProcessRow row: transferRows) {
-			row.setUsedItems(usedMap.get(row.getId()));
-			row.setProducedItems(producedMap.get(row.getId()));
-			row.setItemCounts(countMap.get(row.getId()));
-		}		
-		
-		return transferRows;
-
+		return dao.getProcessesByTypeAndPoCode(StorageTransfer.class, ProcessName.STORAGE_TRANSFER, poCodeId, null, true);
 	}
 
 	public List<ProcessRow> getStorageRelocations() {
@@ -106,19 +88,20 @@ public class WarehouseManagement {
 	}
 	
 	public List<ProcessRow> getStorageRelocationsByPoCode(Integer poCodeId, ProductionFunctionality productionFunctionality) {
-		List<ProcessRow> relocationRows = getRelocationRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, productionFunctionality, true);
-		int[] processIds = relocationRows.stream().mapToInt(ProcessRow::getId).toArray();
-		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getRelocationRepository()
-				.findAllMovedItemsByProcessIds(processIds)
-				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = getRelocationRepository()
-				.findAllItemsCountsByProcessIds(processIds)
-				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-		for(ProcessRow row: relocationRows) {
-			row.setUsedItems(usedMap.get(row.getId()));
-			row.setItemCounts(countMap.get(row.getId()));
-		}		
-		return relocationRows;
+		return dao.getProcessesByTypeAndPoCode(StorageRelocation.class, ProcessName.STORAGE_RELOCATION, poCodeId, productionFunctionality, true);
+//		List<ProcessRow> relocationRows = getRelocationRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, productionFunctionality, true);
+//		int[] processIds = relocationRows.stream().mapToInt(ProcessRow::getId).toArray();
+//		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getRelocationRepository()
+//				.findAllMovedItemsByProcessIds(processIds)
+//				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+//		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = getRelocationRepository()
+//				.findAllItemsCountsByProcessIds(processIds)
+//				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+//		for(ProcessRow row: relocationRows) {
+//			row.setUsedItems(usedMap.get(row.getId()));
+//			row.setItemCounts(countMap.get(row.getId()));
+//		}		
+//		return relocationRows;
 	}
 	
 	public List<ProcessRow> getInventoryUses() {
@@ -126,15 +109,16 @@ public class WarehouseManagement {
 	}
 	
 	public List<ProcessRow> getInventoryUses(Integer poCodeId) {
-		List<ProcessRow> inventoryUseRows = getInventoryUseRepository().findProcessByType(ProcessName.GENERAL_USE, poCodeId, null, true);
-		int[] processIds = inventoryUseRows.stream().mapToInt(ProcessRow::getId).toArray();
-		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getInventoryUseRepository()
-				.findAllUsedItemsByProcessIds(processIds)
-				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-		for(ProcessRow row: inventoryUseRows) {
-			row.setUsedItems(usedMap.get(row.getId()));
-		}		
-		return inventoryUseRows;
+		return dao.getProcessesByTypeAndPoCode(InventoryUse.class, ProcessName.GENERAL_USE, poCodeId, null, true);
+//		List<ProcessRow> inventoryUseRows = getInventoryUseRepository().findProcessByType(ProcessName.GENERAL_USE, poCodeId, null, true);
+//		int[] processIds = inventoryUseRows.stream().mapToInt(ProcessRow::getId).toArray();
+//		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getInventoryUseRepository()
+//				.findAllUsedItemsByProcessIds(processIds)
+//				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+//		for(ProcessRow row: inventoryUseRows) {
+//			row.setUsedItems(usedMap.get(row.getId()));
+//		}		
+//		return inventoryUseRows;
 	}
 
 	/**
