@@ -18,8 +18,10 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 
@@ -31,6 +33,9 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class ProcessRow extends BasicDTO {
+	
+	@Getter(value = AccessLevel.NONE)
+	private final static MeasureUnit totalMeasureUnit = MeasureUnit.KG;
 
 //	private PoCodeBasic poCode;//should be removed
 	private int[] poCodeIds;
@@ -43,13 +48,13 @@ public class ProcessRow extends BasicDTO {
 	private String[] approvals;
 	 
 	private List<ProductionProcessWithItemAmount> usedItems;
-	private Optional<AmountWithUnit> usedAmounts;
+	@JsonIgnore private Optional<AmountWithUnit> usedAmounts;
 	
 	private List<ProductionProcessWithItemAmount> producedItems;
-	private Optional<AmountWithUnit> producedAmounts;
+	@JsonIgnore private Optional<AmountWithUnit> producedAmounts;
 		
 	private List<ProductionProcessWithItemAmount> itemCounts;
-	private Optional<AmountWithUnit> countAmounts;
+	@JsonIgnore private Optional<AmountWithUnit> countAmounts;
 	
 	public ProcessRow(@NonNull Integer id, 
 //			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
@@ -171,5 +176,22 @@ public class ProcessRow extends BasicDTO {
 		}
 	}
 	
+	public Ratio getUniformTotals() {
+		Ratio ratio = new Ratio();
+		if(getUsedAmounts().isPresent())
+			ratio.setUsed(getUsedAmounts().get().convert(ProcessRow.totalMeasureUnit).getAmount());
+		if(getProducedAmounts().isPresent())
+			ratio.setProduced(getProducedAmounts().get().convert(ProcessRow.totalMeasureUnit).getAmount());
+		if(getCountAmounts().isPresent())
+			ratio.setCount(getCountAmounts().get().convert(ProcessRow.totalMeasureUnit).getAmount());
+		return ratio;
+	}
+	
+	@Data
+	private class Ratio {
+		BigDecimal used;
+		BigDecimal produced;
+		BigDecimal count;
+	}
 	
 }
