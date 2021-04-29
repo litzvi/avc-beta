@@ -28,6 +28,7 @@ public class SettingsWriter {
 
 	@Autowired private DeletableDAO dao;
 	
+	@Autowired private ProcessReader processReader;
 	@Autowired ProcessInfoReader processInfoReader;
 	@Autowired ProcessInfoDAO processInfoDAO;
 	
@@ -58,7 +59,7 @@ public class SettingsWriter {
 
 	
 	public void refillAllProcessParents() {
-		List<ProcessBasic<PoProcess>> processes = processInfoReader.getAllProcesses();
+		List<ProcessBasic<PoProcess>> processes = processReader.getAllProcesses();
 		for(ProcessBasic<PoProcess> processBasic: processes) {
 			PoProcess process = processBasic.getProcess();
 			if(process instanceof TransactionProcess) {

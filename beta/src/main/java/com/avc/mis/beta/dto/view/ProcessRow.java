@@ -184,6 +184,10 @@ public class ProcessRow extends BasicDTO {
 			ratio.setProduced(getProducedAmounts().get().convert(ProcessRow.totalMeasureUnit).getAmount());
 		if(getCountAmounts() != null && getCountAmounts().isPresent())
 			ratio.setCount(getCountAmounts().get().convert(ProcessRow.totalMeasureUnit).getAmount());
+		if(ratio.getProduced() != null && ratio.getUsed() != null)
+			ratio.setLoss(ratio.getProduced().subtract(ratio.getUsed()));
+		else if(ratio.getProduced() != null && ratio.getCount() != null)
+			ratio.setLoss(ratio.getProduced().subtract(ratio.getCount()));
 		return ratio;
 	}
 	
@@ -192,6 +196,7 @@ public class ProcessRow extends BasicDTO {
 		BigDecimal used;
 		BigDecimal produced;
 		BigDecimal count;
+		BigDecimal loss;
 	}
 	
 }

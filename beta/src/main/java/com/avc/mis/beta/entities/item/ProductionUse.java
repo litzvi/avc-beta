@@ -16,4 +16,5 @@ public enum ProductionUse {
 	INGREDIENTS,
 	PACKING_SUPPLYES,
 	WASTE,
+	GENERAL_INVENTORY
 }

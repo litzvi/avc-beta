@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
-import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.dto.view.RelocationWithItemAmount;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
@@ -21,10 +20,6 @@ import com.avc.mis.beta.entities.process.inventory.StorageBase;
  */
 public interface RelocationRepository extends PoProcessRepository<StorageRelocation>{
 
-	/**
-	 * @param processId
-	 * @return
-	 */
 	@Query("select new com.avc.mis.beta.dto.query.ProcessItemTransactionDifference("
 			+ "pi.id, "
 			+ "SUM(used_sf.unitAmount * storageMove.numberUnits * uom_used.multiplicand / uom_used.divisor), "

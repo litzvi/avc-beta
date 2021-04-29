@@ -100,7 +100,7 @@ public class Users {
 			person.setName(user.getUsername());
 			user.setPerson(person);
 		}		
-		dao.addEntity(user.getPerson());
+		dao.addEntity(person);
 		openUserForPerson(user);
 	}
 	

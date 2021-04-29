@@ -25,13 +25,6 @@ import com.avc.mis.beta.entities.item.ProductionUse;
  *
  */
 public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
-
-//	@Query("select new com.avc.mis.beta.dto.values.ItemDTO(i.id, i.value, i.defaultMeasureUnit, i.itemGroup, i.productionUse) "
-//			+ "from Item i "
-//			+ "where i.itemGroup = :itemGroup "
-//				+ "and i.active = true "
-//			+ "order by i.value ")
-//	List<ItemDTO> findItemsByGroupBasic(ItemGroup itemGroup);
 	
 	@Query("select new com.avc.mis.beta.dto.values.ItemWithUnitDTO("
 				+ "i.id, i.value, i.measureUnit, i.itemGroup, i.productionUse, "
@@ -69,20 +62,5 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 		+ "where s.id in :storageIds "
 		+ "group by i ")
 	List<ItemWithUnitDTO>  findStoragesItems(Set<Integer> storageIds);
-
-//	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
-//			+ "from Item i "
-//			+ "where i.productionUse = :productionUse "
-//				+ "and i.active = true "
-//			+ "order by i.value ")
-//	List<BasicValueEntity<Item>> findItemsByProductionUse(ProductionUse productionUse);
-//
-//	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
-//			+ "from Item i "
-//			+ "where i.itemGroup = :itemGroup "
-//				+ "and i.active = true "
-//			+ "order by i.value ")
-//	List<BasicValueEntity<Item>> findItemsByGroup(ItemGroup itemGroup);
-	
 	
 }

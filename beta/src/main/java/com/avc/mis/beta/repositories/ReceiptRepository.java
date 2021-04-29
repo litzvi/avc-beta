@@ -86,38 +86,4 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 			+ "order by r.recordedTime desc ")
 	List<ReceiptItemRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses, Integer poCodeId);
 
-
-//	@Query("select r  "
-//		+ "from Receipt r "
-////			+ "join r.poCode po_code "
-////			+ "join po_code.supplier s "
-////			+ "left join r.createdBy p_user "
-////			+ "left join r.productionLine p_line "
-////			+ "left join r.status p_status "
-//		+ "where r.id = :id ")
-//	Optional<Receipt> findReceiptByProcessId(int id);
-	
-
-//	@Query("select new com.avc.mis.beta.dto.process.ReceiptItemDTO("
-//			+ "i.id, i.version, item.id, item.value, "
-//			+ "itemPo.id, ct.code, s.name, "
-//			+ "i.description, i.remarks, oi.id, oi.version) "
-//		+ "from ReceiptItem i "
-//			+ "left join i.orderItem oi "
-//			+ "join i.item item "
-//			+ "join i.process p "
-//			+ "left join i.itemPo itemPo "
-//				+ "join itemPo.contractType ct "
-//				+ "join itemPo.supplier s "
-////			+ "left join i.storageLocation storageLocation "
-//		+ "where p.id = :processId ")
-//	Set<ReceiptItemDTO> findReceiptItemsById(int processId);
-
-	
-	/**
-	 * @param processId
-	 * @return
-	 */
-//	Optional<ReceiptDTO> findReceiptByProcessId(int processId);
-
 }

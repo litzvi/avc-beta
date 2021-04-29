@@ -75,10 +75,10 @@ public class ItemAmountWithPoCode {
 	}
 	
 	@JsonIgnore
-	public WeightedPo getWeightedPo() {
+	public static WeightedPo getWeightedPo(Integer poCodeId) {
 		WeightedPo weightedPo = new WeightedPo();
 		BasePoCode poCode = new BasePoCode();
-		poCode.setId(getPoCode().getId());
+		poCode.setId(poCodeId);
 		weightedPo.setPoCode(poCode);
 		return weightedPo;
 	}

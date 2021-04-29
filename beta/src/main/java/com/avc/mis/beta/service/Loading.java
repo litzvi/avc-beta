@@ -46,7 +46,9 @@ public class Loading {
 	
 	@Autowired private ContainerLoadingRepository containerLoadingRepository;
 	
+	@Autowired private ProcessReader processReader;
 	@Autowired private ProcessInfoReader processInfoReader;
+	@Autowired private ProcessSummaryReader processSummaryReader;
 
 	@Deprecated
 	@Autowired private DeletableDAO deletableDAO;
@@ -75,10 +77,9 @@ public class Loading {
 	
 	public List<LoadingReportLine> getLoadingSummary(Integer poCodeId) {
 		
-		
-		List<ItemAmountWithLoadingReportLine> lines = getContainerLoadingRepository().findLoadingsItemsAmounts(poCodeId, false);
-		
-		return CollectionItemWithGroup.getFilledGroups(lines);
+		return processSummaryReader.getLoadingSummary(poCodeId);
+//		List<ItemAmountWithLoadingReportLine> lines = getContainerLoadingRepository().findLoadingsItemsAmounts(poCodeId, false);		
+//		return CollectionItemWithGroup.getFilledGroups(lines);
 	}
 	
 
@@ -125,7 +126,7 @@ public class Loading {
 						()->new IllegalArgumentException("No container loading with given process id")));
 		loadingDTO.setContainerLoadingInfo(getContainerLoadingRepository().findContainerLoadingInfo(processId));
 		
-		getProcessInfoReader().setTransactionProcessCollections(loadingDTO);
+		getProcessReader().setTransactionProcessCollections(loadingDTO);
 		
 		loadingDTO.setLoadedItems(getContainerLoadingRepository().findLoadedItems(processId));
 

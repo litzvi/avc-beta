@@ -57,11 +57,11 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 			BigDecimal amount) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		if(clazz == BulkItem.class) {
+		if(clazz == BulkItem.class && MeasureUnit.WEIGHT_UNITS.contains(defaultMeasureUnit)) {
 			this.amount = null;
 			this.weight = new AmountWithUnit(amount, defaultMeasureUnit);
 		}
-		else if(clazz == PackedItem.class){
+		else if(clazz == PackedItem.class && MeasureUnit.WEIGHT_UNITS.contains(unitMeasureUnit)){
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			this.weight = new AmountWithUnit(amount.multiply(unitAmount), unitMeasureUnit);
 		}

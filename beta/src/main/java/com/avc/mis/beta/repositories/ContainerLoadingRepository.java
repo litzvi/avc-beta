@@ -13,7 +13,6 @@ import com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow;
 import com.avc.mis.beta.dto.doc.ExportInfo;
 import com.avc.mis.beta.dto.embedable.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
-import com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 
@@ -23,46 +22,6 @@ import com.avc.mis.beta.entities.process.ContainerLoading;
  */
 public interface ContainerLoadingRepository  extends TransactionProcessRepository<ContainerLoading> {
 	
-	/**
-	 * Gets loading summary for final report by 'PO code' (also if product is from a combination of other POs besides the given one). 
-	 * @param poCodeId id of 'PO code' for whom to get the loading data summary.
-	 * @param cancelled, if to include cancelled loadings in summary.
-	 * @return List of ItemAmountWithLoadingReportLine which is pair of LoadingReportLine and ItemAmount for one item.
-	 */
-	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine("
-			+ "p.id, sc.id, sc.code, port.code, port.value, cont_arrival.containerDetails, p.recordedTime, "
-			+ "lc.processStatus, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
-			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
-			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((ui.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor), "
-			+ "coalesce(w_po_used_item.weight, 1)) "
-		+ "from ContainerLoading p "
-			+ "join p.shipmentCode sc "
-				+ "join sc.portOfDischarge port "
-			+ "join p.arrival cont_arrival "
-			+ "join p.usedItemGroups grp "
-				+ "join grp.usedItems ui "
-					+ "join ui.storage sf "
-						+ "join sf.processItem pi "
-							+ "join pi.item item "
-								+ "join item.unit item_unit "
-							+ "join pi.process p_used_item "
-								+ "left join p_used_item.poCode po_code_used_item "
-								+ "left join p_used_item.weightedPos w_po_used_item "
-									+ "left join w_po_used_item.poCode w_po_code_used_item "
-								+ "join PoCode po_code "
-									+ "on (po_code = po_code_used_item or po_code = w_po_code_used_item) "
-						+ "join UOM uom "
-							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
-			+ "join p.lifeCycle lc "
-			+ "left join p.approvals approval "
-				+ "left join approval.user u "
-		+ "where "
-			+ "po_code.id = :poCodeId "
-			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
-		+ "group by p, item, w_po_code_used_item ")
-	List<ItemAmountWithLoadingReportLine> findLoadingsItemsAmounts(Integer poCodeId, boolean cancelled);
-
 	/**
 	 * Gets the access loading information (over the general process information assumed to be fetched).
 	 * @param processId id of loading process info to be fetched.
@@ -129,40 +88,12 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "join p.lifeCycle lc "
 			+ "left join p.approvals approval "
 				+ "left join approval.user u "
-// 			+ "join p.usedItemGroups grp "
-//				+ "join grp.usedItems ui "
-//					+ "join ui.storage sf "
-//						+ "join sf.processItem pi "
-//							+ "join pi.process p_used_item "
-//								+ "left join p_used_item.poCode po_code_used_item "
-//								+ "left join p_used_item.weightedPos w_po "
-//									+ "left join w_po.poCode w_po_code "
-//								+ "join BasePoCode po_code "
-//									+ "on (po_code = po_code_used_item or po_code = w_po_code) "
-//									+ "join po_code.contractType t "
-//									+ "join po_code.supplier s "
 		+ "where "
 			+ "(po_code.id = :poCodeId or :poCodeId is null) "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
 	List<LoadingRow> findContainerLoadings(Integer poCodeId, boolean cancelled);
-	
-
-	
-//	@Query("select new com.avc.mis.beta.dto.view.LoadingRow( "
-//			+ "p.id, shipment_code.id, shipment_code.code, pod.code, pod.value, "
-//			+ "p.recordedTime, p.duration, lc.processStatus, ship.eta, "
-//			+ "cont.containerNumber, cont.sealNumber, cont.containerType) "
-//		+ "from ContainerLoading p "
-//			+ "join p.shipmentCode shipment_code "
-//				+ "join shipment_code.portOfDischarge pod "
-//			+ "join p.containerDetails cont "
-//			+ "join p.shipingDetails ship "
-//			+ "join p.lifeCycle lc "
-//		+ "where "
-//			+ "p.id in :processIds ")
-//	List<LoadingRow> findContainerLoadingsByProcessIds(int[] processIds);
 
 	@Query("select new com.avc.mis.beta.dto.doc.ExportInfo( "
 			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, p.recordedTime) "
@@ -230,9 +161,4 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "group by item.id, sf.unitAmount, pi.measureUnit ")
 	List<ContainerPoItemStorageRow> findLoadedStorages(int processId);
 
-
-
-
-
-	
 }

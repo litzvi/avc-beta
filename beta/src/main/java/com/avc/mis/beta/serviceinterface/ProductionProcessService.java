@@ -35,15 +35,6 @@ public interface ProductionProcessService {
 	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId);
 	
 	/**
-	 * Summary of Production for a given PO Code and ProcessName,
-	 * Used for Final Report
-	 * @param processName the process name. e.g. CASHEW_CLEANING
-	 * @param poCodeId poCodeId id of PO Code, to fetch processes that process the given PO Code.
-	 * @return ProductionReportLine containing summary of all productions for the given arguments.
-	 */
-	public ProductionReportLine getProductionSummary(ProcessName processName, Integer poCodeId);
-	
-	/**
 	 * Add/Insert/Persist a new ProductionProcess to the Persistence context.
 	 * @param process the new ProductionProcess entity
 	 * @param processName the name of the process type to be added. (CASHEW_CLEANING\CASHEW_ROASTING\PACKING)

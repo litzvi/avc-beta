@@ -14,8 +14,6 @@ import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.UsedProcess;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -25,7 +23,6 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
-import com.avc.mis.beta.entities.processinfo.ProcessParent;
 
 /**
  * Spring repository for accessing all notification information and requirements of production processes.
@@ -197,14 +194,6 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 		+ "where u.id = :currentUserId ")
 	List<ProcessManagementDTO> findAllUserProcessPrivilige(Integer currentUserId);
 
-//	@Query("select new com.avc.mis.beta.dto.view.PoFinalReport("
-//			+ "po_code.id, po_code.code, c.code, c.suffix, s.name, po_code.display) "
-//		+ "from PoCode po_code "
-//				+ "join po_code.contractType c "
-//				+ "join po_code.supplier s "
-//		+ "where po_code.id = :poCodeId ")
-//	PoFinalReport findFinalReportBasic(@NonNull Integer poCodeId);
-
 	//TODO check if can change number of units
 	@Query("select new java.lang.Boolean(count(*) > 0) "
 			+ "from ProcessWithProduct p "
@@ -335,32 +324,5 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			+ "where w_po_code.id in :poCodeIds "
 			+ "group by used_p.id, using_p.id ")
 	List<Integer[]> findTransactionProcessVertices(Integer[] poCodeIds);
-
-		
-
-	
-
-	
-
-	
-
-//	@Modifying
-//	@Query("update ProcessLifeCycle c "
-//			+ "join c.process p "
-//			+ "join ProcessManagement m "
-//					+ "on p.processType = m.processType "
-//				+ "join m.user u "
-//			+ "set c.status = :status "
-//			+ "where p.id = :processId and "
-//				+ "u.id = :currentUserId and "
-//				+ "m.managementType = com.avc.mis.beta.entities.enums.ManagementType.MANAGER ")
-//	int updateLifeCycleStatus(RecordStatus status, Integer processId, Integer currentUserId);
-	
-
-//	@Query("select a "
-//			+ "from ProcessManagement a "
-//			+ "join fetch a.user "
-//			+ "where a.processType = ?1")
-//	List<ProcessManagement> findProcessTypeAlerts(ProcessType processType);
 
 }

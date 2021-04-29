@@ -40,7 +40,7 @@ public class ProcessStateInfo extends BasicDTO {
 			this.approvals = null;
 		}
 		else {
-			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
+			this.approvals = Stream.of(approvals.split(",")).toArray(String[]::new);
 		}
 	}
 	

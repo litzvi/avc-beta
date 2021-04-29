@@ -52,41 +52,44 @@ public class Receipts {
 	
 	@Autowired private ReceiptRepository receiptRepository;	
 	@Autowired private PORepository poRepository;
-	
+
+	@Autowired private ProcessSummaryReader processSummaryReader;
+
 	@Deprecated
 	@Autowired private DeletableDAO deletableDAO;
 		
 	public ReceiptReportLine getReceiptSummary(Integer poCodeId) {
-//		List<ProcessRow> processRows = getReceiptRepository().findProcessByType(ProcessName.CASHEW_RECEIPT, poCodeId, false);
-		List<ProcessStateInfo> processes = getReceiptRepository().findProcessReportLines(ProcessName.CASHEW_RECEIPT, poCodeId, false);
-		int[] processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
-
-		if(processes.isEmpty()) {
-			return null;
-		}
 		
-		ReceiptReportLine reportLine = new ReceiptReportLine();
-//		reportLine.setReceivedOrderUnits(getReceiptRepository().);
-//		reportLine.setPoCode(processRows.get(0).getPoCode());
-//		reportLine.setSupplierName(processRows.get(0).getSupplierName());
-		reportLine.setProcesses(processes);
-//		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
-		
-		Stream<ItemAmount> itemAmounts = getReceiptRepository().findSummaryProducedItemAmounts(processIds, poCodeId);
-		reportLine.setReceived(itemAmounts.collect(Collectors.toList()));
-		
-		List<ItemAmount> countAmounts = new ArrayList<>();
-		if(reportLine.getReceived() != null) {
-			int[] productItemsIds = reportLine.getReceived().stream().mapToInt(i -> i.getItem().getId()).toArray();
-			processes = getReceiptRepository().findProcessReportLines(ProcessName.STORAGE_RELOCATION, poCodeId, false);
-			processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
-			for(int i=0; i < processIds.length; i++) {
-				countAmounts.addAll(getReceiptRepository().findProductCountItemAmountsByProcessId(processIds[i], productItemsIds));
-			}
-			reportLine.setProductCount(countAmounts);						
-		}
-
-		return reportLine;
+		return processSummaryReader.getReceiptSummary(poCodeId);
+//		List<ProcessStateInfo> processes = getReceiptRepository().findProcessReportLines(ProcessName.CASHEW_RECEIPT, poCodeId, false);
+//		int[] processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
+//
+//		if(processes.isEmpty()) {
+//			return null;
+//		}
+//		
+//		ReceiptReportLine reportLine = new ReceiptReportLine();
+////		reportLine.setReceivedOrderUnits(getReceiptRepository().);
+////		reportLine.setPoCode(processRows.get(0).getPoCode());
+////		reportLine.setSupplierName(processRows.get(0).getSupplierName());
+//		reportLine.setProcesses(processes);
+////		reportLine.setDates(processRows.stream().map(r -> r.getRecordedTime().toLocalDate()).collect(Collectors.toSet()));
+//		
+//		Stream<ItemAmount> itemAmounts = getReceiptRepository().findSummaryProducedItemAmounts(processIds, poCodeId);
+//		reportLine.setReceived(itemAmounts.collect(Collectors.toList()));
+//		
+//		List<ItemAmount> countAmounts = new ArrayList<>();
+//		if(reportLine.getReceived() != null) {
+//			int[] productItemsIds = reportLine.getReceived().stream().mapToInt(i -> i.getItem().getId()).toArray();
+//			processes = getReceiptRepository().findProcessReportLines(ProcessName.STORAGE_RELOCATION, poCodeId, false);
+//			processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
+//			for(int i=0; i < processIds.length; i++) {
+//				countAmounts.addAll(getReceiptRepository().findProductCountItemAmountsByProcessId(processIds[i], productItemsIds));
+//			}
+//			reportLine.setProductCount(countAmounts);						
+//		}
+//
+//		return reportLine;
 	}
 	
 	/**
@@ -188,7 +191,7 @@ public class Receipts {
 		if(!isOrderOpen(receipt.getReceiptItems())) {
 			throw new IllegalArgumentException("Order items where already fully received");
 		}
-		dao.addGeneralProcessEntity(receipt);
+		dao.addPoProcessEntity(receipt);
 	}
 	
 	
@@ -217,7 +220,7 @@ public class Receipts {
 //		addOrderReceipt(receipt);
 
 		if(dao.isPoCodeFree(receipt.getPoCode().getId())) {
-			dao.addGeneralProcessEntity(receipt);						
+			dao.addPoProcessEntity(receipt);						
 		}
 		else {
 			throw new IllegalArgumentException("Po Code is already used for another order or receipt");

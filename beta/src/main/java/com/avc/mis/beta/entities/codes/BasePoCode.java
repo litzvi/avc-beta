@@ -63,7 +63,7 @@ public class BasePoCode extends BaseEntity implements ValueInterface {
 //	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
 //	@Column(nullable = false, updatable = false, unique = true)
 //	@Column(updatable = false, unique = true)
-	@Column(updatable = false)
+	@Column(updatable = false, nullable = false)
 //	@EqualsAndHashCode.Include
 	private String code;
 	

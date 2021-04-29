@@ -11,7 +11,6 @@ import com.avc.mis.beta.dto.embedable.GeneralProcessInfo;
 import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
-import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
@@ -26,7 +25,7 @@ import lombok.NonNull;
  * @author Zvi
  *
  */
-public interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> {
+interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> {
 	
 	@Query("select new com.avc.mis.beta.dto.embedable.GeneralProcessInfo("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
@@ -46,28 +45,6 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 		+ "group by r ")
 	Optional<GeneralProcessInfo> findGeneralProcessInfoByProcessId(int processId, Class<? extends T> clazz);
 	
-	@Query("select new com.avc.mis.beta.dto.report.ProcessStateInfo("
-			+ "p.id, p.recordedTime, lc.processStatus, "
-			+ "function('GROUP_CONCAT', concat(u.username, ': ', approval.decision)) ) "
-		+ "from PoProcess p "
-			+ "left join p.poCode po_code "
-			+ "left join p.weightedPos w_po "
-				+ "left join w_po.poCode w_po_code "
-			+ "join p.processType pt "
-			+ "join p.lifeCycle lc "
-			+ "left join p.approvals approval "
-				+ "left join approval.user u "
-		+ "where pt.processName = :processName "
-			+ "and ("
-				+ "(coalesce(po_code.id, w_po_code.id) = :poCodeId) "
-				+ "or :poCodeId is null "
-//				+ "or (coalesce(w_po_code.id, null) = :poCodeId) "
-			+ ") "
-			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
-		+ "group by p "
-		+ "order by p.recordedTime desc ")
-	List<ProcessStateInfo> findProcessReportLines(ProcessName processName, Integer poCodeId, boolean cancelled);
-
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
 			+ "p.id, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', po_code.id)), "
@@ -199,21 +176,7 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 				+ "join p.processParents process_parent "
 			+ "where p.id = :processId")
 	List<ProcessParent> findProcessParentReferences(Integer processId);	
-	
 
-//	/**
-//	 * Gets all processes done for given PoCode
-//	 * @param poCodeId id of PoCode
-//	 * @return List of ProcessBasic
-//	 */
-//	@Query("select new com.avc.mis.beta.dto.basic.ProcessBasic( "
-//			+ "p.id, t.processName, type(p)) "
-//		+ "from PoCode c "
-//			+ "join c.processes p "
-//				+ "join p.processType t "
-//		+ "where c.id = :poCodeId ")
-//	List<ProcessBasic> findAllProcessesByPo(Integer poCodeId);
-//	
 	/**
 	 * Gets all processes done for given PoCode
 	 * @param poCodeId id of PoCode
@@ -259,44 +222,5 @@ public interface ProcessRepository<T extends GeneralProcess> extends BaseReposit
 			+ "join p.processType t "
 		+ "where p.id = :processId ")
 	ProcessBasic<GeneralProcess> findProcessBasic(@NonNull Integer processId);
-
-//	@Query("select new com.avc.mis.beta.dto.process.inventory.UsedItemDTO( "
-//			+ "i.id, i.version, i.ordinal, i.numberUnits, "
-//			+ "item.id, item.value, item.measureUnit, "
-//			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-//			+ "sf_group.measureUnit, used_p.recordedTime, "
-//			+ "itemPo.id, itemPo.code, ct.code, ct.suffix, s.name, itemPo.display, "
-//			+ "sf.id, sf.version, sf.ordinal, "
-//			+ "sf.unitAmount, sf.numberUnits, "
-//			+ "SUM("
-//				+ "(CASE "
-//					+ "WHEN (sf_ui <> i AND sf_used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
-//						+ "THEN sf_ui.numberUnits "
-//					+ "ELSE 0 "
-//				+ "END)"
-//			+ "), "
-//			+ "sf.accessWeight, "
-//			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks) "
-//		+ "from UsedItem i "
-//			+ "join i.storage sf "
-//				+ "join sf.group sf_group "
-//				+ "left join sf.warehouseLocation warehouseLocation "
-//				+ "join sf.processItem pi "
-//					+ "join pi.item item "
-//						+ "join item.unit item_unit "
-//					+ "join pi.process used_p "
-//						+ "left join used_p.poCode itemPo "
-//							+ "left join itemPo.contractType ct "
-//							+ "left join itemPo.supplier s "
-//				+ "join sf.usedItems sf_ui "
-//					+ "join sf_ui.group sf_used_g "
-//						+ "join sf_used_g.process sf_used_p "
-//							+ "join sf_used_p.lifeCycle sf_used_lc "
-//			+ "join i.group grp "
-//				+ "join grp.process p "
-//		+ "where p.id = :processId "
-//		+ "group by sf "
-//		+ "order by i.ordinal ")
-//	List<UsedItemDTO> findUsedItems(int processId);
 
 }

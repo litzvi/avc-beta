@@ -37,7 +37,7 @@ public class Samples {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addSampleReceipt(SampleReceipt sample) {
 		sample.setProcessType(dao.getProcessTypeByValue(ProcessName.SAMPLE_RECEIPET));
-		dao.addGeneralProcessEntity(sample);
+		dao.addPoProcessEntity(sample);
 	}
 	
 	public SampleReceiptDTO getSampleReceiptByProcessId(int processId) {

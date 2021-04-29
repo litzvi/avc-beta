@@ -181,25 +181,12 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
 			ItemGroup itemGroup, Integer itemId);
 
-	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
-			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
-		+ "from Receipt r "
-			+ "join r.poCode po_code "
-				+ "join po_code.contractType c "
-				+ "join po_code.supplier s "
-			+ "join r.processType t "
-		+ "where t.processName in ?1 "
-		+ "order by po_code.id desc ")
-	List<PoCodeBasic> findReceivedPoCodeByTypes(ProcessName[] processNames);
-
 	//will also give old (history) po_codes
 	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from PoCode po_code "
 				+ "join po_code.contractType c "
 				+ "join po_code.supplier s "
-//			+ "join p.processType t "
-//		+ "where t.processName in ?1 "
 		+ "order by po_code.id desc ")
 	List<PoCodeBasic> findAllPoCodeBasics();
 	
@@ -260,7 +247,6 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED ")
 	boolean isPoCodeReceived(Integer poCodeId);
 
-
 	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from MixPoCode po_code "
@@ -279,17 +265,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 		+ "order by po_code.id desc ")
 	List<PoCodeBasic> findMixFreePoCodes(Integer poCodeId);
 
-	@Query("select org_po.id "
-		+ "from MixPoCode po_code "
-			+ "join po_code.origionPoCodes org_po "
-		+ "where po_code.id = :poCodeId ")
-	List<Integer> findOrigionPoCodes(Integer poCodeId);
-
 	@Query("select s from ProgramSequence s where s.identifier = :sequenceIdentifier ")
 	ProgramSequence findSequence(SequenceIdentifier sequenceIdentifier);
-
-
-
-
 	
 }

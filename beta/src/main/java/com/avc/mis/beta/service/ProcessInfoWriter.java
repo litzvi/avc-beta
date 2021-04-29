@@ -39,6 +39,7 @@ public class ProcessInfoWriter {
 	
 	@Autowired private DeletableDAO deletableDAO;
 	
+	@Autowired private ProcessReader processReader;
 	@Autowired private ProcessInfoReader processInfoReader;
 	
 	@Autowired private ProcessInfoRepository processInfoRepository;
@@ -79,19 +80,6 @@ public class ProcessInfoWriter {
 		deletableDAO.permenentlyRemoveEntity(processTypeAlert);
 	}
 
-	/**
-	 * Approve (or any other decision) to a approval task for a process.
-	 * ATTENTION! Should not be used because ApprovalTask user can be changed with current user, 
-	 * and will be approved since user isn't updated in the database.
-	 * @param approval the approval task with id and user with id.
-	 * @param decisionType the decision made.
-	 * @throws IllegalArgumentException trying to approve for another user.
-	 */
-	@Deprecated
-	public void approveProcess(ApprovalTask approval, String decisionType) {
-		dao.approveProcess(approval, decisionType);
-	}
-	
 	/**
 	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.
 	 * @param approvalId the ApprovalTask id.
@@ -144,7 +132,7 @@ public class ProcessInfoWriter {
 	}
 	
 	public void removeProcess(Integer processId) {
-		ProcessBasic processBasic = processInfoReader.getProcessesBasic(processId);
+		ProcessBasic processBasic = processReader.getProcessesBasic(processId);
 		removeProcess(processId, processBasic.getProcessClazz());
 	}
 	
@@ -153,7 +141,7 @@ public class ProcessInfoWriter {
 	}
 
 	public void removeAllProcesses(Integer poCodeId) {
-		List<ProcessBasic<GeneralProcess>> processes = processInfoReader.getAllProcessesByPo(poCodeId);
+		List<ProcessBasic<GeneralProcess>> processes = processReader.getAllProcessesByPo(poCodeId);
 		processes.forEach(i -> removeProcess(i.getId(), i.getProcessClazz()));
 		//find used items that are disappearing
 		//delete po code

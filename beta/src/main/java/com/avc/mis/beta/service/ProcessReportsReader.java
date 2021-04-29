@@ -1,23 +1,35 @@
 /**
  * 
  */
-package com.avc.mis.beta.dao;
+package com.avc.mis.beta.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.ReadOnlyDAO;
+import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.report.ProcessStateInfo;
+import com.avc.mis.beta.dto.report.ProductionReportLine;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.repositories.ProcessInfoRepository;
+import com.avc.mis.beta.repositories.ProcessSummaryRepository;
+import com.avc.mis.beta.repositories.ProductionProcessRepository;
 import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.TransactionProcessRepository;
 
@@ -29,8 +41,10 @@ import lombok.NonNull;
  * @author zvi
  *
  */
+@Service
 @Getter(value = AccessLevel.PRIVATE)
-public class ProcessInfoReaderDAO extends DAO {
+@Transactional(readOnly = true)
+public class ProcessReportsReader {
 
 	@Autowired private TransactionProcessRepository<TransactionProcess<ProcessItem>> transactionProcessRepository;
 	@Autowired private RelocationRepository relocationRepository;
@@ -46,6 +60,7 @@ public class ProcessInfoReaderDAO extends DAO {
 		List<ProcessRow> processRows = getTransactionProcessRepository().findProcessByType(processName, poCodeId, functionality, cancelled);
 		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = null;
+		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = null;
 		if(TransactionProcess.class.isAssignableFrom(processClass)) {
 			usedMap = getTransactionProcessRepository()
 					.findAllUsedItemsByProcessIds(processIds)
@@ -55,6 +70,10 @@ public class ProcessInfoReaderDAO extends DAO {
 			usedMap = getRelocationRepository()
 					.findAllMovedItemsByProcessIds(processIds)
 					.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+			countMap = getTransactionProcessRepository()
+					.findAllItemsCountsByProcessIds(processIds)
+					.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+
 		}
 		
 		Map<Integer, List<ProductionProcessWithItemAmount>> producedMap = null;
@@ -64,14 +83,12 @@ public class ProcessInfoReaderDAO extends DAO {
 					.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		}
 		
-		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = getTransactionProcessRepository()
-				.findAllItemsCountsByProcessIds(processIds)
-				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		for(ProcessRow row: processRows) {
 			if(usedMap != null)
 				row.setUsedItems(usedMap.get(row.getId()));
 			if(producedMap != null)
 				row.setProducedItems(producedMap.get(row.getId()));
+			if(countMap != null)
 			row.setItemCounts(countMap.get(row.getId()));
 		}	
 		return processRows;

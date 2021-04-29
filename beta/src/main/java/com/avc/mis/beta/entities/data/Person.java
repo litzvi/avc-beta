@@ -65,8 +65,4 @@ public class Person extends ObjectDataEntity implements ObjectWithNameInterface 
 		return this.contactDetails;
 	}
 	
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
-	
 }

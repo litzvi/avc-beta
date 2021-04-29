@@ -46,7 +46,9 @@ public class QualityChecks {
 
 	@Autowired private QCRepository qcRepository;
 	
+	@Autowired private ProcessReader processReader;
 	@Autowired private ProcessInfoReader processInfoReader;
+	@Autowired private ProcessSummaryReader processSummaryReader;
 	
 	@Deprecated
 	@Autowired private DeletableDAO deletableDAO;
@@ -79,37 +81,31 @@ public class QualityChecks {
 	}
 	
 	public List<QcReportLine> getQcSummary(ProcessName processName, Integer poCodeId) {
-		
-		List<QcReportLine> lines = getQcRepository().findCashewQCReportLines(processName, poCodeId, QcCompany.AVC_LAB, false);
-		
-		
-		int[] processIds = lines.stream().mapToInt(QcReportLine::getId).toArray();
-		if(lines == null || lines.isEmpty()) {
-			return null;
-		}
-		
-		Stream<ItemQc> itemQcs = getQcRepository().findCashewQcItems(processIds);
-		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getProcessId));
-		
-		for(QcReportLine line: lines) {
-			line.setItemQcs(itemsMap.get(line.getId()));
-		}
-		
-		
-		return lines;
-		
+	
+		return processSummaryReader.getQcSummary(processName, poCodeId);
+//		List<QcReportLine> lines = getQcRepository().findCashewQCReportLines(processName, poCodeId, QcCompany.AVC_LAB, false);		
+//		int[] processIds = lines.stream().mapToInt(QcReportLine::getId).toArray();
+//		if(lines == null || lines.isEmpty()) {
+//			return null;
+//		}		
+//		Stream<ItemQc> itemQcs = getQcRepository().findCashewQcItems(processIds);
+//		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getProcessId));		
+//		for(QcReportLine line: lines) {
+//			line.setItemQcs(itemsMap.get(line.getId()));
+//		}
+//		return lines;		
 	}
 			
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewReceiptCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT_QC));
-		dao.addGeneralProcessEntity(check);
+		dao.addPoProcessEntity(check);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addRoastedCashewCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.ROASTED_CASHEW_QC));
-		dao.addGeneralProcessEntity(check);
+		dao.addPoProcessEntity(check);
 	}
 	
 //	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -137,8 +133,8 @@ public class QualityChecks {
 				checksMap.put(processName, new ArrayList<PoProcessDTO>());
 			}
 		}
-		List<ProcessBasic<PoProcess>> basicProcesses = getProcessInfoReader().getAllProcessesByPoAndName(poCodeId, checksMap.keySet());
-		basicProcesses.forEach(p -> checksMap.get(p.getProcessName()).add(getProcessInfoReader().getProcess(p.getId(), p.getProcessName())));
+		List<ProcessBasic<PoProcess>> basicProcesses = getProcessReader().getAllProcessesByPoAndName(poCodeId, checksMap.keySet());
+		basicProcesses.forEach(p -> checksMap.get(p.getProcessName()).add(getProcessReader().getProcess(p.getId(), p.getProcessName())));
 		
 		
 		return checksMap;
@@ -160,7 +156,7 @@ public class QualityChecks {
 //		Optional<QualityCheckDTO> check = getQcRepository().findQcDTOByProcessId(processId);
 //		QualityCheckDTO qualityCheckDTO = check.orElseThrow(
 //				()->new IllegalArgumentException("No quality check with given process id"));
-		getProcessInfoReader().setProcessWithProductCollections(qualityCheckDTO);
+		getProcessReader().setProcessWithProductCollections(qualityCheckDTO);
 //		qualityCheckDTO.setProcessItems(
 //				CollectionItemWithGroup.getFilledGroups(
 //						getQcRepository()

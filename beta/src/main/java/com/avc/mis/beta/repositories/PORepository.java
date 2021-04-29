@@ -100,78 +100,6 @@ public interface PORepository extends PoProcessRepository<PO> {
 		+ "order by lc.processStatus ")
 	Optional<PoDTO> findOrderById(Integer processId, Integer poCodeId, ProcessStatus[] statuses);
 	
-	/**
-	 * Gets rows of open orders for the given order type - 
-	 * orders that aren't cancelled and not fully received.
-	 * @param orderType e.g. GENERAL_ORDER, CASHEW_ORDER
-	 * @return List of PoItemRow for all open orders sorted by delivery date.
-	 */
-//	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, "
-//			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
-//			+ "function('GROUP_CONCAT', concat(coalesce(user.username, ''), ': ', coalesce(approval.decision, ''))), "
-//			+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit.amount, item_unit.measureUnit, type(item), "
-//			+ "oi.id, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
-//			+ "oi.defects, price.amount, price.currency, "
-//			+ "SUM( "
-//				+ "CASE "
-//					+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN null  "
-//					+ "ELSE (rou.amount * rou_uom.multiplicand / rou_uom.divisor) "
-//				+ "END "
-//			+ "), "
-////			+ "SUM( "
-////				+ "CASE "
-////					+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN null  "
-////					+ "ELSE (sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor) "
-////				+ "END "
-////			+ "), "
-//			+ "lc.processStatus, "
-//			+ "SUM( "
-//				+ "CASE "
-//					+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN 1 "
-//					+ "ELSE 0 "
-//				+ "END "
-//			+ ") "
-//		+ ") "
-//		+ "from PO po "
-//			+ "join po.lifeCycle lc "
-//			+ "join po.poCode po_code "
-//				+ "join po_code.contractType ct "
-//				+ "join po_code.supplier s "
-//			+ "join po.processType t "
-//			+ "left join po.approvals approval "
-//				+ "left join approval.user user "
-//			+ "join po.orderItems oi "
-//				+ "join oi.numberUnits units "
-//				+ "left join oi.unitPrice price "
-//				+ "join oi.item item "
-//					+ "join item.unit item_unit "
-//				+ "left join oi.receiptItems ri "
-//					+ "left join ri.process r "
-//						+ "left join r.lifeCycle rlc "		
-//					+ "left join ri.storageForms sf "
-////						+ "left join sf.group sf_group "
-//				+ "left join UOM uom "
-//					+ "on uom.fromUnit = ri.measureUnit and uom.toUnit = units.measureUnit "
-//					+ "left join ri.receivedOrderUnits rou "
-//						+ "left join UOM rou_uom "
-//							+ "on rou_uom.fromUnit = rou.measureUnit and rou_uom.toUnit = units.measureUnit "
-//			+ "where "
-//				+ "(t.processName = :orderType or :orderType is null) "
-//				+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
-//				+ "and (lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.PENDING "
-//					+ "or lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
-//			+ "group by oi "
-//			+ "having coalesce("
-//				+ "SUM("
-//					+ "CASE "
-//						+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN null  "
-//						+ "ELSE (rou.amount * rou_uom.multiplicand / rou_uom.divisor) " //checks by recorded receipt (used for payment etc.)
-////						+ "ELSE (unit.amount * sf.numberUnits * uom.multiplicand / uom.divisor) " //will leave open even if only missing a negligible fraction
-//					+ "END), "
-//				+ "0) < units.amount "
-//			+ "ORDER BY oi.deliveryDate, po.id ") // done in the java code if aggregated
-//	List<PoItemRow> findOpenOrdersByType(ProcessName orderType, ItemGroup itemGroup);
-
 	@Query("select new com.avc.mis.beta.dto.report.ItemAmount("
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
@@ -362,13 +290,6 @@ public interface PORepository extends PoProcessRepository<PO> {
 	@Query("select new com.avc.mis.beta.dto.basic.ValueObject( "
 			+ "oi.id, "
 			+ "SUM(1)) "
-//			+ ", "
-//			+ "SUM( "
-//				+ "CASE "
-//					+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN 1 "
-//					+ "ELSE 0 "
-//				+ "END "
-//			+ ") "
 		+ "from OrderItem oi "
 			+ "left join oi.receiptItems ri "
 				+ "left join ri.process r "
@@ -378,90 +299,6 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "and rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
 		+ "group by oi ")
 	Stream<ValueObject<Long>> findumReceiptsCancelledByOrderItemIds(int[] orderItemIds);
-
-	
-
-
-
-//	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
-//			+ "po.id, po.version, po.createdDate, p_user.username, "
-//			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
-//			+ "pt.processName, p_line, "
-//			+ "po.recordedTime, po.duration, po.numOfWorkers, "
-//			+ "lc.processStatus, lc.editStatus, po.remarks, po.personInCharge) "
-//		+ "from PO po "
-//			+ "join po.poCode po_code "
-//				+ "join po_code.contractType t "
-//				+ "join po_code.supplier s "
-//			+ "join po.processType pt "
-//			+ "left join po.createdBy p_user "
-//			+ "left join po.productionLine p_line "
-//			+ "join po.lifeCycle lc "
-//		+ "where po_code.id = :codeId ")
-//	Optional<PoDTO> findOrderByPoCodeId(Integer codeId);
-//	
-//	@Query("select new com.avc.mis.beta.dto.process.PoDTO("
-//			+ "po.id, po.version, po.createdDate, p_user.username, "
-//			+ "po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
-//			+ "pt.processName, p_line, "
-//			+ "po.recordedTime, po.duration, po.numOfWorkers, "
-//			+ "lc.processStatus, lc.editStatus, po.remarks, po.personInCharge) "
-//		+ "from PO po "
-//			+ "join po.poCode po_code "
-//				+ "join po_code.contractType t "
-//				+ "join po_code.supplier s "
-//			+ "join po.processType pt "
-//			+ "left join po.createdBy p_user "
-//			+ "left join po.productionLine p_line "
-//			+ "join po.lifeCycle lc "
-//		+ "where po.id = :id ")
-//	Optional<PoDTO> findOrderByProcessId(Integer id);
-	
-	
-//	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po_code, s.name, po.orderStatus) "
-//		+ "from PO po "
-//		+ "left join po.poCode po_code "
-//		+ "left join po.supplier s "
-//		+ "left join po.processType t "
-//		+ "where t.processName = ?1 and po.orderStatus in ?2 ")
-//	List<PoBasic> findByOrderTypeAndStatusesBasic(ProcessName orderType, OrderStatus[] statuses);
-//	
-//	@Query("select new com.avc.mis.beta.dto.values.PoBasic(po.id, po_code, s.name, po.orderStatus) "
-//		+ "from PO po "
-//		+ "left join po.poCode po_code "
-//		+ "left join po.supplier s "
-//		+ "left join po.processType t "
-//		+ "left join po.orderItems oi "
-//		+ "where t.processName = ?1 and oi.status in ?2 "
-//		+ "group by po.id ")
-//	List<PoBasic> findByOrderTypeAndItemStatusesBasic(ProcessName orderType, OrderItemStatus[] statuses);
-//		
-//	
-//	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code, s.name, i.value, "
-//			+ "oi.numberUnits, oi.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus, "
-//			+ "oi.defects, oi.currency, oi.unitPrice) "
-//		+ "from PO po "
-//		+ "left join po.poCode po_code "
-//		+ "left join po.supplier s "
-//		+ "left join po.processType t "
-//		+ "join po.orderItems oi "
-//			+ "left join oi.item i "
-//		+ "where t.processName = ?1 and oi.status in ?2 ")
-////		+ "ORDER BY po.createdDate DESC ") // maybe by delivery date
-//	List<PoRow> findByOrderTypeAndItemStatuses(ProcessName orderType, OrderItemStatus[] statuses);
-//	
-//	@Query("select new com.avc.mis.beta.dto.values.PoRow(po.id, po_code, s.name, i.value, "
-//			+ "oi.numberUnits, oi.measureUnit, po.recordedTime, oi.deliveryDate, po.orderStatus, "
-//			+ "oi.defects, oi.currency, oi.unitPrice) "
-//		+ "from PO po "
-//		+ "left join po.poCode po_code "
-//		+ "left join po.supplier s "
-//		+ "left join po.processType t "
-//		+ "join po.orderItems oi "
-//			+ "left join oi.item i "
-//		+ "where t.processName = ?1 and po.orderStatus in ?2 ")
-////		+ "ORDER BY po.createdDate DESC ") // maybe by delivery date
-//	List<PoRow> findByOrderTypeAndStatuses(ProcessName orderType, OrderStatus[] statuses);
 
 	
 }

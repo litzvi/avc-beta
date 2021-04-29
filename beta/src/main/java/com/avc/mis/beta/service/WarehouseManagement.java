@@ -68,6 +68,8 @@ public class WarehouseManagement {
 	@Autowired private RelocationRepository relocationRepository;
 	@Autowired private InventoryUseRepository inventoryUseRepository;
 	@Autowired private ValueTablesRepository valueTablesRepository;
+	@Autowired private ProcessReportsReader processReportsReader;
+	@Autowired private ProcessReader processReader;
 	@Autowired private ProcessInfoReader processInfoReader;
 
 	
@@ -76,7 +78,7 @@ public class WarehouseManagement {
 	}
 	
 	public List<ProcessRow> getStorageTransfersByPoCode(Integer poCodeId) {
-		return dao.getProcessesByTypeAndPoCode(StorageTransfer.class, ProcessName.STORAGE_TRANSFER, poCodeId, null, true);
+		return getProcessReportsReader().getProcessesByTypeAndPoCode(StorageTransfer.class, ProcessName.STORAGE_TRANSFER, poCodeId, null, true);
 	}
 
 	public List<ProcessRow> getStorageRelocations() {
@@ -88,7 +90,7 @@ public class WarehouseManagement {
 	}
 	
 	public List<ProcessRow> getStorageRelocationsByPoCode(Integer poCodeId, ProductionFunctionality productionFunctionality) {
-		return dao.getProcessesByTypeAndPoCode(StorageRelocation.class, ProcessName.STORAGE_RELOCATION, poCodeId, productionFunctionality, true);
+		return getProcessReportsReader().getProcessesByTypeAndPoCode(StorageRelocation.class, ProcessName.STORAGE_RELOCATION, poCodeId, productionFunctionality, true);
 //		List<ProcessRow> relocationRows = getRelocationRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, productionFunctionality, true);
 //		int[] processIds = relocationRows.stream().mapToInt(ProcessRow::getId).toArray();
 //		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getRelocationRepository()
@@ -109,7 +111,7 @@ public class WarehouseManagement {
 	}
 	
 	public List<ProcessRow> getInventoryUses(Integer poCodeId) {
-		return dao.getProcessesByTypeAndPoCode(InventoryUse.class, ProcessName.GENERAL_USE, poCodeId, null, true);
+		return getProcessReportsReader().getProcessesByTypeAndPoCode(InventoryUse.class, ProcessName.GENERAL_USE, poCodeId, null, true);
 //		List<ProcessRow> inventoryUseRows = getInventoryUseRepository().findProcessByType(ProcessName.GENERAL_USE, poCodeId, null, true);
 //		int[] processIds = inventoryUseRows.stream().mapToInt(ProcessRow::getId).toArray();
 //		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getInventoryUseRepository()
@@ -139,9 +141,7 @@ public class WarehouseManagement {
 	public void addStorageRelocation(StorageRelocation relocation) {
 		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
 		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
-		dao.addGeneralProcessEntity(relocation);
-		dao.setPoWeights(relocation);
-		dao.setUsedProcesses(relocation);
+		dao.addStorageRelocationProcessEntity(relocation);
 		//check if storage moves match the amounts of the used item
 		checkRelocationBalance(relocation);
 	}
@@ -151,12 +151,9 @@ public class WarehouseManagement {
 		//Check that used items are from general
 		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.GENERAL)) {
 			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
-		}		
-				
+		}				
 		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_USE));
-		dao.addGeneralProcessEntity(inventoryUse);
-//		set weightedPos weight for general (no weight)
-		dao.setUsedProcesses(inventoryUse);
+		dao.addGeneralTransactionProcessEntity(inventoryUse);
 	}	
 	
 	private boolean isUsedInItemGroup(UsedItemsGroup[] usedItemGroups, ItemGroup itemGroup) {
@@ -182,7 +179,7 @@ public class WarehouseManagement {
 		inventoryUseDTO.setPoProcessInfo(getInventoryUseRepository()
 				.findPoProcessInfoByProcessId(processId, InventoryUse.class).orElse(null));
 		
-		getProcessInfoReader().setTransactionProcessCollections(inventoryUseDTO);
+		getProcessReader().setTransactionProcessCollections(inventoryUseDTO);
 		
 		return inventoryUseDTO;
 	}
@@ -305,12 +302,8 @@ public class WarehouseManagement {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editStorageRelocation(StorageRelocation relocation) {
-		dao.checkRelocationRemovingUsedProduct(relocation);
 		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
-		dao.editGeneralProcessEntity(relocation);
-		dao.setUsedProcesses(relocation);;
-		List<ItemAmountWithPoCode> usedPos = dao.setPoWeights(relocation);
-		getProcessInfoReader().checkDAGmaintained(usedPos, relocation.getId());
+		dao.editStorageRelocationProcessEntity(relocation);
 		checkRelocationOutputSufficent(relocation);
 		checkRelocationBalance(relocation);
 	}
@@ -321,9 +314,7 @@ public class WarehouseManagement {
 		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.GENERAL)) {
 			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
 		}			
-		dao.editGeneralProcessEntity(inventoryUse);
-//		set weightedPos weight for general
-		dao.setUsedProcesses(inventoryUse);
+		dao.editGeneralTransactionProcessEntity(inventoryUse);
 	}
 	
 	private void setStorageMovesProcessItem(StorageMovesGroup[] storageMovesGroups) {
@@ -350,7 +341,7 @@ public class WarehouseManagement {
 		boolean checkPoCodes = (poCodeIds != null);
 		Integer[] excludedProcessIds = null;
 		if(poCodeIds != null && excludeProcessId != null) {
-			excludedProcessIds = getProcessInfoReader().getProcessDescendants(poCodeIds, excludeProcessId);
+			excludedProcessIds = dao.getProcessDescendants(poCodeIds, excludeProcessId);
 		}
 		boolean checkExcludedProcessIds = (excludedProcessIds != null && excludedProcessIds.length > 0);
 		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()

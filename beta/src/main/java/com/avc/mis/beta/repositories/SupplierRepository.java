@@ -44,12 +44,6 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "where s.active = true")
 	List<DataObjectWithName<Supplier>> findAllSuppliersBasic();
 	
-//	@Query("select s from Supplier s "
-//			+ "left join fetch s.contactDetails cd "
-//			+ "where s.active = true "
-//			+ "ORDER BY s.name ASC ")
-//	Stream<Supplier> findAll();
-	
 	@Query("select s from Supplier s "
 			+ "left join fetch s.contactDetails cd "
 			+ "where s.id = :id")

@@ -10,8 +10,8 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
- * Version: 15.9 ProcessInfoReaderDAO
- * 
+ * Version: 16.0
+ * issues 447, 456, 450
  * 
  * @author zvi
  *

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,6 @@ import com.avc.mis.beta.dto.view.ItemInventoryWithOrderRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.PoItemRow;
-import com.avc.mis.beta.dto.view.PoRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
@@ -65,7 +63,8 @@ import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
-import com.avc.mis.beta.service.ProductionProcesses;
+import com.avc.mis.beta.service.ProcessReader;
+import com.avc.mis.beta.service.ProcessSummaryReader;
 import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Suppliers;
@@ -87,7 +86,9 @@ public class QueryTest {
 	@Autowired TestService service;
 	@Autowired ObjectTablesReader objectTablesReader;
 	@Autowired ValueTablesReader valueTablesReader;
+	@Autowired ProcessReader processReader;
 	@Autowired ProcessInfoReader processInfoReader;
+	@Autowired ProcessSummaryReader processSummaryReader;
 	@Autowired Users users;
 	@Autowired Suppliers suppliers;
 	@Autowired Orders orders;
@@ -276,7 +277,7 @@ public class QueryTest {
 		
 		//get all processes by po code/id
 		for(PoCode poCode: objectTablesReader.getAllPoCodes()) {
-			List<ProcessBasic<GeneralProcess>> processBasics = processInfoReader.getAllProcessesByPo(poCode.getId());
+			List<ProcessBasic<GeneralProcess>> processBasics = processReader.getAllProcessesByPo(poCode.getId());
 			processBasics.forEach(s -> System.out.println(s));
 			
 		}
@@ -392,12 +393,12 @@ public class QueryTest {
 		List<PoCodeBasic> freeMixPoCodes = objectTablesReader.findFreeMixPoCodes();
 
 		//final report
-		poCodes.forEach(c -> System.out.println(processInfoReader.getFinalReport(c.getId())));
+		poCodes.forEach(c -> System.out.println(processSummaryReader.getFinalReport(c.getId())));
 		poCodes.forEach(c -> System.out.println(qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, c.getId())));
-		poCodes.forEach(c -> System.out.println(productionProcesses.getProductionSummary(ProcessName.CASHEW_CLEANING, c.getId())));
+		poCodes.forEach(c -> System.out.println(processSummaryReader.getProductionSummary(ProcessName.CASHEW_CLEANING, c.getId())));
 		poCodes.forEach(c -> System.out.println(receipts.getReceiptSummary(c.getId())));
 
-		poCodes.forEach(c -> System.out.println(processInfoReader.getFinalReport(c.getId())));
+		poCodes.forEach(c -> System.out.println(processSummaryReader.getFinalReport(c.getId())));
 		
 		List<ItemInventoryWithOrderRow> inventoryWithOrderRows;
 		try {

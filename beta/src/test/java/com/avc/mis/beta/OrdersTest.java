@@ -30,6 +30,7 @@ import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessInfoWriter;
+import com.avc.mis.beta.service.ProcessReader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -50,7 +51,8 @@ public class OrdersTest {
 
 	@Autowired TestService service;
 	@Autowired Orders orders;
-	@Autowired private ProcessInfoReader processDisplay;
+	@Autowired private ProcessReader processReader;
+	@Autowired private ProcessInfoReader processInfoReader;
 	@Autowired private ProcessInfoWriter processInfoWriter;
 
 	
@@ -95,7 +97,7 @@ public class OrdersTest {
 		//get list approval tasks for user
 		List<ApprovalTaskDTO> tasks;
 		ObjectMapper objMapper = new ObjectMapper();
-		tasks = processDisplay.getAllRequiredApprovals();
+		tasks = processInfoReader.getAllRequiredApprovals();
 
 		try {
 			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, po.getId());
@@ -103,7 +105,7 @@ public class OrdersTest {
 		} catch (Exception e1) {}		
 		try {
 			tasks.forEach(t -> {
-				PoProcessDTO p = processDisplay.getProcess(t.getProcessId(), t.getProcessName());
+				PoProcessDTO p = processReader.getProcess(t.getProcessId(), t.getProcessName());
 				String processSnapshot = null;
 				try {
 					processSnapshot = objMapper.writeValueAsString(p);

@@ -42,7 +42,7 @@ import com.avc.mis.beta.entities.values.Warehouse;
  * 
  */
 @NoRepositoryBean
-public interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
+interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 	
 	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(s.id, s.value) "
 			+ "from Warehouse s where s.active = true "
@@ -101,9 +101,6 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	@Query("select t from ProcessType t where t.active = true")
 	List<ProcessType> findAllProcessTypes();
 
-//	@Query("select t from ProductionLine t where t.active = true")
-//	List<ProductionLine> findAllProductionLines();
-
 	@Query("select t from ProductionLine t "
 			+ "where t.active = true "
 				+ "and t.productionFunctionality in :functionalities "
@@ -116,6 +113,6 @@ public interface BaseRepository<T extends Insertable> extends Repository<T, Inte
 	
 	//for inserting contract type in testing
 	@Query("select t from ContractType t where t.code = :code and t.currency = :currency")
-	ContractType findContractTypeByCodeAndCurrency(String code, Currency currency);
+	ContractType findContractTypeByCodeAndCurrency(String code, Currency currency); // NO_UCD (test only)
 
 }
