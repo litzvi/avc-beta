@@ -3,33 +3,24 @@
  */
 package com.avc.mis.beta.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.ReadOnlyDAO;
-import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.report.ProcessStateInfo;
-import com.avc.mis.beta.dto.report.ProductionReportLine;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
+import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.repositories.ProcessInfoRepository;
-import com.avc.mis.beta.repositories.ProcessSummaryRepository;
-import com.avc.mis.beta.repositories.ProductionProcessRepository;
 import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.TransactionProcessRepository;
 
@@ -44,11 +35,18 @@ import lombok.NonNull;
 @Service
 @Getter(value = AccessLevel.PRIVATE)
 @Transactional(readOnly = true)
-public class ProcessReportsReader {
+public class ProductionProcessReports {
 
 	@Autowired private TransactionProcessRepository<TransactionProcess<ProcessItem>> transactionProcessRepository;
 	@Autowired private RelocationRepository relocationRepository;
 
+	public List<ProcessRow> getProductionProcessesByType(ProcessName processName) {
+		return getProductionProcessesByTypeAndPoCode(processName, null);
+	}
+	
+	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
+		return getProcessesByTypeAndPoCode(ProductionProcess.class, processName, poCodeId, null, true);
+	}
 	
 	/**
 	 * Gets list of process rows, filled with used, produced and count information for a given process name.
@@ -93,4 +91,5 @@ public class ProcessReportsReader {
 		}	
 		return processRows;
 	}
+	
 }

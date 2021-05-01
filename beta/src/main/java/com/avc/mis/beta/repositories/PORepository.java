@@ -242,16 +242,6 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "having nu.amount <= sum(rnu.amount * uom.multiplicand / uom.divisor) ")
 	List<OrderItem> findNonOpenOrderItemsById(Integer[] orderItemIds);
 
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO( "
-			+ "po_code.id, po_code.code, "
-			+ "s.id, s.version, s.name, "
-			+ "ct.id, ct.value, ct.code, ct.currency, ct.suffix, ct.supplyGroup) "
-		+ "from BasePoCode po_code "
-			+ "join po_code.supplier s "
-			+ "join po_code.contractType ct "
-		+ "where po_code.id = :poCodeId ")
-	Optional<PoCodeDTO> findPoCodeById(int poCodeId);
-
 	@Query("select new com.avc.mis.beta.dto.basic.ValueObject( "
 			+ "oi.id, "
 			+ "SUM(sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor)) "

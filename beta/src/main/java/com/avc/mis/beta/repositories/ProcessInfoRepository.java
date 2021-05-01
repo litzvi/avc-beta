@@ -20,6 +20,7 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.processinfo.ApprovalTask;
@@ -157,6 +158,18 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	Boolean isProcessReferenced(Integer processId);
 	
 	@Query("select new java.lang.Boolean(count(*) > 0) "
+			+ "from StorageRelocation p "
+				+ "join p.storageMovesGroups grp "
+					+ "join grp.storageMoves s "
+						+ "join s.usedItems ui "
+							+ "join ui.group used_g "
+								+ "join used_g.process used_p "
+									+ "join used_p.lifeCycle used_lc "
+			+ "where p.id = :processId "
+				+ "and used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED ")
+	Boolean isRelocationReferenced(Integer processId);
+	
+	@Query("select new java.lang.Boolean(count(*) > 0) "
 			+ "from PO po "
 				+ "join po.orderItems oi "
 					+ "join oi.receiptItems ri "
@@ -251,11 +264,11 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 										+ "join po_code.contractType t "
 										+ "join po_code.supplier s "
 			+ "where p.id = :processId "
-				+ "and item.itemGroup = com.avc.mis.beta.entities.item.ItemGroup.PRODUCT "
+				+ "and item.itemGroup = :itemGroup "
 			+ "group by po_code, item "
 //			+ "group by used_p, po_code, item "
 			+ "order by po_item_amount desc ")
-	List<ItemAmountWithPoCode> findTransactionWeightedPos(Integer processId);
+	List<ItemAmountWithPoCode> findTransactionWeightedPos(Integer processId, ItemGroup itemGroup);
 	
 	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithPoCode("
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
@@ -283,7 +296,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 									+ "join po_code.contractType t "
 									+ "join po_code.supplier s "
 		+ "where p.id = :processId "
-			+ "and item.itemGroup = com.avc.mis.beta.entities.item.ItemGroup.PRODUCT "
+//			+ "and item.itemGroup = com.avc.mis.beta.entities.item.ItemGroup.PRODUCT " - in relocation should be for any moved item
 		+ "group by po_code, item "
 		+ "order by po_item_amount desc ")
 	List<ItemAmountWithPoCode> findRelocationWeightedPos(Integer processId);

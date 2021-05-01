@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.ValueInterface;
@@ -63,6 +64,7 @@ public class BasePoCode extends BaseEntity implements ValueInterface {
 //	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
 //	@Column(nullable = false, updatable = false, unique = true)
 //	@Column(updatable = false, unique = true)
+	@NotNull(message = "code is mandatory")
 	@Column(updatable = false, nullable = false)
 //	@EqualsAndHashCode.Include
 	private String code;

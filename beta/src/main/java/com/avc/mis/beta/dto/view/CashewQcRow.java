@@ -14,6 +14,7 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.item.Item;
 
@@ -39,6 +40,7 @@ public class CashewQcRow extends BasicDTO {
 	BasicValueEntity<Item> item;
 //	String itemName;
 	OffsetDateTime checkDate;
+	ProcessStatus status;
 	BigInteger numberOfSamples;
 	Boolean precentage;
 	BigDecimal sampleWeight;
@@ -53,7 +55,7 @@ public class CashewQcRow extends BasicDTO {
 			QcCompany checkedBy,
 			Integer itemId, String itemValue, 
 //			String itemName, 
-			OffsetDateTime checkDate, 
+			OffsetDateTime checkDate, ProcessStatus status,
 			BigInteger numberOfSamples, BigDecimal sampleWeight, boolean precentage,
 			BigDecimal humidity, BigDecimal breakage,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, 
@@ -67,6 +69,7 @@ public class CashewQcRow extends BasicDTO {
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 //		this.itemName = itemName;
 		this.checkDate = checkDate;
+		this.status = status;
 		this.numberOfSamples = numberOfSamples;
 		this.sampleWeight = sampleWeight;
 		this.humidity = humidity;

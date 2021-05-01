@@ -16,6 +16,7 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
@@ -61,7 +62,9 @@ import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.service.ContainerBookings;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
+import com.avc.mis.beta.service.ObjectWriter;
 import com.avc.mis.beta.service.Orders;
+import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.ValueTablesReader;
@@ -72,9 +75,11 @@ import com.avc.mis.beta.service.ValueTablesReader;
  */
 @Service
 public class TestService {
+	@Autowired ProcessInfoWriter processInfoWriter;
 	
 	@Autowired private Suppliers suppliers;	
 	@Autowired ValueTablesReader valueTableReader;
+	@Autowired ObjectWriter objectWriter;
 	@Autowired ObjectTablesReader objectTablesReader;
 	@Autowired Orders orders;
 	@Autowired Receipts receipts;
@@ -112,7 +117,7 @@ public class TestService {
 		Supplier supplier = addBasicSupplier();
 		poCode.setSupplier(supplier);
 		poCode.setContractType(getContractType());
-		orders.addPoCode(poCode);
+		objectWriter.addPoCode(poCode);
 		return poCode;
 	}
 
@@ -120,7 +125,7 @@ public class TestService {
 		ShipmentCode shipmentCode = new ShipmentCode();
 		shipmentCode.setCode(Integer.toString(randCode++));
 		shipmentCode.setPortOfDischarge(getShippingPort());
-		loadings.addShipmentCode(shipmentCode);
+		objectWriter.addShipmentCode(shipmentCode);
 		return shipmentCode;
 	}
 
@@ -152,6 +157,7 @@ public class TestService {
 		PO po = new PO();
 		GeneralPoCode poCode = new GeneralPoCode();
 		Supplier supplier = addBasicSupplier();
+		poCode.setCode(Integer.toString(randCode++));
 		poCode.setSupplier(supplier);
 		poCode.setContractType(getContractType());
 		po.setPoCode(poCode);
@@ -394,14 +400,17 @@ public class TestService {
 	public void cleanup(PO po) {
 		BasePoCode poCode = po.getPoCode();
 		Supplier supplier = poCode.getSupplier();
-		orders.removeOrder(po.getId());
-		suppliers.permenentlyRemoveEntity(poCode);
+		processInfoWriter.removeAllProcesses(poCode.getId());
+//		processInfoWriter.removeProcess(po.getId());
+//		orders.removeOrder(po.getId());
+//		suppliers.permenentlyRemoveEntity(poCode);
 		cleanup(supplier);
 		
 	}
 
 	public void cleanup(Receipt receipt) {
-		receipts.removeReceipt(receipt.getId());
+		processInfoWriter.removeProcess(receipt.getId());
+//		receipts.removeReceipt(receipt.getId());
 	}
 	
 	public static UsedItemsGroup[] getUsedItemsGroups(List<ProcessItemInventory> poInventory) {

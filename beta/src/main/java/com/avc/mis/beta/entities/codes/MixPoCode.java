@@ -33,6 +33,7 @@ import lombok.ToString;
 @Table(name = "MIXED_PO_CODES")
 //@PrimaryKeyJoinColumn(name = "poCodeId")
 //@DiscriminatorValue("mix_code")
+@Deprecated
 public class MixPoCode extends BasePoCode {
 
 	@ToString.Exclude 

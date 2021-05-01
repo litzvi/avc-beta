@@ -46,7 +46,8 @@ public class ProcessRow extends BasicDTO {
 	private Duration duration;
 	private ProcessStatus status;
 	private String[] approvals;
-	 
+	private String remarks;
+	
 	private List<ProductionProcessWithItemAmount> usedItems;
 	@JsonIgnore private Optional<AmountWithUnit> usedAmounts;
 	
@@ -59,7 +60,7 @@ public class ProcessRow extends BasicDTO {
 	public ProcessRow(@NonNull Integer id, 
 //			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			String poCodeIds, String poCodes, String suppliers,
-			OffsetDateTime recordedTime, Duration duration, ProcessStatus status, String approvals) {
+			OffsetDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, String remarks) {
 		super(id);
 //		if(poCodeId != null)
 //			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
@@ -79,6 +80,7 @@ public class ProcessRow extends BasicDTO {
 		else {
 			this.approvals = Stream.of(approvals.split(",")).toArray(String[]::new);
 		}
+		this.remarks = remarks;
 	}
 	
 	public void setUsedItems(List<ProductionProcessWithItemAmount> usedItems) {

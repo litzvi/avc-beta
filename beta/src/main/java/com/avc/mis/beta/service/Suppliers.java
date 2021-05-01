@@ -124,8 +124,6 @@ public class Suppliers {
 	 * @param supplierId
 	 */
 	public void removeSupplier(int supplierId) {
-//		SoftDeleted entity = getEntityManager().getReference(Supplier.class, supplierId);
-//		removeEntity(entity);	
 		dao.removeEntity(Supplier.class, supplierId);
 	}
 	
@@ -207,8 +205,6 @@ public class Suppliers {
 	 * @param contactId ContactDetails id of the account owner
 	 */
 	public void addAccount(PaymentAccount account, int contactId) {
-//		ContactDetails contactDetails = getEntityManager().getReference(ContactDetails.class, contactId);
-//		account.setContactDetails(contactDetails);
 		if(account.getOrdinal() == null) {
 			account.setOrdinal(0);
 		}
@@ -220,7 +216,6 @@ public class Suppliers {
 	 * @param accountId
 	 */
 	public void removeAccount(int accountId) {
-//		BaseEntity entity = getEntityManager().getReference(PaymentAccount.class, accountId);
 		getDeletableDAO().permenentlyRemoveEntity(PaymentAccount.class, accountId);	
 	}
 	
@@ -231,8 +226,6 @@ public class Suppliers {
 	 * @throws IllegalArgumentException if person isn't set or has a non qualifying name.
 	 */
 	public void addContactPerson(CompanyContact contact, int companyId) {
-//		Company company = getEntityManager().getReference(Company.class, companyId);
-//		contact.setCompany(company);
 		Person person = contact.getPerson();
 		if(person == null) {
 			throw new IllegalArgumentException("Company contact has to reference an existing or new person");
@@ -244,45 +237,9 @@ public class Suppliers {
 		}
 		else {
 			dao.addEntity(person);
-//			getEntityManager().persist(contact);
 		}
 		dao.addEntity(contact, Company.class, companyId);
 	}
 	
-	/**
-	 * Soft remove the CompanyContact - flags the contact as not active
-	 * @param contactId id of CompanyContact to remove
-	 */
-	public void removeContactPerson(int contactId) {
-//		SoftDeleted entity = getEntityManager().getReference(CompanyContact.class, contactId);
-		dao.removeEntity(CompanyContact.class, contactId);
-	}
-	
-	/**
-	 * For testing only, needed because calling DAO directly has no transaction
-	 * @param id
-	 */
-//	@Deprecated
-//	public void addEntity(BaseEntity entity, BaseEntity reference) {
-//		dao.addEntity(entity, reference);
-//	}
-	
-	/**
-	 * For testing only, needed because calling DAO directly has no transaction
-	 * @param identity
-	 */
-	@Deprecated
-	public void permenentlyRemoveEntity(BaseEntity entity) {
-		getDeletableDAO().permenentlyRemoveEntity(entity);
-	}
-
-	/**
-	 * For testing only, needed because calling DAO directly has no transaction
-	 * @param entity
-	 */
-	@Deprecated
-	public void editEntity(BaseEntity entity) {
-		dao.editEntity(entity);
-	}
 	
 }

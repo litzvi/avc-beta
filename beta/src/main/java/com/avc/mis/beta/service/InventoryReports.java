@@ -96,7 +96,6 @@ public class InventoryReports {
 				(i -> {return new PoInventoryRow(i.getPoCode());}), 
 				Function.identity(), 
 				setter));
-
 	}
 	
 	/**

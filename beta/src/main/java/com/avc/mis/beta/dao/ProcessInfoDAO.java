@@ -35,6 +35,7 @@ import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
@@ -115,28 +116,55 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public void addTransactionProcessEntity(TransactionProcess<?> process) {
 		addPoProcessEntity(process);
-		//check used items amounts () don't exceed the storage amounts
-		if(!isUsedInventorySufficiant(process.getId())) {
-			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
-		}	
-		setPoWeights(process);
-		setUsedProcesses(process);
+//		//check used items amounts () don't exceed the storage amounts
+//		if(!isUsedInventorySufficiant(process.getId())) {
+//			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+//		}	
+//		setPoWeights(process);
+//		setUsedProcesses(process);
 	}
 	
+	public void checkUsedInventoryAvailability(TransactionProcess<?> process) {
+		List<StorageBalance> storageBalances = getInventoryRepository().findUsedStorageBalances(process.getId());
+		if(storageBalances != null && storageBalances.stream().anyMatch(b -> !b.isLegal())) {
+			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+		}
+	}
+	
+	public void checkUsedInventoryAvailability(StorageRelocation process) {
+		List<StorageBalance> storageBalances = getInventoryRepository().findRelocationUseBalances(process.getId());
+		if(storageBalances != null && storageBalances.stream().anyMatch(b -> !b.isLegal())) {
+			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+		}
+	}
+
+	/**
+	 * Checks if for given storageBalances, the used/moved item storages total don't exceed storage amounts.
+	 * Only applies for TransactionProcess or StorageRelocation.
+	 * @param storageBalances 
+	 * @return true if for all process used storages, used amounts are equal or less than storage amount, false otherwise
+	 */
+//	private boolean isUsedInventorySufficiant(List<StorageBalance> storageBalances) {		
+//		if(storageBalances == null || storageBalances.isEmpty()) {
+//			return true;
+//		}
+//		return storageBalances.stream().allMatch(b -> b.isLegal());
+//	}
+
 	/**
 	 * Adding (persisting) a Storage Relocation process. 
 	 * Should be unified with addTransactionProcessEntity when StorageRelocation will extend TransactionProcess.
 	 * @param relocation
 	 */
-	public void addStorageRelocationProcessEntity(StorageRelocation relocation) {
-		addPoProcessEntity(relocation);
-		//check used items amounts () don't exceed the storage amounts
-		if(!isUsedInventorySufficiant(relocation.getId())) {
-			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
-		}	
-		setPoWeights(relocation);
-		setUsedProcesses(relocation);
-	}
+//	public void addStorageRelocationProcessEntity(StorageRelocation relocation) {
+//		addPoProcessEntity(relocation);
+//		//check used items amounts () don't exceed the storage amounts
+//		if(!isUsedInventorySufficiant(relocation.getId())) {
+//			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+//		}	
+//		setPoWeights(relocation);
+//		setUsedProcesses(relocation);
+//	}
 	
 	/**
 	 * Adding (persisting) a general transaction process (may have used and stored items). 
@@ -145,14 +173,14 @@ public class ProcessInfoDAO extends DAO {
 	 * Adds the process and adds required notifications.
 	 * @param process GeneralProcess to be added.
 	 */
-	public void addGeneralTransactionProcessEntity(TransactionProcess<?> process) {
-		addPoProcessEntity(process);
-		//check used items amounts () don't exceed the storage amounts
-		if(!isUsedInventorySufficiant(process.getId())) {
-			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
-		}	
-		setUsedProcesses(process);
-	}
+//	public void addGeneralTransactionProcessEntity(TransactionProcess<?> process) {
+//		addPoProcessEntity(process);
+//		//check used items amounts () don't exceed the storage amounts
+//		if(!isUsedInventorySufficiant(process.getId())) {
+//			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+//		}	
+//		setUsedProcesses(process);
+//	}
 		
 	public void setUsedProcesses(StorageRelocation process) {
 		removeOldProcessParents(process.getId());
@@ -180,30 +208,41 @@ public class ProcessInfoDAO extends DAO {
 	public List<ItemAmountWithPoCode> setPoWeights(StorageRelocation process) {
 		removeOldWeightedPos(process.getId());
 		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findRelocationWeightedPos(process.getId());
-		addPoWeights(poWeights, process);
+		addPoWeights(poWeights, process, true);
 		return poWeights;
 	}	
 	
 	public void setPoWeights(TransactionProcess<?> process) {
 		removeOldWeightedPos(process.getId());
-		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findTransactionWeightedPos(process.getId());
-		addPoWeights(poWeights, process);		
+		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findTransactionWeightedPos(process.getId(), ItemGroup.PRODUCT);
+		addPoWeights(poWeights, process, true);		
 	}
 	
-	private void addPoWeights(List<ItemAmountWithPoCode> poWeights, PoProcess process) {
+	public void setGeneralPoWeights(TransactionProcess<?> process) {
+		removeOldWeightedPos(process.getId());
+		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findTransactionWeightedPos(process.getId(), ItemGroup.GENERAL);
+		addPoWeights(poWeights, process, false);		
+	}
+	
+	private void addPoWeights(List<ItemAmountWithPoCode> poWeights, PoProcess process, boolean setWeight) {
 		if(poWeights != null && !poWeights.isEmpty()) {
-			AmountWithUnit usedWeight = poWeights.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
+			AmountWithUnit usedWeight = null;
+			if(setWeight) {
+				usedWeight = poWeights.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
+			}
 			Map<PoCodeBasic, Optional<AmountWithUnit>> poMap = poWeights.stream()
 					.collect(Collectors.groupingBy(ItemAmountWithPoCode::getPoCode, 
 							Collectors.mapping(ItemAmountWithPoCode::getWeightAmount, Collectors.reducing(AmountWithUnit::add))));
 			int ordinal = 0;
 			for(PoCodeBasic poCode: poMap.keySet()) {
 				WeightedPo weightedPo = ItemAmountWithPoCode.getWeightedPo(poCode.getId());
-				weightedPo.setWeight(
-						poMap.get(poCode).get()
-//						poWeight.getWeightAmount()
-						.divide(usedWeight)
-						.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_EVEN));
+				if(usedWeight != null) {
+					weightedPo.setWeight(
+							poMap.get(poCode).get()
+	//						poWeight.getWeightAmount()
+							.divide(usedWeight)
+							.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_EVEN));
+				}
 				weightedPo.setOrdinal(ordinal++);
 				addEntity(weightedPo, process);
 			}
@@ -223,29 +262,7 @@ public class ProcessInfoDAO extends DAO {
 			getEntityManager().remove(processParent);
 		}
 	}
-
-	/**
-	 * Checks if for given process, the used/moved item storages total don't exceed storage amounts.
-	 * Only applies for TransactionProcess or StorageRelocation.
-	 * @param processId 
-	 * @return true if for all process used storages, used amounts are equal or less than storage amount, false otherwise
-	 */
-	private boolean isUsedInventorySufficiant(Integer processId) {		
-		List<StorageBalance> storageBalances = getInventoryRepository().findUsedStorageBalances(processId);
-		if(storageBalances == null || storageBalances.isEmpty()) {
-			storageBalances = getInventoryRepository().findRelocationUseBalances(processId);
-		}
-		if(storageBalances == null || storageBalances.isEmpty()) {
-			return true;
-		}
-		return storageBalances.stream().allMatch(b -> b.isLegal());
-	}
 		
-	private boolean isProducedInventorySufficiant(Integer processId) {		
-		Stream<StorageBalance> storageBalances = getInventoryRepository().findProducedStorageBalances(processId);
-		return storageBalances.allMatch(b -> b.isLegal());
-	}
-
 	/**
 	 * editing (merging) a process or process information. 
 	 * Edits the process and adds required notifications.
@@ -261,49 +278,67 @@ public class ProcessInfoDAO extends DAO {
 		editAlerts(process);
 	}
 	
-	public void editStorageRelocationProcessEntity(StorageRelocation relocation) {
-		
-		checkRelocationRemovingUsedProduct(relocation);
-		editGeneralProcessEntity(relocation);
-		
-		//check used items amounts (after edit) don't exceed the storage amounts
-		if(!isUsedInventorySufficiant(relocation.getId())) {
-			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
-		}
-		setUsedProcesses(relocation);
-		List<ItemAmountWithPoCode> usedPos = setPoWeights(relocation);
-		checkDAGmaintained(usedPos, relocation.getId());
-		
+	public void editPoProcessEntity(PoProcess process) {
+		editGeneralProcessEntity(process);			
 	}
 	
-	public <T extends GeneralProcess> void editGeneralTransactionProcessEntity(TransactionProcess<?> process) {
-		editGeneralProcessEntity(process);
-
-		//check used items amounts (after edit) don't exceed the storage amounts
-		if(!isUsedInventorySufficiant(process.getId())) {
-			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
-		}
-		setUsedProcesses(process);
+	/**
+	 * editing (merging) a transaction process or process information(may have used and stored items). 
+	 * Edits the process and adds required notifications.
+	 * @param process GeneralProcess to be edited.
+	 */
+	public <T extends TransactionProcess<?>> void editTransactionProcessEntity(T process) {
+		editPoProcessEntity(process);
 	}
-	
-	public <T extends ProcessWithProduct<?>> void editProcessWithProductEntity(T process) {
-		//TODO check if can change number of units, if balance after change is legal
-		HashSet<Integer> storageIds = new HashSet<Integer>();
-		for(ProcessItem pi: CollectionItemWithGroup.safeCollection(Arrays.asList(process.getProcessItems()))) {
-			storageIds.addAll(Arrays.stream(pi.getStorageForms()).map(Storage::getId).collect(Collectors.toSet()));
-		}
-		if(getProcessRepository().isRemovingUsedProduct(process.getId(), storageIds)) {
-			throw new AccessControlException("Process items can't be edited because they are already in use");
-		}
-		
-		editGeneralProcessEntity(process);	
 
-		if(!isProducedInventorySufficiant(process.getId())) {
+//	public void editStorageRelocationProcessEntity(StorageRelocation relocation) {
+//		
+//		checkRemovingUsedProduct(relocation);
+//		editPoProcessEntity(relocation);
+//		
+//		checkUsedInventoryAvailability(relocation);
+//		setUsedProcesses(relocation);
+//		List<ItemAmountWithPoCode> usedPos = setPoWeights(relocation);
+//		checkDAGmaintained(usedPos, relocation.getId());
+//		
+//	}
+	
+//	public <T extends GeneralProcess> void editGeneralTransactionProcessEntity(TransactionProcess<?> process) {
+//		editGeneralProcessEntity(process);
+//
+//		checkUsedInventoryAvailability(process);
+//		setUsedProcesses(process);
+//	}
+	
+//	public <T extends ProcessWithProduct<?>> void editProcessWithProductEntity(T process) {
+//		//TODO check if can change number of units, if balance after change is legal
+//		checkRemovingUsedProduct(process);
+//		
+//		editPoProcessEntity(process);	
+//
+//		checkProducedInventorySufficiency(process);	
+//	}
+	
+	public <T extends ProcessWithProduct<?>> void checkProducedInventorySufficiency(T process) {
+		Stream<StorageBalance> storageBalances = getInventoryRepository().findProducedStorageBalances(process.getId());		
+		if(storageBalances.anyMatch(b -> !b.isLegal())) {
 			throw new IllegalArgumentException("Process produced amounts can't be reduced because already in use");
 		}
 	}
 	
-	public void checkRelocationRemovingUsedProduct(StorageRelocation relocation) {
+	public void checkProducedInventorySufficiency(StorageRelocation relocation) {
+		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageMoveBalances(relocation.getId());
+		if(!storageBalances.allMatch(b -> b.isLegal())) {
+			throw new IllegalArgumentException("Process moved amounts can't be reduced because already in use");
+		}	
+	}
+
+//	private boolean isProducedInventorySufficiant(Integer processId) {		
+//		Stream<StorageBalance> storageBalances = getInventoryRepository().findProducedStorageBalances(processId);
+//		return storageBalances.allMatch(b -> b.isLegal());
+//	}
+	
+	public void checkRemovingUsedProduct(StorageRelocation relocation) {
 		HashSet<Integer> storageIds = new HashSet<Integer>();
 		for(StorageMovesGroup pi: CollectionItemWithGroup.safeCollection(Arrays.asList(relocation.getStorageMovesGroups()))) {
 			storageIds.addAll(Arrays.stream(pi.getStorageMoves()).map(StorageBase::getId).collect(Collectors.toSet()));
@@ -313,15 +348,14 @@ public class ProcessInfoDAO extends DAO {
 		}		
 	}
 	
-	/**
-	 * editing (merging) a transaction process or process information(may have used and stored items). 
-	 * Edits the process and adds required notifications.
-	 * @param process GeneralProcess to be edited.
-	 */
-	public <T extends TransactionProcess<?>> void editTransactionProcessEntity(T process) {
-		editProcessWithProductEntity(process);
-		setPoWeights(process);
-		setUsedProcesses(process);
+	public <T extends ProcessWithProduct<?>> void checkRemovingUsedProduct(T process) {
+		HashSet<Integer> storageIds = new HashSet<Integer>();
+		for(ProcessItem pi: CollectionItemWithGroup.safeCollection(Arrays.asList(process.getProcessItems()))) {
+			storageIds.addAll(Arrays.stream(pi.getStorageForms()).map(Storage::getId).collect(Collectors.toSet()));
+		}
+		if(getProcessRepository().isRemovingUsedProduct(process.getId(), storageIds)) {
+			throw new AccessControlException("Process items can't be edited because they are already in use");
+		}	
 	}
 	
 	//call for edit of a TransactionProcess or StorageRelocation
@@ -519,7 +553,9 @@ public class ProcessInfoDAO extends DAO {
 			
 			//check that process items aren't used so can be cancelled
 			if(processStatus == ProcessStatus.CANCELLED && 
-					(getProcessRepository().isProcessReferenced(processId) || getProcessRepository().isOrderReferenced(processId))) {
+					(getProcessRepository().isProcessReferenced(processId) || 
+							getProcessRepository().isRelocationReferenced(processId) || 
+							getProcessRepository().isOrderReferenced(processId))) {
 				throw new IllegalStateException("Process can't be cancelled, is referenced by other not cancelled processes");			
 			}
 			

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
@@ -18,6 +17,7 @@ import com.avc.mis.beta.dto.view.ContainerArrivalRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ContainerArrival;
 import com.avc.mis.beta.repositories.ContainerArrivalRepository;
+import com.avc.mis.beta.service.reports.ContainerArrivalReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -34,20 +34,10 @@ import lombok.Getter;
 public class ContainerArrivals {
 	
 	@Autowired private ProcessInfoDAO dao;
-	
-	@Deprecated
-	@Autowired private DeletableDAO deletableDAO;
 
 	@Autowired private ContainerArrivalRepository containerArrivalRepository;
+	@Autowired private ContainerArrivalReports containerArrivalReports;
 	
-	public List<ContainerArrivalRow> getContainerArrivals() {
-		return getContainerArrivalRepository().findContainerArrivals();
-	}
-	
-	public Set<ContainerArrivalBasic> getNonLoadedArrivals() {
-		return getContainerArrivalRepository().getNonLoadedArrivals();		
-	}
-		
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addArrival(ContainerArrival arrival) {
 		arrival.setProcessType(dao.getProcessTypeByValue(ProcessName.CONTAINER_ARRIVAL));
@@ -75,10 +65,15 @@ public class ContainerArrivals {
 		dao.editGeneralProcessEntity(arrival);
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	@Deprecated
-	public void removeArrival(int arrivalId) {
-		getDeletableDAO().permenentlyRemoveEntity(ContainerArrival.class, arrivalId);
+	//----------------------------Duplicate in ContainerArrivalReports - Should remove------------------------------------------
+
+	public List<ContainerArrivalRow> getContainerArrivals() {
+		return getContainerArrivalReports().getContainerArrivals();
 	}
 	
+	public Set<ContainerArrivalBasic> getNonLoadedArrivals() {
+		return getContainerArrivalReports().getNonLoadedArrivals();		
+	}
+		
+
 }

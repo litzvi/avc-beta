@@ -5,30 +5,20 @@
 package com.avc.mis.beta.service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
-import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
-import com.avc.mis.beta.dto.doc.ExportInfo;
 import com.avc.mis.beta.dto.doc.InventoryExportDoc;
 import com.avc.mis.beta.dto.doc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
-import com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine;
-import com.avc.mis.beta.dto.report.LoadingReportLine;
 import com.avc.mis.beta.dto.view.LoadingRow;
-import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ContainerLoading;
-import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
+import com.avc.mis.beta.service.reports.LoadingReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -48,51 +38,9 @@ public class Loading {
 	
 	@Autowired private ProcessReader processReader;
 	@Autowired private ProcessInfoReader processInfoReader;
-	@Autowired private ProcessSummaryReader processSummaryReader;
 
-	@Deprecated
-	@Autowired private DeletableDAO deletableDAO;
+	@Autowired private LoadingReports lodingReports;
 	
-	public List<LoadingRow> getLoadings() {
-		return getLoadingsByPoCode(null);
-	}
-	
-	public List<LoadingRow> getLoadingsByPoCode(Integer poCodeId) {
-		List<LoadingRow> loadingRows = getContainerLoadingRepository().findContainerLoadings(poCodeId, true);
-		int[] processIds = loadingRows.stream().mapToInt(LoadingRow::getId).toArray();
-		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getContainerLoadingRepository()
-				.findAllUsedItemsByProcessIds(processIds)
-				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-		Map<Integer, List<ContainerPoItemRow>> usedByPoMap = getContainerLoadingRepository()
-				.findLoadedTotals(processIds)
-				.stream()
-				.collect(Collectors.groupingBy(ContainerPoItemRow::getId));
-		for(LoadingRow row: loadingRows) {
-			row.setUsedItems(usedMap.get(row.getId()));
-			row.setLoadedTotals(usedByPoMap.get(row.getId()));
-		}		
-		
-		return loadingRows;
-	}
-	
-	public List<LoadingReportLine> getLoadingSummary(Integer poCodeId) {
-		
-		return processSummaryReader.getLoadingSummary(poCodeId);
-//		List<ItemAmountWithLoadingReportLine> lines = getContainerLoadingRepository().findLoadingsItemsAmounts(poCodeId, false);		
-//		return CollectionItemWithGroup.getFilledGroups(lines);
-	}
-	
-
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addShipmentCode(ShipmentCode shipmentCode) {
-		dao.addEntity(shipmentCode);
-	}
-
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editShipmentCode(ShipmentCode shipmentCode) {
-		dao.editEntity(shipmentCode);
-	}	
-
 	/**
 	 * Adds a new container loading
 	 * 
@@ -104,6 +52,9 @@ public class Loading {
 		loading.setProcessType(dao.getProcessTypeByValue(ProcessName.CONTAINER_LOADING)); 
 		if(dao.isShippingCodeFree(loading.getShipmentCode().getId())) {
 			dao.addTransactionProcessEntity(loading); 
+			dao.checkUsedInventoryAvailability(loading);
+			dao.setPoWeights(loading);
+			dao.setUsedProcesses(loading);
 		}
 		else {
 			throw new IllegalArgumentException("Shipment Code is already used for another shipping");
@@ -132,23 +83,6 @@ public class Loading {
 
 		return loadingDTO; 
 	}
-	
-//	public ContainerLoadingDTO getLoadingWithAvilableInventory(
-//			int processId, ItemGroup group, ProductionUse[] productionUses, Integer itemId) {
-//		
-//		ContainerLoadingDTO loadingDTO = getLoading(processId);
-//		
-//		List<Integer> poCodeIds = Arrays.asList(Optional.ofNullable(loadingDTO.getPoCode()).map(i -> i.getId()).orElse(null));		
-//		if(loadingDTO.getWeightedPos() != null) {
-//			poCodeIds.addAll(loadingDTO.getWeightedPos().stream()
-//					.map(WeightedPoDTO::getPoCode)
-//					.filter(i -> i != null)
-//					.map(PoCodeBasic::getId).collect(Collectors.toList()));
-//		}
-//		getProcessInfoReader().setAvailableInventory(loadingDTO, group, productionUses, itemId, poCodeIds.toArray(new Integer[poCodeIds.size()]));
-//
-//		return loadingDTO;
-//	}
 
 	/**
 	 * Update the given ContainerLoading with the set data - Process information and
@@ -158,32 +92,34 @@ public class Loading {
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false) 
 	public void editLoading(ContainerLoading loading) {
+		dao.checkRemovingUsedProduct(loading);
+		
 		dao.editTransactionProcessEntity(loading); 
+		
+		dao.checkProducedInventorySufficiency(loading);
+		dao.checkUsedInventoryAvailability(loading);
+		dao.setPoWeights(loading);
+		dao.setUsedProcesses(loading);
 	}
 
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	//----------------------------Duplicate in LoadingReports - Should remove------------------------------------------
 
-	@Deprecated public void removeLoading(int loadingId) {
-		getDeletableDAO().permenentlyRemoveEntity(ContainerLoading.class, loadingId);
-	} 
+	
+	public List<LoadingRow> getLoadings() {
+		return getLoadingsByPoCode(null);
+	}
+	
+	public List<LoadingRow> getLoadingsByPoCode(Integer poCodeId) {		
+		return getLodingReports().getLoadingsByPoCode(poCodeId);
+	}
 	
 	public InventoryExportDoc getInventoryExportDoc(int processId) {
-		InventoryExportDoc doc = new InventoryExportDoc();
-		Optional<ExportInfo> optInfo = getContainerLoadingRepository().findInventoryExportDocById(processId);
-		doc.setExportInfo(optInfo.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id")));
-		doc.setLoadedTotals(getContainerLoadingRepository().findLoadedTotals(new int[] {processId}));
-		
-		return doc; 
-		
+		return getLodingReports().getInventoryExportDoc(processId);		
 	}
 	
 	public SecurityExportDoc getSecurityExportDoc(int processId) {
-		SecurityExportDoc doc = new SecurityExportDoc();
-		Optional<ExportInfo> optInfo = getContainerLoadingRepository().findInventoryExportDocById(processId);
-		doc.setExportInfo(optInfo.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id")));
-		doc.setLoadedStorages(getContainerLoadingRepository().findLoadedStorages(processId));
-		
-		return doc; 
-		
+		return getLodingReports().getSecurityExportDoc(processId);		
 	}
+	
+
 }

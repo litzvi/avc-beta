@@ -36,24 +36,17 @@ public class ProductionProcesses implements ProductionProcessService {
 	
 	@Autowired private ProcessReader processReader;
 	@Autowired private ProcessInfoReader processInfoReader;
-	@Autowired private ProcessReportsReader processReportsReader;
-	@Autowired private ProcessSummaryReader processSummaryReader;
+	@Autowired private ProductionProcessReports productionProcessReports;
 		
-	@Override
-	public List<ProcessRow> getProductionProcessesByType(ProcessName processName) {
-		return getProductionProcessesByTypeAndPoCode(processName, null);
-	}
-	
-	@Override
-	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
-		return getProcessReportsReader().getProcessesByTypeAndPoCode(ProductionProcess.class, processName, poCodeId, null, true);
-	}
 		
 	@Override
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addProductionProcess(ProductionProcess process, ProcessName processName) {
 		process.setProcessType(dao.getProcessTypeByValue(processName));
 		dao.addTransactionProcessEntity(process);	
+		dao.checkUsedInventoryAvailability(process);
+		dao.setPoWeights(process);
+		dao.setUsedProcesses(process);
 	}
 	
 	@Override
@@ -72,9 +65,26 @@ public class ProductionProcesses implements ProductionProcessService {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	@Override
 	public void editProductionProcess(ProductionProcess process) {
-		//check used items amounts don't exceed the storage amounts
-		dao.editTransactionProcessEntity(process);
+		dao.checkRemovingUsedProduct(process);
+				
+		dao.editTransactionProcessEntity(process);		
+		dao.checkProducedInventorySufficiency(process);
+		dao.checkUsedInventoryAvailability(process);
+		dao.setPoWeights(process);
+		dao.setUsedProcesses(process);
 	}
 
+	//----------------------------Duplicate in ProductionProcessReports - Should remove------------------------------------------
 	
+	
+	@Override
+	public List<ProcessRow> getProductionProcessesByType(ProcessName processName) {
+		return getProductionProcessesByTypeAndPoCode(processName, null);
+	}
+	
+	@Override
+	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
+		return getProductionProcessReports().getProcessesByTypeAndPoCode(ProductionProcess.class, processName, poCodeId, null, true);
+	}
+
 }

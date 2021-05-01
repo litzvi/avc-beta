@@ -22,11 +22,9 @@ import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageBalance;
-import com.avc.mis.beta.dto.query.UsedProcess;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
-import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
@@ -68,7 +66,7 @@ public class WarehouseManagement {
 	@Autowired private RelocationRepository relocationRepository;
 	@Autowired private InventoryUseRepository inventoryUseRepository;
 	@Autowired private ValueTablesRepository valueTablesRepository;
-	@Autowired private ProcessReportsReader processReportsReader;
+	@Autowired private ProductionProcessReports processReportsReader;
 	@Autowired private ProcessReader processReader;
 	@Autowired private ProcessInfoReader processInfoReader;
 
@@ -132,6 +130,9 @@ public class WarehouseManagement {
 	public void addStorageTransfer(StorageTransfer transfer) {
 		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
 		dao.addTransactionProcessEntity(transfer);
+		dao.checkUsedInventoryAvailability(transfer);
+		dao.setPoWeights(transfer);
+		dao.setUsedProcesses(transfer);
 		//check if process items match the used item (items are equal, perhaps also check amounts difference and send warning)
 		checkTransferBalance(transfer);
 	}
@@ -141,7 +142,10 @@ public class WarehouseManagement {
 	public void addStorageRelocation(StorageRelocation relocation) {
 		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
 		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
-		dao.addStorageRelocationProcessEntity(relocation);
+		dao.addPoProcessEntity(relocation);
+		dao.checkUsedInventoryAvailability(relocation);
+		dao.setPoWeights(relocation);
+		dao.setUsedProcesses(relocation);
 		//check if storage moves match the amounts of the used item
 		checkRelocationBalance(relocation);
 	}
@@ -153,7 +157,10 @@ public class WarehouseManagement {
 			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
 		}				
 		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_USE));
-		dao.addGeneralTransactionProcessEntity(inventoryUse);
+		dao.addTransactionProcessEntity(inventoryUse);
+		dao.checkUsedInventoryAvailability(inventoryUse);
+		dao.setGeneralPoWeights(inventoryUse);
+		dao.setUsedProcesses(inventoryUse);
 	}	
 	
 	private boolean isUsedInItemGroup(UsedItemsGroup[] usedItemGroups, ItemGroup itemGroup) {
@@ -184,16 +191,6 @@ public class WarehouseManagement {
 		return inventoryUseDTO;
 	}
 		
-	/**
-	 * @param relocation
-	 */
-	private void checkRelocationOutputSufficent(StorageRelocation relocation) {
-		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageMoveBalances(relocation.getId());
-		if(!storageBalances.allMatch(b -> b.isLegal())) {
-			throw new IllegalArgumentException("Process moved amounts can't be reduced because already in use");
-		}	
-	}
-	
 	private void checkRelocationBalance(StorageRelocation relocation) {
 		List<ProcessItemTransactionDifference> differences = getRelocationRepository().findRelocationDifferences(relocation.getId());		
 		for(ProcessItemTransactionDifference d: differences) {
@@ -296,15 +293,31 @@ public class WarehouseManagement {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editStorageTransfer(StorageTransfer transfer) {
 		//check used items amounts don't exceed the storage amounts
+		dao.checkRemovingUsedProduct(transfer);
+		
 		dao.editTransactionProcessEntity(transfer);
+		
+		dao.checkProducedInventorySufficiency(transfer);
+		dao.checkUsedInventoryAvailability(transfer);
+		dao.setPoWeights(transfer);
+		dao.setUsedProcesses(transfer);
 		checkTransferBalance(transfer);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editStorageRelocation(StorageRelocation relocation) {
 		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
-		dao.editStorageRelocationProcessEntity(relocation);
-		checkRelocationOutputSufficent(relocation);
+		
+		dao.checkRemovingUsedProduct(relocation);
+		
+		dao.editPoProcessEntity(relocation);
+		
+		dao.checkUsedInventoryAvailability(relocation);
+		dao.setUsedProcesses(relocation);
+		List<ItemAmountWithPoCode> usedPos = dao.setPoWeights(relocation);
+		dao.checkDAGmaintained(usedPos, relocation.getId());
+
+		dao.checkProducedInventorySufficiency(relocation);
 		checkRelocationBalance(relocation);
 	}
 	
@@ -314,7 +327,12 @@ public class WarehouseManagement {
 		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.GENERAL)) {
 			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
 		}			
-		dao.editGeneralTransactionProcessEntity(inventoryUse);
+		dao.editTransactionProcessEntity(inventoryUse);
+		
+		dao.checkUsedInventoryAvailability(inventoryUse);
+		dao.setGeneralPoWeights(inventoryUse);
+		dao.setUsedProcesses(inventoryUse);
+
 	}
 	
 	private void setStorageMovesProcessItem(StorageMovesGroup[] storageMovesGroups) {
@@ -353,67 +371,5 @@ public class WarehouseManagement {
 				
 		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
 	}	
-	
-//	public List<ProcessItemInventory> getAvailableInventory(ItemGroup group, ProductionUse[] productionUses, Integer itemId, int poCodeId) {
-//		int[] poCodeIds = new int[] {poCodeId};
-//		return getAvailableInventory(group, productionUses, itemId, poCodeIds);
-//	}
-	
-//	//need to make sure currently in inventory - used for test
-//	@Deprecated
-//	public List<PoProcessItemEntry> getProcessItemsWithPoByPo(Integer poCodeId) {		
-//		return ProcessItemDTO.getProcessItemsWithPo(getInventoryRepository().findProcessItemWithStorageByPoCode(poCodeId));
-//	}
-//	
-//	//need to make sure currently in inventory - used for test
-//	@Deprecated
-//	public List<PoProcessItemEntry> getProcessItemsWithPoByItem(Integer itemId) {		
-//		return ProcessItemDTO.getProcessItemsWithPo(getInventoryRepository().findProcessItemWithStorageByItem(itemId));
-//	}
-
-//	public List<ProcessItemInventory> getCashewAvailableInventoryByPo(Integer poCodeId) {		
-//		return getAvailableInventory(ItemGroup.PRODUCT, null, null, poCodeId);		
-//	}
-	
-//	/**
-//	 * Gets inventory for all item groups (Product, General, Waste etc.)
-//	 * @param poCodeId
-//	 * @return
-//	 */
-//	public List<ProcessItemInventory> getAllAvailableInventoryByPo(Integer poCodeId) {		
-//		return getAvailableInventory(null, null, null, poCodeId);		
-//	}
-	
-//	public List<ProcessItemInventory> getAvailableInventoryByItem(Integer itemId) {		
-//		return getAvailableInventory(null, null, itemId, null);
-//	}
-	
-//	public List<ProcessItemInventory> getAvailableInventoryByItemProductionUses(@NonNull ProductionUse[] productionUses) {		
-//		return getAvailableInventory(null, productionUses, null, null);
-//	}
-	
-//	/**
-//	 * Gets all information of items in available inventory, for provided supply group, item or po code.
-//	 * If one of the parameters are null than will ignore that constraint.
-//	 * For each stored item in inventory, provides information on the process item and balances,
-//	 * with list of storages that contain amounts used and totals.
-//	 * Available inventory for querying what items are available for use by a process.
-//	 * Items are considered available inventory if the producing process status is final 
-//	 * and it's not completely used by another using process where the using process isn't cancelled.
-//	 * @param supplyGroup constrain to only this supply group, if null than any.
-//	 * @param itemCategories constrain to only items from given category, if null than any.
-//	 * @param itemId constrain to only this item, if null than any.
-//	 * @param poCodeId constrain to only this po, if null than any.
-//	 * @return List of ProcessItemInventory
-//	 */
-//	@Deprecated //next method - new one
-//	public List<ProcessItemInventory> getAvailableInventory_old(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
-//		boolean checkProductionUses = (productionUses != null);
-//		List<InventoryProcessItemWithStorage> processItemWithStorages =
-//					getInventoryRepository().findAvailableInventoryProcessItemWithStorage(checkProductionUses, productionUses, group, itemId, poCodeId);
-//
-//		return CollectionItemWithGroup.getFilledGroups(processItemWithStorages);
-//	}
-
 
 }

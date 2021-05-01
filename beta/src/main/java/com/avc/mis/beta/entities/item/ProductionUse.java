@@ -12,6 +12,7 @@ public enum ProductionUse {
 	RAW_KERNEL,
 	CLEAN,
 	ROAST,
+	TOFFEE,
 	PACKED,
 	INGREDIENTS,
 	PACKING_SUPPLYES,

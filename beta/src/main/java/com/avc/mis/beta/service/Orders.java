@@ -3,36 +3,21 @@
  */
 package com.avc.mis.beta.service;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
-import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.process.PoDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
-import com.avc.mis.beta.dto.view.PoRow;
-import com.avc.mis.beta.dto.view.ProcessRow;
-import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
-import com.avc.mis.beta.entities.codes.GeneralPoCode;
-import com.avc.mis.beta.entities.codes.MixPoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.enums.SequenceIdentifier;
-import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.repositories.PORepository;
-import com.avc.mis.beta.utilities.ProgramSequence;
+import com.avc.mis.beta.service.reports.OrderReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -50,133 +35,9 @@ public class Orders {
 	
 	@Autowired private ProcessInfoDAO dao;
 	
-	@Deprecated
-	@Autowired private DeletableDAO deletableDAO;
-	
-	@Autowired private PORepository poRepository;	
-	
-	
-	private List<PoRow> getPoRows(List<PoItemRow> itemRows) {
-		Map<Integer, List<PoItemRow>> poMap = itemRows.stream()
-				.collect(Collectors.groupingBy(PoItemRow::getId, Collectors.toList()));
-		List<PoRow> poRows = new ArrayList<PoRow>();
-		poMap.forEach((k, v) -> {
-			PoRow poRow = new PoRow(k, v);
-			poRows.add(poRow);
-		});
+	@Autowired private PORepository poRepository;
+	@Autowired private OrderReports orderReports;
 		
-		return poRows;
-	}
-	
-	/**
-	 * Get the table of all Cashew purchase orders that are active(not cancelled or archived) and where not received.
-	 * @return list of PoRow for orders that are yet to be received
-	 */
-	public List<PoItemRow> findOpenCashewOrderItems() {
-		List<PoItemRow> poItemRows = getOrdersByType(ProcessName.CASHEW_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
-		return poItemRows;
-	}
-	
-	/**
-	 * Get the table of all Cashew purchase orders that are not cancelled.
-	 * @return list of PoRow for all orders (not cancelled)
-	 */
-	public List<PoItemRow> findAllCashewOrderItems() {
-		return getOrdersByType(ProcessName.CASHEW_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false);
-	}
-	
-	/**
-	 * Get the table of all Cashew purchase orders that are not cancelled.
-	 * @return list of PoRow for all orders (not cancelled)
-	 */
-	public List<PoItemRow> findAllGeneralOrderItems() {
-		return getOrdersByType(ProcessName.GENERAL_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false);
-	}
-	
-	/**
-	 * Get the table of all Cashew purchase orders including cancelled orders.
-	 * @return list of PoRow for all orders
-	 */
-	public List<PoItemRow> findAllCashewOrderItemsHistory() {
-		return getOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null, null, false);
-	}
-	
-	/**
-	 * Get the table of all Cashew purchase orders including cancelled orders.
-	 * @return list of PoRow for all orders
-	 */
-	public List<PoItemRow> findAllGeneralOrderItemsHistory() {
-		return getOrdersByType(ProcessName.GENERAL_ORDER, ProcessStatus.values(), null, null, false);
-	}
-	
-	public List<PoItemRow> getOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId) {
-		return getOrdersByType(orderType, processStatuses, poCodeId, null, false);
-	}
-	
-	public List<PoItemRow> getOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId, ItemGroup itemGroup, boolean onlyOpen) {
-		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(orderType, processStatuses, poCodeId, itemGroup, onlyOpen);
-		int[] orderItemIds = poItemRows.stream().mapToInt(PoItemRow::getOrderItemId).toArray();
-		Map<Integer, BigDecimal> receivedAmountMap = getPoRepository()
-				.findReceivedAmountByOrderItemIds(orderItemIds)
-				.collect(Collectors.toMap(ValueObject<BigDecimal>::getId, ValueObject<BigDecimal>::getValue));
-		Map<Integer, BigDecimal> receivedOrderUnitsMap = getPoRepository()
-				.findReceivedOrderUnitsByOrderItemIds(orderItemIds)
-				.collect(Collectors.toMap(ValueObject<BigDecimal>::getId, ValueObject<BigDecimal>::getValue));
-		Map<Integer, Long> numReceiptsCancelledMap = getPoRepository()
-				.findumReceiptsCancelledByOrderItemIds(orderItemIds)
-				.collect(Collectors.toMap(ValueObject<Long>::getId, ValueObject<Long>::getValue));
-		for(PoItemRow row: poItemRows) {
-			row.setReceivedAmount(receivedAmountMap.get(row.getOrderItemId()));
-			row.setReceivedOrderUnits(receivedOrderUnitsMap.get(row.getOrderItemId()));
-			
-			Optional<Long> numCancelled = Optional.ofNullable(numReceiptsCancelledMap.get(row.getOrderItemId()));
-			row.setReceiptsCancelled(numCancelled.orElse(0L));
-		}	
-		return poItemRows;
-	}
-	
-	/**
-	 * Get the table of all General purchase orders that are active(not cancelled or archived) and where not received.
-	 * @return list of PoRow for orders that are yet to be received
-	 */
-	public List<PoItemRow> findOpenGeneralOrderItems() {
-		return getOrdersByType(ProcessName.GENERAL_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
-	}
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addPoCode(PoCode poCode) {
-		dao.addEntity(poCode);
-	}
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	@Deprecated
-	public void addMixPoCode(MixPoCode poCode) {
-		dao.addEntity(poCode);
-	}
-	
-	@Deprecated //The code is set by the user
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	private void addGeneralPoCode(GeneralPoCode poCode) {
-		ProgramSequence sequence = dao.getSequnce(SequenceIdentifier.GENERAL_PO_CODE);
-		poCode.setCode(String.valueOf(sequence.getSequance()));	
-		sequence.advance();
-		dao.addEntity(poCode);
-	}
-
-	
-//	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-//	private void addOrder(PO po) {
-//		//using save rather than persist in case POid was assigned by user
-////		dao.addEntityWithFlexibleGenerator(po.getPoCode());
-////		Session session = getEntityManager().unwrap(Session.class);
-////		session.save(po.getPoCode());
-//		
-//		
-//	}
 
 	/**
 	 * Adds a new Cashew purchase order
@@ -262,54 +123,54 @@ public class Orders {
 	public void editOrder(PO po) {
 		dao.editGeneralProcessEntity(po);
 	}
+			
 	
-	public PoCodeDTO getPoCode(int poCodeId) {
-		Optional<PoCodeDTO> poCode = getPoRepository().findPoCodeById(poCodeId);
-		return poCode.orElseThrow(
-				()->new IllegalArgumentException("No PO code with given id"));		
-	}
+//----------------------------Duplicate in OrderReports - Should remove------------------------------------------
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editPoCode(PoCode poCode) {
-		dao.editEntity(poCode);
-	}	
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editMixPoCode(MixPoCode poCode) {
-		dao.editEntity(poCode);
-	}	
-		
-	/**
-	 * Get the table of all Cashew purchase orders that are active and where not received.
-	 * @return list of PoRow for orders that are yet to be received
-	 */
-	@Deprecated
-	public List<PoRow> findOpenCashewOrders() {
-		List<PoItemRow> itemRows = getOrdersByType(ProcessName.CASHEW_ORDER, 
+	public List<PoItemRow> findOpenCashewOrderItems() {
+		List<PoItemRow> poItemRows = getOrderReports().getOrdersByType(ProcessName.CASHEW_ORDER, 
 				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
-		
-		return getPoRows(itemRows);
+		return poItemRows;
 	}
 	
-	/**
-	 * Get the table of all General purchase orders that are active and where not received.
-	 * @return list of PoRow for orders that are yet to be received
-	 */
-	@Deprecated
-	public List<PoRow> findOpenGeneralOrders() {
-		List<PoItemRow> itemRows = getOrdersByType(ProcessName.GENERAL_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
-		return getPoRows(itemRows);
+	public List<PoItemRow> findAllCashewOrderItems() {
+		return getOrderReports().getOrdersByType(ProcessName.CASHEW_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false);
 	}
+	
+	public List<PoItemRow> findAllGeneralOrderItems() {
+		return getOrderReports().getOrdersByType(ProcessName.GENERAL_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false);
+	}
+	
+	public List<PoItemRow> findAllCashewOrderItemsHistory() {
+		return getOrderReports().getOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null, null, false);
+	}
+	
+	public List<PoItemRow> findAllGeneralOrderItemsHistory() {
+		return getOrderReports().getOrdersByType(ProcessName.GENERAL_ORDER, ProcessStatus.values(), null, null, false);
+	}
+	
+	public List<PoItemRow> getOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId) {
+		return getOrderReports().getOrdersByType(orderType, processStatuses, poCodeId, null, false);
+	}
+		
+	public List<PoItemRow> findOpenGeneralOrderItems() {
+		return getOrderReports().getOrdersByType(ProcessName.GENERAL_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
+	}
+	
+	
+//	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+//	private void addOrder(PO po) {
+//		//using save rather than persist in case POid was assigned by user
+////		dao.addEntityWithFlexibleGenerator(po.getPoCode());
+////		Session session = getEntityManager().unwrap(Session.class);
+////		session.save(po.getPoCode());
+//		
+//		
+//	}
 
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	@Deprecated
-	public void removeOrder(int orderId) {
-		getDeletableDAO().permenentlyRemoveEntity(PO.class, orderId);
-	}
-	
-	
-	
 	
 }

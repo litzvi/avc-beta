@@ -4,12 +4,15 @@
 package com.avc.mis.beta.repositories;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
+import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.BankAccount;
@@ -267,5 +270,16 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 
 	@Query("select s from ProgramSequence s where s.identifier = :sequenceIdentifier ")
 	ProgramSequence findSequence(SequenceIdentifier sequenceIdentifier);
+
+	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO( "
+			+ "po_code.id, po_code.code, "
+			+ "s.id, s.version, s.name, "
+			+ "ct.id, ct.value, ct.code, ct.currency, ct.suffix, ct.supplyGroup) "
+		+ "from BasePoCode po_code "
+			+ "join po_code.supplier s "
+			+ "join po_code.contractType ct "
+		+ "where po_code.id = :poCodeId ")
+	Optional<PoCodeDTO> findPoCodeById(int poCodeId);
+
 	
 }

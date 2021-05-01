@@ -88,7 +88,7 @@ public interface QCRepository extends PoProcessRepository<QualityCheck> {
 
 	@Query("select new com.avc.mis.beta.dto.view.CashewQcRow( "
 			+ "qc.id, po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
-			+ "qc.checkedBy, i.id, i.value, qc.recordedTime, "
+			+ "qc.checkedBy, i.id, i.value, qc.recordedTime, lc.processStatus, "
 			+ "ti.numberOfSamples, ti.sampleWeight, ti.precentage, "
 			+ "ti.humidity, ti.breakage,"
 				+ "def.scorched, def.deepCut, def.offColour, "
@@ -104,6 +104,7 @@ public interface QCRepository extends PoProcessRepository<QualityCheck> {
 				+ "join po_code.supplier s "
 				+ "join po_code.contractType ct "
 			+ "join qc.processType pt "
+			+ "join qc.lifeCycle lc "
 		+ "where pt.processName in :processNames "
 			+ "and (po_code.id = :poId or :poId is null) "
 		+ "order by qc.recordedTime desc ")

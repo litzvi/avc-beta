@@ -61,6 +61,7 @@ import com.avc.mis.beta.service.ContainerArrivals;
 import com.avc.mis.beta.service.InventoryReports;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
+import com.avc.mis.beta.service.ObjectWriter;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessReader;
@@ -84,6 +85,7 @@ import com.avc.mis.beta.serviceinterface.ProductionProcessService;
 public class QueryTest {
 	
 	@Autowired TestService service;
+	@Autowired ObjectWriter objectWriter;
 	@Autowired ObjectTablesReader objectTablesReader;
 	@Autowired ValueTablesReader valueTablesReader;
 	@Autowired ProcessReader processReader;
@@ -365,38 +367,20 @@ public class QueryTest {
 		List<PoCodeBasic> poCodes = objectTablesReader.findAllPoCodes();
 		if(poCodes.isEmpty())
 			fail("No po codes to test");
-		poCodes.forEach(c -> {
-			Map<ProcessName, List<PoProcessDTO>> qcProcessesMap = qualityChecks.getAllQualityChecksByPo(c.getId());
-			qcProcessesMap.forEach((k, v) -> {
-				if(!v.isEmpty()) {
-					System.out.println("Process name: " + k);
-					v.forEach(r -> System.out.println(r));
-				}
-			});
-			System.out.println(loading.getLoadingsByPoCode(c.getId()));
-		});
 		
-		poCodes.forEach(c -> System.out.println(orders.getPoCode(c.getId())));
+		poCodes.forEach(c -> System.out.println(objectWriter.getPoCode(c.getId())));
 		
 		poCodes = objectTablesReader.findFreePoCodes();
 		poCodes.forEach(i -> System.out.println(i));
-		
-		Map<ProcessName, List<PoProcessDTO>> qcProcessesMap = qualityChecks.getAllQualityChecksByPo(44952);
-		qcProcessesMap.forEach((k, v) -> {
-			if(!v.isEmpty()) {
-				System.out.println("Process name: " + k);
-				v.forEach(r -> System.out.println(r));
-			}
-		});
 		
 		List<PoCodeBasic> freePoCodes = objectTablesReader.findFreeMixPoCodes();
 		List<PoCodeBasic> freeMixPoCodes = objectTablesReader.findFreeMixPoCodes();
 
 		//final report
 		poCodes.forEach(c -> System.out.println(processSummaryReader.getFinalReport(c.getId())));
-		poCodes.forEach(c -> System.out.println(qualityChecks.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, c.getId())));
+		poCodes.forEach(c -> System.out.println(processSummaryReader.getQcSummary(ProcessName.CASHEW_RECEIPT_QC, c.getId())));
 		poCodes.forEach(c -> System.out.println(processSummaryReader.getProductionSummary(ProcessName.CASHEW_CLEANING, c.getId())));
-		poCodes.forEach(c -> System.out.println(receipts.getReceiptSummary(c.getId())));
+		poCodes.forEach(c -> System.out.println(processSummaryReader.getReceiptSummary(c.getId())));
 
 		poCodes.forEach(c -> System.out.println(processSummaryReader.getFinalReport(c.getId())));
 		

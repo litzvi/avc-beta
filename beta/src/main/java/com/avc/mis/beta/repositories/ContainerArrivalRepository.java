@@ -27,23 +27,6 @@ public interface ContainerArrivalRepository extends ProcessRepository<ContainerA
 		+ "where p.id = :processId ")
 	ContainerArrivalInfo findContainerArrivalInfo(int processId);
 
-	@Query("select new com.avc.mis.beta.dto.basic.ContainerArrivalBasic("
-			+ "p.id, p.version, cd.containerNumber, "
-			+ "pc.id, pc.version, pc.name) "
-		+ "from ContainerArrival p "
-			+ "join p.containerDetails cd "
-			+ "left join p.productCompany pc "
-		+ "where p.containerLoadings is empty "
-			+ "or not exists ("
-				+ "select p_2 "
-				+ "from p.containerLoadings p_2 "
-					+ "join p_2.lifeCycle lc_2 "
-				+ "where "
-					+ "lc_2.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
-			+ ") "
-		+ "order by p.recordedTime ")
-	Set<ContainerArrivalBasic> getNonLoadedArrivals();
-
 	@Query("select new com.avc.mis.beta.dto.view.ContainerArrivalRow( "
 			+ "p.id, "
 			+ "p.recordedTime, p.duration, lc.processStatus, "
@@ -61,5 +44,23 @@ public interface ContainerArrivalRepository extends ProcessRepository<ContainerA
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
 	List<ContainerArrivalRow> findContainerArrivals();
+
+	@Query("select new com.avc.mis.beta.dto.basic.ContainerArrivalBasic("
+			+ "p.id, p.version, cd.containerNumber, "
+			+ "pc.id, pc.version, pc.name) "
+		+ "from ContainerArrival p "
+			+ "join p.containerDetails cd "
+			+ "left join p.productCompany pc "
+		+ "where p.containerLoadings is empty "
+			+ "or not exists ("
+				+ "select p_2 "
+				+ "from p.containerLoadings p_2 "
+					+ "join p_2.lifeCycle lc_2 "
+				+ "where "
+					+ "lc_2.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+			+ ") "
+		+ "order by p.recordedTime ")
+	Set<ContainerArrivalBasic> getNonLoadedArrivals();
+
 
 }

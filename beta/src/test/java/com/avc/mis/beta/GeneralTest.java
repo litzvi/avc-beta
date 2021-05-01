@@ -52,6 +52,7 @@ import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.entities.processinfo.SampleItem;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
+import com.avc.mis.beta.service.ObjectWriter;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.QualityChecks;
@@ -84,6 +85,7 @@ public class GeneralTest {
 	@Autowired QualityChecks checks;
 	@Autowired Samples samples;
 	
+	@Autowired ObjectWriter objectWriter;
 	@Autowired ValueWriter valueWriter;
 	@Autowired ProcessInfoWriter processInfoWriter;
 	
@@ -103,7 +105,7 @@ public class GeneralTest {
 		poCode.setCode(Integer.toString(PO_CODE));
 		poCode.setContractType(valueTablesRepository.findContractTypeByCodeAndCurrency("VAT", Currency.getInstance("VND")));
 		poCode.setSupplier(supplier);
-		orders.addPoCode(poCode);
+		objectWriter.addPoCode(poCode);
 		po.setPoCode(poCode);
 		po.setRecordedTime(OffsetDateTime.now());
 		OrderItem[] orderItems = new OrderItem[NUM_PO_ITEMS];
