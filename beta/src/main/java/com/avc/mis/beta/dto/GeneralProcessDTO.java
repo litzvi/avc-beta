@@ -10,7 +10,7 @@ import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
-import com.avc.mis.beta.dto.embedable.GeneralProcessInfo;
+import com.avc.mis.beta.dto.processInfo.GeneralProcessInfo;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;

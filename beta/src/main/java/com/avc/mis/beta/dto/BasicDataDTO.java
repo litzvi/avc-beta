@@ -13,12 +13,11 @@ import lombok.ToString;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public abstract class BasicDataDTO extends BasicDTO {
+public abstract class BasicDataDTO extends BasicValueDTO {
 
-	@EqualsAndHashCode.Exclude
 	private Integer version;
 	
 	public BasicDataDTO(Integer id, Integer version) {

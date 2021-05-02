@@ -9,7 +9,7 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
-import com.avc.mis.beta.dto.embedable.ContainerArrivalInfo;
+import com.avc.mis.beta.dto.processInfo.ContainerArrivalInfo;
 import com.avc.mis.beta.dto.view.ContainerArrivalRow;
 import com.avc.mis.beta.entities.process.ContainerArrival;
 
@@ -19,7 +19,7 @@ import com.avc.mis.beta.entities.process.ContainerArrival;
  */
 public interface ContainerArrivalRepository extends ProcessRepository<ContainerArrival> {
 
-	@Query("select new com.avc.mis.beta.dto.embedable.ContainerArrivalInfo("
+	@Query("select new com.avc.mis.beta.dto.processInfo.ContainerArrivalInfo("
 			+ "p.containerDetails, p.shipingDetails, "
 			+ "pc.id, pc.version, pc.name) "
 		+ "from ContainerArrival p "

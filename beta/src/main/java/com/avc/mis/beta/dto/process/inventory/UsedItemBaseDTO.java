@@ -12,10 +12,10 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.ItemWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -1,14 +1,7 @@
 package com.avc.mis.beta.service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +11,7 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
-import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
-import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
-import com.avc.mis.beta.dto.query.StorageBalance;
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
@@ -33,16 +22,11 @@ import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.InventoryUse;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
-import com.avc.mis.beta.entities.process.inventory.StorageBase;
-import com.avc.mis.beta.entities.process.inventory.StorageMove;
-import com.avc.mis.beta.entities.process.inventory.UsedItem;
-import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
-import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 import com.avc.mis.beta.repositories.InventoryRepository;
-import com.avc.mis.beta.repositories.InventoryUseRepository;
-import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
-import com.avc.mis.beta.repositories.ValueTablesRepository;
+import com.avc.mis.beta.service.reports.InventoryUseReports;
+import com.avc.mis.beta.service.reports.ProductionProcessReports;
+import com.avc.mis.beta.service.reports.StorageRelocationReports;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
@@ -62,64 +46,93 @@ public class WarehouseManagement {
 	@Autowired private ProcessInfoDAO dao;
 	
 	@Autowired private InventoryRepository inventoryRepository;
-	@Autowired private TransferRepository transferRepository;
-	@Autowired private RelocationRepository relocationRepository;
-	@Autowired private InventoryUseRepository inventoryUseRepository;
-	@Autowired private ValueTablesRepository valueTablesRepository;
-	@Autowired private ProductionProcessReports processReportsReader;
-	@Autowired private ProcessReader processReader;
-	@Autowired private ProcessInfoReader processInfoReader;
 
+	public List<ProcessItemInventory> getAvailableInventory(
+			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
+			Integer itemId, Integer[] poCodeIds, Integer excludeProcessId) {
+		
+		boolean checkProductionUses = (productionUses != null);
+		boolean checkFunctionalities = (functionalities != null);
+		boolean checkPoCodes = (poCodeIds != null);
+		Integer[] excludedProcessIds = null;
+		if(poCodeIds != null && excludeProcessId != null) {
+			excludedProcessIds = dao.getProcessDescendants(poCodeIds, excludeProcessId);
+		}
+		boolean checkExcludedProcessIds = (excludedProcessIds != null && excludedProcessIds.length > 0);
+		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()
+				.findAvailableInventoryByStorage(checkProductionUses, productionUses, 
+						checkFunctionalities, functionalities, 
+						group, itemId, 
+						checkPoCodes, poCodeIds,
+						checkExcludedProcessIds, excludedProcessIds);
+				
+		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
+	}	
 	
-	public List<ProcessRow> getStorageTransfers() {
-		return getStorageTransfersByPoCode(null);
-	}
 	
-	public List<ProcessRow> getStorageTransfersByPoCode(Integer poCodeId) {
-		return getProcessReportsReader().getProcessesByTypeAndPoCode(StorageTransfer.class, ProcessName.STORAGE_TRANSFER, poCodeId, null, true);
-	}
+	//----------------------------Duplicate in InventoryUses - Should remove------------------------------------------
+	
+	@Autowired private InventoryUses inventoryUseService;
+	@Autowired private InventoryUseReports inventoryUseReports;
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addGeneralInventoryUse(InventoryUse inventoryUse) {
+		getInventoryUseService().addGeneralInventoryUse(inventoryUse);
+	}	
+	
 
-	public List<ProcessRow> getStorageRelocations() {
-		return getStorageRelocationsByPoCode(null, null);
+	public InventoryUseDTO getInventoryUse(int processId) {
+		return getInventoryUseService().getInventoryUse(processId);
 	}
-	
-	public List<ProcessRow> getStorageRelocations(ProductionFunctionality productionFunctionality) {
-		return getStorageRelocationsByPoCode(null, productionFunctionality);
-	}
-	
-	public List<ProcessRow> getStorageRelocationsByPoCode(Integer poCodeId, ProductionFunctionality productionFunctionality) {
-		return getProcessReportsReader().getProcessesByTypeAndPoCode(StorageRelocation.class, ProcessName.STORAGE_RELOCATION, poCodeId, productionFunctionality, true);
-//		List<ProcessRow> relocationRows = getRelocationRepository().findProcessByType(ProcessName.STORAGE_RELOCATION, poCodeId, productionFunctionality, true);
-//		int[] processIds = relocationRows.stream().mapToInt(ProcessRow::getId).toArray();
-//		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getRelocationRepository()
-//				.findAllMovedItemsByProcessIds(processIds)
-//				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-//		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = getRelocationRepository()
-//				.findAllItemsCountsByProcessIds(processIds)
-//				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-//		for(ProcessRow row: relocationRows) {
-//			row.setUsedItems(usedMap.get(row.getId()));
-//			row.setItemCounts(countMap.get(row.getId()));
-//		}		
-//		return relocationRows;
+		
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editGeneralInventoryUse(InventoryUse inventoryUse) {
+		getInventoryUseService().editGeneralInventoryUse(inventoryUse);
 	}
 	
 	public List<ProcessRow> getInventoryUses() {
-		return getInventoryUses(null);
+		return getInventoryUseReports().getInventoryUses();
 	}
 	
 	public List<ProcessRow> getInventoryUses(Integer poCodeId) {
-		return getProcessReportsReader().getProcessesByTypeAndPoCode(InventoryUse.class, ProcessName.GENERAL_USE, poCodeId, null, true);
-//		List<ProcessRow> inventoryUseRows = getInventoryUseRepository().findProcessByType(ProcessName.GENERAL_USE, poCodeId, null, true);
-//		int[] processIds = inventoryUseRows.stream().mapToInt(ProcessRow::getId).toArray();
-//		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getInventoryUseRepository()
-//				.findAllUsedItemsByProcessIds(processIds)
-//				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
-//		for(ProcessRow row: inventoryUseRows) {
-//			row.setUsedItems(usedMap.get(row.getId()));
-//		}		
-//		return inventoryUseRows;
+		return getInventoryUseReports().getInventoryUses(poCodeId);
 	}
+	
+	//----------------------------Duplicate in StorageRelocations - Should remove------------------------------------------
+
+	@Autowired private StorageRelocations relocationService;
+	@Autowired private StorageRelocationReports relocationReports;
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addStorageRelocation(StorageRelocation relocation) {
+		getRelocationService().addStorageRelocation(relocation);
+	}
+
+	public StorageRelocationDTO getStorageRelocation(int processId) {
+		return getRelocationService().getStorageRelocation(processId);
+	}
+
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editStorageRelocation(StorageRelocation relocation) {
+		getRelocationService().editStorageRelocation(relocation);
+	}
+	
+	public List<ProcessRow> getStorageRelocations() {
+		return getRelocationReports().getStorageRelocations();
+	}
+	
+	public List<ProcessRow> getStorageRelocations(ProductionFunctionality productionFunctionality) {
+		return getRelocationReports().getStorageRelocations(productionFunctionality);
+	}
+	
+	public List<ProcessRow> getStorageRelocationsByPoCode(Integer poCodeId, ProductionFunctionality productionFunctionality) {
+		return getRelocationReports().getStorageRelocationsByPoCode(poCodeId, productionFunctionality);
+	}
+	
+	//----------------------------StorageTransfers - Deprecated Should remove------------------------------------------
+
+	@Autowired private TransferRepository transferRepository;
+	@Autowired private ProductionProcessReports processReportsReader;
 
 	/**
 	 * Adding a record about a storage transfer process
@@ -137,68 +150,14 @@ public class WarehouseManagement {
 		checkTransferBalance(transfer);
 	}
 	
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addStorageRelocation(StorageRelocation relocation) {
-		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
-		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
-		dao.addPoProcessEntity(relocation);
-		dao.checkUsedInventoryAvailability(relocation);
-		dao.setPoWeights(relocation);
-		dao.setUsedProcesses(relocation);
-		//check if storage moves match the amounts of the used item
-		checkRelocationBalance(relocation);
+	public List<ProcessRow> getStorageTransfers() {
+		return getStorageTransfersByPoCode(null);
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addGeneralInventoryUse(InventoryUse inventoryUse) {
-		//Check that used items are from general
-		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.GENERAL)) {
-			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
-		}				
-		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_USE));
-		dao.addTransactionProcessEntity(inventoryUse);
-		dao.checkUsedInventoryAvailability(inventoryUse);
-		dao.setGeneralPoWeights(inventoryUse);
-		dao.setUsedProcesses(inventoryUse);
-	}	
-	
-	private boolean isUsedInItemGroup(UsedItemsGroup[] usedItemGroups, ItemGroup itemGroup) {
-		Set<Integer> usedStorageIds = null;
-		for(UsedItemsGroup uig: usedItemGroups) {
-			usedStorageIds = Arrays.stream(uig.getUsedItems()).map(UsedItem::getStorage).map(StorageBase::getId).collect(Collectors.toSet());
-		}
-		if(usedStorageIds != null) {
-			List<ItemWithUnitDTO> items = getValueTablesRepository().findStoragesItems(usedStorageIds);
-			if(items.stream().anyMatch(i -> i.getGroup() != itemGroup)) {
-				return false;
-			}
-		}
-		return true;
+	public List<ProcessRow> getStorageTransfersByPoCode(Integer poCodeId) {
+		return getProcessReportsReader().getProcessesByTypeAndPoCode(StorageTransfer.class, ProcessName.STORAGE_TRANSFER, poCodeId, null, true);
 	}
 
-	public InventoryUseDTO getInventoryUse(int processId) {
-		InventoryUseDTO inventoryUseDTO = new InventoryUseDTO();
-		inventoryUseDTO.setGeneralProcessInfo(getInventoryUseRepository()
-				.findGeneralProcessInfoByProcessId(processId, InventoryUse.class)
-				.orElseThrow(
-						()->new IllegalArgumentException("No inventory use with given process id")));
-		inventoryUseDTO.setPoProcessInfo(getInventoryUseRepository()
-				.findPoProcessInfoByProcessId(processId, InventoryUse.class).orElse(null));
-		
-		getProcessReader().setTransactionProcessCollections(inventoryUseDTO);
-		
-		return inventoryUseDTO;
-	}
-		
-	private void checkRelocationBalance(StorageRelocation relocation) {
-		List<ProcessItemTransactionDifference> differences = getRelocationRepository().findRelocationDifferences(relocation.getId());		
-		for(ProcessItemTransactionDifference d: differences) {
-			if(d.getDifference().signum() != 0) {
-				dao.sendMessageAlerts(relocation, "Relocated process items don't have matching amounts");
-			}
-		}
-	}
 	
 	private void checkTransferBalance(StorageTransfer transfer) {
 		List<ItemTransactionDifference> differences = getTransferRepository().findTransferDifferences(transfer.getId());
@@ -256,39 +215,6 @@ public class WarehouseManagement {
 		return transferDTO;
 	}
 	
-	public StorageRelocationDTO getStorageRelocation(int processId) {
-		StorageRelocationDTO relocationDTO = new StorageRelocationDTO();
-		relocationDTO.setGeneralProcessInfo(getRelocationRepository()
-				.findGeneralProcessInfoByProcessId(processId, StorageRelocation.class)
-				.orElseThrow(
-						()->new IllegalArgumentException("No storage relocation with given process id")));
-		relocationDTO.setPoProcessInfo(getRelocationRepository()
-				.findPoProcessInfoByProcessId(processId, StorageRelocation.class)
-				.orElseThrow(
-						()->new IllegalArgumentException("No po code for given process id")));
-
-//		Optional<StorageRelocationDTO> relocation = getRelocationRepository().findRelocationDTOByProcessId(processId);
-//		StorageRelocationDTO relocationDTO = relocation.orElseThrow(
-//				()->new IllegalArgumentException("No storage relocation with given process id"));
-		
-		relocationDTO.setStorageMovesGroups(
-				CollectionItemWithGroup.getFilledGroups(
-						getRelocationRepository()
-						.findStorageMovesWithGroup(processId)));
-//				StorageMovesGroupDTO.getStorageMoveGroups(
-//						getRelocationRepository()
-//						.findStorageMovesWithGroup(processId)));
-//		relocationDTO.setStorageMoves(getRelocationRepository().findStorageMoveDTOsByProcessId(processId));
-		relocationDTO.setItemCounts(
-				CollectionItemWithGroup.getFilledGroups(
-						getTransferRepository()
-						.findItemCountWithAmount(processId)));
-//		relocationDTO.setItemCounts(
-//				ItemCountDTO.getItemCounts(
-//						getTransferRepository()
-//						.findItemCountWithAmount(processId)));
-		return relocationDTO;
-	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editStorageTransfer(StorageTransfer transfer) {
@@ -303,73 +229,5 @@ public class WarehouseManagement {
 		dao.setUsedProcesses(transfer);
 		checkTransferBalance(transfer);
 	}
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editStorageRelocation(StorageRelocation relocation) {
-		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
-		
-		dao.checkRemovingUsedProduct(relocation);
-		
-		dao.editPoProcessEntity(relocation);
-		
-		dao.checkUsedInventoryAvailability(relocation);
-		dao.setUsedProcesses(relocation);
-		List<ItemAmountWithPoCode> usedPos = dao.setPoWeights(relocation);
-		dao.checkDAGmaintained(usedPos, relocation.getId());
-
-		dao.checkProducedInventorySufficiency(relocation);
-		checkRelocationBalance(relocation);
-	}
-	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editGeneralInventoryUse(InventoryUse inventoryUse) {
-		//Check that used items are from general
-		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.GENERAL)) {
-			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
-		}			
-		dao.editTransactionProcessEntity(inventoryUse);
-		
-		dao.checkUsedInventoryAvailability(inventoryUse);
-		dao.setGeneralPoWeights(inventoryUse);
-		dao.setUsedProcesses(inventoryUse);
-
-	}
-	
-	private void setStorageMovesProcessItem(StorageMovesGroup[] storageMovesGroups) {
-		List<StorageMove> storageMoves = new ArrayList<StorageMove>();
-		for(StorageMovesGroup group: storageMovesGroups) {
-			Arrays.stream(group.getStorageMoves()).forEach(storageMoves::add);
-		}
-		Map<Integer, StorageBase> storageMap = getRelocationRepository().findStoragesById(
-				storageMoves.stream()
-				.mapToInt(sm -> sm.getStorage().getId())
-				.toArray())
-				.collect(Collectors.toMap(StorageBase::getId, Function.identity()));
-		storageMoves.forEach(move -> {
-			move.setProcessItem(storageMap.get(move.getStorage().getId()).getProcessItem());
-		});
-	}
-	
-	public List<ProcessItemInventory> getAvailableInventory(
-			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
-			Integer itemId, Integer[] poCodeIds, Integer excludeProcessId) {
-		
-		boolean checkProductionUses = (productionUses != null);
-		boolean checkFunctionalities = (functionalities != null);
-		boolean checkPoCodes = (poCodeIds != null);
-		Integer[] excludedProcessIds = null;
-		if(poCodeIds != null && excludeProcessId != null) {
-			excludedProcessIds = dao.getProcessDescendants(poCodeIds, excludeProcessId);
-		}
-		boolean checkExcludedProcessIds = (excludedProcessIds != null && excludedProcessIds.length > 0);
-		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()
-				.findAvailableInventoryByStorage(checkProductionUses, productionUses, 
-						checkFunctionalities, functionalities, 
-						group, itemId, 
-						checkPoCodes, poCodeIds,
-						checkExcludedProcessIds, excludedProcessIds);
-				
-		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
-	}	
 
 }

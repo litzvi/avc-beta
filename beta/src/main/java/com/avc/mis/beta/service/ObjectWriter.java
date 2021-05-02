@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
@@ -32,9 +31,6 @@ public class ObjectWriter {
 	@Autowired private ProcessInfoDAO dao;
 	
 	@Autowired private ObjectTablesRepository objectTablesRepository;
-
-	@Deprecated
-	@Autowired private DeletableDAO deletableDAO;
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addPoCode(PoCode poCode) {

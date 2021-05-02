@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
-import com.avc.mis.beta.dto.doc.InventoryExportDoc;
-import com.avc.mis.beta.dto.doc.SecurityExportDoc;
+import com.avc.mis.beta.dto.exportdoc.InventoryExportDoc;
+import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -39,7 +39,6 @@ public class Loading {
 	@Autowired private ProcessReader processReader;
 	@Autowired private ProcessInfoReader processInfoReader;
 
-	@Autowired private LoadingReports lodingReports;
 	
 	/**
 	 * Adds a new container loading
@@ -104,21 +103,22 @@ public class Loading {
 
 	//----------------------------Duplicate in LoadingReports - Should remove------------------------------------------
 
-	
+	@Autowired private LoadingReports loadingReports;
+
 	public List<LoadingRow> getLoadings() {
 		return getLoadingsByPoCode(null);
 	}
 	
 	public List<LoadingRow> getLoadingsByPoCode(Integer poCodeId) {		
-		return getLodingReports().getLoadingsByPoCode(poCodeId);
+		return getLoadingReports().getLoadingsByPoCode(poCodeId);
 	}
 	
 	public InventoryExportDoc getInventoryExportDoc(int processId) {
-		return getLodingReports().getInventoryExportDoc(processId);		
+		return getLoadingReports().getInventoryExportDoc(processId);		
 	}
 	
 	public SecurityExportDoc getSecurityExportDoc(int processId) {
-		return getLodingReports().getSecurityExportDoc(processId);		
+		return getLoadingReports().getSecurityExportDoc(processId);		
 	}
 	
 

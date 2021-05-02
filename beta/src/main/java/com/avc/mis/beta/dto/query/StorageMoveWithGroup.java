@@ -6,8 +6,8 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
-import com.avc.mis.beta.dto.processinfo.StorageMovesGroupDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.inventory.Storage;
@@ -22,7 +22,6 @@ import lombok.NonNull;
  *
  */
 @Data
-//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMoveDTO, StorageMovesGroupDTO> {
 
 	StorageMovesGroupDTO storageMovesGroup;
@@ -37,11 +36,10 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemPoCodes, String itemSuppliers,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 
-			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, //BigDecimal storageContainerWeight,
+			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, 
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
-			BigDecimal unitAmount, BigDecimal numberUnits, //BigDecimal accessWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits, 
 			Integer warehouseLocationId, String warehouseLocationValue, Class<? extends Storage> clazz) {
-//		super(id);
 		this.storageMovesGroup = new StorageMovesGroupDTO(id, version, ordinal, groupName, tableView);
 		this.storageMove = new StorageMoveDTO(moveId, moveVersion, moveOrdinal, numberUsedUnits, 
 				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
@@ -54,12 +52,6 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 				unitAmount, numberUnits, //accessWeight,
 				warehouseLocationId, warehouseLocationValue, clazz);
 	}
-	
-//	public StorageMoveWithGroup(@NonNull Integer id, StorageMovesGroupDTO storageMovesGroup, StorageMoveDTO storageMove) {
-//		super(id);
-//		this.storageMovesGroup = storageMovesGroup;
-//		this.storageMove = storageMove;
-//	}
 
 	@JsonIgnore
 	@Override

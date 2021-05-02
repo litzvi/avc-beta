@@ -34,11 +34,11 @@ import com.avc.mis.beta.entities.process.InventoryUse;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageRelocation;
+import com.avc.mis.beta.entities.process.collection.CountAmount;
+import com.avc.mis.beta.entities.process.collection.ItemCount;
+import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
-import com.avc.mis.beta.entities.processinfo.CountAmount;
-import com.avc.mis.beta.entities.processinfo.ItemCount;
-import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
 

@@ -10,7 +10,7 @@ import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
-import com.avc.mis.beta.dto.basic.OrdinalAmount;
+import com.avc.mis.beta.dto.generic.OrdinalAmount;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.Storage;
@@ -138,33 +138,5 @@ public class StorageWithSampleDTO extends StorageDTO {
 				.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN);
 	}
 	
-	//done in UsedItemBaseDTO
-//	
-//	/**
-//	 * Gets a new StorageWithSample with all user set fields in the DTO (excluding id, version) 
-//	 * with given numerUnits and new warehouse location.
-//	 * @param numberUnits new storage number of units
-//	 * @param newLocation the new warehouse location
-//	 * @return StorageWithSample with all fields besides for the ones managed by the persistence context. 
-//	 */
-//	@Override
-//	public Storage getNewStorage(BigDecimal numberUnits, Warehouse newLocation) {
-//		StorageWithSample storage = new StorageWithSample();
-//		setNewStorageFields(storage, numberUnits, newLocation);
-//		return storage;
-//	}
-//	
-//	/**
-//	 * Receives a StorageWithSample and fills in all user set fields of this StorageWithSampleDTO
-//	 * @param storage StorageWithSample to set with this dto's data
-//	 * @param numberUnits new storage number of units
-//	 * @param newLocation the new warehouse location
-//	 */
-//	protected void setNewStorageFields(StorageWithSample storage, BigDecimal numberUnits, Warehouse newLocation) {
-//		super.setNewStorageFields(storage, numberUnits, newLocation);
-//		storage.setSampleContainerWeight(this.sampleContainerWeight);
-//		storage.setNumberOfSamples(this.numberOfSamples);
-//		storage.setAvgTestedWeight(this.avgTestedWeight);		
-//	}
 
 }

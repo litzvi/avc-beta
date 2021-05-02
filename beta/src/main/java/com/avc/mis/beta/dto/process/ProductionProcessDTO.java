@@ -4,11 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
-import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
 import com.avc.mis.beta.entities.process.ProductionProcess;
-import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

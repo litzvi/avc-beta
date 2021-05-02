@@ -20,8 +20,8 @@ import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.processinfo.LoadedItem;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.entities.process.collection.LoadedItem;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
 
 import lombok.AccessLevel;
 import lombok.Data;

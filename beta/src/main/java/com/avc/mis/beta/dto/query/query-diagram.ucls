@@ -106,8 +106,8 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </interface>  
-  <class id="12" language="java" name="com.avc.mis.beta.dto.BasicDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/BasicDTO.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="12" language="java" name="com.avc.mis.beta.dto.BasicValueDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/BasicValueDTO.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="53" width="110" x="330" y="129"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
@@ -116,23 +116,23 @@
     </display>  
   </class>  
   <dependency id="13">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="10"/>  
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="12"/>  
   </dependency>  
   <dependency id="14">    
-    <end type="SOURCE" refId="9"/>    
+    <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="15">    
-    <end type="SOURCE" refId="2"/>    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="16">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="12"/>  
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="17">    
-    <end type="SOURCE" refId="3"/>    
+    <end type="SOURCE" refId="9"/>    
     <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="18">    
@@ -140,16 +140,16 @@
     <end type="TARGET" refId="10"/>  
   </dependency>  
   <dependency id="19">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="10"/>  
-  </dependency>  
-  <dependency id="20">    
-    <end type="SOURCE" refId="6"/>    
+    <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="12"/>  
   </dependency>  
-  <dependency id="21">    
+  <dependency id="20">    
     <end type="SOURCE" refId="10"/>    
     <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="10"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
     sort-features="false" accessors="true" visibility="true">    

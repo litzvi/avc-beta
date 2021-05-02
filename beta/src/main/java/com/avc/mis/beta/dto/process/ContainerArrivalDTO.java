@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.process;
 
 import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
-import com.avc.mis.beta.dto.embedable.ContainerArrivalInfo;
+import com.avc.mis.beta.dto.processInfo.ContainerArrivalInfo;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;

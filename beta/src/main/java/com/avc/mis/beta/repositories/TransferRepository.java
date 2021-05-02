@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 
@@ -39,21 +38,5 @@ public interface TransferRepository extends TransactionProcessRepository<Storage
 			+ "group by usedItem ")
 	List<ItemTransactionDifference> findTransferDifferences(Integer processId);
 
-	@Query("select new com.avc.mis.beta.dto.query.ItemCountWithAmount( "
-			+ " i.id, i.version, i.ordinal, "
-			+ "item.id, item.value, item.productionUse, type(item), "
-			+ "i.measureUnit, i.containerWeight, i.accessWeight, "
-			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, "
-			+ "count_amount.id, count_amount.version, count_amount.ordinal, count_amount.amount) "
-		+ "from ItemCount i "
-			+ "join i.item item "
-			+ "join i.process p "
-				+ "join p.poCode poCode "
-					+ "join poCode.contractType ct "
-					+ "join poCode.supplier s "
-			+ "join i.amounts count_amount "
-		+ "where p.id = :processId "
-		+ "order by i.ordinal, count_amount.ordinal ")
-	List<ItemCountWithAmount> findItemCountWithAmount(int processId);
 
 }

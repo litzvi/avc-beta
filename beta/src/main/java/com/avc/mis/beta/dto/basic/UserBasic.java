@@ -37,6 +37,7 @@ public class UserBasic extends BasicDataDTO {
 	}
 	
 	@ToString.Include(name = "value")
+	@Override
 	public String getValue() {
 		return getUsername();
 	}

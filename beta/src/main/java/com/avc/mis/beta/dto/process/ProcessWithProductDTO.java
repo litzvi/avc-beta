@@ -5,7 +5,8 @@ package com.avc.mis.beta.dto.process;
 
 import java.util.List;
 
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
+import com.avc.mis.beta.dto.PoProcessDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
 
 import lombok.AccessLevel;

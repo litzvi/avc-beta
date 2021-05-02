@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.processinfo.SampleItemDTO;
+import com.avc.mis.beta.dto.PoProcessDTO;
+import com.avc.mis.beta.dto.process.collection.SampleItemDTO;
 import com.avc.mis.beta.dto.query.SampleItemWithWeight;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.process.SampleReceipt;

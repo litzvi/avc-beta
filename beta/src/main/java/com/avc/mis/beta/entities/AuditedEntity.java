@@ -40,10 +40,6 @@ import lombok.ToString;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AuditedEntity extends DataEntity {
 	
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;		
-
 	@JsonIgnore
 	@Column(updatable = false, nullable = false)
 	@CreatedDate

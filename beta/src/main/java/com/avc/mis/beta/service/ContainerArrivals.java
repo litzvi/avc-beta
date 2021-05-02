@@ -36,7 +36,6 @@ public class ContainerArrivals {
 	@Autowired private ProcessInfoDAO dao;
 
 	@Autowired private ContainerArrivalRepository containerArrivalRepository;
-	@Autowired private ContainerArrivalReports containerArrivalReports;
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addArrival(ContainerArrival arrival) {
@@ -66,6 +65,8 @@ public class ContainerArrivals {
 	}
 	
 	//----------------------------Duplicate in ContainerArrivalReports - Should remove------------------------------------------
+
+	@Autowired private ContainerArrivalReports containerArrivalReports;
 
 	public List<ContainerArrivalRow> getContainerArrivals() {
 		return getContainerArrivalReports().getContainerArrivals();

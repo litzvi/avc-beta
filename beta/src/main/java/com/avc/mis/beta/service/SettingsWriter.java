@@ -57,7 +57,7 @@ public class SettingsWriter {
 		return dao.isTableEmpty(entityClass);	
 	}
 
-	
+	//used by DataLoader.java
 	public void refillAllProcessParents() {
 		List<ProcessBasic<PoProcess>> processes = processReader.getAllProcesses();
 		for(ProcessBasic<PoProcess> processBasic: processes) {

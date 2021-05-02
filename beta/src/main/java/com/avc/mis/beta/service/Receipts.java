@@ -3,11 +3,8 @@
  */
 package com.avc.mis.beta.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,22 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
-import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.report.ProcessStateInfo;
-import com.avc.mis.beta.dto.report.ReceiptReportLine;
-import com.avc.mis.beta.dto.view.ReceiptItemRow;
+import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.process.collection.OrderItem;
+import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
-import com.avc.mis.beta.entities.processinfo.OrderItem;
-import com.avc.mis.beta.entities.processinfo.ReceiptItem;
 import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.repositories.ReceiptRepository;
 import com.avc.mis.beta.service.reports.ReceiptReports;
@@ -142,10 +134,6 @@ public class Receipts {
 		dao.checkProducedInventorySufficiency(receipt);	
 	}
 	
-	/**
-	 * @param receiptItems
-	 * @return
-	 */
 	private boolean isOrderOpen(ReceiptItem[] receiptItems) {
 		if(receiptItems == null || receiptItems.length == 0) {
 			return true;

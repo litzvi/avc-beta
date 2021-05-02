@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.entities;
 
+import java.util.Objects;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,7 +60,8 @@ public abstract class BaseEntity implements Insertable {
 	 */
 	@Override 
 	public int hashCode() {
-	    final int PRIME = 59;
-		return PRIME;
+//	    final int PRIME = 59;
+//		return PRIME;
+		return Objects.hashCode(getId());
 	}
 }

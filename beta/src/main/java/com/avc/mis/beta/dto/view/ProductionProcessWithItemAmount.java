@@ -21,8 +21,6 @@ import com.avc.mis.beta.entities.item.PackedItem;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-import lombok.Value;
-import lombok.experimental.NonFinal;
 
 /**
  * @author zvi

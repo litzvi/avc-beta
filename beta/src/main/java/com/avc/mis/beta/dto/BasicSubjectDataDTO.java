@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class BasicSubjectDataDTO extends BasicDataDTO {
 
-private Integer ordinal;
+	private Integer ordinal;
 	
 	public BasicSubjectDataDTO(Integer id, Integer version, Integer ordinal) {
 		super(id, version);

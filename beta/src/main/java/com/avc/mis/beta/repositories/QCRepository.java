@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.basic.ValueEntityObject;
-import com.avc.mis.beta.dto.embedable.QualityCheckInfo;
-import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
+import com.avc.mis.beta.dto.generic.ValueEntityObject;
+import com.avc.mis.beta.dto.process.collection.CashewItemQualityDTO;
+import com.avc.mis.beta.dto.processInfo.QualityCheckInfo;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -22,12 +22,12 @@ import com.avc.mis.beta.entities.process.QualityCheck;
  */
 public interface QCRepository extends PoProcessRepository<QualityCheck> {
 	
-	@Query("select new com.avc.mis.beta.dto.embedable.QualityCheckInfo(r.checkedBy, r.inspector, r.sampleTaker) "
+	@Query("select new com.avc.mis.beta.dto.processInfo.QualityCheckInfo(r.checkedBy, r.inspector, r.sampleTaker) "
 		+ "from QualityCheck r "
 		+ "where r.id = :processId ")
 	QualityCheckInfo findQualityCheckInfo(int processId);
 
-	@Query("select new com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO("
+	@Query("select new com.avc.mis.beta.dto.process.collection.CashewItemQualityDTO("
 			+ "i.id, i.version, i.ordinal, item.id, item.value, "
 			+ "i.measureUnit, i.sampleWeight, i.numberOfSamples, i.precentage, "
 //			+ "i.description, i.remarks, "
@@ -80,7 +80,7 @@ public interface QCRepository extends PoProcessRepository<QualityCheck> {
 		+ "where i.active = true")
 	List<CashewStandardDTO> findAllCashewStandardDTO();
 	
-	@Query("select new com.avc.mis.beta.dto.basic.ValueEntityObject(i.id, item.id, item.value) "
+	@Query("select new com.avc.mis.beta.dto.generic.ValueEntityObject(i.id, item.id, item.value) "
 		+ "from CashewStandard i "
 			+ "join i.items item "
 		+ "where i.active = true")

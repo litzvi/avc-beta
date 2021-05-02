@@ -7,26 +7,19 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;
 
-import com.avc.mis.beta.dto.BasicDataDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.basic.ProcessBasic;
-import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.process.PoProcess;
-import com.avc.mis.beta.entities.processinfo.WeightedPo;
+import com.avc.mis.beta.entities.process.collection.WeightedPo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 

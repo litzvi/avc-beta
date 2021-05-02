@@ -15,8 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.ReadOnlyDAO;
 import com.avc.mis.beta.dto.basic.UserBasic;
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
-import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
+import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
+import com.avc.mis.beta.service.reports.InventoryReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;

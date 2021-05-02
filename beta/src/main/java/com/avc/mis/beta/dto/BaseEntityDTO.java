@@ -52,10 +52,10 @@ public abstract class BaseEntityDTO {
 	    BaseEntityDTO other = (BaseEntityDTO) o;
 	    
 	    //Exclusively one is null so they are equal (objects with this id can equal)
-	    if(this.getId() == null ^ other.getId() == null) 
-	    	return true;
+//	    if(this.getId() == null ^ other.getId() == null) 
+//	    	return true;
 	    
-	    if(this.getId() != null) { //both not null compare with id
+	    if(this.getId() != null && other.getId() != null) { //both not null compare with id
 	    	return this.getId().equals(other.getId());
 	    }
 	    else { //both are null

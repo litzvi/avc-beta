@@ -18,15 +18,15 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.basic.UserBasic;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.data.UserDTO;
-import com.avc.mis.beta.dto.process.PoProcessDTO;
-import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
+import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
@@ -35,7 +35,6 @@ import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.dto.view.ContainerArrivalRow;
 import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
-import com.avc.mis.beta.dto.view.ItemInventoryWithOrderRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.PoItemRow;
@@ -58,7 +57,6 @@ import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.service.ContainerArrivals;
-import com.avc.mis.beta.service.InventoryReports;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.ObjectWriter;
@@ -72,7 +70,8 @@ import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
-import com.avc.mis.beta.serviceinterface.ProductionProcessService;
+import com.avc.mis.beta.service.interfaces.ProductionProcessService;
+import com.avc.mis.beta.service.reports.InventoryReports;
 
 /**
  * @author Zvi
@@ -383,17 +382,7 @@ public class QueryTest {
 		poCodes.forEach(c -> System.out.println(processSummaryReader.getReceiptSummary(c.getId())));
 
 		poCodes.forEach(c -> System.out.println(processSummaryReader.getFinalReport(c.getId())));
-		
-		List<ItemInventoryWithOrderRow> inventoryWithOrderRows;
-		try {
-			inventoryWithOrderRows = inventoryReports.getInventoryWithOrderTableByItem(ItemGroup.PRODUCT);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
-		inventoryWithOrderRows.forEach(i -> System.out.println(i));
-		
+				
 		List<ItemInventoryAmountWithOrder> inventoryWithOrder = inventoryReports.getInventoryWithOrderByItem(ItemGroup.GENERAL);	
 		inventoryWithOrder.forEach(i -> System.out.println(i));
 

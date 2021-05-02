@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.BasicValueDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 
@@ -19,9 +20,9 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class ItemTransactionDifference extends BasicDTO {
+public class ItemTransactionDifference {
 
+	Integer itemId;
 	String itemName;
 	BigDecimal usedAmount;
 	MeasureUnit usedMU;
@@ -31,7 +32,8 @@ public class ItemTransactionDifference extends BasicDTO {
 	public ItemTransactionDifference(@NonNull Integer itemId, String itemName, 
 			BigDecimal usedAmount, MeasureUnit usedMU, 
 			BigDecimal producedAmount, MeasureUnit producedMU) {
-		super(itemId);
+		super();
+		this.itemId = itemId;
 		this.itemName = itemName;
 		this.producedAmount = producedAmount;
 		this.usedMU = usedMU;

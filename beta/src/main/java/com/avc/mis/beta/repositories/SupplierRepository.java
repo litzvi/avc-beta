@@ -9,8 +9,8 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.generic.ValueObject;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.Supplier;
@@ -65,17 +65,17 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "order by s.name ")
 	List<SupplierRow> findAllSupplierRows();
 	
-	@Query("select new com.avc.mis.beta.dto.basic.ValueObject(cd.id, p.value) "
+	@Query("select new com.avc.mis.beta.dto.generic.ValueObject(cd.id, p.value) "
 			+ "from Phone p "
 				+ "join p.contactDetails cd ")
 	Stream<ValueObject<String>> findAllPhoneValues();
 	
-	@Query("select new com.avc.mis.beta.dto.basic.ValueObject(cd.id, e.value) "
+	@Query("select new com.avc.mis.beta.dto.generic.ValueObject(cd.id, e.value) "
 			+ "from Email e "
 				+ "join e.contactDetails cd ")
 	Stream<ValueObject<String>> findAllEmailValues();
 
-	@Query("select new com.avc.mis.beta.dto.basic.ValueObject(s.id, c.value) "
+	@Query("select new com.avc.mis.beta.dto.generic.ValueObject(s.id, c.value) "
 			+ "from Supplier s "
 				+ "join s.supplyCategories c ")
 	Stream<ValueObject<String>> findAllSupplyCategoryValues();

@@ -95,12 +95,7 @@ public class ValueWriter {
 	public void addCompanyPosition(CompanyPosition position) {
 		dao.addEntity(position);
 	}
-	
-	//item should practically be abstarct
-//	public void addItem(Item item) {
-//		dao.addEntity(item);
-//	}
-	
+		
 	public void addPackedItem(PackedItem item) {
 		dao.addEntity(item);
 	}
@@ -112,14 +107,6 @@ public class ValueWriter {
 	public void addContractType(ContractType type) {
 		dao.addEntity(type);
 	}
-	
-//	public void addProcessStatus(ProcessStatus status) {
-//		dao.addEntity(status);
-//	}
-	
-//	public void addProcessType(ProcessType type) {
-//		dao.addEntity(type);
-//	}
 	
 	public void addProductionLine(ProductionLine line) {
 		dao.addEntity(line);

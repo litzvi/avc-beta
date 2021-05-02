@@ -3,12 +3,14 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.embedable.PoProcessInfo;
+import com.avc.mis.beta.dto.processInfo.PoProcessInfo;
+import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.process.PoProcess;
 
@@ -20,7 +22,7 @@ import com.avc.mis.beta.entities.process.PoProcess;
  */
 public interface PoProcessRepository<T extends PoProcess> extends ProcessRepository<T> {
 	
-	@Query("select new com.avc.mis.beta.dto.embedable.PoProcessInfo("
+	@Query("select new com.avc.mis.beta.dto.processInfo.PoProcessInfo("
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name) "
 		+ "from PoProcess p "
 			+ "join p.poCode po_code "
@@ -50,5 +52,22 @@ public interface PoProcessRepository<T extends PoProcess> extends ProcessReposit
 			+ "p.id in :processIds "
 		+ "group by item_count ")
 	Stream<ProductionProcessWithItemAmount> findAllItemsCountsByProcessIds(int[] processIds);
+
+	@Query("select new com.avc.mis.beta.dto.query.ItemCountWithAmount( "
+			+ " i.id, i.version, i.ordinal, "
+			+ "item.id, item.value, item.productionUse, type(item), "
+			+ "i.measureUnit, i.containerWeight, i.accessWeight, "
+			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, "
+			+ "count_amount.id, count_amount.version, count_amount.ordinal, count_amount.amount) "
+		+ "from ItemCount i "
+			+ "join i.item item "
+			+ "join i.process p "
+				+ "join p.poCode poCode "
+					+ "join poCode.contractType ct "
+					+ "join poCode.supplier s "
+			+ "join i.amounts count_amount "
+		+ "where p.id = :processId "
+		+ "order by i.ordinal, count_amount.ordinal ")
+	List<ItemCountWithAmount> findItemCountWithAmount(int processId);
 
 }

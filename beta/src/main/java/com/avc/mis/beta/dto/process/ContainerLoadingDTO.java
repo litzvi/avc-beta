@@ -8,13 +8,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
-import com.avc.mis.beta.dto.embedable.ContainerLoadingInfo;
-import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
+import com.avc.mis.beta.dto.process.collection.LoadedItemDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
+import com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.values.ShipmentCodeDTO;
 import com.avc.mis.beta.entities.process.ContainerLoading;
-import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

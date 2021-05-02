@@ -10,18 +10,17 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.basic.ValueObject;
-import com.avc.mis.beta.dto.embedable.OrderProcessInfo;
+import com.avc.mis.beta.dto.generic.ValueObject;
 import com.avc.mis.beta.dto.process.PoDTO;
-import com.avc.mis.beta.dto.processinfo.OrderItemDTO;
+import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
+import com.avc.mis.beta.dto.processInfo.OrderProcessInfo;
 import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.processinfo.OrderItem;
+import com.avc.mis.beta.entities.process.collection.OrderItem;
 
 /**
  * Spring repository for accessing purchase order information.
@@ -32,7 +31,7 @@ import com.avc.mis.beta.entities.processinfo.OrderItem;
 public interface PORepository extends PoProcessRepository<PO> {
 
 	
-	@Query("select new com.avc.mis.beta.dto.embedable.OrderProcessInfo(po.personInCharge) "
+	@Query("select new com.avc.mis.beta.dto.processInfo.OrderProcessInfo(po.personInCharge) "
 		+ "from PO po "
 		+ "where po.id = :processId ")
 	OrderProcessInfo findPoInfo(Integer processId);
@@ -43,7 +42,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 	 * @param processId the process id of the PO
 	 * @return Set of OrderItemDTOs for the given process
 	 */
-	@Query("select new com.avc.mis.beta.dto.processinfo.OrderItemDTO("
+	@Query("select new com.avc.mis.beta.dto.process.collection.OrderItemDTO("
 			+ "i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.measureUnit, "
 			+ "units.amount, units.measureUnit, "
@@ -242,7 +241,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "having nu.amount <= sum(rnu.amount * uom.multiplicand / uom.divisor) ")
 	List<OrderItem> findNonOpenOrderItemsById(Integer[] orderItemIds);
 
-	@Query("select new com.avc.mis.beta.dto.basic.ValueObject( "
+	@Query("select new com.avc.mis.beta.dto.generic.ValueObject( "
 			+ "oi.id, "
 			+ "SUM(sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor)) "
 		+ "from OrderItem oi "
@@ -260,7 +259,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 		+ "group by oi ")
 	Stream<ValueObject<BigDecimal>> findReceivedAmountByOrderItemIds(int[] orderItemIds);
 
-	@Query("select new com.avc.mis.beta.dto.basic.ValueObject( "
+	@Query("select new com.avc.mis.beta.dto.generic.ValueObject( "
 			+ "oi.id, "
 			+ "SUM(rou.amount * rou_uom.multiplicand / rou_uom.divisor)) "
 		+ "from OrderItem oi "
@@ -277,7 +276,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 		+ "group by oi ")
 	Stream<ValueObject<BigDecimal>> findReceivedOrderUnitsByOrderItemIds(int[] orderItemIds);
 
-	@Query("select new com.avc.mis.beta.dto.basic.ValueObject( "
+	@Query("select new com.avc.mis.beta.dto.generic.ValueObject( "
 			+ "oi.id, "
 			+ "SUM(1)) "
 		+ "from OrderItem oi "

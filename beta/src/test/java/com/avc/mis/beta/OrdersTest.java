@@ -20,13 +20,13 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
-import com.avc.mis.beta.dto.process.PoProcessDTO;
-import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.processinfo.OrderItem;
+import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessInfoWriter;

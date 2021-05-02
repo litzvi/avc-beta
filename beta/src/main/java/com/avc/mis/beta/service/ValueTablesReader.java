@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
-import com.avc.mis.beta.dto.basic.ValueEntityObject;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.generic.ValueEntityObject;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
@@ -198,24 +198,6 @@ public class ValueTablesReader {
 	public List<DataObjectWithName<Supplier>> getGeneralSuppliersBasic() {
 		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.GENERAL);
 	}
-	
-	/**
-	 * Get a list of CASHEW items basic -  id and value.
-	 * @return List of ItemDTO of all CASHEW items.
-	 */
-//	@Transactional(readOnly = true)
-//	public List<ItemDTO> getCashewItemsBasic() {
-//		return getValueTablesRepository().findItemsByGroupBasic(ItemGroup.PRODUCT, null);
-//	}
-	
-	/**
-	 * Get a list of GENERAL items basic -  id and value.
-	 * @return List of ItemDTO of all GENERAL items.
-	 */
-//	@Transactional(readOnly = true)
-//	public List<ItemDTO> getGeneralItemsBasic() {
-//		return getValueTablesRepository().findItemsByGroupBasic(ItemGroup.GENERAL, null);
-//	}
 	
 	public List<ItemWithUnitDTO> getItemsByPrudoctionUse(ProductionUse productionUse) {
 		return getValueTablesRepository().findItemsByGroupBasic(null, productionUse, Arrays.asList(BulkItem.class, PackedItem.class));

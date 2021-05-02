@@ -10,7 +10,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
+import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

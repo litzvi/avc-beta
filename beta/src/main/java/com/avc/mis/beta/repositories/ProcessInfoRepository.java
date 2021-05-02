@@ -10,8 +10,8 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
-import com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
+import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.UsedProcess;
 import com.avc.mis.beta.entities.data.ProcessManagement;
@@ -23,7 +23,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
-import com.avc.mis.beta.entities.processinfo.ApprovalTask;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 
 /**
  * Spring repository for accessing all notification information and requirements of production processes.
@@ -52,7 +52,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	@Query("select p.approvals from GeneralProcess p where p.id = :processId")
 	List<ApprovalTask> findProcessApprovals(Integer processId);
 
-	@Query("select new com.avc.mis.beta.dto.processinfo.UserMessageDTO("
+	@Query("select new com.avc.mis.beta.dto.process.collection.UserMessageDTO("
 			+ "m.id, m.version, "
 			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
 			+ "function('GROUP_CONCAT', s.name), "
@@ -80,7 +80,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<UserMessageDTO> findAllMessages(Integer userId, List<MessageLabel> lables);
 	
 
-	@Query("select new com.avc.mis.beta.dto.processinfo.ApprovalTaskDTO("
+	@Query("select new com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO("
 			+ "pa.id, pa.version, "
 			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
 			+ "function('GROUP_CONCAT', s.name), "

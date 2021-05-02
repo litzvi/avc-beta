@@ -16,6 +16,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserLogin;
 import com.avc.mis.beta.entities.data.Person;
@@ -30,6 +31,7 @@ import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.Users;
+import com.avc.mis.beta.service.ValueWriter;
 
 /**
  * @author Zvi
@@ -57,6 +59,7 @@ public class UsersTest {
 	
 	@Autowired private PoProcessRepository processRepository;
 	
+	@Autowired private DeletableDAO deletableDAO;
 
 	
 	@Test

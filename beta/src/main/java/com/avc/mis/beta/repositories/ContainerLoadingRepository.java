@@ -8,11 +8,11 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
-import com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow;
-import com.avc.mis.beta.dto.doc.ExportInfo;
-import com.avc.mis.beta.dto.embedable.ContainerLoadingInfo;
-import com.avc.mis.beta.dto.processinfo.LoadedItemDTO;
+import com.avc.mis.beta.dto.exportdoc.ContainerPoItemRow;
+import com.avc.mis.beta.dto.exportdoc.ContainerPoItemStorageRow;
+import com.avc.mis.beta.dto.exportdoc.ExportInfo;
+import com.avc.mis.beta.dto.process.collection.LoadedItemDTO;
+import com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 
@@ -27,7 +27,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	 * @param processId id of loading process info to be fetched.
 	 * @return ContainerLoadingInfo object that contains loading process information.
 	 */
-	@Query("select new com.avc.mis.beta.dto.embedable.ContainerLoadingInfo( "
+	@Query("select new com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo( "
 			+ "sc.id, sc.code, port.id, port.value, port.code, "
 			+ "arrival.id, arrival.version, cd.containerNumber, "
 			+ "pc.id, pc.version, pc.name) "
@@ -45,7 +45,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	 * @param processId id of the process
 	 * @return List of LoadedItemWithStorage
 	 */
-	@Query("select new com.avc.mis.beta.dto.processinfo.LoadedItemDTO( "
+	@Query("select new com.avc.mis.beta.dto.process.collection.LoadedItemDTO( "
 			+ " i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.productionUse, type(item), "
 			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, "
@@ -95,7 +95,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "order by p.recordedTime desc ")
 	List<LoadingRow> findContainerLoadings(Integer poCodeId, boolean cancelled);
 
-	@Query("select new com.avc.mis.beta.dto.doc.ExportInfo( "
+	@Query("select new com.avc.mis.beta.dto.exportdoc.ExportInfo( "
 			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, p.recordedTime) "
 		+ "from ContainerLoading p "
 //			+ "join p.booking b "
@@ -104,11 +104,10 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "where p.id = :processId ")
 	Optional<ExportInfo> findInventoryExportDocById(int processId);
 
-	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemRow( "
+	@Query("select new com.avc.mis.beta.dto.exportdoc.ContainerPoItemRow( "
 			+ "p.id, "
 			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-//			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "sum("
 				+ "(sf.unitAmount * i.numberUnits) "
@@ -135,7 +134,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "group by p, item.id ")
 	List<ContainerPoItemRow> findLoadedTotals(int[] processIds);
 
-	@Query("select new com.avc.mis.beta.dto.doc.ContainerPoItemStorageRow( "
+	@Query("select new com.avc.mis.beta.dto.exportdoc.ContainerPoItemStorageRow( "
 			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "

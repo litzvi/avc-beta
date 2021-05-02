@@ -21,7 +21,4 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public abstract class LinkEntity extends BaseEntity {
 	
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
 }

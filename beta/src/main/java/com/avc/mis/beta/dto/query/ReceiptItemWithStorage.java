@@ -8,19 +8,19 @@ import java.math.BigInteger;
 import java.util.Currency;
 import java.util.List;
 
-import com.avc.mis.beta.dto.basic.OrdinalAmount;
 import com.avc.mis.beta.dto.data.DataObject;
+import com.avc.mis.beta.dto.generic.OrdinalAmount;
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
 import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.process.inventory.Storage;
-import com.avc.mis.beta.entities.processinfo.OrderItem;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.Data;
@@ -42,9 +42,8 @@ public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDT
 	public ReceiptItemWithStorage(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ProductionUse productionUse, 	BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> ItemClazz,
 			MeasureUnit measureUnit,
-			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
-			BigDecimal unitAmount, BigDecimal numberUnits, //BigDecimal accessWeight,
+			BigDecimal unitAmount, BigDecimal numberUnits,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
 			List<OrdinalAmount<BigDecimal>> sampleContainerWeights, 
@@ -53,22 +52,20 @@ public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDT
 			BigDecimal receivedUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
 			Integer referencedOrder,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
-//		super(id);
 		this.receiptItem = new ReceiptItemDTO(id, version, ordinal,
 				itemId, itemValue, productionUse, itemUnitAmount, itemUnitMeasureUnit, ItemClazz, measureUnit,
-				/* poCodeId, contractTypeCode, supplierName, */
 				groupName, description, remarks, tableView,
 				receivedUnits, orderMU, unitPrice, currency,
 				referencedOrder, orderItemId, orderItemVersion, extraRequested, extraMU);
 		if(ExtraAdded.class.equals(clazz)) {
 			this.storage = new ExtraAddedDTO(storageId, storageVersion, storageOrdinal, 
-					unitAmount, measureUnit, numberUnits, //accessWeight,
+					unitAmount, measureUnit, numberUnits,
 					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
 					numberOfSamples, avgTestedWeight);
 		}
 		else {
 			this.storage = new StorageWithSampleDTO(storageId, storageVersion, storageOrdinal, 
-					unitAmount, numberUnits, //accessWeight,
+					unitAmount, numberUnits,
 					warehouseLocationId, warehouseLocationValue, storageRemarks, clazz,
 					sampleContainerWeights, sampleWeights, numberOfSamples, avgTestedWeight);
 		}		

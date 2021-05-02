@@ -7,11 +7,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
-import com.avc.mis.beta.dto.processinfo.StorageMovesGroupDTO;
+import com.avc.mis.beta.dto.PoProcessDTO;
+import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
+import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
 import com.avc.mis.beta.entities.process.StorageRelocation;
-import com.avc.mis.beta.entities.processinfo.ItemCount;
-import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
+import com.avc.mis.beta.entities.process.collection.ItemCount;
+import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

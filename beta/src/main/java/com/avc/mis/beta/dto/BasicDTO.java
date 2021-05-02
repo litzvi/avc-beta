@@ -26,5 +26,4 @@ public abstract class BasicDTO {
 
 	@EqualsAndHashCode.Include
 	private Integer id;
-
 }

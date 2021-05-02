@@ -18,7 +18,7 @@ import javax.validation.constraints.Positive;
 
 import com.avc.mis.beta.entities.RankedAuditedEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.processinfo.ProcessGroup;
+import com.avc.mis.beta.entities.process.collection.ProcessGroup;
 
 import lombok.AccessLevel;
 import lombok.Data;

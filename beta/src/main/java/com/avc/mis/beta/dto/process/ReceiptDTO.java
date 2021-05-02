@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.processinfo.ReceiptItemDTO;
+import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.processinfo.ReceiptItem;
+import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

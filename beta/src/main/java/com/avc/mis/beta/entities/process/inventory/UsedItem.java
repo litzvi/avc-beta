@@ -5,7 +5,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
+import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

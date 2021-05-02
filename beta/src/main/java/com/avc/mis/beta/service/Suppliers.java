@@ -4,10 +4,7 @@
 package com.avc.mis.beta.service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,14 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.SoftDeletableDAO;
-import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.data.BankAccountDTO;
 import com.avc.mis.beta.dto.data.CompanyContactDTO;
 import com.avc.mis.beta.dto.data.PaymentAccountDTO;
 import com.avc.mis.beta.dto.data.PersonDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.view.SupplierRow;
-import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
@@ -31,6 +26,7 @@ import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.repositories.SupplierRepository;
+import com.avc.mis.beta.service.reports.SupplierReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -55,31 +51,6 @@ public class Suppliers {
 	
 	@Autowired private SupplierRepository supplierRepository;
 	
-	/**
-	 * Get Table of all suppliers with partial info - id, name, emails, phones and supply categories -
-	 * to show in the table.
-	 * @return List of SupplierRow of all suppliers
-	 */
-	@Transactional(readOnly = true)
-	public List<SupplierRow> getSuppliersTable() {
-		
-		List<SupplierRow> supplierRows = getSupplierRepository().findAllSupplierRows();
-		Map<Integer, Set<String>> phones = getSupplierRepository().findAllPhoneValues()
-				.collect(Collectors.groupingBy(ValueObject<String>::getId, 
-						Collectors.mapping(ValueObject<String>::getValue, Collectors.toSet())));
-		Map<Integer, Set<String>> emails = getSupplierRepository().findAllEmailValues()
-				.collect(Collectors.groupingBy(ValueObject<String>::getId, 
-						Collectors.mapping(ValueObject<String>::getValue, Collectors.toSet())));
-		Map<Integer, Set<String>> categories = getSupplierRepository().findAllSupplyCategoryValues()
-				.collect(Collectors.groupingBy(ValueObject<String>::getId, 
-						Collectors.mapping(ValueObject<String>::getValue, Collectors.toSet())));
-		supplierRows.forEach((s) -> {
-			s.setPhones(phones.get(s.getContactDetailsId())); 
-			s.setEmails(emails.get(s.getContactDetailsId()));
-			s.setSupplyCategories(categories.get(s.getId()));
-		});
-		return supplierRows;		
-	}	
 		
 	/**
 	 * Adds (persists) the given supplier with all information - 
@@ -127,26 +98,6 @@ public class Suppliers {
 		dao.removeEntity(Supplier.class, supplierId);
 	}
 	
-	/**
-	 * For testing only
-	 * @param supplierId
-	 */
-	@Deprecated
-	public void permenentlyRemoveSupplier(int supplierId) {
-		SupplierDTO supplier = getSupplier(supplierId);
-		if(supplier.getContactDetails() != null) {
-			for(PaymentAccountDTO paymentAccount: supplier.getContactDetails().getPaymentAccounts())  {
-				BankAccountDTO bankAccount = paymentAccount.getBankAccount();
-				getDeletableDAO().permenentlyRemoveEntity(BankAccount.class, bankAccount.getId());
-			}
-		}
-		for(CompanyContactDTO companyContact: supplier.getCompanyContacts())  {
-			PersonDTO person = companyContact.getPerson();
-			getDeletableDAO().permenentlyRemoveEntity(CompanyContact.class, companyContact.getId());
-			getDeletableDAO().permenentlyRemoveEntity(Person.class, person.getId());
-		}
-		getDeletableDAO().permenentlyRemoveEntity(Supplier.class, supplier.getId());
-	}
 	
 	/**
 	 * Edits supplier main (company) Information - 
@@ -240,6 +191,43 @@ public class Suppliers {
 		}
 		dao.addEntity(contact, Company.class, companyId);
 	}
+
+	//----------------------------Duplicate in SupplierReports - Should remove------------------------------------------
+
+	@Autowired private SupplierReports supplierReports;
 	
+	/**
+	 * Get Table of all suppliers with partial info - id, name, emails, phones and supply categories -
+	 * to show in the table.
+	 * @return List of SupplierRow of all suppliers
+	 */
+	@Transactional(readOnly = true)
+	public List<SupplierRow> getSuppliersTable() {
+		return getSupplierReports().getSuppliersTable();
+	}	
+
+	//----------------------------For testing only------------------------------------------
+	
+	/**
+	 * For testing only
+	 * @param supplierId
+	 */
+	@Deprecated
+	public void permenentlyRemoveSupplier(int supplierId) {
+		SupplierDTO supplier = getSupplier(supplierId);
+		if(supplier.getContactDetails() != null) {
+			for(PaymentAccountDTO paymentAccount: supplier.getContactDetails().getPaymentAccounts())  {
+				BankAccountDTO bankAccount = paymentAccount.getBankAccount();
+				getDeletableDAO().permenentlyRemoveEntity(BankAccount.class, bankAccount.getId());
+			}
+		}
+		for(CompanyContactDTO companyContact: supplier.getCompanyContacts())  {
+			PersonDTO person = companyContact.getPerson();
+			getDeletableDAO().permenentlyRemoveEntity(CompanyContact.class, companyContact.getId());
+			getDeletableDAO().permenentlyRemoveEntity(Person.class, person.getId());
+		}
+		getDeletableDAO().permenentlyRemoveEntity(Supplier.class, supplier.getId());
+	}
+
 	
 }

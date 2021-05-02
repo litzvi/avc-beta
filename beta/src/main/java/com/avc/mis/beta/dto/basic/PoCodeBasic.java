@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.basic;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.BasicValueDTO;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 
 import lombok.EqualsAndHashCode;
@@ -20,16 +20,12 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class PoCodeBasic extends ValueDTO {
+public class PoCodeBasic extends BasicValueDTO {
 
 	String code;
 	String contractTypeCode;
-//	Currency currency;
 	String contractTypeSuffix;
 	String supplierName;	
-//	String display;
-//	@NonFinal
-//	Class<? extends BasePoCode> clazz;
 	
 	/**
 	 * @param id
@@ -44,22 +40,8 @@ public class PoCodeBasic extends ValueDTO {
 		this.code = code;
 		this.contractTypeCode = contractTypeCode;
 		this.supplierName = supplierName;
-//		this.currency = currency;
 		this.contractTypeSuffix = contractTypeSuffix != null ? contractTypeSuffix : "";
-//		this.display = display;
 	}	
-	
-//	public PoCodeBasic(Integer id, String code,
-//			String contractTypeCode, String contractTypeSuffix, String supplierName,
-//			String display, Class<? extends BasePoCode> clazz) {
-//		super(id);
-//		this.code = code;
-//		this.contractTypeCode = contractTypeCode;
-//		this.supplierName = supplierName;
-//		this.contractTypeSuffix = contractTypeSuffix != null ? contractTypeSuffix : "";
-//		this.display = display;
-//		this.clazz = clazz;
-//	}	
 	
 	/**
 	 * @param poCode
@@ -77,10 +59,8 @@ public class PoCodeBasic extends ValueDTO {
 	/**
 	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
 	 */
+	@Override
 	public String getValue() {	
-//		if(this.display != null) {
-//			return this.display;
-//		}
 		return String.format("%s-%s%s", this.contractTypeCode, this.getCode(), this.contractTypeSuffix);
 	}
 		

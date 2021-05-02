@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
-import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.process.ProcessWithProductDTO;
 import com.avc.mis.beta.dto.process.TransactionProcessDTO;
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
-import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;

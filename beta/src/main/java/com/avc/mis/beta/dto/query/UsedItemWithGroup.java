@@ -6,8 +6,8 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
-import com.avc.mis.beta.dto.processinfo.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
@@ -20,7 +20,6 @@ import lombok.NonNull;
  *
  */
 @Data
-//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class UsedItemWithGroup implements CollectionItemWithGroup<UsedItemDTO, UsedItemsGroupDTO> {
 	
 	UsedItemsGroupDTO usedItemsGroup;
@@ -36,7 +35,6 @@ public class UsedItemWithGroup implements CollectionItemWithGroup<UsedItemDTO, U
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, BigDecimal storageNumberUnits, BigDecimal otherUsedUnits, //BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks) {
-//		super(id);
 		this.usedItemsGroup = new UsedItemsGroupDTO(id, version, ordinal, groupName, tableView);
 		this.usedItem = new UsedItemDTO(usedId, usedVersion, usedOrdinal, numberUnits, 
 				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
@@ -47,20 +45,11 @@ public class UsedItemWithGroup implements CollectionItemWithGroup<UsedItemDTO, U
 				unitAmount, storageNumberUnits, otherUsedUnits, //accessWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks);
 	}
-	
-	
-//	public UsedItemWithGroup(@NonNull Integer id, UsedItemsGroupDTO usedItemsGroup, UsedItemDTO usedItem) {
-//		super(id);
-//		this.usedItemsGroup = usedItemsGroup;
-//		this.usedItem = usedItem;
-//	}
-
 
 	@Override
 	public UsedItemDTO getItem() {
 		return getUsedItem();
 	}
-
 
 	@Override
 	public UsedItemsGroupDTO getGroup() {

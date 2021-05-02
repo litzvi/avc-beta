@@ -21,8 +21,8 @@ import org.hibernate.annotations.Where;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.processinfo.ProcessGroup;
-import com.avc.mis.beta.entities.processinfo.StorageMovesGroup;
+import com.avc.mis.beta.entities.process.collection.ProcessGroup;
+import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 
 import lombok.AccessLevel;
 import lombok.Data;

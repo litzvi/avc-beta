@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine;
 import com.avc.mis.beta.dto.report.FinalReport;
+import com.avc.mis.beta.dto.report.InventoryReportLine;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.report.ItemQc;
 import com.avc.mis.beta.dto.report.LoadingReportLine;
@@ -25,6 +26,7 @@ import com.avc.mis.beta.dto.report.ReceiptReportLine;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.ProcessSummaryRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
@@ -42,7 +44,19 @@ import lombok.NonNull;
 public class ProcessSummaryReader {
 
 	@Autowired private ProcessSummaryRepository processSummaryRepository;
-	@Autowired private InventoryReports inventoryReports;
+	@Autowired private InventoryRepository inventoryRepository;
+
+	public InventoryReportLine getInventorySummary(@NonNull Integer poCodeId) {
+		List<ItemAmount> inventory = getInventoryRepository().findInventoryItemAmounts(false, null, ItemGroup.PRODUCT, null, poCodeId);
+		
+		if(inventory == null || inventory.isEmpty()) {
+			return null;
+		}
+		
+		InventoryReportLine reportLine = new InventoryReportLine();
+		reportLine.setInventory(inventory);
+		return reportLine;
+	}
 
 	
 	/**
@@ -134,10 +148,7 @@ public class ProcessSummaryReader {
 		for(QcReportLine line: lines) {
 			line.setItemQcs(itemsMap.get(line.getId()));
 		}
-		
-		
 		return lines;
-		
 	}
 
 	public List<LoadingReportLine> getLoadingSummary(Integer poCodeId) {	
@@ -146,24 +157,9 @@ public class ProcessSummaryReader {
 		return CollectionItemWithGroup.getFilledGroups(lines);
 	}
 	
-//	public PoFinalReport getPoFinalReport(@NonNull Integer poCodeId) {
-//	PoFinalReport report = getProcessInfoRepository().findFinalReportBasic(poCodeId);
-//	report.setReceipt(orderReceipts.findFinalCashewReceiptsByPoCode(poCodeId));
-//	report.setReceiptQC(qualityChecks.getRawQualityChecksByPoCode(poCodeId));
-//	report.setCleaning(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.CASHEW_CLEANING, poCodeId));
-//	report.setRelocationCounts(warehouseManagement.getStorageTransfersByPoCode(poCodeId));
-////	report.setMoveToRoaster(warehouseManagement.getStorageRelocations());
-//	report.setRoasting(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.CASHEW_ROASTING, poCodeId));
-//	report.setRoastQC(qualityChecks.getRoastedQualityChecksByPoCode(poCodeId));
-//	report.setPacking(productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.PACKING, poCodeId));
-//	report.setLoading(loading.getLoadingsByPoCode(poCodeId));
-//	
-//	return report;
-//}
-	
 	public FinalReport getFinalReport(@NonNull Integer poCodeId) {
 		FinalReport report = new FinalReport();
-		report.setInventory(inventoryReports.getInventorySummary(poCodeId));
+		report.setInventory(getInventorySummary(poCodeId));
 		report.setReceipt(getReceiptSummary(poCodeId));
 		report.setReceiptQC(getQcSummary(ProcessName.CASHEW_RECEIPT_QC, poCodeId));
 		report.setCleaning(getProductionSummary(ProcessName.CASHEW_CLEANING, poCodeId));

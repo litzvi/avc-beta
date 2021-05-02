@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
-import com.avc.mis.beta.dto.processinfo.UserMessageDTO;
+import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -23,8 +23,7 @@ import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.GeneralProcess;
-import com.avc.mis.beta.entities.processinfo.ApprovalTask;
-import com.avc.mis.beta.entities.processinfo.UserMessage;
+import com.avc.mis.beta.entities.process.collection.UserMessage;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 
 /**

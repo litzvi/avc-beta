@@ -7,8 +7,8 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ProcessBasic;
-import com.avc.mis.beta.dto.embedable.GeneralProcessInfo;
-import com.avc.mis.beta.dto.processinfo.WeightedPoDTO;
+import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
+import com.avc.mis.beta.dto.processInfo.GeneralProcessInfo;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.view.ProcessRow;
@@ -16,8 +16,8 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
-import com.avc.mis.beta.entities.processinfo.ProcessParent;
-import com.avc.mis.beta.entities.processinfo.WeightedPo;
+import com.avc.mis.beta.entities.process.collection.ProcessParent;
+import com.avc.mis.beta.entities.process.collection.WeightedPo;
 
 import lombok.NonNull;
 
@@ -27,7 +27,7 @@ import lombok.NonNull;
  */
 interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> {
 	
-	@Query("select new com.avc.mis.beta.dto.embedable.GeneralProcessInfo("
+	@Query("select new com.avc.mis.beta.dto.processInfo.GeneralProcessInfo("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
 			+ "pt.processName, p_line.id, p_line.value, p_line.productionFunctionality, "
 			+ "r.recordedTime, r.startTime, r.endTime, r.duration, r.numOfWorkers, "
@@ -152,7 +152,7 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 		+ "")
 	List<ProcessItemWithStorage> findProcessItemWithStorage(int processId);
 
-	@Query("select new com.avc.mis.beta.dto.processinfo.WeightedPoDTO( "
+	@Query("select new com.avc.mis.beta.dto.process.collection.WeightedPoDTO( "
 			+ "weighted_po.id, weighted_po.version, weighted_po.ordinal, "
 			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name,  "
 			+ "weighted_po.weight) "

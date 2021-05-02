@@ -10,7 +10,7 @@ import java.util.List;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
-import com.avc.mis.beta.dto.basic.OrdinalAmount;
+import com.avc.mis.beta.dto.generic.OrdinalAmount;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

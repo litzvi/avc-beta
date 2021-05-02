@@ -94,4 +94,10 @@ public class StorageInventoryRow extends BasicSubjectDataDTO implements Collecti
 		return group;
 	}
 
+	@JsonIgnore
+	@Override
+	public String getValue() {
+		return null;
+	}
+
 }

@@ -19,10 +19,9 @@ import javax.persistence.Table;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
-import com.avc.mis.beta.entities.processinfo.ItemCount;
-import com.avc.mis.beta.entities.processinfo.ProcessParent;
-import com.avc.mis.beta.entities.processinfo.WeightedPo;
+import com.avc.mis.beta.entities.process.collection.ItemCount;
+import com.avc.mis.beta.entities.process.collection.ProcessParent;
+import com.avc.mis.beta.entities.process.collection.WeightedPo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;

@@ -20,9 +20,9 @@ import org.hibernate.annotations.Where;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.PoCode;
-import com.avc.mis.beta.entities.processinfo.ProcessGroup;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.UsedItemsGroup;
+import com.avc.mis.beta.entities.process.collection.ProcessGroup;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
+import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
 
 import lombok.AccessLevel;
 import lombok.Data;

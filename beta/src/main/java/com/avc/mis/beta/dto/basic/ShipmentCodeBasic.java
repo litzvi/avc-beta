@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.basic;
 
-import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.BasicValueDTO;
 import com.avc.mis.beta.entities.process.ShipmentCode;
 
 import lombok.EqualsAndHashCode;
@@ -18,7 +18,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class ShipmentCodeBasic extends BasicDTO {
+public class ShipmentCodeBasic extends BasicValueDTO {
 
 	String code;
 	String portOfDischargeCode;
@@ -41,6 +41,7 @@ public class ShipmentCodeBasic extends BasicDTO {
 	/**
 	 * @return a string representing full Shipment code. e.g. TAN-51284
 	 */
+	@Override
 	public String getValue() {
 		return String.format("%s-%s", this.portOfDischargeCode, this.getCode());
 	}

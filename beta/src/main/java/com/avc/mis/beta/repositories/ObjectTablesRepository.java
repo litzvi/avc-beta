@@ -9,7 +9,6 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.values.PoCodeDTO;

@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.embedable.QualityCheckInfo;
-import com.avc.mis.beta.dto.processinfo.CashewItemQualityDTO;
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.collection.CashewItemQualityDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
+import com.avc.mis.beta.dto.processInfo.QualityCheckInfo;
 import com.avc.mis.beta.entities.process.QualityCheck;
 
 import lombok.Data;

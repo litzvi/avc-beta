@@ -23,7 +23,7 @@ import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
-import com.avc.mis.beta.entities.processinfo.OrderItem;
+import com.avc.mis.beta.entities.process.collection.OrderItem;
 
 import lombok.AccessLevel;
 import lombok.Data;

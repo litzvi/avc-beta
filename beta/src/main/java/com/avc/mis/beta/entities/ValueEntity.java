@@ -25,9 +25,6 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public abstract class ValueEntity extends BaseEntity implements SoftDeleted, ValueInterface {
 	
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
 	
 	@Column(nullable = false, updatable = false, columnDefinition = "boolean default true")
 	private boolean active = true;

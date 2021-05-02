@@ -21,8 +21,8 @@ import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.enums.QcCompany;
-import com.avc.mis.beta.entities.processinfo.CashewItemQuality;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.entities.process.collection.CashewItemQuality;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
 
 import lombok.AccessLevel;
 import lombok.Data;

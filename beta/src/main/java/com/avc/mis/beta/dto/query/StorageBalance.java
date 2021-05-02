@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.BasicValueDTO;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -18,14 +19,14 @@ import lombok.Value;
  *
  */
 @Value
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class StorageBalance extends BasicDTO {
+public class StorageBalance {
 
+	Integer storageId;
 	BigDecimal numberUnits;
 	BigDecimal usedAmount;
 	
-	public StorageBalance(@NonNull Integer id, @NonNull BigDecimal numberUnits, BigDecimal usedAmount) {
-		super(id);
+	public StorageBalance(@NonNull Integer storageId, @NonNull BigDecimal numberUnits, BigDecimal usedAmount) {
+		this.storageId = storageId;
 		this.numberUnits = numberUnits;
 		this.usedAmount = usedAmount;
 	}

@@ -13,7 +13,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
-import com.avc.mis.beta.dto.doc.ContainerPoItemRow;
+import com.avc.mis.beta.dto.exportdoc.ContainerPoItemRow;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.fasterxml.jackson.annotation.JsonIgnore;

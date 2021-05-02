@@ -33,11 +33,9 @@ public class QualityChecks {
 	
 	@Autowired private ProcessInfoDAO dao;
 
-	@Autowired private QualityCheckReports qualityCheckReports;
 	@Autowired private QCRepository qcRepository;
 	
 	@Autowired private ProcessReader processReader;
-	@Autowired private ProcessInfoReader processInfoReader;
 	
 				
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -81,6 +79,8 @@ public class QualityChecks {
 
 	//----------------------------Duplicate in QualityCheckReports - Should remove------------------------------------------
 	
+	@Autowired private QualityCheckReports qualityCheckReports;
+
 	public List<CashewQcRow> getRawQualityChecks() {
 		return getQualityCheckReports().getRawQualityChecks();
 	}

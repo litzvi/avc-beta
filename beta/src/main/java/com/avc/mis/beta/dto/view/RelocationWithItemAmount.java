@@ -4,24 +4,14 @@
 package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
-import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.PackedItem;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
-import lombok.experimental.NonFinal;
 
 /**
  * @author zvi

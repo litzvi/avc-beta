@@ -6,8 +6,8 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.processinfo.CountAmountDTO;
-import com.avc.mis.beta.dto.processinfo.ItemCountDTO;
+import com.avc.mis.beta.dto.process.collection.CountAmountDTO;
+import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -21,7 +21,6 @@ import lombok.Data;
  *
  */
 @Data
-//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ItemCountWithAmount implements CollectionItemWithGroup<CountAmountDTO, ItemCountDTO> {
 
 	private ItemCountDTO itemCount;

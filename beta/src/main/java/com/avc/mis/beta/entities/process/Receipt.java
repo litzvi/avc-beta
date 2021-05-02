@@ -14,8 +14,8 @@ import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
-import com.avc.mis.beta.entities.processinfo.ReceiptItem;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
+import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

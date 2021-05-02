@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.basic;
 
-import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.BasicValueDTO;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.values.ProductionLine;
 
@@ -18,7 +18,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class ProductionLineBasic extends ValueDTO {
+public class ProductionLineBasic extends BasicValueDTO {
 
 	String value;
 	ProductionFunctionality productionFunctionality;

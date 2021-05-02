@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dto.basic;
 
-import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.BasicDataDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.GeneralProcess;
@@ -25,11 +24,11 @@ public class ProcessBasic <T extends GeneralProcess> extends BasicDataDTO {
 	
 	ProcessName processName;
 	Class<? extends T> processClazz;
-
+	
 	public ProcessBasic(@NonNull Integer id, ProcessName processName, Class<? extends T> processClazz) {
 		this(id, null, processName, processClazz);
 	}
-	
+
 	public ProcessBasic(@NonNull Integer id, Integer version, ProcessName processName, Class<? extends T> processClazz) {
 		super(id, version);
 		this.processName = processName;
@@ -47,6 +46,11 @@ public class ProcessBasic <T extends GeneralProcess> extends BasicDataDTO {
 		} catch (InstantiationException | IllegalAccessException e) {
 			throw new IllegalStateException(e.getMessage());
 		} 
+	}
+
+	@Override
+	public String getValue() {
+		return this.processName.toString();
 	}
 	
 }

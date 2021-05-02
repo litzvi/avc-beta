@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.UserBasic;
-import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.data.UserLogin;
+import com.avc.mis.beta.dto.generic.ValueObject;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.Role;
@@ -41,7 +41,7 @@ public interface UserRepository extends BaseRepository<UserEntity> {
 	/**
 	 * @return (user id, role) pairs of joining all users with their corresponding role
 	 */
-	@Query("select new com.avc.mis.beta.dto.basic.ValueObject(u.id, r) "
+	@Query("select new com.avc.mis.beta.dto.generic.ValueObject(u.id, r) "
 			+ "from UserEntity u "
 				+ "join u.roles r ")
 	Stream<ValueObject<Role>> findAllRolesByUsers();

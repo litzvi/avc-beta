@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

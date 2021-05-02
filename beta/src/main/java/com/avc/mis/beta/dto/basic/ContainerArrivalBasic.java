@@ -25,10 +25,8 @@ public class ContainerArrivalBasic extends BasicDataDTO {
 
 	@JsonIgnore
 	@ToString.Exclude
-	@EqualsAndHashCode.Include
 	String containerNumber;
 
-	@EqualsAndHashCode.Include
 	DataObjectWithName<Supplier> productCompany; 
 
 	public ContainerArrivalBasic(Integer id, Integer version, String containerNumber,
@@ -52,6 +50,7 @@ public class ContainerArrivalBasic extends BasicDataDTO {
 	}
 	
 	@ToString.Include(name = "value")
+	@Override
 	public String getValue() {
 		return getContainerNumber();
 	}

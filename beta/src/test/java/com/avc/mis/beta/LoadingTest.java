@@ -17,8 +17,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.avc.mis.beta.dto.doc.InventoryExportDoc;
-import com.avc.mis.beta.dto.doc.SecurityExportDoc;
+import com.avc.mis.beta.dto.exportdoc.InventoryExportDoc;
+import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
 import com.avc.mis.beta.dto.process.ContainerBookingDTO;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;

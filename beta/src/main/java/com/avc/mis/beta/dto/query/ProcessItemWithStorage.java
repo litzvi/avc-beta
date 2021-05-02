@@ -5,8 +5,8 @@ package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
 
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
-import com.avc.mis.beta.dto.processinfo.ProcessItemDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -23,11 +23,9 @@ import lombok.Data;
  *
  */
 @Data
-//@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDTO, ProcessItemDTO> {
 	
 	private ProcessItemDTO processItem;
-//	private PoCodeBasic po;//should be removed
 
 	private StorageDTO storage;
 	
@@ -38,19 +36,16 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 	public ProcessItemWithStorage(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ProductionUse productionUse, BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> ItemClazz,
 			MeasureUnit measureUnit, 
-//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, BigDecimal numberUnits, //BigDecimal accessWeight,
 			Integer warehouseLocationId,  String warehouseLocationValue, String storageRemarks, 
 			Class<? extends Storage> clazz,
 			String groupName, String description, String remarks, boolean tableView) {
-//		super(id);
 		this.processItem = new ProcessItemDTO(id, version, ordinal,
 				itemId, itemValue, productionUse, itemUnitAmount, itemUnitMeasureUnit, ItemClazz, 
 				measureUnit, groupName, description, remarks, tableView);
-//		this.po = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		this.storage = new StorageDTO(storageId, storageVersion, storageOrdinal,
-				unitAmount, numberUnits, //accessWeight,
+				unitAmount, numberUnits,
 				warehouseLocationId, warehouseLocationValue, storageRemarks, clazz);
 		
 	}

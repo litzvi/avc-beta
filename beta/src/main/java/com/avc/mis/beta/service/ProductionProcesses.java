@@ -16,7 +16,8 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
-import com.avc.mis.beta.serviceinterface.ProductionProcessService;
+import com.avc.mis.beta.service.interfaces.ProductionProcessService;
+import com.avc.mis.beta.service.reports.ProductionProcessReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;

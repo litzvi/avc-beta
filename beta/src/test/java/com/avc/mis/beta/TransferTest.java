@@ -28,8 +28,8 @@ import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageTransfer;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.process.inventory.Storage;
-import com.avc.mis.beta.entities.processinfo.ProcessItem;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
 
