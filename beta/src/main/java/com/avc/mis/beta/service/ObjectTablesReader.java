@@ -142,58 +142,6 @@ public class ObjectTablesReader {
 		return poCodes;
 	}
 	
-	/**
-	 * Gets the po code basic information of all Cashew in inventory - id, poCode and supplier.
-	 * Cashew in inventory - process outcomes that are finalized. 
-	 * Can be used for choosing a po for factory processing.
-	 * @return Set of PoCodeBasic for all inventory Cashew.
-	 */
-	public Set<PoCodeBasic> findCashewAvailableInventoryPoCodes() {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, false, null, ItemGroup.PRODUCT, null);		
-	}
-	
-	/**
-	 * Gets the po code basic information of all General items in inventory - id, poCode and supplier.
-	 * General inventory - process outcomes that are finalized. 
-	 * Can be used for choosing a po for factory processing.
-	 * @return Set of PoCodeBasic for all General inventory.
-	 */
-	public Set<PoCodeBasic> findGeneralAvailableInventoryPoCodes() {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, false, null, ItemGroup.GENERAL, null);		
-	}
-	
-	/**
-	 * Gets the basic information of all po codes for the given item in inventory - id, poCode and supplier.
-	 * Can be used for choosing a po for factory processing of a certain item.
-	 * @param itemId id of the item
-	 * @return Set of PoCodeBasic
-	 */
-	public Set<PoCodeBasic> findAvailableInventoryPoCodes(Integer itemId) {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false, null, false, null, null, itemId);		
-	}
-	
-	/**
-	 * Gets the basic information of all po codes for the given item category in inventory - id, poCode and supplier.
-	 * Can be used for choosing a po for factory processing at a certian process type.
-	 * @param itemCategories
-	 * @return Set of PoCodeBasic
-	 */
-	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true, productionUses, false, null, null, null);		
-	}
-	
-	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses, ProductionFunctionality[] functionalities) {
-		boolean checkFunctionalities = (functionalities != null);
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true, productionUses, checkFunctionalities, functionalities, null, null);		
-	}
-	
-	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ItemGroup group) {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(false,  null, false, null, group, null);		
-	}
-	
-	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
-		return getObjectTablesRepository().findAvailableInventoryPoCodeByType(true,  productionUses, false, null, group, null);		
-	}
 	
 	/**
 	 * Get the table of all po codes.
@@ -211,5 +159,38 @@ public class ObjectTablesReader {
 	public List<ShipmentCodeBasic> findAllShipmentCodes() {
 		return getObjectTablesRepository().findAllShipmentCodeBasics();
 	}
+	
+//	--------------------------------------Duplicate in WarehouseManagement - should be removed----------------------------------------
+	
+	@Autowired private WarehouseManagement warehouseManagement;
+	
+	public Set<PoCodeBasic> findCashewAvailableInventoryPoCodes() {
+		return getWarehouseManagement().findCashewAvailableInventoryPoCodes();		
+	}
+
+	public Set<PoCodeBasic> findGeneralAvailableInventoryPoCodes() {
+		return getWarehouseManagement().findGeneralAvailableInventoryPoCodes();		
+	}
+	
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(Integer itemId) {
+		return getWarehouseManagement().findAvailableInventoryPoCodes(itemId);	
+	}
+	
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
+		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses);		
+	}
+	
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses, ProductionFunctionality[] functionalities) {
+		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses, functionalities);		
+	}
+	
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ItemGroup group) {
+		return getWarehouseManagement().findAvailableInventoryPoCodes(group);		
+	}
+	
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
+		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses, group);
+	}
+
 
 }

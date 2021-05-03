@@ -9,13 +9,16 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 
@@ -150,17 +153,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
 					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
 				+ "END) "
-//				+ " - "
-//				+ "(CASE "
-//					+ "WHEN ui is null THEN coalesce(sf.accessWeight, 0) "
-//					+ "ELSE (coalesce(sf.accessWeight, 0) / size(sf.usedItems)) "
-//				+ "END)"
 			+ " ) AS balance, "
-//			+ "sum("
-				+ "coalesce(w_po.weight, 1) "
-//				+ " / "
-//				+ "(size(pi.allStorages) * coalesce(size(sf.usedItems), 1))) "
-			+ ") "
+			+ "coalesce(w_po.weight, 1)) "
 		+ "from ProcessItem pi "
 			+ "left join ReceiptItem ri "
 				+ "on pi = ri "
@@ -295,6 +289,103 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	List<ProcessItemInventoryRow> findInventoryProcessItemRows(
 			boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId, Integer poCodeId);
 
+	/**
+	 * ITEMS THAT HAVE AVAILABLE INVENTORY
+	 */
+	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(item.id, item.value)  "
+			+ "from ProcessItem pi "
+				+ "join pi.item item "
+				+ "join pi.process p "
+					+ "left join p.poCode p_po_code "
+					+ "left join p.weightedPos w_po "
+						+ "left join w_po.poCode w_po_code "
+					+ "join BasePoCode po_code "
+						+ "on (po_code = p_po_code or po_code = w_po_code) "
+					+ "join p.lifeCycle lc "
+				+ "join pi.allStorages sf "
+					+ "join sf.group sf_group "
+						+ "join sf_group.process sf_p "
+							+ "left join sf_p.productionLine sf_p_line "
+							+ "join sf_p.lifeCycle sf_lc "
+					+ "left join sf.usedItems ui "
+						+ "left join ui.group used_g "
+							+ "left join used_g.process used_p "
+								+ "left join used_p.lifeCycle used_lc "
+			+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+				+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+				+ "and (item.itemGroup = :itemGroup or :itemGroup is null)  "
+				+ "and (:checkProductionUses = false or item.productionUse in :productionUses)  "
+				+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
+				+ "and (item.id = :itemId or :itemId is null)  "
+				+ "and (po_code.id = :poCodeId or :poCodeId is null) "
+			+ "group by sf.id, sf.numberUnits "
+			+ "having sf.numberUnits > "
+				+ "SUM("
+					+ "(CASE "
+						+ "WHEN (ui IS NOT null AND used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
+							+ "THEN ui.numberUnits "
+						+ "ELSE 0 "
+					+ "END)"
+				+ " ) ")
+		Set<BasicValueEntity<Item>> findAvailableInventoryItemsByType(
+				boolean checkProductionUses, ProductionUse[] productionUses, 
+				boolean checkFunctionalities, ProductionFunctionality[] functionalities,
+				ItemGroup itemGroup, Integer itemId,
+				Integer poCodeId);
+	
+	/**
+	 * PO CODES THAT HAVE AVAILABLE INVENTORY
+	 * Gets set of All PoCodes that have item/s currently in available inventory 
+	 * and contain the given item and belong to given supply group.
+	 * Items are considered available inventory if the producing process status is final 
+	 * and it's not completely used by another using process where the using process isn't cancelled.
+	 * @param supplyGroup constrain to only this supply group, if null than any.
+	 * @param itemId constrain to only this item, if null than any.
+	 * @return Set of PoCodeBasic
+	 */
+	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
+			+ "po_code.id, po_code.code, t.code, t.suffix, s.name) "
+		+ "from ProcessItem pi "
+			+ "join pi.item item "
+			+ "join pi.process p "
+				+ "left join p.poCode p_po_code "
+				+ "left join p.weightedPos w_po "
+					+ "left join w_po.poCode w_po_code "
+				+ "join BasePoCode po_code "
+					+ "on (po_code = p_po_code or po_code = w_po_code) "
+					+ "join po_code.contractType t "
+					+ "join po_code.supplier s "
+				+ "join p.lifeCycle lc "
+			+ "join pi.allStorages sf "
+				+ "join sf.group sf_group "
+					+ "join sf_group.process sf_p "
+						+ "left join sf_p.productionLine sf_p_line "
+						+ "join sf_p.lifeCycle sf_lc "
+				+ "left join sf.usedItems ui "
+					+ "left join ui.group used_g "
+						+ "left join used_g.process used_p "
+							+ "left join used_p.lifeCycle used_lc "
+		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (item.itemGroup = :itemGroup or :itemGroup is null)  "
+			+ "and (:checkProductionUses = false or item.productionUse in :productionUses)  "
+			+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
+			+ "and (item.id = :itemId or :itemId is null)  "
+		+ "group by sf.id, sf.numberUnits, po_code.id "
+//		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) "
+		+ "having sf.numberUnits > "
+			+ "SUM("
+				+ "(CASE "
+					+ "WHEN (ui IS NOT null AND used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
+						+ "THEN ui.numberUnits "
+					+ "ELSE 0 "
+				+ "END)"
+			+ " ) ")
+	Set<PoCodeBasic> findAvailableInventoryPoCodeByType(
+			boolean checkProductionUses, ProductionUse[] productionUses, 
+			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
+			ItemGroup itemGroup, Integer itemId);
+		
 	
 	/**
 	 * Gets the storage balance for storages used by the given process.

@@ -50,6 +50,7 @@ import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -394,6 +395,13 @@ public class QueryTest {
 
 		List<ContainerArrivalRow> containerArrivalRows = containerArrivals.getContainerArrivals();
 		containerArrivalRows.forEach(i -> System.out.println(i));
+
+		List<ProcessRow> inventoryUsesTable = warehouseManagement.getInventoryUses();
+		if(inventoryUsesTable.isEmpty())
+			fail("No inventory uses to test");
+		else
+			System.out.println(inventoryUsesTable.size());
+
 		
 		service.cleanup(po);
 
@@ -402,11 +410,23 @@ public class QueryTest {
 //	@Disabled
 	@Test
 	void oneQueryTest() {
-		List<ProcessRow> inventoryUsesTable = warehouseManagement.getInventoryUses();
-		if(inventoryUsesTable.isEmpty())
-			fail("No inventory uses to test");
-		else
-			System.out.println(inventoryUsesTable.size());
-			
+		Set<BasicValueEntity<Item>> availableItems =  warehouseManagement.findCashewAvailableInventoryItems();
+		availableItems.forEach(i -> System.out.println(i));
+		
+		availableItems =  warehouseManagement.findGeneralAvailableInventoryItems();
+		availableItems.forEach(i -> System.out.println(i));
+		
+		availableItems =  warehouseManagement.findAvailableInventoryItems(ProductionUse.values(), ProductionFunctionality.values());
+		availableItems.forEach(i -> System.out.println(i));
+
+		availableItems =  warehouseManagement.findAvailableInventoryItems(ProductionUse.values(), ItemGroup.WASTE);
+		availableItems.forEach(i -> System.out.println(i));
+
+		availableItems =  warehouseManagement.findAvailableInventoryItems(ProductionUse.values());
+		availableItems.forEach(i -> System.out.println(i));
+
+		availableItems =  warehouseManagement.findAvailableInventoryItems(ItemGroup.QC);
+		availableItems.forEach(i -> System.out.println(i));
+
 	}
 }

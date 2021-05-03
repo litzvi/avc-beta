@@ -2,21 +2,25 @@ package com.avc.mis.beta.service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.InventoryUse;
@@ -31,6 +35,7 @@ import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * Service for recording and receiving Warehouse activity and information
@@ -69,6 +74,118 @@ public class WarehouseManagement {
 		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
 	}	
 	
+//	--------------------------------------Items available in inventory----------------------------------------
+	
+	/**
+	 * Gets the item's BasicValueEntity for all Cashew items available in inventory - id and value.
+	 * Cashew in inventory - process outcomes that are finalized. 
+	 * Can be used for choosing a item for use.
+	 * @return Set of BasicValueEntity for all inventory Cashew.
+	 */
+	public Set<BasicValueEntity<Item>> findCashewAvailableInventoryItems() {
+		return findAvailableInventoryItems(false,  null, false, null, ItemGroup.PRODUCT, null, null);		
+	}
+	
+	/**
+	 * Gets the item's BasicValueEntity for all General items available in inventory - id and value.
+	 * General inventory - process outcomes that are finalized. 
+	 * Can be used for choosing a item for use.
+	 * @return Set of BasicValueEntity for all General inventory.
+	 */
+	public Set<BasicValueEntity<Item>> findGeneralAvailableInventoryItems() {
+		return findAvailableInventoryItems(false,  null, false, null, ItemGroup.GENERAL, null, null);		
+	}
+	
+	
+	public Set<BasicValueEntity<Item>> findAvailableInventoryItems(@NonNull ProductionUse[] productionUses) {
+		return findAvailableInventoryItems(true, productionUses, false, null, null, null, null);		
+	}
+	
+	public Set<BasicValueEntity<Item>> findAvailableInventoryItems(@NonNull ProductionUse[] productionUses, ProductionFunctionality[] functionalities) {
+		boolean checkFunctionalities = (functionalities != null);
+		return findAvailableInventoryItems(true, productionUses, checkFunctionalities, functionalities, null, null, null);		
+	}
+	
+	/**
+	 * Gets the item's BasicValueEntity for all items for the given item group available in inventory - id and value.
+	 * Can be used for choosing a an item from a given group. e.g. waste.
+	 * @param group
+	 * @return Set of BasicValueEntity
+	 */
+	public Set<BasicValueEntity<Item>> findAvailableInventoryItems(ItemGroup group) {
+		return findAvailableInventoryItems(false,  null, false, null, group, null, null);		
+	}
+	
+	public Set<BasicValueEntity<Item>> findAvailableInventoryItems(ProductionUse[] productionUses, ItemGroup group) {
+		return findAvailableInventoryItems(true,  productionUses, false, null, group, null, null);		
+	}
+	
+	private Set<BasicValueEntity<Item>> findAvailableInventoryItems(
+			boolean checkProductionUses, ProductionUse[] productionUses, 
+			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
+			ItemGroup itemGroup, Integer itemId,
+			Integer poCodeId) {
+		return getInventoryRepository().findAvailableInventoryItemsByType(checkProductionUses, productionUses, 
+				checkFunctionalities, functionalities, itemGroup, itemId, poCodeId);		
+	}
+	
+//	--------------------------------------PO codes available in inventory----------------------------------------
+	
+	/**
+	 * Gets the po code basic information of all Cashew in inventory - id, poCode and supplier.
+	 * Cashew in inventory - process outcomes that are finalized. 
+	 * Can be used for choosing a po for factory processing.
+	 * @return Set of PoCodeBasic for all inventory Cashew.
+	 */
+	public Set<PoCodeBasic> findCashewAvailableInventoryPoCodes() {
+		return findAvailableInventoryPoCodes(false,  null, false, null, ItemGroup.PRODUCT, null);		
+	}
+	
+	/**
+	 * Gets the po code basic information of all General items in inventory - id, poCode and supplier.
+	 * General inventory - process outcomes that are finalized. 
+	 * Can be used for choosing a po for factory processing.
+	 * @return Set of PoCodeBasic for all General inventory.
+	 */
+	public Set<PoCodeBasic> findGeneralAvailableInventoryPoCodes() {
+		return findAvailableInventoryPoCodes(false,  null, false, null, ItemGroup.GENERAL, null);		
+	}
+	
+	/**
+	 * Gets the basic information of all po codes for the given item in inventory - id, poCode and supplier.
+	 * Can be used for choosing a po for factory processing of a certain item.
+	 * @param itemId id of the item
+	 * @return Set of PoCodeBasic
+	 */
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(Integer itemId) {
+		return findAvailableInventoryPoCodes(false, null, false, null, null, itemId);		
+	}
+	
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
+		return findAvailableInventoryPoCodes(true, productionUses, false, null, null, null);		
+	}
+	
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses, ProductionFunctionality[] functionalities) {
+		boolean checkFunctionalities = (functionalities != null);
+		return findAvailableInventoryPoCodes(true, productionUses, checkFunctionalities, functionalities, null, null);		
+	}
+	
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ItemGroup group) {
+		return findAvailableInventoryPoCodes(false,  null, false, null, group, null);		
+	}
+	
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
+		return findAvailableInventoryPoCodes(true,  productionUses, false, null, group, null);		
+	}
+	
+	private Set<PoCodeBasic> findAvailableInventoryPoCodes(
+			boolean checkProductionUses, ProductionUse[] productionUses, 
+			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
+			ItemGroup itemGroup, Integer itemId) {
+		return getInventoryRepository().findAvailableInventoryPoCodeByType(checkProductionUses, productionUses, 
+				checkFunctionalities, functionalities, itemGroup, itemId);		
+	}
+
 	
 	//----------------------------Duplicate in InventoryUses - Should remove------------------------------------------
 	
