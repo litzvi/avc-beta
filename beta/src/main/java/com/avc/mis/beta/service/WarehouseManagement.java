@@ -61,7 +61,9 @@ public class WarehouseManagement {
 		boolean checkPoCodes = (poCodeIds != null);
 		Integer[] excludedProcessIds = null;
 		if(poCodeIds != null && excludeProcessId != null) {
-			excludedProcessIds = dao.getProcessDescendants(poCodeIds, excludeProcessId);
+			Set<Integer> excludedProcessIdsSet = dao.getProcessDescendants(poCodeIds, excludeProcessId);
+			excludedProcessIdsSet.add(excludeProcessId);
+			excludedProcessIds = excludedProcessIdsSet.toArray(new Integer[excludedProcessIdsSet.size()]);
 		}
 		boolean checkExcludedProcessIds = (excludedProcessIds != null && excludedProcessIds.length > 0);
 		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()

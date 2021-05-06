@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
+import com.avc.mis.beta.entities.codes.GeneralPoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PO;
@@ -50,7 +52,7 @@ public class Orders {
 		if(po.getPoCode() == null) {
 			throw new IllegalArgumentException("Purchase Order has to reference a po code");
 		}
-		if(dao.isPoCodeFree(po.getPoCode().getId())) {
+		if(dao.isPoCodeFree(po.getPoCode().getId(), PoCode.class)) {
 			dao.addPoProcessEntity(po);						
 		}
 		else {
@@ -70,9 +72,15 @@ public class Orders {
 			throw new IllegalArgumentException("Purchase Order has to reference a po code");
 		}
 //		addGeneralPoCode((GeneralPoCode) po.getPoCode()); - now the code is set by the user
-		dao.addEntity(po.getPoCode());
-				
-		dao.addPoProcessEntity(po);	
+//		dao.addEntity(po.getPoCode());
+//				
+//		dao.addPoProcessEntity(po);	
+		if(dao.isPoCodeFree(po.getPoCode().getId(), GeneralPoCode.class)) {
+			dao.addPoProcessEntity(po);						
+		}
+		else {
+			throw new IllegalArgumentException("Po Code is already used for another order or receipt");
+		}	
 	}
 	
 	/**

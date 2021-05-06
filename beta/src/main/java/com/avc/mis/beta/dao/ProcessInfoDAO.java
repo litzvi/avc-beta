@@ -25,6 +25,8 @@ import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.query.UsedProcess;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -360,20 +362,21 @@ public class ProcessInfoDAO extends DAO {
 	
 	//call for edit of a TransactionProcess or StorageRelocation
 	public void checkDAGmaintained(List<ItemAmountWithPoCode> usedPos, Integer processId) {
-		getProcessDescendants(usedPos.stream()
+		Set<Integer> descendants = getProcessDescendants(usedPos.stream()
 				.map(i -> i.getPoCode().getId()).collect(Collectors.toSet())
 				.stream().toArray(Integer[]::new), processId);
+		if(descendants.stream().anyMatch(i -> i.equals(processId))) {
+			throw new IllegalArgumentException("Process using it's descendant");
+		}
 	}
 	
-	public Integer[] getProcessDescendants (Integer[] poCodeIds, @NonNull Integer processId) {
+	public Set<Integer> getProcessDescendants (Integer[] poCodeIds, @NonNull Integer processId) {
 		List<Integer[]> processVertices = getProcessRepository().findTransactionProcessVertices(poCodeIds);
 		Map<Integer, List<Integer>> map = processVertices.stream().collect(Collectors.groupingBy(i -> i[0], Collectors.mapping(i -> i[1], Collectors.toList())));
-		System.out.println(processId);
-		System.out.println(map);
 		List<Integer> addedProcesses = null;
 		Set<Integer> processDescendants = new HashSet<>();
-		processDescendants.add(processId);
-		int numDescendants;
+//		processDescendants.add(processId);
+//		int numDescendants;
 		do {
 			if(addedProcesses == null) {
 				if(map.containsKey(processId))
@@ -387,18 +390,11 @@ public class ProcessInfoDAO extends DAO {
 			}
 			
 			if(addedProcesses != null) {
-				int numToAdd = addedProcesses.size();
-				numDescendants = processDescendants.size();
-				System.out.println("processDescendants: " + processDescendants);
-				System.out.println("addedProcesses: " + addedProcesses);
 				processDescendants.addAll(addedProcesses);
-				if(processDescendants.size() != (numDescendants + numToAdd)) {
-					throw new IllegalArgumentException("Process using it's descendant");
-				}
 			}
 		} while(addedProcesses != null && !addedProcesses.isEmpty());
 		
-		return processDescendants.toArray(new Integer[processDescendants.size()]);
+		return processDescendants;
 	}
 
 		
@@ -625,8 +621,8 @@ public class ProcessInfoDAO extends DAO {
 	 * @param poCode po code to check
 	 * @return true if given PO Code isn't used
 	 */
-	public boolean isPoCodeFree(Integer poCodeId) {
-		List<PoCodeBasic> poCodes = getObjectTablesRepository().findFreePoCodes(poCodeId);
+	public <T extends BasePoCode> boolean isPoCodeFree(@NonNull Integer poCodeId, Class<T> clazz) {
+		List<PoCodeBasic> poCodes = getObjectTablesRepository().findFreePoCodes(poCodeId, clazz);
 		if(poCodes == null || poCodes.size() == 0) {
 			return false;
 		}

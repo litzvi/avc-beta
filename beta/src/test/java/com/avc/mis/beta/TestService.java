@@ -120,6 +120,17 @@ public class TestService {
 		objectWriter.addPoCode(poCode);
 		return poCode;
 	}
+	
+	GeneralPoCode addGeneralPoCode() {
+		GeneralPoCode poCode = new GeneralPoCode();
+		poCode.setCode(Integer.toString(randCode++));
+		Supplier supplier = addBasicSupplier();
+		poCode.setCode(Integer.toString(randCode++));
+		poCode.setSupplier(supplier);
+		poCode.setContractType(getContractType());
+		objectWriter.addPoCode(poCode);
+		return poCode;
+	}
 
 	public ShipmentCode addShipmentCode() {
 		ShipmentCode shipmentCode = new ShipmentCode();
@@ -155,11 +166,11 @@ public class TestService {
 		
 		//build purchase order
 		PO po = new PO();
-		GeneralPoCode poCode = new GeneralPoCode();
-		Supplier supplier = addBasicSupplier();
-		poCode.setCode(Integer.toString(randCode++));
-		poCode.setSupplier(supplier);
-		poCode.setContractType(getContractType());
+		GeneralPoCode poCode = addGeneralPoCode();
+//		Supplier supplier = addBasicSupplier();
+//		poCode.setCode(Integer.toString(randCode++));
+//		poCode.setSupplier(supplier);
+//		poCode.setContractType(getContractType());
 		po.setPoCode(poCode);
 		
 		//build process

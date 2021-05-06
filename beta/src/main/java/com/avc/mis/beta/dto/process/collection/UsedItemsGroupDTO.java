@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.process.collection;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
@@ -102,7 +103,7 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 					}
 					else 
 					{
-						throw new IllegalStateException("The class can only apply to weight items");
+						throw new IllegalStateException("Unknowen item class");
 					}
 				})
 				.reduce(AmountWithUnit::add).get();
@@ -113,6 +114,36 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 			return Arrays.asList(totalAmount);
 		}
 		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+	}
+	
+	@JsonIgnore
+	public AmountWithUnit getTotalWeight() {
+		if(usedItems == null || usedItems.isEmpty()) {
+			return null;
+		}
+		Optional<AmountWithUnit> totalWeight;
+		try {
+			totalWeight = usedItems.stream()
+				.map(ui -> {
+					Class<? extends Item> itemClass = ui.getItem().getClazz();
+					if(itemClass == BulkItem.class && MeasureUnit.WEIGHT_UNITS.contains(ui.getMeasureUnit())) {
+						return new AmountWithUnit(ui.getTotal(), ui.getMeasureUnit());
+					}
+					else if(itemClass == PackedItem.class && MeasureUnit.WEIGHT_UNITS.contains(ui.getItem().getUnit().getMeasureUnit())){
+						return ui.getItem().getUnit().multiply(ui.getTotal());
+					}
+					else 
+					{
+						return null;
+					}
+				})
+				.filter(i -> i != null)
+				.reduce(AmountWithUnit::add);
+		} catch (NoSuchElementException | UnsupportedOperationException e) {
+			return null;
+		}
+		
+		return totalWeight.orElse(null);
 	}
 	
 	@JsonIgnore

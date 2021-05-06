@@ -402,14 +402,6 @@ public class QueryTest {
 		else
 			System.out.println(inventoryUsesTable.size());
 
-		
-		service.cleanup(po);
-
-	}
-	
-//	@Disabled
-	@Test
-	void oneQueryTest() {
 		Set<BasicValueEntity<Item>> availableItems =  warehouseManagement.findCashewAvailableInventoryItems();
 		availableItems.forEach(i -> System.out.println(i));
 		
@@ -427,6 +419,26 @@ public class QueryTest {
 
 		availableItems =  warehouseManagement.findAvailableInventoryItems(ItemGroup.QC);
 		availableItems.forEach(i -> System.out.println(i));
+		
+		service.cleanup(po);
+
+	}
+	
+//	@Disabled
+	@Test
+	void oneQueryTest() {
+		
+		
+		//get list of cashew orders and receipts
+		List<PoCodeBasic> activeCashewBasic =  objectTablesReader.findAllPoCodes();
+		System.out.println("cashew:");
+		System.out.println("size:" + activeCashewBasic.size());
+		activeCashewBasic.forEach(row -> System.out.println(row));
+
+		List<PoCodeBasic> activeGeneralBasic =  objectTablesReader.findAllGeneralPoCodes();
+		System.out.println("general:");
+		System.out.println("size:" + activeGeneralBasic.size());
+		activeGeneralBasic.forEach(row -> System.out.println(row));
 
 	}
 }

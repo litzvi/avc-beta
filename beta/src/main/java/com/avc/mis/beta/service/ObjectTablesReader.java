@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
+import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
@@ -67,6 +68,10 @@ public class ObjectTablesReader {
 		return getObjectTablesRepository().findAllPoCodes();		
 	}
 	
+	public List<GeneralPoCode> getAllGeneralPoCodes() {
+		return getObjectTablesRepository().findAllGeneralPoCodes();		
+	}
+	
 	public List<ShipmentCode> getAllShipmentCodes() {
 		return getObjectTablesRepository().findAllShipmentCodes();		
 	}
@@ -97,7 +102,11 @@ public class ObjectTablesReader {
 //---------------------------------DTOs---------------------------------------------------------
 	
 	public List<PoCodeBasic> findFreePoCodes() {
-		return getObjectTablesRepository().findFreePoCodes(null);		
+		return getObjectTablesRepository().findFreePoCodes(null, PoCode.class);		
+	}
+	
+	public List<PoCodeBasic> findFreeGeneralPoCodes() {
+		return getObjectTablesRepository().findFreePoCodes(null, GeneralPoCode.class);		
 	}
 	
 	public List<PoCodeBasic> findFreeMixPoCodes() {
@@ -144,12 +153,21 @@ public class ObjectTablesReader {
 	
 	
 	/**
-	 * Get the table of all po codes.
+	 * Get the table of all product po codes.
 	 * Can be used for searching reports for any PO.
 	 * @return List of PoCodeBasic
 	 */
 	public List<PoCodeBasic> findAllPoCodes() {
-		return getObjectTablesRepository().findAllPoCodeBasics();
+		return getObjectTablesRepository().findAllPoCodeBasics(PoCode.class);
+	}
+	
+	/**
+	 * Get the table of all general po codes.
+	 * Can be used for searching reports for any PO.
+	 * @return List of PoCodeBasic
+	 */
+	public List<PoCodeBasic> findAllGeneralPoCodes() {
+		return getObjectTablesRepository().findAllPoCodeBasics(GeneralPoCode.class);
 	}
 	
 	/**

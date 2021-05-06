@@ -37,6 +37,11 @@ public class ObjectWriter {
 		dao.addEntity(poCode);
 	}
 	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addPoCode(GeneralPoCode poCode) {
+		dao.addEntity(poCode);
+	}
+	
 	public PoCodeDTO getPoCode(int poCodeId) {
 		Optional<PoCodeDTO> poCode = objectTablesRepository.findPoCodeById(poCodeId);
 		return poCode.orElseThrow(
@@ -46,7 +51,12 @@ public class ObjectWriter {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editPoCode(PoCode poCode) {
 		dao.editEntity(poCode);
-	}	
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editPoCode(GeneralPoCode poCode) {
+		dao.editEntity(poCode);
+	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addShipmentCode(ShipmentCode shipmentCode) {

@@ -17,6 +17,9 @@ import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.GeneralPoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -50,7 +53,7 @@ public class Receipts {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addCashewReceipt(Receipt receipt) {
 		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT));
-		addReceipt(receipt);
+		addReceipt(receipt, PoCode.class);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -67,7 +70,7 @@ public class Receipts {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addGeneralReceipt(Receipt receipt) {
 		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_RECEIPT));
-		addReceipt(receipt);
+		addReceipt(receipt, GeneralPoCode.class);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -86,12 +89,12 @@ public class Receipts {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	private void addReceipt(Receipt receipt) {
+	private <T extends BasePoCode> void addReceipt(Receipt receipt, Class<T> clazz) {
 		//using save rather than persist in case POid was assigned by user
 //		dao.addEntityWithFlexibleGenerator(receipt.getPoCode());
 //		addOrderReceipt(receipt);
 
-		if(dao.isPoCodeFree(receipt.getPoCode().getId())) {
+		if(dao.isPoCodeFree(receipt.getPoCode().getId(), clazz)) {
 			dao.addPoProcessEntity(receipt);						
 		}
 		else {

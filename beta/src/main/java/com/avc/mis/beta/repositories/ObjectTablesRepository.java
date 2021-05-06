@@ -13,6 +13,8 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.ObjectDataEntity;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
@@ -40,6 +42,9 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	
 	@Query("select e from PoCode e")
 	List<PoCode> findAllPoCodes();
+	
+	@Query("select e from PoCode e")
+	List<GeneralPoCode> findAllGeneralPoCodes();
 	
 	@Query("select e from ShipmentCode e")
 	List<ShipmentCode> findAllShipmentCodes();
@@ -136,11 +141,12 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	//will also give old (history) po_codes
 	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
-		+ "from PoCode po_code "
+		+ "from BasePoCode po_code "
 				+ "join po_code.contractType c "
 				+ "join po_code.supplier s "
+		+ "where type(po_code) = :clazz "
 		+ "order by po_code.id desc ")
-	List<PoCodeBasic> findAllPoCodeBasics();
+	 <T extends BasePoCode> List<PoCodeBasic> findAllPoCodeBasics(Class<T> clazz);
 	
 	//will also give old (history) shipment codes
 	@Query("select new com.avc.mis.beta.dto.basic.ShipmentCodeBasic("
@@ -152,10 +158,11 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 
 	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
-		+ "from PoCode po_code "
+		+ "from BasePoCode po_code "
 			+ "join po_code.contractType c "
 			+ "join po_code.supplier s "
-		+ "where (po_code.id = :poCodeId or :poCodeId is null) "
+		+ "where type(po_code) = :clazz "
+			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
 			+ "and (po_code.processes is empty "
 				+ "or not exists ("
 					+ "select p_2 "
@@ -171,7 +178,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 				+ ")"
 			+ ") "
 		+ "order by po_code.id desc ")
-	List<PoCodeBasic> findFreePoCodes(Integer poCodeId);
+	<T extends BasePoCode> List<PoCodeBasic> findFreePoCodes(Integer poCodeId, Class<T> clazz);
 
 	@Query("select new com.avc.mis.beta.dto.basic.ShipmentCodeBasic("
 			+ "s_code.id, s_code.code, port.code, port.value) "

@@ -54,8 +54,7 @@ public class LoadingRow extends BasicDTO {
 	private String sealNumber;
 	private String containerSize;
 	
-	private List<ProductionProcessWithItemAmount> usedItems;
-//	private List<ProductionProcessWithItemAmount> loadedItems;
+//	private List<ProductionProcessWithItemAmount> usedItems;
 
 	private List<ContainerPoItemRow> loadedTotals;
 

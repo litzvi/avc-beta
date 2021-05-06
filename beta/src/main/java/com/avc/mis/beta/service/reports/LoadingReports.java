@@ -42,15 +42,15 @@ public class LoadingReports {
 	public List<LoadingRow> getLoadingsByPoCode(Integer poCodeId) {
 		List<LoadingRow> loadingRows = getContainerLoadingRepository().findContainerLoadings(poCodeId, true);
 		int[] processIds = loadingRows.stream().mapToInt(LoadingRow::getId).toArray();
-		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getContainerLoadingRepository()
-				.findAllUsedItemsByProcessIds(processIds)
-				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
+//		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getContainerLoadingRepository()
+//				.findAllUsedItemsByProcessIds(processIds)
+//				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		Map<Integer, List<ContainerPoItemRow>> usedByPoMap = getContainerLoadingRepository()
 				.findLoadedTotals(processIds)
 				.stream()
 				.collect(Collectors.groupingBy(ContainerPoItemRow::getId));
 		for(LoadingRow row: loadingRows) {
-			row.setUsedItems(usedMap.get(row.getId()));
+//			row.setUsedItems(usedMap.get(row.getId()));
 			row.setLoadedTotals(usedByPoMap.get(row.getId()));
 		}		
 		
