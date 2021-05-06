@@ -13,6 +13,7 @@ import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
+import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
@@ -144,7 +145,7 @@ public class ProcessInfoWriter {
 		processes.forEach(i -> removeProcess(i.getId(), i.getProcessClazz()));
 		//find used items that are disappearing
 		//delete po code
-		deletableDAO.permenentlyRemoveEntity(PoCode.class, poCodeId);
+		deletableDAO.permenentlyRemoveEntity(BasePoCode.class, poCodeId);
 	}
 	
 	

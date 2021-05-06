@@ -368,6 +368,8 @@ public class ProcessInfoDAO extends DAO {
 	public Integer[] getProcessDescendants (Integer[] poCodeIds, @NonNull Integer processId) {
 		List<Integer[]> processVertices = getProcessRepository().findTransactionProcessVertices(poCodeIds);
 		Map<Integer, List<Integer>> map = processVertices.stream().collect(Collectors.groupingBy(i -> i[0], Collectors.mapping(i -> i[1], Collectors.toList())));
+		System.out.println(processId);
+		System.out.println(map);
 		List<Integer> addedProcesses = null;
 		Set<Integer> processDescendants = new HashSet<>();
 		processDescendants.add(processId);
@@ -387,6 +389,8 @@ public class ProcessInfoDAO extends DAO {
 			if(addedProcesses != null) {
 				int numToAdd = addedProcesses.size();
 				numDescendants = processDescendants.size();
+				System.out.println("processDescendants: " + processDescendants);
+				System.out.println("addedProcesses: " + addedProcesses);
 				processDescendants.addAll(addedProcesses);
 				if(processDescendants.size() != (numDescendants + numToAdd)) {
 					throw new IllegalArgumentException("Process using it's descendant");

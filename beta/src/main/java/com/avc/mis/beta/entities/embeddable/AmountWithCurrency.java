@@ -30,9 +30,9 @@ import lombok.Setter;
 @Embeddable
 public class AmountWithCurrency implements Cloneable {
 	
-	private static final int SCALE = 2;
+	private static final int SCALE = 3;
 
-	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,###.##");
+	private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,###.###");
 
 
 	@Column(precision = 19, scale = SCALE)

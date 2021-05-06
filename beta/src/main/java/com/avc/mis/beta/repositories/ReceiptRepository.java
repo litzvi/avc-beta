@@ -55,7 +55,7 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 				+ "ro_units.amount, ro_units.measureUnit, "
 				+ "r.recordedTime, lc.processStatus, "
 				+ "SUM(sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor), item.measureUnit, "
-				+ "function('GROUP_CONCAT', sto.value), "
+				+ "function('GROUP_CONCAT', function('DISTINCT', sto.value)), "
 				+ "extra.amount, extra.measureUnit) "
 			+ "from Receipt r "
 				+ "join r.lifeCycle lc "

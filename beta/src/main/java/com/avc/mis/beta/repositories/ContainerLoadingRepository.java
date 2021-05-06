@@ -138,7 +138,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
-			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
+			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "sf.unitAmount, pi.measureUnit, "
 			+ "sum(i.numberUnits * coalesce(w_po.weight, 1))) "
 		+ "from ContainerLoading p "

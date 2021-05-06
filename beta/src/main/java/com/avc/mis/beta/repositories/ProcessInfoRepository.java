@@ -54,8 +54,8 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 
 	@Query("select new com.avc.mis.beta.dto.process.collection.UserMessageDTO("
 			+ "m.id, m.version, "
-			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
-			+ "function('GROUP_CONCAT', s.name), "
+			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
+			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
 			+ "m.description, p.id, pt.processName, pt.value, m.createdDate, prm.name, pr.name, m.label) "
 		+ "from UserMessage m "
 			+ "left join m.process p "
@@ -82,8 +82,8 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 
 	@Query("select new com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO("
 			+ "pa.id, pa.version, "
-			+ "function('GROUP_CONCAT', concat(t.code, '-', po_code.code, coalesce(t.suffix, ''))), "
-			+ "function('GROUP_CONCAT', s.name), "
+			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
+			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
 			+ "pa.description, p.id, pt.processName, pt.value, pa.createdDate, "
 			+ "prm.name, pr.name, pa.decision, pa.processSnapshot) "
 		+ "from ApprovalTask pa "

@@ -80,7 +80,8 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line.id, p_line.value, p_line.productionFunctionality,  "
 			+ "po.recordedTime, po.startTime, po.endTime, po.duration, po.numOfWorkers, "
-			+ "lc.processStatus, lc.editStatus, po.remarks, function('GROUP_CONCAT', concat(u.username, ':', approval.decision)), "
+			+ "lc.processStatus, lc.editStatus, po.remarks, "
+			+ "function('GROUP_CONCAT', function('DISTINCT', concat(u.username, ':', approval.decision))), "
 			+ "po.personInCharge) "
 		+ "from PO po "
 			+ "join po.poCode po_code "
@@ -149,7 +150,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 	 */
 	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, "
 			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
-			+ "function('GROUP_CONCAT', concat(coalesce(user.username, ''), ': ', coalesce(approval.decision, ''))), "
+			+ "function('GROUP_CONCAT', function('DISTINCT', concat(coalesce(user.username, ''), ': ', coalesce(approval.decision, '')))), "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "oi.id, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency, "
