@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -51,11 +52,11 @@ public class ItemAmount {
 		else {
 			this.weightCoefficient = BigDecimal.ONE;
 		}
-		if(clazz == BulkItem.class) {
+		if(clazz == BulkItem.class && MeasureUnit.WEIGHT_UNITS.contains(defaultMeasureUnit)) {
 			this.amount = null;
 			this.weightAmount = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
 		}
-		else if(clazz == PackedItem.class){
+		else if(clazz == PackedItem.class && MeasureUnit.WEIGHT_UNITS.contains(unitMeasureUnit)){
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			this.amount.setScale(MeasureUnit.SCALE);
 			AmountWithUnit weightAmount = new AmountWithUnit(
@@ -80,7 +81,9 @@ public class ItemAmount {
 		}
 		else 
 		{
-			throw new IllegalStateException("The class can only apply to weight items");
+			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);	
+			this.weightAmount = null;
+//			throw new IllegalStateException("The class can only apply to weight items");
 		}
 	}
 	
@@ -95,12 +98,27 @@ public class ItemAmount {
 	}
 	
 	public List<AmountWithUnit> getWeight() {
-		return AmountWithUnit.weightDisplay(this.weightAmount, Arrays.asList(MeasureUnit.LBS, MeasureUnit.KG));
+		if(this.weightAmount != null) {
+			return AmountWithUnit.weightDisplay(this.weightAmount, Arrays.asList(MeasureUnit.LBS, MeasureUnit.KG));	
+		}
+		else {
+			return null;
+		}
 	}
 	
 	@JsonIgnore
 	static AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
-		return itemAmounts.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get().setScale(MeasureUnit.SUM_DISPLAY_SCALE);
+		Optional<AmountWithUnit> totalWeight = itemAmounts.stream()
+				.filter(i -> i.getWeightAmount() != null)
+				.map(i -> i.getWeightAmount())
+				.reduce(AmountWithUnit::add);
+		if(totalWeight.isPresent()) {
+			return totalWeight.get()
+					.setScale(MeasureUnit.SUM_DISPLAY_SCALE);
+		}
+		else {
+			return null;
+		}
 	}
 	
 

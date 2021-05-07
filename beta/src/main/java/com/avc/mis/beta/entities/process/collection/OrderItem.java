@@ -79,7 +79,7 @@ public class OrderItem extends RankedAuditedEntity {
 
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
-                           column=@Column(name="unitPrice", nullable = false, 
+                           column=@Column(name="unitPrice",
                                   	precision = 19, scale = AmountWithCurrency.SCALE))    })
 	@Embedded
 	@Valid
