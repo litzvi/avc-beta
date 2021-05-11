@@ -5,10 +5,6 @@ package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
 
-import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.BasicValueDTO;
-
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
 

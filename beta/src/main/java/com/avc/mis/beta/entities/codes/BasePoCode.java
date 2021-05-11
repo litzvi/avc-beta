@@ -44,29 +44,17 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
 @Entity
-//@Table(name = "PO_CODES")
 @Table(name = "PO_CODES", uniqueConstraints = 
 	{ @UniqueConstraint(columnNames = { "code", "contractTypeId" }) })
 @Inheritance(strategy=InheritanceType.JOINED)
-//@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
-//@DiscriminatorValue("abstract")
 public class BasePoCode extends BaseEntity implements ValueInterface {
 
-//	@Column(nullable = false, insertable = false, updatable = false)
-//	private String dtype;
-
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
-	
 //	@Id
 //	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
 //	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
 //	@Column(nullable = false, updatable = false, unique = true)
-//	@Column(updatable = false, unique = true)
 	@NotNull(message = "code is mandatory")
 	@Column(updatable = false, nullable = false)
-//	@EqualsAndHashCode.Include
 	private String code;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -75,7 +63,6 @@ public class BasePoCode extends BaseEntity implements ValueInterface {
 		
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contractTypeId", nullable = false)
-//	@NotNull(message = "PO code is required to have a contract type")
 	private ContractType contractType;
 		
 	@JsonIgnore
@@ -92,10 +79,17 @@ public class BasePoCode extends BaseEntity implements ValueInterface {
 	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
 	 */
 	public String getValue() {
-//		if(this.display != null) {
-//			return this.display;
-//		}
-		return String.format("%s-%s%s", this.contractType.getCode(), this.code, this.contractType.getSuffix());
+		return display(this.contractType.getCode(), this.code, this.contractType.getSuffix());
+	}
+	
+	/**
+	 * @param contractTypeCode
+	 * @param poCode
+	 * @param suffix
+	 * @return a string representing full PO code. e.g. VAT-900001, PO-900001V
+	 */
+	public static String display(String contractTypeCode, String poCode, String suffix) {
+		return String.format("%s-%s%s", contractTypeCode, poCode, suffix);		
 	}
 
 }

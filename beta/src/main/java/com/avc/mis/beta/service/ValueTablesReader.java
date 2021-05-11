@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.generic.ValueEntityObject;
@@ -48,7 +47,6 @@ import com.avc.mis.beta.repositories.ValueTablesRepository;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 
 /**
  * Used to access full lists (tables) of active Value entities - {@link com.avc.mis.beta.entities.ValueEntity}

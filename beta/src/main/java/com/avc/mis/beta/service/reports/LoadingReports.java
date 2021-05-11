@@ -17,7 +17,6 @@ import com.avc.mis.beta.dto.exportdoc.ExportInfo;
 import com.avc.mis.beta.dto.exportdoc.InventoryExportDoc;
 import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
 import com.avc.mis.beta.dto.view.LoadingRow;
-import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
 
 import lombok.AccessLevel;

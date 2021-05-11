@@ -3,16 +3,16 @@
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="com.avc.mis.beta.entities.codes.BasePoCode" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/entities/codes/BasePoCode.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="153" width="227" x="797" y="111"/>    
+    <position height="153" width="254" x="751" y="87"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="com.avc.mis.beta.entities.codes.PoCode" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/codes/PoCode.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="53" width="123" x="672" y="404"/>    
+  <class id="2" language="java" name="com.avc.mis.beta.entities.codes.GeneralPoCode" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/codes/GeneralPoCode.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="732" y="476"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,33 +21,42 @@
   </class>  
   <class id="3" language="java" name="com.avc.mis.beta.entities.codes.MixPoCode" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/entities/codes/MixPoCode.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1078" y="440"/>    
+    <position height="-1" width="-1" x="1342" y="466"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <generalization id="4">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="1"/>  
-  </generalization>  
-  <generalization id="5">    
+  <class id="4" language="java" name="com.avc.mis.beta.entities.codes.PoCode" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/codes/PoCode.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1003" y="472"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <association id="5">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="6" name="origionPoCodes"/>      
+      <multiplicity id="7" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="4" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="8">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="1"/>  
   </generalization>  
-  <association id="6">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="7" name="origionPoCodes">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="8" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="1" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
+  <generalization id="9">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
+  <generalization id="10">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="1"/>  
+  </generalization>  
   <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

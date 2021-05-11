@@ -23,8 +23,6 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 @Table(name = "ORDER_PO_CODES")
-//@PrimaryKeyJoinColumn(name = "poCodeId")
-//@DiscriminatorValue("po_code")
 public class PoCode extends BasePoCode {
 
 	@NotNull(message = "Po code code is mandatory")
@@ -45,11 +43,5 @@ public class PoCode extends BasePoCode {
 		return super.getContractType();
 	}
 	
-//	@Null(message = "Po code doesn't have display ")
-//	@Override
-//	public String getDisplay() {
-//		return super.getDisplay();
-//	}
-
 
 }

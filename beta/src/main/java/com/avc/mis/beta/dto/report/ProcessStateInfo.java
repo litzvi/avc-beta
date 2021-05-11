@@ -8,7 +8,6 @@ import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.BasicValueDTO;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 
 import lombok.Data;
