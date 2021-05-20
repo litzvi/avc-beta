@@ -79,6 +79,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.interfaces.ProductionProcessService;
 import com.avc.mis.beta.service.report.InventoryReports;
+import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 
 /**
@@ -109,7 +110,7 @@ public class QueryTest {
 	@Autowired Loading loading;
 	@Autowired ContainerArrivals containerArrivals;
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void queryTest() {
 
@@ -448,7 +449,12 @@ public class QueryTest {
 		activeGeneralBasic.forEach(row -> System.out.println(row));
 		
 		List<ReceiptInventoryRow> receiptInventoryRows = inventoryReports.getReceiptInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.RAW_KERNEL}, 
-				LocalDate.parse("2021-05-01").atStartOfDay().atOffset(ZoneOffset.ofHours(7)), LocalDate.parse("2021-05-19").atStartOfDay().atOffset(ZoneOffset.ofHours(7)));
+				LocalDate.parse("2021-05-01"), LocalDate.parse("2021-05-19"));
 		receiptInventoryRows.forEach(row -> {System.out.println(row); });
+		
+		List<FinishedProductInventoryRow> finishedProductInventoryRows = inventoryReports.getFinishedProductInventoryRows(ItemGroup.PRODUCT, 
+				new ProductionUse[] {ProductionUse.PACKED, ProductionUse.ROAST, ProductionUse.ROAST, ProductionUse.TOFFEE}, 
+				null, null);
+		finishedProductInventoryRows.forEach(row -> {System.out.println(row); });
 	}
 }

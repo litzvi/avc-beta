@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,8 +46,8 @@ public class ProcessItemInventoryRow extends BasicDTO {
 	private ItemWithUnitDTO item;
 	private PoCodeBasic poCode;
 	private String supplierName;
-	private OffsetDateTime processDate;
-	private OffsetDateTime receiptDate;
+	private LocalDate processDate;
+	private LocalDate receiptDate;
 	private BigDecimal weightCoefficient;
 	private AmountWithUnit amount;
 	private AmountWithUnit weight;
@@ -60,7 +61,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 			ItemGroup itemGroup, ProductionUse productionUse, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			OffsetDateTime processDate, OffsetDateTime receiptDate,
+			LocalDate processDate, LocalDate receiptDate,
 			BigDecimal weightCoefficient, BigDecimal amount, 
 			String warehouses) {
 		super(id);

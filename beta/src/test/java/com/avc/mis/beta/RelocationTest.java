@@ -5,6 +5,7 @@ package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -72,7 +73,7 @@ public class RelocationTest {
 		
 		StorageRelocation relocation = new StorageRelocation();
 		relocation.setPoCode((PoCode) receipt.getPoCode());
-		relocation.setRecordedTime(OffsetDateTime.now());
+		relocation.setRecordedTime(LocalDate.now());
 		relocation.setProductionLine(service.getProductionLine(ProductionFunctionality.RAW_STATION));
 
 

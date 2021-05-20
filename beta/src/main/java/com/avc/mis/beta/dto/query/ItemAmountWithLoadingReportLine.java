@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.report.ItemAmount;
@@ -30,7 +31,7 @@ public class ItemAmountWithLoadingReportLine implements CollectionItemWithGroup<
 	
 	public ItemAmountWithLoadingReportLine(
 			Integer processId, Integer shipmentId, String shipmentCode, String portOfDischargeCode, String portOfDischargeValue, 
-			ContainerDetails containerDetails, OffsetDateTime loadingDate, ProcessStatus status, String approvals,
+			ContainerDetails containerDetails, LocalDate loadingDate, ProcessStatus status, String approvals,
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			ItemGroup itemGroup, ProductionUse productionUse, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz, 

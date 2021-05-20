@@ -23,6 +23,7 @@ import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 
 /**
@@ -504,7 +505,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "END) "
 			+ " ) AS balance, rou.measureUnit, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', sto.value)), "
-			+ "price, t.currency) "
+			+ "price, t.currency, receipt_lc.processStatus) "
 		+ "from ReceiptItem ri "
 			+ "join ri.receivedOrderUnits rou "
 				+ "join UOM uom "
@@ -525,12 +526,12 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "left join ui.group used_g "
 						+ "left join used_g.process used_p "
 							+ "left join used_p.lifeCycle used_lc "
-		+ "where receipt_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+		+ "where receipt_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
-			+ "and (coalesce(:startDateTime, :endDateTime) is null "
-				+ "or r.recordedTime between :startDateTime and :endDateTime) "
+			+ "and (:startDate is null or r.recordedTime >= :startDate) "
+			+ "and (:endDate is null or r.recordedTime < :endDate) "
 			+ "and"
 				+ "(sf.numberUnits > "
 					+ "coalesce("
@@ -546,9 +547,84 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "order by r.recordedTime " 
 		+ "")
 	List<ReceiptInventoryRow> findReceiptInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup,
-			OffsetDateTime startDateTime, OffsetDateTime endDateTime);
+			LocalDate startDate, LocalDate endDate);
 
 
-
+	/**
+	 * LIST OF INVENTORY ITEMS FOR REPORT. (Used for finished product inventory)
+	 */
+	@Query("select new com.avc.mis.beta.service.report.row.FinishedProductInventoryRow( "
+			+ "item.value, "
+			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
+			+ "function('GROUP_CONCAT', function('DISTINCT', r.recordedTime)), "
+			+ "function('GROUP_CONCAT', function('DISTINCT', p.recordedTime)), "
+			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
+				+ " * coalesce(w_po.weight, 1) "
+				+ " * "
+				+ "(CASE "
+					+ "WHEN ui is null THEN sf.numberUnits "
+					+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
+					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
+				+ "END) "
+			+ " ) AS balance, item.measureUnit, "
+			+ "SUM((CASE "
+				+ "WHEN ui is null THEN sf.numberUnits "
+				+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+					+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
+				+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
+			+ "END)), "
+			+ "function('GROUP_CONCAT', function('DISTINCT', sto.value)), lc.processStatus) "
+		+ "from ProcessItem pi "
+			+ "left join ReceiptItem ri "
+				+ "on pi = ri "
+			+ "join pi.item item "
+				+ "join item.unit item_unit "
+				+ "join UOM uom "
+					+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
+			+ "join pi.process p "
+				+ "join p.lifeCycle lc "
+				+ "left join p.poCode p_po_code "
+				+ "left join p.weightedPos w_po "
+					+ "left join w_po.poCode w_po_code "
+				+ "join BasePoCode po_code "
+					+ "on (po_code = p_po_code or po_code = w_po_code) "
+					+ "join po_code.contractType t "
+					+ "join po_code.supplier s "
+				+ "join Receipt r "
+					+ "on r.poCode = po_code "
+						+ "and (ri is null or ri.process = r) "
+					+ "join r.lifeCycle receipt_lc "
+			+ "join pi.allStorages sf "
+				+ "join sf.group sf_group "
+					+ "join sf_group.process sf_p "
+						+ "join sf_p.lifeCycle sf_lc "
+				+ "left join sf.warehouseLocation sto "
+				+ "left join sf.usedItems ui "
+					+ "left join ui.group used_g "
+						+ "left join used_g.process used_p "
+							+ "left join used_p.lifeCycle used_lc "
+		+ "where lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+			+ "and receipt_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
+			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
+			+ "and (:startDate is null or p.recordedTime >= :startDate) "
+			+ "and (:endDate is null or p.recordedTime < :endDate) "
+			+ "and"
+				+ "(sf.numberUnits > "
+					+ "coalesce("
+						+ "(select sum(usedStorage.numberUnits) "
+						+ " from sf.usedItems usedStorage "
+							+ "join usedStorage.group usedGroup "
+								+ "join usedGroup.process usedProcess "
+									+ "join usedProcess.lifeCycle usedLc "
+						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+					+ ", 0)"
+				+ ") "
+		+ "group by item "
+		+ "order by item ")
+	List<FinishedProductInventoryRow> findFinishedProductInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup,
+			LocalDate startDate, LocalDate endDate);
 
 }

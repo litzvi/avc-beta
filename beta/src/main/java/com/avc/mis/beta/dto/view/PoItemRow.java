@@ -52,7 +52,7 @@ public class PoItemRow extends BasicValueDTO {
 	Integer orderItemId;
 	@JsonIgnore
 	AmountWithUnit numUnits;
-	OffsetDateTime contractDate;
+	LocalDate contractDate;
 	LocalDate deliveryDate;
 	String defects;
 	AmountWithCurrency unitPrice;
@@ -72,7 +72,7 @@ public class PoItemRow extends BasicValueDTO {
 			Integer itemId, String itemValue, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
 			Integer orderItemId, BigDecimal amount, MeasureUnit measureUnit, 
-			OffsetDateTime contractDate, LocalDate deliveryDate, 
+			LocalDate contractDate, LocalDate deliveryDate, 
 			String defects, BigDecimal unitPrice, Currency currency, 
 //			BigDecimal receivedOrderUnits,
 //			BigDecimal receivedAmount, 

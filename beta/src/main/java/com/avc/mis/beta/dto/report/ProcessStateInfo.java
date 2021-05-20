@@ -32,9 +32,9 @@ public class ProcessStateInfo extends BasicDTO {
 		this.approvals = approvals;
 	}
 
-	public ProcessStateInfo(Integer id, OffsetDateTime date, ProcessStatus status, String approvals) {
+	public ProcessStateInfo(Integer id, LocalDate date, ProcessStatus status, String approvals) {
 		super(id);
-		this.date = date.toLocalDate();
+		this.date = date;
 		this.status = status;
 		if(approvals == null || approvals.startsWith(":")) {
 			this.approvals = null;

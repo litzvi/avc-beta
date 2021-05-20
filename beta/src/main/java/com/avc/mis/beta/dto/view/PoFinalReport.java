@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.view;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -49,8 +50,8 @@ public class PoFinalReport extends BasicDTO {
 		this.supplierName = supplierName;
 	}
 	
-	public Map<ProcessName, List<OffsetDateTime>> getProductionDates() {
-		Map<ProcessName, List<OffsetDateTime>> productionDates = new HashMap<>();
+	public Map<ProcessName, List<LocalDate>> getProductionDates() {
+		Map<ProcessName, List<LocalDate>> productionDates = new HashMap<>();
 		if(receipt != null) {
 			productionDates.put(ProcessName.CASHEW_RECEIPT, 
 					receipt.stream().map(i -> i.getReceiptDate()).collect(Collectors.toList()));

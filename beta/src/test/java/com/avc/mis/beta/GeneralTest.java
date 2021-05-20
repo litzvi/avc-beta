@@ -107,7 +107,7 @@ public class GeneralTest {
 		poCode.setSupplier(supplier);
 		objectWriter.addPoCode(poCode);
 		po.setPoCode(poCode);
-		po.setRecordedTime(OffsetDateTime.now());
+		po.setRecordedTime(LocalDate.now());
 		OrderItem[] orderItems = new OrderItem[NUM_PO_ITEMS];
 		List<Item> items = valueTablesReader.getAllItems();
 		for(int i=0; i < NUM_PO_ITEMS; i++) {
@@ -142,7 +142,7 @@ public class GeneralTest {
 		//receive both order lines in parts and different storages
 		Receipt receipt = new Receipt();
 		receipt.setPoCode(poCode);
-		receipt.setRecordedTime(OffsetDateTime.now());
+		receipt.setRecordedTime(LocalDate.now());
 		ReceiptItem[] receiptItems = new ReceiptItem[NUM_PO_ITEMS];
 		List<Warehouse> storages = valueTablesReader.getAllWarehouses();
 		for(int i=0; i < receiptItems.length; i++) {
@@ -179,7 +179,7 @@ public class GeneralTest {
 		//add QC for received order
 		QualityCheck check = new QualityCheck();
 		check.setPoCode(poCode);
-		check.setRecordedTime(OffsetDateTime.now());
+		check.setRecordedTime(LocalDate.now());
 		check.setCheckedBy("avc lab");
 		CashewItemQuality[] rawItemQualities = new CashewItemQuality[NUM_PO_ITEMS];
 		ProcessItem[] processItems = new ProcessItem[NUM_PO_ITEMS];
@@ -219,7 +219,7 @@ public class GeneralTest {
 		//add receipt sample check for received orders
 		SampleReceipt sampleReceipt = new SampleReceipt();
 		sampleReceipt.setPoCode(poCode);
-		sampleReceipt.setRecordedTime(OffsetDateTime.now());
+		sampleReceipt.setRecordedTime(LocalDate.now());
 		SampleItem[] sampleItems = new SampleItem[2];
 		sampleItems[0] = new SampleItem();
 		sampleItems[0].setItem(items.get(0));

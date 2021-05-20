@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.exportdoc;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
@@ -17,13 +18,13 @@ import lombok.Value;
 public class ExportInfo {
 
 	ShipmentCodeBasic shipmentCode;
-	OffsetDateTime processDate;
+	LocalDate processDate;
 	//vehicle
 	//driver(name, phone, id)
 	
 	
 	public ExportInfo(Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue, 
-			OffsetDateTime processDate
+			LocalDate processDate
 			) {
 		super();
 		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, shipmentCodeCode, portOfDischargeCode, portOfDischargeValue);

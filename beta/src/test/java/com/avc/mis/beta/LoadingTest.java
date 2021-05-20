@@ -5,6 +5,7 @@ package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -79,7 +80,7 @@ public class LoadingTest {
 		
 		//test container arrival
 		ContainerArrival arrival = new ContainerArrival();
-		arrival.setRecordedTime(OffsetDateTime.now());
+		arrival.setRecordedTime(LocalDate.now());
 		ContainerDetails containerDetails = new ContainerDetails();
 		containerDetails.setContainerNumber("CONT01");
 		containerDetails.setSealNumber("SEAL01");
@@ -100,7 +101,7 @@ public class LoadingTest {
 //		refBooking.setVersion(booking.getVersion());
 		loading.setArrival(arrival);
 		loading.setShipmentCode(service.addShipmentCode());
-		loading.setRecordedTime(OffsetDateTime.now());
+		loading.setRecordedTime(LocalDate.now());
 
 		//get inventory storages for transfer
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);

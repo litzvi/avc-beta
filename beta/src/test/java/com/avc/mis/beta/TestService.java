@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.fail;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
@@ -100,7 +101,7 @@ public class TestService {
 		ContainerBooking booking = new ContainerBooking();
 		booking.setBookingNumber("booking_no " + randCode++);
 		booking.setBookingDate("1983-11-23");
-		booking.setRecordedTime(OffsetDateTime.now());
+		booking.setRecordedTime(LocalDate.now());
 		return booking;
 	}
 	
@@ -153,7 +154,7 @@ public class TestService {
 //		poCode.setContractType(getContractType());
 		
 		//build process
-		po.setRecordedTime(OffsetDateTime.now());
+		po.setRecordedTime(LocalDate.now());
 		
 		//add order items
 		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS, ItemGroup.PRODUCT);				
@@ -174,7 +175,7 @@ public class TestService {
 		po.setPoCode(poCode);
 		
 		//build process
-		po.setRecordedTime(OffsetDateTime.now());
+		po.setRecordedTime(LocalDate.now());
 		
 		//add order items
 		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS, ItemGroup.GENERAL);				
@@ -206,7 +207,7 @@ public class TestService {
 //		poCode.setContractType(getContractType());
 		receipt.setPoCode(poCode);
 		//build process
-		receipt.setRecordedTime(OffsetDateTime.now());
+		receipt.setRecordedTime(LocalDate.now());
 		//add order items
 		receipt.setReceiptItems(getReceiptItems(1));
 		receipts.addCashewReceipt(receipt);
@@ -219,7 +220,7 @@ public class TestService {
 		PoCode poCode = addPoCode();
 		receipt.setPoCode(poCode);
 		//build process
-		receipt.setRecordedTime(OffsetDateTime.now());
+		receipt.setRecordedTime(LocalDate.now());
 		receipt.setStartTime(LocalTime.parse("20:15"));
 		//add order items
 		receipt.setReceiptItems(getReceiptItems(OrdersTest.NUM_ITEMS));
@@ -265,7 +266,7 @@ public class TestService {
 		poCode.setId(orderPoCode);
 		receipt.setPoCode(poCode);
 		//build process
-		receipt.setRecordedTime(OffsetDateTime.now());
+		receipt.setRecordedTime(LocalDate.now());
 		//add order items
 		PoDTO poDTO = orders.getOrder(orderPoCode);
 		receipt.setReceiptItems(getOrderReceiptItems(poDTO));
@@ -280,7 +281,7 @@ public class TestService {
 		poCode.setId(orderPoCode);
 		receipt.setPoCode(poCode);
 		//build process
-		receipt.setRecordedTime(OffsetDateTime.now());
+		receipt.setRecordedTime(LocalDate.now());
 		//add order items
 		PoDTO poDTO = orders.getOrder(orderPoCode);
 		receipt.setReceiptItems(getOrderReceiptItems(poDTO));

@@ -36,7 +36,7 @@ public class LoadingRow extends BasicDTO {
 	@JsonIgnore private int[] poCodeIds;
 	private String[] poCodes;
 	@JsonIgnore private String[] suppliers;
-	private OffsetDateTime recordedTime;
+	private LocalDate recordedTime;
 	private Duration duration;
 	private ProcessStatus status;
 	private String[] approvals;
@@ -61,7 +61,7 @@ public class LoadingRow extends BasicDTO {
 	
 	public LoadingRow(@NonNull Integer id, 
 			String poCodeIds, String poCodes, String suppliers,
-			OffsetDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, 			
+			LocalDate recordedTime, Duration duration, ProcessStatus status, String approvals, 			
 			Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue, 
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType) {
 		super(id);

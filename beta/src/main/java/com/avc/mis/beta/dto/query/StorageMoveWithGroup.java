@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.query;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
@@ -32,7 +33,7 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 			Integer moveId, Integer moveVersion, Integer moveOrdinal, BigDecimal numberUsedUnits, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
-			MeasureUnit movedMeasureUnit, OffsetDateTime itemProcessDate,
+			MeasureUnit movedMeasureUnit, LocalDate itemProcessDate,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemPoCodes, String itemSuppliers,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 

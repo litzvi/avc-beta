@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.process.inventory;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Optional;
 
@@ -39,7 +40,7 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 	public StorageMoveDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
-			MeasureUnit measureUnit, OffsetDateTime itemProcessDate,
+			MeasureUnit measureUnit, LocalDate itemProcessDate,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemPoCodes, String itemSuppliers,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 

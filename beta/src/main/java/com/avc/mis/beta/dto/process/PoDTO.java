@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.process;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
@@ -55,7 +56,7 @@ public class PoDTO extends PoProcessDTO {
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName, 
 			ProcessName processName, Integer productionLineId, String productionLineValue, ProductionFunctionality productionFunctionality,
-			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, 
+			LocalDate recordedTime, LocalTime startTime, LocalTime endTime, 
 			Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
 			String personInCharge) {

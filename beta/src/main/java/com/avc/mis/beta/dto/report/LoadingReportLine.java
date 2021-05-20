@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.report;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class LoadingReportLine extends ProcessStateInfo implements ListGroup<Ite
 	
 	public LoadingReportLine(Integer id, 
 			Integer shipmentId, String shipmentCode, String portOfDischargeCode, String portOfDischargeValue, 
-			ContainerDetails containerDetails, OffsetDateTime loadingDate, ProcessStatus status, String approvals) {
+			ContainerDetails containerDetails, LocalDate loadingDate, ProcessStatus status, String approvals) {
 		super(id, loadingDate, status, approvals);
 //		this.processId = processId;
 		this.shipmentCode = new ShipmentCodeBasic(shipmentId, shipmentCode,  portOfDischargeCode, portOfDischargeValue);

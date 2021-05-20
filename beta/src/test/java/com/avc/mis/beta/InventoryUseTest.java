@@ -5,6 +5,7 @@ package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
@@ -67,7 +68,7 @@ public class InventoryUseTest {
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
 		InventoryUse inventoryUse = new InventoryUse();
-		inventoryUse.setRecordedTime(OffsetDateTime.now());
+		inventoryUse.setRecordedTime(LocalDate.now());
 		PoCode poCode = new PoCode();
 		poCode.setId(receipt.getPoCode().getId());
 		inventoryUse.setPoCode(receipt.getPoCode());
@@ -97,7 +98,7 @@ public class InventoryUseTest {
 		
 		assertEquals(expected, actual, "Failed test adding InventoryUse");
 		
-		OffsetDateTime time =OffsetDateTime.of(1983, 11, 23, 1, 1, 1, 0, ZoneOffset.ofHours(7));
+		LocalDate time =LocalDate.of(1983, 11, 23);
 		inventoryUse.setRecordedTime(time);
 		expected.setRecordedTime(time);		
 		warehouseManagement.editGeneralInventoryUse(inventoryUse);

@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.processInfo;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
@@ -30,7 +31,7 @@ public class GeneralProcessInfo extends DataDTO {
 	String userRecording;
 	ProcessName processName;
 	ProductionLineBasic productionLine;
-	OffsetDateTime recordedTime;
+	LocalDate recordedTime;
 	LocalTime startTime;
 	LocalTime endTime;
 	Duration duration;
@@ -43,7 +44,7 @@ public class GeneralProcessInfo extends DataDTO {
 	
 	public GeneralProcessInfo(Integer id, Integer version, Instant createdDate, String userRecording, 
 			ProcessName processName, Integer productionLineId, String productionLineValue, ProductionFunctionality productionFunctionality,
-			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration, Integer numOfWorkers, 
+			LocalDate recordedTime, LocalTime startTime, LocalTime endTime, Duration duration, Integer numOfWorkers, 
 			ProcessStatus processStatus, EditStatus editStatus,
 			String remarks, String approvals) {
 		super(id, version);

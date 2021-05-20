@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
@@ -128,9 +129,14 @@ public class InventoryReports {
 		return (List<ItemInventoryAmountWithOrder>) CollectionItemWithGroup.safeCollection(inventoryAmountWithOrders);
 	}
 	
-	public List<ReceiptInventoryRow> getReceiptInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, OffsetDateTime startDateTime, OffsetDateTime endDateTime) {
+	public List<ReceiptInventoryRow> getReceiptInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDate startDate, LocalDate endDate) {
 		boolean checkProductionUses = (productionUses != null);
-		return getInventoryRepository().findReceiptInventoryRows(checkProductionUses, productionUses, itemGroup, startDateTime, endDateTime);	
+		return getInventoryRepository().findReceiptInventoryRows(checkProductionUses, productionUses, itemGroup, startDate, endDate);	
+	}
+	
+	public List<FinishedProductInventoryRow> getFinishedProductInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDate startDate, LocalDate endDate) {
+		boolean checkProductionUses = (productionUses != null);
+		return getInventoryRepository().findFinishedProductInventoryRows(checkProductionUses, productionUses, itemGroup, startDate, endDate);	
 	}
 	
 

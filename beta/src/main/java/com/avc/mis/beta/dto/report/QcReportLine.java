@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.report;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class QcReportLine extends ProcessStateInfo implements ListGroup<ItemQc> 
 	
 	public QcReportLine(@NonNull Integer id, 
 			QcCompany checkedBy, 
-			OffsetDateTime date, ProcessStatus status, String approvals) {
+			LocalDate date, ProcessStatus status, String approvals) {
 		super(id, date, status, approvals);
 		this.checkedBy = checkedBy;
 //		setProcesses(new ProcessStateInfo(date.toLocalDate(), status, approvals));

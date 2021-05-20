@@ -4,6 +4,7 @@
 package com.avc.mis.beta.service.report.row;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Currency;
@@ -12,6 +13,7 @@ import java.util.stream.Stream;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 
 import lombok.Value;
 
@@ -31,18 +33,20 @@ public class ReceiptInventoryRow {
 	String[] warehouses;
 	AmountWithCurrency unitPrice;
 	Currency currency;
+	ProcessStatus status;
+
 		
 	public ReceiptInventoryRow(String supplier, 
 			String item, 
-			String poCode, OffsetDateTime receiptDate, String bags,
+			String poCode, LocalDate receiptDate, String bags,
 			BigDecimal amount, MeasureUnit measureUnit,
 			String warehouses, 
-			AmountWithCurrency unitPrice, Currency currency) {
+			AmountWithCurrency unitPrice, Currency currency, ProcessStatus status) {
 		super();
 		this.supplier = supplier;
 		this.item = item;
 		this.poCode = poCode;
-		this.receiptDate = receiptDate.toLocalDate();
+		this.receiptDate = receiptDate;
 		if(bags != null) {
 			this.bags = Stream.of(bags.split(",")).toArray(String[]::new);
 		}
@@ -59,15 +63,16 @@ public class ReceiptInventoryRow {
 		}
 		this.unitPrice = unitPrice;
 		this.currency = currency;
+		this.status = status;
 	} 
 	
-	public AmountWithUnit getWeightInLbs() {
+	public BigDecimal getWeightInLbs() {
 		if(getAmount().getMeasureUnit() == MeasureUnit.LBS) {
-			return getAmount();
+			return getAmount().getAmount();
 		}
 		
 		try {
-			return getAmount().convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE);
+			return getAmount().convert(MeasureUnit.LBS).getAmount().setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}

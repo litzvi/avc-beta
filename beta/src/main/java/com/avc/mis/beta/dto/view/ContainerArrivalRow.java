@@ -29,7 +29,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ContainerArrivalRow extends BasicDTO {
 
-	private OffsetDateTime recordedTime;
+	private LocalDate recordedTime;
 	private Duration duration;
 	private ProcessStatus status;
 	private String[] approvals;
@@ -44,7 +44,7 @@ public class ContainerArrivalRow extends BasicDTO {
 
 
 	public ContainerArrivalRow(@NonNull Integer id, 
-			OffsetDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, 			
+			LocalDate recordedTime, Duration duration, ProcessStatus status, String approvals, 			
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType,
 			Integer productCompanyId, Integer productCompanyVersion, String productCompanyName) {
 		super(id);

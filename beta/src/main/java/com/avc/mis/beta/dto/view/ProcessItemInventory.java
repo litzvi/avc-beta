@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,8 +47,8 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 	private PoCodeBasic poCode;
 	private String[] poCodes;
 	private String[] suppliers;
-	private OffsetDateTime itemProcessDate;
-	private OffsetDateTime receiptDate;
+	private LocalDate itemProcessDate;
+	private LocalDate receiptDate;
 //	private List<AmountWithUnit> totalBalanceAmount; //not used now
 	
 	@JsonIgnore
@@ -64,7 +65,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 			MeasureUnit processItemMeasureUnit, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String poCodes, String suppliers,
-			OffsetDateTime processDate, OffsetDateTime receiptDate, boolean tableView) {
+			LocalDate processDate, LocalDate receiptDate, boolean tableView) {
 		super(id);
 		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unitAmount, itemUnitMeasureUnit, clazz);
 		this.measureUnit = processItemMeasureUnit;
