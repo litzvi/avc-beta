@@ -24,7 +24,7 @@ import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
-import com.avc.mis.beta.service.reports.InventoryReports;
+import com.avc.mis.beta.service.report.InventoryReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;

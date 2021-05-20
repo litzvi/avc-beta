@@ -17,7 +17,7 @@ import com.avc.mis.beta.dto.view.ContainerArrivalRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ContainerArrival;
 import com.avc.mis.beta.repositories.ContainerArrivalRepository;
-import com.avc.mis.beta.service.reports.ContainerArrivalReports;
+import com.avc.mis.beta.service.report.ContainerArrivalReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;

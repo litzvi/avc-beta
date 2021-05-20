@@ -1,8 +1,10 @@
 /**
  * 
  */
-package com.avc.mis.beta.service.reports;
+package com.avc.mis.beta.service.report;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -22,6 +24,7 @@ import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
@@ -123,6 +126,11 @@ public class InventoryReports {
 				Function.identity(), 
 				ItemInventoryAmountWithOrder::setOrder);
 		return (List<ItemInventoryAmountWithOrder>) CollectionItemWithGroup.safeCollection(inventoryAmountWithOrders);
+	}
+	
+	public List<ReceiptInventoryRow> getReceiptInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, OffsetDateTime startDateTime, OffsetDateTime endDateTime) {
+		boolean checkProductionUses = (productionUses != null);
+		return getInventoryRepository().findReceiptInventoryRows(checkProductionUses, productionUses, itemGroup, startDateTime, endDateTime);	
 	}
 	
 

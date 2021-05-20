@@ -28,7 +28,7 @@ import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.repositories.ReceiptRepository;
-import com.avc.mis.beta.service.reports.ReceiptReports;
+import com.avc.mis.beta.service.report.ReceiptReports;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;

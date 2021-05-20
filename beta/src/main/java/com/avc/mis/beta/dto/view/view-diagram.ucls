@@ -28,8 +28,8 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.avc.mis.beta.service.reports.InventoryReports" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/service/reports/InventoryReports.java" binary="false" 
+  <class id="4" language="java" name="com.avc.mis.beta.service.report.InventoryReports" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/service/report/InventoryReports.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="651" y="667"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
@@ -232,90 +232,90 @@
     <end type="TARGET" refId="13" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="28">    
+  <association id="28">    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="29" name="receiptRows">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="30" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="16" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="31">    
     <end type="SOURCE" refId="2"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
-  <association id="29">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="30" name="poInventoryRows">        
+  <dependency id="32">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="33">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="34" name="usedItems">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="31" minimum="0" maximum="2147483647">        
+      <multiplicity id="35" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="36">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="37" name="producedItems">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="38" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="39">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <association id="40">    
+    <end type="SOURCE" refId="14" navigable="false">      
+      <attribute id="41" name="itemCounts">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="42" minimum="0" maximum="2147483647">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="24" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="43">    
+    <end type="SOURCE" refId="3" navigable="false">      
+      <attribute id="44" name="poInventoryRows">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="45" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="13" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="32">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="33" name="producedItems">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="34" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="24" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="35">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="36" name="usedItems">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="37" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="24" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="38">    
-    <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="39" name="itemCounts">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="40" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="24" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="41">    
+  <association id="46">    
     <end type="SOURCE" refId="10" navigable="false">      
-      <attribute id="42" name="poRows">        
+      <attribute id="47" name="poRows">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="43" minimum="0" maximum="2147483647">        
+      <multiplicity id="48" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="44">    
-    <end type="SOURCE" refId="15"/>    
-    <end type="TARGET" refId="14"/>  
-  </dependency>  
-  <association id="45">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="46" name="usedItems">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="47" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="24" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="48">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
   <association id="49">    
     <end type="SOURCE" refId="11" navigable="false">      
       <attribute id="50" name="storageForms">        
@@ -326,18 +326,6 @@
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="19" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <association id="52">    
-    <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="53" name="receiptRows">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="54" minimum="0" maximum="2147483647">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="16" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <classifier-display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 

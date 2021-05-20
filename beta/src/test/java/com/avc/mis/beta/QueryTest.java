@@ -6,10 +6,16 @@ package com.avc.mis.beta;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +78,8 @@ import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.interfaces.ProductionProcessService;
-import com.avc.mis.beta.service.reports.InventoryReports;
+import com.avc.mis.beta.service.report.InventoryReports;
+import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 
 /**
  * @author Zvi
@@ -439,6 +446,9 @@ public class QueryTest {
 		System.out.println("general:");
 		System.out.println("size:" + activeGeneralBasic.size());
 		activeGeneralBasic.forEach(row -> System.out.println(row));
-
+		
+		List<ReceiptInventoryRow> receiptInventoryRows = inventoryReports.getReceiptInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.RAW_KERNEL}, 
+				LocalDate.parse("2021-05-01").atStartOfDay().atOffset(ZoneOffset.ofHours(7)), LocalDate.parse("2021-05-19").atStartOfDay().atOffset(ZoneOffset.ofHours(7)));
+		receiptInventoryRows.forEach(row -> {System.out.println(row); });
 	}
 }

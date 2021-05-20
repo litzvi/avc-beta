@@ -107,25 +107,4 @@ public abstract class PoProcess extends GeneralProcess {
 		this.itemCounts = Insertable.setReferences(itemCounts, (t) -> {t.setReference(this);	return t;});
 	}
 	
-	//weights set by program
-//	@PrePersist
-//	@Override
-//	public void prePersist() {
-//		super.prePersist();
-//		preUpdate();
-//	}
-//
-//	@PreUpdate
-//	public void preUpdate() {
-//		Set<WeightedPo> weightedPos = this.weightedPos;
-//		if(weightedPos != null && weightedPos.size() > 0) {
-//			Optional<BigDecimal> totalWeights = weightedPos.stream().map(WeightedPo::getWeight).reduce(BigDecimal::add);
-//			if(totalWeights.get().compareTo(BigDecimal.ONE) != 0) {
-//				weightedPos.stream().map(WeightedPo::getWeight).forEach(i -> System.out.println(i));
-//				System.out.println("t w:" + totalWeights);
-//				throw new IllegalArgumentException("Total mixed po weights have to add up to one");
-//			}
-//		}
-//		
-//	}
 }

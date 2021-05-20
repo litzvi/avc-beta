@@ -19,7 +19,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.repositories.PORepository;
-import com.avc.mis.beta.service.reports.OrderReports;
+import com.avc.mis.beta.service.report.OrderReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;

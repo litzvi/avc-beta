@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.service.reports;
+package com.avc.mis.beta.service.report;
 
 import java.util.List;
 

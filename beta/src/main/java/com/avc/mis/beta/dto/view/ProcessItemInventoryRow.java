@@ -49,7 +49,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 	private OffsetDateTime receiptDate;
 	private BigDecimal weightCoefficient;
 	private AmountWithUnit amount;
-	private AmountWithUnit weight; //change to weight
+	private AmountWithUnit weight;
 	private String[] warehouses;
 
 	/**
@@ -70,16 +70,6 @@ public class ProcessItemInventoryRow extends BasicDTO {
 		this.processDate = processDate;
 		this.receiptDate = receiptDate;
 		this.weightCoefficient = weightCoefficient;
-//		AmountWithUnit balanceAmount = new AmountWithUnit(totalAmount.multiply(weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
-//		this.totalWeight = new AmountWithUnit[] {
-//				balanceAmount.convert(MeasureUnit.KG).setScale(MeasureUnit.SCALE),
-//				balanceAmount.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE)
-//		};
-		
-//		if(itemGroup == ItemGroup.GENERAL) {
-//			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
-//			this.weight = null;
-//		} else
 		if(clazz == BulkItem.class) {
 			this.amount = null;
 			this.weight = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
@@ -116,17 +106,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 		}
 		return totalBalance;
 	}
-	
-//	@JsonIgnore
-//	public PoInventoryRow getPoInventoryRow() {
-//		return new PoInventoryRow(getPoCode());
-//	}
-	
-//	@JsonIgnore
-//	public ItemInventoryRow getItemInventoryRow() {
-//		return new ItemInventoryRow(getItem());
-//	}
-		
+			
 	public static AmountWithUnit getTotalWeight(List<ProcessItemInventoryRow> poInventoryRows) {
 		if(poInventoryRows == null) {
 			return null;

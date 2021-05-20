@@ -20,7 +20,7 @@ import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.repositories.UserRepository;
-import com.avc.mis.beta.service.reports.UserReports;
+import com.avc.mis.beta.service.report.UserReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;

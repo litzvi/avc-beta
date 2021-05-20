@@ -18,7 +18,7 @@ import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
-import com.avc.mis.beta.service.reports.LoadingReports;
+import com.avc.mis.beta.service.report.LoadingReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -28,9 +28,9 @@ import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
-import com.avc.mis.beta.service.reports.InventoryUseReports;
-import com.avc.mis.beta.service.reports.ProductionProcessReports;
-import com.avc.mis.beta.service.reports.StorageRelocationReports;
+import com.avc.mis.beta.service.report.InventoryUseReports;
+import com.avc.mis.beta.service.report.ProductionProcessReports;
+import com.avc.mis.beta.service.report.StorageRelocationReports;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;

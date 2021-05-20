@@ -26,7 +26,7 @@ import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.repositories.SupplierRepository;
-import com.avc.mis.beta.service.reports.SupplierReports;
+import com.avc.mis.beta.service.report.SupplierReports;
 
 import lombok.AccessLevel;
 import lombok.Getter;

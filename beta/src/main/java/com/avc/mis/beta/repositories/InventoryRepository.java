@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -21,6 +23,7 @@ import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 
 /**
  * @author Zvi
@@ -471,6 +474,79 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 //			+ ", s"
 			+ "")
 	Stream<StorageBalance> findStorageMoveBalances(Integer processId);
+
+	/**
+	 * LIST OF INVENTORY POS FOR REPORT, including price and bags. (Used for raw material inventory)
+	 */
+	@Query("select new com.avc.mis.beta.service.report.row.ReceiptInventoryRow( "
+			+ "s.name, "
+			+ "item.value, "
+			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
+			+ "r.recordedTime, "
+			+ "function('GROUP_CONCAT', "
+				+ "concat( "
+					+ "cast((CASE "
+						+ "WHEN ui is null THEN sf.numberUnits "
+						+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+							+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
+						+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
+					+ "END) as string)+0, "
+					+ "'x', "
+					+ "cast(sf.unitAmount as string)+0, "
+					+ "ri.measureUnit)), "
+			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
+				+ " * "
+				+ "(CASE "
+					+ "WHEN ui is null THEN sf.numberUnits "
+					+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
+					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
+				+ "END) "
+			+ " ) AS balance, rou.measureUnit, "
+			+ "function('GROUP_CONCAT', function('DISTINCT', sto.value)), "
+			+ "price, t.currency) "
+		+ "from ReceiptItem ri "
+			+ "join ri.receivedOrderUnits rou "
+				+ "join UOM uom "
+					+ "on uom.fromUnit = ri.measureUnit and uom.toUnit = rou.measureUnit "
+			+ "left join ri.unitPrice price "
+			+ "join ri.item item "
+			+ "join ri.process r "
+				+ "join r.lifeCycle receipt_lc "
+				+ "join r.poCode po_code "
+					+ "join po_code.contractType t "
+					+ "join po_code.supplier s "
+			+ "join ri.allStorages sf "
+				+ "join sf.group sf_group "
+					+ "join sf_group.process sf_p "
+						+ "join sf_p.lifeCycle sf_lc "
+				+ "left join sf.warehouseLocation sto "
+				+ "left join sf.usedItems ui "
+					+ "left join ui.group used_g "
+						+ "left join used_g.process used_p "
+							+ "left join used_p.lifeCycle used_lc "
+		+ "where receipt_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
+			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
+			+ "and (coalesce(:startDateTime, :endDateTime) is null "
+				+ "or r.recordedTime between :startDateTime and :endDateTime) "
+			+ "and"
+				+ "(sf.numberUnits > "
+					+ "coalesce("
+						+ "(select sum(usedStorage.numberUnits) "
+						+ " from sf.usedItems usedStorage "
+							+ "join usedStorage.group usedGroup "
+								+ "join usedGroup.process usedProcess "
+									+ "join usedProcess.lifeCycle usedLc "
+						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+					+ ", 0)"
+				+ ") "
+		+ "group by ri "
+		+ "order by r.recordedTime " 
+		+ "")
+	List<ReceiptInventoryRow> findReceiptInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup,
+			OffsetDateTime startDateTime, OffsetDateTime endDateTime);
 
 
 

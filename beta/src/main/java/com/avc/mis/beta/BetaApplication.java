@@ -10,8 +10,8 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
- * Version: 16.8
- * before changing usedItems and storageMoves to collection
+ * Version: 16.9
+ * issue 483
  * 
  * @author zvi
  *
