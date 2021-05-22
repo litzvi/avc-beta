@@ -4,6 +4,7 @@
 package com.avc.mis.beta.service.report;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -129,14 +130,14 @@ public class InventoryReports {
 		return (List<ItemInventoryAmountWithOrder>) CollectionItemWithGroup.safeCollection(inventoryAmountWithOrders);
 	}
 	
-	public List<ReceiptInventoryRow> getReceiptInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDate startDate, LocalDate endDate) {
+	public List<ReceiptInventoryRow> getReceiptInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDateTime pointOfTime) {
 		boolean checkProductionUses = (productionUses != null);
-		return getInventoryRepository().findReceiptInventoryRows(checkProductionUses, productionUses, itemGroup, startDate, endDate);	
+		return getInventoryRepository().findReceiptInventoryRows(checkProductionUses, productionUses, itemGroup, pointOfTime);	
 	}
 	
-	public List<FinishedProductInventoryRow> getFinishedProductInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDate startDate, LocalDate endDate) {
+	public List<FinishedProductInventoryRow> getFinishedProductInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDateTime pointOfTime) {
 		boolean checkProductionUses = (productionUses != null);
-		return getInventoryRepository().findFinishedProductInventoryRows(checkProductionUses, productionUses, itemGroup, startDate, endDate);	
+		return getInventoryRepository().findFinishedProductInventoryRows(checkProductionUses, productionUses, itemGroup, pointOfTime);	
 	}
 	
 

@@ -7,12 +7,15 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.stream.Stream;
 
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 
 import lombok.Value;
 
@@ -22,29 +25,44 @@ import lombok.Value;
  */
 @Value
 public class FinishedProductInventoryRow {
+	
+//	static final DateTimeFormatter DATE_TIME_FORMATTER = 
+//	        new DateTimeFormatterBuilder().append(DateTimeFormatter.ISO_LOCAL_DATE)
+//	                .appendLiteral(' ')
+//	                .append(DateTimeFormatter.ISO_LOCAL_TIME)
+//	                .toFormatter();
 
-	String item;
+	ItemWithUnitDTO item;
+//	String item;
 	String[] poCodes;
-	LocalDate[] receiptDates;
-	LocalDate[] processDates;
-	BigInteger units;
-	AmountWithUnit amount;
+	String[] receiptDates;
+	String[] processDates;
+//	BigInteger units;
+	AmountWithUnit unitAmount;
 	String[] warehouses;
 	ProcessStatus status;
 	
 	
-	public FinishedProductInventoryRow(String item, String poCodes, 
+	public FinishedProductInventoryRow(
+//			String item, 
+			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
+			ItemGroup itemGroup, ProductionUse productionUse, 
+			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
+			String poCodes, 
 			String receiptDates, String processDates, 
 			BigDecimal amount, MeasureUnit measureUnit,
-			BigDecimal units, String warehouses, ProcessStatus status) {
+			String warehouses, ProcessStatus status) {
 		super();
-		this.item = item;
+//		this.item = item;
+		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unitAmount, unitMeasureUnit, clazz);
 		this.poCodes = Stream.of(poCodes.split(",")).toArray(String[]::new);
-		this.receiptDates = Stream.of(receiptDates.split(",")).map(j -> LocalDate.parse(j)).toArray(LocalDate[]::new);
-		this.processDates = Stream.of(processDates.split(",")).map(j -> LocalDate.parse(j)).toArray(LocalDate[]::new);
-		this.units = units.setScale(0, RoundingMode.HALF_DOWN).toBigInteger();
-		this.amount = new AmountWithUnit(amount, measureUnit);
-		this.amount.setScale(MeasureUnit.SCALE);
+		this.receiptDates = Stream.of(receiptDates.split(",")).toArray(String[]::new);
+		this.processDates = Stream.of(processDates.split(",")).toArray(String[]::new);
+//		this.receiptDates = Stream.of(receiptDates.split(",")).map(j -> LocalDateTime.parse(j, DATE_TIME_FORMATTER)).toArray(LocalDateTime[]::new);
+//		this.processDates = Stream.of(processDates.split(",")).map(j -> LocalDateTime.parse(j, DATE_TIME_FORMATTER)).toArray(LocalDateTime[]::new);
+//		this.units = units.setScale(0, RoundingMode.HALF_DOWN).toBigInteger();
+		this.unitAmount = new AmountWithUnit(amount, measureUnit);
+		this.unitAmount.setScale(MeasureUnit.SCALE);
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).toArray(String[]::new);
 		}
@@ -55,8 +73,35 @@ public class FinishedProductInventoryRow {
 	}
 
 
-	public AmountWithUnit getWeightInLbs() {
-		//TODO
+	public BigDecimal getWeightInLbs() {
+		AmountWithUnit weight;
+		if(MeasureUnit.NONE == getItem().getUnit().getMeasureUnit()) {
+			weight = getUnitAmount();
+		}
+		else {
+			weight = new AmountWithUnit(
+					getUnitAmount().getAmount()
+					.multiply(getItem().getUnit().getAmount(), MathContext.DECIMAL64), 
+					getItem().getUnit().getMeasureUnit());
+		}
+		
+
+		if(weight.getMeasureUnit() == MeasureUnit.LBS) {
+			return weight.setScale(MeasureUnit.SCALE).getAmount();
+		}
+		
+		try {
+			return weight.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE).getAmount();
+		} catch (UnsupportedOperationException e) {
+			return null;
+		}
+	}
+	
+	public BigInteger getBoxes() {
+		if(MeasureUnit.NONE == getItem().getUnit().getMeasureUnit()){ }
+		else {
+			return getUnitAmount().getAmount().setScale(0, RoundingMode.HALF_DOWN).toBigInteger();
+		}
 		return null;
 	}
 }

@@ -12,9 +12,7 @@ import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.PackedItem;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -44,10 +42,10 @@ public class ContainerPoItemRow extends BasicDTO {
 			this.poCodes = Stream.of(poCodes.split(",")).toArray(String[]::new);
 		else
 			this.poCodes = null;
-		if(itemClazz == BulkItem.class) {
+		if(MeasureUnit.NONE == itemMeasureUnit) {
 			this.total = new AmountWithUnit(total, measureUnit);
 		}
-		else if(itemClazz == PackedItem.class){
+		else if(MeasureUnit.WEIGHT_UNITS.contains(itemMeasureUnit)){
 			this.total = new AmountWithUnit(total.multiply(itemUnitAmount), itemMeasureUnit);
 		}
 		else 

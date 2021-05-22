@@ -4,6 +4,7 @@
 package com.avc.mis.beta.repositories;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
@@ -57,8 +58,10 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "ELSE 0 "
 					+ "END))) AS balance, "
 			+ "(CASE "
-			+ "WHEN type(item) = com.avc.mis.beta.entities.item.PackedItem THEN item_unit.measureUnit "
+			+ "WHEN item_unit.measureUnit <> com.avc.mis.beta.entities.enums.MeasureUnit.NONE THEN item_unit.measureUnit "
 				+ "ELSE item.measureUnit "
+//			+ "WHEN type(item) = com.avc.mis.beta.entities.item.PackedItem THEN item_unit.measureUnit "
+//				+ "ELSE item.measureUnit "
 			+ "END)) "
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
@@ -488,7 +491,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "concat( "
 					+ "cast((CASE "
 						+ "WHEN ui is null THEN sf.numberUnits "
-						+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+						+ "WHEN (used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+								+ "and (:pointOfTime is null or used_p.recordedTime <= :pointOfTime)) "
 							+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
 						+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
 					+ "END) as string)+0, "
@@ -499,7 +503,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ " * "
 				+ "(CASE "
 					+ "WHEN ui is null THEN sf.numberUnits "
-					+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+					+ "WHEN (used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+							+ "and (:pointOfTime is null or used_p.recordedTime <= :pointOfTime)) "
 						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
 					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
 				+ "END) "
@@ -530,8 +535,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
-			+ "and (:startDate is null or r.recordedTime >= :startDate) "
-			+ "and (:endDate is null or r.recordedTime < :endDate) "
+			+ "and (:pointOfTime is null "
+				+ "or (r.recordedTime <= :pointOfTime and sf_p.recordedTime <= :pointOfTime)) "
 			+ "and"
 				+ "(sf.numberUnits > "
 					+ "coalesce("
@@ -540,21 +545,22 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 							+ "join usedStorage.group usedGroup "
 								+ "join usedGroup.process usedProcess "
 									+ "join usedProcess.lifeCycle usedLc "
-						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+							+ "and (:pointOfTime is null or usedProcess.recordedTime <= :pointOfTime)) "
 					+ ", 0)"
 				+ ") "
 		+ "group by ri "
-		+ "order by r.recordedTime " 
-		+ "")
+		+ "order by r.recordedTime ")
 	List<ReceiptInventoryRow> findReceiptInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup,
-			LocalDate startDate, LocalDate endDate);
+			LocalDateTime pointOfTime);
 
 
 	/**
 	 * LIST OF INVENTORY ITEMS FOR REPORT. (Used for finished product inventory)
 	 */
 	@Query("select new com.avc.mis.beta.service.report.row.FinishedProductInventoryRow( "
-			+ "item.value, "
+//			+ "item.value, "
+			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', r.recordedTime)), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', p.recordedTime)), "
@@ -563,17 +569,19 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ " * "
 				+ "(CASE "
 					+ "WHEN ui is null THEN sf.numberUnits "
-					+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+					+ "WHEN (used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+							+ "and (:pointOfTime is null or used_p.recordedTime <= :pointOfTime)) "
 						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
 					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
 				+ "END) "
 			+ " ) AS balance, item.measureUnit, "
-			+ "SUM((CASE "
-				+ "WHEN ui is null THEN sf.numberUnits "
-				+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
-					+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
-				+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
-			+ "END)), "
+//			+ "SUM((CASE "
+//				+ "WHEN ui is null THEN sf.numberUnits "
+//				+ "WHEN (used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+//						+ "and (:pointOfTime is null or used_p.recordedTime <= :pointOfTime)) "
+//					+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
+//				+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
+//			+ "END)), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', sto.value)), lc.processStatus) "
 		+ "from ProcessItem pi "
 			+ "left join ReceiptItem ri "
@@ -609,8 +617,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
-			+ "and (:startDate is null or p.recordedTime >= :startDate) "
-			+ "and (:endDate is null or p.recordedTime < :endDate) "
+			+ "and (:pointOfTime is null "
+				+ "or (p.recordedTime <= :pointOfTime and sf_p.recordedTime <= :pointOfTime)) "
 			+ "and"
 				+ "(sf.numberUnits > "
 					+ "coalesce("
@@ -619,12 +627,13 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 							+ "join usedStorage.group usedGroup "
 								+ "join usedGroup.process usedProcess "
 									+ "join usedProcess.lifeCycle usedLc "
-						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+							+ "and (:pointOfTime is null or usedProcess.recordedTime <= :pointOfTime)) "
 					+ ", 0)"
 				+ ") "
 		+ "group by item "
 		+ "order by item ")
 	List<FinishedProductInventoryRow> findFinishedProductInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup,
-			LocalDate startDate, LocalDate endDate);
+			LocalDateTime pointOfTime);
 
 }

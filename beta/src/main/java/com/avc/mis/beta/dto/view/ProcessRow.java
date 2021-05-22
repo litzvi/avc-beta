@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.view;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ProcessRow extends BasicDTO {
 	private String[] poCodes;
 	private String[] suppliers;
 //	private String supplierName;//should be removed
-	private LocalDate recordedTime;
+	private LocalDateTime recordedTime;
 	private Duration duration;
 	private ProcessStatus status;
 	private String[] approvals;
@@ -61,7 +62,7 @@ public class ProcessRow extends BasicDTO {
 	public ProcessRow(@NonNull Integer id, 
 //			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			String poCodeIds, String poCodes, String suppliers,
-			LocalDate recordedTime, Duration duration, ProcessStatus status, String approvals, String remarks) {
+			LocalDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, String remarks) {
 		super(id);
 //		if(poCodeId != null)
 //			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);

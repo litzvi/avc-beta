@@ -15,10 +15,8 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -125,18 +123,21 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 				.reduce(BigDecimal::add).orElse(BigDecimal.ZERO);
 		AmountWithUnit totalAmount;
 		Class<? extends Item> itemClass = this.item.getClazz();
-		if(itemClass == BulkItem.class) {
+		if(MeasureUnit.NONE == item.getUnit().getMeasureUnit()) {
 			totalAmount = new AmountWithUnit(total, this.measureUnit);
 		}
-		else if(itemClass == PackedItem.class){
+		else {
 			totalAmount = this.item.getUnit().multiply(total);
 		}
-		else 
-		{
-			throw new IllegalStateException("The class can only apply to weight items");
-		}
+//		else if(itemClass == PackedItem.class){
+//			totalAmount = this.item.getUnit().multiply(total);
+//		}
+//		else 
+//		{
+//			throw new IllegalStateException("The class can only apply to weight items");
+//		}
 		
-		if(this.item.getGroup() == ItemGroup.PRODUCT) {
+		if(this.item.getGroup() == ItemGroup.PRODUCT && MeasureUnit.WEIGHT_UNITS.contains(totalAmount.getMeasureUnit())) {
 			return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
 		}
 		return Arrays.asList(totalAmount);

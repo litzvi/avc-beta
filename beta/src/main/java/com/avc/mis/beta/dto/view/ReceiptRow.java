@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.view;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,7 @@ import lombok.Value;
 public class ReceiptRow extends BasicDTO {
 
 //	AmountWithUnit[] totalAmount;
-	LocalDate receiptDate;
+	LocalDateTime receiptDate;
 	ProcessStatus status;
 	List<ReceiptItemRow> receiptRows;
 

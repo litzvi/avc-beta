@@ -11,9 +11,7 @@ import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.PackedItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -48,10 +46,10 @@ public class ItemInventoryRow extends BasicDTO {
 		this.poInventoryRows = poInventoryRows;
 		this.totalWeight = ProcessItemInventoryRow.getTotalWeight(poInventoryRows);
 		
-		if(item.getClazz() == BulkItem.class) {
+		if(MeasureUnit.NONE == item.getUnit().getMeasureUnit()) {
 			this.totalAmount = null;
 		}
-		else if(item.getClazz() == PackedItem.class){
+		else if(MeasureUnit.WEIGHT_UNITS.contains(item.getUnit().getMeasureUnit())){
 			this.totalAmount = ProcessItemInventoryRow.getTotalAmount(poInventoryRows);
 		}
 		else 

@@ -21,7 +21,6 @@ import javax.validation.constraints.Positive;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
 import lombok.AllArgsConstructor;
@@ -245,14 +244,18 @@ public class AmountWithUnit implements Cloneable {
 				displayMeasureUnits != null && !displayMeasureUnits.isEmpty()) {
 			displayMeasureUnits.forEach(mu -> {
 				AmountWithUnit.convert(units, mu).ifPresent(e -> amounts.add(e));
-				if(item.getClazz() == PackedItem.class) {
+				if(MeasureUnit.NONE == item.getUnit().getMeasureUnit()) {
+				}
+				else {
 					convert(item.getUnit().multiply(units.getAmount()), mu).ifPresent(e -> amounts.add(e));
 				}
 			});
 		}
 		else {
 			amounts.add(units);
-			if(item.getClazz() == PackedItem.class) {
+			if(MeasureUnit.NONE == item.getUnit().getMeasureUnit()) {
+			}
+			else {
 				amounts.add(item.getUnit().multiply(units.getAmount()));
 			}
 		}

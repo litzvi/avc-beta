@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,7 @@ public class ReceiptItemRow extends BasicDTO {
 	AmountWithUnit orderAmount;
 	AmountWithUnit orderBalance;
 	@JsonIgnore
-	LocalDate receiptDate;
+	LocalDateTime receiptDate;
 	@JsonIgnore
 	ProcessStatus status;
 	String storage;
@@ -55,7 +56,7 @@ public class ReceiptItemRow extends BasicDTO {
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
 			BigDecimal orderAmount, MeasureUnit orderMU, 
 			BigDecimal receivedOrderAmount, MeasureUnit receivedOrderMU, 			
-			LocalDate receiptDate, ProcessStatus status,
+			LocalDateTime receiptDate, ProcessStatus status,
 			BigDecimal receiptAmount, MeasureUnit receiptMU, String storage, 
 			BigDecimal extraAdded, MeasureUnit extraAddedMU) {
 		super(id);

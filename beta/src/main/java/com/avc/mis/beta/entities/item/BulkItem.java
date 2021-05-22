@@ -13,22 +13,22 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
  * @author zvi
  *
  */
-@Entity
-@DiscriminatorValue("bulk")
-public class BulkItem extends Item {
-
-	public BulkItem() {
-		super();
-		super.setUnit(AmountWithUnit.NEUTRAL);
-	}
-	
-	public BulkItem(MeasureUnit measureUnit) {
-		super();
-		super.setUnit(AmountWithUnit.NEUTRAL);
-		super.setMeasureUnit(measureUnit);
-	}
-		
-	@Override
-	public void setUnit(AmountWithUnit unit) {
-	}
-}
+//@Entity
+//@DiscriminatorValue("bulk")
+//public class BulkItem extends Item {
+//
+//	public BulkItem() {
+//		super();
+//		super.setUnit(AmountWithUnit.NEUTRAL);
+//	}
+//	
+//	public BulkItem(MeasureUnit measureUnit) {
+//		super();
+//		super.setUnit(AmountWithUnit.NEUTRAL);
+//		super.setMeasureUnit(measureUnit);
+//	}
+//		
+//	@Override
+//	public void setUnit(AmountWithUnit unit) {
+//	}
+//}

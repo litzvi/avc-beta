@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.view;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Stream;
@@ -36,7 +37,7 @@ public class LoadingRow extends BasicDTO {
 	@JsonIgnore private int[] poCodeIds;
 	private String[] poCodes;
 	@JsonIgnore private String[] suppliers;
-	private LocalDate recordedTime;
+	private LocalDateTime recordedTime;
 	private Duration duration;
 	private ProcessStatus status;
 	private String[] approvals;
@@ -61,7 +62,7 @@ public class LoadingRow extends BasicDTO {
 	
 	public LoadingRow(@NonNull Integer id, 
 			String poCodeIds, String poCodes, String suppliers,
-			LocalDate recordedTime, Duration duration, ProcessStatus status, String approvals, 			
+			LocalDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, 			
 			Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue, 
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType) {
 		super(id);

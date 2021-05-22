@@ -10,9 +10,7 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.ItemWithUnit;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.PackedItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Value;
@@ -60,10 +58,10 @@ public class ContainerPoItemStorageRow {
 	public AmountWithUnit getTotalWeight() {
 		AmountWithUnit totalAmount;
 		Class<? extends Item> itemClass = itemWithUnit.getClazz();
-		if(itemClass == BulkItem.class) {
+		if(MeasureUnit.NONE == itemWithUnit.getUnit().getMeasureUnit()) {
 			totalAmount = unitAmount.multiply(numberUnits);
 		}
-		else if(itemClass == PackedItem.class){
+		else if(MeasureUnit.WEIGHT_UNITS.contains(itemWithUnit.getUnit().getMeasureUnit())) {
 			totalAmount = itemWithUnit.getUnit().multiply(unitAmount.getAmount().multiply(numberUnits));
 		}
 		else 

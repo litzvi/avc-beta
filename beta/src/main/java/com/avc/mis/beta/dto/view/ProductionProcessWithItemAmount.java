@@ -14,9 +14,7 @@ import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.PackedItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -55,11 +53,11 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 			BigDecimal amount) {
 		super(id);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		if(clazz == BulkItem.class && MeasureUnit.WEIGHT_UNITS.contains(defaultMeasureUnit)) {
+		if(MeasureUnit.NONE == unitMeasureUnit && MeasureUnit.WEIGHT_UNITS.contains(defaultMeasureUnit)) {
 			this.amount = null;
 			this.weight = new AmountWithUnit(amount, defaultMeasureUnit);
 		}
-		else if(clazz == PackedItem.class && MeasureUnit.WEIGHT_UNITS.contains(unitMeasureUnit)){
+		else if(MeasureUnit.WEIGHT_UNITS.contains(unitMeasureUnit)){
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			this.weight = new AmountWithUnit(amount.multiply(unitAmount), unitMeasureUnit);
 		}

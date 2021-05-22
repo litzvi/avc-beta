@@ -7,6 +7,7 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZoneId;
@@ -449,12 +450,24 @@ public class QueryTest {
 		activeGeneralBasic.forEach(row -> System.out.println(row));
 		
 		List<ReceiptInventoryRow> receiptInventoryRows = inventoryReports.getReceiptInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.RAW_KERNEL}, 
-				LocalDate.parse("2021-05-01"), LocalDate.parse("2021-05-19"));
+				LocalDateTime.now());
+//				LocalDateTime.of(2021, 5, 1, 0, 0));
 		receiptInventoryRows.forEach(row -> {System.out.println(row); });
 		
-		List<FinishedProductInventoryRow> finishedProductInventoryRows = inventoryReports.getFinishedProductInventoryRows(ItemGroup.PRODUCT, 
-				new ProductionUse[] {ProductionUse.PACKED, ProductionUse.ROAST, ProductionUse.ROAST, ProductionUse.TOFFEE}, 
-				null, null);
-		finishedProductInventoryRows.forEach(row -> {System.out.println(row); });
+		List<FinishedProductInventoryRow> finishedProductInventoryRows;
+		try {
+			finishedProductInventoryRows = inventoryReports.getFinishedProductInventoryRows(ItemGroup.PRODUCT, 
+					new ProductionUse[] {ProductionUse.PACKED, ProductionUse.ROAST, ProductionUse.ROAST, ProductionUse.TOFFEE}, 
+					LocalDateTime.now());
+//					LocalDateTime.of(2021, 5, 1, 0, 0));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+		finishedProductInventoryRows.forEach(row -> {System.out.println(row); 
+			System.out.println("boxes="+row.getBoxes());
+			System.out.println("lbs="+row.getWeightInLbs());
+		});
 	}
 }

@@ -3,6 +3,9 @@
  */
 package com.avc.mis.beta.entities.item;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -18,6 +21,7 @@ import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
@@ -49,11 +53,14 @@ public class Item extends ValueEntity implements ValueInterface {
 	
 	@Column(nullable = false, insertable = false, updatable = false)
 	private String dtype;
-		
+	
+	private String code;
+	private String brand;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "defaultMeasureUnit", nullable = false)
 	@NotNull(message = "Item has to have a default measure unit")
-	private MeasureUnit measureUnit;
+	private MeasureUnit measureUnit = MeasureUnit.UNIT;
 	
 	@AttributeOverrides({
         @AttributeOverride(name="amount",
@@ -66,7 +73,7 @@ public class Item extends ValueEntity implements ValueInterface {
 	@NotNull(message = "Unit amount is mandatory")
 	@Valid
 	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
-	private AmountWithUnit unit;
+	private AmountWithUnit unit = AmountWithUnit.NEUTRAL;
 
 
 	@Enumerated(EnumType.STRING)

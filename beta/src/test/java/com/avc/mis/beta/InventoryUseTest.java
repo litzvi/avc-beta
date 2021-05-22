@@ -5,10 +5,7 @@ package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -20,26 +17,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
-import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
-import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
-import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.BulkItem;
-import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.InventoryUse;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.process.StorageRelocation;
-import com.avc.mis.beta.entities.process.collection.CountAmount;
-import com.avc.mis.beta.entities.process.collection.ItemCount;
-import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
-import com.avc.mis.beta.entities.process.inventory.Storage;
-import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
 
@@ -68,7 +53,7 @@ public class InventoryUseTest {
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
 		InventoryUse inventoryUse = new InventoryUse();
-		inventoryUse.setRecordedTime(LocalDate.now());
+		inventoryUse.setRecordedTime(LocalDateTime.now());
 		PoCode poCode = new PoCode();
 		poCode.setId(receipt.getPoCode().getId());
 		inventoryUse.setPoCode(receipt.getPoCode());
@@ -98,7 +83,7 @@ public class InventoryUseTest {
 		
 		assertEquals(expected, actual, "Failed test adding InventoryUse");
 		
-		LocalDate time =LocalDate.of(1983, 11, 23);
+		LocalDateTime time =LocalDateTime.of(1983, 11, 23, 0, 0);
 		inventoryUse.setRecordedTime(time);
 		expected.setRecordedTime(time);		
 		warehouseManagement.editGeneralInventoryUse(inventoryUse);

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -51,7 +52,7 @@ public class TransferTest {
 			
 			StorageTransfer transfer = new StorageTransfer();
 			transfer.setPoCode((PoCode) receipt.getPoCode());
-			transfer.setRecordedTime(LocalDate.now());
+			transfer.setRecordedTime(LocalDateTime.now());
 
 
 			//get inventory storages for transfer
@@ -73,7 +74,13 @@ public class TransferTest {
 //		}
 
 			try {
-				warehouseManagement.addStorageTransfer(transfer);
+				try {
+					warehouseManagement.addStorageTransfer(transfer);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					throw e;
+				}
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -83,7 +90,7 @@ public class TransferTest {
 			//TODO check if usedItems exceeds inventory should fail
 			transfer = new StorageTransfer();
 			transfer.setPoCode((PoCode) receipt.getPoCode());
-			transfer.setRecordedTime(LocalDate.now());
+			transfer.setRecordedTime(LocalDateTime.now());
 			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 			transfer.setProcessItems(service.getProcessItems(poInventory));
 			
@@ -99,7 +106,7 @@ public class TransferTest {
 					
 			transfer = new StorageTransfer();
 			transfer.setPoCode((PoCode) receipt.getPoCode());
-			transfer.setRecordedTime(LocalDate.now());
+			transfer.setRecordedTime(LocalDateTime.now());
 			
 			poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
 			
@@ -132,7 +139,7 @@ public class TransferTest {
 					
 			transfer = new StorageTransfer();
 			transfer.setPoCode((PoCode) receipt.getPoCode());
-			transfer.setRecordedTime(LocalDate.now());
+			transfer.setRecordedTime(LocalDateTime.now());
 			
 			poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
 			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
@@ -180,7 +187,7 @@ public class TransferTest {
 		
 		StorageTransfer transfer = new StorageTransfer();
 		transfer.setPoCode((PoCode) receipt.getPoCode());
-		transfer.setRecordedTime(LocalDate.now());
+		transfer.setRecordedTime(LocalDateTime.now());
 
 
 		//get inventory storages for transfer

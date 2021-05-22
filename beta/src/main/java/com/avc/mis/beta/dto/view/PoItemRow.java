@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Currency;
@@ -21,7 +21,6 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.PackedItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
@@ -52,7 +51,7 @@ public class PoItemRow extends BasicValueDTO {
 	Integer orderItemId;
 	@JsonIgnore
 	AmountWithUnit numUnits;
-	LocalDate contractDate;
+	LocalDateTime contractDate;
 	LocalDate deliveryDate;
 	String defects;
 	AmountWithCurrency unitPrice;
@@ -72,7 +71,7 @@ public class PoItemRow extends BasicValueDTO {
 			Integer itemId, String itemValue, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
 			Integer orderItemId, BigDecimal amount, MeasureUnit measureUnit, 
-			LocalDate contractDate, LocalDate deliveryDate, 
+			LocalDateTime contractDate, LocalDate deliveryDate, 
 			String defects, BigDecimal unitPrice, Currency currency, 
 //			BigDecimal receivedOrderUnits,
 //			BigDecimal receivedAmount, 
@@ -146,13 +145,16 @@ public class PoItemRow extends BasicValueDTO {
 	}
 	
 	public AmountWithUnit getNumberLots() {
-		if(item.getGroup()  == ItemGroup.PRODUCT) {
+		if(item.getGroup() == ItemGroup.PRODUCT) {
 			AmountWithUnit numberLots;
-			if(item.getClazz() == PackedItem.class) {
+			if(MeasureUnit.WEIGHT_UNITS.contains(item.getUnit().getMeasureUnit())) {
 				numberLots = item.getUnit().multiply(this.numUnits.getAmount());
 			}
-			else {
+			else if(MeasureUnit.WEIGHT_UNITS.contains(this.numUnits.getMeasureUnit())) {
 				numberLots = this.numUnits;
+			}
+			else {
+				throw new IllegalStateException("The class can only apply to weight items");
 			}
 			return numberLots.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 		}

@@ -12,10 +12,8 @@ import java.util.Optional;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -52,11 +50,11 @@ public class ItemAmount {
 		else {
 			this.weightCoefficient = BigDecimal.ONE;
 		}
-		if(clazz == BulkItem.class && MeasureUnit.WEIGHT_UNITS.contains(defaultMeasureUnit)) {
+		if(MeasureUnit.NONE == unitMeasureUnit && MeasureUnit.WEIGHT_UNITS.contains(defaultMeasureUnit)) {
 			this.amount = null;
 			this.weightAmount = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
 		}
-		else if(clazz == PackedItem.class && MeasureUnit.WEIGHT_UNITS.contains(unitMeasureUnit)){
+		else if(MeasureUnit.WEIGHT_UNITS.contains(unitMeasureUnit)){
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			this.amount.setScale(MeasureUnit.SCALE);
 			AmountWithUnit weightAmount = new AmountWithUnit(
@@ -73,17 +71,11 @@ public class ItemAmount {
 			else {
 				this.weightAmount = weightAmount;
 			}
-//			this.weight = new AmountWithUnit[] {
-//					weight.convert(MeasureUnit.LBS),
-//					weight.convert(MeasureUnit.KG)};
-//			AmountWithUnit.setScales(this.weight, MeasureUnit.SCALE);
-
 		}
 		else 
 		{
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);	
 			this.weightAmount = null;
-//			throw new IllegalStateException("The class can only apply to weight items");
 		}
 	}
 	

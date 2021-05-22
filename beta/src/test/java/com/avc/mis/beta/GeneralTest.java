@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Currency;
 import java.util.List;
@@ -107,7 +108,7 @@ public class GeneralTest {
 		poCode.setSupplier(supplier);
 		objectWriter.addPoCode(poCode);
 		po.setPoCode(poCode);
-		po.setRecordedTime(LocalDate.now());
+		po.setRecordedTime(LocalDateTime.now());
 		OrderItem[] orderItems = new OrderItem[NUM_PO_ITEMS];
 		List<Item> items = valueTablesReader.getAllItems();
 		for(int i=0; i < NUM_PO_ITEMS; i++) {
@@ -142,7 +143,7 @@ public class GeneralTest {
 		//receive both order lines in parts and different storages
 		Receipt receipt = new Receipt();
 		receipt.setPoCode(poCode);
-		receipt.setRecordedTime(LocalDate.now());
+		receipt.setRecordedTime(LocalDateTime.now());
 		ReceiptItem[] receiptItems = new ReceiptItem[NUM_PO_ITEMS];
 		List<Warehouse> storages = valueTablesReader.getAllWarehouses();
 		for(int i=0; i < receiptItems.length; i++) {
@@ -179,7 +180,7 @@ public class GeneralTest {
 		//add QC for received order
 		QualityCheck check = new QualityCheck();
 		check.setPoCode(poCode);
-		check.setRecordedTime(LocalDate.now());
+		check.setRecordedTime(LocalDateTime.now());
 		check.setCheckedBy("avc lab");
 		CashewItemQuality[] rawItemQualities = new CashewItemQuality[NUM_PO_ITEMS];
 		ProcessItem[] processItems = new ProcessItem[NUM_PO_ITEMS];
@@ -219,7 +220,7 @@ public class GeneralTest {
 		//add receipt sample check for received orders
 		SampleReceipt sampleReceipt = new SampleReceipt();
 		sampleReceipt.setPoCode(poCode);
-		sampleReceipt.setRecordedTime(LocalDate.now());
+		sampleReceipt.setRecordedTime(LocalDateTime.now());
 		SampleItem[] sampleItems = new SampleItem[2];
 		sampleItems[0] = new SampleItem();
 		sampleItems[0].setItem(items.get(0));

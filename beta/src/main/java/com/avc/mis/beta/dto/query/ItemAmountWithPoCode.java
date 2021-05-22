@@ -12,10 +12,8 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.collection.WeightedPo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,21 +48,24 @@ public class ItemAmountWithPoCode {
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.itemGroup = itemGroup;
-		if(clazz == BulkItem.class) {
+		if(MeasureUnit.NONE == unitMeasureUnit) {
 			this.amount = null;
 			this.weightAmount = new AmountWithUnit(amount, defaultMeasureUnit);
 		}
-		else if(clazz == PackedItem.class){
+		else 
+//			if(MeasureUnit.WEIGHT_UNITS.contains(unitMeasureUnit))
+		{
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			this.weightAmount = new AmountWithUnit(
 					amount.multiply(unitAmount, MathContext.DECIMAL64), 
 					unitMeasureUnit);
 			this.amount.setScale(MeasureUnit.SCALE);
 		}
-		else 
-		{
-			throw new IllegalStateException("The class can only apply to weight items");
-		}
+//		else 
+//		{
+//			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
+//			this.weightAmount = null;
+//		}
 	}
 	
 	@JsonIgnore

@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.process.inventory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
@@ -43,7 +44,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	@EqualsAndHashCode.Exclude
 	private MeasureUnit measureUnit;
 	@EqualsAndHashCode.Exclude
-	private LocalDate itemProcessDate;
+	private LocalDateTime itemProcessDate;
 	@EqualsAndHashCode.Exclude
 	private PoCodeBasic itemPo;
 	@EqualsAndHashCode.Exclude
@@ -75,7 +76,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	public UsedItemBaseDTO(Integer id, Integer version, Integer ordinal, BigDecimal numberUsedUnits,
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
-			MeasureUnit measureUnit, LocalDate itemProcessDate,
+			MeasureUnit measureUnit, LocalDateTime itemProcessDate,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String itemPoCodes, String itemSuppliers,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,

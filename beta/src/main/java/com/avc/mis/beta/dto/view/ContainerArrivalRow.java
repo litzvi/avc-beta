@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.view;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
@@ -29,7 +30,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ContainerArrivalRow extends BasicDTO {
 
-	private LocalDate recordedTime;
+	private LocalDateTime recordedTime;
 	private Duration duration;
 	private ProcessStatus status;
 	private String[] approvals;
@@ -44,7 +45,7 @@ public class ContainerArrivalRow extends BasicDTO {
 
 
 	public ContainerArrivalRow(@NonNull Integer id, 
-			LocalDate recordedTime, Duration duration, ProcessStatus status, String approvals, 			
+			LocalDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, 			
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType,
 			Integer productCompanyId, Integer productCompanyVersion, String productCompanyName) {
 		super(id);

@@ -16,9 +16,7 @@ import com.avc.mis.beta.dto.process.inventory.UsedItemTableDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.utilities.ListGroup;
@@ -94,17 +92,20 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 		try {
 			totalAmount = usedItems.stream()
 				.map(ui -> {
-					Class<? extends Item> itemClass = ui.getItem().getClazz();
-					if(itemClass == BulkItem.class) {
+//					Class<? extends Item> itemClass = ui.getItem().getClazz();
+					if(MeasureUnit.NONE == ui.getItem().getUnit().getMeasureUnit()) {
 						return new AmountWithUnit(ui.getTotal(), ui.getMeasureUnit());
 					}
-					else if(itemClass == PackedItem.class){
+					else {
 						return ui.getItem().getUnit().multiply(ui.getTotal());
 					}
-					else 
-					{
-						throw new IllegalStateException("Unknowen item class");
-					}
+//					else if(itemClass == PackedItem.class){
+//						return ui.getItem().getUnit().multiply(ui.getTotal());
+//					}
+//					else 
+//					{
+//						throw new IllegalStateException("Unknowen item class");
+//					}
 				})
 				.reduce(AmountWithUnit::add).get();
 		} catch (NoSuchElementException | UnsupportedOperationException e) {
@@ -126,10 +127,10 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 			totalWeight = usedItems.stream()
 				.map(ui -> {
 					Class<? extends Item> itemClass = ui.getItem().getClazz();
-					if(itemClass == BulkItem.class && MeasureUnit.WEIGHT_UNITS.contains(ui.getMeasureUnit())) {
+					if(MeasureUnit.NONE == ui.getItem().getUnit().getMeasureUnit() && MeasureUnit.WEIGHT_UNITS.contains(ui.getMeasureUnit())) {
 						return new AmountWithUnit(ui.getTotal(), ui.getMeasureUnit());
 					}
-					else if(itemClass == PackedItem.class && MeasureUnit.WEIGHT_UNITS.contains(ui.getItem().getUnit().getMeasureUnit())){
+					else if(MeasureUnit.WEIGHT_UNITS.contains(ui.getItem().getUnit().getMeasureUnit())){
 						return ui.getItem().getUnit().multiply(ui.getTotal());
 					}
 					else 

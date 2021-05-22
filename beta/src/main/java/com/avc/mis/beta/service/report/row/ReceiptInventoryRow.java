@@ -6,6 +6,7 @@ package com.avc.mis.beta.service.report.row;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Currency;
 import java.util.stream.Stream;
@@ -27,7 +28,7 @@ public class ReceiptInventoryRow {
 	String supplier;
 	String item;
 	String poCode;
-	LocalDate receiptDate;
+	LocalDateTime receiptDate;
 	String[] bags;
 	AmountWithUnit amount;
 	String[] warehouses;
@@ -38,7 +39,7 @@ public class ReceiptInventoryRow {
 		
 	public ReceiptInventoryRow(String supplier, 
 			String item, 
-			String poCode, LocalDate receiptDate, String bags,
+			String poCode, LocalDateTime receiptDate, String bags,
 			BigDecimal amount, MeasureUnit measureUnit,
 			String warehouses, 
 			AmountWithCurrency unitPrice, Currency currency, ProcessStatus status) {
@@ -72,7 +73,7 @@ public class ReceiptInventoryRow {
 		}
 		
 		try {
-			return getAmount().convert(MeasureUnit.LBS).getAmount().setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
+			return getAmount().convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE).getAmount();
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}

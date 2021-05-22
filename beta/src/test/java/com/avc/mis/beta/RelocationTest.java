@@ -5,9 +5,7 @@ package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
-import java.util.Arrays;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -23,10 +21,8 @@ import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
-import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageRelocation;
@@ -73,7 +69,7 @@ public class RelocationTest {
 		
 		StorageRelocation relocation = new StorageRelocation();
 		relocation.setPoCode((PoCode) receipt.getPoCode());
-		relocation.setRecordedTime(LocalDate.now());
+		relocation.setRecordedTime(LocalDateTime.now());
 		relocation.setProductionLine(service.getProductionLine(ProductionFunctionality.RAW_STATION));
 
 
@@ -143,7 +139,7 @@ public class RelocationTest {
 			//build item count
 			ProcessItemInventory processItemRow = poInventory.get(i);
 			itemCounts[i] = new ItemCount();
-			Item item = new BulkItem();
+			Item item = new Item();
 			item.setId(processItemRow.getItem().getId());
 			itemCounts[i].setItem(item);
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();

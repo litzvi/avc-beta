@@ -7,21 +7,17 @@ import static org.assertj.core.api.Assertions.fail;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.avc.mis.beta.dao.DAO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
-import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
@@ -32,12 +28,10 @@ import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.BulkItem;
+import com.avc.mis.beta.entities.item.CashewItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.process.ContainerBooking;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -101,7 +95,7 @@ public class TestService {
 		ContainerBooking booking = new ContainerBooking();
 		booking.setBookingNumber("booking_no " + randCode++);
 		booking.setBookingDate("1983-11-23");
-		booking.setRecordedTime(LocalDate.now());
+		booking.setRecordedTime(LocalDateTime.now());
 		return booking;
 	}
 	
@@ -154,7 +148,7 @@ public class TestService {
 //		poCode.setContractType(getContractType());
 		
 		//build process
-		po.setRecordedTime(LocalDate.now());
+		po.setRecordedTime(LocalDateTime.now());
 		
 		//add order items
 		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS, ItemGroup.PRODUCT);				
@@ -175,7 +169,7 @@ public class TestService {
 		po.setPoCode(poCode);
 		
 		//build process
-		po.setRecordedTime(LocalDate.now());
+		po.setRecordedTime(LocalDateTime.now());
 		
 		//add order items
 		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS, ItemGroup.GENERAL);				
@@ -207,7 +201,7 @@ public class TestService {
 //		poCode.setContractType(getContractType());
 		receipt.setPoCode(poCode);
 		//build process
-		receipt.setRecordedTime(LocalDate.now());
+		receipt.setRecordedTime(LocalDateTime.now());
 		//add order items
 		receipt.setReceiptItems(getReceiptItems(1));
 		receipts.addCashewReceipt(receipt);
@@ -220,7 +214,7 @@ public class TestService {
 		PoCode poCode = addPoCode();
 		receipt.setPoCode(poCode);
 		//build process
-		receipt.setRecordedTime(LocalDate.now());
+		receipt.setRecordedTime(LocalDateTime.now());
 		receipt.setStartTime(LocalTime.parse("20:15"));
 		//add order items
 		receipt.setReceiptItems(getReceiptItems(OrdersTest.NUM_ITEMS));
@@ -266,7 +260,7 @@ public class TestService {
 		poCode.setId(orderPoCode);
 		receipt.setPoCode(poCode);
 		//build process
-		receipt.setRecordedTime(LocalDate.now());
+		receipt.setRecordedTime(LocalDateTime.now());
 		//add order items
 		PoDTO poDTO = orders.getOrder(orderPoCode);
 		receipt.setReceiptItems(getOrderReceiptItems(poDTO));
@@ -281,7 +275,7 @@ public class TestService {
 		poCode.setId(orderPoCode);
 		receipt.setPoCode(poCode);
 		//build process
-		receipt.setRecordedTime(LocalDate.now());
+		receipt.setRecordedTime(LocalDateTime.now());
 		//add order items
 		PoDTO poDTO = orders.getOrder(orderPoCode);
 		receipt.setReceiptItems(getOrderReceiptItems(poDTO));
@@ -509,15 +503,16 @@ public class TestService {
 	
 	public Item getItem(ItemWithUnitDTO itemWithUnitDTO) {
 		Item item;
-		if(itemWithUnitDTO.getClazz() == BulkItem.class) {
-			item = new BulkItem(itemWithUnitDTO.getMeasureUnit());			
+		if(itemWithUnitDTO.getClazz() == Item.class) {
+			item = new Item();
 		}
-		else if(itemWithUnitDTO.getClazz() == PackedItem.class) {
-			item = new PackedItem();
+		else if(itemWithUnitDTO.getClazz() == CashewItem.class) {
+			item = new CashewItem();
 		}
 		else {
 			throw new NullPointerException();
 		}
+		item.setMeasureUnit(itemWithUnitDTO.getMeasureUnit());
 		item.setId(itemWithUnitDTO.getId());
 		return item;
 	}

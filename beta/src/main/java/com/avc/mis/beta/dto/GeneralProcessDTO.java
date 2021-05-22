@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
@@ -44,7 +45,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 	private ProcessName processName;
 	
 	private ProductionLineBasic productionLine;
-	private LocalDate recordedTime;
+	private LocalDateTime recordedTime;
 
 	private LocalTime startTime;
 	private LocalTime endTime;

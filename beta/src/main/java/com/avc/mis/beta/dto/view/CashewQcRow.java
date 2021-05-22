@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.BasicDTO;
@@ -40,7 +41,7 @@ public class CashewQcRow extends BasicDTO {
 //	Integer itemId;
 	BasicValueEntity<Item> item;
 //	String itemName;
-	LocalDate checkDate;
+	LocalDateTime checkDate;
 	ProcessStatus status;
 	BigInteger numberOfSamples;
 	Boolean precentage;
@@ -56,7 +57,7 @@ public class CashewQcRow extends BasicDTO {
 			QcCompany checkedBy,
 			Integer itemId, String itemValue, 
 //			String itemName, 
-			LocalDate checkDate, ProcessStatus status,
+			LocalDateTime checkDate, ProcessStatus status,
 			BigInteger numberOfSamples, BigDecimal sampleWeight, boolean precentage,
 			BigDecimal humidity, BigDecimal breakage,
 			BigDecimal scorched, BigDecimal deepCut, BigDecimal offColour, 

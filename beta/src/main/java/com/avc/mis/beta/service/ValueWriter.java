@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.SoftDeletableDAO;
 import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.item.BulkItem;
-import com.avc.mis.beta.entities.item.PackedItem;
+import com.avc.mis.beta.entities.item.CashewItem;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.CashewStandard;
@@ -96,11 +96,19 @@ public class ValueWriter {
 		dao.addEntity(position);
 	}
 		
-	public void addPackedItem(PackedItem item) {
+//	public void addPackedItem(PackedItem item) {
+//		dao.addEntity(item);
+//	}
+//	
+//	public void addBulkItem(BulkItem item) {
+//		dao.addEntity(item);
+//	}
+	
+	public void addItem(Item item) {
 		dao.addEntity(item);
 	}
 	
-	public void addBulkItem(BulkItem item) {
+	public void addCashewItem(CashewItem item) {
 		dao.addEntity(item);
 	}
 	

@@ -5,8 +5,7 @@ package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,10 +19,8 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BulkItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.PackedItem;
 import com.avc.mis.beta.entities.item.ProductionUse;
 
 import lombok.EqualsAndHashCode;
@@ -46,8 +43,8 @@ public class ProcessItemInventoryRow extends BasicDTO {
 	private ItemWithUnitDTO item;
 	private PoCodeBasic poCode;
 	private String supplierName;
-	private LocalDate processDate;
-	private LocalDate receiptDate;
+	private LocalDateTime processDate;
+	private LocalDateTime receiptDate;
 	private BigDecimal weightCoefficient;
 	private AmountWithUnit amount;
 	private AmountWithUnit weight;
@@ -61,7 +58,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 			ItemGroup itemGroup, ProductionUse productionUse, 
 			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			LocalDate processDate, LocalDate receiptDate,
+			LocalDateTime processDate, LocalDateTime receiptDate,
 			BigDecimal weightCoefficient, BigDecimal amount, 
 			String warehouses) {
 		super(id);
@@ -71,11 +68,11 @@ public class ProcessItemInventoryRow extends BasicDTO {
 		this.processDate = processDate;
 		this.receiptDate = receiptDate;
 		this.weightCoefficient = weightCoefficient;
-		if(clazz == BulkItem.class) {
+		if(MeasureUnit.NONE == item.getUnit().getMeasureUnit()) {
 			this.amount = null;
 			this.weight = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
 		}
-		else if(clazz == PackedItem.class){
+		else if(MeasureUnit.WEIGHT_UNITS.contains(item.getUnit().getMeasureUnit())) {
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			this.amount.setScale(MeasureUnit.SCALE);
 			this.weight = new AmountWithUnit(
@@ -84,8 +81,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 					.multiply(this.weightCoefficient, MathContext.DECIMAL64), 
 					unitMeasureUnit);
 		}
-		else 
-		{
+		else {
 			throw new IllegalStateException("The class can only apply to weight items");
 		}
 				

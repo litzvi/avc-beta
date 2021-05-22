@@ -181,7 +181,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 				+ "join po_code.contractType ct "
 				+ "join po_code.supplier s "
 			+ "join po.processType t "
-			+ "join po.orderItems oi "
+			+ "join po.orderItems oi " 
 				+ "join oi.numberUnits units "
 				+ "left join oi.unitPrice price "
 				+ "join oi.item item "

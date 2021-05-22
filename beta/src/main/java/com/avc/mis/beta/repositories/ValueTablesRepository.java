@@ -12,6 +12,8 @@ import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.ValueEntity;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
@@ -33,9 +35,16 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 				+ "join i.unit u "
 			+ "where (i.itemGroup = :itemGroup or :itemGroup is null) "
 				+ "and (i.productionUse = :productionUse or :productionUse is null) "
-				+ "and (type(i) in :classes) "
+//				+ "and (type(i) in :classes) "
+				+ "and (:packageType = "
+					+ "(CASE "
+						+ "WHEN u.measureUnit = com.avc.mis.beta.entities.enums.MeasureUnit.NONE "
+							+ "THEN 0 "
+						+ "ELSE 1 "
+					+ "END) "
+					+ "or :packageType is null) "
 			+ "order by i.value ")
-	List<ItemWithUnitDTO> findItemsByGroupBasic(ItemGroup itemGroup, ProductionUse productionUse, List<Class<? extends Item>> classes);
+	List<ItemWithUnitDTO> findItemsByGroupBasic(ItemGroup itemGroup, ProductionUse productionUse, Integer packageType);
 
 	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
 			+ "from Item i "

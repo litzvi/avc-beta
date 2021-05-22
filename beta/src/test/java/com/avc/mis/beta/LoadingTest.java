@@ -6,6 +6,7 @@ package com.avc.mis.beta;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -80,7 +81,7 @@ public class LoadingTest {
 		
 		//test container arrival
 		ContainerArrival arrival = new ContainerArrival();
-		arrival.setRecordedTime(LocalDate.now());
+		arrival.setRecordedTime(LocalDateTime.now());
 		ContainerDetails containerDetails = new ContainerDetails();
 		containerDetails.setContainerNumber("CONT01");
 		containerDetails.setSealNumber("SEAL01");
@@ -101,7 +102,7 @@ public class LoadingTest {
 //		refBooking.setVersion(booking.getVersion());
 		loading.setArrival(arrival);
 		loading.setShipmentCode(service.addShipmentCode());
-		loading.setRecordedTime(LocalDate.now());
+		loading.setRecordedTime(LocalDateTime.now());
 
 		//get inventory storages for transfer
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
@@ -115,7 +116,14 @@ public class LoadingTest {
 		InventoryExportDoc inventoryExportDoc = loadingService.getInventoryExportDoc(loading.getId());
 		System.out.println(inventoryExportDoc);
 		
-		SecurityExportDoc securityExportDoc =loadingService.getSecurityExportDoc(loading.getId());
+		SecurityExportDoc securityExportDoc;
+		try {
+			securityExportDoc = loadingService.getSecurityExportDoc(loading.getId());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		System.out.println(securityExportDoc);
 		
 		try {

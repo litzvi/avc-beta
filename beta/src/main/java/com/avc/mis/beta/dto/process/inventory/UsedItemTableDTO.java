@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.process.inventory;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class UsedItemTableDTO {
 	
 	private BasicValueEntity<Item> item;
 	private PoCodeBasic itemPo;
-	private LocalDate itemProcessDate;
+	private LocalDateTime itemProcessDate;
 	
 	private List<BasicUsedStorageDTO> amounts;
 	
