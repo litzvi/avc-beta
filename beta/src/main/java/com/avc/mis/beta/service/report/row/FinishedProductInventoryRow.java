@@ -38,7 +38,7 @@ public class FinishedProductInventoryRow {
 	String[] receiptDates;
 	String[] processDates;
 //	BigInteger units;
-	AmountWithUnit unitAmount;
+	AmountWithUnit totalAmount;
 	String[] warehouses;
 	ProcessStatus status;
 	
@@ -61,8 +61,8 @@ public class FinishedProductInventoryRow {
 //		this.receiptDates = Stream.of(receiptDates.split(",")).map(j -> LocalDateTime.parse(j, DATE_TIME_FORMATTER)).toArray(LocalDateTime[]::new);
 //		this.processDates = Stream.of(processDates.split(",")).map(j -> LocalDateTime.parse(j, DATE_TIME_FORMATTER)).toArray(LocalDateTime[]::new);
 //		this.units = units.setScale(0, RoundingMode.HALF_DOWN).toBigInteger();
-		this.unitAmount = new AmountWithUnit(amount, measureUnit);
-		this.unitAmount.setScale(MeasureUnit.SCALE);
+		this.totalAmount = new AmountWithUnit(amount, measureUnit);
+		this.totalAmount.setScale(MeasureUnit.SCALE);
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).toArray(String[]::new);
 		}
@@ -75,32 +75,29 @@ public class FinishedProductInventoryRow {
 
 	public BigDecimal getWeightInLbs() {
 		AmountWithUnit weight;
-		if(MeasureUnit.NONE == getItem().getUnit().getMeasureUnit()) {
-			weight = getUnitAmount();
+		if(MeasureUnit.NONE == getItem().getUnit().getMeasureUnit() && MeasureUnit.WEIGHT_UNITS.contains(getTotalAmount().getMeasureUnit())) {
+			weight = getTotalAmount();
 		}
-		else {
+		else if(MeasureUnit.WEIGHT_UNITS.contains(getItem().getUnit().getMeasureUnit())) {
 			weight = new AmountWithUnit(
-					getUnitAmount().getAmount()
+					getTotalAmount().getAmount()
 					.multiply(getItem().getUnit().getAmount(), MathContext.DECIMAL64), 
 					getItem().getUnit().getMeasureUnit());
 		}
-		
+		else {
+			return null;			
+		}
 
 		if(weight.getMeasureUnit() == MeasureUnit.LBS) {
 			return weight.setScale(MeasureUnit.SCALE).getAmount();
-		}
-		
-		try {
-			return weight.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE).getAmount();
-		} catch (UnsupportedOperationException e) {
-			return null;
-		}
+		}		
+		return weight.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE).getAmount();		
 	}
 	
 	public BigInteger getBoxes() {
 		if(MeasureUnit.NONE == getItem().getUnit().getMeasureUnit()){ }
 		else {
-			return getUnitAmount().getAmount().setScale(0, RoundingMode.HALF_DOWN).toBigInteger();
+			return getTotalAmount().getAmount().setScale(0, RoundingMode.HALF_DOWN).toBigInteger();
 		}
 		return null;
 	}

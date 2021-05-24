@@ -45,14 +45,19 @@ public class ContainerPoItemRow extends BasicDTO {
 		if(MeasureUnit.NONE == itemMeasureUnit) {
 			this.total = new AmountWithUnit(total, measureUnit);
 		}
-		else if(MeasureUnit.WEIGHT_UNITS.contains(itemMeasureUnit)){
+		else {
 			this.total = new AmountWithUnit(total.multiply(itemUnitAmount), itemMeasureUnit);
 		}
-		else 
-		{
-			throw new IllegalStateException("The class can only apply to weight items");
-		}
 		
+	}
+	
+	public AmountWithUnit getTotalWeight() {
+		if(MeasureUnit.WEIGHT_UNITS.contains(getTotal().getMeasureUnit())) {
+			return getTotal();
+		}
+		else {
+			return null;
+		}
 	}
 	
 	public List<AmountWithUnit> getTotalRow() {

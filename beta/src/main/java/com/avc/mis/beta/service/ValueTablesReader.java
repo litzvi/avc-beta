@@ -17,6 +17,7 @@ import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.generic.ValueEntityObject;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
@@ -198,19 +199,23 @@ public class ValueTablesReader {
 	}
 	
 	public List<ItemWithUnitDTO> getItemsByPrudoctionUse(ProductionUse productionUse) {
-		return getValueTablesRepository().findItemsByGroupBasic(null, productionUse, null);//, Arrays.asList(BulkItem.class, PackedItem.class));
+		return getValueTablesRepository().findItemsByGroupBasic(null, productionUse, -1);//, Arrays.asList(BulkItem.class, PackedItem.class));
 	}
 
 	public List<ItemWithUnitDTO> getItemsByGroup(ItemGroup itemGroup) {
-		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, null, null);//, Arrays.asList(BulkItem.class, PackedItem.class));
+		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, null, -1);//, Arrays.asList(BulkItem.class, PackedItem.class));
 	}
 	
 	public List<ItemWithUnitDTO> getItems(ItemGroup itemGroup, ProductionUse productionUse) {
-		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, productionUse, null);//, Arrays.asList(BulkItem.class, PackedItem.class));
+		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, productionUse, -1);//, Arrays.asList(BulkItem.class, PackedItem.class));
 	}
 	
 	public List<ItemWithUnitDTO> getItems(ItemGroup itemGroup, ProductionUse productionUse, PackageType packageType) {
 		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, productionUse, packageType.ordinal());
+	}
+	
+	public List<CashewItemDTO> getCashewItems(ItemGroup itemGroup, ProductionUse productionUse, PackageType packageType, int minBagsInBox) {
+		return getValueTablesRepository().findCashewItems(itemGroup, productionUse, packageType.ordinal(), minBagsInBox);
 	}
 	
 	/**

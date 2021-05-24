@@ -10,11 +10,14 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.ValueEntity;
+import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.enums.SaltLevel;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -42,9 +45,28 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 							+ "THEN 0 "
 						+ "ELSE 1 "
 					+ "END) "
-					+ "or :packageType is null) "
+					+ "or :packageType = -1) "
 			+ "order by i.value ")
 	List<ItemWithUnitDTO> findItemsByGroupBasic(ItemGroup itemGroup, ProductionUse productionUse, Integer packageType);
+
+	@Query("select new com.avc.mis.beta.dto.values.CashewItemDTO("
+			+ "i.id, i.value, i.code, i.brand, i.measureUnit, i.itemGroup, i.productionUse, "
+			+ "i.unit, type(i), "
+			+ "i.numBags, i.grade, i.whole, i.roast, i.toffee, i.saltLevel) "
+		+ "from CashewItem i "
+			+ "join i.unit u "
+		+ "where (i.itemGroup = :itemGroup or :itemGroup is null) "
+			+ "and (i.productionUse = :productionUse or :productionUse is null) "
+			+ "and (:packageType = "
+				+ "(CASE "
+					+ "WHEN u.measureUnit = com.avc.mis.beta.entities.enums.MeasureUnit.NONE "
+						+ "THEN 0 "
+					+ "ELSE 1 "
+				+ "END) "
+				+ "or :packageType = -1) "
+			+ "and i.numBags >= :minBagsInBox "
+		+ "order by i.brand, i.code, i.value ")
+	List<CashewItemDTO> findCashewItems(ItemGroup itemGroup, ProductionUse productionUse, int packageType, int minBagsInBox);
 
 	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
 			+ "from Item i "
@@ -71,7 +93,5 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 		+ "where s.id in :storageIds "
 		+ "group by i ")
 	List<ItemWithUnitDTO>  findStoragesItems(Set<Integer> storageIds);
-
-	
 		
 }

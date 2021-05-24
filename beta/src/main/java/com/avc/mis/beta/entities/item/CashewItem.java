@@ -40,16 +40,16 @@ public class CashewItem extends Item {
 	private CashewGrade grade;
 
 //	@Column(nullable = false, updatable = false) - TODO TEMPERARY COMMENTED
-//	@NotNull(message = "Is whole is mandatory")
-	private Boolean isWhole = false;
+	@Column(columnDefinition = "boolean not null default 0")
+	private boolean whole = false;
 
 //	@Column(nullable = false, updatable = false) - TODO TEMPERARY COMMENTED
-//	@NotNull(message = "Is roast is mandatory")
-	private Boolean isRoast = false;
+	@Column(columnDefinition = "boolean not null default 0")
+	private boolean roast = false;
 
 //	@Column(nullable = false, updatable = false) - TODO TEMPERARY COMMENTED
-//	@NotNull(message = "Is toffee is mandatory")
-	private Boolean isToffee = false;
+	@Column(columnDefinition = "boolean not null default 0")
+	private boolean toffee = false;
 
 	@Enumerated(EnumType.STRING)
 //	@Column(nullable = false, updatable = false) - TODO TEMPERARY COMMENTED

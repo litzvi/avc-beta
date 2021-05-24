@@ -48,12 +48,11 @@ public class ItemAmountWithPoCode {
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
 		this.itemGroup = itemGroup;
-		if(MeasureUnit.NONE == unitMeasureUnit) {
+		if(MeasureUnit.NONE == unitMeasureUnit && MeasureUnit.WEIGHT_UNITS.contains(defaultMeasureUnit)) {
 			this.amount = null;
 			this.weightAmount = new AmountWithUnit(amount, defaultMeasureUnit);
 		}
-		else 
-//			if(MeasureUnit.WEIGHT_UNITS.contains(unitMeasureUnit))
+		else if(MeasureUnit.WEIGHT_UNITS.contains(unitMeasureUnit))
 		{
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			this.weightAmount = new AmountWithUnit(
@@ -61,11 +60,11 @@ public class ItemAmountWithPoCode {
 					unitMeasureUnit);
 			this.amount.setScale(MeasureUnit.SCALE);
 		}
-//		else 
-//		{
-//			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
-//			this.weightAmount = null;
-//		}
+		else 
+		{
+			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
+			this.weightAmount = null;
+		}
 	}
 	
 	@JsonIgnore

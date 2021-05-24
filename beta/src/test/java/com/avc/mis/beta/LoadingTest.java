@@ -29,6 +29,7 @@ import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.ContainerArrival;
 import com.avc.mis.beta.entities.process.ContainerBooking;
 import com.avc.mis.beta.entities.process.ContainerLoading;
@@ -113,8 +114,14 @@ public class LoadingTest {
 		ContainerLoadingDTO expectedLoading = new ContainerLoadingDTO(loading);
 		ContainerLoadingDTO actualLoading = loadingService.getLoading(loading.getId());
 
-		InventoryExportDoc inventoryExportDoc = loadingService.getInventoryExportDoc(loading.getId());
-		System.out.println(inventoryExportDoc);
+		try {
+			InventoryExportDoc inventoryExportDoc = loadingService.getInventoryExportDoc(loading.getId());
+			System.out.println(inventoryExportDoc);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			throw e2;
+		}
 		
 		SecurityExportDoc securityExportDoc;
 		try {

@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -20,10 +21,14 @@ import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.enums.SaltLevel;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 
@@ -635,5 +640,60 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "order by item ")
 	List<FinishedProductInventoryRow> findFinishedProductInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup,
 			LocalDateTime pointOfTime);
+
+	/**
+	 * LIST OF BAGGED CASHEW INVENTORY ITEMS (without po) FOR REPORT. (Used for bagged product inventory)
+	 */
+	@Query("select new com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow( "
+			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "item.brand, item.code, item.whole, item.grade, item.saltLevel, item.numBags, "
+			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
+				+ " * "
+				+ "(CASE "
+					+ "WHEN ui is null THEN sf.numberUnits "
+					+ "WHEN (used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+							+ "and (:pointOfTime is null or used_p.recordedTime <= :pointOfTime)) "
+						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
+					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
+				+ "END) "
+			+ " ) AS balance, item.measureUnit) "
+		+ "from ProcessItem pi "
+			+ "join CashewItem item "
+				+ "on pi.item = item "
+				+ "join item.unit item_unit "
+				+ "join UOM uom "
+					+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
+			+ "join pi.process p "
+				+ "join p.lifeCycle lc "
+			+ "join pi.allStorages sf "
+				+ "join sf.group sf_group "
+					+ "join sf_group.process sf_p "
+						+ "join sf_p.lifeCycle sf_lc "
+				+ "left join sf.usedItems ui "
+					+ "left join ui.group used_g "
+						+ "left join used_g.process used_p "
+							+ "left join used_p.lifeCycle used_lc "
+		+ "where lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
+			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
+			+ "and (:pointOfTime is null "
+				+ "or (p.recordedTime <= :pointOfTime and sf_p.recordedTime <= :pointOfTime)) "
+			+ "and"
+				+ "(sf.numberUnits > "
+					+ "coalesce("
+						+ "(select sum(usedStorage.numberUnits) "
+						+ " from sf.usedItems usedStorage "
+							+ "join usedStorage.group usedGroup "
+								+ "join usedGroup.process usedProcess "
+									+ "join usedProcess.lifeCycle usedLc "
+						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+							+ "and (:pointOfTime is null or usedProcess.recordedTime <= :pointOfTime)) "
+					+ ", 0)"
+				+ ") "
+		+ "group by item "
+		+ "order by item.brand, item.code, item.id ")	
+	List<CashewBaggedInventoryRow> findCashewBaggedInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses,
+			ItemGroup itemGroup, LocalDateTime pointOfTime);
 
 }

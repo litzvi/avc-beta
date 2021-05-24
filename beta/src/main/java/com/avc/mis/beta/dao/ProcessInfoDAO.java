@@ -209,7 +209,7 @@ public class ProcessInfoDAO extends DAO {
 	public List<ItemAmountWithPoCode> setPoWeights(StorageRelocation process) {
 		removeOldWeightedPos(process.getId());
 		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findRelocationWeightedPos(process.getId());
-		addPoWeights(poWeights, process, true);
+		addPoWeights(poWeights, process, false);
 		return poWeights;
 	}	
 	
@@ -233,11 +233,11 @@ public class ProcessInfoDAO extends DAO {
 			}
 			Map<PoCodeBasic, Optional<AmountWithUnit>> poMap = poWeights.stream()
 					.collect(Collectors.groupingBy(ItemAmountWithPoCode::getPoCode, 
-							Collectors.mapping(ItemAmountWithPoCode::getWeightAmount, Collectors.reducing(AmountWithUnit::add))));
+							Collectors.mapping(ItemAmountWithPoCode::getWeightAmount, Collectors.reducing(AmountWithUnit::addNullable))));
 			int ordinal = 0;
 			for(PoCodeBasic poCode: poMap.keySet()) {
 				WeightedPo weightedPo = ItemAmountWithPoCode.getWeightedPo(poCode.getId());
-				if(usedWeight != null) {
+				if(usedWeight != null && poMap.get(poCode).isPresent()) {
 					weightedPo.setWeight(
 							poMap.get(poCode).get()
 	//						poWeight.getWeightAmount()

@@ -56,18 +56,18 @@ public class ContainerPoItemStorageRow {
 	
 	@JsonIgnore
 	public AmountWithUnit getTotalWeight() {
-		AmountWithUnit totalAmount;
+		AmountWithUnit totalWeight;
 		Class<? extends Item> itemClass = itemWithUnit.getClazz();
-		if(MeasureUnit.NONE == itemWithUnit.getUnit().getMeasureUnit()) {
-			totalAmount = unitAmount.multiply(numberUnits);
+		if(MeasureUnit.NONE == itemWithUnit.getUnit().getMeasureUnit() && MeasureUnit.WEIGHT_UNITS.contains(unitAmount.getMeasureUnit())) {
+			totalWeight = unitAmount.multiply(numberUnits);
 		}
 		else if(MeasureUnit.WEIGHT_UNITS.contains(itemWithUnit.getUnit().getMeasureUnit())) {
-			totalAmount = itemWithUnit.getUnit().multiply(unitAmount.getAmount().multiply(numberUnits));
+			totalWeight = itemWithUnit.getUnit().multiply(unitAmount.getAmount().multiply(numberUnits));
 		}
 		else 
 		{
-			throw new IllegalStateException("The class can only apply to weight items");
+			return null;
 		}
-		return totalAmount;
+		return totalWeight;
 	}
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
-import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ItemWithUse;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -33,7 +33,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class ItemCountDTO extends SubjectDataDTO implements ListGroup<CountAmountDTO> {
 
-	private ItemDTO item;
+	private ItemWithUse item;
 	private MeasureUnit measureUnit;
 	private BigDecimal containerWeight;
 	private BigDecimal accessWeight;
@@ -44,7 +44,7 @@ public class ItemCountDTO extends SubjectDataDTO implements ListGroup<CountAmoun
 			Integer itemId, String itemValue, ProductionUse productionUse, Class<? extends Item> clazz,
 			MeasureUnit measureUnit, BigDecimal containerWeight, BigDecimal accessWeight) {
 		super(id, version, ordinal);
-		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
+		this.item = new ItemWithUse(itemId, itemValue, productionUse, clazz);
 		this.measureUnit = measureUnit;
 		this.containerWeight = containerWeight;
 		this.accessWeight = accessWeight;
@@ -55,7 +55,7 @@ public class ItemCountDTO extends SubjectDataDTO implements ListGroup<CountAmoun
 	 */
 	public ItemCountDTO(ItemCount itemCount) {
 		super(itemCount.getId(), itemCount.getVersion(), itemCount.getOrdinal());
-		this.item = new ItemDTO(itemCount.getItem());
+		this.item = new ItemWithUse(itemCount.getItem());
 		this.measureUnit = itemCount.getMeasureUnit();
 		this.containerWeight = itemCount.getContainerWeight();
 		this.accessWeight = itemCount.getAccessWeight();

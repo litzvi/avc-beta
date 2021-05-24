@@ -219,6 +219,10 @@ public class AmountWithUnit implements Cloneable {
 					"Convertion from " + denominator.getMeasureUnit() + " to " + numerator.getMeasureUnit() + " not supported");
 		return numerator.getAmount().divide(denominatorAmount, MathContext.DECIMAL64);
 	}
+	
+	public AmountWithUnit divide(BigDecimal denominator) {
+		return new AmountWithUnit(getAmount().divide(denominator, MathContext.DECIMAL64), getMeasureUnit());
+	}
 
 	public static BigDecimal percentageLoss(AmountWithUnit out, AmountWithUnit in) {
 		BigDecimal ratio = AmountWithUnit.divide(out, in);
@@ -244,18 +248,14 @@ public class AmountWithUnit implements Cloneable {
 				displayMeasureUnits != null && !displayMeasureUnits.isEmpty()) {
 			displayMeasureUnits.forEach(mu -> {
 				AmountWithUnit.convert(units, mu).ifPresent(e -> amounts.add(e));
-				if(MeasureUnit.NONE == item.getUnit().getMeasureUnit()) {
-				}
-				else {
+				if(MeasureUnit.NONE != item.getUnit().getMeasureUnit()) {
 					convert(item.getUnit().multiply(units.getAmount()), mu).ifPresent(e -> amounts.add(e));
 				}
 			});
 		}
 		else {
 			amounts.add(units);
-			if(MeasureUnit.NONE == item.getUnit().getMeasureUnit()) {
-			}
-			else {
+			if(MeasureUnit.NONE != item.getUnit().getMeasureUnit()) {
 				amounts.add(item.getUnit().multiply(units.getAmount()));
 			}
 		}
@@ -276,6 +276,7 @@ public class AmountWithUnit implements Cloneable {
 		AmountWithUnit.setScales(weights, MeasureUnit.SUM_DISPLAY_SCALE);
 		return weights;
 	}
+
 
 
 

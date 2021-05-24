@@ -25,6 +25,7 @@ import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
@@ -138,6 +139,11 @@ public class InventoryReports {
 	public List<FinishedProductInventoryRow> getFinishedProductInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDateTime pointOfTime) {
 		boolean checkProductionUses = (productionUses != null);
 		return getInventoryRepository().findFinishedProductInventoryRows(checkProductionUses, productionUses, itemGroup, pointOfTime);	
+	}
+	
+	public List<CashewBaggedInventoryRow> getCashewBaggedInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDateTime pointOfTime) {
+		boolean checkProductionUses = (productionUses != null);
+		return getInventoryRepository().findCashewBaggedInventoryRows(checkProductionUses, productionUses, itemGroup, pointOfTime);	
 	}
 	
 

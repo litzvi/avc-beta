@@ -80,6 +80,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.interfaces.ProductionProcessService;
 import com.avc.mis.beta.service.report.InventoryReports;
+import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 
@@ -460,14 +461,39 @@ public class QueryTest {
 					new ProductionUse[] {ProductionUse.PACKED, ProductionUse.ROAST, ProductionUse.ROAST, ProductionUse.TOFFEE}, 
 					LocalDateTime.now());
 //					LocalDateTime.of(2021, 5, 1, 0, 0));
+			finishedProductInventoryRows.forEach(row -> {System.out.println(row); 
+				System.out.println("boxes="+row.getBoxes());
+				System.out.println("lbs="+row.getWeightInLbs());
+			});
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw e;
 		}
-		finishedProductInventoryRows.forEach(row -> {System.out.println(row); 
-			System.out.println("boxes="+row.getBoxes());
-			System.out.println("lbs="+row.getWeightInLbs());
-		});
+		
+		
+		List<CashewBaggedInventoryRow> cashewBaggedInventoryRows = inventoryReports.getCashewBaggedInventoryRows(ItemGroup.PRODUCT, 
+					new ProductionUse[] {ProductionUse.PACKED}, 
+					LocalDateTime.now());
+		
+		try {
+			cashewBaggedInventoryRows.forEach(row -> {
+			System.out.print("item="+row.getItem().getValue()+", ");
+			System.out.print("brand="+row.getBrand()+", ");
+			System.out.print("code="+row.getCode()+", ");
+			System.out.print("type="+row.isWhole()+", ");
+			System.out.print("size="+row.getBagSize().getValue()+", ");
+			System.out.print("salt="+row.getSaltLevel()+", ");
+			System.out.print("box quanyity="+row.getBagsInBox()+", ");
+			System.out.print("boxes="+row.getBoxQuantity()+", ");
+			System.out.print("bags="+row.getBagQuantity()+", ");
+			System.out.print("lbs="+row.getWeightInLbs()+", ");
+			System.out.println();
+			});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 	}
 }

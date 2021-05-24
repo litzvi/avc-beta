@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ItemWithUse;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -26,7 +26,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class LoadedItemDTO extends SubjectDataDTO {
 	
-	private ItemDTO item; //change to itemDTO in order to get category
+	private ItemWithUse item; //change to itemDTO in order to get category
 	private PoCodeBasic poCode;
 	private AmountWithUnit declaredAmount;
 	
@@ -39,7 +39,7 @@ public class LoadedItemDTO extends SubjectDataDTO {
 			BigDecimal declaredAmount, MeasureUnit measureUnit,
 			String description, String remarks) {
 		super(id, version, ordinal);
-		this.item = new ItemDTO(itemId, itemValue, null, null, productionUse, clazz);
+		this.item = new ItemWithUse(itemId, itemValue, productionUse, clazz);
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);	
 		this.declaredAmount = new AmountWithUnit(declaredAmount.setScale(MeasureUnit.SCALE), measureUnit);
 		this.description = description;
@@ -58,7 +58,7 @@ public class LoadedItemDTO extends SubjectDataDTO {
 	}
 
 	public LoadedItemDTO(Integer id, Integer version, Integer ordinal,
-			ItemDTO item, PoCodeBasic poCode, AmountWithUnit declaredAmount,
+			ItemWithUse item, PoCodeBasic poCode, AmountWithUnit declaredAmount,
 			String description, String remarks) {
 		super(id, version, ordinal);
 		this.item = item;

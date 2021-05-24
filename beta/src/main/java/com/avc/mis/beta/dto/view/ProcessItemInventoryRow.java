@@ -68,7 +68,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 		this.processDate = processDate;
 		this.receiptDate = receiptDate;
 		this.weightCoefficient = weightCoefficient;
-		if(MeasureUnit.NONE == item.getUnit().getMeasureUnit()) {
+		if(MeasureUnit.NONE == item.getUnit().getMeasureUnit() && MeasureUnit.WEIGHT_UNITS.contains(defaultMeasureUnit)) {
 			this.amount = null;
 			this.weight = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
 		}

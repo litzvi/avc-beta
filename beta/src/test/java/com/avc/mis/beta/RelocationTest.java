@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.collection.CountAmount;
