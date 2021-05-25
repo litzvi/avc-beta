@@ -80,7 +80,9 @@ import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.interfaces.ProductionProcessService;
 import com.avc.mis.beta.service.report.InventoryReports;
+import com.avc.mis.beta.service.report.LoadingReports;
 import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
+import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 
@@ -110,9 +112,10 @@ public class QueryTest {
 	@Autowired WarehouseManagement warehouseManagement;
 	@Autowired ProductionProcessService productionProcesses;
 	@Autowired Loading loading;
+	@Autowired LoadingReports loadingReports;
 	@Autowired ContainerArrivals containerArrivals;
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void queryTest() {
 
@@ -407,9 +410,9 @@ public class QueryTest {
 		containerArrivalRows.forEach(i -> System.out.println(i));
 
 		List<ProcessRow> inventoryUsesTable = warehouseManagement.getInventoryUses();
-		if(inventoryUsesTable.isEmpty())
-			fail("No inventory uses to test");
-		else
+//		if(inventoryUsesTable.isEmpty())
+//			fail("No inventory uses to test");
+//		else
 			System.out.println(inventoryUsesTable.size());
 
 		Set<BasicValueEntity<Item>> availableItems =  warehouseManagement.findCashewAvailableInventoryItems();
@@ -481,7 +484,7 @@ public class QueryTest {
 			System.out.print("item="+row.getItem().getValue()+", ");
 			System.out.print("brand="+row.getBrand()+", ");
 			System.out.print("code="+row.getCode()+", ");
-			System.out.print("type="+row.isWhole()+", ");
+			System.out.print("whole?="+row.isWhole()+", ");
 			System.out.print("size="+row.getBagSize().getValue()+", ");
 			System.out.print("salt="+row.getSaltLevel()+", ");
 			System.out.print("box quanyity="+row.getBagsInBox()+", ");
@@ -495,5 +498,18 @@ public class QueryTest {
 			e.printStackTrace();
 			throw e;
 		}
+		
+		List<CashewExportReportRow> cashewExportReportRows = loadingReports.getCashewExportReportRows(null, null);
+		cashewExportReportRows.forEach(row -> {
+			System.out.print("item="+row.getItem().getValue()+", ");
+			System.out.print("whole?="+row.isWhole()+", ");
+			System.out.print("salt="+row.getSaltLevel()+", ");
+			System.out.print("boxes="+row.getBoxQuantity()+", ");
+			System.out.print("bags="+row.getBagQuantity()+", ");
+			System.out.print("lbs="+row.getWeightInLbs()+", ");
+			System.out.println(row);
+
+			System.out.println();
+		});
 	}
 }

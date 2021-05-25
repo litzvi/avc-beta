@@ -15,6 +15,7 @@ import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
 import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -40,7 +41,7 @@ public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDT
 	
 	
 	public ReceiptItemWithStorage(Integer id, Integer version, Integer ordinal,
-			Integer itemId, String itemValue, ProductionUse productionUse, 	BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> ItemClazz,
+			Integer itemId, String itemValue, ProductionUse productionUse, 	AmountWithUnit itemUnit, Class<? extends Item> ItemClazz,
 			MeasureUnit measureUnit,
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, BigDecimal numberUnits,
@@ -53,7 +54,7 @@ public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDT
 			Integer referencedOrder,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
 		this.receiptItem = new ReceiptItemDTO(id, version, ordinal,
-				itemId, itemValue, productionUse, itemUnitAmount, itemUnitMeasureUnit, ItemClazz, measureUnit,
+				itemId, itemValue, productionUse, itemUnit, ItemClazz, measureUnit,
 				groupName, description, remarks, tableView,
 				receivedUnits, orderMU, unitPrice, currency,
 				referencedOrder, orderItemId, orderItemVersion, extraRequested, extraMU);

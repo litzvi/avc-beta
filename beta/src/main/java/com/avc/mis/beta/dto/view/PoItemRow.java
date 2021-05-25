@@ -69,7 +69,7 @@ public class PoItemRow extends BasicValueDTO {
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String approvals,
 			Integer itemId, String itemValue, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, 
-			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
+			AmountWithUnit unit, Class<? extends Item> clazz,
 			Integer orderItemId, BigDecimal amount, MeasureUnit measureUnit, 
 			LocalDateTime contractDate, LocalDate deliveryDate, 
 			String defects, BigDecimal unitPrice, Currency currency, 
@@ -87,7 +87,7 @@ public class PoItemRow extends BasicValueDTO {
 			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
 		}
 		this.supplierName = supplierName;
-		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unitAmount, unitMeasureUnit, clazz);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unit, clazz);
 //		this.itemName = itemName;
 		this.orderItemId = orderItemId;
 		this.numUnits = new AmountWithUnit(amount, measureUnit);

@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service.report;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,7 +18,11 @@ import com.avc.mis.beta.dto.exportdoc.ExportInfo;
 import com.avc.mis.beta.dto.exportdoc.InventoryExportDoc;
 import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
 import com.avc.mis.beta.dto.view.LoadingRow;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
+import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
+import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -76,5 +81,7 @@ public class LoadingReports {
 		
 	}
 
-	
+	public List<CashewExportReportRow> getCashewExportReportRows(LocalDateTime startTime, LocalDateTime endTime) {
+		return getContainerLoadingRepository().findCashewExportReportRows(startTime, endTime);	
+	}
 }

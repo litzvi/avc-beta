@@ -3,18 +3,29 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.exportdoc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.exportdoc.ContainerPoItemStorageRow;
 import com.avc.mis.beta.dto.exportdoc.ExportInfo;
 import com.avc.mis.beta.dto.process.collection.LoadedItemDTO;
 import com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.view.LoadingRow;
+import com.avc.mis.beta.entities.enums.CashewGrade;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.SaltLevel;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.ContainerLoading;
+import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 
 /**
  * @author zvi
@@ -73,12 +84,12 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "ship.eta, cont.containerNumber, cont.sealNumber, cont.containerType) "
 		+ "from ContainerLoading p "
 			+ "left join p.poCode p_po_code "
-				+ "left join p.weightedPos w_po "
-					+ "left join w_po.poCode w_po_code "
-					+ "left join BasePoCode po_code "
-						+ "on (po_code = p_po_code or po_code = w_po_code) "
-						+ "left join po_code.contractType t "
-						+ "left join po_code.supplier s "
+			+ "left join p.weightedPos w_po "
+				+ "left join w_po.poCode w_po_code "
+				+ "left join BasePoCode po_code "
+					+ "on (po_code = p_po_code or po_code = w_po_code) "
+					+ "left join po_code.contractType t "
+					+ "left join po_code.supplier s "
 			+ "join p.shipmentCode shipment_code "
 				+ "join shipment_code.portOfDischarge pod "
 			+ "join p.arrival cont_arrival "
@@ -159,5 +170,43 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "where p.id = :processId "
 		+ "group by item.id, sf.unitAmount, pi.measureUnit ")
 	List<ContainerPoItemStorageRow> findLoadedStorages(int processId);
+
+	@Query("select new com.avc.mis.beta.service.report.row.CashewExportReportRow( "
+			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item.unit, type(item), item.brand, item.code, "
+			+ "item.whole, item.grade, item.saltLevel, item.numBags, "
+			+ "sum(i.numberUnits), pi.measureUnit, coalesce(w_po.weight, 1), "
+			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
+			+ "p.recordedTime, "
+			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, "
+			+ "ship.eta, cont.containerNumber, cont.sealNumber, cont.containerType, p.remarks) "
+		+ "from ContainerLoading p "
+			+ "join p.shipmentCode shipment_code "
+				+ "join shipment_code.portOfDischarge pod "
+			+ "join p.arrival cont_arrival "
+				+ "join cont_arrival.containerDetails cont "
+				+ "join cont_arrival.shipingDetails ship "
+			+ "join p.lifeCycle lc "
+			+ "join p.usedItemGroups g "
+				+ "join g.usedItems i "
+					+ "join i.storage sf "
+						+ "join sf.processItem pi "
+							+ "join pi.item item "
+//							+ "join CashewItem item "
+//								+ "on pi.item = item "
+//								+ "join item.unit item_unit "
+							+ "join pi.process used_p "
+								+ "left join used_p.poCode p_po_code "
+								+ "left join used_p.weightedPos w_po "
+									+ "left join w_po.poCode w_po_code "
+								+ "left join PoCode po_code "
+									+ "on (po_code = p_po_code or po_code = w_po_code) "
+									+ "left join po_code.contractType t "
+									+ "left join po_code.supplier s "
+		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and type(item) = com.avc.mis.beta.entities.item.CashewItem "
+			+ "and (:startTime is null or p.recordedTime >= :startTime) "
+			+ "and (:endTime is null or p.recordedTime <= :endTime) "
+		+ "group by item, po_code, pi.measureUnit ")	
+	List<CashewExportReportRow> findCashewExportReportRows(LocalDateTime startTime, LocalDateTime endTime);
 
 }

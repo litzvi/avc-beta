@@ -35,13 +35,13 @@ public class ItemWithUnitDTO extends ValueDTO {
 	
 	public ItemWithUnitDTO(Integer id, String value, MeasureUnit measureUnit, 
 			ItemGroup group, ProductionUse productionUse, 
-			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz) {
+			AmountWithUnit unit, Class<? extends Item> clazz) {
 		super(id);
 		this.value = value;
 		this.measureUnit = measureUnit;
 		this.group = group;
 		this.productionUse = productionUse;
-		this.unit = new AmountWithUnit(unitAmount, unitMeasureUnit);
+		this.unit = unit;
 		this.clazz = clazz;
 	}
 	

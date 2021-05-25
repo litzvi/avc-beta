@@ -53,7 +53,7 @@ public class ReceiptItemRow extends BasicDTO {
 	public ReceiptItemRow(@NonNull Integer id, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			Integer itemId, String itemValue, MeasureUnit itemeasureUnit, ItemGroup itemGroup, 
-			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
+			AmountWithUnit unit, Class<? extends Item> clazz,
 			BigDecimal orderAmount, MeasureUnit orderMU, 
 			BigDecimal receivedOrderAmount, MeasureUnit receivedOrderMU, 			
 			LocalDateTime receiptDate, ProcessStatus status,
@@ -62,7 +62,7 @@ public class ReceiptItemRow extends BasicDTO {
 		super(id);
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
-		this.item = new ItemWithUnitDTO(itemId, itemValue, itemeasureUnit, itemGroup, null, unitAmount, unitMeasureUnit, clazz);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, itemeasureUnit, itemGroup, null, unit, clazz);
 //		this.itemName = itemName;
 
 		this.receivedOrderUnits = new AmountWithUnit(receivedOrderAmount, receivedOrderMU);

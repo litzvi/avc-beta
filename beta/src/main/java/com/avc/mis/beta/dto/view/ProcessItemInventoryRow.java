@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -56,13 +57,13 @@ public class ProcessItemInventoryRow extends BasicDTO {
 	public ProcessItemInventoryRow(Integer id, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			ItemGroup itemGroup, ProductionUse productionUse, 
-			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
+			AmountWithUnit unit, Class<? extends Item> clazz,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			LocalDateTime processDate, LocalDateTime receiptDate,
 			BigDecimal weightCoefficient, BigDecimal amount, 
 			String warehouses) {
 		super(id);
-		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unitAmount, unitMeasureUnit, clazz);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unit, clazz);
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
 		this.processDate = processDate;
@@ -77,12 +78,13 @@ public class ProcessItemInventoryRow extends BasicDTO {
 			this.amount.setScale(MeasureUnit.SCALE);
 			this.weight = new AmountWithUnit(
 					amount
-					.multiply(unitAmount, MathContext.DECIMAL64)
+					.multiply(unit.getAmount(), MathContext.DECIMAL64)
 					.multiply(this.weightCoefficient, MathContext.DECIMAL64), 
-					unitMeasureUnit);
+					unit.getMeasureUnit());
 		}
 		else {
-			throw new IllegalStateException("The class can only apply to weight items");
+			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
+			this.weight = null;
 		}
 				
 		if(warehouses != null) {
@@ -109,9 +111,15 @@ public class ProcessItemInventoryRow extends BasicDTO {
 			return null;
 		}
 		
-		return poInventoryRows.stream()
+		Optional<AmountWithUnit> optionalWeight = poInventoryRows.stream()
 				.map(pi -> pi.getWeight())
-				.reduce(AmountWithUnit::add).get();
+				.filter(weight -> weight != null)
+				.reduce(AmountWithUnit::add);
+		
+		if(optionalWeight.isPresent()) {
+			return optionalWeight.get();
+		}
+		return null;
 	}
 	
 	public static AmountWithUnit getTotalAmount(List<ProcessItemInventoryRow> poInventoryRows) {

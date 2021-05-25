@@ -46,15 +46,11 @@ public class ItemInventoryRow extends BasicDTO {
 		this.poInventoryRows = poInventoryRows;
 		this.totalWeight = ProcessItemInventoryRow.getTotalWeight(poInventoryRows);
 		
-		if(MeasureUnit.NONE == item.getUnit().getMeasureUnit()) {
+		if(MeasureUnit.NONE == item.getUnit().getMeasureUnit() && MeasureUnit.WEIGHT_UNITS.contains(item.getMeasureUnit())) {
 			this.totalAmount = null;
 		}
-		else if(MeasureUnit.WEIGHT_UNITS.contains(item.getUnit().getMeasureUnit())){
+		else {
 			this.totalAmount = ProcessItemInventoryRow.getTotalAmount(poInventoryRows);
-		}
-		else 
-		{
-			throw new IllegalStateException("The class can only apply to weight items");
 		}
 	}
 	

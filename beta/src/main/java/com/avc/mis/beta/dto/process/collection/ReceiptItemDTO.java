@@ -48,14 +48,14 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 	
 	public ReceiptItemDTO(Integer id, Integer version, Integer ordinal,
 			Integer itemId, String itemValue, ProductionUse productionUse, 
-			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
+			AmountWithUnit unit, Class<? extends Item> clazz,
 			MeasureUnit measureUnit,
 			/* Integer poCodeId, ContractTypeCode contractTypeCode, String supplierName, */
 			String groupName, String description, String remarks, boolean tableView,
 			BigDecimal orderUnits, MeasureUnit orderMU, BigDecimal unitPrice, Currency currency,
 			Integer referencedOrder,
 			Integer orderItemId, Integer orderItemVersion, BigDecimal extraRequested, MeasureUnit extraMU) {
-		super(id, version, ordinal, itemId, itemValue, productionUse, unitAmount, unitMeasureUnit, clazz, 
+		super(id, version, ordinal, itemId, itemValue, productionUse, unit, clazz, 
 				measureUnit,
 				/* poCodeId, contractTypeCode, supplierName, */groupName, description, remarks, tableView);
 		if(orderUnits != null) {

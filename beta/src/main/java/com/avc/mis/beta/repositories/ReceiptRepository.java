@@ -21,7 +21,7 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 	
 	@Query("select new com.avc.mis.beta.dto.query.ReceiptItemWithStorage( "
 			+ " i.id, i.version, i.ordinal, item.id, item.value, item.productionUse, "
-			+ "item_unit.amount, item_unit.measureUnit, type(item), sf_group.measureUnit, "
+			+ "item_unit, type(item), sf_group.measureUnit, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "sf.unitAmount, sf.numberUnits, "
 //			+ "sf.accessWeight, "
@@ -50,7 +50,7 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 
 	@Query("select new com.avc.mis.beta.dto.view.ReceiptItemRow( "
 				+ "r.id, po_code.id, po_code.code, ct.code, ct.suffix, s.name,  "
-				+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit.amount, item_unit.measureUnit, type(item), "
+				+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit, type(item), "
 				+ "units.amount, units.measureUnit, "
 				+ "ro_units.amount, ro_units.measureUnit, "
 				+ "r.recordedTime, lc.processStatus, "

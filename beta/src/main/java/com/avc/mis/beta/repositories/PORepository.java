@@ -151,7 +151,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, "
 			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(coalesce(user.username, ''), ': ', coalesce(approval.decision, '')))), "
-			+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit, type(item), "
 			+ "oi.id, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency, "
 //			+ "SUM( "

@@ -17,6 +17,7 @@ import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
@@ -62,13 +63,13 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 	 */
 	public ProcessItemInventory(Integer id, 
 			Integer itemId, String itemValue, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, 
-			BigDecimal unitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> clazz,
+			AmountWithUnit unit, Class<? extends Item> clazz,
 			MeasureUnit processItemMeasureUnit, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String poCodes, String suppliers,
 			LocalDateTime processDate, LocalDateTime receiptDate, boolean tableView) {
 		super(id);
-		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unitAmount, itemUnitMeasureUnit, clazz);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unit, clazz);
 		this.measureUnit = processItemMeasureUnit;
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		if(poCodes != null)

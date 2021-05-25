@@ -27,7 +27,7 @@ public class InventoryExportDoc {
 		if(getLoadedTotals() != null) {
 			Optional<AmountWithUnit> optionalWeight = loadedTotals.stream()
 					.map(i -> i.getTotal())
-					.filter(j -> MeasureUnit.WEIGHT_UNITS.contains(j.getMeasureUnit()))
+					.filter(j -> j != null && MeasureUnit.WEIGHT_UNITS.contains(j.getMeasureUnit()))
 					.reduce(AmountWithUnit::add);
 			
 			if(optionalWeight.isPresent()) {

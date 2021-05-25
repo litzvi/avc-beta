@@ -47,11 +47,11 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 	
 	public ProcessItemDTO(Integer id, Integer version, Integer ordinal, 
 			Integer itemId, String itemValue, ProductionUse productionUse, 
-			BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> clazz,
+			AmountWithUnit itemUnit, Class<? extends Item> clazz,
 			MeasureUnit measureUnit,
 			String groupName, String description, String remarks, boolean tableView) {
 		super(id, version, ordinal, groupName, tableView);
-		this.item = new ItemWithUnitDTO(itemId, itemValue, null, null, productionUse, itemUnitAmount, itemUnitMeasureUnit, clazz);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, null, null, productionUse, itemUnit, clazz);
 		this.measureUnit = measureUnit;
 		this.description = description;
 		this.remarks = remarks;

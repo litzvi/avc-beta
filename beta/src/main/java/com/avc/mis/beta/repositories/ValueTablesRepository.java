@@ -33,7 +33,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 	
 	@Query("select new com.avc.mis.beta.dto.values.ItemWithUnitDTO("
 				+ "i.id, i.value, i.measureUnit, i.itemGroup, i.productionUse, "
-				+ "u.amount, u.measureUnit, type(i)) "
+				+ "u, type(i)) "
 			+ "from Item i "
 				+ "join i.unit u "
 			+ "where (i.itemGroup = :itemGroup or :itemGroup is null) "
@@ -85,7 +85,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 
 	@Query("select new com.avc.mis.beta.dto.values.ItemWithUnitDTO("
 			+ "i.id, i.value, i.measureUnit, i.itemGroup, i.productionUse, "
-			+ "u.amount, u.measureUnit, type(i)) "
+			+ "u, type(i)) "
 		+ "from StorageBase s "
 			+ "join s.processItem pi "
 				+ "join pi.item i "

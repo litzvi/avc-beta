@@ -129,7 +129,7 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 	@Query("select new com.avc.mis.beta.dto.query.ProcessItemWithStorage( "
 			+ " i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.productionUse, "
-			+ "item_unit.amount, item_unit.measureUnit, type(item), sf_group.measureUnit, "
+			+ "item_unit, type(item), sf_group.measureUnit, "
 //			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, poCode.display, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "sf.unitAmount, sf.numberUnits, "

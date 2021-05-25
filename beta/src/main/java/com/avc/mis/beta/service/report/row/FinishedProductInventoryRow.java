@@ -47,14 +47,14 @@ public class FinishedProductInventoryRow {
 //			String item, 
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			ItemGroup itemGroup, ProductionUse productionUse, 
-			BigDecimal unitAmount, MeasureUnit unitMeasureUnit, Class<? extends Item> clazz,
+			AmountWithUnit unit, Class<? extends Item> clazz,
 			String poCodes, 
 			String receiptDates, String processDates, 
 			BigDecimal amount, MeasureUnit measureUnit,
 			String warehouses, ProcessStatus status) {
 		super();
 //		this.item = item;
-		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unitAmount, unitMeasureUnit, clazz);
+		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unit, clazz);
 		this.poCodes = Stream.of(poCodes.split(",")).toArray(String[]::new);
 		this.receiptDates = Stream.of(receiptDates.split(",")).toArray(String[]::new);
 		this.processDates = Stream.of(processDates.split(",")).toArray(String[]::new);

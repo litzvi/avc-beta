@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -34,7 +35,7 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 	 * that fetches process item, process and storage details.
 	 */
 	public ProcessItemWithStorage(Integer id, Integer version, Integer ordinal,
-			Integer itemId, String itemValue, ProductionUse productionUse, BigDecimal itemUnitAmount, MeasureUnit itemUnitMeasureUnit, Class<? extends Item> ItemClazz,
+			Integer itemId, String itemValue, ProductionUse productionUse, AmountWithUnit itemUnit, Class<? extends Item> ItemClazz,
 			MeasureUnit measureUnit, 
 			Integer storageId, Integer storageVersion, Integer storageOrdinal,
 			BigDecimal unitAmount, BigDecimal numberUnits, //BigDecimal accessWeight,
@@ -42,7 +43,7 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 			Class<? extends Storage> clazz,
 			String groupName, String description, String remarks, boolean tableView) {
 		this.processItem = new ProcessItemDTO(id, version, ordinal,
-				itemId, itemValue, productionUse, itemUnitAmount, itemUnitMeasureUnit, ItemClazz, 
+				itemId, itemValue, productionUse, itemUnit, ItemClazz, 
 				measureUnit, groupName, description, remarks, tableView);
 		this.storage = new StorageDTO(storageId, storageVersion, storageOrdinal,
 				unitAmount, numberUnits,

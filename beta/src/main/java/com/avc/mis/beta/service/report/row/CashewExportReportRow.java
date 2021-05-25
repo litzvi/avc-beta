@@ -1,0 +1,65 @@
+/**
+ * 
+ */
+package com.avc.mis.beta.service.report.row;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.stream.Stream;
+
+import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.CashewGrade;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.SaltLevel;
+import com.avc.mis.beta.entities.enums.ShippingContainerType;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
+
+import lombok.Value;
+
+/**
+ * @author zvi
+ *
+ */
+@Value
+public class CashewExportReportRow extends CashewBaggedInventoryRow {
+
+
+	String poCode;
+	LocalDateTime processDate;
+	
+	ShipmentCodeBasic shipmentCode;
+	LocalDate eta;
+	String containerNumber;
+	String sealNumber;
+	String containerSize;
+	
+	String remarks;
+
+	public CashewExportReportRow(Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, ItemGroup itemGroup,
+			ProductionUse productionUse, AmountWithUnit unit, Class<? extends Item> clazz, 
+			String brand, String code, boolean whole, CashewGrade grade,
+			SaltLevel saltLevel, int numBags, BigDecimal amount, MeasureUnit measureUnit, BigDecimal weightCoefficient,
+			String poCode, LocalDateTime processDate, 
+			Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue, 
+			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType, String remarks) {
+		super(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unit, clazz,
+				brand, code, whole, grade, saltLevel, numBags, amount, measureUnit, weightCoefficient);
+		this.poCode = poCode;
+		this.processDate = processDate;
+		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, shipmentCodeCode, portOfDischargeCode, portOfDischargeValue);
+		this.eta = eta;
+		this.containerNumber = containerNumber;
+		this.sealNumber = sealNumber;
+		if(containerType != null)
+			this.containerSize = containerType.toString();
+		else
+			this.containerSize = null;
+		this.remarks = remarks;
+	}
+	
+}

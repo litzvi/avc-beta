@@ -123,7 +123,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventory( "
 			+ "pi.id, "
-			+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit, type(item), "
 			+ "pi.measureUnit, "
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
@@ -224,7 +224,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	 */
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventoryRow( "
 			+ "pi.id, "
-			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item_unit, type(item), "
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "p.recordedTime, r.recordedTime, "
 			+ "coalesce(w_po.weight, 1), "
@@ -565,7 +565,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	 */
 	@Query("select new com.avc.mis.beta.service.report.row.FinishedProductInventoryRow( "
 //			+ "item.value, "
-			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item_unit, type(item), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', r.recordedTime)), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', p.recordedTime)), "
@@ -645,7 +645,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	 * LIST OF BAGGED CASHEW INVENTORY ITEMS (without po) FOR REPORT. (Used for bagged product inventory)
 	 */
 	@Query("select new com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow( "
-			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item_unit, type(item), "
 			+ "item.brand, item.code, item.whole, item.grade, item.saltLevel, item.numBags, "
 			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
 				+ " * "
