@@ -85,7 +85,7 @@ public class ProductionProcesses implements ProductionProcessService {
 	
 	@Override
 	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
-		return getProductionProcessReports().getProcessesByTypeAndPoCode(ProductionProcess.class, processName, poCodeId, null, true);
+		return getProductionProcessReports().getProductionProcessesByTypeAndPoCode(processName, poCodeId);
 	}
 
 }

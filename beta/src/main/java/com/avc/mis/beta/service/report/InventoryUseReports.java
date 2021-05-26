@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service.report;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,16 @@ public class InventoryUseReports {
 		return getInventoryUses(null);
 	}
 	
+	public List<ProcessRow> getInventoryUses(LocalDateTime startTime, LocalDateTime endTime) {
+		return getInventoryUses(null, startTime, endTime);
+	}
+	
 	public List<ProcessRow> getInventoryUses(Integer poCodeId) {
-		return getProcessReportsReader().getProcessesByTypeAndPoCode(InventoryUse.class, ProcessName.GENERAL_USE, poCodeId, null, true);
+		return getInventoryUses(poCodeId, null, null);
+	}
+	
+	public List<ProcessRow> getInventoryUses(Integer poCodeId, LocalDateTime startTime, LocalDateTime endTime) {
+		return getProcessReportsReader().getProcessesByTypeAndPoCode(InventoryUse.class, ProcessName.GENERAL_USE, poCodeId, null, true, startTime, endTime);
 	}
 	
 }

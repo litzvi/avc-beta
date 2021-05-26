@@ -274,7 +274,7 @@ public class WarehouseManagement {
 	}
 	
 	public List<ProcessRow> getStorageTransfersByPoCode(Integer poCodeId) {
-		return getProcessReportsReader().getProcessesByTypeAndPoCode(StorageTransfer.class, ProcessName.STORAGE_TRANSFER, poCodeId, null, true);
+		return getProcessReportsReader().getProcessesByTypeAndPoCode(StorageTransfer.class, ProcessName.STORAGE_TRANSFER, poCodeId, null, true, null, null);
 	}
 
 	

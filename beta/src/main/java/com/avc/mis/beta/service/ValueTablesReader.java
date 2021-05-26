@@ -22,6 +22,7 @@ import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
@@ -214,8 +215,8 @@ public class ValueTablesReader {
 		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, productionUse, packageType.ordinal());
 	}
 	
-	public List<CashewItemDTO> getCashewItems(ItemGroup itemGroup, ProductionUse productionUse, PackageType packageType, int minBagsInBox) {
-		return getValueTablesRepository().findCashewItems(itemGroup, productionUse, packageType.ordinal(), minBagsInBox);
+	public List<CashewItemDTO> getCashewItems(ItemGroup itemGroup, ProductionUse productionUse, CashewGrade grade, PackageType packageType) {
+		return getValueTablesRepository().findCashewItems(itemGroup, productionUse, grade, packageType.ordinal());
 	}
 	
 	/**

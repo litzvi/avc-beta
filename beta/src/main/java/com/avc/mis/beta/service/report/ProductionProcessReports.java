@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service.report;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,11 +42,27 @@ public class ProductionProcessReports {
 	@Autowired private RelocationRepository relocationRepository;
 
 	public List<ProcessRow> getProductionProcessesByType(ProcessName processName) {
-		return getProductionProcessesByTypeAndPoCode(processName, null);
+		return getProductionProcessesByType(processName, null, null);
+	}
+	
+	public List<ProcessRow> getProductionProcessesByType(ProcessName processName, 
+			LocalDateTime startTime, LocalDateTime endTime) {
+		return getProductionProcessesByTypeAndPoCode(processName, null, startTime, endTime);
 	}
 	
 	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId) {
-		return getProcessesByTypeAndPoCode(ProductionProcess.class, processName, poCodeId, null, true);
+		return getProductionProcessesByTypeAndPoCode(processName, poCodeId, null, null);
+	}
+	
+	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId, 
+			LocalDateTime startTime, LocalDateTime endTime) {
+		return getProcessesByTypeAndPoCode(ProductionProcess.class, processName, poCodeId, null, true, startTime, endTime);
+	}
+	
+	public <T extends PoProcess> List<ProcessRow> getProcessesByTypeAndPoCode(
+			@NonNull Class<T> processClass, @NonNull ProcessName processName, 
+			Integer poCodeId, ProductionFunctionality functionality, boolean cancelled) {
+		return getProcessesByTypeAndPoCode(processClass, processName, poCodeId, functionality, cancelled, null, null);		
 	}
 	
 	/**
@@ -54,8 +71,9 @@ public class ProductionProcessReports {
 	 */
 	public <T extends PoProcess> List<ProcessRow> getProcessesByTypeAndPoCode(
 			@NonNull Class<T> processClass, @NonNull ProcessName processName, 
-			Integer poCodeId, ProductionFunctionality functionality, boolean cancelled) {
-		List<ProcessRow> processRows = getTransactionProcessRepository().findProcessByType(processName, poCodeId, functionality, cancelled);
+			Integer poCodeId, ProductionFunctionality functionality, boolean cancelled, 
+			LocalDateTime startTime, LocalDateTime endTime) {
+		List<ProcessRow> processRows = getTransactionProcessRepository().findProcessByType(processName, poCodeId, functionality, cancelled, startTime, endTime);
 		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = null;
 		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = null;

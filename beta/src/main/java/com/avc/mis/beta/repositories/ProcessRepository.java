@@ -1,5 +1,6 @@
 package com.avc.mis.beta.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -69,9 +70,12 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
 			+ "and (p_line.productionFunctionality = :functionality or :functionality is null) "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
+			+ "and (:startTime is null or p.recordedTime >= :startTime) "
+			+ "and (:endTime is null or p.recordedTime <= :endTime) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
-	List<ProcessRow> findProcessByType(@NonNull ProcessName processName, Integer poCodeId, ProductionFunctionality functionality, boolean cancelled);
+	List<ProcessRow> findProcessByType(@NonNull ProcessName processName, Integer poCodeId, ProductionFunctionality functionality, boolean cancelled,
+			LocalDateTime startTime, LocalDateTime endTime);
 		
 	@Query("select new com.avc.mis.beta.dto.query.UsedItemWithGroup( "
 			+ "g.id, g.version, g.ordinal, g.groupName, g.tableView, "
