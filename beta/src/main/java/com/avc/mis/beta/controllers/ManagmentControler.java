@@ -4,6 +4,46 @@
  */
 package com.avc.mis.beta.controllers;
 
+import com.avc.mis.beta.dto.basic.UserBasic;
+import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.data.UserDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.dto.view.UserRow;
+import com.avc.mis.beta.entities.ValueEntity;
+import com.avc.mis.beta.entities.data.Person;
+import com.avc.mis.beta.entities.data.ProcessManagement;
+import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.ManagementType;
+import com.avc.mis.beta.entities.enums.PackageType;
+import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.Role;
+import com.avc.mis.beta.entities.item.CashewItem;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.values.Bank;
+import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.values.CashewStandard;
+import com.avc.mis.beta.entities.values.City;
+import com.avc.mis.beta.entities.values.CompanyPosition;
+import com.avc.mis.beta.entities.values.ContractType;
+import com.avc.mis.beta.entities.values.Country;
+import com.avc.mis.beta.entities.values.ProductionLine;
+import com.avc.mis.beta.entities.values.ShippingPort;
+import com.avc.mis.beta.entities.values.SupplyCategory;
+import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.service.ProcessInfoReader;
+import com.avc.mis.beta.service.ProcessInfoWriter;
+import com.avc.mis.beta.service.Users;
+import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.ValueWriter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -23,42 +63,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.avc.mis.beta.dto.data.UserDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.DataObjectWithName;
-import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.UserBasic;
-import com.avc.mis.beta.dto.view.UserRow;
-import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.data.PaymentAccount;
-import com.avc.mis.beta.entities.data.ProcessManagement;
-import com.avc.mis.beta.entities.data.UserEntity;
-import com.avc.mis.beta.entities.enums.ManagementType;
-import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.Role;
-import com.avc.mis.beta.entities.values.Bank;
-import com.avc.mis.beta.entities.values.BankBranch;
-import com.avc.mis.beta.entities.values.CashewStandard;
-import com.avc.mis.beta.entities.values.City;
-import com.avc.mis.beta.entities.values.CompanyPosition;
-import com.avc.mis.beta.entities.values.ContractType;
-import com.avc.mis.beta.entities.values.Country;
-import com.avc.mis.beta.entities.values.Item;
-import com.avc.mis.beta.entities.values.ProductionLine;
-import com.avc.mis.beta.entities.values.SupplyCategory;
-import com.avc.mis.beta.entities.values.Warehouse;
-import com.avc.mis.beta.service.ProcessInfoReader;
-import com.avc.mis.beta.service.ProcessInfoWriter;
-import com.avc.mis.beta.service.Users;
-import com.avc.mis.beta.service.ValueTablesReader;
-import com.avc.mis.beta.service.ValueWriter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Data;
 
@@ -167,7 +171,7 @@ public class ManagmentControler {
 	}
 	
 	@GetMapping(value="/getAllPersons")
-	public List<DataObjectWithName> getAllPersons() {
+	public List<DataObjectWithName<Person>> getAllPersons() {
 		return usersDao.getPersonsBasic();
 	}
 	
@@ -200,11 +204,46 @@ public class ManagmentControler {
 	}
 	
 	
+	@GetMapping(value="/getItemsSetupTable/{setupTable}")
+	public List<ItemWithUnitDTO> getItemsSetupTable(@PathVariable("setupTable") String setupTable) {
+		ItemGroup itemGroup;
+		if(setupTable.startsWith("C")) {
+			itemGroup = ItemGroup.PRODUCT;
+		} else if(setupTable.startsWith("G")) {
+			itemGroup = ItemGroup.GENERAL;
+		} else {
+			itemGroup = ItemGroup.WASTE;
+		}
+		if(setupTable.endsWith("packed")) {
+			return refeDao.getItems(itemGroup, null, PackageType.PACKED);
+		} else {
+			return refeDao.getItems(itemGroup, null, PackageType.BULK);
+		}
+	}
+	
+	@PostMapping(value="/addNewItem/{setupTable}")
+	public void addNewItem(@PathVariable("setupTable") String setupTable, @RequestBody JsonNode newOne) throws JsonMappingException, JsonProcessingException {
+		ItemGroup itemGroup;
+		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		if(setupTable.startsWith("C")) {
+			CashewItem packed = mapper.readValue(newOne.toString(), CashewItem.class);
+			packed.setItemGroup(ItemGroup.PRODUCT);
+			refeDaoWrite.addCashewItem(packed);
+			return;
+		} else if(setupTable.startsWith("G")) {
+			itemGroup = ItemGroup.GENERAL;
+		} else {
+			itemGroup = ItemGroup.WASTE;
+		}
+		Item normalItem = mapper.readValue(newOne.toString(), Item.class);
+		normalItem.setItemGroup(itemGroup);
+		refeDaoWrite.addItem(normalItem);
+	}
+	
 	
 	@PostMapping(value="/addNewSetup/{setupTable}")
 	public void addNewSetup(@PathVariable("setupTable") String setupTable, @RequestBody JsonNode newOne) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		System.out.println(setupTable);
 		switch (setupTable) {
 			case "Countries":
 				refeDaoWrite.addCountry(mapper.readValue(newOne.toString(), Country.class));
@@ -227,9 +266,6 @@ public class ManagmentControler {
 			case "CompanyPositions":
 				refeDaoWrite.addCompanyPosition(mapper.readValue(newOne.toString(), CompanyPosition.class));
 				break;
-			case "Items":
-				refeDaoWrite.addItem(mapper.readValue(newOne.toString(), Item.class));
-				break;
 			case "ContractTypes":
 				refeDaoWrite.addContractType(mapper.readValue(newOne.toString(), ContractType.class));
 				break;
@@ -241,8 +277,10 @@ public class ManagmentControler {
 				break;
 			case "CashewStandards":
 				refeDaoWrite.addCashewStandard(mapper.readValue(newOne.toString(), CashewStandard.class));
-			case "ShippingPort":
-//				refeDaoWrite.addShippingPort
+				break;
+			case "ShippingPorts":
+				refeDaoWrite.addShippingPort(mapper.readValue(newOne.toString(), ShippingPort.class));
+				break;
 			default:
 				break;
 		}
@@ -254,12 +292,56 @@ public class ManagmentControler {
 		return refeDaoWrite.edit(mapper.readValue(editOne.toString(), setTable(setupTable, editOne)));
 	}
 	
+	@PutMapping(value="/editItem/{setupTable}")
+	public ValueEntity editItem(@PathVariable("setupTable") String setupTable, @RequestBody JsonNode editOne) throws JsonMappingException, JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		ItemGroup itemGroup;
+		if(setupTable.startsWith("C")) {
+			itemGroup = ItemGroup.PRODUCT;
+		} else if(setupTable.startsWith("G")) {
+			itemGroup = ItemGroup.GENERAL;
+		} else {
+			itemGroup = ItemGroup.WASTE;
+		}
+//		if(setupTable.endsWith("packed")) {
+//			PackedItem packed = mapper.readValue(editOne.toString(), PackedItem.class);
+//			packed.setItemGroup(itemGroup);
+//			return refeDaoWrite.edit(packed);
+//		} else {
+//			BulkItem packed = mapper.readValue(editOne.toString(), BulkItem.class);
+//			packed.setItemGroup(itemGroup);
+//			return refeDaoWrite.edit(packed);
+//		}
+		if(setupTable.startsWith("C")) { 
+			itemGroup = ItemGroup.PRODUCT; 
+			CashewItem cashewItem = mapper.readValue(editOne.toString(), CashewItem.class);
+			cashewItem.setItemGroup(itemGroup); 
+			return refeDaoWrite.edit(cashewItem);
+		} else if(setupTable.startsWith("G")) { 
+			itemGroup = ItemGroup.GENERAL; 
+		} else { 
+			itemGroup = ItemGroup.WASTE; 
+		} 
+		Item item = mapper.readValue(editOne.toString(), Item.class); 
+		item.setItemGroup(itemGroup); 
+		return refeDaoWrite.edit(item);
+	}
+	
 	@DeleteMapping(value="/deleteSetup/{setupTable}")
-	public void deleteSetup(@PathVariable("setupTable") String setupTable, @RequestBody JsonNode deleteOne) throws JsonMappingException, JsonProcessingException {
+	public void deleteSetup(@PathVariable("setupTable") String setupTable, @RequestBody JsonNode deleteOne) {
 		refeDaoWrite.remove(setTable(setupTable, deleteOne), deleteOne.get("id").asInt());
 	}
 	
-	private Class<? extends ValueEntity> setTable(String setupTable, JsonNode newOne) throws JsonMappingException, JsonProcessingException {
+	@DeleteMapping(value="/deleteItem/{setupTable}")
+	public void deleteItem(@PathVariable("setupTable") String setupTable, @RequestBody JsonNode deleteOne) {
+//		if(setupTable.endsWith("packed")) {
+//			refeDaoWrite.remove(PackedItem.class, deleteOne.get("id").asInt());
+//		} else {
+			refeDaoWrite.remove(Item.class, deleteOne.get("id").asInt());
+//		}
+	}
+	
+	private Class<? extends ValueEntity> setTable(String setupTable, JsonNode newOne) {
 		
 		switch (setupTable) {
 			case "Countries":
@@ -283,9 +365,6 @@ public class ManagmentControler {
 			case "CompanyPositions":
 				return CompanyPosition.class;
 //				return mapper.readValue(newOne.toString(), CompanyPosition.class);
-			case "Items":
-				return Item.class;
-//				return mapper.readValue(newOne.toString(), Item.class);
 			case "ContractTypes":
 				return ContractType.class;
 //				return mapper.readValue(newOne.toString(), ContractType.class);
@@ -297,6 +376,8 @@ public class ManagmentControler {
 //				return mapper.readValue(newOne.toString(), ProductionLine.class);
 			case "CashewStandards":
 				return CashewStandard.class;
+			case "ShippingPorts":
+				return ShippingPort.class;
 		}
 		return null;
 	}
@@ -312,8 +393,20 @@ public class ManagmentControler {
 	}
 	
 	@RequestMapping("/getCashewItems")
-	public List<ItemDTO> getCashewItems() {
-		return refeDao.getCashewItemsBasic();
+	public List<ItemWithUnitDTO> getCashewItems() {
+		return refeDao.getItemsByGroup(ItemGroup.PRODUCT);
+	}
+	
+	
+	@DeleteMapping(value="/removeAllProcesses/{id}")
+	public ResponseEntity<?> removeAllProcesses(@PathVariable("id") int poCode) {
+		processInfoWriter.removeAllProcesses(poCode);
+		return ResponseEntity.ok().build();
+	}
+	@DeleteMapping(value="/removeProcess/{id}")
+	public ResponseEntity<?> removeProcess(@PathVariable("id") int processId) {
+		processInfoWriter.removeProcess(processId);
+		return ResponseEntity.ok().build();
 	}
 	
 	@Data

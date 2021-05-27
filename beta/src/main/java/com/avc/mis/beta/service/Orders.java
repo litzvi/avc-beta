@@ -137,36 +137,31 @@ public class Orders {
 	
 	
 	public List<PoItemRow> findOpenCashewOrderItems() {
-		List<PoItemRow> poItemRows = getOrderReports().getOrdersByType(ProcessName.CASHEW_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
-		return poItemRows;
+		return getOrderReports().findOpenCashewOrderItems();
 	}
 	
 	public List<PoItemRow> findAllCashewOrderItems() {
-		return getOrderReports().getOrdersByType(ProcessName.CASHEW_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false);
+		return getOrderReports().findAllCashewOrderItems();
 	}
 	
 	public List<PoItemRow> findAllGeneralOrderItems() {
-		return getOrderReports().getOrdersByType(ProcessName.GENERAL_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false);
+		return getOrderReports().findAllGeneralOrderItems();
 	}
 	
 	public List<PoItemRow> findAllCashewOrderItemsHistory() {
-		return getOrderReports().getOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null, null, false);
+		return getOrderReports().findAllCashewOrderItemsHistory();
 	}
 	
 	public List<PoItemRow> findAllGeneralOrderItemsHistory() {
-		return getOrderReports().getOrdersByType(ProcessName.GENERAL_ORDER, ProcessStatus.values(), null, null, false);
+		return getOrderReports().findAllGeneralOrderItemsHistory();
 	}
 	
 	public List<PoItemRow> getOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId) {
-		return getOrderReports().getOrdersByType(orderType, processStatuses, poCodeId, null, false);
+		return getOrderReports().getOrdersByType(orderType, processStatuses, poCodeId);
 	}
 		
 	public List<PoItemRow> findOpenGeneralOrderItems() {
-		return getOrderReports().getOrdersByType(ProcessName.GENERAL_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
+		return getOrderReports().findOpenGeneralOrderItems();
 	}
 	
 	

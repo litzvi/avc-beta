@@ -1,10 +1,47 @@
-/**
- * 
- */
+
 package com.avc.mis.beta.controllers;
 
 
+import com.avc.mis.beta.dto.BaseEntityDTO;
+import com.avc.mis.beta.dto.GeneralProcessDTO;
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.ProductionLineBasic;
+import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
+import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.dto.view.ProcessItemInventory;
+import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.EditStatus;
+import com.avc.mis.beta.entities.enums.ManagementType;
+import com.avc.mis.beta.entities.enums.MessageLabel;
+import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.values.CashewStandard;
+import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.service.ObjectTablesReader;
+import com.avc.mis.beta.service.ProcessInfoReader;
+import com.avc.mis.beta.service.ProcessInfoWriter;
+import com.avc.mis.beta.service.ProcessReader;
+import com.avc.mis.beta.service.QualityChecks;
+import com.avc.mis.beta.service.Users;
+import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.WarehouseManagement;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -18,45 +55,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.avc.mis.beta.dto.data.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.data.UserMessageDTO;
-import com.avc.mis.beta.dto.process.GeneralProcessDTO;
-import com.avc.mis.beta.dto.process.ProductionProcessDTO;
-import com.avc.mis.beta.dto.process.QualityCheckDTO;
-import com.avc.mis.beta.dto.processinfo.RawItemQualityDTO;
-import com.avc.mis.beta.dto.values.BankBranchDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.CityDTO;
-import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.ValueObject;
-import com.avc.mis.beta.entities.enums.DecisionType;
-import com.avc.mis.beta.entities.enums.EditStatus;
-import com.avc.mis.beta.entities.enums.ManagementType;
-import com.avc.mis.beta.entities.enums.MessageLabel;
-import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.process.PoCode;
-import com.avc.mis.beta.entities.values.Bank;
-import com.avc.mis.beta.entities.values.CashewStandard;
-import com.avc.mis.beta.entities.values.CompanyPosition;
-import com.avc.mis.beta.entities.values.ContractType;
-import com.avc.mis.beta.entities.values.Country;
-import com.avc.mis.beta.entities.values.Item;
-import com.avc.mis.beta.entities.values.ProductionLine;
-import com.avc.mis.beta.entities.values.ShippingPort;
-import com.avc.mis.beta.entities.values.SupplyCategory;
-import com.avc.mis.beta.entities.values.Warehouse;
-import com.avc.mis.beta.service.ObjectTablesReader;
-import com.avc.mis.beta.service.Orders;
-import com.avc.mis.beta.service.ProcessInfoReader;
-import com.avc.mis.beta.service.ProcessInfoWriter;
-import com.avc.mis.beta.service.QualityChecks;
-import com.avc.mis.beta.service.Suppliers;
-import com.avc.mis.beta.service.ValueTablesReader;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 
 
 
@@ -69,10 +67,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class Controller {
 	
 	@Autowired
+	private SignedUrlsAws signedUrlsAws;
+	
+	@Autowired
 	private ValueTablesReader refeDao;
 	
 	@Autowired
 	private ProcessInfoReader processDao;
+	
+	@Autowired
+	private ProcessReader processReader;
 	
 	@Autowired
 	private ObjectTablesReader objectTableReader;
@@ -81,58 +85,75 @@ public class Controller {
 	private QualityChecks qualityChecks;
 	
 	@Autowired
+	private WarehouseManagement warehouseManagement;
+	
+	@Autowired
 	private ProcessInfoWriter processInfoWriter;
+	
+	@Autowired
+	private Users users;
 	
 	@GetMapping("/")
 	public String index() {
 		return "Greetings from Spring Boot!";
 	}
 	
+	@PostMapping("/urli")
+	public URL urli(@RequestBody JsonNode path) throws IOException {
+		return signedUrlsAws.uploadRequest(path.get("fileName").toString());
+	}
+	
+	@PostMapping("/getUrls")
+	public URL getUrls(@RequestBody JsonNode path) throws IOException {
+		return signedUrlsAws.getRequest(path.get("fileName").toString());
+	}
+	
+	
 	//should be done with one service
 	@RequestMapping("/setup")
 	public List<Object> getSetup() {
+		
 		List<Object> result = new ArrayList<Object>();
-		
-		List<CityDTO> cityholder = refeDao.getAllCitiesDTO();
-		result.add(cityholder);
-		
-		List<Country> countryholder = refeDao.getAllCountries();
-		result.add(countryholder);
-
-		List<CompanyPosition> Positionholder = refeDao.getAllCompanyPositions();
-		result.add(Positionholder);
-		
-		List<Bank> Bankholder = refeDao.getAllBanks();
-		result.add(Bankholder);
-
-		List<ContractType> Contractholder = refeDao.getAllContractTypes();
-		result.add(Contractholder);
 		
 		List<BasicValueEntity<Warehouse>> Storageholder = refeDao.getAllWarehousesDTO();
 		result.add(Storageholder);
 		
-		List<ItemDTO> CashewItemsholder = refeDao.getCashewItemsBasic();
-		result.add(CashewItemsholder);
-		
-		List<ItemDTO> GeneralItemsholder = refeDao.getGeneralItemsBasic();
-		result.add(GeneralItemsholder);
-		
-		List<SupplyCategory> Suplyholder = refeDao.getAllSupplyCategories();
-		result.add(Suplyholder);
-
-		List<BankBranchDTO> Branchholder = refeDao.getAllBankBranchesDTO();
-		result.add(Branchholder);
-		
 		List<CashewStandard> standartholder = refeDao.getAllCashewStandards();
 		result.add(standartholder);
+		
+		List<ItemWithUnitDTO> CashewItemsholder = refeDao.getItemsByGroup(ItemGroup.PRODUCT);
+		result.add(CashewItemsholder);
+		
+		List<ItemWithUnitDTO> GeneralItemsholder = refeDao.getItemsByGroup(ItemGroup.GENERAL);
+		result.add(GeneralItemsholder);
+		
 		Map<ProcessName, List<ManagementType>> Managmentholder = processDao.getAllUserManagementTypes();
 		result.add(Managmentholder);
-		
-		List<ShippingPort> ShippingPortsholder = refeDao.getAllShippingPorts();
-		result.add(ShippingPortsholder);
 
-		List<ProductionLine> ProductionLinesHolder = refeDao.getAllProductionLines();
+		List<ProductionLineBasic> ProductionLinesHolder = refeDao.getAllBasicProductionLines();
 		result.add(ProductionLinesHolder);
+		
+		List<ItemWithUnitDTO> WasteItemsholder = refeDao.getItemsByGroup(ItemGroup.WASTE);
+		WasteItemsholder.sort(new Comparator<BaseEntityDTO>() {
+			@Override
+			public int compare(BaseEntityDTO o1, BaseEntityDTO o2) {
+				return Integer.compare(o1.getId(), o2.getId());
+			}
+		});
+		result.add(WasteItemsholder);
+		
+		List<DataObjectWithName<Supplier>> CashewSuppliers = refeDao.getCashewSuppliersBasic();
+		result.add(CashewSuppliers);
+		
+		List<DataObjectWithName<Supplier>> GeneralSuppliers = refeDao.getGeneralSuppliersBasic();
+		result.add(GeneralSuppliers);
+		
+//		List<BasicValueEntity<Item>> CashewItemsraw = refeDao.getItemsByCategry(ItemCategory.RAW);
+//		result.add(CashewItemsraw);
+//		List<BasicValueEntity<Item>> CashewItemsclean = refeDao.getItemsByCategry(ItemCategory.CLEAN);
+//		result.add(CashewItemsclean);
+//		List<BasicValueEntity<Item>> CashewItemsroast = refeDao.getItemsByCategry(ItemCategory.ROAST);
+//		result.add(CashewItemsroast);
 		return result; 
 	}
 	
@@ -143,13 +164,29 @@ public class Controller {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
 	
 	@RequestMapping("/getUserTasks")
 	public List<ApprovalTaskDTO> getUserTasks() {
 		return processDao.getAllApprovals();
+	}
+	
+	@RequestMapping("/getUserMassagesNumber")
+	public int getMassagesNumber() {
+		try {
+			return processDao.getAllMessages().size();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return 0;
+		}
+	}
+	
+	@RequestMapping("/getUserTasksNumber")
+	public int getUserTasksNumber() {
+		return processDao.getAllApprovals().size();
 	}
 	
 	
@@ -163,7 +200,7 @@ public class Controller {
 //			case SAMPLE_QC:
 //				return getQcRawCheck(processId);
 //			default:
-				return processDao.getProcess(processId, type);
+				return processReader.getProcess(processId, type);
 //		}
 	}
 	
@@ -177,7 +214,7 @@ public class Controller {
 //		case SAMPLE_QC:
 //			return getQcRawCheck(processId);
 //		default:
-			return processDao.getProcess(processId, type);
+			return processReader.getProcess(processId, type);
 //	}
 	}
 	
@@ -188,7 +225,7 @@ public class Controller {
 //	}
 	
 	@PostMapping("/approveTaskAndManagment/{approve}")
-	public ResponseEntity<?> approveTaskAndManagment(@RequestBody JsonNode remarkSnapshot, @PathVariable("approve") DecisionType approve) {
+	public ObjectNode approveTaskAndManagment(@RequestBody JsonNode remarkSnapshot, @PathVariable("approve") DecisionType approve) throws JsonMappingException, JsonProcessingException {
 		int processId = (remarkSnapshot.get("id")).asInt();
 		if(remarkSnapshot.get("remarks") == null) {
 			processInfoWriter.setUserProcessDecision(processId, approve, (remarkSnapshot.get("snapshot")).toString(), null);
@@ -204,7 +241,11 @@ public class Controller {
 		if((remarkSnapshot.get("toCancal")).asBoolean()) {
 			processInfoWriter.setProcessStatus(ProcessStatus.CANCELLED, processId);
 		}
-		return ResponseEntity.ok().build();
+		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		ProcessName type = mapper.readValue((remarkSnapshot.get("processName")).toString(), ProcessName.class);
+		ObjectNode childNode1 = mapper.createObjectNode();
+		childNode1.put("approvals", (processReader.getProcess(processId, type)).getApprovals());
+		return childNode1;
 	}
 	
 	@PostMapping("/taskManagment")
@@ -229,25 +270,33 @@ public class Controller {
 		return ResponseEntity.ok().build();
 	}
 	
-//	@GetMapping("/getStandardts")
-//	public List<CashewStandard> getStandardts() {
-//		return refeDao.getAllCashewStandards();
+	
+//	@RequestMapping("/getCashewSuppliers")
+//	public List<DataObjectWithName<Supplier>> getCashewSuppliers() {
+//		return refeDao.getCashewSuppliersBasic();
 //	}
 	
-//	private JsonNode getQcRawCheck(int processId) {
-//		List<Object> qcs = new ArrayList<Object>();
-//		QualityCheckDTO qualityCheckDTO = qualityChecks.getQcByProcessId(processId);
-//		Set<RawItemQualityDTO> listChecks = qualityCheckDTO.getTestedItems();
-//		listChecks.forEach(m -> {
-//			Object[] array = {qualityCheckDTO.getProcessName(), m, qualityChecks.getCashewStatndard(m.getItem().getId(), "avc")};
-//			qcs.add(array);
-//		});
-//		ObjectMapper mapper = new ObjectMapper();
-//		JsonNode node = mapper.valueToTree(qualityCheckDTO);
-//		JsonNode node2 = mapper.valueToTree(qcs);
-//		JsonNode node3 = ((ObjectNode)node).putPOJO("testedItems", node2);
-//		return node3;
-//	}
+	@RequestMapping("/findAllPoCodes")
+	public List<PoCodeBasic> findAllPoCodes() {
+		return objectTableReader.findAllPoCodes();
+	}
 	
+	@RequestMapping("/getStorageGeneralItem/{id}")
+	public List<ProcessItemInventory> getStorageGeneralItem(@PathVariable("id") int itemId) {
+		return warehouseManagement.getAvailableInventory(ItemGroup.GENERAL, null, null, itemId, null, null);
+	}
+	
+	@RequestMapping("/findAvailableItems")
+	public Set<BasicValueEntity<Item>> findAvailableItems() {
+		return warehouseManagement.findAvailableInventoryItems(ItemGroup.GENERAL);
+	}
+	
+	@PostMapping("/passChange")
+	public ResponseEntity<?> passChange(@RequestBody JsonNode passwords) {
+		String oldPassword = (passwords.get("oldPassword")).asText();
+		String newPassword = (passwords.get("newPassword")).asText();
+		users.changePassword(oldPassword, newPassword);
+		return ResponseEntity.ok().build();
+	}
 }
 

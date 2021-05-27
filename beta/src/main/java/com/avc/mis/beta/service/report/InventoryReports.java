@@ -47,14 +47,18 @@ public class InventoryReports {
 	@Autowired private InventoryRepository inventoryRepository;
 	@Autowired private PORepository poRepository;
 	@Autowired private ValueTablesReader valueTablesReader;
-		
+
+	public List<ItemInventoryRow> getInventoryTableByItem(ItemGroup group) {
+		return getInventoryTableByItem(group, null);
+	}
+	
 	/**
 	 * Gets report of all items that are currently in the inventory with full information needed for report display.
 	 * @return List of ItemInventoryRow that have a balance in inventory
 	 */
-	public List<ItemInventoryRow> getInventoryTableByItem(ItemGroup group) {
+	public List<ItemInventoryRow> getInventoryTableByItem(ItemGroup group, LocalDateTime pointOfTime) {
 		
-		List<ProcessItemInventoryRow> processItemRows = getInventoryRows(group, null, null, null);
+		List<ProcessItemInventoryRow> processItemRows = getInventoryRows(group, null, null, null, pointOfTime);
 		return (List<ItemInventoryRow>) CollectionItemWithGroup.safeCollection(
 				CollectionItemWithGroup.getFilledGroups(processItemRows, 
 				(i -> {return new ItemInventoryRow(i.getItem());}), 
@@ -62,13 +66,17 @@ public class InventoryReports {
 				ItemInventoryRow::setPoInventoryRows));
 	}
 	
+	public List<PoInventoryRow> getInventoryTableByPo(ItemGroup group) {
+		return getInventoryTableByPo(group, null);
+	}
+	
 	/**
 	 * Gets report of all po code that currently have balance in inventory with full information needed for report display.
 	 * @return List of PoInventoryRow that have a balance in inventory
 	 */
-	public List<PoInventoryRow> getInventoryTableByPo(ItemGroup group) {
+	public List<PoInventoryRow> getInventoryTableByPo(ItemGroup group, LocalDateTime pointOfTime) {
 		
-		List<ProcessItemInventoryRow> processItemRows = getInventoryRows(group, null, null, null);
+		List<ProcessItemInventoryRow> processItemRows = getInventoryRows(group, null, null, null, pointOfTime);
 
 		BiConsumer<PoInventoryRow, List<ProcessItemInventoryRow>> setter = PoInventoryRow::setProductPoInventoryRows;
 		if(group == ItemGroup.GENERAL) {
@@ -97,9 +105,10 @@ public class InventoryReports {
 	 * @param poCodeId constrain to only this po, if null than any.
 	 * @return List of ProcessItemInventoryRow
 	 */
-	private List<ProcessItemInventoryRow> getInventoryRows(ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId) {
+	private List<ProcessItemInventoryRow> getInventoryRows(
+			ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId, LocalDateTime pointOfTime) {
 		boolean checkProductionUses = (productionUses != null);
-		return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, poCodeId);			
+		return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, poCodeId, pointOfTime);			
 	}
 
 		

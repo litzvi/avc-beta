@@ -102,9 +102,11 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "where "
 			+ "(po_code.id = :poCodeId or :poCodeId is null) "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
+			+ "and (:startTime is null or p.recordedTime >= :startTime) "
+			+ "and (:endTime is null or p.recordedTime <= :endTime) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
-	List<LoadingRow> findContainerLoadings(Integer poCodeId, boolean cancelled);
+	List<LoadingRow> findContainerLoadings(Integer poCodeId, boolean cancelled, LocalDateTime startTime, LocalDateTime endTime);
 
 	@Query("select new com.avc.mis.beta.dto.exportdoc.ExportInfo( "
 			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, p.recordedTime) "

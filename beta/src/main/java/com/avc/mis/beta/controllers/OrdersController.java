@@ -3,6 +3,31 @@
  */
 package com.avc.mis.beta.controllers;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.process.PoDTO;
+import com.avc.mis.beta.dto.process.ReceiptDTO;
+import com.avc.mis.beta.dto.process.SampleReceiptDTO;
+import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.view.PoItemRow;
+import com.avc.mis.beta.dto.view.ReceiptRow;
+import com.avc.mis.beta.entities.codes.GeneralPoCode;
+import com.avc.mis.beta.entities.codes.MixPoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.process.PO;
+import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.process.SampleReceipt;
+import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
+import com.avc.mis.beta.entities.values.ContractType;
+import com.avc.mis.beta.service.ObjectTablesReader;
+import com.avc.mis.beta.service.ObjectWriter;
+import com.avc.mis.beta.service.Orders;
+import com.avc.mis.beta.service.ProcessInfoWriter;
+import com.avc.mis.beta.service.Receipts;
+import com.avc.mis.beta.service.Samples;
+import com.avc.mis.beta.service.ValueTablesReader;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,35 +41,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.avc.mis.beta.dto.process.PoCodeDTO;
-import com.avc.mis.beta.dto.process.PoDTO;
-import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.dto.process.SampleReceiptDTO;
-import com.avc.mis.beta.dto.values.DataObjectWithName;
-import com.avc.mis.beta.dto.view.PoItemRow;
-import com.avc.mis.beta.dto.view.PoRow;
-import com.avc.mis.beta.dto.view.ReceiptItemRow;
-import com.avc.mis.beta.dto.view.ReceiptRow;
-import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.process.SampleReceipt;
-import com.avc.mis.beta.entities.processinfo.ExtraAdded;
-import com.avc.mis.beta.entities.processinfo.Storage;
-import com.avc.mis.beta.service.ObjectTablesReader;
-import com.avc.mis.beta.service.Orders;
-import com.avc.mis.beta.service.ProcessInfoWriter;
-import com.avc.mis.beta.service.Receipts;
-import com.avc.mis.beta.service.Samples;
-import com.avc.mis.beta.service.ValueTablesReader;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 /**
  * @author Zvi
@@ -56,6 +52,9 @@ public class OrdersController {
 	
 	@Autowired
 	private Orders ordersDao;
+	
+	@Autowired
+	private ObjectWriter objectWriter;
 	
 	@Autowired
 	private ObjectTablesReader objectTableReader;
@@ -74,69 +73,66 @@ public class OrdersController {
 	private ProcessInfoWriter processInfoWriter;
 	
 	@PostMapping(value="/addCashewOrder")
-	public ResponseEntity<PoDTO> addCashewOrder(@RequestBody PO po) {
+	public PoDTO addCashewOrder(@RequestBody PO po) {
 		ordersDao.addCashewOrder(po);
-		return ResponseEntity.ok(ordersDao.getOrderByProcessId(po.getId()));
+		return ordersDao.getOrderByProcessId(po.getId());
 	}
 	
 	@PostMapping(value="/addGeneralOrder")
-	public ResponseEntity<PoDTO> addGeneralOrder(@RequestBody PO po) {
+	public PoDTO addGeneralOrder(@RequestBody PO po) {
 		ordersDao.addGeneralOrder(po);
-		return ResponseEntity.ok(ordersDao.getOrderByProcessId(po.getId()));
+		return ordersDao.getOrderByProcessId(po.getId());
 	}
 	
 	@PostMapping(value="/receiveCashewOrder")
-	public ResponseEntity<ReceiptDTO> receiptCashewOrder(@RequestBody Receipt receipt) {
-		for(Storage i : receipt.getReceiptItems()[0].getStorageForms()) {
-			System.out.println(i);
-		}
+	public ReceiptDTO receiptCashewOrder(@RequestBody Receipt receipt) {
 		orderRecipt.addCashewOrderReceipt(receipt);
-		return ResponseEntity.ok(orderRecipt.getReceiptByProcessId(receipt.getId()));
+		return orderRecipt.getReceiptByProcessId(receipt.getId());
 	}
 	
 	@PostMapping(value="/receiveCashewNoOrder")
-	public ResponseEntity<ReceiptDTO> addCashewReceipt(@RequestBody Receipt receipt) {
+	public ReceiptDTO addCashewReceipt(@RequestBody Receipt receipt) {
 		orderRecipt.addCashewReceipt(receipt);
-		return ResponseEntity.ok(orderRecipt.getReceiptByProcessId(receipt.getId()));
+		return orderRecipt.getReceiptByProcessId(receipt.getId());
 	}
 	
 	@PostMapping(value="/receiveGeneralOrder")
-	public ResponseEntity<ReceiptDTO> receiveGeneralOrder(@RequestBody Receipt receipt) {
-		orderRecipt.addGeneralReceipt(receipt);
-		return ResponseEntity.ok(orderRecipt.getReceiptByProcessId(receipt.getId()));
+	public ReceiptDTO receiveGeneralOrder(@RequestBody Receipt receipt) {
+		orderRecipt.addGeneralOrderReceipt(receipt);
+		return orderRecipt.getReceiptByProcessId(receipt.getId());
 	}
 	
 	@PostMapping(value="/receiveSample")
-	public ResponseEntity<SampleReceiptDTO> receiveSample(@RequestBody SampleReceipt sample) {
+	public SampleReceiptDTO receiveSample(@RequestBody SampleReceipt sample) {
 		samples.addSampleReceipt(sample);
-		return ResponseEntity.ok(samples.getSampleReceiptByProcessId(sample.getId()));
+		return samples.getSampleReceiptByProcessId(sample.getId());
 	}
 	
 	
 	@PutMapping(value="/editOrder")
-	public ResponseEntity<PoDTO> editOrder(@RequestBody PO po) {
+	public PoDTO editOrder(@RequestBody PO po) {
 		ordersDao.editOrder(po);
-		return ResponseEntity.ok(ordersDao.getOrderByProcessId(po.getId()));
+		return ordersDao.getOrderByProcessId(po.getId());
 	}
 	
 	@PutMapping(value="/editReciving")
-	public ResponseEntity<ReceiptDTO> editReciving(@RequestBody Receipt receipt) {
+	public ReceiptDTO editReciving(@RequestBody Receipt receipt) {
 		orderRecipt.editReceipt(receipt);
-		return ResponseEntity.ok(orderRecipt.getReceiptByProcessId(receipt.getId()));
+		return orderRecipt.getReceiptByProcessId(receipt.getId());
 	}
 	
 	@PutMapping(value="/editReceiveSample")
-	public ResponseEntity<SampleReceiptDTO> editReceiveSample(@RequestBody SampleReceipt sample) {
+	public SampleReceiptDTO editReceiveSample(@RequestBody SampleReceipt sample) {
 		samples.editSampleReceipt(sample);
-		return ResponseEntity.ok(samples.getSampleReceiptByProcessId(sample.getId()));
+		return samples.getSampleReceiptByProcessId(sample.getId());
 	}
 	
 	@PostMapping("/receiveExtra/{id}")
-	public ResponseEntity<ReceiptDTO> receiveExtra(@RequestBody Map<String, Map<String, ExtraAdded[]>> listChanges, @PathVariable("id") int reciptId) {
+	public ReceiptDTO receiveExtra(@RequestBody Map<String, Map<String, ExtraAdded[]>> listChanges, @PathVariable("id") int reciptId) {
 		listChanges.forEach((k, v) -> {
 					orderRecipt.addExtra(v.get("extraAdded"), Integer.parseInt(k));
 		});
-		return ResponseEntity.ok(orderRecipt.getReceiptByProcessId(reciptId));
+		return orderRecipt.getReceiptByProcessId(reciptId);
 	}
 	
 	@RequestMapping("/orderDetails/{id}")
@@ -146,7 +142,11 @@ public class OrdersController {
 	
 	@RequestMapping("/orderDetailsPo/{id}")
 	public PoDTO orderDetailsPo(@PathVariable("id") int poCode) {
-		return ordersDao.getOrder(poCode);
+		try {
+			return ordersDao.getOrder(poCode);
+		} catch(IllegalArgumentException e) {
+			return null;
+		}
 	}
 	
 	@RequestMapping("/receiveDetails/{id}")
@@ -160,8 +160,8 @@ public class OrdersController {
 	}
 	
 	@RequestMapping("/getGeneralOrdersOpen")
-	public List<PoRow> getGeneralOrdersOpen() {
-		return ordersDao.findOpenGeneralOrders();
+	public List<PoItemRow> getGeneralOrdersOpen() {
+		return ordersDao.findOpenGeneralOrderItems();
 	}
 	
 	@RequestMapping("/getPendingCashew")
@@ -169,10 +169,10 @@ public class OrdersController {
 		return orderRecipt.findPendingCashewReceipts();
 	}
 	
-//	@RequestMapping("/getPendingGeneral")
-//	public List<ReceiptRow> getPendingGeneral() {
-//		return orderRecipt.fin
-//	}
+	@RequestMapping("/getPendingGeneral")
+	public List<ReceiptRow> getPendingGeneral() {
+		return orderRecipt.findPendingGeneralReceipts();
+	}
 	
 	@RequestMapping("/getReceivedCashew")
 	public List<ReceiptRow> getReceivedCashew() {
@@ -180,43 +180,139 @@ public class OrdersController {
 	}
 	
 	@RequestMapping("/getReceivedGeneral")
-	public List<ReceiptItemRow> getReceivedGeneral() {
+	public List<ReceiptRow> getReceivedGeneral() {
 		return orderRecipt.findFinalGeneralReceipts();
 	}
+
+	@RequestMapping("/getHistoryCashewOrders")
+	public List<PoItemRow> getHistoryCashewOrders() {
+		return ordersDao.findAllCashewOrderItemsHistory();
+	}
 	
-	@RequestMapping("/getAllCashewOrders")
-	public List<PoRow> getAllCashewOrders() {
-		return ordersDao.findAllCashewOrders();
+	@RequestMapping("/findCashewReceiptsHistory")
+	public List<ReceiptRow> findCashewReceiptsHistory() {
+		return orderRecipt.findCashewReceiptsHistory();
+	}
+	
+	@RequestMapping("/findGeneralReceiptsHistory")
+	public List<ReceiptRow> findGeneralReceiptsHistory() {
+		return orderRecipt.findGeneralReceiptsHistory();
+	}
+	
+	@RequestMapping("/getAllCashewReciveRejected")
+	public List<ReceiptRow> getAllCashewReciveRejected() {
+		return orderRecipt.findCancelledCashewReceipts();
 	}
 	
 	@RequestMapping("/getAllGeneralOrders")
-	public List<PoRow> getAllGeneralOrders() {
-		return ordersDao.findAllGeneralOrders();
+	public List<PoItemRow> getAllGeneralOrders() {
+		return ordersDao.findAllGeneralOrderItemsHistory();
 	}
 	
 	@RequestMapping("/getCashewSuppliers")
-	public List<DataObjectWithName> getCashewSuppliers() {
+	public List<DataObjectWithName<Supplier>> getCashewSuppliers() {
 		return refeDao.getCashewSuppliersBasic();
 	}
 	
 	@RequestMapping("/getGeneralSuppliers")
-	public List<DataObjectWithName> getGeneralSuppliers() {
+	public List<DataObjectWithName<Supplier>> getGeneralSuppliers() {
 		return refeDao.getGeneralSuppliersBasic();
 	}
 	
 	@RequestMapping("/getCashewPoOpen")
-	public Set<PoCodeDTO> getCashewPoOpen() {
+	public Set<PoCodeBasic> getCashewPoOpen() {
 		return objectTableReader.findOpenCashewOrdersPoCodes();
 	}
 	
 	@RequestMapping("/getPoCashewCodesOpenPending")
-	public Set<PoCodeDTO> getPoCashewCodesOpenPending() {
+	public Set<PoCodeBasic> getPoCashewCodesOpenPending() {
 		return objectTableReader.findOpenAndPendingCashewOrdersPoCodes();
 	}
 	
 	@RequestMapping("/getGeneralPoOpen")
-	public Set<PoCodeDTO> getGeneralPoOpen() {
+	public Set<PoCodeBasic> getGeneralPoOpen() {
 		return objectTableReader.findOpenGeneralOrdersPoCodes();
 	}
 	
+	@RequestMapping("/findFreePoCodes")
+	public List<PoCodeBasic> findFreePoCodes() {
+		return objectTableReader.findFreePoCodes();
+	}
+	
+	@RequestMapping("/findAllPoCodes")
+	public List<PoCodeBasic> findAllPoCodes() {
+		return objectTableReader.findAllPoCodes();
+	}
+	
+	@RequestMapping("/getPoCode/{id}")
+	public PoCodeDTO getPoCode(@PathVariable("id") int poCode) {
+		return objectWriter.getPoCode(poCode);
+	}
+	
+	@PostMapping(value="/addPoCode")
+	public ResponseEntity<?> addPoCode(@RequestBody PoCode poCode) {
+		objectWriter.addPoCode(poCode);
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping(value="/editPoCode")
+	public ResponseEntity<?> editPoCode(@RequestBody PoCode poCode) {
+		objectWriter.editPoCode(poCode);
+		return ResponseEntity.ok().build();
+	}
+	
+	@RequestMapping("/getGeneralPoCode/{id}")
+	public PoCodeDTO getGeneralPoCode(@PathVariable("id") int poCode) {
+		return objectWriter.getPoCode(poCode);
+	}
+	
+	@PostMapping(value="/addGeneralPoCode")
+	public ResponseEntity<?> addGeneralPoCode(@RequestBody GeneralPoCode poCode) {
+		objectWriter.addPoCode(poCode);
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping(value="/editGeneralPoCode")
+	public ResponseEntity<?> editGeneralPoCode(@RequestBody GeneralPoCode poCode) {
+		objectWriter.editPoCode(poCode);
+		return ResponseEntity.ok().build();
+	}
+	
+	@RequestMapping("/findAllGeneralPoCodes")
+	public List<PoCodeBasic> findAllGeneralPoCodes() {
+		return objectTableReader.findAllGeneralPoCodes();
+	}
+	
+	@RequestMapping("/findFreeGeneralPoCodes")
+	public List<PoCodeBasic> findFreeGeneralPoCodes() {
+		return objectTableReader.findFreeGeneralPoCodes();
+	}
+	
+	@PostMapping(value="/addMixPoCode")
+	public ResponseEntity<?> addMixPoCode(@RequestBody MixPoCode poCode) {
+		objectWriter.addMixPoCode(poCode);
+		return ResponseEntity.ok().build();
+	}
+	
+	@PutMapping(value="/editMixPoCode")
+	public ResponseEntity<?> editMixPoCode(@RequestBody MixPoCode poCode) {
+		objectWriter.editMixPoCode(poCode);
+		return ResponseEntity.ok().build();
+	}
+	
+	@RequestMapping("/getAllSuppliers")
+	public List<DataObjectWithName<Supplier>> getAllSuppliers() {
+		return refeDao.getSuppliersBasic();
+	}
+	
+	
+	@RequestMapping("/getGeneralContractTypes")
+	public List<ContractType> getGeneralContractTypes() {
+		return refeDao.getGeneralContractTypes();
+	}
+	
+	@RequestMapping("/getCashewContractTypes")
+	public List<ContractType> getCashewContractTypes() {
+		return refeDao.getCashewContractTypes();
+	}
 }

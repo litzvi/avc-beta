@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service.report;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +31,11 @@ public class ContainerArrivalReports {
 
 	
 	public List<ContainerArrivalRow> getContainerArrivals() {
-		return getContainerArrivalRepository().findContainerArrivals();
+		return getContainerArrivals(null, null);
+	}
+	
+	public List<ContainerArrivalRow> getContainerArrivals(LocalDateTime startTime, LocalDateTime endTime) {
+		return getContainerArrivalRepository().findContainerArrivals(startTime, endTime);
 	}
 	
 	public Set<ContainerArrivalBasic> getNonLoadedArrivals() {

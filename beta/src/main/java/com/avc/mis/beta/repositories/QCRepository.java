@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -107,7 +108,9 @@ public interface QCRepository extends PoProcessRepository<QualityCheck> {
 			+ "join qc.lifeCycle lc "
 		+ "where pt.processName in :processNames "
 			+ "and (po_code.id = :poId or :poId is null) "
+			+ "and (:startTime is null or qc.recordedTime >= :startTime) "
+			+ "and (:endTime is null or qc.recordedTime <= :endTime) "
 		+ "order by qc.recordedTime desc ")
-	List<CashewQcRow> findCashewQualityChecks(ProcessName[] processNames, Integer poId);
+	List<CashewQcRow> findCashewQualityChecks(ProcessName[] processNames, Integer poId, LocalDateTime startTime, LocalDateTime endTime);
 
 }

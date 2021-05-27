@@ -233,7 +233,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ " * "
 				+ "(CASE "
 					+ "WHEN ui is null THEN sf.numberUnits "
-					+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+					+ "WHEN (used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+						+ "and (:pointOfTime is null or used_p.recordedTime <= :pointOfTime)) "
 						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
 					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
 				+ "END) "
@@ -284,6 +285,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (item.id = :itemId or :itemId is null) "
 			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
+			+ "and (:pointOfTime is null "
+				+ "or (p.recordedTime <= :pointOfTime and sf_p.recordedTime <= :pointOfTime)) "
 			+ "and"
 				+ "(sf.numberUnits > "
 					+ "coalesce("
@@ -299,7 +302,9 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "order by r.recordedTime, p.recordedTime " 
 		+ "")
 	List<ProcessItemInventoryRow> findInventoryProcessItemRows(
-			boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId, Integer poCodeId);
+			boolean checkProductionUses, ProductionUse[] productionUses, 
+			ItemGroup itemGroup, Integer itemId, Integer poCodeId, 
+			LocalDateTime pointOfTime);
 
 	/**
 	 * ITEMS THAT HAVE AVAILABLE INVENTORY

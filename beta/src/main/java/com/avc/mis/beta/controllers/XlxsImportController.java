@@ -3,6 +3,7 @@ package com.avc.mis.beta.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -20,18 +24,14 @@ import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.entities.values.Country;
-import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
-import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.Receipts;
-import com.avc.mis.beta.service.Samples;
 import com.avc.mis.beta.service.Suppliers;
-import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.ValueWriter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -58,6 +58,9 @@ public class XlxsImportController {
 	
 	@Autowired
 	private QualityChecks qualityChecks;
+	
+	@Autowired
+	private ProcessInfoWriter processInfoWriter;
 	
 	
 //	just for adding from xlex
@@ -94,11 +97,21 @@ public class XlxsImportController {
 //	just for adding from xlex
 	@PostMapping(value="/addAllReceiveCashewOrder")
 	public void addAllReceiveCashewOrder(@RequestBody List<Receipt> listChanges) throws JsonMappingException, JsonProcessingException {
-		System.out.println(listChanges);
 		listChanges.forEach(k -> {
 			System.out.println(k);
 			orderRecipt.addCashewOrderReceipt(k);
 		});
+	}
+	
+	@PostMapping("/approveAll")
+	public ResponseEntity<?> approveAll(@RequestBody List<JsonNode> listChanges) {
+		listChanges.forEach(k -> {
+			System.out.println(k);
+			int processId = k.get("id").asInt();
+			processInfoWriter.setUserProcessDecision(processId, DecisionType.APPROVED, k.toString(), null);
+			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, processId);
+		});
+		return ResponseEntity.ok().build();
 	}
 	
 	@PostMapping(value="/addAllNewSetup/{setupTable}")
@@ -130,7 +143,7 @@ public class XlxsImportController {
 				break;
 			case "Items":
 				for(Item var: mapper.readValue(newOne.toString(), new TypeReference<List<Item>>(){})) {
-					refeDaoWrite.addItem(var);
+//					refeDaoWrite.addItem(var);
 				}
 				break;
 			case "ContractTypes":

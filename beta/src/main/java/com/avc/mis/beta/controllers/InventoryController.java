@@ -1,10 +1,32 @@
 package com.avc.mis.beta.controllers;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.process.InventoryUseDTO;
+import com.avc.mis.beta.dto.process.StorageRelocationDTO;
+import com.avc.mis.beta.dto.process.StorageTransferDTO;
+import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
+import com.avc.mis.beta.dto.view.ItemInventoryRow;
+import com.avc.mis.beta.dto.view.PoInventoryRow;
+import com.avc.mis.beta.dto.view.ProcessItemInventory;
+import com.avc.mis.beta.dto.view.ProcessRow;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.InventoryUse;
+import com.avc.mis.beta.entities.process.StorageRelocation;
+import com.avc.mis.beta.entities.process.StorageTransfer;
+import com.avc.mis.beta.service.ObjectTablesReader;
+import com.avc.mis.beta.service.ProductionProcesses;
+import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.WarehouseManagement;
+import com.avc.mis.beta.service.report.InventoryReports;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,32 +34,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.avc.mis.beta.dto.process.PoCodeDTO;
-import com.avc.mis.beta.dto.process.ProductionProcessDTO;
-import com.avc.mis.beta.dto.process.StorageTransferDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.view.ItemInventoryRow;
-import com.avc.mis.beta.dto.view.PoInventoryRow;
-import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
-import com.avc.mis.beta.dto.view.ProcessRow;
-import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.ProductionProcess;
-import com.avc.mis.beta.entities.process.StorageTransfer;
-import com.avc.mis.beta.entities.values.Item;
-import com.avc.mis.beta.service.CashewReports;
-import com.avc.mis.beta.service.ObjectTablesReader;
-import com.avc.mis.beta.service.ProductionProcesses;
-import com.avc.mis.beta.service.ValueTablesReader;
-import com.avc.mis.beta.service.WarehouseManagement;
-
 @RestController
 @RequestMapping(path = "/api/inventory")
 public class InventoryController {
 
 	
 	@Autowired
-	private CashewReports cashewReports;
+	private InventoryReports inventoryReports;
 	
 	@Autowired
 	private ValueTablesReader refeDao;
@@ -53,24 +56,39 @@ public class InventoryController {
 	
 	
 	@PostMapping(value="/addStorageTransfer")
-	public ResponseEntity<StorageTransferDTO> addStorageTransfer(@RequestBody StorageTransfer transfer) {
+	public StorageTransferDTO addStorageTransfer(@RequestBody StorageTransfer transfer) {
 		warehouseManagement.addStorageTransfer(transfer);
-		return ResponseEntity.ok(warehouseManagement.getStorageTransfer(transfer.getId()));
+		return warehouseManagement.getStorageTransfer(transfer.getId());
+	}
+	
+	@PostMapping(value="/addRelocationTransfer")
+	public StorageRelocationDTO addRelocationTransfer(@RequestBody StorageRelocation relocation) {
+		warehouseManagement.addStorageRelocation(relocation);
+		return warehouseManagement.getStorageRelocation(relocation.getId());
+	}
+	
+	@PostMapping(value="/addMaterialUse")
+	public InventoryUseDTO addMaterialUse(@RequestBody InventoryUse inventoryUse) {
+		warehouseManagement.addGeneralInventoryUse(inventoryUse);
+		return warehouseManagement.getInventoryUse(inventoryUse.getId());
 	}
 	
 	@PutMapping(value="/editStorageTransfer")
-	public ResponseEntity<StorageTransferDTO> editStorageTransfer(@RequestBody StorageTransfer transfer) {
+	public StorageTransferDTO editStorageTransfer(@RequestBody StorageTransfer transfer) {
 		warehouseManagement.editStorageTransfer(transfer);
-		return ResponseEntity.ok(warehouseManagement.getStorageTransfer(transfer.getId()));
+		return warehouseManagement.getStorageTransfer(transfer.getId());
 	}
 	
-	@PostMapping(value="/addStorageListTransfer")
-	public ResponseEntity<StorageTransferDTO> addStorageListTransfer(@RequestBody List<StorageTransfer> transfer) {
-		transfer.forEach((m) -> {
-			warehouseManagement.addStorageTransfer(m);
-		});
-		
-		return ResponseEntity.ok(warehouseManagement.getStorageTransfer(transfer.get(0).getId()));
+	@PutMapping(value="/editRelocationTransfer")
+	public StorageRelocationDTO editRelocationTransfer(@RequestBody StorageRelocation relocation) {
+		warehouseManagement.editStorageRelocation(relocation);
+		return warehouseManagement.getStorageRelocation(relocation.getId());
+	}
+	
+	@PutMapping(value="/editMaterialUse")
+	public InventoryUseDTO editMaterialUse(@RequestBody InventoryUse inventoryUse) {
+		warehouseManagement.editGeneralInventoryUse(inventoryUse);
+		return warehouseManagement.getInventoryUse(inventoryUse.getId());
 	}
 	
 	@RequestMapping("/getStorageTransfer/{id}")
@@ -78,56 +96,120 @@ public class InventoryController {
 		return warehouseManagement.getStorageTransfer(id);
 	}
 	
-	@RequestMapping("/allProduction/{id}")
-	public List<ProcessRow> allProduction(@PathVariable("id") ProcessName process) {
-		return productionProcesses.getProductionProcessesByType(process);
+	@RequestMapping("/getStorageRelocation/{id}")
+	public StorageRelocationDTO getStorageRelocation(@PathVariable("id") int id) {
+		return warehouseManagement.getStorageRelocation(id);
+	}
+	
+	@RequestMapping("/getMaterialUse/{id}")
+	public InventoryUseDTO getMaterialUse(@PathVariable("id") int id) {
+		return warehouseManagement.getInventoryUse(id);
+	}
+	
+	@RequestMapping("/getTransferCounts")
+	public List<ProcessRow> getTransferCounts() {
+		return warehouseManagement.getStorageTransfers();
+	}
+	
+	@RequestMapping("/getStorageRelocations/{id}")
+	public List<ProcessRow> getStorageRelocations(@PathVariable("id") ProductionFunctionality functionality) {
+		return warehouseManagement.getStorageRelocations(functionality);
 	}
 	
 	@RequestMapping("/getCashewInventoryItem")
 	public List<ItemInventoryRow> getCashewInventoryItem() {
-		return cashewReports.getInventoryTableByItem();
+		return inventoryReports.getInventoryTableByItem(ItemGroup.PRODUCT);
 	}
 	
-	@RequestMapping("/getInventoryTableByPo")
-	public List<PoInventoryRow> getInventoryTableByPo() {
-		return cashewReports.getInventoryTableByPo();
+	@RequestMapping("/getCashewInventoryByPo")
+	public List<PoInventoryRow> getCashewInventoryByPo() {
+		return inventoryReports.getInventoryTableByPo(ItemGroup.PRODUCT);
 	}
 	
-	@RequestMapping("/getAllItems")
-	public List<Item> getAllItems() {
-		return refeDao.getAllItems();
+	@RequestMapping("/getCashewInventoryOrder")
+	public List<ItemInventoryAmountWithOrder> getCashewInventoryOrder() {
+		return inventoryReports.getInventoryWithOrderByItem(ItemGroup.PRODUCT);
 	}
 	
-	@RequestMapping("/getCashewItems")
-	public List<ItemDTO> getCashewItems() {
-		return refeDao.getCashewItemsBasic();
+	@RequestMapping("/getGeneralInventoryItem")
+	public List<ItemInventoryRow> getGeneralInventoryItem() {
+		return inventoryReports.getInventoryTableByItem(ItemGroup.GENERAL);
 	}
 	
-	@RequestMapping("/getGeneralItems")
-	public List<ItemDTO> getGeneralItems() {
-		return refeDao.getGeneralItemsBasic();
+	@RequestMapping("/getMaterialUses")
+	public List<ProcessRow> getMaterialUses() {
+		return warehouseManagement.getInventoryUses();
+	}
+	
+	@RequestMapping("/getGeneralInventoryByPo")
+	public List<PoInventoryRow> getGeneralInventoryByPo() {
+		return inventoryReports.getInventoryTableByPo(ItemGroup.GENERAL);
+	}
+	
+	@RequestMapping("/getGeneralInventoryOrder")
+	public List<ItemInventoryAmountWithOrder> getGeneralInventoryOrder() {
+		return inventoryReports.getInventoryWithOrderByItem(ItemGroup.GENERAL);
 	}
 	
 	@RequestMapping("/getPoCashewCodesInventory")
-	public Set<PoCodeDTO> getPoCashewCodesInventory() {
-		return objectTableReader.findCashewInventoryPoCodes();
+	public Set<PoCodeBasic> getPoCashewCodesInventory() {
+		return objectTableReader.findCashewAvailableInventoryPoCodes();
 	}
 	
-	@RequestMapping("/getStorageTransferPo/{id}")
-	public List<ProcessItemInventoryRow> getStorageTransferPo(@PathVariable("id") int poCode) {
-		return warehouseManagement.getInventoryByPo(poCode);
+//	@RequestMapping("/getPoCashewCodesRaw")
+//	public Set<PoCodeBasic> getPoCashewCodesInventory() {
+//		return objectTableReader.findCashewAvailableInventoryPoCodes();
+//	}
+//	
+//	@RequestMapping("/getPoCashewCodesClean")
+//	public Set<PoCodeBasic> getPoCashewCodesInventory() {
+//		return objectTableReader.findCashewAvailableInventoryPoCodes();
+//	}
+	
+	
+	@RequestMapping(value={"/getStoragePo/{id}", "/getStoragePo/{id}/{process}"})
+	public List<ProcessItemInventory> getStoragePo(@PathVariable("id") Integer[] poCodes, @PathVariable("process") Optional<Integer> process) {
+		if (process.isPresent()) {
+			return warehouseManagement.getAvailableInventory(null, null, null, null, poCodes, process.get());
+	    } else {
+	    	return warehouseManagement.getAvailableInventory(null, null, null, null, poCodes, null);
+	    }
+	}
+	
+	@RequestMapping(value={"/getStorageRawPo/{id}", "/getStorageRawPo/{id}/{process}"})
+	public List<ProcessItemInventory> getStorageRawPo(@PathVariable("id") Integer[] poCodes, @PathVariable("process") Optional<Integer> process) {
+		if (process.isPresent()) {
+			return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.RAW_KERNEL}, null, null, poCodes, process.get());
+	    } else {
+	    	return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.RAW_KERNEL}, null, null, poCodes, null);
+	    }
+	}
+	
+	@RequestMapping(value={"/getStorageCleanPo/{id}", "/getStorageCleanPo/{id}/{process}"})
+	public List<ProcessItemInventory> getStorageCleanPo(@PathVariable("id") Integer[] poCodes, @PathVariable("process") Optional<Integer> process) {
+		if (process.isPresent()) {
+			return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.CLEAN}, null, null, poCodes, process.get());
+	    } else {
+	    	return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.CLEAN}, null, null, poCodes, null);
+	    }
 	}
 	
 	@RequestMapping("/getStorageTransferItem/{id}")
-	public List<ProcessItemInventoryRow> getStorageTransferItem(@PathVariable("id") int itemId) {
-		return warehouseManagement.getInventoryByItem(itemId);
+	public List<ProcessItemInventory> getStorageTransferItem(@PathVariable("id") int itemId) {
+		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, null, null, itemId, null, null);
 	}
 	
-//	@PostMapping(value="/addCleaningTransfer")
-//	public ResponseEntity<ProductionProcessDTO> addCleaningTransfer(@RequestBody ProductionProcess process) {
-//		productionProcesses.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
-//		return ResponseEntity.ok(productionProcesses.getProductionProcess(process.getId()));
-//	}
-//	
+	@RequestMapping("/getAllPos/{id}")
+	public Set<PoCodeBasic> getAllPos(@PathVariable("id") ProductionUse item) {
+		return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{item});
+	}
+	
+	@RequestMapping("/findAllPoCodes")
+	public List<PoCodeBasic> getAllPoCodes() {
+		List<PoCodeBasic> allPoCodes = new ArrayList<PoCodeBasic>();
+		allPoCodes.addAll(objectTableReader.findCashewAvailableInventoryPoCodes());
+		allPoCodes.addAll(objectTableReader.findGeneralAvailableInventoryPoCodes());
+		return allPoCodes;
+	}
 
 }

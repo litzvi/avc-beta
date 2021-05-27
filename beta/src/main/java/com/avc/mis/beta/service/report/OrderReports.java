@@ -4,6 +4,7 @@
 package com.avc.mis.beta.service.report;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,65 +35,101 @@ public class OrderReports {
 	
 	@Autowired private PORepository poRepository;	
 
+	public List<PoItemRow> findOpenCashewOrderItems() {
+		return findOpenCashewOrderItems(null, null);
+	}
+
 	/**
 	 * Get the table of all Cashew purchase orders that are active(not cancelled or archived) and where not received.
 	 * @return list of PoRow for orders that are yet to be received
 	 */
-	public List<PoItemRow> findOpenCashewOrderItems() {
+	public List<PoItemRow> findOpenCashewOrderItems(LocalDateTime startTime, LocalDateTime endTime) {
 		List<PoItemRow> poItemRows = getOrdersByType(ProcessName.CASHEW_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true, startTime, endTime);
 		return poItemRows;
 	}
 	
-	/**
-	 * Get the table of all Cashew purchase orders that are not cancelled.
-	 * @return list of PoRow for all orders (not cancelled)
-	 */
 	public List<PoItemRow> findAllCashewOrderItems() {
-		return getOrdersByType(ProcessName.CASHEW_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false);
+		return findAllCashewOrderItems(null, null);
 	}
 	
 	/**
 	 * Get the table of all Cashew purchase orders that are not cancelled.
 	 * @return list of PoRow for all orders (not cancelled)
 	 */
+	public List<PoItemRow> findAllCashewOrderItems(LocalDateTime startTime, LocalDateTime endTime) {
+		return getOrdersByType(ProcessName.CASHEW_ORDER, 
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false, startTime, endTime);
+	}
+
 	public List<PoItemRow> findAllGeneralOrderItems() {
+		return findAllGeneralOrderItems(null, null);
+	}
+	
+	/**
+	 * Get the table of all Cashew purchase orders that are not cancelled.
+	 * @return list of PoRow for all orders (not cancelled)
+	 */
+	public List<PoItemRow> findAllGeneralOrderItems(LocalDateTime startTime, LocalDateTime endTime) {
 		return getOrdersByType(ProcessName.GENERAL_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false);
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false, startTime, endTime);
 	}
 	
-	/**
-	 * Get the table of all Cashew purchase orders including cancelled orders.
-	 * @return list of PoRow for all orders
-	 */
 	public List<PoItemRow> findAllCashewOrderItemsHistory() {
-		return getOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null, null, false);
+		return findAllCashewOrderItemsHistory(null, null);
 	}
 	
 	/**
 	 * Get the table of all Cashew purchase orders including cancelled orders.
 	 * @return list of PoRow for all orders
 	 */
+	public List<PoItemRow> findAllCashewOrderItemsHistory(LocalDateTime startTime, LocalDateTime endTime) {
+		return getOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null, null, false, startTime, endTime);
+	}
+	
 	public List<PoItemRow> findAllGeneralOrderItemsHistory() {
-		return getOrdersByType(ProcessName.GENERAL_ORDER, ProcessStatus.values(), null, null, false);
+		return findAllGeneralOrderItemsHistory(null, null);
+	}
+	
+	/**
+	 * Get the table of all Cashew purchase orders including cancelled orders.
+	 * @return list of PoRow for all orders
+	 */
+	public List<PoItemRow> findAllGeneralOrderItemsHistory(LocalDateTime startTime, LocalDateTime endTime) {
+		return getOrdersByType(ProcessName.GENERAL_ORDER, ProcessStatus.values(), null, null, false, startTime, endTime);
 	}
 	
 	public List<PoItemRow> getOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId) {
-		return getOrdersByType(orderType, processStatuses, poCodeId, null, false);
+		return getOrdersByType(orderType, processStatuses, poCodeId, null, null);
+	}
+	
+	public List<PoItemRow> getOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId,
+			LocalDateTime startTime, LocalDateTime endTime) {
+		return getOrdersByType(orderType, processStatuses, poCodeId, null, false, startTime, endTime);
+	}
+	
+	public List<PoItemRow> findOpenGeneralOrderItems() {
+		return findOpenGeneralOrderItems(null, null);
 	}
 		
 	/**
 	 * Get the table of all General purchase orders that are active(not cancelled or archived) and where not received.
 	 * @return list of PoRow for orders that are yet to be received
 	 */
-	public List<PoItemRow> findOpenGeneralOrderItems() {
+	public List<PoItemRow> findOpenGeneralOrderItems(LocalDateTime startTime, LocalDateTime endTime) {
 		return getOrdersByType(ProcessName.GENERAL_ORDER, 
-				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true);
+				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true, startTime, endTime);
 	}
 	
-	public List<PoItemRow> getOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId, ItemGroup itemGroup, boolean onlyOpen) {
-		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(orderType, processStatuses, poCodeId, itemGroup, onlyOpen);
+	public List<PoItemRow> getOrdersByType(
+			ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId, ItemGroup itemGroup, boolean onlyOpen) {
+		return getOrdersByType(orderType, processStatuses, poCodeId, itemGroup, onlyOpen, null, null);
+	}
+	
+	public List<PoItemRow> getOrdersByType(
+			ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId, ItemGroup itemGroup, boolean onlyOpen, 
+			LocalDateTime startTime, LocalDateTime endTime) {
+		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(orderType, processStatuses, poCodeId, itemGroup, onlyOpen, startTime, endTime);
 		int[] orderItemIds = poItemRows.stream().mapToInt(PoItemRow::getOrderItemId).toArray();
 		Map<Integer, BigDecimal> receivedAmountMap = getPoRepository()
 				.findReceivedAmountByOrderItemIds(orderItemIds)

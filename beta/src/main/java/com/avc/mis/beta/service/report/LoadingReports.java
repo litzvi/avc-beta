@@ -38,13 +38,20 @@ public class LoadingReports {
 	
 	@Autowired private ContainerLoadingRepository containerLoadingRepository;
 
-
 	public List<LoadingRow> getLoadings() {
-		return getLoadingsByPoCode(null);
+		return getLoadings(null, null);
+	}
+
+	public List<LoadingRow> getLoadings(LocalDateTime startTime, LocalDateTime endTime) {
+		return getLoadingsByPoCode(null, startTime, endTime);
 	}
 	
 	public List<LoadingRow> getLoadingsByPoCode(Integer poCodeId) {
-		List<LoadingRow> loadingRows = getContainerLoadingRepository().findContainerLoadings(poCodeId, true);
+		return getLoadingsByPoCode(poCodeId, null, null);
+	}
+	
+	public List<LoadingRow> getLoadingsByPoCode(Integer poCodeId, LocalDateTime startTime, LocalDateTime endTime) {
+		List<LoadingRow> loadingRows = getContainerLoadingRepository().findContainerLoadings(poCodeId, true, startTime, endTime);
 		int[] processIds = loadingRows.stream().mapToInt(LoadingRow::getId).toArray();
 //		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = getContainerLoadingRepository()
 //				.findAllUsedItemsByProcessIds(processIds)

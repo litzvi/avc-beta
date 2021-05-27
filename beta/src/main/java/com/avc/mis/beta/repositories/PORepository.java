@@ -4,6 +4,7 @@
 package com.avc.mis.beta.repositories;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -203,6 +204,8 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and lc.processStatus in :processStatuses "
 			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
+			+ "and (:startTime is null or po.recordedTime >= :startTime) "
+			+ "and (:endTime is null or po.recordedTime <= :endTime) "
 			+ "and ( "
 					+ ":onlyOpen = false "
 				+ "or (coalesce("
@@ -219,7 +222,9 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ ")"
 		+ "group by oi "
 		+ "ORDER BY oi.deliveryDate, po.id ")
-	List<PoItemRow> findAllOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId, ItemGroup itemGroup, boolean onlyOpen);
+	List<PoItemRow> findAllOrdersByType(
+			ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId, ItemGroup itemGroup, boolean onlyOpen, 
+			LocalDateTime startTime, LocalDateTime endTime);
 
 
 	@Query("select oi "

@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -82,8 +83,12 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 			+ "where t.processName in :processNames "
 				+ "and lc.processStatus in :statuses "
 				+ "and (po_code.id = :poCodeId or :poCodeId is null)"
+				+ "and (:startTime is null or r.recordedTime >= :startTime) "
+				+ "and (:endTime is null or r.recordedTime <= :endTime) "
 			+ "group by r.id, oi, pi "
 			+ "order by r.recordedTime desc ")
-	List<ReceiptItemRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses, Integer poCodeId);
+	List<ReceiptItemRow> findAllReceiptsByType(
+			ProcessName[] processNames, ProcessStatus[] statuses, Integer poCodeId, 
+			LocalDateTime startTime, LocalDateTime endTime);
 
 }

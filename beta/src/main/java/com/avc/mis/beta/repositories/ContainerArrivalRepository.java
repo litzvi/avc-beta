@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -41,9 +42,12 @@ public interface ContainerArrivalRepository extends ProcessRepository<ContainerA
 			+ "join p.lifeCycle lc "
 			+ "left join p.approvals approval "
 				+ "left join approval.user u "
+		+ "where "
+			+ "(:startTime is null or p.recordedTime >= :startTime) "
+			+ "and (:endTime is null or p.recordedTime <= :endTime) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
-	List<ContainerArrivalRow> findContainerArrivals();
+	List<ContainerArrivalRow> findContainerArrivals(LocalDateTime startTime, LocalDateTime endTime);
 
 	@Query("select new com.avc.mis.beta.dto.basic.ContainerArrivalBasic("
 			+ "p.id, p.version, cd.containerNumber, "
