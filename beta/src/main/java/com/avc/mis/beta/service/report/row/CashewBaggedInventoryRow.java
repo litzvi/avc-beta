@@ -125,6 +125,15 @@ public class CashewBaggedInventoryRow {
 				.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
 	}
 	
+	public AmountWithUnit getBoxWeight() {
+		if(MeasureUnit.NONE == getItem().getUnit().getMeasureUnit()){ 
+			return null;
+		}
+		else {
+			return getItem().getUnit();
+		}
+	}
+	
 	public String getType() {
 		if(isWhole()) {
 			return "WHOLE";

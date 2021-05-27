@@ -641,8 +641,13 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 							+ "and (:pointOfTime is null or usedProcess.recordedTime <= :pointOfTime)) "
 					+ ", 0)"
 				+ ") "
-		+ "group by item "
-		+ "order by item ")
+		+ "GROUP BY item, "
+			+ "CASE "
+				+ "WHEN item.itemGroup = com.avc.mis.beta.entities.item.ItemGroup.PRODUCT "
+					+ "THEN po_code "
+				+ "ELSE null "
+			+ "END "
+		+ "ORDER BY item ")
 	List<FinishedProductInventoryRow> findFinishedProductInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup,
 			LocalDateTime pointOfTime);
 

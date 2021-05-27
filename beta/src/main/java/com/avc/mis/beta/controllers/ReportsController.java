@@ -321,7 +321,7 @@ public class ReportsController {
 	public List<CashewBaggedInventoryRow> getCashewInventoryBagged(@PathVariable("dateLong") Long dateLong) {
 		LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochSecond(dateLong), 
                 TimeZone.getDefault().toZoneId());
-		return inventoryReports.getCashewBaggedInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.PACKED, ProductionUse.ROAST, ProductionUse.TOFFEE}, date);
+		return inventoryReports.getCashewBaggedInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.PACKED}, date);
 	}
 	
 	@RequestMapping("/getCashewExportReport/{firstLong}/{secondLong}")

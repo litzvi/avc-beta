@@ -94,11 +94,21 @@ public class FinishedProductInventoryRow {
 		return weight.convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE).getAmount();		
 	}
 	
+	public AmountWithUnit getBoxWeight() {
+		if(MeasureUnit.NONE == getItem().getUnit().getMeasureUnit()){ 
+			return null;
+		}
+		else {
+			return getItem().getUnit();
+		}
+	}
+	
 	public BigInteger getBoxes() {
-		if(MeasureUnit.NONE == getItem().getUnit().getMeasureUnit()){ }
+		if(MeasureUnit.NONE == getItem().getUnit().getMeasureUnit()){ 
+			return null;
+		}
 		else {
 			return getTotalAmount().getAmount().setScale(0, RoundingMode.HALF_DOWN).toBigInteger();
 		}
-		return null;
 	}
 }
