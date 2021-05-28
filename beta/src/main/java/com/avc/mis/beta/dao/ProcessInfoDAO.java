@@ -199,6 +199,11 @@ public class ProcessInfoDAO extends DAO {
 		if(usedProcesses != null && !usedProcesses.isEmpty()) {
 			int ordinal = 0;
 			for(UsedProcess usedProcess: usedProcesses) {
+				//check processes are in order, for consistency when searching inventory at point of time.
+				if(process.getRecordedTime().isBefore(usedProcess.getRecordedTime())) {
+					throw new IllegalArgumentException("Process can't have a date earlier than a used process.\n "
+							+ "Either change the current process time, or edit the used process time.");
+				}
 				ProcessParent processParent = usedProcess.getProcessParent();
 				processParent.setOrdinal(ordinal++);
 				addEntity(processParent, process);

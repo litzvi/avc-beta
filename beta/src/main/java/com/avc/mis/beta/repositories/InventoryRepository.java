@@ -656,7 +656,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	 */
 	@Query("select new com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow( "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item_unit, type(item), "
-			+ "item.brand, item.code, item.whole, item.grade, item.saltLevel, item.numBags, "
+			+ "item.brand, item.code, item.whole, item.roast, item.toffee, "
+			+ "item.grade, item.saltLevel, item.numBags, "
 			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
 				+ " * "
 				+ "(CASE "

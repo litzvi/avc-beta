@@ -175,7 +175,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 
 	@Query("select new com.avc.mis.beta.service.report.row.CashewExportReportRow( "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item.unit, type(item), item.brand, item.code, "
-			+ "item.whole, item.grade, item.saltLevel, item.numBags, "
+			+ "item.whole, item.roast, item.toffee, "
+			+ "item.grade, item.saltLevel, item.numBags, "
 			+ "sum(i.numberUnits), pi.measureUnit, coalesce(w_po.weight, 1), "
 			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
 			+ "p.recordedTime, "

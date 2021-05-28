@@ -83,7 +83,7 @@ public class InventoryUseTest {
 		
 		assertEquals(expected, actual, "Failed test adding InventoryUse");
 		
-		LocalDateTime time =LocalDateTime.of(1983, 11, 23, 0, 0);
+		LocalDateTime time =LocalDateTime.now();
 		inventoryUse.setRecordedTime(time);
 		expected.setRecordedTime(time);		
 		warehouseManagement.editGeneralInventoryUse(inventoryUse);

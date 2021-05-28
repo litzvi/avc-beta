@@ -10,6 +10,7 @@ import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.data.Supplier;
@@ -121,10 +122,10 @@ public class Controller {
 		List<CashewStandard> standartholder = refeDao.getAllCashewStandards();
 		result.add(standartholder);
 		
-		List<ItemWithUnitDTO> CashewItemsholder = refeDao.getItemsByGroup(ItemGroup.PRODUCT);
+		List<ItemDTO> CashewItemsholder = refeDao.getItemsByGroup(ItemGroup.PRODUCT);
 		result.add(CashewItemsholder);
 		
-		List<ItemWithUnitDTO> GeneralItemsholder = refeDao.getItemsByGroup(ItemGroup.GENERAL);
+		List<ItemDTO> GeneralItemsholder = refeDao.getItemsByGroup(ItemGroup.GENERAL);
 		result.add(GeneralItemsholder);
 		
 		Map<ProcessName, List<ManagementType>> Managmentholder = processDao.getAllUserManagementTypes();
@@ -133,7 +134,7 @@ public class Controller {
 		List<ProductionLineBasic> ProductionLinesHolder = refeDao.getAllBasicProductionLines();
 		result.add(ProductionLinesHolder);
 		
-		List<ItemWithUnitDTO> WasteItemsholder = refeDao.getItemsByGroup(ItemGroup.WASTE);
+		List<ItemDTO> WasteItemsholder = refeDao.getItemsByGroup(ItemGroup.WASTE);
 		WasteItemsholder.sort(new Comparator<BaseEntityDTO>() {
 			@Override
 			public int compare(BaseEntityDTO o1, BaseEntityDTO o2) {

@@ -302,7 +302,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<ItemAmountWithPoCode> findRelocationWeightedPos(Integer processId);
 	
 	@Query("select new com.avc.mis.beta.dto.query.UsedProcess( "
-			+ "used_p.id, used_p.version, used_type.processName, type(used_p)) "
+			+ "used_p.id, used_p.version, used_type.processName, type(used_p), used_p.recordedTime) "
 		+ "from TransactionProcess p "
 			+ "join p.usedItemGroups grp "
 				+ "join grp.usedItems ui "
@@ -315,7 +315,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<UsedProcess> findTransactionUsedProcess(Integer processId);
 		
 	@Query("select new com.avc.mis.beta.dto.query.UsedProcess( "
-			+ "used_p.id, used_p.version, used_type.processName, type(used_p)) "
+			+ "used_p.id, used_p.version, used_type.processName, type(used_p), used_p.recordedTime) "
 		+ "from StorageRelocation p "
 			+ "join p.storageMovesGroups grp "
 				+ "join grp.storageMoves ui "

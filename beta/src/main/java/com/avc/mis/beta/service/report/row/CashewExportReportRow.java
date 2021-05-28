@@ -42,13 +42,14 @@ public class CashewExportReportRow extends CashewBaggedInventoryRow {
 
 	public CashewExportReportRow(Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, ItemGroup itemGroup,
 			ProductionUse productionUse, AmountWithUnit unit, Class<? extends Item> clazz, 
-			String brand, String code, boolean whole, CashewGrade grade,
-			SaltLevel saltLevel, int numBags, BigDecimal amount, MeasureUnit measureUnit, BigDecimal weightCoefficient,
+			String brand, String code, boolean whole, boolean roast, boolean toffee,
+			CashewGrade grade, SaltLevel saltLevel, int numBags, 
+			BigDecimal amount, MeasureUnit measureUnit, BigDecimal weightCoefficient,
 			String poCode, LocalDateTime processDate, 
 			Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue, 
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType, String remarks) {
 		super(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unit, clazz,
-				brand, code, whole, grade, saltLevel, numBags, amount, measureUnit, weightCoefficient);
+				brand, code, whole, roast, toffee, grade, saltLevel, numBags, amount, measureUnit, weightCoefficient);
 		this.poCode = poCode;
 		this.processDate = processDate;
 		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, shipmentCodeCode, portOfDischargeCode, portOfDischargeValue);

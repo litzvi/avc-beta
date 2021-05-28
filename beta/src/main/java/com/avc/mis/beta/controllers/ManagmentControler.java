@@ -8,6 +8,7 @@ import com.avc.mis.beta.dto.basic.UserBasic;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.ValueEntity;
@@ -205,7 +206,7 @@ public class ManagmentControler {
 	
 	
 	@GetMapping(value="/getItemsSetupTable/{setupTable}")
-	public List<ItemWithUnitDTO> getItemsSetupTable(@PathVariable("setupTable") String setupTable) {
+	public List<ItemDTO> getItemsSetupTable(@PathVariable("setupTable") String setupTable) {
 		ItemGroup itemGroup;
 		if(setupTable.startsWith("C")) {
 			itemGroup = ItemGroup.PRODUCT;
@@ -393,7 +394,7 @@ public class ManagmentControler {
 	}
 	
 	@RequestMapping("/getCashewItems")
-	public List<ItemWithUnitDTO> getCashewItems() {
+	public List<ItemDTO> getCashewItems() {
 		return refeDao.getItemsByGroup(ItemGroup.PRODUCT);
 	}
 	

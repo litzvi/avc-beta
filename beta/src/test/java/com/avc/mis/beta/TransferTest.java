@@ -4,9 +4,7 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -19,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.codes.PoCode;
@@ -113,11 +112,11 @@ public class TransferTest {
 			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 			ProcessItem[] processItems = service.getProcessItems(poInventory);
 
-			List<ItemWithUnitDTO> items = service.getItemsByGroup(null);
+			List<ItemDTO> items = service.getItemsByGroup(null);
 			if(items.size() < 2) {
 				fail("not enough items for test");
 			}
-			ItemWithUnitDTO item = items.get(0);
+			ItemDTO item = items.get(0);
 			if(item.equals(processItems[0].getItem())) {
 				item = items.get(1);
 			}	

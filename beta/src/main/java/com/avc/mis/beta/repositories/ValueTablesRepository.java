@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.CashewGrade;
@@ -31,8 +32,9 @@ import com.avc.mis.beta.entities.item.ProductionUse;
  */
 public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 	
-	@Query("select new com.avc.mis.beta.dto.values.ItemWithUnitDTO("
-				+ "i.id, i.value, i.measureUnit, i.itemGroup, i.productionUse, "
+	@Query("select new com.avc.mis.beta.dto.values.ItemDTO("
+				+ "i.id, i.value, i.code, i.brand, "
+				+ "i.measureUnit, i.itemGroup, i.productionUse, "
 				+ "u, type(i)) "
 			+ "from Item i "
 				+ "join i.unit u "
@@ -47,7 +49,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 					+ "END) "
 					+ "or :packageType = -1) "
 			+ "order by i.value ")
-	List<ItemWithUnitDTO> findItemsByGroupBasic(ItemGroup itemGroup, ProductionUse productionUse, Integer packageType);
+	List<ItemDTO> findItemsByGroupBasic(ItemGroup itemGroup, ProductionUse productionUse, Integer packageType);
 
 	@Query("select new com.avc.mis.beta.dto.values.CashewItemDTO("
 			+ "i.id, i.value, i.code, i.brand, i.measureUnit, i.itemGroup, i.productionUse, "

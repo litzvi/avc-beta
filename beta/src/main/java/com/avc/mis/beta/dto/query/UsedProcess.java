@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dto.query;
 
+import java.time.LocalDateTime;
+
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoProcess;
@@ -19,11 +21,14 @@ import lombok.Value;
 public class UsedProcess {
 
 	ProcessBasic<? extends PoProcess> usedProcess;
+	LocalDateTime recordedTime;
 
 	public UsedProcess(
-			Integer usedProcessId, Integer usedProcessVersion, ProcessName processName, Class<? extends PoProcess> ProcessClazz) {
+			Integer usedProcessId, Integer usedProcessVersion, ProcessName processName, Class<? extends PoProcess> ProcessClazz, 
+			LocalDateTime recordedTime) {
 		super();
 		this.usedProcess = new ProcessBasic<>(usedProcessId, usedProcessVersion, processName, ProcessClazz);
+		this.recordedTime = recordedTime;
 	}	
 
 	@JsonIgnore

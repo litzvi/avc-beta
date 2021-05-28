@@ -2,6 +2,7 @@ package com.avc.mis.beta.controllers;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.item.ItemGroup;
@@ -71,7 +72,7 @@ public class QcController {
 	}
 	
 	@RequestMapping("/getCashewItems")
-	public List<ItemWithUnitDTO> getCashewItems() {
+	public List<ItemDTO> getCashewItems() {
 		return refeDao.getItemsByGroup(ItemGroup.PRODUCT);
 	}
 	

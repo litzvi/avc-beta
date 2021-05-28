@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
@@ -28,6 +29,7 @@ import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.CashewItem;
 import com.avc.mis.beta.entities.item.Item;
@@ -295,7 +297,7 @@ public class TestService {
 			items[i] = new ReceiptItem();
 			storageForms[i] = new StorageWithSample();
 			int itemId = oItem.getItem().getId();
-			ItemWithUnitDTO item = getItemsByGroup(null).stream().filter(j -> j.getId() == itemId).findAny().get();
+			ItemDTO item = getItemsByGroup(null).stream().filter(j -> j.getId() == itemId).findAny().get();
 			items[i].setItem(getItem(item));
 			items[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
 			items[i].setMeasureUnit(item.getMeasureUnit());
@@ -333,8 +335,8 @@ public class TestService {
 	
 	
 
-	public List<ItemWithUnitDTO> getItemsByGroup(ItemGroup group) {
-		List<ItemWithUnitDTO> items = valueTableReader.getItemsByGroup(group);
+	public List<ItemDTO> getItemsByGroup(ItemGroup group) {
+		List<ItemDTO> items = valueTableReader.getItemsByGroup(group);
 		if(items.isEmpty())
 			fail("No items in database for running this test");
 		return items;
@@ -346,8 +348,8 @@ public class TestService {
 	}
 	
 	public Item getItemByGroup(ItemGroup group) {
-		List<ItemWithUnitDTO> items = getItemsByGroup(group);
-		ItemWithUnitDTO item = items.get(randNum.nextInt(items.size()));
+		List<ItemDTO> items = getItemsByGroup(group);
+		ItemDTO item = items.get(randNum.nextInt(items.size()));
 		
 		return getItem(item);
 	}
@@ -501,19 +503,28 @@ public class TestService {
 		return processItems;
 	}
 	
-	public Item getItem(ItemWithUnitDTO itemWithUnitDTO) {
+	public Item getItem(ItemWithUnitDTO item) {
+		return getItem(item.getId(), item.getMeasureUnit(), item.getClazz());
+	}
+	
+	public Item getItem(ItemDTO item) {
+		return getItem(item.getId(), item.getMeasureUnit(), item.getClazz());
+	}
+
+	
+	public Item getItem(Integer id, MeasureUnit measureUnit, Class<? extends Item> clazz) {
 		Item item;
-		if(itemWithUnitDTO.getClazz() == Item.class) {
+		if(clazz == Item.class) {
 			item = new Item();
 		}
-		else if(itemWithUnitDTO.getClazz() == CashewItem.class) {
+		else if(clazz == CashewItem.class) {
 			item = new CashewItem();
 		}
 		else {
 			throw new NullPointerException();
 		}
-		item.setMeasureUnit(itemWithUnitDTO.getMeasureUnit());
-		item.setId(itemWithUnitDTO.getId());
+		item.setMeasureUnit(measureUnit);
+		item.setId(id);
 		return item;
 	}
 	

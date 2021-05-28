@@ -31,6 +31,8 @@ public class CashewBaggedInventoryRow {
 	private String brand;
 	private String code;
 	private boolean whole;
+	private boolean roast;
+	private boolean toffee;
 	private CashewGrade grade;
 	private AmountWithUnit bagSize;
 	private SaltLevel saltLevel;
@@ -43,13 +45,15 @@ public class CashewBaggedInventoryRow {
 			ItemGroup itemGroup, ProductionUse productionUse, 
 			AmountWithUnit unit, Class<? extends Item> clazz,
 			String brand, String code, 
-			boolean whole, CashewGrade grade, SaltLevel saltLevel, int numBags, 
+			boolean whole, boolean roast, boolean toffee,
+			CashewGrade grade, SaltLevel saltLevel, int numBags, 
 			BigDecimal amount, MeasureUnit measureUnit) {
 		this(itemId, itemValue, defaultMeasureUnit, 
 				itemGroup, productionUse, 
 				unit, clazz, 
 				brand, code, 
-				whole, grade, saltLevel, numBags, 
+				whole, roast, toffee,
+				grade, saltLevel, numBags, 
 				amount, measureUnit, BigDecimal.ONE);
 	}
 	
@@ -58,13 +62,16 @@ public class CashewBaggedInventoryRow {
 			ItemGroup itemGroup, ProductionUse productionUse, 
 			AmountWithUnit unit, Class<? extends Item> clazz,
 			String brand, String code, 
-			boolean whole, CashewGrade grade, SaltLevel saltLevel, int numBags, 
+			boolean whole, boolean roast, boolean toffee,
+			CashewGrade grade, SaltLevel saltLevel, int numBags, 
 			BigDecimal amount, MeasureUnit measureUnit, BigDecimal weightCoefficient) {
 		super();
 		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unit, clazz);
 		this.brand = brand;
 		this.code = code;
 		this.whole = whole;
+		this.roast = roast;
+		this.toffee = toffee;
 		this.grade = grade;
 		this.saltLevel = saltLevel;
 		this.bagsInBox = numBags;
