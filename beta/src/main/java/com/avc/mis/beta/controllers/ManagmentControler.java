@@ -9,7 +9,6 @@ import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.data.Person;
@@ -206,19 +205,24 @@ public class ManagmentControler {
 	
 	
 	@GetMapping(value="/getItemsSetupTable/{setupTable}")
-	public List<ItemDTO> getItemsSetupTable(@PathVariable("setupTable") String setupTable) {
+	public <T> List<T> getItemsSetupTable(@PathVariable("setupTable") String setupTable) {
 		ItemGroup itemGroup;
 		if(setupTable.startsWith("C")) {
 			itemGroup = ItemGroup.PRODUCT;
+			if(setupTable.endsWith("packed")) {
+				return (List<T>) refeDao.getCashewItems(itemGroup, null, null, PackageType.PACKED);
+			} else {
+				return (List<T>) refeDao.getCashewItems(itemGroup, null, null, PackageType.BULK);
+			}
 		} else if(setupTable.startsWith("G")) {
 			itemGroup = ItemGroup.GENERAL;
 		} else {
 			itemGroup = ItemGroup.WASTE;
 		}
 		if(setupTable.endsWith("packed")) {
-			return refeDao.getItems(itemGroup, null, PackageType.PACKED);
+			return (List<T>) refeDao.getItems(itemGroup, null, PackageType.PACKED);
 		} else {
-			return refeDao.getItems(itemGroup, null, PackageType.BULK);
+			return (List<T>) refeDao.getItems(itemGroup, null, PackageType.BULK);
 		}
 	}
 	
@@ -304,15 +308,6 @@ public class ManagmentControler {
 		} else {
 			itemGroup = ItemGroup.WASTE;
 		}
-//		if(setupTable.endsWith("packed")) {
-//			PackedItem packed = mapper.readValue(editOne.toString(), PackedItem.class);
-//			packed.setItemGroup(itemGroup);
-//			return refeDaoWrite.edit(packed);
-//		} else {
-//			BulkItem packed = mapper.readValue(editOne.toString(), BulkItem.class);
-//			packed.setItemGroup(itemGroup);
-//			return refeDaoWrite.edit(packed);
-//		}
 		if(setupTable.startsWith("C")) { 
 			itemGroup = ItemGroup.PRODUCT; 
 			CashewItem cashewItem = mapper.readValue(editOne.toString(), CashewItem.class);

@@ -88,7 +88,7 @@ public class StorageRelocations {
 		List<ItemAmountWithPoCode> usedPos = dao.setPoWeights(relocation);
 		dao.checkDAGmaintained(usedPos, relocation.getId());
 
-		dao.checkProducedInventorySufficiency(relocation);
+		dao.checkUsingProcesessConsistency(relocation);
 		checkRelocationBalance(relocation);
 	}
 		

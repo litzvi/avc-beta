@@ -19,7 +19,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
-@ToString
+@ToString(callSuper = true)
 public abstract class BasicValueDTO extends BasicDTO {
 
 	public abstract String getValue();

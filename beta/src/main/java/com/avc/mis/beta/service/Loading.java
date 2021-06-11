@@ -95,7 +95,7 @@ public class Loading {
 		
 		dao.editTransactionProcessEntity(loading); 
 		
-		dao.checkProducedInventorySufficiency(loading);
+		dao.checkUsingProcesessConsistency(loading);
 		dao.checkUsedInventoryAvailability(loading);
 		dao.setPoWeights(loading);
 		dao.setUsedProcesses(loading);

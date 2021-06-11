@@ -233,6 +233,19 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "and ui_p_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
 				+ "and sf.id not in :storageIds ")
 	Boolean isRelocationRemovingUsedProduct(Integer processId, Set<Integer> storageIds);
+	
+	@Query("select new java.lang.Boolean(count(*) = 0) "
+			+ "from ProcessParent pp "
+				+ "join pp.process p "
+					+ "join p.lifeCycle p_lc "
+				+ "join pp.usedProcess up "
+					+ "join up.lifeCycle up_lc "
+			+ "where up.id = :processId "
+				+ "and p_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+				+ "and up_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
+				+ "and p.recordedTime < up.recordedTime ")
+	Boolean isProcessSynchronized(Integer processId);
+
 
 	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithPoCode("
 				+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
@@ -337,5 +350,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			+ "where w_po_code.id in :poCodeIds "
 			+ "group by used_p.id, using_p.id ")
 	List<Integer[]> findTransactionProcessVertices(Integer[] poCodeIds);
+
+	
 
 }

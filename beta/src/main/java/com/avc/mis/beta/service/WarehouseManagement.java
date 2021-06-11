@@ -342,7 +342,7 @@ public class WarehouseManagement {
 		
 		dao.editTransactionProcessEntity(transfer);
 		
-		dao.checkProducedInventorySufficiency(transfer);
+		dao.checkUsingProcesessConsistency(transfer);
 		dao.checkUsedInventoryAvailability(transfer);
 		dao.setPoWeights(transfer);
 		dao.setUsedProcesses(transfer);

@@ -69,7 +69,7 @@ public class ProductionProcesses implements ProductionProcessService {
 		dao.checkRemovingUsedProduct(process);
 				
 		dao.editTransactionProcessEntity(process);		
-		dao.checkProducedInventorySufficiency(process);
+		dao.checkUsingProcesessConsistency(process);
 		dao.checkUsedInventoryAvailability(process);
 		dao.setPoWeights(process);
 		dao.setUsedProcesses(process);

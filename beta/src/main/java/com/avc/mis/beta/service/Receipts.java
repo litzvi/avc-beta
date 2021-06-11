@@ -134,7 +134,7 @@ public class Receipts {
 	public void editReceipt(Receipt receipt) {
 		dao.checkRemovingUsedProduct(receipt);		
 		dao.editPoProcessEntity(receipt);
-		dao.checkProducedInventorySufficiency(receipt);	
+		dao.checkUsingProcesessConsistency(receipt);	
 	}
 	
 	private boolean isOrderOpen(ReceiptItem[] receiptItems) {

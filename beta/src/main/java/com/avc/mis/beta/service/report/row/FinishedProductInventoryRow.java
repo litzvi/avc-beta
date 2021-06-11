@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
@@ -56,7 +59,12 @@ public class FinishedProductInventoryRow {
 //		this.item = item;
 		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unit, clazz);
 		this.poCodes = Stream.of(poCodes.split(",")).toArray(String[]::new);
-		this.receiptDates = Stream.of(receiptDates.split(",")).toArray(String[]::new);
+		this.receiptDates = Stream.of(processDates.split(",")).toArray(String[]::new);
+//		System.out.println("db dates: " + receiptDates);
+//		this.receiptDates = Stream.of(receiptDates.split(","))
+//				.map(j -> LocalDateTime.parse(j, DATE_TIME_FORMATTER)).map(k -> k.toLocalDate())
+//				.distinct().toArray(String[]::new);
+//		System.out.println("dates: " + this.receiptDates);
 		this.processDates = Stream.of(processDates.split(",")).toArray(String[]::new);
 //		this.receiptDates = Stream.of(receiptDates.split(",")).map(j -> LocalDateTime.parse(j, DATE_TIME_FORMATTER)).toArray(LocalDateTime[]::new);
 //		this.processDates = Stream.of(processDates.split(",")).map(j -> LocalDateTime.parse(j, DATE_TIME_FORMATTER)).toArray(LocalDateTime[]::new);

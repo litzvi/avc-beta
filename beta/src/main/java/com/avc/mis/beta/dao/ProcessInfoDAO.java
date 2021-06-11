@@ -325,14 +325,26 @@ public class ProcessInfoDAO extends DAO {
 //		checkProducedInventorySufficiency(process);	
 //	}
 	
-	public <T extends ProcessWithProduct<?>> void checkProducedInventorySufficiency(T process) {
+	public <T extends ProcessWithProduct<?>> void checkUsingProcesessConsistency(T process) {
+		//check that processes who use this product are synchronized (are later) with this edited process
+		if(!getProcessRepository().isProcessSynchronized(process.getId())) {
+			throw new IllegalArgumentException("Process recorded time is after a process using it's product");			
+		}
+		
+		//checks if not reducing produced amounts already used by other processes
 		Stream<StorageBalance> storageBalances = getInventoryRepository().findProducedStorageBalances(process.getId());		
 		if(storageBalances.anyMatch(b -> !b.isLegal())) {
 			throw new IllegalArgumentException("Process produced amounts can't be reduced because already in use");
 		}
 	}
 	
-	public void checkProducedInventorySufficiency(StorageRelocation relocation) {
+	public void checkUsingProcesessConsistency(StorageRelocation relocation) {
+		//check that processes who use this product are synchronized (are later) with this edited process
+		if(!getProcessRepository().isProcessSynchronized(relocation.getId())) {
+			throw new IllegalArgumentException("Process recorded time is after a process using it's product");			
+		}
+		
+		//checks if not reducing produced amounts already used by other processes
 		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageMoveBalances(relocation.getId());
 		if(!storageBalances.allMatch(b -> b.isLegal())) {
 			throw new IllegalArgumentException("Process moved amounts can't be reduced because already in use");

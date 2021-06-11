@@ -200,20 +200,22 @@ public class ValueTablesReader {
 		return getSupplierRepository().findSuppliersByGroupBasic(SupplyGroup.GENERAL);
 	}
 	
-	public List<ItemDTO> getItemsByPrudoctionUse(ProductionUse productionUse) {
-		return getValueTablesRepository().findItemsByGroupBasic(null, productionUse, -1);//, Arrays.asList(BulkItem.class, PackedItem.class));
+	public List<ItemDTO> getItemsByPrudoctionUse(ProductionUse[] productionUses) {
+		return getItems(null, productionUses, null);//, Arrays.asList(BulkItem.class, PackedItem.class));
 	}
 
 	public List<ItemDTO> getItemsByGroup(ItemGroup itemGroup) {
-		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, null, -1);//, Arrays.asList(BulkItem.class, PackedItem.class));
+		return getItems(itemGroup, null, null);//, Arrays.asList(BulkItem.class, PackedItem.class));
 	}
 	
-	public List<ItemDTO> getItems(ItemGroup itemGroup, ProductionUse productionUse) {
-		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, productionUse, -1);//, Arrays.asList(BulkItem.class, PackedItem.class));
+	public List<ItemDTO> getItems(ItemGroup itemGroup, ProductionUse[] productionUses) {
+		return getItems(itemGroup, productionUses, null);//, Arrays.asList(BulkItem.class, PackedItem.class));
 	}
 	
-	public List<ItemDTO> getItems(ItemGroup itemGroup, ProductionUse productionUse, PackageType packageType) {
-		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, productionUse, packageType.ordinal());
+	public List<ItemDTO> getItems(ItemGroup itemGroup, ProductionUse[] productionUses, PackageType packageType) {
+		boolean checkProductionUses = (productionUses != null);
+		Integer packageTypeOrdinal = packageType != null ? packageType.ordinal() : null;
+		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, checkProductionUses, productionUses, packageTypeOrdinal);
 	}
 	
 	public List<CashewItemDTO> getCashewItems(ItemGroup itemGroup, ProductionUse productionUse, CashewGrade grade, PackageType packageType) {

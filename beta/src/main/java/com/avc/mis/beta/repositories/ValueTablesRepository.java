@@ -39,17 +39,19 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 			+ "from Item i "
 				+ "join i.unit u "
 			+ "where (i.itemGroup = :itemGroup or :itemGroup is null) "
-				+ "and (i.productionUse = :productionUse or :productionUse is null) "
+				+ "and (:checkProductionUses = false or i.productionUse in :productionUses) "
 //				+ "and (type(i) in :classes) "
-				+ "and (:packageType = "
+				+ "and (:packageTypeOrdinal = "
 					+ "(CASE "
 						+ "WHEN u.measureUnit = com.avc.mis.beta.entities.enums.MeasureUnit.NONE "
 							+ "THEN 0 "
 						+ "ELSE 1 "
 					+ "END) "
-					+ "or :packageType = -1) "
+					+ "or :packageTypeOrdinal is null) "
 			+ "order by i.value ")
-	List<ItemDTO> findItemsByGroupBasic(ItemGroup itemGroup, ProductionUse productionUse, Integer packageType);
+	List<ItemDTO> findItemsByGroupBasic(ItemGroup itemGroup, 
+			boolean checkProductionUses, ProductionUse[] productionUses, 
+			Integer packageTypeOrdinal);
 
 	@Query("select new com.avc.mis.beta.dto.values.CashewItemDTO("
 			+ "i.id, i.value, i.code, i.brand, i.measureUnit, i.itemGroup, i.productionUse, "
