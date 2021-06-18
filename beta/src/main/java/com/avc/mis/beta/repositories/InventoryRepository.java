@@ -23,6 +23,7 @@ import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.CashewGrade;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.enums.SaltLevel;
 import com.avc.mis.beta.entities.item.Item;
@@ -495,8 +496,11 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	@Query("select new com.avc.mis.beta.service.report.row.ReceiptInventoryRow( "
 			+ "s.name, "
 			+ "item.value, "
+//			+ "item.id, item.value, item.code, item.brand, item.measureUnit, "
+//			+ "item.itemGroup, item.productionUse, item.unit, type(item), "
+//			+ "cashew_item.numBags, cashew_item.grade, cashew_item.whole, cashew_item.roast, cashew_item.toffee, cashew_item.saltLevel, "
 			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
-			+ "r.recordedTime, "
+			+ "r.recordedTime, receipt_pl.productionFunctionality, "
 			+ "function('GROUP_CONCAT', "
 				+ "concat( "
 					+ "cast((CASE "
@@ -527,8 +531,12 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "on uom.fromUnit = ri.measureUnit and uom.toUnit = rou.measureUnit "
 			+ "left join ri.unitPrice price "
 			+ "join ri.item item "
+//			+ "join CashewItem cashew_item "
+//				+ "on item = cashew_item "
 			+ "join ri.process r "
 				+ "join r.lifeCycle receipt_lc "
+				+ "left join r.productionLine receipt_pl "
+//					+ "left join receipt_pl.productionFunctionality receipt_pf "
 				+ "join r.poCode po_code "
 					+ "join po_code.contractType t "
 					+ "join po_code.supplier s "
@@ -549,7 +557,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "or (r.recordedTime <= :pointOfTime and sf_p.recordedTime <= :pointOfTime)) "
 			+ "and"
 				+ "(sf.numberUnits > "
-					+ "coalesce("
+					+ "coalesce(" 
 						+ "(select sum(usedStorage.numberUnits) "
 						+ " from sf.usedItems usedStorage "
 							+ "join usedStorage.group usedGroup "
@@ -561,7 +569,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ ") "
 		+ "group by ri "
 		+ "order by r.recordedTime ")
-	List<ReceiptInventoryRow> findReceiptInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup,
+	List<ReceiptInventoryRow> findReceiptInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses, 
+			ItemGroup itemGroup,
 			LocalDateTime pointOfTime);
 
 

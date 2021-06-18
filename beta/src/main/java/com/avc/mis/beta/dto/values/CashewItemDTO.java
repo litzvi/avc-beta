@@ -13,6 +13,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.SaltLevel;
+import com.avc.mis.beta.entities.item.CashewItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -50,6 +51,14 @@ public class CashewItemDTO extends ItemDTO {
 		this.saltLevel = saltLevel;
 	}
 	
-	
+	public CashewItemDTO(CashewItem cashewItem) {
+		super(cashewItem);
+		this.numBags = cashewItem.getNumBags();
+		this.grade = cashewItem.getGrade();
+		this.whole = cashewItem.isWhole();
+		this.roast = cashewItem.isRoast();
+		this.toffee = cashewItem.isToffee();
+		this.saltLevel = cashewItem.getSaltLevel();
+	}
 
 }
