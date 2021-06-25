@@ -119,21 +119,41 @@ public enum MeasureUnit {
 		
 		Map<MeasureUnit, UOM> unitMap = new HashMap<MeasureUnit, UOM>();
 		unitMap.put(UNIT, new UOM(UNIT, UNIT, BigDecimal.ONE, BigDecimal.ONE));
+		unitMap.put(BOX, new UOM(UNIT, BOX, BigDecimal.ONE, BigDecimal.ONE));
+		unitMap.put(TANK, new UOM(UNIT, TANK, BigDecimal.ONE, BigDecimal.ONE));
+		unitMap.put(BAG, new UOM(UNIT, BAG, BigDecimal.ONE, BigDecimal.ONE));
+		unitMap.put(ROLL, new UOM(UNIT, ROLL, BigDecimal.ONE, BigDecimal.ONE));
 		CONVERTION_MAP.put(UNIT, unitMap);
 
 		Map<MeasureUnit, UOM> boxMap = new HashMap<MeasureUnit, UOM>();
+		boxMap.put(UNIT, new UOM(BOX, UNIT, BigDecimal.ONE, BigDecimal.ONE));
 		boxMap.put(BOX, new UOM(BOX, BOX, BigDecimal.ONE, BigDecimal.ONE));
+		boxMap.put(TANK, new UOM(BOX, TANK, BigDecimal.ONE, BigDecimal.ONE));
+		boxMap.put(BAG, new UOM(BOX, BAG, BigDecimal.ONE, BigDecimal.ONE));
+		boxMap.put(ROLL, new UOM(BOX, ROLL, BigDecimal.ONE, BigDecimal.ONE));
 		CONVERTION_MAP.put(BOX, boxMap);
 		
 		Map<MeasureUnit, UOM> tankMap = new HashMap<MeasureUnit, UOM>();
+		tankMap.put(UNIT, new UOM(TANK, UNIT, BigDecimal.ONE, BigDecimal.ONE));
+		tankMap.put(BOX, new UOM(TANK, BOX, BigDecimal.ONE, BigDecimal.ONE));
 		tankMap.put(TANK, new UOM(TANK, TANK, BigDecimal.ONE, BigDecimal.ONE));
+		tankMap.put(BAG, new UOM(TANK, BAG, BigDecimal.ONE, BigDecimal.ONE));
+		tankMap.put(ROLL, new UOM(TANK, ROLL, BigDecimal.ONE, BigDecimal.ONE));
 		CONVERTION_MAP.put(TANK, tankMap);
 		
 		Map<MeasureUnit, UOM> bagMap = new HashMap<MeasureUnit, UOM>();
+		bagMap.put(UNIT, new UOM(BAG, UNIT, BigDecimal.ONE, BigDecimal.ONE));
+		bagMap.put(BOX, new UOM(BAG, BOX, BigDecimal.ONE, BigDecimal.ONE));
+		bagMap.put(TANK, new UOM(BAG, TANK, BigDecimal.ONE, BigDecimal.ONE));
 		bagMap.put(BAG, new UOM(BAG, BAG, BigDecimal.ONE, BigDecimal.ONE));
+		bagMap.put(ROLL, new UOM(BAG, ROLL, BigDecimal.ONE, BigDecimal.ONE));
 		CONVERTION_MAP.put(BAG, bagMap);
 		
 		Map<MeasureUnit, UOM> rollMap = new HashMap<MeasureUnit, UOM>();
+		rollMap.put(UNIT, new UOM(ROLL, UNIT, BigDecimal.ONE, BigDecimal.ONE));
+		rollMap.put(BOX, new UOM(ROLL, BOX, BigDecimal.ONE, BigDecimal.ONE));
+		rollMap.put(TANK, new UOM(ROLL, TANK, BigDecimal.ONE, BigDecimal.ONE));
+		rollMap.put(BAG, new UOM(ROLL, BAG, BigDecimal.ONE, BigDecimal.ONE));
 		rollMap.put(ROLL, new UOM(ROLL, ROLL, BigDecimal.ONE, BigDecimal.ONE));
 		CONVERTION_MAP.put(ROLL, rollMap);
 

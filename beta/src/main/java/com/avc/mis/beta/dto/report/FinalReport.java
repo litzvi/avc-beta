@@ -26,6 +26,7 @@ public class FinalReport {
 	private List<QcReportLine> receiptQC;
 	private ProductionReportLine cleaning;
 	private ProductionReportLine roasting;
+	private ProductionReportLine toffee;
 	private List<QcReportLine> roastQC;
 	private ProductionReportLine packing;
 	private List<LoadingReportLine> loadings;
@@ -53,6 +54,12 @@ public class FinalReport {
 			productPercentage = new ProductPercentage("roasting",
 					AmountWithUnit.percentageLoss(roasting.getTotalProductOut(), receivedAmount),
 					AmountWithUnit.percentageLoss(roasting.getTotalProductOut(), totalReceiptCount));
+			productPercentageLoss.add(productPercentage);
+		}
+		if(toffee != null) {			
+			productPercentage = new ProductPercentage("toffee",
+					AmountWithUnit.percentageLoss(toffee.getTotalProductOut(), receivedAmount),
+					AmountWithUnit.percentageLoss(toffee.getTotalProductOut(), totalReceiptCount));
 			productPercentageLoss.add(productPercentage);
 		}
 		if(packing != null) {			

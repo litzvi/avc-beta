@@ -165,6 +165,7 @@ public class ProcessSummaryReader {
 		report.setCleaning(getProductionSummary(ProcessName.CASHEW_CLEANING, poCodeId));
 		report.setRoasting(getProductionSummary(ProcessName.CASHEW_ROASTING, poCodeId));
 		report.setRoastQC(getQcSummary(ProcessName.ROASTED_CASHEW_QC, poCodeId));
+		report.setToffee(getProductionSummary(ProcessName.CASHEW_TOFFEE, poCodeId));
 		report.setPacking(getProductionSummary(ProcessName.PACKING, poCodeId));
 		report.setLoadings(getLoadingSummary(poCodeId));
 		
