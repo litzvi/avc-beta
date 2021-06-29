@@ -494,7 +494,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	 * LIST OF INVENTORY POS FOR REPORT, including price and bags. (Used for raw material inventory)
 	 */
 	@Query("select new com.avc.mis.beta.service.report.row.ReceiptInventoryRow( "
-			+ "s.name, "
+			+ "s.name, pc.name, "
 			+ "item.value, "
 //			+ "item.id, item.value, item.code, item.brand, item.measureUnit, "
 //			+ "item.itemGroup, item.productionUse, item.unit, type(item), "
@@ -540,6 +540,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "join r.poCode po_code "
 					+ "join po_code.contractType t "
 					+ "join po_code.supplier s "
+					+ "left join po_code.productCompany pc "
 			+ "join ri.allStorages sf "
 				+ "join sf.group sf_group "
 					+ "join sf_group.process sf_p "

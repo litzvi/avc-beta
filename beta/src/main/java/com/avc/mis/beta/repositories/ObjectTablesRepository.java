@@ -227,10 +227,12 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO( "
 			+ "po_code.id, po_code.code, "
 			+ "s.id, s.version, s.name, "
-			+ "ct.id, ct.value, ct.code, ct.currency, ct.suffix, ct.supplyGroup) "
+			+ "ct.id, ct.value, ct.code, ct.currency, ct.suffix, ct.supplyGroup, "
+			+ "pc.id, pc.version, pc.name) "
 		+ "from BasePoCode po_code "
 			+ "join po_code.supplier s "
 			+ "join po_code.contractType ct "
+			+ "left join po_code.productCompany pc "
 		+ "where po_code.id = :poCodeId ")
 	Optional<PoCodeDTO> findPoCodeById(int poCodeId);
 

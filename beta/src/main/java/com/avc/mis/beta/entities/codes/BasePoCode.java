@@ -64,6 +64,10 @@ public class BasePoCode extends BaseEntity implements ValueInterface {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "contractTypeId", nullable = false)
 	private ContractType contractType;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "productCompanyId")
+	private Supplier productCompany;
 		
 	@JsonIgnore
 	@ToString.Exclude 

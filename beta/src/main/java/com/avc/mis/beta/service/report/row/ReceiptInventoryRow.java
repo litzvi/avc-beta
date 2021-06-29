@@ -34,6 +34,7 @@ public class ReceiptInventoryRow {
 
 	String supplier;
 //	CashewItemDTO cashewItem;
+	String productCompany;
 	String item;
 	String poCode;
 	LocalDateTime receiptDate;
@@ -46,7 +47,7 @@ public class ReceiptInventoryRow {
 	ProcessStatus status;
 
 		
-	public ReceiptInventoryRow(String supplier, 
+	public ReceiptInventoryRow(String supplier, String productCompany, 
 			String item,
 //			Integer itemId, String itemValue, 
 //			String itemCode, String itemBrand, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, ProductionUse itemProductionUse, 
@@ -59,6 +60,7 @@ public class ReceiptInventoryRow {
 			AmountWithCurrency unitPrice, Currency currency, ProcessStatus status) {
 		super();
 		this.supplier = supplier;
+		this.productCompany = productCompany;
 		this.item = item;
 //		this.cashewItem = new CashewItemDTO(itemId, itemValue, itemCode, itemBrand, itemMeasureUnit, itemGroup, itemProductionUse, itemUnit, itemClazz, 
 //				itemNumBags, itemGrade, itemWhole, itemRoast, itemToffee, itemSaltLevel);
