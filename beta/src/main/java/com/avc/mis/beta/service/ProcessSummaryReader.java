@@ -49,12 +49,20 @@ public class ProcessSummaryReader {
 	public InventoryReportLine getInventorySummary(@NonNull Integer poCodeId) {
 		List<ItemAmount> inventory = getInventoryRepository().findInventoryItemAmounts(false, null, ItemGroup.PRODUCT, null, poCodeId);
 		
-		if(inventory == null || inventory.isEmpty()) {
-			return null;
-		}
+		List<ProcessStateInfo> processes = getProcessSummaryRepository().findProcessReportLines(ProcessName.PRODUCT_USE, poCodeId, false);
+		int[] processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
+		Stream<ItemAmount> itemAmounts = getProcessSummaryRepository().findSummaryUsedItemAmounts(processIds, poCodeId);
+		Map<ItemGroup, List<ItemAmount>> itemsMap = itemAmounts.collect(Collectors.groupingBy(ItemAmount::getItemGroup));
+
+
+		
+//		if(inventory == null || inventory.isEmpty()) {
+//			return null;
+//		}
 		
 		InventoryReportLine reportLine = new InventoryReportLine();
 		reportLine.setInventory(inventory);
+		reportLine.setInventoryUse(itemsMap.get(ItemGroup.PRODUCT));
 		return reportLine;
 	}
 

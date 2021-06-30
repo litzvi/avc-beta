@@ -19,6 +19,9 @@ public class InventoryReportLine {
 	private List<ItemAmount> inventory;
 
 	private AmountWithUnit totalInventory;
+	
+	private List<ItemAmount> inventoryUse;
+	private AmountWithUnit totalInventoryUse;
 
 
 	public void setInventory(List<ItemAmount> inventory) {
@@ -26,6 +29,12 @@ public class InventoryReportLine {
 		this.inventory = empty ? null : inventory;
 		this.totalInventory = empty ? null : ItemAmount.getTotalWeight(inventory);
 
+	}
+	
+	public void setInventoryUse(List<ItemAmount> inventoryUse) {
+		boolean empty = inventoryUse == null || inventoryUse.isEmpty();
+		this.inventoryUse = empty ? null : inventoryUse;
+		this.totalInventoryUse = empty ? null : ItemAmount.getTotalWeight(inventoryUse);
 	}
 
 }
