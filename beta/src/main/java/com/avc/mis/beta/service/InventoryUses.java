@@ -55,6 +55,19 @@ public class InventoryUses {
 		dao.setUsedProcesses(inventoryUse);
 	}
 	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addProductInventoryUse(InventoryUse inventoryUse) {
+		//Check that used items are from general
+		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.PRODUCT)) {
+			throw new IllegalArgumentException("Inventory use can only be for PRODUCT item groups");
+		}				
+		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.PRODUCT_USE));
+		dao.addTransactionProcessEntity(inventoryUse);
+		dao.checkUsedInventoryAvailability(inventoryUse);
+		dao.setPoWeights(inventoryUse);
+		dao.setUsedProcesses(inventoryUse);
+	}
+	
 	public InventoryUseDTO getInventoryUse(int processId) {
 		InventoryUseDTO inventoryUseDTO = new InventoryUseDTO();
 		inventoryUseDTO.setGeneralProcessInfo(getInventoryUseRepository()
@@ -79,6 +92,19 @@ public class InventoryUses {
 		
 		dao.checkUsedInventoryAvailability(inventoryUse);
 		dao.setGeneralPoWeights(inventoryUse);
+		dao.setUsedProcesses(inventoryUse);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editProductInventoryUse(InventoryUse inventoryUse) {
+		//Check that used items are from product
+		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.PRODUCT)) {
+			throw new IllegalArgumentException("Inventory use can only be for PRODUCT item groups");
+		}			
+		dao.editTransactionProcessEntity(inventoryUse);
+		
+		dao.checkUsedInventoryAvailability(inventoryUse);
+		dao.setPoWeights(inventoryUse);
 		dao.setUsedProcesses(inventoryUse);
 	}
 

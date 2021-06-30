@@ -60,7 +60,7 @@ public class ProductionProcessReports {
 	}
 	
 	public <T extends PoProcess> List<ProcessRow> getProcessesByTypeAndPoCode(
-			@NonNull Class<T> processClass, @NonNull ProcessName processName, 
+			@NonNull Class<T> processClass, ProcessName processName, 
 			Integer poCodeId, ProductionFunctionality functionality, boolean cancelled) {
 		return getProcessesByTypeAndPoCode(processClass, processName, poCodeId, functionality, cancelled, null, null);		
 	}
@@ -73,7 +73,8 @@ public class ProductionProcessReports {
 			@NonNull Class<T> processClass, @NonNull ProcessName processName, 
 			Integer poCodeId, ProductionFunctionality functionality, boolean cancelled, 
 			LocalDateTime startTime, LocalDateTime endTime) {
-		List<ProcessRow> processRows = getTransactionProcessRepository().findProcessByType(processName, poCodeId, functionality, cancelled, startTime, endTime);
+		List<ProcessRow> processRows = getTransactionProcessRepository().findProcessByType(
+				processClass, processName, poCodeId, functionality, cancelled, startTime, endTime);
 		int[] processIds = processRows.stream().mapToInt(ProcessRow::getId).toArray();
 		Map<Integer, List<ProductionProcessWithItemAmount>> usedMap = null;
 		Map<Integer, List<ProductionProcessWithItemAmount>> countMap = null;

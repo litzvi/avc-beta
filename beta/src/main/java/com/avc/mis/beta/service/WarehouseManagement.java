@@ -210,11 +210,11 @@ public class WarehouseManagement {
 	}
 	
 	public List<ProcessRow> getInventoryUses() {
-		return getInventoryUseReports().getInventoryUses();
+		return getInventoryUseReports().getInventoryUses(ProcessName.GENERAL_USE);
 	}
 	
 	public List<ProcessRow> getInventoryUses(Integer poCodeId) {
-		return getInventoryUseReports().getInventoryUses(poCodeId);
+		return getInventoryUseReports().getInventoryUses(ProcessName.GENERAL_USE, poCodeId);
 	}
 	
 	//----------------------------Duplicate in StorageRelocations - Should remove------------------------------------------

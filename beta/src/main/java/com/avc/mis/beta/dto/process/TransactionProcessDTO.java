@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.process;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +64,8 @@ public abstract class TransactionProcessDTO<T extends ProcessItemDTO> extends Pr
 			.filter(i -> i != null)
 			.reduce(AmountWithUnit::add);
 		if(totalAmount.isPresent()) {
-			return AmountWithUnit.weightDisplay(totalAmount.get(), Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+//			return AmountWithUnit.weightDisplay(totalAmount.get(), Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+			return Arrays.asList(totalAmount.get());
 		}
 		return null;
 	}

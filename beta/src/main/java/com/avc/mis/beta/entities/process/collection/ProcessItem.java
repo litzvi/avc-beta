@@ -151,7 +151,8 @@ public class ProcessItem extends ProcessGroupWithStorages {
 	
 	@PrePersist @PreUpdate
 	public void measureUnitItemCompatiable() {
-		Item.measureUnitItemCompatiable(item.getMeasureUnit(), getMeasureUnit());
+		if(getItem() != null && getMeasureUnit() != null)
+			Item.measureUnitItemCompatiable(getItem().getMeasureUnit(), getMeasureUnit());
 //		MeasureUnit itemDefaultMU = item.getMeasureUnit();
 //		if(MeasureUnit.DISCRETE_UNITS.contains(itemDefaultMU) ^ MeasureUnit.DISCRETE_UNITS.contains(getMeasureUnit())) {
 //			if(MeasureUnit.DISCRETE_UNITS.contains(itemDefaultMU)) {

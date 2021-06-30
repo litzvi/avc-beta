@@ -47,7 +47,7 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 	Optional<GeneralProcessInfo> findGeneralProcessInfoByProcessId(int processId, Class<? extends T> clazz);
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
-			+ "p.id, "
+			+ "p.id, pt.processName, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', po_code.id)), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
@@ -66,7 +66,8 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 			+ "left join p.productionLine p_line "
 			+ "left join p.approvals approval "
 				+ "left join approval.user u "
-		+ "where pt.processName = :processName "
+		+ "where type(p) = :processClass "
+			+ "and (pt.processName = :processName or :processName is null) "
 			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
 			+ "and (p_line.productionFunctionality = :functionality or :functionality is null) "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
@@ -74,7 +75,7 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 			+ "and (:endTime is null or p.recordedTime <= :endTime) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
-	List<ProcessRow> findProcessByType(@NonNull ProcessName processName, Integer poCodeId, ProductionFunctionality functionality, boolean cancelled,
+	<S extends PoProcess> List<ProcessRow> findProcessByType(@NonNull Class<S> processClass, ProcessName processName, Integer poCodeId, ProductionFunctionality functionality, boolean cancelled,
 			LocalDateTime startTime, LocalDateTime endTime);
 		
 	@Query("select new com.avc.mis.beta.dto.query.UsedItemWithGroup( "

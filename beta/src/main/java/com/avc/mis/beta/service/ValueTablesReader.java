@@ -219,7 +219,8 @@ public class ValueTablesReader {
 	}
 	
 	public List<CashewItemDTO> getCashewItems(ItemGroup itemGroup, ProductionUse productionUse, CashewGrade grade, PackageType packageType) {
-		return getValueTablesRepository().findCashewItems(itemGroup, productionUse, grade, packageType.ordinal());
+		Integer packageTypeOrdinal = packageType != null ? packageType.ordinal() : null;
+		return getValueTablesRepository().findCashewItems(itemGroup, productionUse, grade, packageTypeOrdinal);
 	}
 	
 	/**

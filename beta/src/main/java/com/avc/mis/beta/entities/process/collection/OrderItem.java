@@ -113,7 +113,8 @@ public class OrderItem extends RankedAuditedEntity {
 	
 	@PrePersist @PreUpdate
 	public void measureUnitItemCompatiable() {
-		Item.measureUnitItemCompatiable(getItem().getMeasureUnit(), getNumberUnits().getMeasureUnit());
+		if(getItem() != null && getNumberUnits() != null)
+			Item.measureUnitItemCompatiable(getItem().getMeasureUnit(), getNumberUnits().getMeasureUnit());
 	}
 
 }

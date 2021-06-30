@@ -96,9 +96,8 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 		if(totalAmount == null) {
 			return null;
 		}
-		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
-//		return new AmountWithUnit[] {totalAmount.setScale(MeasureUnit.SCALE),
-//				totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
+//		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+		return Arrays.asList(totalAmount.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
 	}
 	
 	/**

@@ -28,20 +28,20 @@ public class InventoryUseReports {
 
 	@Autowired private ProductionProcessReports processReportsReader;
 
-	public List<ProcessRow> getInventoryUses() {
-		return getInventoryUses(null);
+	public List<ProcessRow> getInventoryUses(ProcessName processName) {
+		return getInventoryUses(processName, null);
 	}
 	
-	public List<ProcessRow> getInventoryUses(LocalDateTime startTime, LocalDateTime endTime) {
-		return getInventoryUses(null, startTime, endTime);
+	public List<ProcessRow> getInventoryUses(ProcessName processName, LocalDateTime startTime, LocalDateTime endTime) {
+		return getInventoryUses(processName, null, startTime, endTime);
 	}
 	
-	public List<ProcessRow> getInventoryUses(Integer poCodeId) {
-		return getInventoryUses(poCodeId, null, null);
+	public List<ProcessRow> getInventoryUses(ProcessName processName, Integer poCodeId) {
+		return getInventoryUses(processName, poCodeId, null, null);
 	}
 	
-	public List<ProcessRow> getInventoryUses(Integer poCodeId, LocalDateTime startTime, LocalDateTime endTime) {
-		return getProcessReportsReader().getProcessesByTypeAndPoCode(InventoryUse.class, ProcessName.GENERAL_USE, poCodeId, null, true, startTime, endTime);
+	public List<ProcessRow> getInventoryUses(ProcessName processName, Integer poCodeId, LocalDateTime startTime, LocalDateTime endTime) {
+		return getProcessReportsReader().getProcessesByTypeAndPoCode(InventoryUse.class, processName, poCodeId, null, true, startTime, endTime);
 	}
 	
 }

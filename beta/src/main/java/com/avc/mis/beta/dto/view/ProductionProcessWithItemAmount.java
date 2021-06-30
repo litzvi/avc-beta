@@ -16,8 +16,10 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -28,6 +30,10 @@ import lombok.NonNull;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ProductionProcessWithItemAmount extends BasicDTO {
 
+	@Getter(value = AccessLevel.NONE)
+	private final static MeasureUnit DISPLAY_MEASURE_UNIT = MeasureUnit.LBS;
+
+	
 	private BasicValueEntity<Item> item;
 	private AmountWithUnit weight;
 	private AmountWithUnit amount;
@@ -75,7 +81,10 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 			amountList.add(this.amount);
 		}
 		if(this.weight != null) {
-			amountList.addAll(AmountWithUnit.weightDisplay(this.weight, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS)));
+			amountList.addAll(AmountWithUnit.weightDisplay(this.weight, Arrays.asList(DISPLAY_MEASURE_UNIT)));
+//			if(this.weight.getMeasureUnit() != DISPLAY_MEASURE_UNIT) {
+//				amountList.add(this.weight);
+//			}				
 		}
 		return amountList;
 

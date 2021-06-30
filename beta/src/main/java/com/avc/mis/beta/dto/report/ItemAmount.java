@@ -17,6 +17,8 @@ import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.ToString;
 import lombok.Value;
 
@@ -26,6 +28,10 @@ import lombok.Value;
  */
 @Value
 public class ItemAmount {
+	
+	@Getter(value = AccessLevel.NONE)
+	private final static MeasureUnit DISPLAY_MEASURE_UNIT = MeasureUnit.LBS;
+
 
 	BasicValueEntity<Item> item;
 
@@ -91,7 +97,8 @@ public class ItemAmount {
 	
 	public List<AmountWithUnit> getWeight() {
 		if(this.weightAmount != null) {
-			return AmountWithUnit.weightDisplay(this.weightAmount, Arrays.asList(MeasureUnit.LBS, MeasureUnit.KG));	
+//			return AmountWithUnit.weightDisplay(this.weightAmount, Arrays.asList(MeasureUnit.LBS, MeasureUnit.KG));	
+			return AmountWithUnit.weightDisplay(this.weightAmount, Arrays.asList(DISPLAY_MEASURE_UNIT));	
 		}
 		else {
 			return null;
@@ -102,7 +109,7 @@ public class ItemAmount {
 	static AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
 		Optional<AmountWithUnit> totalWeight = itemAmounts.stream()
 				.filter(i -> i.getWeightAmount() != null)
-				.map(i -> i.getWeightAmount())
+				.map(i -> AmountWithUnit.convert(i.getWeightAmount(), DISPLAY_MEASURE_UNIT).get())
 				.reduce(AmountWithUnit::add);
 		if(totalWeight.isPresent()) {
 			return totalWeight.get()

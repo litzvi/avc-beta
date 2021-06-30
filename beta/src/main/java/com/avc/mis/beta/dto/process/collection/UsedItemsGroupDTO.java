@@ -111,10 +111,11 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 		} catch (NoSuchElementException | UnsupportedOperationException e) {
 			return null;
 		}
-		if(!MeasureUnit.WEIGHT_UNITS.contains(totalAmount.getMeasureUnit())) {
-			return Arrays.asList(totalAmount);
-		}
-		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+//		if(!MeasureUnit.WEIGHT_UNITS.contains(totalAmount.getMeasureUnit())) {
+//			return Arrays.asList(totalAmount);
+//		}
+//		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+		return Arrays.asList(totalAmount.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
 	}
 	
 	@JsonIgnore

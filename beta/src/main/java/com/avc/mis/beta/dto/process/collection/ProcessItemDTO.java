@@ -129,18 +129,11 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 		else {
 			totalAmount = this.item.getUnit().multiply(total);
 		}
-//		else if(itemClass == PackedItem.class){
-//			totalAmount = this.item.getUnit().multiply(total);
-//		}
-//		else 
-//		{
-//			throw new IllegalStateException("The class can only apply to weight items");
-//		}
 		
-		if(this.item.getGroup() == ItemGroup.PRODUCT && MeasureUnit.WEIGHT_UNITS.contains(totalAmount.getMeasureUnit())) {
-			return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
-		}
-		return Arrays.asList(totalAmount);
+//		if(this.item.getGroup() == ItemGroup.PRODUCT && MeasureUnit.WEIGHT_UNITS.contains(totalAmount.getMeasureUnit())) {
+//			return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+//		}
+		return Arrays.asList(totalAmount.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
 
 	}
 
