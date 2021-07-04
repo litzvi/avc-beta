@@ -234,7 +234,7 @@ public class ProcessInfoDAO extends DAO {
 		if(poWeights != null && !poWeights.isEmpty()) {
 			AmountWithUnit usedWeight = null;
 			if(setWeight) {
-				usedWeight = poWeights.stream().map(i -> i.getWeightAmount()).reduce(AmountWithUnit::add).get();
+				usedWeight = poWeights.stream().map(i -> i.getWeightAmount()).filter(j -> j != null).reduce(AmountWithUnit::add).get();
 			}
 			Map<PoCodeBasic, Optional<AmountWithUnit>> poMap = poWeights.stream()
 					.collect(Collectors.groupingBy(ItemAmountWithPoCode::getPoCode, 

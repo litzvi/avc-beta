@@ -103,7 +103,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "(po_code.id = :poCodeId or :poCodeId is null) "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 			+ "and (:startTime is null or p.recordedTime >= :startTime) "
-			+ "and (:endTime is null or p.recordedTime <= :endTime) "
+			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
 	List<LoadingRow> findContainerLoadings(Integer poCodeId, boolean cancelled, LocalDateTime startTime, LocalDateTime endTime);
@@ -208,7 +208,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and type(item) = com.avc.mis.beta.entities.item.CashewItem "
 			+ "and (:startTime is null or p.recordedTime >= :startTime) "
-			+ "and (:endTime is null or p.recordedTime <= :endTime) "
+			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by item, po_code, pi.measureUnit "
 		+ "order by p.id, item.itemGroup, item ")	
 	List<CashewExportReportRow> findCashewExportReportRows(LocalDateTime startTime, LocalDateTime endTime);

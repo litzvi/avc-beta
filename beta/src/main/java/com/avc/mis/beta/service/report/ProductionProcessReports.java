@@ -70,7 +70,7 @@ public class ProductionProcessReports {
 	 * Optional filters are PO Code, Production Functionality and if to retrive cancelled processes.
 	 */
 	public <T extends PoProcess> List<ProcessRow> getProcessesByTypeAndPoCode(
-			@NonNull Class<T> processClass, @NonNull ProcessName processName, 
+			@NonNull Class<T> processClass, ProcessName processName, 
 			Integer poCodeId, ProductionFunctionality functionality, boolean cancelled, 
 			LocalDateTime startTime, LocalDateTime endTime) {
 		List<ProcessRow> processRows = getTransactionProcessRepository().findProcessByType(

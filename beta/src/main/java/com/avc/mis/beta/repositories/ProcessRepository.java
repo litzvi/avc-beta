@@ -72,7 +72,7 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 			+ "and (p_line.productionFunctionality = :functionality or :functionality is null) "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 			+ "and (:startTime is null or p.recordedTime >= :startTime) "
-			+ "and (:endTime is null or p.recordedTime <= :endTime) "
+			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
 	<S extends PoProcess> List<ProcessRow> findProcessByType(@NonNull Class<S> processClass, ProcessName processName, Integer poCodeId, ProductionFunctionality functionality, boolean cancelled,

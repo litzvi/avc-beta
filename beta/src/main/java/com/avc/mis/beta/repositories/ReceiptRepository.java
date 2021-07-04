@@ -84,7 +84,7 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 				+ "and lc.processStatus in :statuses "
 				+ "and (po_code.id = :poCodeId or :poCodeId is null)"
 				+ "and (:startTime is null or r.recordedTime >= :startTime) "
-				+ "and (:endTime is null or r.recordedTime <= :endTime) "
+				+ "and (:endTime is null or r.recordedTime < :endTime) "
 			+ "group by r.id, oi, pi "
 			+ "order by r.recordedTime desc ")
 	List<ReceiptItemRow> findAllReceiptsByType(

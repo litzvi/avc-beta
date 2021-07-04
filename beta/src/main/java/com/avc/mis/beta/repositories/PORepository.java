@@ -205,7 +205,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "and lc.processStatus in :processStatuses "
 			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
 			+ "and (:startTime is null or po.recordedTime >= :startTime) "
-			+ "and (:endTime is null or po.recordedTime <= :endTime) "
+			+ "and (:endTime is null or po.recordedTime < :endTime) "
 			+ "and ( "
 					+ ":onlyOpen = false "
 				+ "or (coalesce("

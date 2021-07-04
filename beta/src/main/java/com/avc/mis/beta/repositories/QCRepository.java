@@ -109,7 +109,7 @@ public interface QCRepository extends PoProcessRepository<QualityCheck> {
 		+ "where pt.processName in :processNames "
 			+ "and (po_code.id = :poId or :poId is null) "
 			+ "and (:startTime is null or qc.recordedTime >= :startTime) "
-			+ "and (:endTime is null or qc.recordedTime <= :endTime) "
+			+ "and (:endTime is null or qc.recordedTime < :endTime) "
 		+ "order by qc.recordedTime desc ")
 	List<CashewQcRow> findCashewQualityChecks(ProcessName[] processNames, Integer poId, LocalDateTime startTime, LocalDateTime endTime);
 

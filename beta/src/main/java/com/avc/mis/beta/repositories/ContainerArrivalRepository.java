@@ -44,7 +44,7 @@ public interface ContainerArrivalRepository extends ProcessRepository<ContainerA
 				+ "left join approval.user u "
 		+ "where "
 			+ "(:startTime is null or p.recordedTime >= :startTime) "
-			+ "and (:endTime is null or p.recordedTime <= :endTime) "
+			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
 	List<ContainerArrivalRow> findContainerArrivals(LocalDateTime startTime, LocalDateTime endTime);

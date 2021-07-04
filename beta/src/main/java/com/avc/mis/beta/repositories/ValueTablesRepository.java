@@ -71,7 +71,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 				+ "or :packageTypeOrdinal is null) "
 //			+ "and i.numBags >= :minBagsInBox "
 		+ "order by i.brand, i.code, i.value ")
-	List<CashewItemDTO> findCashewItems(ItemGroup itemGroup, ProductionUse productionUse, CashewGrade grade, int packageTypeOrdinal);
+	List<CashewItemDTO> findCashewItems(ItemGroup itemGroup, ProductionUse productionUse, CashewGrade grade, Integer packageTypeOrdinal);
 
 	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
 			+ "from Item i "
