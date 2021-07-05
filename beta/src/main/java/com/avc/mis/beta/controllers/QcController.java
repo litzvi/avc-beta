@@ -12,11 +12,16 @@ import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.report.QualityCheckReports;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -34,6 +39,9 @@ public class QcController {
 	
 	@Autowired
 	private QualityChecks qualityChecks;
+	
+	@Autowired
+	private QualityCheckReports qualityCheckReports;
 	
 	@Autowired
 	private ValueTablesReader refeDao;
@@ -63,13 +71,15 @@ public class QcController {
 	}
 	
 	@RequestMapping("/getRawQC")
-	public List<CashewQcRow> getRawQC() {
-		return qualityChecks.getRawQualityChecks();
+	public List<CashewQcRow> getRawQC(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return qualityCheckReports.getRawQualityChecks(begin, end);
 	}
 	
 	@RequestMapping("/getRoastQC")
-	public List<CashewQcRow> getRoastQC() {
-		return qualityChecks.getRoastedQualityChecks();
+	public List<CashewQcRow> getRoastQC(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return qualityCheckReports.getRoastedQualityChecks(begin, end);
 	}
 	
 	@RequestMapping("/getCashewItems")

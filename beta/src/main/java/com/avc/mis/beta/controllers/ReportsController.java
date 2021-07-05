@@ -118,6 +118,7 @@ public class ReportsController {
 		List<Object> roastingProcces = new ArrayList<Object>();
 		List<Object> toffeeProcces = new ArrayList<Object>();
 		List<Object> packingProcces = new ArrayList<Object>();
+		List<Object> usageProcces = new ArrayList<Object>();
 		List<Object> arrivalProcces = new ArrayList<Object>();
 		List<Object> loadingProcces = new ArrayList<Object>();
 		processReader.getAllProcessesByPo(poCode).forEach(k -> {
@@ -155,8 +156,12 @@ public class ReportsController {
 				case PACKING:
 					packingProcces.add(productionProcesses.getProductionProcess(k.getId()));
 					break;
+				case GENERAL_USE:
+				case PRODUCT_USE:
+					usageProcces.add(warehouseManagement.getInventoryUse(k.getId()));
+					break;
 				case CONTAINER_ARRIVAL:
-//					arrivalProcces.add(containerArrivals..g.getProductionProcess(k.getId()));
+					arrivalProcces.add(containerArrivals.getArrival(k.getId()));
 					break;
 				case CONTAINER_LOADING:
 					loadingProcces.add(loading.getLoading(k.getId()));
@@ -180,6 +185,7 @@ public class ReportsController {
 	    finalProcesses.put("roastingItemsObj", roastingProcces);
 	    finalProcesses.put("toffeeItemsObj", toffeeProcces);
 	    finalProcesses.put("packingItemsObj", packingProcces);
+	    finalProcesses.put("usageItemsObj", usageProcces);
 	    finalProcesses.put("arrivalsItemsObj", arrivalProcces);
 	    finalProcesses.put("loadingItemsObj", loadingProcces);
 		return finalProcesses;
@@ -224,12 +230,9 @@ public class ReportsController {
 	@RequestMapping("/allProductionByTime")
 	public List<ProcessRow> allProductionByTime(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		List<ProcessRow> allProduction = productionProcessReports.getProductionProcessesByType(ProcessName.CASHEW_CLEANING, begin, end);
-		allProduction.addAll(productionProcessReports.getProductionProcessesByType(ProcessName.CASHEW_ROASTING, begin, end));
-		allProduction.addAll(productionProcessReports.getProductionProcessesByType(ProcessName.CASHEW_TOFFEE, begin, end));
-		allProduction.addAll(productionProcessReports.getProductionProcessesByType(ProcessName.PACKING, begin, end));
-		
-		return allProduction;
+//		System.out.println(begin);
+//		System.out.println(end);
+		return productionProcessReports.getProductionProcessesByType(null, begin, end);
 	}
 	
 //	@RequestMapping("/getCashewInventoryPacked")
@@ -268,34 +271,25 @@ public class ReportsController {
 		return result3;
 	}
 	
-	@RequestMapping("/getCashewInventoryFinished/{dateLong}")
-	public List<FinishedProductInventoryRow> getCashewInventoryFinished(@PathVariable("dateLong") Long dateLong) {
-		LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochSecond(dateLong), 
-                TimeZone.getDefault().toZoneId());
+	@RequestMapping("/getCashewInventoryFinished")
+	public List<FinishedProductInventoryRow> getCashewInventoryFinished(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
 		return inventoryReports.getFinishedProductInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.PACKED, ProductionUse.ROAST, ProductionUse.TOFFEE}, date);
 	}
 	
-	@RequestMapping("/getCashewInventoryRaw/{dateLong}")
-	public List<ReceiptInventoryRow> getCashewInventoryRaw(@PathVariable("dateLong") Long dateLong) {
-		LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochSecond(dateLong), 
-                TimeZone.getDefault().toZoneId());
+	@RequestMapping("/getCashewInventoryRaw")
+	public List<ReceiptInventoryRow> getCashewInventoryRaw(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
 		return inventoryReports.getReceiptInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.RAW_KERNEL}, date);
 	}
 	
-	@RequestMapping("/getCashewInventoryBagged/{dateLong}")
-	public List<CashewBaggedInventoryRow> getCashewInventoryBagged(@PathVariable("dateLong") Long dateLong) {
-		LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochSecond(dateLong), 
-                TimeZone.getDefault().toZoneId());
+	@RequestMapping("/getCashewInventoryBagged")
+	public List<CashewBaggedInventoryRow> getCashewInventoryBagged(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
 		return inventoryReports.getCashewBaggedInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.PACKED}, date);
 	}
 	
-	@RequestMapping("/getCashewExportReport/{firstLong}/{secondLong}")
-	public List<CashewExportReportRow> getCashewExportReport(@PathVariable("firstLong") Long firstLong, @PathVariable("secondLong") Long secondLong) {
-		LocalDateTime firstDate = LocalDateTime.ofInstant(Instant.ofEpochSecond(firstLong), 
-                TimeZone.getDefault().toZoneId());
-		LocalDateTime secondDate = LocalDateTime.ofInstant(Instant.ofEpochSecond(secondLong), 
-                TimeZone.getDefault().toZoneId());
-		return loadingReports.getCashewExportReportRows(firstDate, secondDate);
+	@RequestMapping("/getCashewExportReport")
+	public List<CashewExportReportRow> getCashewExportReport(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return loadingReports.getCashewExportReportRows(begin, end);
 	}
 	
 	@RequestMapping("/getBulkPackCashewItems/{packageType}")

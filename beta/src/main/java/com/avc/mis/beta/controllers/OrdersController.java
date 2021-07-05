@@ -28,12 +28,19 @@ import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.Receipts;
 import com.avc.mis.beta.service.Samples;
 import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.report.OrderReports;
+import com.avc.mis.beta.service.report.ReceiptReports;
+import com.fasterxml.jackson.databind.JsonNode;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,10 +76,14 @@ public class OrdersController {
 	@Autowired
 	private ValueTablesReader refeDao;
 	
+	@Autowired
+	private OrderReports orderReports;
 
 	@Autowired
 	private ProcessInfoWriter processInfoWriter;
 	
+	@Autowired
+	private ReceiptReports receiptReports;
 	
 //	@PostMapping(value="/addCashewOrder")
 //	public void addCashewOrder(@RequestBody JsonNode po) {
@@ -162,47 +173,54 @@ public class OrdersController {
 	
 	@RequestMapping("/getCashewOrdersOpen")
 	public List<PoItemRow> getCashewOrdersOpen() {
-		return ordersDao.findOpenCashewOrderItems();
+		return orderReports.findOpenCashewOrderItems();
 	}
 	
 	@RequestMapping("/getGeneralOrdersOpen")
 	public List<PoItemRow> getGeneralOrdersOpen() {
-		return ordersDao.findOpenGeneralOrderItems();
+		return orderReports.findOpenGeneralOrderItems();
 	}
 	
 	@RequestMapping("/getPendingCashew")
-	public List<ReceiptRow> getPendingCashew() {
-		return orderRecipt.findPendingCashewReceipts();
+	public List<ReceiptRow> getPendingCashew(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return receiptReports.findPendingCashewReceipts(begin, end);
 	}
 	
 	@RequestMapping("/getPendingGeneral")
-	public List<ReceiptRow> getPendingGeneral() {
-		return orderRecipt.findPendingGeneralReceipts();
+	public List<ReceiptRow> getPendingGeneral(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return receiptReports.findPendingGeneralReceipts(begin, end);
 	}
 	
 	@RequestMapping("/getReceivedCashew")
-	public List<ReceiptRow> getReceivedCashew() {
-		return orderRecipt.findFinalCashewReceipts();
+	public List<ReceiptRow> getReceivedCashew(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return receiptReports.findFinalCashewReceipts(begin, end);
 	}
 	
 	@RequestMapping("/getReceivedGeneral")
-	public List<ReceiptRow> getReceivedGeneral() {
-		return orderRecipt.findFinalGeneralReceipts();
+	public List<ReceiptRow> getReceivedGeneral(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return receiptReports.findFinalGeneralReceipts(begin, end);
 	}
 
 	@RequestMapping("/getHistoryCashewOrders")
-	public List<PoItemRow> getHistoryCashewOrders() {
-		return ordersDao.findAllCashewOrderItemsHistory();
+	public List<PoItemRow> getHistoryCashewOrders(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return orderReports.findAllCashewOrderItemsHistory(begin, end);
 	}
 	
 	@RequestMapping("/findCashewReceiptsHistory")
-	public List<ReceiptRow> findCashewReceiptsHistory() {
-		return orderRecipt.findCashewReceiptsHistory();
+	public List<ReceiptRow> findCashewReceiptsHistory(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return receiptReports.findCashewReceiptsHistory(begin, end);
 	}
 	
 	@RequestMapping("/findGeneralReceiptsHistory")
-	public List<ReceiptRow> findGeneralReceiptsHistory() {
-		return orderRecipt.findGeneralReceiptsHistory();
+	public List<ReceiptRow> findGeneralReceiptsHistory(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return receiptReports.findGeneralReceiptsHistory(begin, end);
 	}
 	
 	@RequestMapping("/getAllCashewReciveRejected")
@@ -211,8 +229,9 @@ public class OrdersController {
 	}
 	
 	@RequestMapping("/getAllGeneralOrders")
-	public List<PoItemRow> getAllGeneralOrders() {
-		return ordersDao.findAllGeneralOrderItemsHistory();
+	public List<PoItemRow> getAllGeneralOrders(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return orderReports.findAllGeneralOrderItemsHistory(begin, end);
 	}
 	
 	@RequestMapping("/getCashewSuppliers")

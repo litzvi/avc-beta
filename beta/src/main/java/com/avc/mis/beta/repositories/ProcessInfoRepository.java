@@ -116,14 +116,16 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	@Query("select count(*) "
 		+ "from UserMessage m "
 			+ "join m.user u "
-		+ "where u.id = :userId ")
-	Integer findUserMassagesNumber(Integer userId);
+		+ "where u.id = :userId "
+			+ "and (:lables is null or m.label in :lables) ")
+	Integer findUserMassagesNumber(Integer userId, List<MessageLabel> lables);
 	
 	@Query("select count(*) "
 		+ "from ApprovalTask pa "
 			+ "join pa.user u "
-		+ "where u.id = :userId ")
-	Integer findUserTasksNumber(Integer userId);
+		+ "where pa.decision in :decisions "
+			+ "and u.id = :userId ")
+	Integer findUserTasksNumber(Integer userId, DecisionType[] decisions);
 
 	@Query("select a "
 			+ "from ProcessManagement a "

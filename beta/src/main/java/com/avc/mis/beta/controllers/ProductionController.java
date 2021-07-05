@@ -14,11 +14,16 @@ import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.ProductionProcesses;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
+import com.avc.mis.beta.service.report.ProductionProcessReports;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -46,22 +51,32 @@ public class ProductionController {
 	@Autowired
 	private ProductionProcesses productionProcesses;
 	
+	@Autowired
+	private ProductionProcessReports productionProcessReports;
+	
 	@RequestMapping("/allProduction/{id}")
-	public List<ProcessRow> allProduction(@PathVariable("id") ProcessName process) {
-		return productionProcesses.getProductionProcessesByType(process);
+	public List<ProcessRow> allProduction(@PathVariable("id") ProcessName process,
+			@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return productionProcessReports.getProductionProcessesByType(process, begin, end);
 	}
 	
 	
 	@RequestMapping("/getAllPos/{id}")
-	public Set<PoCodeBasic> getAllPos(@PathVariable("id") ProductionUse item) {
-		switch (item) {
+	public Set<PoCodeBasic> getAllPos(@PathVariable("id") ProductionUse usage) {
+		switch (usage) {
 			case RAW_KERNEL:
-				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{item}, new ProductionFunctionality[]{ProductionFunctionality.RAW_STATION});
+				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{usage}, new ProductionFunctionality[]{ProductionFunctionality.RAW_STATION});
 			case CLEAN:
-				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{item}, new ProductionFunctionality[]{ProductionFunctionality.ROASTER_IN});
+				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{usage}, new ProductionFunctionality[]{ProductionFunctionality.ROASTER_IN});
 			default:
-				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{item});
+				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{usage});
 		}
+	}
+	
+	@RequestMapping("/getAllPosQc")
+	public Set<PoCodeBasic> getAllPosQc() {
+		return objectTableReader.findAvailableInventoryPoCodes(ItemGroup.QC);
 	}
 	
 	@RequestMapping("/findFreeMixPoCodes")
@@ -81,6 +96,10 @@ public class ProductionController {
 	@RequestMapping("/getStorageRoastPo/{id}")
 	public List<ProcessItemInventory> getStorageRoastPo(@PathVariable("id") int poCode) {
 		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST}, null, null, new Integer[] {poCode}, null);
+	}
+	@RequestMapping("/getStorageQcPo/{id}")
+	public List<ProcessItemInventory> getStorageQcPo(@PathVariable("id") int poCode) {
+		return warehouseManagement.getAvailableInventory(ItemGroup.QC, null, null, null, new Integer[] {poCode}, null);
 	}
 	@RequestMapping("/getStorageRoastPos/{poCodes}")
 	public List<ProcessItemInventory> getStorageRoastPos(@PathVariable("poCodes") Integer[] poCodes) {

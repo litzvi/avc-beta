@@ -134,7 +134,11 @@
 		    <artifactId>commons-collections4</artifactId>
 		    <version>4.4</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.11.999</version>
+		</dependency>
 		<!-- <dependency>
 		    <groupId>org.hibernate</groupId>
 		    <artifactId>hibernate-envers</artifactId>

@@ -10,6 +10,7 @@ import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
@@ -41,13 +42,18 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -122,12 +128,12 @@ public class Controller {
 		List<CashewStandard> standartholder = refeDao.getAllCashewStandards();
 		result.add(standartholder);
 		
-		List<ItemDTO> CashewItemsholder = refeDao.getItemsByGroup(ItemGroup.PRODUCT);
-		result.add(CashewItemsholder);
-		
-//		List<CashewItemDTO> CashewItemsholder = refeDao.getCashewItems(null, null, null, null);
+//		List<ItemDTO> CashewItemsholder = refeDao.getItemsByGroup(ItemGroup.PRODUCT);
 //		result.add(CashewItemsholder);
 		
+		List<CashewItemDTO> CashewItemsholder = refeDao.getCashewItems(null, null, null, null);
+		result.add(CashewItemsholder);
+//		
 		List<ItemDTO> GeneralItemsholder = refeDao.getItemsByGroup(ItemGroup.GENERAL);
 		result.add(GeneralItemsholder);
 		
@@ -161,26 +167,28 @@ public class Controller {
 		return result; 
 	}
 	
-	@RequestMapping("/getUserMassages")
-	public List<UserMessageDTO> getMassages() {
-		try {
-			return processDao.getAllMessages(null, null);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-	}
+//	@RequestMapping("/getUserMassages")
+//	public List<UserMessageDTO> getMassages(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+//			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+//		try {
+//			return processDao.getAllMessages(begin, end);
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			return null;
+//		}
+//	}
 	
-	@RequestMapping("/getUserTasks")
-	public List<ApprovalTaskDTO> getUserTasks() {
-		return processDao.getAllApprovals(null, null);
-	}
+//	@RequestMapping("/getUserTasks")
+//	public List<ApprovalTaskDTO> getUserTasks(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+//			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+//		return processDao.getAllApprovals(begin, end);
+//	}
 	
 	@RequestMapping("/getUserMassagesNumber")
 	public int getMassagesNumber() {
 		try {
-			return processDao.getUserMassagesNumber();
+			return processDao.getUserMassagesNumber(Arrays.asList(MessageLabel.NEW));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -190,7 +198,7 @@ public class Controller {
 	
 	@RequestMapping("/getUserTasksNumber")
 	public int getUserTasksNumber() {
-		return processDao.getUserTasksNumber();
+		return processDao.getUserTasksNumber(new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED});
 	}
 	
 	

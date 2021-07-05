@@ -25,12 +25,18 @@ import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.ObjectWriter;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
+import com.avc.mis.beta.service.report.ContainerArrivalReports;
+import com.avc.mis.beta.service.report.LoadingReports;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,7 +70,11 @@ public class ContainerController {
 	@Autowired
 	private ObjectTablesReader objectTableReader;
 	
+	@Autowired
+	private LoadingReports loadingReports;
 	
+	@Autowired
+	private ContainerArrivalReports containerArrivalReports;
 	
 	@PostMapping("/addLoading")
 	public ContainerLoadingDTO addLoading(@RequestBody ContainerLoading load) {
@@ -122,8 +132,9 @@ public class ContainerController {
 		return loading.getSecurityExportDoc(processId);
 	}
 	@RequestMapping("/getAllLoadings")
-	public List<LoadingRow> getAllLoadings() {
-		return loading.getLoadings();
+	public List<LoadingRow> getAllLoadings(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return loadingReports.getLoadings(begin, end);
 	}
 	
 	@RequestMapping("/getStorageRoastPackedPo/{id}")
@@ -152,8 +163,9 @@ public class ContainerController {
 	}
 	
 	@RequestMapping("/findContainerArrivals")
-	public List<ContainerArrivalRow> findContainerArrivals() {
-		return containerArrivals.getContainerArrivals();
+	public List<ContainerArrivalRow> findContainerArrivals(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return containerArrivalReports.getContainerArrivals(begin, end);
 	}
 	
 	@RequestMapping("/getSetUpContianer")

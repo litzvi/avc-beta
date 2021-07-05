@@ -208,8 +208,12 @@ public class ManagmentControler {
 	public <T> List<T> getItemsSetupTable(@PathVariable("setupTable") String setupTable) {
 		ItemGroup itemGroup;
 		if(setupTable.startsWith("C")) {
-			itemGroup = ItemGroup.PRODUCT;
-			if(setupTable.endsWith("packed")) {
+			if(setupTable.endsWith("QC")) {
+				itemGroup = ItemGroup.QC;
+			} else {
+				itemGroup = ItemGroup.PRODUCT;
+			}
+			if(setupTable.contains("packed")) {
 				return (List<T>) refeDao.getCashewItems(itemGroup, null, null, PackageType.PACKED);
 			} else {
 				return (List<T>) refeDao.getCashewItems(itemGroup, null, null, PackageType.BULK);
@@ -232,7 +236,11 @@ public class ManagmentControler {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		if(setupTable.startsWith("C")) {
 			CashewItem packed = mapper.readValue(newOne.toString(), CashewItem.class);
-			packed.setItemGroup(ItemGroup.PRODUCT);
+			if(setupTable.endsWith("QC")) {
+				packed.setItemGroup(ItemGroup.QC);
+			} else {
+				packed.setItemGroup(ItemGroup.PRODUCT);
+			}
 			refeDaoWrite.addCashewItem(packed);
 			return;
 		} else if(setupTable.startsWith("G")) {
@@ -300,26 +308,21 @@ public class ManagmentControler {
 	@PutMapping(value="/editItem/{setupTable}")
 	public ValueEntity editItem(@PathVariable("setupTable") String setupTable, @RequestBody JsonNode editOne) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		ItemGroup itemGroup;
-		if(setupTable.startsWith("C")) {
-			itemGroup = ItemGroup.PRODUCT;
-		} else if(setupTable.startsWith("G")) {
-			itemGroup = ItemGroup.GENERAL;
-		} else {
-			itemGroup = ItemGroup.WASTE;
-		}
 		if(setupTable.startsWith("C")) { 
-			itemGroup = ItemGroup.PRODUCT; 
 			CashewItem cashewItem = mapper.readValue(editOne.toString(), CashewItem.class);
-			cashewItem.setItemGroup(itemGroup); 
+			if(setupTable.endsWith("QC")) {
+				cashewItem.setItemGroup(ItemGroup.QC);
+			} else {
+				cashewItem.setItemGroup(ItemGroup.PRODUCT);
+			} 
 			return refeDaoWrite.edit(cashewItem);
-		} else if(setupTable.startsWith("G")) { 
-			itemGroup = ItemGroup.GENERAL; 
-		} else { 
-			itemGroup = ItemGroup.WASTE; 
 		} 
-		Item item = mapper.readValue(editOne.toString(), Item.class); 
-		item.setItemGroup(itemGroup); 
+		Item item = mapper.readValue(editOne.toString(), Item.class);
+		if(setupTable.startsWith("G")) { 
+			item.setItemGroup(ItemGroup.GENERAL); 
+		} else {
+			item.setItemGroup(ItemGroup.WASTE); 
+		}
 		return refeDaoWrite.edit(item);
 	}
 	

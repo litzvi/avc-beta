@@ -120,12 +120,12 @@ public class ProcessInfoReader {
 		return getProcessInfoRepository().findApprovals(dao.getCurrentUserId(), DecisionType.values(), startTime, endTime);
 	}
 	
-	public Integer getUserMassagesNumber() {		
-		return getProcessInfoRepository().findUserMassagesNumber(dao.getCurrentUserId());
+	public Integer getUserMassagesNumber(List<MessageLabel> lables) {		
+		return getProcessInfoRepository().findUserMassagesNumber(dao.getCurrentUserId(), lables);
 	}
 		
-	public Integer getUserTasksNumber() {		
-		return getProcessInfoRepository().findUserTasksNumber(dao.getCurrentUserId());
+	public Integer getUserTasksNumber(DecisionType[] decisions) {		
+		return getProcessInfoRepository().findUserTasksNumber(dao.getCurrentUserId(), decisions);
 	}
 		
 	/**

@@ -9,24 +9,32 @@ import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.InventoryUse;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
+import com.avc.mis.beta.service.InventoryUses;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.ProductionProcesses;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.report.InventoryReports;
+import com.avc.mis.beta.service.report.InventoryUseReports;
+import com.avc.mis.beta.service.report.StorageRelocationReports;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,6 +51,9 @@ public class InventoryController {
 	private InventoryReports inventoryReports;
 	
 	@Autowired
+	private InventoryUseReports inventoryUseReports;
+	
+	@Autowired
 	private ValueTablesReader refeDao;
 	
 	@Autowired
@@ -52,7 +63,13 @@ public class InventoryController {
 	private WarehouseManagement warehouseManagement;
 	
 	@Autowired
+	private InventoryUses inventoryUses;
+	
+	@Autowired
 	private ProductionProcesses productionProcesses;
+	
+	@Autowired
+	private StorageRelocationReports storageRelocationReports;
 	
 	
 	@PostMapping(value="/addStorageTransfer")
@@ -69,8 +86,14 @@ public class InventoryController {
 	
 	@PostMapping(value="/addMaterialUse")
 	public InventoryUseDTO addMaterialUse(@RequestBody InventoryUse inventoryUse) {
-		warehouseManagement.addGeneralInventoryUse(inventoryUse);
-		return warehouseManagement.getInventoryUse(inventoryUse.getId());
+		inventoryUses.addGeneralInventoryUse(inventoryUse);
+		return inventoryUses.getInventoryUse(inventoryUse.getId());
+	}
+	
+	@PostMapping(value="/addCashewUse")
+	public InventoryUseDTO addCashewUse(@RequestBody InventoryUse inventoryUse) {
+		inventoryUses.addProductInventoryUse(inventoryUse);
+		return inventoryUses.getInventoryUse(inventoryUse.getId());
 	}
 	
 	@PutMapping(value="/editStorageTransfer")
@@ -87,8 +110,14 @@ public class InventoryController {
 	
 	@PutMapping(value="/editMaterialUse")
 	public InventoryUseDTO editMaterialUse(@RequestBody InventoryUse inventoryUse) {
-		warehouseManagement.editGeneralInventoryUse(inventoryUse);
-		return warehouseManagement.getInventoryUse(inventoryUse.getId());
+		inventoryUses.editGeneralInventoryUse(inventoryUse);
+		return inventoryUses.getInventoryUse(inventoryUse.getId());
+	}
+	
+	@PutMapping(value="/editCashewUse")
+	public InventoryUseDTO editCashewUse(@RequestBody InventoryUse inventoryUse) {
+		inventoryUses.editProductInventoryUse(inventoryUse);
+		return inventoryUses.getInventoryUse(inventoryUse.getId());
 	}
 	
 	@RequestMapping("/getStorageTransfer/{id}")
@@ -101,8 +130,8 @@ public class InventoryController {
 		return warehouseManagement.getStorageRelocation(id);
 	}
 	
-	@RequestMapping("/getMaterialUse/{id}")
-	public InventoryUseDTO getMaterialUse(@PathVariable("id") int id) {
+	@RequestMapping("/getStroageUse/{id}")
+	public InventoryUseDTO getStroageUse(@PathVariable("id") int id) {
 		return warehouseManagement.getInventoryUse(id);
 	}
 	
@@ -112,8 +141,10 @@ public class InventoryController {
 	}
 	
 	@RequestMapping("/getStorageRelocations/{id}")
-	public List<ProcessRow> getStorageRelocations(@PathVariable("id") ProductionFunctionality functionality) {
-		return warehouseManagement.getStorageRelocations(functionality);
+	public List<ProcessRow> getStorageRelocations(@PathVariable("id") ProductionFunctionality functionality,
+			@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return storageRelocationReports.getStorageRelocations(functionality, begin, end);
 	}
 	
 	@RequestMapping("/getCashewInventoryItem")
@@ -137,8 +168,15 @@ public class InventoryController {
 	}
 	
 	@RequestMapping("/getMaterialUses")
-	public List<ProcessRow> getMaterialUses() {
-		return warehouseManagement.getInventoryUses();
+	public List<ProcessRow> getMaterialUses(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end){
+		return inventoryUseReports.getInventoryUses(ProcessName.GENERAL_USE, begin, end);
+	}
+	
+	@RequestMapping("/getCashewUses")
+	public List<ProcessRow> getCashewUses(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end){
+		return inventoryUseReports.getInventoryUses(ProcessName.PRODUCT_USE, begin, end);
 	}
 	
 	@RequestMapping("/getGeneralInventoryByPo")
@@ -210,6 +248,16 @@ public class InventoryController {
 		allPoCodes.addAll(objectTableReader.findCashewAvailableInventoryPoCodes());
 		allPoCodes.addAll(objectTableReader.findGeneralAvailableInventoryPoCodes());
 		return allPoCodes;
+	}
+	
+	@RequestMapping("/getAllCashewPos")
+	public Set<PoCodeBasic> getAllCashewPos() {
+		return objectTableReader.findCashewAvailableInventoryPoCodes();
+	}
+	
+	@RequestMapping("/getAllStorageCashew/{id}")
+	public List<ProcessItemInventory> getAllStorageCashew(@PathVariable("id") int poCode) {
+		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, null, null, null, new Integer[] {poCode}, null);
 	}
 
 }
