@@ -12,6 +12,7 @@ import java.util.stream.Stream;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.ItemWithUnit;
+import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
@@ -51,6 +52,8 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	private String[] itemPoCodes;
 	@EqualsAndHashCode.Exclude
 	private String[] itemSuppliers;
+	@EqualsAndHashCode.Exclude
+	private CashewGrade cashewGrade;
 	
 	//for equals comparing - since storage is excluded
 	private Integer storageId;
@@ -78,7 +81,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
 			MeasureUnit measureUnit, LocalDateTime itemProcessDate,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			String itemPoCodes, String itemSuppliers,
+			String itemPoCodes, String itemSuppliers, CashewGrade cashewGrade,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal,
 			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, //BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId,  String storageWarehouseLocationValue, String storageRemarks) {
@@ -102,6 +105,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 			this.itemPoCodes = Stream.of(itemPoCodes.split(",")).distinct().toArray(String[]::new);
 		if(itemSuppliers != null)
 			this.itemSuppliers = Stream.of(itemSuppliers.split(",")).distinct().toArray(String[]::new);
+		this.cashewGrade = cashewGrade;
 	
 //		this.storageOrdinal = storageOrdinal;
 //		this.storageUnitAmount = storageUnitAmount.setScale(MeasureUnit.SCALE);

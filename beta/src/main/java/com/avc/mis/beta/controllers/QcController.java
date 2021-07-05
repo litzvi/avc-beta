@@ -5,6 +5,7 @@ import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
+import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.QualityCheck;
@@ -82,6 +83,15 @@ public class QcController {
 			return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{ProductionUse.CLEAN, ProductionUse.ROAST});
 		} else {
 			return objectTableReader.findOpenAndPendingCashewOrdersPoCodes();
+		}
+	}
+	
+	@RequestMapping("/getItemsCashewBulk/{id}")
+	public List<ItemDTO> getItemsCashewBulk(@PathVariable("id") Boolean roast) {
+		if(roast) {
+			return refeDao.getItems(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.CLEAN, ProductionUse.ROAST}, PackageType.BULK);
+		} else {
+			return refeDao.getItems(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.RAW_KERNEL}, PackageType.BULK);
 		}
 	}
 	

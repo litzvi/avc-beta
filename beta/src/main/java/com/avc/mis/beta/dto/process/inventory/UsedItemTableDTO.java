@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -39,5 +40,7 @@ public class UsedItemTableDTO {
 	private String[] itemPoCodes;
 	@EqualsAndHashCode.Exclude
 	private String[] itemSuppliers;
-	
+	@EqualsAndHashCode.Exclude
+	private CashewGrade cashewGrade;
+
 }

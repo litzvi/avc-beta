@@ -18,6 +18,7 @@ import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
@@ -49,6 +50,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 	private PoCodeBasic poCode;
 	private String[] poCodes;
 	private String[] suppliers;
+	private CashewGrade cashewGrade;
 	private LocalDateTime itemProcessDate;
 	private LocalDateTime receiptDate;
 //	private List<AmountWithUnit> totalBalanceAmount; //not used now
@@ -66,7 +68,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 			AmountWithUnit unit, Class<? extends Item> clazz,
 			MeasureUnit processItemMeasureUnit, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			String poCodes, String suppliers,
+			String poCodes, String suppliers, CashewGrade cashewGrade,
 			LocalDateTime processDate, LocalDateTime receiptDate, boolean tableView) {
 		super(id);
 		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unit, clazz);
@@ -76,6 +78,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
 		if(suppliers != null)
 			this.suppliers = Stream.of(suppliers.split(",")).distinct().toArray(String[]::new);
+		this.cashewGrade = cashewGrade;
 		this.itemProcessDate = processDate;
 		this.receiptDate = receiptDate;
 		this.tableView = tableView;

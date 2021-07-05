@@ -71,6 +71,7 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 				
 				usedItemTable.setItemPoCodes(ui.getItemPoCodes());
 				usedItemTable.setItemSuppliers(ui.getItemSuppliers());
+				usedItemTable.setCashewGrade(ui.getCashewGrade());
 			});
 			List<BasicUsedStorageDTO> used = this.usedItems.stream().map((i) -> {
 				StorageDTO storage = i.getStorage();

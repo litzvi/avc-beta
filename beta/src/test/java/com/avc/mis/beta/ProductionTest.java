@@ -86,6 +86,7 @@ public class ProductionTest {
 			e2.printStackTrace();
 			throw e2;
 		}
+		System.out.println(actual);
 
 		infoWriter.removeAllProcesses(receipt.getPoCode().getId());
 		

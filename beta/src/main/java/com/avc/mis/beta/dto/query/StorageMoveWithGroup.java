@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
+import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.inventory.Storage;
@@ -36,7 +37,7 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
 			MeasureUnit movedMeasureUnit, LocalDateTime itemProcessDate,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			String itemPoCodes, String itemSuppliers,
+			String itemPoCodes, String itemSuppliers, CashewGrade cashewGrade,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 
 			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, 
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
@@ -47,7 +48,7 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
 				movedMeasureUnit, itemProcessDate,
 				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, 
-				itemPoCodes, itemSuppliers,
+				itemPoCodes, itemSuppliers, cashewGrade,
 				storageId, stoageVersion, storageOrdinal, 
 				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, //storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks,

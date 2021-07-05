@@ -125,6 +125,9 @@ public class Controller {
 		List<ItemDTO> CashewItemsholder = refeDao.getItemsByGroup(ItemGroup.PRODUCT);
 		result.add(CashewItemsholder);
 		
+//		List<CashewItemDTO> CashewItemsholder = refeDao.getCashewItems(null, null, null, null);
+//		result.add(CashewItemsholder);
+		
 		List<ItemDTO> GeneralItemsholder = refeDao.getItemsByGroup(ItemGroup.GENERAL);
 		result.add(GeneralItemsholder);
 		

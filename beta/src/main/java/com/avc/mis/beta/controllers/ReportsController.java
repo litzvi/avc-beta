@@ -1,15 +1,18 @@
 package com.avc.mis.beta.controllers;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessRow;
+import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.service.ContainerArrivals;
@@ -27,6 +30,7 @@ import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.report.InventoryReports;
 import com.avc.mis.beta.service.report.LoadingReports;
+import com.avc.mis.beta.service.report.ProductionProcessReports;
 import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
@@ -36,7 +40,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +47,10 @@ import java.util.TimeZone;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -98,6 +104,8 @@ public class ReportsController {
 	@Autowired
 	private ProductionProcesses productionProcesses;
 	
+	@Autowired
+	private ProductionProcessReports productionProcessReports;
 	
 	@RequestMapping("/getAllProcesses/{id}")
 	public Map<String, List<Object>> getAllProcesses(@PathVariable("id") int poCode) {
@@ -108,6 +116,7 @@ public class ReportsController {
 		List<Object> relocationProcces = new ArrayList<Object>();
 		List<Object> cleaningProcces = new ArrayList<Object>();
 		List<Object> roastingProcces = new ArrayList<Object>();
+		List<Object> toffeeProcces = new ArrayList<Object>();
 		List<Object> packingProcces = new ArrayList<Object>();
 		List<Object> arrivalProcces = new ArrayList<Object>();
 		List<Object> loadingProcces = new ArrayList<Object>();
@@ -140,6 +149,9 @@ public class ReportsController {
 				case CASHEW_ROASTING:
 					roastingProcces.add(productionProcesses.getProductionProcess(k.getId()));
 					break;
+				case CASHEW_TOFFEE:
+					toffeeProcces.add(productionProcesses.getProductionProcess(k.getId()));
+					break;
 				case PACKING:
 					packingProcces.add(productionProcesses.getProductionProcess(k.getId()));
 					break;
@@ -166,6 +178,7 @@ public class ReportsController {
 	    finalProcesses.put("relocationItemsObj", relocationProcces);
 	    finalProcesses.put("cleaningItemsObj", cleaningProcces);
 	    finalProcesses.put("roastingItemsObj", roastingProcces);
+	    finalProcesses.put("toffeeItemsObj", toffeeProcces);
 	    finalProcesses.put("packingItemsObj", packingProcces);
 	    finalProcesses.put("arrivalsItemsObj", arrivalProcces);
 	    finalProcesses.put("loadingItemsObj", loadingProcces);
@@ -199,6 +212,7 @@ public class ReportsController {
 	    finalProcesses.put("qcRoast", qualityChecks.getRoastedQualityChecksByPoCode(poCode));
 	    finalProcesses.put("cleaning", productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.CASHEW_CLEANING, poCode));
 	    finalProcesses.put("roasting", productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.CASHEW_ROASTING, poCode));
+	    finalProcesses.put("toffee", productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.CASHEW_TOFFEE, poCode));
 	    finalProcesses.put("packing", productionProcesses.getProductionProcessesByTypeAndPoCode(ProcessName.PACKING, poCode));
 //	    finalProcesses.put("arrivals", loading.getLoadingsByPoCode(poCode));
 	    finalProcesses.put("loading", loading.getLoadingsByPoCode(poCode));
@@ -207,64 +221,15 @@ public class ReportsController {
 	
 	
 	
-	@RequestMapping("/allProductionByTime/{dateLong}/{type}")
-	public List<ProcessRow> allProductionByTime(@PathVariable("dateLong") Long dateLong, @PathVariable("type") String type) {
-		LocalDateTime date = LocalDateTime.ofInstant(Instant.ofEpochSecond(dateLong), 
-                TimeZone.getDefault().toZoneId());
-		List<ProcessRow> allProduction = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_CLEANING);
-		allProduction.addAll(productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_ROASTING));
-		allProduction.addAll(productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_TOFFEE));
-		allProduction.addAll(productionProcesses.getProductionProcessesByType(ProcessName.PACKING));
-		switch (type) {
-			case "DAY":
-				Predicate<ProcessRow> byDate = row -> row.getRecordedTime().getDayOfYear() == date.getDayOfYear() && row.getRecordedTime().getYear() == date.getYear();
-				List<ProcessRow> result = allProduction.stream().filter(byDate)
-		                .collect(Collectors.toList());
-				Collections.sort(result, new Comparator<ProcessRow>() {
-					  @Override
-					  public int compare(ProcessRow u1, ProcessRow u2) {
-					    return u1.getRecordedTime().compareTo(u2.getRecordedTime());
-					  }
-					});
-				return result;
-			case "WEEK":
-//				OffsetDateTime o = OffsetDateTime.of(date, ZoneOffset.UTC);
-//				LocalDate o = date.toLocalDate();
-				Predicate<ProcessRow> byDate1 = row -> row.getRecordedTime().isAfter(date) && row.getRecordedTime().isBefore(date.plusDays(8));
-				List<ProcessRow> result1 = allProduction.stream().filter(byDate1)
-		                .collect(Collectors.toList());
-				Collections.sort(result1, new Comparator<ProcessRow>() {
-					  @Override
-					  public int compare(ProcessRow u1, ProcessRow u2) {
-					    return u1.getRecordedTime().compareTo(u2.getRecordedTime());
-					  }
-					});
-				return result1;
-			case "MONTH":
-				Predicate<ProcessRow> byDate2 = row -> row.getRecordedTime().getMonthValue() == date.getMonthValue() && row.getRecordedTime().getYear() == date.getYear();
-				List<ProcessRow> result2 = allProduction.stream().filter(byDate2)
-		                .collect(Collectors.toList());
-				Collections.sort(result2, new Comparator<ProcessRow>() {
-					  @Override
-					  public int compare(ProcessRow u1, ProcessRow u2) {
-					    return u1.getRecordedTime().compareTo(u2.getRecordedTime());
-					  }
-					});
-				return result2;
-			case "YEAR":
-				Predicate<ProcessRow> byDate3 = row -> row.getRecordedTime().getYear() == date.getYear();
-				List<ProcessRow> result3 = allProduction.stream().filter(byDate3)
-		                .collect(Collectors.toList());
-				Collections.sort(result3, new Comparator<ProcessRow>() {
-					  @Override
-					  public int compare(ProcessRow u1, ProcessRow u2) {
-					    return u1.getRecordedTime().compareTo(u2.getRecordedTime());
-					  }
-					});
-				return result3;
-			default:
-				return allProduction;
-			}
+	@RequestMapping("/allProductionByTime")
+	public List<ProcessRow> allProductionByTime(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		List<ProcessRow> allProduction = productionProcessReports.getProductionProcessesByType(ProcessName.CASHEW_CLEANING, begin, end);
+		allProduction.addAll(productionProcessReports.getProductionProcessesByType(ProcessName.CASHEW_ROASTING, begin, end));
+		allProduction.addAll(productionProcessReports.getProductionProcessesByType(ProcessName.CASHEW_TOFFEE, begin, end));
+		allProduction.addAll(productionProcessReports.getProductionProcessesByType(ProcessName.PACKING, begin, end));
+		
+		return allProduction;
 	}
 	
 //	@RequestMapping("/getCashewInventoryPacked")
@@ -339,6 +304,11 @@ public class ReportsController {
 	}
 	
 	
+	
+	@RequestMapping("/getSuppliersGroups")
+	public List<DataObjectWithName<Supplier>> getSuppliersGroups() {
+		return valueTablesReader.getSuppliersBasicByGroup(SupplyGroup.SHIPPED_PRODUCT);
+	}
 	
 	
 //	@RequestMapping("/allProductionByRange/{start}/{end}")

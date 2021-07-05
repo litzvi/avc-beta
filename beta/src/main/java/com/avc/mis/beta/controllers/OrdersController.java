@@ -15,6 +15,7 @@ import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.MixPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.SampleReceipt;
@@ -72,6 +73,11 @@ public class OrdersController {
 	@Autowired
 	private ProcessInfoWriter processInfoWriter;
 	
+	
+//	@PostMapping(value="/addCashewOrder")
+//	public void addCashewOrder(@RequestBody JsonNode po) {
+//		System.out.println(po);
+//	}
 	@PostMapping(value="/addCashewOrder")
 	public PoDTO addCashewOrder(@RequestBody PO po) {
 		ordersDao.addCashewOrder(po);
@@ -315,4 +321,11 @@ public class OrdersController {
 	public List<ContractType> getCashewContractTypes() {
 		return refeDao.getCashewContractTypes();
 	}
+	
+	@RequestMapping("/getSuppliersGroups")
+	public List<DataObjectWithName<Supplier>> getSuppliersGroups() {
+		return refeDao.getSuppliersBasicByGroup(SupplyGroup.SHIPPED_PRODUCT);
+	}
+	
+	
 }
