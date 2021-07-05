@@ -209,19 +209,19 @@ public class QueryTest {
 		
 		
 		//get messages for logged in user
-		List<UserMessageDTO> userMessages = processInfoReader.getAllMessages();
+		List<UserMessageDTO> userMessages = processInfoReader.getAllMessages(null, null);
 		userMessages.forEach(m -> System.out.println(m));
 				
 		//get required approvals for logged in user		
-		List<ApprovalTaskDTO> requierdTasks = processInfoReader.getAllRequiredApprovals();
+		List<ApprovalTaskDTO> requierdTasks = processInfoReader.getAllRequiredApprovals(null, null);
 		requierdTasks.forEach(i -> System.out.println(i));
 		
 		//get all approvals for logged in user		
-		List<ApprovalTaskDTO> tasks = processInfoReader.getAllApprovals();
+		List<ApprovalTaskDTO> tasks = processInfoReader.getAllApprovals(null, null);
 		tasks.forEach(i -> System.out.println(i));
 
 		//get list of new message for user
-		List<UserMessageDTO> messages = processInfoReader.getAllNewMessages();
+		List<UserMessageDTO> messages = processInfoReader.getAllNewMessages(null, null);
 		messages.forEach(m -> System.out.println(m));
 		
 		//get processTypeAlerts

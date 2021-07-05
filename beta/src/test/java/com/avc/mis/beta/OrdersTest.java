@@ -97,7 +97,7 @@ public class OrdersTest {
 		//get list approval tasks for user
 		List<ApprovalTaskDTO> tasks;
 		ObjectMapper objMapper = new ObjectMapper();
-		tasks = processInfoReader.getAllRequiredApprovals();
+		tasks = processInfoReader.getAllRequiredApprovals(null, null);
 
 		try {
 			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, po.getId());

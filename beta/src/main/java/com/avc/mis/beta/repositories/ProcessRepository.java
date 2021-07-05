@@ -75,7 +75,8 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by p "
 		+ "order by p.recordedTime desc ")
-	<S extends PoProcess> List<ProcessRow> findProcessByType(@NonNull Class<S> processClass, ProcessName processName, Integer poCodeId, ProductionFunctionality functionality, boolean cancelled,
+	<S extends PoProcess> List<ProcessRow> findProcessByType(@NonNull Class<S> processClass, ProcessName processName, Integer poCodeId, 
+			ProductionFunctionality functionality, boolean cancelled,
 			LocalDateTime startTime, LocalDateTime endTime);
 		
 	@Query("select new com.avc.mis.beta.dto.query.UsedItemWithGroup( "

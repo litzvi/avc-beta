@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -82,13 +83,13 @@ public class ProcessInfoReader {
 	 * @return List of messages for the current user including the subject process information.
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<UserMessageDTO> getAllMessages() {		
-		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), null);
+	public List<UserMessageDTO> getAllMessages(LocalDateTime startTime, LocalDateTime endTime) {		
+		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), null, startTime, endTime);
 	}
 	
 	@Deprecated
-	public List<UserMessageDTO> getAllUserMessages(Integer userId) {		
-		return getProcessInfoRepository().findAllMessages(userId, null);
+	public List<UserMessageDTO> getAllUserMessages(Integer userId, LocalDateTime startTime, LocalDateTime endTime) {		
+		return getProcessInfoRepository().findAllMessages(userId, null, startTime, endTime);
 	}
 	
 	/**
@@ -96,9 +97,8 @@ public class ProcessInfoReader {
 	 * @return List of new  messages for the given user including the subject process information.
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<UserMessageDTO> getAllNewMessages() {
-		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), 
-				Arrays.asList(MessageLabel.NEW));
+	public List<UserMessageDTO> getAllNewMessages(LocalDateTime startTime, LocalDateTime endTime) {
+		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), Arrays.asList(MessageLabel.NEW), startTime, endTime);
 	}
 	
 	/**
@@ -106,9 +106,9 @@ public class ProcessInfoReader {
 	 * @return List of unattended approval tasks including the subject process information.
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<ApprovalTaskDTO> getAllRequiredApprovals() {
+	public List<ApprovalTaskDTO> getAllRequiredApprovals(LocalDateTime startTime, LocalDateTime endTime) {
 		return getProcessInfoRepository().findApprovals(dao.getCurrentUserId(), 
-				new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED});
+				new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED}, startTime, endTime);
 	}
 	
 	/**
@@ -116,8 +116,16 @@ public class ProcessInfoReader {
 	 * @return List of approval tasks including the subject process information for current user.
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<ApprovalTaskDTO> getAllApprovals() {
-		return getProcessInfoRepository().findApprovals(dao.getCurrentUserId(), DecisionType.values());
+	public List<ApprovalTaskDTO> getAllApprovals(LocalDateTime startTime, LocalDateTime endTime) {
+		return getProcessInfoRepository().findApprovals(dao.getCurrentUserId(), DecisionType.values(), startTime, endTime);
+	}
+	
+	public Integer getUserMassagesNumber() {		
+		return getProcessInfoRepository().findUserMassagesNumber(dao.getCurrentUserId());
+	}
+		
+	public Integer getUserTasksNumber() {		
+		return getProcessInfoRepository().findUserTasksNumber(dao.getCurrentUserId());
 	}
 		
 	/**

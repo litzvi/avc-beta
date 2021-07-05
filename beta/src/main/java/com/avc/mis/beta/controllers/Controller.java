@@ -164,7 +164,7 @@ public class Controller {
 	@RequestMapping("/getUserMassages")
 	public List<UserMessageDTO> getMassages() {
 		try {
-			return processDao.getAllMessages();
+			return processDao.getAllMessages(null, null);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -174,13 +174,13 @@ public class Controller {
 	
 	@RequestMapping("/getUserTasks")
 	public List<ApprovalTaskDTO> getUserTasks() {
-		return processDao.getAllApprovals();
+		return processDao.getAllApprovals(null, null);
 	}
 	
 	@RequestMapping("/getUserMassagesNumber")
 	public int getMassagesNumber() {
 		try {
-			return processDao.getAllMessages().size();
+			return processDao.getUserMassagesNumber();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -190,7 +190,7 @@ public class Controller {
 	
 	@RequestMapping("/getUserTasksNumber")
 	public int getUserTasksNumber() {
-		return processDao.getAllApprovals().size();
+		return processDao.getUserTasksNumber();
 	}
 	
 	

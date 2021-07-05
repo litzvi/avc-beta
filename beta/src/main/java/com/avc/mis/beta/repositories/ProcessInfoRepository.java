@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -75,9 +76,11 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "join u.person pr "
 		+ "where u.id = :userId "
 			+ "and (:lables is null or m.label in :lables) "
+			+ "and (:startTime is null or m.createdDate >= :startTime) "
+			+ "and (:endTime is null or m.createdDate < :endTime) "
 		+ "group by m "
 		+ "ORDER BY m.createdDate DESC ")
-	List<UserMessageDTO> findAllMessages(Integer userId, List<MessageLabel> lables);
+	List<UserMessageDTO> findAllMessages(Integer userId, List<MessageLabel> lables, LocalDateTime startTime, LocalDateTime endTime);
 	
 
 	@Query("select new com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO("
@@ -104,9 +107,23 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "join u.person pr "
 			+ "where pa.decision in :decisions "
 				+ "and u.id = :userId "
+				+ "and (:startTime is null or p.modifiedDate >= :startTime) "
+				+ "and (:endTime is null or p.modifiedDate < :endTime) "
 			+ "group by pa "
 			+ "ORDER BY p.modifiedDate DESC ")
-	List<ApprovalTaskDTO> findApprovals(Integer userId, DecisionType[] decisions);
+	List<ApprovalTaskDTO> findApprovals(Integer userId, DecisionType[] decisions, LocalDateTime startTime, LocalDateTime endTime);
+	
+	@Query("select count(*) "
+		+ "from UserMessage m "
+			+ "join m.user u "
+		+ "where u.id = :userId ")
+	Integer findUserMassagesNumber(Integer userId);
+	
+	@Query("select count(*) "
+		+ "from ApprovalTask pa "
+			+ "join pa.user u "
+		+ "where u.id = :userId ")
+	Integer findUserTasksNumber(Integer userId);
 
 	@Query("select a "
 			+ "from ProcessManagement a "

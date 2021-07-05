@@ -46,7 +46,7 @@ public class ProcessInfoWriter {
 
 	@Deprecated
 	public void removeUserMessages(Integer userId) {
-		List<UserMessageDTO> userMessages = processInfoReader.getAllUserMessages(userId);
+		List<UserMessageDTO> userMessages = processInfoReader.getAllUserMessages(userId, null, null);
 		userMessages.forEach(m -> deletableDAO.permenentlyRemoveEntity(UserMessage.class, m.getId()));
 
 	}
