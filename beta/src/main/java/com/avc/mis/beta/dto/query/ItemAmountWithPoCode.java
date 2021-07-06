@@ -57,8 +57,8 @@ public class ItemAmountWithPoCode {
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 			this.weightAmount = new AmountWithUnit(
 					amount.multiply(unitAmount, MathContext.DECIMAL64), 
-					unitMeasureUnit);
-			this.amount.setScale(MeasureUnit.SCALE);
+					unitMeasureUnit).setScale(MeasureUnit.SCALE);
+//			this.amount.setScale(MeasureUnit.SCALE);
 		}
 		else 
 		{

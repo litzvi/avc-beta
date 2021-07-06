@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.report;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -61,8 +62,8 @@ public class ItemAmount {
 			this.weightAmount = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
 		}
 		else if(MeasureUnit.WEIGHT_UNITS.contains(unitMeasureUnit)){
-			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
-			this.amount.setScale(MeasureUnit.SCALE);
+			this.amount = new AmountWithUnit(amount, defaultMeasureUnit).setScale(MeasureUnit.SCALE);
+//			this.amount.setScale(MeasureUnit.SCALE);
 			AmountWithUnit weightAmount = new AmountWithUnit(
 					amount
 					.multiply(unitAmount, MathContext.DECIMAL64)
@@ -103,6 +104,17 @@ public class ItemAmount {
 		else {
 			return null;
 		}
+	}
+	
+	public List<AmountWithUnit> getAmountWithWeight() {
+		List<AmountWithUnit> list = new ArrayList<>();
+		if(this.amount != null) {
+			list.add(this.amount);	
+		}
+		if(this.weightAmount != null) {
+			list.add(this.weightAmount.setScale(MeasureUnit.SUM_DISPLAY_SCALE));	
+		}
+		return list;
 	}
 	
 	@JsonIgnore

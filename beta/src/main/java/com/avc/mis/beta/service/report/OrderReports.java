@@ -4,6 +4,7 @@
 package com.avc.mis.beta.service.report;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class OrderReports {
 	 * Get the table of all Cashew purchase orders that are active(not cancelled or archived) and where not received.
 	 * @return list of PoRow for orders that are yet to be received
 	 */
-	public List<PoItemRow> findOpenCashewOrderItems(LocalDateTime startTime, LocalDateTime endTime) {
+	public List<PoItemRow> findOpenCashewOrderItems(LocalDate startTime, LocalDate endTime) {
 		List<PoItemRow> poItemRows = getOrdersByType(ProcessName.CASHEW_ORDER, 
 				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true, startTime, endTime);
 		return poItemRows;
@@ -57,7 +58,7 @@ public class OrderReports {
 	 * Get the table of all Cashew purchase orders that are not cancelled.
 	 * @return list of PoRow for all orders (not cancelled)
 	 */
-	public List<PoItemRow> findAllCashewOrderItems(LocalDateTime startTime, LocalDateTime endTime) {
+	public List<PoItemRow> findAllCashewOrderItems(LocalDate startTime, LocalDate endTime) {
 		return getOrdersByType(ProcessName.CASHEW_ORDER, 
 				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false, startTime, endTime);
 	}
@@ -70,7 +71,7 @@ public class OrderReports {
 	 * Get the table of all Cashew purchase orders that are not cancelled.
 	 * @return list of PoRow for all orders (not cancelled)
 	 */
-	public List<PoItemRow> findAllGeneralOrderItems(LocalDateTime startTime, LocalDateTime endTime) {
+	public List<PoItemRow> findAllGeneralOrderItems(LocalDate startTime, LocalDate endTime) {
 		return getOrdersByType(ProcessName.GENERAL_ORDER, 
 				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, false, startTime, endTime);
 	}
@@ -83,7 +84,7 @@ public class OrderReports {
 	 * Get the table of all Cashew purchase orders including cancelled orders.
 	 * @return list of PoRow for all orders
 	 */
-	public List<PoItemRow> findAllCashewOrderItemsHistory(LocalDateTime startTime, LocalDateTime endTime) {
+	public List<PoItemRow> findAllCashewOrderItemsHistory(LocalDate startTime, LocalDate endTime) {
 		return getOrdersByType(ProcessName.CASHEW_ORDER, ProcessStatus.values(), null, null, false, startTime, endTime);
 	}
 	
@@ -95,7 +96,7 @@ public class OrderReports {
 	 * Get the table of all Cashew purchase orders including cancelled orders.
 	 * @return list of PoRow for all orders
 	 */
-	public List<PoItemRow> findAllGeneralOrderItemsHistory(LocalDateTime startTime, LocalDateTime endTime) {
+	public List<PoItemRow> findAllGeneralOrderItemsHistory(LocalDate startTime, LocalDate endTime) {
 		return getOrdersByType(ProcessName.GENERAL_ORDER, ProcessStatus.values(), null, null, false, startTime, endTime);
 	}
 	
@@ -104,7 +105,7 @@ public class OrderReports {
 	}
 	
 	public List<PoItemRow> getOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId,
-			LocalDateTime startTime, LocalDateTime endTime) {
+			LocalDate startTime, LocalDate endTime) {
 		return getOrdersByType(orderType, processStatuses, poCodeId, null, false, startTime, endTime);
 	}
 	
@@ -116,7 +117,7 @@ public class OrderReports {
 	 * Get the table of all General purchase orders that are active(not cancelled or archived) and where not received.
 	 * @return list of PoRow for orders that are yet to be received
 	 */
-	public List<PoItemRow> findOpenGeneralOrderItems(LocalDateTime startTime, LocalDateTime endTime) {
+	public List<PoItemRow> findOpenGeneralOrderItems(LocalDate startTime, LocalDate endTime) {
 		return getOrdersByType(ProcessName.GENERAL_ORDER, 
 				new ProcessStatus[] {ProcessStatus.FINAL, ProcessStatus.PENDING}, null, null, true, startTime, endTime);
 	}
@@ -128,7 +129,7 @@ public class OrderReports {
 	
 	public List<PoItemRow> getOrdersByType(
 			ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId, ItemGroup itemGroup, boolean onlyOpen, 
-			LocalDateTime startTime, LocalDateTime endTime) {
+			LocalDate startTime, LocalDate endTime) {
 		List<PoItemRow> poItemRows = getPoRepository().findAllOrdersByType(orderType, processStatuses, poCodeId, itemGroup, onlyOpen, startTime, endTime);
 		int[] orderItemIds = poItemRows.stream().mapToInt(PoItemRow::getOrderItemId).toArray();
 		Map<Integer, BigDecimal> receivedAmountMap = getPoRepository()

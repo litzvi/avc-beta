@@ -32,6 +32,7 @@ import com.avc.mis.beta.service.report.OrderReports;
 import com.avc.mis.beta.service.report.ReceiptReports;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -206,8 +207,8 @@ public class OrdersController {
 	}
 
 	@RequestMapping("/getHistoryCashewOrders")
-	public List<PoItemRow> getHistoryCashewOrders(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
-			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+	public List<PoItemRow> getHistoryCashewOrders(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
 		return orderReports.findAllCashewOrderItemsHistory(begin, end);
 	}
 	
@@ -229,8 +230,8 @@ public class OrdersController {
 	}
 	
 	@RequestMapping("/getAllGeneralOrders")
-	public List<PoItemRow> getAllGeneralOrders(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
-			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+	public List<PoItemRow> getAllGeneralOrders(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
 		return orderReports.findAllGeneralOrderItemsHistory(begin, end);
 	}
 	

@@ -74,8 +74,8 @@ public class ProcessItemInventoryRow extends BasicDTO {
 			this.weight = new AmountWithUnit(amount.multiply(this.weightCoefficient, MathContext.DECIMAL64), defaultMeasureUnit);
 		}
 		else if(MeasureUnit.WEIGHT_UNITS.contains(item.getUnit().getMeasureUnit())) {
-			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
-			this.amount.setScale(MeasureUnit.SCALE);
+			this.amount = new AmountWithUnit(amount, defaultMeasureUnit).setScale(MeasureUnit.SCALE);
+//			this.amount.setScale(MeasureUnit.SCALE);
 			this.weight = new AmountWithUnit(
 					amount
 					.multiply(unit.getAmount(), MathContext.DECIMAL64)

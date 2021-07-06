@@ -69,8 +69,8 @@ public class FinishedProductInventoryRow {
 //		this.receiptDates = Stream.of(receiptDates.split(",")).map(j -> LocalDateTime.parse(j, DATE_TIME_FORMATTER)).toArray(LocalDateTime[]::new);
 //		this.processDates = Stream.of(processDates.split(",")).map(j -> LocalDateTime.parse(j, DATE_TIME_FORMATTER)).toArray(LocalDateTime[]::new);
 //		this.units = units.setScale(0, RoundingMode.HALF_DOWN).toBigInteger();
-		this.totalAmount = new AmountWithUnit(amount, measureUnit);
-		this.totalAmount.setScale(MeasureUnit.SCALE);
+		this.totalAmount = new AmountWithUnit(amount, measureUnit).setScale(MeasureUnit.SCALE);
+//		this.totalAmount.setScale(MeasureUnit.SCALE);
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).toArray(String[]::new);
 		}

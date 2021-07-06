@@ -137,8 +137,8 @@ public class AmountWithUnit implements Cloneable {
 //	}
 	
 	public AmountWithUnit setScale(int newScale) {
-		this.amount = amount.setScale(newScale, RoundingMode.HALF_DOWN);
-		return this;
+//		this.amount = amount.setScale(newScale, RoundingMode.HALF_DOWN);
+		return new AmountWithUnit(amount.setScale(newScale, RoundingMode.HALF_DOWN), this.measureUnit);
 	}
 	
 	public String getValue() {

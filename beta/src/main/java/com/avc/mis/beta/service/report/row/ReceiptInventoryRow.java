@@ -73,8 +73,8 @@ public class ReceiptInventoryRow {
 		else {
 			this.bags = null;
 		}
-		this.amount = new AmountWithUnit(amount, measureUnit);
-		this.amount.setScale(MeasureUnit.SCALE);
+		this.amount = new AmountWithUnit(amount, measureUnit).setScale(MeasureUnit.SCALE);
+//		this.amount.setScale(MeasureUnit.SCALE);
 		if(warehouses != null) {
 			this.warehouses = Stream.of(warehouses.split(",")).toArray(String[]::new);
 		}
