@@ -11,6 +11,7 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,7 +29,11 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class PoInventoryRow extends BasicDTO {
 
+	@Getter(value = AccessLevel.NONE)
+	private List<MeasureUnit> displayMeasureUnits = Arrays.asList(MeasureUnit.LBS, MeasureUnit.LOT);
+
 	private PoCodeBasic poCode;
+	
 	//already in poCode
 	private String supplierName;
 	
@@ -55,7 +60,7 @@ public class PoInventoryRow extends BasicDTO {
 	
 	public List<AmountWithUnit> getTotalStock() {
 		if(this.totalWeight != null) {
-			return AmountWithUnit.weightDisplay(this.totalWeight, Arrays.asList(MeasureUnit.LBS, MeasureUnit.LOT));
+			return AmountWithUnit.weightDisplay(this.totalWeight, displayMeasureUnits);
 		}
 		return null;
 	}

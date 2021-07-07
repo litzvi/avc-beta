@@ -13,8 +13,10 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.ItemGroup;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 
@@ -30,6 +32,9 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class ItemInventoryRow extends BasicDTO {
+	
+	@Getter(value = AccessLevel.NONE)
+	private List<MeasureUnit> displayMeasureUnits = Arrays.asList(MeasureUnit.LBS, MeasureUnit.LOT);
 	
 	private ItemWithUnitDTO item;
 	
@@ -61,7 +66,7 @@ public class ItemInventoryRow extends BasicDTO {
 		}
 		if(this.totalWeight != null) {
 			if(item.getGroup() == ItemGroup.PRODUCT) {
-				totalStock.addAll(AmountWithUnit.weightDisplay(this.totalWeight, Arrays.asList(MeasureUnit.LBS, MeasureUnit.LOT)));
+				totalStock.addAll(AmountWithUnit.weightDisplay(this.totalWeight, displayMeasureUnits));
 			}
 			else {
 				totalStock.add(this.totalWeight.setScale(MeasureUnit.SCALE));

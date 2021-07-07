@@ -38,7 +38,11 @@ import lombok.ToString;
 public class ProcessRow extends BasicDTO {
 	
 	@Getter(value = AccessLevel.NONE)
-	private final static MeasureUnit DISPLAY_MEASURE_UNIT = MeasureUnit.LBS;
+	private final static MeasureUnit RATION_CALCULATION_MEASURE_UNIT = MeasureUnit.LBS;
+
+	@Getter(value = AccessLevel.NONE)
+	private List<MeasureUnit> displayMeasureUnits = Arrays.asList(MeasureUnit.LBS);
+
 
 	private ProcessName processName;
 //	private PoCodeBasic poCode;//should be removed
@@ -122,7 +126,7 @@ public class ProcessRow extends BasicDTO {
 		
 		try {
 			AmountWithUnit processGain = producedAmounts.get().subtract(usedAmounts.get());
-			List<AmountWithUnit> diff =  AmountWithUnit.weightDisplay(processGain, Arrays.asList(ProcessRow.DISPLAY_MEASURE_UNIT));
+			List<AmountWithUnit> diff =  AmountWithUnit.weightDisplay(processGain, displayMeasureUnits);
 			diff.add(0, new AmountWithUnit(getProcessPercentageGain(), MeasureUnit.PERCENT));
 			return diff;
 		} catch (NullPointerException | NoSuchElementException e) {
@@ -145,7 +149,7 @@ public class ProcessRow extends BasicDTO {
 		
 		try {
 			AmountWithUnit countDifference = countAmounts.get().subtract(usedAmounts.get());			
-			List<AmountWithUnit> diff = AmountWithUnit.weightDisplay(countDifference, Arrays.asList(ProcessRow.DISPLAY_MEASURE_UNIT));
+			List<AmountWithUnit> diff = AmountWithUnit.weightDisplay(countDifference, displayMeasureUnits);
 			diff.add(0, new AmountWithUnit(getUsedCountPercentageDifference(), MeasureUnit.PERCENT));
 			return diff;
 		} catch (NullPointerException | NoSuchElementException e) {
@@ -166,7 +170,7 @@ public class ProcessRow extends BasicDTO {
 		
 		try {
 			AmountWithUnit countDifference = countAmounts.get().subtract(producedAmounts.get());
-			List<AmountWithUnit> diff =  AmountWithUnit.weightDisplay(countDifference, Arrays.asList(ProcessRow.DISPLAY_MEASURE_UNIT));
+			List<AmountWithUnit> diff =  AmountWithUnit.weightDisplay(countDifference, displayMeasureUnits);
 			diff.add(0, new AmountWithUnit(getProducedCountPercentageDifference(), MeasureUnit.PERCENT));
 			return diff;
 		} catch (NullPointerException | NoSuchElementException e) {
@@ -186,11 +190,11 @@ public class ProcessRow extends BasicDTO {
 	public Ratio getUniformTotals() {
 		Ratio ratio = new Ratio();
 		if(getUsedAmounts() != null && getUsedAmounts().isPresent())
-			ratio.setUsed(getUsedAmounts().get().convert(ProcessRow.DISPLAY_MEASURE_UNIT).getAmount());
+			ratio.setUsed(getUsedAmounts().get().convert(RATION_CALCULATION_MEASURE_UNIT).getAmount());
 		if(getProducedAmounts() != null && getProducedAmounts().isPresent())
-			ratio.setProduced(getProducedAmounts().get().convert(ProcessRow.DISPLAY_MEASURE_UNIT).getAmount());
+			ratio.setProduced(getProducedAmounts().get().convert(ProcessRow.RATION_CALCULATION_MEASURE_UNIT).getAmount());
 		if(getCountAmounts() != null && getCountAmounts().isPresent())
-			ratio.setCount(getCountAmounts().get().convert(ProcessRow.DISPLAY_MEASURE_UNIT).getAmount());
+			ratio.setCount(getCountAmounts().get().convert(ProcessRow.RATION_CALCULATION_MEASURE_UNIT).getAmount());
 		if(ratio.getProduced() != null && ratio.getUsed() != null)
 			ratio.setLoss(ratio.getProduced().subtract(ratio.getUsed()));
 		else if(ratio.getProduced() != null && ratio.getCount() != null)

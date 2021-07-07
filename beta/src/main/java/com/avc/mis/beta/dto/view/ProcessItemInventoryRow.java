@@ -24,7 +24,9 @@ import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 import lombok.Value;
 
@@ -41,6 +43,9 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class ProcessItemInventoryRow extends BasicDTO {
 
+	@Getter(value = AccessLevel.NONE)
+	private List<MeasureUnit> weightDisplayMeasureUnits = Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS);
+	
 	private ItemWithUnitDTO item;
 	private PoCodeBasic poCode;
 	private String supplierName;
@@ -101,7 +106,7 @@ public class ProcessItemInventoryRow extends BasicDTO {
 			totalBalance.add(this.amount);
 		}
 		if(this.weight != null) {
-			totalBalance.addAll(AmountWithUnit.weightDisplay(this.weight, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS)));
+			totalBalance.addAll(AmountWithUnit.weightDisplay(this.weight, weightDisplayMeasureUnits));
 		}
 		return totalBalance;
 	}

@@ -28,16 +28,12 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class ReceiptRow extends BasicDTO {
 
-//	AmountWithUnit[] totalAmount;
 	LocalDateTime receiptDate;
 	ProcessStatus status;
 	List<ReceiptItemRow> receiptRows;
 
 	public ReceiptRow(@NonNull Integer id, List<ReceiptItemRow> receiptRows) {
 		super(id);
-//		this.totalAmount = new AmountWithUnit[2];
-//		this.totalAmount[0] = totalAmount.setScale(MeasureUnit.SCALE);
-//		this.totalAmount[1] = totalAmount.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE);
 		this.receiptRows = receiptRows;
 		if(receiptRows != null && !receiptRows.isEmpty()) {
 			ReceiptItemRow itemRow = receiptRows.get(0);
@@ -57,9 +53,6 @@ public class ReceiptRow extends BasicDTO {
 			return null;
 		}
 		AmountWithUnit totalAmount;
-//		if(receiptRows.stream().map(pi -> pi.getReceiptAmt()).anyMatch(u -> !MeasureUnit.WEIGHT_UNITS.contains(u.getMeasureUnit()))) {
-//			return null;
-//		}
 		try {
 			totalAmount = receiptRows.stream()
 					.map(pi -> pi.getReceiptAmt())
@@ -71,9 +64,9 @@ public class ReceiptRow extends BasicDTO {
 		if(!MeasureUnit.WEIGHT_UNITS.contains(totalAmount.getMeasureUnit())) {
 			return Arrays.asList(totalAmount);
 		}
-		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(totalAmount.getMeasureUnit(), MeasureUnit.LOT));
-
-
+		else {
+			return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(totalAmount.getMeasureUnit(), MeasureUnit.LOT));
+		}
 	}
 
 }

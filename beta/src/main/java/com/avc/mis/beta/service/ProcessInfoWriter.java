@@ -4,6 +4,7 @@
 package com.avc.mis.beta.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -139,12 +140,14 @@ public class ProcessInfoWriter {
 		deletableDAO.permenentlyRemoveEntity(clazz, processId);
 	}
 
-	public void removeAllProcesses(Integer poCodeId) {
+	public List<String> removeAllProcesses(Integer poCodeId) {
 		List<ProcessBasic<GeneralProcess>> processes = processReader.getAllProcessesByPo(poCodeId);
+		List<String> removed = processes.stream().map(i -> "removing process: " + i).collect(Collectors.toList());
 		processes.forEach(i -> removeProcess(i.getId(), i.getProcessClazz()));
 		//find used items that are disappearing
 		//delete po code
 		deletableDAO.permenentlyRemoveEntity(BasePoCode.class, poCodeId);
+		return removed;
 	}
 	
 	

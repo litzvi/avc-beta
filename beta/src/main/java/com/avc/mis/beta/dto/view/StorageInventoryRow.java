@@ -32,7 +32,6 @@ public class StorageInventoryRow extends BasicSubjectDataDTO implements Collecti
 	Integer processItemId;
 	BigDecimal unitAmount;
 	BigDecimal numberUnits;	
-//	BigDecimal accessWeight;
 	BasicValueEntity<Warehouse> warehouseLocation;
 	BigDecimal numberUsedUnits;
 	AmountWithUnit totalBalance;
@@ -50,7 +49,6 @@ public class StorageInventoryRow extends BasicSubjectDataDTO implements Collecti
 		this.processItemId = processItemId;
 		this.unitAmount = unitAmount;
 		this.numberUnits = numberUnits;
-//		this.accessWeight = accessWeight;
 		if(warehouseLocationId != null && warehouseLocationValue != null)
 			this.warehouseLocation = new BasicValueEntity<Warehouse>(warehouseLocationId,  warehouseLocationValue);
 		else
@@ -63,14 +61,13 @@ public class StorageInventoryRow extends BasicSubjectDataDTO implements Collecti
 	 * All class arguments constructor
 	 */
 	public StorageInventoryRow(Integer id, Integer version, Integer ordinal,
-			Integer processItemId, BigDecimal unitAmount, //BigDecimal accessWeight,
+			Integer processItemId, BigDecimal unitAmount, 
 			BigDecimal numberUnits, BasicValueEntity<Warehouse> warehouseLocation, 
 			BigDecimal numberUsedUnits, AmountWithUnit totalBalance) {
 		super(id, version, ordinal);
 		this.processItemId = processItemId;
 		this.unitAmount = unitAmount;
 		this.numberUnits = numberUnits;
-//		this.accessWeight = accessWeight;
 		this.warehouseLocation = warehouseLocation;
 		this.numberUsedUnits = numberUsedUnits;
 		this.totalBalance = totalBalance;

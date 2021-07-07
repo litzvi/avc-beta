@@ -33,7 +33,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class LoadingRow extends BasicDTO {
 	
-//	private PoCodeBasic poCode;
 	@JsonIgnore private int[] poCodeIds;
 	private String[] poCodes;
 	@JsonIgnore private String[] suppliers;
@@ -41,22 +40,13 @@ public class LoadingRow extends BasicDTO {
 	private Duration duration;
 	private ProcessStatus status;
 	private String[] approvals;
-	
-	
-	//---test
-//	private String poCodes;
-//	private String suppliers;
-//	private String approvals;
-	//---end test
-	
+
 	private ShipmentCodeBasic shipmentCode;
 	private LocalDate eta;
 	private String containerNumber;
 	private String sealNumber;
 	private String containerSize;
 	
-//	private List<ProductionProcessWithItemAmount> usedItems;
-
 	private List<ContainerPoItemRow> loadedTotals;
 
 	
@@ -81,12 +71,6 @@ public class LoadingRow extends BasicDTO {
 		else {
 			this.approvals = Stream.of(approvals.split(",")).toArray(String[]::new);
 		}
-		
-		//---test
-//		this.poCodes = poCodes;
-//		this.suppliers = suppliers ;
-//		this.approvals = approvals;
-		//---end test
 		
 		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, shipmentCodeCode, portOfDischargeCode, portOfDischargeValue);
 		this.eta = eta;

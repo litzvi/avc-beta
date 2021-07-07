@@ -6,9 +6,7 @@ package com.avc.mis.beta.dto.view;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
@@ -35,12 +33,8 @@ import lombok.Value;
 public class CashewQcRow extends BasicDTO {
 
 	PoCodeBasic poCode;
-	//already in poCode
-	String supplierName;
 	String checkedBy;
-//	Integer itemId;
 	BasicValueEntity<Item> item;
-//	String itemName;
 	LocalDateTime checkDate;
 	ProcessStatus status;
 	BigInteger numberOfSamples;
@@ -51,12 +45,13 @@ public class CashewQcRow extends BasicDTO {
 	BigDecimal totalDefects;
 	BigDecimal totalDamage;
 
+	//already in poCode
+	String supplierName;
 
 	public CashewQcRow(@NonNull Integer id, 
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			QcCompany checkedBy,
 			Integer itemId, String itemValue, 
-//			String itemName, 
 			LocalDateTime checkDate, ProcessStatus status,
 			BigInteger numberOfSamples, BigDecimal sampleWeight, boolean precentage,
 			BigDecimal humidity, BigDecimal breakage,
@@ -69,7 +64,6 @@ public class CashewQcRow extends BasicDTO {
 		this.supplierName = supplierName;
 		this.checkedBy = checkedBy.toString();
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-//		this.itemName = itemName;
 		this.checkDate = checkDate;
 		this.status = status;
 		this.numberOfSamples = numberOfSamples;

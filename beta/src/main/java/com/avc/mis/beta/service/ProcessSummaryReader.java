@@ -54,11 +54,9 @@ public class ProcessSummaryReader {
 		Stream<ItemAmount> itemAmounts = getProcessSummaryRepository().findSummaryUsedItemAmounts(processIds, poCodeId);
 		Map<ItemGroup, List<ItemAmount>> itemsMap = itemAmounts.collect(Collectors.groupingBy(ItemAmount::getItemGroup));
 
-
-		
-//		if(inventory == null || inventory.isEmpty()) {
-//			return null;
-//		}
+		if(inventory.isEmpty() && processes.isEmpty()) {
+			return null;
+		}
 		
 		InventoryReportLine reportLine = new InventoryReportLine();
 		reportLine.setInventory(inventory);

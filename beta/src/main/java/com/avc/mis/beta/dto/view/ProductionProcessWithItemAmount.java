@@ -31,8 +31,7 @@ import lombok.NonNull;
 public class ProductionProcessWithItemAmount extends BasicDTO {
 
 	@Getter(value = AccessLevel.NONE)
-	private final static MeasureUnit DISPLAY_MEASURE_UNIT = MeasureUnit.LBS;
-
+	private List<MeasureUnit> weightDisplayMeasureUnits = Arrays.asList(MeasureUnit.LBS);
 	
 	private BasicValueEntity<Item> item;
 	private AmountWithUnit weight;
@@ -81,7 +80,7 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 			amountList.add(this.amount);
 		}
 		if(this.weight != null) {
-			amountList.addAll(AmountWithUnit.weightDisplay(this.weight, Arrays.asList(DISPLAY_MEASURE_UNIT)));
+			amountList.addAll(AmountWithUnit.weightDisplay(this.weight, weightDisplayMeasureUnits));
 //			if(this.weight.getMeasureUnit() != DISPLAY_MEASURE_UNIT) {
 //				amountList.add(this.weight);
 //			}				

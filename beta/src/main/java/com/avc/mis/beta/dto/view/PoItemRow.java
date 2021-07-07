@@ -23,7 +23,9 @@ import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
@@ -41,13 +43,15 @@ import lombok.experimental.NonFinal;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class PoItemRow extends BasicValueDTO {
+
+	@Getter(value = AccessLevel.NONE)
+	@NonFinal @Setter List<MeasureUnit> displayMeasureUnits = Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS);
 	
 	String personInCharge;
 	PoCodeBasic poCode;
 	String[] approvals;
 	String supplierName;
 	ItemWithUnitDTO item;
-//	String itemName;
 	Integer orderItemId;
 	@JsonIgnore
 	AmountWithUnit numUnits;
@@ -73,10 +77,7 @@ public class PoItemRow extends BasicValueDTO {
 			Integer orderItemId, BigDecimal amount, MeasureUnit measureUnit, 
 			LocalDateTime contractDate, LocalDate deliveryDate, 
 			String defects, BigDecimal unitPrice, Currency currency, 
-//			BigDecimal receivedOrderUnits,
-//			BigDecimal receivedAmount, 
 			ProcessStatus status) {
-//			, long receiptsCancelled) {
 		super(id);
 		this.personInCharge = personInCharge;
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
@@ -88,12 +89,8 @@ public class PoItemRow extends BasicValueDTO {
 		}
 		this.supplierName = supplierName;
 		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unit, clazz);
-//		this.itemName = itemName;
 		this.orderItemId = orderItemId;
 		this.numUnits = new AmountWithUnit(amount, measureUnit);
-//		this.numberUnits = new AmountWithUnit[] {
-//				numberUnits.setScale(MeasureUnit.SCALE), 
-//				numberUnits.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
 		this.contractDate = contractDate;
 		this.deliveryDate = deliveryDate;
 		this.defects = defects;
@@ -103,10 +100,7 @@ public class PoItemRow extends BasicValueDTO {
 		else {
 			this.unitPrice = null;
 		}
-//		this.receivedOrderUnits = receivedOrderUnits;
-//		this.receivedAmount = receivedAmount;
 		this.status = status;
-//		this.receiptsCancelled = receiptsCancelled;
 	}
 	
 	public List<String> getOrderStatus() {
@@ -141,7 +135,7 @@ public class PoItemRow extends BasicValueDTO {
 	}
 	
 	public List<AmountWithUnit> getNumberUnits() {
-		return AmountWithUnit.amountDisplay(this.numUnits, this.item, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+		return AmountWithUnit.amountDisplay(this.numUnits, this.item, displayMeasureUnits);
 	}
 	
 	public AmountWithUnit getNumberLots() {

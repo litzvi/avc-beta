@@ -20,7 +20,9 @@ import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
@@ -34,10 +36,12 @@ import lombok.Value;
 @ToString(callSuper = true)
 public class ReceiptItemRow extends BasicDTO {
 	
+	@Getter(value = AccessLevel.NONE)
+	private List<MeasureUnit> displayMeasureUnits = Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS);
+
 	PoCodeBasic poCode;
 	String supplierName;
 	ItemWithUnitDTO item;
-//	String itemName;
 	AmountWithUnit receivedOrderUnits;
 	@JsonIgnore
 	AmountWithUnit receiptAmt;
@@ -63,27 +67,19 @@ public class ReceiptItemRow extends BasicDTO {
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		this.supplierName = supplierName;
 		this.item = new ItemWithUnitDTO(itemId, itemValue, itemeasureUnit, itemGroup, null, unit, clazz);
-//		this.itemName = itemName;
 
 		this.receivedOrderUnits = new AmountWithUnit(receivedOrderAmount, receivedOrderMU);
 		this.receiptAmt = new AmountWithUnit(receiptAmount, receiptMU);
 		this.orderBalance = this.receiptAmt.subtract(this.receivedOrderUnits);
 		if(orderAmount != null) {
 			this.orderAmount = new AmountWithUnit(orderAmount, orderMU);
-//			this.orderBalance = this.receiptAmt.subtract(this.orderAmount);
 		}
 		else {
 			this.orderAmount = null;
-//			this.orderBalance = null;
 		}
 		this.receiptDate = receiptDate;
 		this.status = status;
-		
-//		this.receiptAmount = new AmountWithUnit[] {
-//				receiptAmt,
-//				receiptAmt.convert(MeasureUnit.LBS)
-//		};
-		
+				
 		this.storage = storage;
 		if(extraAdded != null) {
 			this.extraAdded = new AmountWithUnit(extraAdded, extraAddedMU);
@@ -94,13 +90,7 @@ public class ReceiptItemRow extends BasicDTO {
 	}
 	
 	public List<AmountWithUnit> getReceiptAmount() {
-		return AmountWithUnit.amountDisplay(this.receiptAmt, this.item, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
-//		if(MeasureUnit.WEIGHT_UNITS.contains(this.receiptAmt.getMeasureUnit())) {
-//			return new AmountWithUnit[] {
-//					this.receiptAmt.setScale(MeasureUnit.SCALE),
-//					this.receiptAmt.convert(MeasureUnit.LOT).setScale(MeasureUnit.SCALE)};
-//		}
-//		return null;
+		return AmountWithUnit.amountDisplay(this.receiptAmt, this.item, displayMeasureUnits);
 	}
 	
 }

@@ -24,10 +24,8 @@ public class ItemInventoryAmountWithOrder {
 	
 	private BasicValueEntity<Item> item;
 
-//	private AmountWithUnit[] inventoryWeight;
 	private AmountWithUnit inventoryAmount;
 
-//	private AmountWithUnit[] orderedWeight;
 	private AmountWithUnit orderedAmount;
 	
 	public ItemInventoryAmountWithOrder(@NonNull BasicValueEntity<Item> item) {
