@@ -106,7 +106,7 @@ public class ItemAmount {
 		}
 	}
 	
-	public List<AmountWithUnit> getAmountWithWeight() {
+	public List<AmountWithUnit> getAmountList() {
 		List<AmountWithUnit> list = new ArrayList<>();
 		if(this.amount != null) {
 			list.add(this.amount);	
