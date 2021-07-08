@@ -15,6 +15,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * DTO(Data Access Object) for sending or displaying UserMessage entity data.
@@ -24,6 +25,7 @@ import lombok.NonNull;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @NoArgsConstructor
 public class UserMessageDTO extends GeneralInfoDTO {
 

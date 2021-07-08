@@ -6,6 +6,7 @@ package com.avc.mis.beta;
 import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -511,5 +512,17 @@ public class QueryTest {
 
 			System.out.println();
 		});
+	}
+	
+	@Test
+	void newTest() {
+		//get messages for logged in user
+		List<UserMessageDTO> userMessages = processInfoReader.getAllMessages(null, null, null, null, 10);
+		userMessages.forEach(m -> System.out.println(m));
+		
+		System.out.println("pagable");
+		//get messages for logged in user
+		userMessages = processInfoReader.getAllMessages(null, null, Instant.parse("2021-07-07T09:42:30.680Z"), null, 4);
+		userMessages.forEach(m -> System.out.println(m));
 	}
 }

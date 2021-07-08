@@ -3,11 +3,13 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.data.ProcessManagementDTO;
@@ -78,9 +80,13 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			+ "and (:lables is null or m.label in :lables) "
 			+ "and (:startTime is null or m.createdDate >= :startTime) "
 			+ "and (:endTime is null or m.createdDate < :endTime) "
+			+ "and ((:lastCreateDate is null and :lastId is null) "
+				+ "or (m.createdDate < :lastCreateDate)"
+				+ "or (m.createdDate = :lastCreateDate and m.id < :lastId)) "
 		+ "group by m "
-		+ "ORDER BY m.createdDate DESC ")
-	List<UserMessageDTO> findAllMessages(Integer userId, List<MessageLabel> lables, LocalDateTime startTime, LocalDateTime endTime);
+		+ "ORDER BY m.createdDate DESC, m.id DESC ")
+	List<UserMessageDTO> findAllMessages(Integer userId, List<MessageLabel> lables, Instant startTime, Instant endTime, 
+			Instant lastCreateDate, Integer lastId, Pageable pageable);
 	
 
 	@Query("select new com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO("
@@ -111,7 +117,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "and (:endTime is null or p.modifiedDate < :endTime) "
 			+ "group by pa "
 			+ "ORDER BY p.modifiedDate DESC ")
-	List<ApprovalTaskDTO> findApprovals(Integer userId, DecisionType[] decisions, LocalDateTime startTime, LocalDateTime endTime);
+	List<ApprovalTaskDTO> findApprovals(Integer userId, DecisionType[] decisions, Instant startTime, Instant endTime);
 	
 	@Query("select count(*) "
 		+ "from UserMessage m "
@@ -370,6 +376,6 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			+ "group by used_p.id, using_p.id ")
 	List<Integer[]> findTransactionProcessVertices(Integer[] poCodeIds);
 
-	
+
 
 }

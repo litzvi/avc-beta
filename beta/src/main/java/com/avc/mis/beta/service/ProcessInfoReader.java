@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,13 +86,19 @@ public class ProcessInfoReader {
 	 * @return List of messages for the current user including the subject process information.
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<UserMessageDTO> getAllMessages(LocalDateTime startTime, LocalDateTime endTime) {		
-		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), null, startTime, endTime);
+	public List<UserMessageDTO> getAllMessages(Instant startTime, Instant endTime) {		
+		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), null, startTime, endTime, null, null, Pageable.unpaged());
+	}
+	
+	public List<UserMessageDTO> getAllMessages(Instant startTime, Instant endTime, 
+			Instant lastCreateDate, Integer lastId, int limit) {		
+		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), null, startTime, endTime, 
+				lastCreateDate, lastId, PageRequest.of(0, limit));
 	}
 	
 	@Deprecated
-	public List<UserMessageDTO> getAllUserMessages(Integer userId, LocalDateTime startTime, LocalDateTime endTime) {		
-		return getProcessInfoRepository().findAllMessages(userId, null, startTime, endTime);
+	public List<UserMessageDTO> getAllUserMessages(Integer userId, Instant startTime, Instant endTime) {		
+		return getProcessInfoRepository().findAllMessages(userId, null, startTime, endTime, null, null, Pageable.unpaged());
 	}
 	
 	/**
@@ -97,8 +106,15 @@ public class ProcessInfoReader {
 	 * @return List of new  messages for the given user including the subject process information.
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<UserMessageDTO> getAllNewMessages(LocalDateTime startTime, LocalDateTime endTime) {
-		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), Arrays.asList(MessageLabel.NEW), startTime, endTime);
+	public List<UserMessageDTO> getAllNewMessages(Instant startTime, Instant endTime) {
+		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), Arrays.asList(MessageLabel.NEW), startTime, endTime, 
+				null, null, Pageable.unpaged());
+	}
+	
+	public List<UserMessageDTO> getAllNewMessages(Instant startTime, Instant endTime,
+			Instant lastCreateDate, Integer lastId, int limit) {		
+		return getProcessInfoRepository().findAllMessages(dao.getCurrentUserId(), Arrays.asList(MessageLabel.NEW), startTime, endTime, 
+				lastCreateDate, lastId, PageRequest.of(0, limit));
 	}
 	
 	/**
@@ -106,7 +122,7 @@ public class ProcessInfoReader {
 	 * @return List of unattended approval tasks including the subject process information.
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<ApprovalTaskDTO> getAllRequiredApprovals(LocalDateTime startTime, LocalDateTime endTime) {
+	public List<ApprovalTaskDTO> getAllRequiredApprovals(Instant startTime, Instant endTime) {
 		return getProcessInfoRepository().findApprovals(dao.getCurrentUserId(), 
 				new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED}, startTime, endTime);
 	}
@@ -116,7 +132,7 @@ public class ProcessInfoReader {
 	 * @return List of approval tasks including the subject process information for current user.
 	 * @throws IllegalStateException if logged in UserEntity not available.
 	 */
-	public List<ApprovalTaskDTO> getAllApprovals(LocalDateTime startTime, LocalDateTime endTime) {
+	public List<ApprovalTaskDTO> getAllApprovals(Instant startTime, Instant endTime) {
 		return getProcessInfoRepository().findApprovals(dao.getCurrentUserId(), DecisionType.values(), startTime, endTime);
 	}
 	
