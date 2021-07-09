@@ -64,7 +64,7 @@ public class ProductionProcessWithItemAmount extends BasicDTO {
 		}
 		else if(MeasureUnit.WEIGHT_UNITS.contains(unitMeasureUnit)){
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
-			this.weight = new AmountWithUnit(amount.multiply(unitAmount), unitMeasureUnit);
+			this.weight = new AmountWithUnit(amount.multiply(unitAmount), unitMeasureUnit).setScale(MeasureUnit.SUM_DISPLAY_SCALE);
 		}
 		else 
 		{

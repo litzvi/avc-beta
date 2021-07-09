@@ -42,6 +42,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -167,33 +168,21 @@ public class Controller {
 		return result; 
 	}
 	
-//	@RequestMapping("/getUserMassages")
-//	public List<UserMessageDTO> getMassages(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
-//			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-//		try {
-//			return processDao.getAllMessages(begin, end);
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
+	@RequestMapping("/getUserMassages")
+	public List<UserMessageDTO> getMassages(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant end) {
+			return processDao.getAllMessages(begin, end);
+	}
 	
-//	@RequestMapping("/getUserTasks")
-//	public List<ApprovalTaskDTO> getUserTasks(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
-//			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-//		return processDao.getAllApprovals(begin, end);
-//	}
+	@RequestMapping("/getUserTasks")
+	public List<ApprovalTaskDTO> getUserTasks(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant end) {
+		return processDao.getAllApprovals(begin, end);
+	}
 	
 	@RequestMapping("/getUserMassagesNumber")
 	public int getMassagesNumber() {
-		try {
-			return processDao.getUserMassagesNumber(Arrays.asList(MessageLabel.NEW));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return 0;
-		}
+		return processDao.getUserMassagesNumber(Arrays.asList(MessageLabel.NEW));
 	}
 	
 	@RequestMapping("/getUserTasksNumber")

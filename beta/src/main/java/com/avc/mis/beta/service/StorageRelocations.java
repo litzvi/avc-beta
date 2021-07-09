@@ -103,7 +103,9 @@ public class StorageRelocations {
 				.toArray())
 				.collect(Collectors.toMap(StorageBase::getId, Function.identity()));
 		storageMoves.forEach(move -> {
-			move.setProcessItem(storageMap.get(move.getStorage().getId()).getProcessItem());
+			StorageBase storageBase = storageMap.get(move.getStorage().getId());
+			move.setProcessItem(storageBase.getProcessItem());
+			move.setUnitAmount(storageBase.getUnitAmount());
 		});
 	}
 	

@@ -79,6 +79,7 @@ public class QcController {
 	@RequestMapping("/getRoastQC")
 	public List<CashewQcRow> getRoastQC(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		System.out.println(begin);
 		return qualityCheckReports.getRoastedQualityChecks(begin, end);
 	}
 	

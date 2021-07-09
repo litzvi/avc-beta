@@ -23,5 +23,6 @@ public enum CashewGrade {
 	SW320,
 	WB,
 	WS,
-	WSLP,	
+	WSLP,
+	LP
 }

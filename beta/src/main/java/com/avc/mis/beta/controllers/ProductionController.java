@@ -135,6 +135,12 @@ public class ProductionController {
 		return productionProcesses.getProductionProcess(process.getId());
 	}
 	
+	@PostMapping(value="/addQcPackingTransfer")
+	public ProductionProcessDTO addQcPackingTransfer(@RequestBody ProductionProcess process) {
+		productionProcesses.addProductionProcess(process, ProcessName.BAD_QUALITY_PACKING);
+		return productionProcesses.getProductionProcess(process.getId());
+	}
+	
 	@PutMapping(value="/editProductionTransfer")
 	public ProductionProcessDTO editProductionTransfer(@RequestBody ProductionProcess process) {
 		productionProcesses.editProductionProcess(process);
