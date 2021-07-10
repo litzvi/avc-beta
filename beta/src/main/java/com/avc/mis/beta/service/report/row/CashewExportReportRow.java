@@ -6,18 +6,16 @@ package com.avc.mis.beta.service.report.row;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.SaltLevel;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.values.CashewGrade;
 
 import lombok.Value;
 
@@ -43,13 +41,14 @@ public class CashewExportReportRow extends CashewBaggedInventoryRow {
 	public CashewExportReportRow(Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, ItemGroup itemGroup,
 			ProductionUse productionUse, AmountWithUnit unit, Class<? extends Item> clazz, 
 			String brand, String code, boolean whole, boolean roast, boolean toffee,
-			CashewGrade grade, SaltLevel saltLevel, int numBags, 
+			Integer gradeId,  String gradeValue,
+			SaltLevel saltLevel, int numBags, 
 			BigDecimal amount, MeasureUnit measureUnit, BigDecimal weightCoefficient,
 			String poCode, LocalDateTime processDate, 
 			Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue, 
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType, String remarks) {
 		super(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unit, clazz,
-				brand, code, whole, roast, toffee, grade, saltLevel, numBags, amount, measureUnit, weightCoefficient);
+				brand, code, whole, roast, toffee, gradeId, gradeValue, saltLevel, numBags, amount, measureUnit, weightCoefficient);
 		this.poCode = poCode;
 		this.processDate = processDate;
 		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, shipmentCodeCode, portOfDischargeCode, portOfDischargeValue);

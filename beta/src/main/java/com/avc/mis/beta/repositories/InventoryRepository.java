@@ -3,10 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -21,11 +18,7 @@ import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.CashewGrade;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.enums.SaltLevel;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -129,7 +122,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
-			+ "cashew_item.grade, "
+			+ "grade.id, grade.value, "
 			+ "p.recordedTime, r.recordedTime, pi.tableView) "
 		+ "from ProcessItem pi "
 			+ "left join ReceiptItem ri "
@@ -138,6 +131,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "join item.unit item_unit "
 			+ "left join CashewItem cashew_item "
 				+ "on item = cashew_item "
+				+ "left join cashew_item.grade grade "
 			+ "join pi.process p "
 				+ "left join p.poCode p_po_code "
 					+ "left join p.weightedPos w_po "
@@ -670,7 +664,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	@Query("select new com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow( "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item_unit, type(item), "
 			+ "item.brand, item.code, item.whole, item.roast, item.toffee, "
-			+ "item.grade, item.saltLevel, item.numBags, "
+			+ "grade.id, grade.value, item.saltLevel, item.numBags, "
 			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
 				+ " * "
 				+ "(CASE "
@@ -687,6 +681,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "join item.unit item_unit "
 				+ "join UOM uom "
 					+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
+				+ "left join item.grade grade "
 			+ "join pi.process p "
 				+ "join p.lifeCycle lc "
 			+ "join pi.allStorages sf "

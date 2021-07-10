@@ -21,9 +21,7 @@ import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
@@ -32,6 +30,7 @@ import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.values.CashewGrade;
 import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.CompanyPosition;
@@ -70,6 +69,10 @@ public class ValueTablesReader {
 	
 	public List<Warehouse> getAllWarehouses() {
 		return getValueTablesRepository().findAllWarehouses();		
+	}
+	
+	public List<CashewGrade> getAllCashewGrades() {
+		return getValueTablesRepository().findAllCashewGrades();		
 	}
 	
 	public List<Country> getAllCountries() {
@@ -147,6 +150,10 @@ public class ValueTablesReader {
 		return getValueTablesRepository().findAllWarehousesDTO();		
 	}
 	
+	public List<BasicValueEntity<CashewGrade>> getAllCashewGradesDTO() {
+		return getValueTablesRepository().findAllCashewGradesDTO();		
+	}
+	
 	public List<CityDTO> getAllCitiesDTO() {
 		return getValueTablesRepository().findAllCitiesDTO();
 	}	
@@ -218,9 +225,9 @@ public class ValueTablesReader {
 		return getValueTablesRepository().findItemsByGroupBasic(itemGroup, checkProductionUses, productionUses, packageTypeOrdinal);
 	}
 	
-	public List<CashewItemDTO> getCashewItems(ItemGroup itemGroup, ProductionUse productionUse, CashewGrade grade, PackageType packageType) {
+	public List<CashewItemDTO> getCashewItems(ItemGroup itemGroup, ProductionUse productionUse, Integer gradeId, PackageType packageType) {
 		Integer packageTypeOrdinal = packageType != null ? packageType.ordinal() : null;
-		return getValueTablesRepository().findCashewItems(itemGroup, productionUse, grade, packageTypeOrdinal);
+		return getValueTablesRepository().findCashewItems(itemGroup, productionUse, gradeId, packageTypeOrdinal);
 	}
 	
 	/**

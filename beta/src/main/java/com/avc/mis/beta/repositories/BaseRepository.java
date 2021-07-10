@@ -21,6 +21,7 @@ import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.values.CashewGrade;
 import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.CompanyPosition;
@@ -49,9 +50,18 @@ interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 			+ "order by s.value ")
 	List<BasicValueEntity<Warehouse>> findAllWarehousesDTO();
 	
+	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(s.id, s.value) "
+			+ "from CashewGrade s where s.active = true "
+			+ "order by s.value ")
+	List<BasicValueEntity<CashewGrade>> findAllCashewGradesDTO();
+	
 	@Query("select s "
 			+ "from Warehouse s where s.active = true")
 	List<Warehouse> findAllWarehouses();
+	
+	@Query("select s "
+			+ "from CashewGrade s where s.active = true")
+	List<CashewGrade> findAllCashewGrades();
 	
 	@Query("select t from ProcessType t where t.processName = :value")
 	Optional<ProcessType> findProcessTypeByValue(ProcessName value);

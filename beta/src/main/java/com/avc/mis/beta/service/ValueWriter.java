@@ -14,6 +14,7 @@ import com.avc.mis.beta.entities.item.CashewItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.values.CashewGrade;
 import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.CompanyPosition;
@@ -131,4 +132,9 @@ public class ValueWriter {
 	public void addShippingPort(ShippingPort port) {
 		dao.addEntity(port);
 	}
+	
+	public void addCashewGrade(CashewGrade cashewGrade) {
+		dao.addEntity(cashewGrade);
+	}
+	
 }

@@ -7,18 +7,17 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
+import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.SaltLevel;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.values.CashewGrade;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Value;
 
 /**
  * @author zvi
@@ -33,7 +32,7 @@ public class CashewBaggedInventoryRow {
 	private boolean whole;
 	private boolean roast;
 	private boolean toffee;
-	private CashewGrade grade;
+	private BasicValueEntity<CashewGrade> grade;
 	private AmountWithUnit bagSize;
 	private SaltLevel saltLevel;
 	private int bagsInBox;
@@ -46,14 +45,16 @@ public class CashewBaggedInventoryRow {
 			AmountWithUnit unit, Class<? extends Item> clazz,
 			String brand, String code, 
 			boolean whole, boolean roast, boolean toffee,
-			CashewGrade grade, SaltLevel saltLevel, int numBags, 
+			Integer gradeId,  String gradeValue,
+			SaltLevel saltLevel, int numBags, 
 			BigDecimal amount, MeasureUnit measureUnit) {
 		this(itemId, itemValue, defaultMeasureUnit, 
 				itemGroup, productionUse, 
 				unit, clazz, 
 				brand, code, 
 				whole, roast, toffee,
-				grade, saltLevel, numBags, 
+				gradeId, gradeValue, 
+				saltLevel, numBags, 
 				amount, measureUnit, BigDecimal.ONE);
 	}
 	
@@ -63,7 +64,8 @@ public class CashewBaggedInventoryRow {
 			AmountWithUnit unit, Class<? extends Item> clazz,
 			String brand, String code, 
 			boolean whole, boolean roast, boolean toffee,
-			CashewGrade grade, SaltLevel saltLevel, int numBags, 
+			Integer gradeId,  String gradeValue,
+			SaltLevel saltLevel, int numBags, 
 			BigDecimal amount, MeasureUnit measureUnit, BigDecimal weightCoefficient) {
 		super();
 		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unit, clazz);
@@ -72,7 +74,10 @@ public class CashewBaggedInventoryRow {
 		this.whole = whole;
 		this.roast = roast;
 		this.toffee = toffee;
-		this.grade = grade;
+		if(gradeId != null && gradeValue != null)
+			this.grade = new BasicValueEntity<CashewGrade>(gradeId, gradeValue);
+		else
+			this.grade = null;
 		this.saltLevel = saltLevel;
 		this.bagsInBox = numBags;
 		this.bagSize = this.item.getUnit().divide(BigDecimal.valueOf(numBags));

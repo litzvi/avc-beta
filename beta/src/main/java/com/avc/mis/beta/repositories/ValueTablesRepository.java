@@ -14,11 +14,7 @@ import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.enums.CashewGrade;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.enums.SaltLevel;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -56,12 +52,15 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 	@Query("select new com.avc.mis.beta.dto.values.CashewItemDTO("
 			+ "i.id, i.value, i.code, i.brand, i.measureUnit, i.itemGroup, i.productionUse, "
 			+ "i.unit, type(i), "
-			+ "i.numBags, i.grade, i.whole, i.roast, i.toffee, i.saltLevel) "
+			+ "i.numBags, "
+			+ "grade.id, grade.value,  "
+			+ "i.whole, i.roast, i.toffee, i.saltLevel) "
 		+ "from CashewItem i "
 			+ "join i.unit u "
+			+ "left join i.grade grade "
 		+ "where (i.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (i.productionUse = :productionUse or :productionUse is null) "
-			+ "and (i.grade = :grade or :grade is null) "
+			+ "and (grade.id = :gradeId or :gradeId is null) "
 			+ "and (:packageTypeOrdinal = "
 				+ "(CASE "
 					+ "WHEN u.measureUnit = com.avc.mis.beta.entities.enums.MeasureUnit.NONE "
@@ -71,7 +70,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 				+ "or :packageTypeOrdinal is null) "
 //			+ "and i.numBags >= :minBagsInBox "
 		+ "order by i.brand, i.code, i.value ")
-	List<CashewItemDTO> findCashewItems(ItemGroup itemGroup, ProductionUse productionUse, CashewGrade grade, Integer packageTypeOrdinal);
+	List<CashewItemDTO> findCashewItems(ItemGroup itemGroup, ProductionUse productionUse, Integer gradeId, Integer packageTypeOrdinal);
 
 	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
 			+ "from Item i "

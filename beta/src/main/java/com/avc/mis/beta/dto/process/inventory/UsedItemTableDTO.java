@@ -3,16 +3,14 @@
  */
 package com.avc.mis.beta.dto.process.inventory;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.values.CashewGrade;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
@@ -41,6 +39,6 @@ public class UsedItemTableDTO {
 	@EqualsAndHashCode.Exclude
 	private String[] itemSuppliers;
 	@EqualsAndHashCode.Exclude
-	private CashewGrade cashewGrade;
+	private BasicValueEntity<CashewGrade> cashewGrade;
 
 }

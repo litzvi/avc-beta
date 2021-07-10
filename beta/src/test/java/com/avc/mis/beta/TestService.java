@@ -331,9 +331,7 @@ public class TestService {
 		if(poCodes.isEmpty())
 			fail("No po codes in database for running this test");
 		return poCodes.get(randNum.nextInt(poCodes.size()));
-	}
-	
-	
+	}	
 
 	public List<ItemDTO> getItemsByGroup(ItemGroup group) {
 		List<ItemDTO> items = valueTableReader.getItemsByGroup(group);

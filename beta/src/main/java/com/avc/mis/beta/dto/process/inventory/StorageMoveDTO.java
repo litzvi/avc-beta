@@ -4,14 +4,11 @@
 package com.avc.mis.beta.dto.process.inventory;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.CashewGrade;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.inventory.Storage;
@@ -44,7 +41,8 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz, 
 			MeasureUnit measureUnit, LocalDateTime itemProcessDate,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
-			String itemPoCodes, String itemSuppliers, CashewGrade cashewGrade,
+			String itemPoCodes, String itemSuppliers, 
+			Integer gradeId,  String gradeValue,
 			Integer storageId, Integer stoageVersion, Integer storageOrdinal, 
 			BigDecimal storageUnitAmount, BigDecimal storageNumberUnits, BigDecimal storgeOtherUsedUnits, //BigDecimal storageContainerWeight,
 			Integer storageWarehouseLocationId, String storageWarehouseLocationValue, String storageRemarks,
@@ -54,7 +52,8 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 				itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz, 
 				measureUnit, itemProcessDate,
 				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, 
-				itemPoCodes, itemSuppliers, cashewGrade,
+				itemPoCodes, itemSuppliers, 
+				gradeId, gradeValue,
 				storageId, stoageVersion, storageOrdinal, 
 				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, //storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks);

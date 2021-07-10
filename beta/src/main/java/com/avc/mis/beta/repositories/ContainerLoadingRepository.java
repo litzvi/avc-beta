@@ -3,27 +3,18 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.exportdoc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.exportdoc.ContainerPoItemStorageRow;
 import com.avc.mis.beta.dto.exportdoc.ExportInfo;
 import com.avc.mis.beta.dto.process.collection.LoadedItemDTO;
 import com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.view.LoadingRow;
-import com.avc.mis.beta.entities.enums.CashewGrade;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.enums.SaltLevel;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 
@@ -176,7 +167,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 	@Query("select new com.avc.mis.beta.service.report.row.CashewExportReportRow( "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item.unit, type(item), item.brand, item.code, "
 			+ "item.whole, item.roast, item.toffee, "
-			+ "item.grade, item.saltLevel, item.numBags, "
+			+ "grade.id, grade.value, item.saltLevel, item.numBags, "
 			+ "sum(i.numberUnits), pi.measureUnit, coalesce(w_po.weight, 1), "
 			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
 			+ "p.recordedTime, "
@@ -194,6 +185,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 					+ "join i.storage sf "
 						+ "join sf.processItem pi "
 							+ "join pi.item item "
+								+ "left join item.grade grade "
 //							+ "join CashewItem item "
 //								+ "on pi.item = item "
 //								+ "join item.unit item_unit "

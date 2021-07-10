@@ -8,13 +8,13 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Positive;
 
-import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.CashewGrade;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.SaltLevel;
+import com.avc.mis.beta.entities.values.CashewGrade;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
 import lombok.Data;
@@ -34,9 +34,8 @@ public class CashewItem extends Item {
 	@Positive(message = "Number of bags has to be positive", groups = PositiveAmount.class)
 	private int numBags = 1;
 	
-	@Enumerated(EnumType.STRING)
-//	@Column(nullable = false, updatable = false) - TODO TEMPERARY COMMENTED
-//	@NotNull(message = "Cashew grade/type is mandatory")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "gradeId")
 	private CashewGrade grade;
 
 //	@Column(nullable = false, updatable = false) - TODO TEMPERARY COMMENTED

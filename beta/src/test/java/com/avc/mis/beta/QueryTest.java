@@ -259,6 +259,7 @@ public class QueryTest {
 			
 		//get all warhouse with id and value only
 		valueTablesReader.getAllWarehousesDTO().forEach(w -> System.out.println(w));
+		valueTablesReader.getAllCashewGradesDTO().forEach(w -> System.out.println(w));
 		
 
 		//get suppliers by supply category
