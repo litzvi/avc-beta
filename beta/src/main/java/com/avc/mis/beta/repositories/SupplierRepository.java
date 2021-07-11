@@ -15,6 +15,7 @@ import com.avc.mis.beta.dto.generic.ValueObject;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.service.report.row.SupplierQualityRow;
 
@@ -82,32 +83,29 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 				+ "join s.supplyCategories c ")
 	Stream<ValueObject<String>> findAllSupplyCategoryValues();
 
-//	@Query("select new com.avc.mis.beta.service.report.row.SupplierQualityRow( "
-//			+ "r.id, po_code.id, po_code.code, ct.code, ct.suffix, s.name,  "
-//			+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit, type(item), "
-//			+ "units.amount, units.measureUnit, "
-//			+ "ro_units.amount, ro_units.measureUnit, "
-//			+ "r.recordedTime, lc.processStatus, "
-//			+ "SUM(sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor), item.measureUnit, "
-//			+ "function('GROUP_CONCAT', function('DISTINCT', sto.value)), "
-//			+ "extra.amount, extra.measureUnit) "
-//		+ "from Receipt r "
-//			+ "join r.lifeCycle lc "
-//			+ "join r.poCode po_code "
-//				+ "join po_code.supplier s "
-//				+ "join po_code.contractType ct "
-//			+ "join r.processItems pi "
-//				+ "left join pi.extraRequested extra "
-//				+ "join pi.item item "
-//					+ "join item.unit item_unit "
-//				+ "join pi.storageForms sf "
-//			+ "join UOM uom "
-//				+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
-//			+ "join r.processType t "
-//		+ "where (s.id = :supplierId or :supplierId is null)"
-//			+ "and (:startTime is null or r.recordedTime >= :startTime) "
-//			+ "and (:endTime is null or r.recordedTime < :endTime) "
-//		+ "group by po_code "
-//		+ "order by s, r.recordedTime ")
-//	List<SupplierQualityRow> findSupplierWithPos(Integer supplierId, LocalDateTime startTime, LocalDateTime endTime);
+	@Query("select new com.avc.mis.beta.service.report.row.SupplierQualityRow( "
+			+ "po_code.id, "
+			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
+			+ "s.name, "
+			+ "item.value,  r.recordedTime, "
+			+ "SUM(sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor), item.measureUnit ) "
+		+ "from Receipt r "
+			+ "join r.lifeCycle lc "
+			+ "join r.poCode po_code "
+				+ "join po_code.supplier s "
+				+ "join po_code.contractType t "
+			+ "join r.processItems pi "
+				+ "join pi.item item "
+					+ "join item.unit item_unit "
+				+ "join pi.storageForms sf "
+			+ "join UOM uom "
+				+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
+			+ "join r.processType pt "
+		+ "where pt.processName = :processName "
+			+ "and (s.id = :supplierId or :supplierId is null)"
+			+ "and (:startTime is null or r.recordedTime >= :startTime) "
+			+ "and (:endTime is null or r.recordedTime < :endTime) "
+		+ "group by po_code "
+		+ "order by s, r.recordedTime ")
+	List<SupplierQualityRow> findSupplierWithPos(ProcessName processName, Integer supplierId, LocalDateTime startTime, LocalDateTime endTime);
 }

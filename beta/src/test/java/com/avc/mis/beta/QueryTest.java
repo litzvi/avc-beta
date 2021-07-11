@@ -82,6 +82,7 @@ import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.interfaces.ProductionProcessService;
 import com.avc.mis.beta.service.report.InventoryReports;
 import com.avc.mis.beta.service.report.LoadingReports;
+import com.avc.mis.beta.service.report.SupplierReports;
 import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
@@ -106,6 +107,7 @@ public class QueryTest {
 	@Autowired ProcessSummaryReader processSummaryReader;
 	@Autowired Users users;
 	@Autowired Suppliers suppliers;
+	@Autowired SupplierReports supplierReports;
 	@Autowired Orders orders;
 	@Autowired Receipts receipts;
 	@Autowired InventoryReports inventoryReports;
@@ -116,7 +118,7 @@ public class QueryTest {
 	@Autowired LoadingReports loadingReports;
 	@Autowired ContainerArrivals containerArrivals;
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void queryTest() {
 
@@ -439,7 +441,7 @@ public class QueryTest {
 
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void oneQueryTest() {
 		
@@ -513,10 +515,7 @@ public class QueryTest {
 
 			System.out.println();
 		});
-	}
-	
-	@Test
-	void newTest() {
+		
 		//get messages for logged in user
 		List<UserMessageDTO> userMessages = processInfoReader.getAllMessages(null, null, null, null, 10);
 		userMessages.forEach(m -> System.out.println(m));
@@ -525,5 +524,11 @@ public class QueryTest {
 		//get messages for logged in user
 		userMessages = processInfoReader.getAllMessages(null, null, Instant.parse("2021-07-07T09:42:30.680Z"), null, 4);
 		userMessages.forEach(m -> System.out.println(m));
+
+	}
+	
+	@Test
+	void newTest() {				
+		supplierReports.getSupplierQualityLines(null, null, null).forEach(i -> System.out.println(i));
 	}
 }

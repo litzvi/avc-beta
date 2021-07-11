@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.generic.ValueObject;
+import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.dto.view.SupplierRow;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.repositories.SupplierRepository;
 import com.avc.mis.beta.service.report.row.SupplierQualityRow;
 
@@ -58,11 +61,12 @@ public class SupplierReports {
 		return supplierRows;
 	}
 	
-//	public List<SupplierQualityRow> getSupplierQualityLines(Integer supplierId, LocalDateTime startTime, LocalDateTime endTime) {
-//		List<SupplierQualityRow> rows = getSupplierRepository().findSupplierWithPos(supplierId, startTime, endTime);
-//		
-//		
-//		return rows;
-//	}
+	public List<SupplierQualityRow> getSupplierQualityLines(Integer supplierId, LocalDateTime startTime, LocalDateTime endTime) {
+		List<SupplierQualityRow> rows = getSupplierRepository().findSupplierWithPos(ProcessName.CASHEW_RECEIPT, supplierId, startTime, endTime);
+		Map<Integer, SupplierQualityRow> rowMap = rows.stream().collect(Collectors.toMap(SupplierQualityRow::getId, Function.identity()));
+		Set<Integer> poCodeIds = rowMap.keySet();
+		//get and set QC and currentAmount
+		return rows;
+	}
 	
 }

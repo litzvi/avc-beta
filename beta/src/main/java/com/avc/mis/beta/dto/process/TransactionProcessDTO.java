@@ -63,6 +63,7 @@ public abstract class TransactionProcessDTO<T extends ProcessItemDTO> extends Pr
 			Optional<AmountWithUnit> totalAmount = usedItemGroups.stream()
 				.filter(i -> i != null)
 				.map(i -> i.getTotalWeight())
+				.filter(i -> i != null)
 				.reduce(AmountWithUnit::add);
 			if(totalAmount.isPresent()) {
 //				return AmountWithUnit.weightDisplay(totalAmount.get(), Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
