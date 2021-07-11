@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service.report;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dto.generic.ValueObject;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.repositories.SupplierRepository;
+import com.avc.mis.beta.service.report.row.SupplierQualityRow;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -53,7 +55,14 @@ public class SupplierReports {
 			s.setEmails(emails.get(s.getContactDetailsId()));
 			s.setSupplyCategories(categories.get(s.getId()));
 		});
-		return supplierRows;		
-	}	
+		return supplierRows;
+	}
+	
+//	public List<SupplierQualityRow> getSupplierQualityLines(Integer supplierId, LocalDateTime startTime, LocalDateTime endTime) {
+//		List<SupplierQualityRow> rows = getSupplierRepository().findSupplierWithPos(supplierId, startTime, endTime);
+//		
+//		
+//		return rows;
+//	}
 	
 }

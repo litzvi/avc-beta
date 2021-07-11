@@ -59,13 +59,15 @@ public abstract class TransactionProcessDTO<T extends ProcessItemDTO> extends Pr
 	}
 	
 	public List<AmountWithUnit> getTotalWeight() {
-		Optional<AmountWithUnit> totalAmount = usedItemGroups.stream()
-			.filter(i -> i != null)
-			.map(i -> i.getTotalWeight())
-			.reduce(AmountWithUnit::add);
-		if(totalAmount.isPresent()) {
-//			return AmountWithUnit.weightDisplay(totalAmount.get(), Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
-			return Arrays.asList(totalAmount.get());
+		if(usedItemGroups != null) {			
+			Optional<AmountWithUnit> totalAmount = usedItemGroups.stream()
+				.filter(i -> i != null)
+				.map(i -> i.getTotalWeight())
+				.reduce(AmountWithUnit::add);
+			if(totalAmount.isPresent()) {
+//				return AmountWithUnit.weightDisplay(totalAmount.get(), Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+				return Arrays.asList(totalAmount.get());
+			}
 		}
 		return null;
 	}
