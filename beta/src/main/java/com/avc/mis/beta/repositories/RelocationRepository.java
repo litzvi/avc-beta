@@ -11,6 +11,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
 import com.avc.mis.beta.dto.view.RelocationWithItemAmount;
+import com.avc.mis.beta.entities.process.RelocationProcess;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 
@@ -18,14 +19,14 @@ import com.avc.mis.beta.entities.process.inventory.StorageBase;
  * @author zvi
  *
  */
-public interface RelocationRepository extends PoProcessRepository<StorageRelocation>{
+public interface RelocationRepository extends PoProcessRepository<RelocationProcess>{
 
 	@Query("select new com.avc.mis.beta.dto.query.ProcessItemTransactionDifference("
 			+ "pi.id, "
 			+ "SUM(used_sf.unitAmount * storageMove.numberUnits * uom_used.multiplicand / uom_used.divisor), "
 			+ "SUM(storageMove.unitAmount * storageMove.numberUnits * uom_produced.multiplicand / uom_produced.divisor), "
 			+ "item.measureUnit) "
-		+ "from StorageRelocation p "
+		+ "from RelocationProcess p "
 			+ "join p.storageMovesGroups g "
 				+ "join g.storageMoves storageMove "
 					+ "join storageMove.processItem pi "
@@ -53,7 +54,7 @@ public interface RelocationRepository extends PoProcessRepository<StorageRelocat
 			+ "SUM((m.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', wh.value)), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', new_wh.value))) "
-		+ "from StorageRelocation p "
+		+ "from RelocationProcess p "
 			+ "join p.storageMovesGroups g "
 				+ "join g.storageMoves m "
 					+ "left join m.warehouseLocation new_wh "

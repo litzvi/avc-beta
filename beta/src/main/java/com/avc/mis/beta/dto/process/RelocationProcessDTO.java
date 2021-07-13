@@ -29,15 +29,17 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class StorageRelocationDTO extends RelocationProcessDTO {
+public abstract class RelocationProcessDTO extends PoProcessDTO {
 	
-	public StorageRelocationDTO(@NonNull StorageRelocation relocation) {
-		super(relocation);
-	}
-	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Storage relocation";
-	}
+	private List<StorageMovesGroupDTO> storageMovesGroups;
 
+	public RelocationProcessDTO(@NonNull RelocationProcess relocation) {
+		super(relocation);
+		this.storageMovesGroups = Arrays.stream(relocation.getStorageMovesGroups())
+				.map(i->{return new StorageMovesGroupDTO((StorageMovesGroup)i);}).collect(Collectors.toList());
+		ItemCount[] itemCounts = relocation.getItemCounts();
+		if(itemCounts != null)
+			this.setItemCounts(Arrays.stream(itemCounts)
+					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toList()));
+	}
 }

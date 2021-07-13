@@ -19,6 +19,7 @@ import com.avc.mis.beta.entities.item.ProductionUse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.Value;
@@ -27,22 +28,22 @@ import lombok.Value;
  * @author zvi
  *
  */
-@Value
+@Data
 public class ItemAmount {
 	
 	@Getter(value = AccessLevel.NONE)
 	private final static MeasureUnit DISPLAY_MEASURE_UNIT = MeasureUnit.LBS;
 
 
-	BasicValueEntity<Item> item;
-
+	private BasicValueEntity<Item> item;
+     
 	@ToString.Exclude @JsonIgnore
-	ItemGroup itemGroup;
+	private ItemGroup itemGroup;
 	@JsonIgnore
-	AmountWithUnit weightAmount;
-	AmountWithUnit amount;
+	private AmountWithUnit weightAmount;
+	private AmountWithUnit amount;
 	@JsonIgnore
-	BigDecimal weightCoefficient;
+	private BigDecimal weightCoefficient;
 	
 	public ItemAmount(Integer id, String value, MeasureUnit defaultMeasureUnit, 
 			ItemGroup itemGroup, ProductionUse productionUse, 
@@ -118,7 +119,7 @@ public class ItemAmount {
 	}
 	
 	@JsonIgnore
-	static AmountWithUnit getTotalWeight(List<ItemAmount> itemAmounts) {
+	public static AmountWithUnit getTotalWeight(List<? extends ItemAmount> itemAmounts) {
 		Optional<AmountWithUnit> totalWeight = itemAmounts.stream()
 				.filter(i -> i.getWeightAmount() != null)
 				.map(i -> AmountWithUnit.convert(i.getWeightAmount(), DISPLAY_MEASURE_UNIT).get())

@@ -6,12 +6,15 @@ package com.avc.mis.beta.repositories;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.generic.ValueObject;
+import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.report.ItemAmountWithPo;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.Supplier;
@@ -102,10 +105,13 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 				+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
 			+ "join r.processType pt "
 		+ "where pt.processName = :processName "
+			+ "and lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (s.id = :supplierId or :supplierId is null)"
 			+ "and (:startTime is null or r.recordedTime >= :startTime) "
 			+ "and (:endTime is null or r.recordedTime < :endTime) "
 		+ "group by po_code "
 		+ "order by s, r.recordedTime ")
 	List<SupplierQualityRow> findSupplierWithPos(ProcessName processName, Integer supplierId, LocalDateTime startTime, LocalDateTime endTime);
+
+
 }

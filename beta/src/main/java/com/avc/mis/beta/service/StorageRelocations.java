@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.repositories.RelocationRepository;
+import com.avc.mis.beta.repositories.StorageRelocationRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
@@ -40,18 +41,18 @@ public class StorageRelocations {
 	
 	@Autowired private ProcessInfoDAO dao;
 		
-	@Autowired private RelocationRepository relocationRepository;
+	@Autowired private StorageRelocationRepository relocationRepository;
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addStorageRelocation(StorageRelocation relocation) {
 		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
-		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
+		dao.setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		dao.addPoProcessEntity(relocation);
 		dao.checkUsedInventoryAvailability(relocation);
 		dao.setPoWeights(relocation);
 		dao.setUsedProcesses(relocation);
 		//check if storage moves match the amounts of the used item
-		checkRelocationBalance(relocation);
+		dao.checkRelocationBalance(relocation);
 	}
 	
 	public StorageRelocationDTO getStorageRelocation(int processId) {
@@ -77,7 +78,7 @@ public class StorageRelocations {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editStorageRelocation(StorageRelocation relocation) {
-		setStorageMovesProcessItem(relocation.getStorageMovesGroups());
+		dao.setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		
 		dao.checkRemovingUsedProduct(relocation);
 		
@@ -89,33 +90,9 @@ public class StorageRelocations {
 		dao.checkDAGmaintained(usedPos, relocation.getId());
 
 		dao.checkUsingProcesessConsistency(relocation);
-		checkRelocationBalance(relocation);
+		dao.checkRelocationBalance(relocation);
 	}
 		
-	private void setStorageMovesProcessItem(StorageMovesGroup[] storageMovesGroups) {
-		List<StorageMove> storageMoves = new ArrayList<StorageMove>();
-		for(StorageMovesGroup group: storageMovesGroups) {
-			Arrays.stream(group.getStorageMoves()).forEach(storageMoves::add);
-		}
-		Map<Integer, StorageBase> storageMap = getRelocationRepository().findStoragesById(
-				storageMoves.stream()
-				.mapToInt(sm -> sm.getStorage().getId())
-				.toArray())
-				.collect(Collectors.toMap(StorageBase::getId, Function.identity()));
-		storageMoves.forEach(move -> {
-			StorageBase storageBase = storageMap.get(move.getStorage().getId());
-			move.setProcessItem(storageBase.getProcessItem());
-			move.setUnitAmount(storageBase.getUnitAmount());
-		});
-	}
 	
-	private void checkRelocationBalance(StorageRelocation relocation) {
-		List<ProcessItemTransactionDifference> differences = getRelocationRepository().findRelocationDifferences(relocation.getId());		
-		for(ProcessItemTransactionDifference d: differences) {
-			if(d.getDifference().signum() != 0) {
-				dao.sendMessageAlerts(relocation, "Relocated process items don't have matching amounts");
-			}
-		}
-	}
 	
 }

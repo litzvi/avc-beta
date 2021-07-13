@@ -5,12 +5,14 @@ package com.avc.mis.beta.dao;
 
 import java.math.RoundingMode;
 import java.security.AccessControlException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Repository;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
+import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.query.UsedProcess;
 import com.avc.mis.beta.entities.codes.BasePoCode;
@@ -41,6 +44,7 @@ import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
+import com.avc.mis.beta.entities.process.RelocationProcess;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.process.collection.ApprovalTask;
@@ -51,10 +55,12 @@ import com.avc.mis.beta.entities.process.collection.UserMessage;
 import com.avc.mis.beta.entities.process.collection.WeightedPo;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
+import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
+import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 import com.avc.mis.beta.utilities.ProgramSequence;
 
@@ -78,6 +84,7 @@ public class ProcessInfoDAO extends DAO {
 	@Autowired private ProcessInfoRepository processRepository;
 	@Autowired private InventoryRepository inventoryRepository;
 	@Autowired private ObjectTablesRepository objectTablesRepository;
+	@Autowired private RelocationRepository relocationRepository;
 	
 	/**
 	 * Gets the ProcessType by it's unique name. 
@@ -132,7 +139,7 @@ public class ProcessInfoDAO extends DAO {
 		}
 	}
 	
-	public void checkUsedInventoryAvailability(StorageRelocation process) {
+	public void checkUsedInventoryAvailability(RelocationProcess process) {
 		List<StorageBalance> storageBalances = getInventoryRepository().findRelocationUseBalances(process.getId());
 		if(storageBalances != null && storageBalances.stream().anyMatch(b -> !b.isLegal())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
@@ -183,7 +190,7 @@ public class ProcessInfoDAO extends DAO {
 //		setUsedProcesses(process);
 //	}
 		
-	public void setUsedProcesses(StorageRelocation process) {
+	public void setUsedProcesses(RelocationProcess process) {
 		removeOldProcessParents(process.getId());
 		List<UsedProcess> usedProcesses = getProcessRepository().findRelocationUsedProcess(process.getId());
 		addUsedProcesses(usedProcesses, process);
@@ -211,7 +218,7 @@ public class ProcessInfoDAO extends DAO {
 		}
 	}
 	
-	public List<ItemAmountWithPoCode> setPoWeights(StorageRelocation process) {
+	public List<ItemAmountWithPoCode> setPoWeights(RelocationProcess process) {
 		removeOldWeightedPos(process.getId());
 		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findRelocationWeightedPos(process.getId());
 		addPoWeights(poWeights, process, false);
@@ -338,7 +345,7 @@ public class ProcessInfoDAO extends DAO {
 		}
 	}
 	
-	public void checkUsingProcesessConsistency(StorageRelocation relocation) {
+	public void checkUsingProcesessConsistency(RelocationProcess relocation) {
 		//check that processes who use this product are synchronized (are later) with this edited process
 		if(!getProcessRepository().isProcessSynchronized(relocation.getId())) {
 			throw new IllegalArgumentException("Process recorded time is after a process using it's product");			
@@ -356,7 +363,7 @@ public class ProcessInfoDAO extends DAO {
 //		return storageBalances.allMatch(b -> b.isLegal());
 //	}
 	
-	public void checkRemovingUsedProduct(StorageRelocation relocation) {
+	public void checkRemovingUsedProduct(RelocationProcess relocation) {
 		HashSet<Integer> storageIds = new HashSet<Integer>();
 		for(StorageMovesGroup pi: CollectionItemWithGroup.safeCollection(Arrays.asList(relocation.getStorageMovesGroups()))) {
 			storageIds.addAll(Arrays.stream(pi.getStorageMoves()).map(StorageBase::getId).collect(Collectors.toSet()));
@@ -411,6 +418,32 @@ public class ProcessInfoDAO extends DAO {
 		} while(addedProcesses != null && !addedProcesses.isEmpty());
 		
 		return processDescendants;
+	}
+	
+	public void setStorageMovesProcessItem(StorageMovesGroup[] storageMovesGroups) {
+		List<StorageMove> storageMoves = new ArrayList<StorageMove>();
+		for(StorageMovesGroup group: storageMovesGroups) {
+			Arrays.stream(group.getStorageMoves()).forEach(storageMoves::add);
+		}
+		Map<Integer, StorageBase> storageMap = getRelocationRepository().findStoragesById(
+				storageMoves.stream()
+				.mapToInt(sm -> sm.getStorage().getId())
+				.toArray())
+				.collect(Collectors.toMap(StorageBase::getId, Function.identity()));
+		storageMoves.forEach(move -> {
+			StorageBase storageBase = storageMap.get(move.getStorage().getId());
+			move.setProcessItem(storageBase.getProcessItem());
+			move.setUnitAmount(storageBase.getUnitAmount());
+		});
+	}
+	
+	public void checkRelocationBalance(RelocationProcess relocation) {
+		List<ProcessItemTransactionDifference> differences = getRelocationRepository().findRelocationDifferences(relocation.getId());		
+		for(ProcessItemTransactionDifference d: differences) {
+			if(d.getDifference().signum() != 0) {
+				sendMessageAlerts(relocation, "Relocated process items don't have matching amounts");
+			}
+		}
 	}
 
 		

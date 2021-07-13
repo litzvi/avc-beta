@@ -16,12 +16,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.Where;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.process.collection.LoadedItem;
+import com.avc.mis.beta.entities.process.collection.ProcessGroup;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
+import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -40,7 +45,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "CONTAINER_LOADINGS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class ContainerLoading extends TransactionProcess<ProcessItem> {
+public class ContainerLoading extends RelocationProcess {
 
 	@NotNull(message = "Container is mandatory")
 	@OneToOne(optional = false, fetch = FetchType.LAZY)

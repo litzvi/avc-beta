@@ -28,7 +28,7 @@ public class QcReportLine extends ProcessStateInfo implements ListGroup<ItemQc> 
 
 //	@JsonIgnore
 //	private Integer processId;
-	private QcCompany checkedBy;
+	private String checkedBy;
 //	OffsetDateTime checkDate;
 
 	private List<ItemQc> itemQcs;
@@ -37,7 +37,7 @@ public class QcReportLine extends ProcessStateInfo implements ListGroup<ItemQc> 
 			QcCompany checkedBy, 
 			LocalDateTime date, ProcessStatus status, String approvals) {
 		super(id, date, status, approvals);
-		this.checkedBy = checkedBy;
+		this.checkedBy = checkedBy.label;
 //		setProcesses(new ProcessStateInfo(date.toLocalDate(), status, approvals));
 	}
 	

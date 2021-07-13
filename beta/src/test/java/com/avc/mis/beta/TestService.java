@@ -43,10 +43,12 @@ import com.avc.mis.beta.entities.process.collection.ItemCount;
 import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.process.collection.ReceiptItem;
+import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
 import com.avc.mis.beta.entities.process.collection.WeightedPo;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
 import com.avc.mis.beta.entities.process.inventory.UsedItem;
 import com.avc.mis.beta.entities.values.BankBranch;
@@ -440,6 +442,38 @@ public class TestService {
 
 		}
 		return usedItemsGroups;
+	}
+	
+	/**
+	 * @param poInventory
+	 * @return
+	 */
+	public StorageMovesGroup[] getStorageMoves(List<ProcessItemInventory> poInventory) {
+		StorageMovesGroup[] storageMovesGroups = new StorageMovesGroup[poInventory.size()];
+		int i = 0;
+		for(ProcessItemInventory processItemRow: poInventory) {
+			StorageMove[] storageMoves = new StorageMove[processItemRow.getStorageForms().size()];
+			int j = 0;
+			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
+				storageMoves[j] = new StorageMove();
+				Storage storage = new Storage();
+				storageMoves[j].setStorage(storage);
+				storage.setId(storagesRow.getId());
+				storage.setVersion(storagesRow.getVersion());
+				storageMoves[j].setNumberUsedUnits(storagesRow.getNumberUnits());
+				storageMoves[j].setUnitAmount(storagesRow.getUnitAmount());
+				storageMoves[j].setNumberUnits(storagesRow.getNumberUnits());
+//				storageMoves[j].setAccessWeight(storagesRow.getAccessWeight());
+				storageMoves[j].setWarehouseLocation(getWarehouse());
+				j++;
+			}
+			storageMovesGroups[i] = new StorageMovesGroup();
+//			storageMovesGroups[i].setMeasureUnit(processItemRow.getItem().getMeasureUnit());
+			storageMovesGroups[i].setStorageMoves(storageMoves);
+			i++;
+
+		}
+		return storageMovesGroups;
 	}
 	
 	/**

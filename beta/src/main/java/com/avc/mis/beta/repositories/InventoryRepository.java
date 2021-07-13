@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.report.ItemAmountWithPo;
 import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
@@ -81,6 +82,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 							+ "left join used_p.lifeCycle used_lc "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
@@ -109,6 +111,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ " ) "
 		+ "order by p.recordedTime, pi.ordinal, sf.ordinal ")
 	List<StorageInventoryRow> findAvailableInventoryByStorage(
+			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
 			ItemGroup itemGroup, Integer itemId, 
@@ -186,6 +189,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "join pi.allStorages sf "
 				+ "join sf.group sf_group "
 					+ "join sf_group.process sf_p "
+						+ "left join sf_p.productionLine sf_p_line "
 						+ "join sf_p.lifeCycle sf_lc "
 				+ "left join sf.usedItems ui "
 					+ "left join ui.group used_g "
@@ -194,6 +198,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and receipt_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (item.id = :itemId or :itemId is null) "
@@ -213,9 +218,71 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ ", w_po.weight "
 //		+ "order by r.recordedTime, p.recordedTime " 
 		+ "")
-	List<ItemAmount> findInventoryItemAmounts(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup, Integer itemId, Integer poCodeId);
+	List<ItemAmount> findInventoryItemAmounts(
+			ProductionFunctionality[] excludedFunctionalities, 
+			boolean checkProductionUses, ProductionUse[] productionUses, 
+			ItemGroup itemGroup, Integer itemId, Integer poCodeId);
 
 
+	/**
+	 * INVENTORY FOR CHECKING LOSS OF SUPPLIER'S POS
+	 */
+	@Query("select new com.avc.mis.beta.dto.report.ItemAmountWithPo( "
+			+ "po_code.id, item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
+			+ "item_unit.amount, item_unit.measureUnit, type(item), "
+			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
+				+ " * "
+				+ "(CASE "
+					+ "WHEN ui is null THEN sf.numberUnits "
+					+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
+					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
+				+ "END) "
+				+ " * "
+				+ "coalesce(w_po.weight, 1))) "
+		+ "from ProcessItem pi "
+			+ "left join ReceiptItem ri "
+				+ "on pi = ri "
+			+ "join pi.item item "
+				+ "join item.unit item_unit "
+			+ "join UOM uom "
+				+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
+			+ "join pi.process p "
+				+ "join p.lifeCycle lc "
+				+ "left join p.poCode p_po_code "
+				+ "left join p.weightedPos w_po "
+					+ "left join w_po.poCode w_po_code "
+				+ "join BasePoCode po_code "
+					+ "on (po_code = p_po_code or po_code = w_po_code) "
+				+ "join Receipt r "
+					+ "on r.poCode = po_code "
+						+ "and (ri is null or ri.process = r) "
+					+ "join r.lifeCycle receipt_lc "
+			+ "join pi.allStorages sf "
+				+ "join sf.group sf_group "
+					+ "join sf_group.process sf_p "
+						+ "join sf_p.lifeCycle sf_lc "
+				+ "left join sf.usedItems ui "
+					+ "left join ui.group used_g "
+						+ "left join used_g.process used_p "
+							+ "left join used_p.lifeCycle used_lc "
+		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and receipt_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (po_code.id in :poCodeIds) "
+			+ "and"
+				+ "(sf.numberUnits > "
+					+ "coalesce("
+						+ "(select sum(usedStorage.numberUnits) "
+						+ " from sf.usedItems usedStorage "
+							+ "join usedStorage.group usedGroup "
+								+ "join usedGroup.process usedProcess "
+									+ "join usedProcess.lifeCycle usedLc "
+						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+					+ ", 0)"
+				+ ") "
+		+ "group by po_code, item ")
+	List<ItemAmountWithPo> findProductsByPos(int[] poCodeIds);
 	
 	/**
 	 * LIST OF INVENTORY ITEMS FOR REPORT	 
@@ -270,6 +337,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "join pi.allStorages sf "
 				+ "join sf.group sf_group "
 					+ "join sf_group.process sf_p "
+						+ "left join sf_p.productionLine sf_p_line "
 						+ "join sf_p.lifeCycle sf_lc "
 				+ "left join sf.warehouseLocation sto "
 				+ "left join sf.usedItems ui "
@@ -278,6 +346,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 							+ "left join used_p.lifeCycle used_lc "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and receipt_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
@@ -300,6 +369,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "order by r.recordedTime, p.recordedTime " 
 		+ "")
 	List<ProcessItemInventoryRow> findInventoryProcessItemRows(
+			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			ItemGroup itemGroup, Integer itemId, Integer poCodeId, 
 			LocalDateTime pointOfTime);
@@ -328,6 +398,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 								+ "left join used_p.lifeCycle used_lc "
 			+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 				+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+				+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 				+ "and (item.itemGroup = :itemGroup or :itemGroup is null)  "
 				+ "and (:checkProductionUses = false or item.productionUse in :productionUses)  "
 				+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
@@ -343,6 +414,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "END)"
 				+ " ) ")
 		Set<BasicValueEntity<Item>> findAvailableInventoryItemsByType(
+				ProductionFunctionality[] excludedFunctionalities, 
 				boolean checkProductionUses, ProductionUse[] productionUses, 
 				boolean checkFunctionalities, ProductionFunctionality[] functionalities,
 				ItemGroup itemGroup, Integer itemId,
@@ -382,6 +454,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 							+ "left join used_p.lifeCycle used_lc "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null)  "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses)  "
 			+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
@@ -397,6 +470,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "END)"
 			+ " ) ")
 	Set<PoCodeBasic> findAvailableInventoryPoCodeByType(
+			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
 			ItemGroup itemGroup, Integer itemId);
@@ -454,7 +528,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "THEN ui.numberUnits "
 				+ "ELSE 0 "
 			+ "END))) "
-			+ "from StorageRelocation p "
+			+ "from RelocationProcess p "
 				+ "join p.storageMovesGroups grp "
 					+ "join grp.storageMoves i "
 						+ "join i.storage s "
@@ -474,7 +548,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "THEN ui.numberUnits "
 				+ "ELSE 0 "
 			+ "END))) "
-			+ "from StorageRelocation p "
+			+ "from RelocationProcess p "
 				+ "join p.storageMovesGroups g "
 					+ "join g.storageMoves i "
 							+ "left join i.usedItems ui "
@@ -541,6 +615,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "join ri.allStorages sf "
 				+ "join sf.group sf_group "
 					+ "join sf_group.process sf_p "
+						+ "left join sf_p.productionLine sf_p_line "
 						+ "join sf_p.lifeCycle sf_lc "
 				+ "left join sf.warehouseLocation sto "
 				+ "left join sf.usedItems ui "
@@ -549,6 +624,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 							+ "left join used_p.lifeCycle used_lc "
 		+ "where receipt_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:pointOfTime is null "
@@ -567,7 +643,9 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ ") "
 		+ "group by ri "
 		+ "order by r.recordedTime ")
-	List<ReceiptInventoryRow> findReceiptInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses, 
+	List<ReceiptInventoryRow> findReceiptInventoryRows(
+			ProductionFunctionality[] excludedFunctionalities, 
+			boolean checkProductionUses, ProductionUse[] productionUses, 
 			ItemGroup itemGroup,
 			LocalDateTime pointOfTime);
 
@@ -623,6 +701,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "join pi.allStorages sf "
 				+ "join sf.group sf_group "
 					+ "join sf_group.process sf_p "
+						+ "left join sf_p.productionLine sf_p_line "
 						+ "join sf_p.lifeCycle sf_lc "
 				+ "left join sf.warehouseLocation sto "
 				+ "left join sf.usedItems ui "
@@ -632,6 +711,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "where lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
 			+ "and receipt_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:pointOfTime is null "
@@ -655,7 +735,9 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ "ELSE null "
 			+ "END "
 		+ "ORDER BY item ")
-	List<FinishedProductInventoryRow> findFinishedProductInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup,
+	List<FinishedProductInventoryRow> findFinishedProductInventoryRows(
+			ProductionFunctionality[] excludedFunctionalities, 
+			boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup,
 			LocalDateTime pointOfTime);
 
 	/**
@@ -687,6 +769,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "join pi.allStorages sf "
 				+ "join sf.group sf_group "
 					+ "join sf_group.process sf_p "
+						+ "left join sf_p.productionLine sf_p_line "
 						+ "join sf_p.lifeCycle sf_lc "
 				+ "left join sf.usedItems ui "
 					+ "left join ui.group used_g "
@@ -694,6 +777,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 							+ "left join used_p.lifeCycle used_lc "
 		+ "where lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:pointOfTime is null "
@@ -712,7 +796,9 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ ") "
 		+ "group by item "
 		+ "order by item.brand, item.code, item.id ")	
-	List<CashewBaggedInventoryRow> findCashewBaggedInventoryRows(boolean checkProductionUses, ProductionUse[] productionUses,
+	List<CashewBaggedInventoryRow> findCashewBaggedInventoryRows(
+			ProductionFunctionality[] excludedFunctionalities, 
+			boolean checkProductionUses, ProductionUse[] productionUses,
 			ItemGroup itemGroup, LocalDateTime pointOfTime);
 
 }

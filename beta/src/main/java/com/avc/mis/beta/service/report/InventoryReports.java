@@ -25,6 +25,7 @@ import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
@@ -108,14 +109,16 @@ public class InventoryReports {
 	private List<ProcessItemInventoryRow> getInventoryRows(
 			ItemGroup group, ProductionUse[] productionUses, Integer itemId, Integer poCodeId, LocalDateTime pointOfTime) {
 		boolean checkProductionUses = (productionUses != null);
-		return getInventoryRepository().findInventoryProcessItemRows(checkProductionUses, productionUses, group, itemId, poCodeId, pointOfTime);			
+		return getInventoryRepository().findInventoryProcessItemRows(
+				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, group, itemId, poCodeId, pointOfTime);			
 	}
 
 		
 	public List<ItemInventoryAmountWithOrder> getInventoryWithOrderByItem(ItemGroup group) {
 		
 		//TODO giving all items in product - but only relevant to raw
-		List<ItemAmount> inventory = inventoryRepository.findInventoryItemAmounts(false, null, group, null, null);
+		List<ItemAmount> inventory = inventoryRepository.findInventoryItemAmounts(
+				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, false, null, group, null, null);
 		List<ItemAmount> openOrders = poRepository.findOpenOrPendingReceiptOrdersItemAmounts(null, group);
 		
 		List<ItemInventoryAmountWithOrder> inventoryAmountWithOrders = getValueTablesReader().getBasicItemsByGroup(group).stream()
@@ -142,17 +145,20 @@ public class InventoryReports {
 	
 	public List<ReceiptInventoryRow> getReceiptInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDateTime pointOfTime) {
 		boolean checkProductionUses = (productionUses != null);
-		return getInventoryRepository().findReceiptInventoryRows(checkProductionUses, productionUses, itemGroup, pointOfTime);	
+		return getInventoryRepository().findReceiptInventoryRows(
+				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, itemGroup, pointOfTime);	
 	}
 	
 	public List<FinishedProductInventoryRow> getFinishedProductInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDateTime pointOfTime) {
 		boolean checkProductionUses = (productionUses != null);
-		return getInventoryRepository().findFinishedProductInventoryRows(checkProductionUses, productionUses, itemGroup, pointOfTime);	
+		return getInventoryRepository().findFinishedProductInventoryRows(
+				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, itemGroup, pointOfTime);	
 	}
 	
 	public List<CashewBaggedInventoryRow> getCashewBaggedInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDateTime pointOfTime) {
 		boolean checkProductionUses = (productionUses != null);
-		return getInventoryRepository().findCashewBaggedInventoryRows(checkProductionUses, productionUses, itemGroup, pointOfTime);	
+		return getInventoryRepository().findCashewBaggedInventoryRows(
+				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, itemGroup, pointOfTime);	
 	}
 	
 

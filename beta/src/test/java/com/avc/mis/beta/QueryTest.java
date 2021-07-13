@@ -118,7 +118,7 @@ public class QueryTest {
 	@Autowired LoadingReports loadingReports;
 	@Autowired ContainerArrivals containerArrivals;
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void queryTest() {
 
@@ -441,7 +441,7 @@ public class QueryTest {
 
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void oneQueryTest() {
 		
@@ -527,8 +527,21 @@ public class QueryTest {
 
 	}
 	
+	@Disabled
 	@Test
 	void newTest() {				
-		supplierReports.getSupplierQualityLines(null, null, null).forEach(i -> System.out.println(i));
+		try {
+			processSummaryReader.getSupplierQualityLines(null, null, null)
+				.forEach(i -> System.out.println(i 
+					+ " loss: " + i.getLoss() 
+					+ " waste: " + i.getWaste() 
+					+ " bad quality: " + i.getBadQuality() 
+					+ " rawDefectsAndDamage: " + i.getRawDefectsAndDamage() 
+					+ " roastDefectsAndDamage: " + i.getRoastDefectsAndDamage()));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 	}
 }

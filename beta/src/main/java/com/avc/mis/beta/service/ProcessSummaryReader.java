@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.report.InventoryReportLine;
 import com.avc.mis.beta.dto.report.ItemAmount;
+import com.avc.mis.beta.dto.report.ItemAmountWithPo;
 import com.avc.mis.beta.dto.report.ItemQc;
 import com.avc.mis.beta.dto.report.LoadingReportLine;
 import com.avc.mis.beta.dto.report.ProcessStateInfo;
@@ -28,6 +30,8 @@ import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.ProcessSummaryRepository;
+import com.avc.mis.beta.repositories.SupplierRepository;
+import com.avc.mis.beta.service.report.row.SupplierQualityRow;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
@@ -45,9 +49,11 @@ public class ProcessSummaryReader {
 
 	@Autowired private ProcessSummaryRepository processSummaryRepository;
 	@Autowired private InventoryRepository inventoryRepository;
+	@Autowired private SupplierRepository supplierRepository;
 
 	public InventoryReportLine getInventorySummary(@NonNull Integer poCodeId) {
-		List<ItemAmount> inventory = getInventoryRepository().findInventoryItemAmounts(false, null, ItemGroup.PRODUCT, null, poCodeId);
+		List<ItemAmount> inventory = getInventoryRepository().findInventoryItemAmounts(
+				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, false, null, ItemGroup.PRODUCT, null, poCodeId);
 		
 		List<ProcessStateInfo> processes = getProcessSummaryRepository().findProcessReportLines(ProcessName.PRODUCT_USE, poCodeId, false);
 		int[] processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
@@ -148,7 +154,7 @@ public class ProcessSummaryReader {
 			return null;
 		}
 		
-		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(processIds);
+		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(processIds, new int[] {}, null, false);
 		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getProcessId));
 		
 		for(QcReportLine line: lines) {
@@ -178,6 +184,24 @@ public class ProcessSummaryReader {
 		return report;
 	}
 
+	public List<SupplierQualityRow> getSupplierQualityLines(Integer supplierId, LocalDateTime startTime, LocalDateTime endTime) {
+		List<SupplierQualityRow> rows = getSupplierRepository().findSupplierWithPos(ProcessName.CASHEW_RECEIPT, supplierId, startTime, endTime);
+		int[] poCodeIds = rows.stream().mapToInt(SupplierQualityRow::getId).toArray();
+		
+		//get and set QC and currentAmount
+		Map<Integer, List<ItemAmountWithPo>> amountsMap = getInventoryRepository().findProductsByPos(poCodeIds)
+				.stream().collect(Collectors.groupingBy(ItemAmountWithPo::getPoCodeId));
+		
+		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, false);
+		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getPoCodeId));
+
+		for(SupplierQualityRow row: rows) {
+			row.setOutAmounts(amountsMap.get(row.getId()));
+			row.setItemQcs(itemsMap.get(row.getId()));
+		}
+				
+		return rows;
+	}
 	
 
 }

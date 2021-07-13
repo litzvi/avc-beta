@@ -107,9 +107,15 @@ public class LoadingTest {
 
 		//get inventory storages for transfer
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-		loading.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+		loading.setStorageMovesGroups(service.getStorageMoves(poInventory));
 		
-		loadingService.addLoading(loading);
+		try {
+			loadingService.addLoading(loading);
+		} catch (Exception e3) {
+			// TODO Auto-generated catch block
+			e3.printStackTrace();
+			throw e3;
+		}
 
 		ContainerLoadingDTO expectedLoading = new ContainerLoadingDTO(loading);
 		ContainerLoadingDTO actualLoading = loadingService.getLoading(loading.getId());

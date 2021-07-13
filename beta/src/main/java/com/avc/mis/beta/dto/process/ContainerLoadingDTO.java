@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
 import com.avc.mis.beta.dto.process.collection.LoadedItemDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
@@ -28,7 +29,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class ContainerLoadingDTO extends TransactionProcessDTO<ProcessItemDTO> {
+public class ContainerLoadingDTO extends RelocationProcessDTO {
 	
 	private ContainerArrivalBasic arrival;
 	private ShipmentCodeDTO shipmentCode;

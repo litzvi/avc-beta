@@ -22,7 +22,7 @@ import com.avc.mis.beta.service.report.row.CashewExportReportRow;
  * @author zvi
  *
  */
-public interface ContainerLoadingRepository  extends TransactionProcessRepository<ContainerLoading> {
+public interface ContainerLoadingRepository extends RelocationRepository {
 	
 	/**
 	 * Gets the access loading information (over the general process information assumed to be fetched).
@@ -114,13 +114,12 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "sum("
-				+ "(sf.unitAmount * i.numberUnits) "
+				+ "(sf.unitAmount * sf.numberUnits) "
 				+ " * coalesce(w_po.weight, 1) * uom.multiplicand / uom.divisor), "
 			+ "item.measureUnit) "
 		+ "from ContainerLoading p "
-			+ "join p.usedItemGroups g "
-				+ "join g.usedItems i "
-					+ "join i.storage sf "
+			+ "join p.storageMovesGroups g "
+				+ "join g.storageMoves sf "
 						+ "join sf.processItem pi "
 							+ "join pi.process used_p "
 								+ "left join used_p.poCode p_po_code "
@@ -144,11 +143,10 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "sf.unitAmount, pi.measureUnit, "
-			+ "sum(i.numberUnits * coalesce(w_po.weight, 1))) "
+			+ "sum(sf.numberUnits * coalesce(w_po.weight, 1))) "
 		+ "from ContainerLoading p "
-			+ "join p.usedItemGroups g "
-				+ "join g.usedItems i "
-					+ "join i.storage sf "
+			+ "join p.storageMovesGroups g "
+				+ "join g.storageMoves sf "
 						+ "join sf.processItem pi "
 							+ "join pi.process used_p "
 								+ "left join used_p.poCode p_po_code "
@@ -168,7 +166,7 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item.unit, type(item), item.brand, item.code, "
 			+ "item.whole, item.roast, item.toffee, "
 			+ "grade.id, grade.value, item.saltLevel, item.numBags, "
-			+ "sum(i.numberUnits), pi.measureUnit, coalesce(w_po.weight, 1), "
+			+ "sum(sf.numberUnits), pi.measureUnit, coalesce(w_po.weight, 1), "
 			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
 			+ "p.recordedTime, "
 			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, "
@@ -180,9 +178,8 @@ public interface ContainerLoadingRepository  extends TransactionProcessRepositor
 				+ "join cont_arrival.containerDetails cont "
 				+ "join cont_arrival.shipingDetails ship "
 			+ "join p.lifeCycle lc "
-			+ "join p.usedItemGroups g "
-				+ "join g.usedItems i "
-					+ "join i.storage sf "
+			+ "join p.storageMovesGroups g "
+				+ "join g.storageMoves sf "
 						+ "join sf.processItem pi "
 							+ "join pi.item item "
 								+ "left join item.grade grade "

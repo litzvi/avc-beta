@@ -23,6 +23,7 @@ import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.values.Bank;
 import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.values.CashewGrade;
 import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.City;
 import com.avc.mis.beta.entities.values.CompanyPosition;
@@ -276,6 +277,9 @@ public class ManagmentControler {
 			case "SupplyCategories":
 				refeDaoWrite.addSupplyCategory(mapper.readValue(newOne.toString(), SupplyCategory.class));
 				break;
+			case "CashewGrades":
+				refeDaoWrite.addCashewGrade(mapper.readValue(newOne.toString(), CashewGrade.class));
+				break;
 			case "CompanyPositions":
 				refeDaoWrite.addCompanyPosition(mapper.readValue(newOne.toString(), CompanyPosition.class));
 				break;
@@ -361,6 +365,8 @@ public class ManagmentControler {
 			case "SupplyCategories":
 				return SupplyCategory.class;
 //				return mapper.readValue(newOne.toString(), SupplyCategory.class);
+			case "CashewGrades":
+				return CashewGrade.class;
 			case "CompanyPositions":
 				return CompanyPosition.class;
 //				return mapper.readValue(newOne.toString(), CompanyPosition.class);
@@ -394,6 +400,11 @@ public class ManagmentControler {
 	@RequestMapping("/getCashewItems")
 	public List<ItemDTO> getCashewItems() {
 		return refeDao.getItemsByGroup(ItemGroup.PRODUCT);
+	}
+	
+	@RequestMapping("/getCashewGrades")
+	public List<BasicValueEntity<CashewGrade>> getCashewGrades() {
+		return refeDao.getAllCashewGradesDTO();
 	}
 	
 	

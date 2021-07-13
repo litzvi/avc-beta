@@ -152,8 +152,8 @@ public interface ProcessSummaryRepository {
 	List<QcReportLine> findCashewQCReportLines(ProcessName processName, Integer poId, QcCompany qcCompany, boolean cancelled);
 
 	@Query("select new com.avc.mis.beta.dto.report.ItemQc( "
-			+ "qc.id, "
-			+ "i.id, i.value, "
+			+ "qc.id, po_code.id, "
+			+ "i.id, i.value, i.productionUse, "
 			+ "ti.sampleWeight, ti.precentage, "
 			+ "ti.humidity, ti.breakage,"
 				+ "def.scorched, def.deepCut, def.offColour, "
@@ -167,9 +167,12 @@ public interface ProcessSummaryRepository {
 				+ "join ti.damage dam "
 			+ "join qc.poCode po_code "
 			+ "join qc.processType pt "
-		+ "where qc.id in :processIds "
-		+ "order by ti.ordinal ")
-	Stream<ItemQc> findCashewQcItems(int[] processIds);
+			+ "join qc.lifeCycle lc "
+		+ "where (qc.id in :processIds or po_code.id in :poCodeIds) "
+			+ "and (qc.checkedBy = :checkedBy or :checkedBy is null) "
+			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
+		+ "order by qc.recordedTime ASC , ti.ordinal ")
+	Stream<ItemQc> findCashewQcItems(int[] processIds, int[] poCodeIds, QcCompany checkedBy, boolean cancelled);
 
 	/**
 	 * Gets loading summary for final report by 'PO code' (also if product is from a combination of other POs besides the given one). 
@@ -183,15 +186,14 @@ public interface ProcessSummaryRepository {
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(u.username, ': ', approval.decision))), "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((ui.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor), "
+			+ "SUM((sf.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor), "
 			+ "coalesce(w_po_used_item.weight, 1)) "
 		+ "from ContainerLoading p "
 			+ "join p.shipmentCode sc "
 				+ "join sc.portOfDischarge port "
 			+ "join p.arrival cont_arrival "
-			+ "join p.usedItemGroups grp "
-				+ "join grp.usedItems ui "
-					+ "join ui.storage sf "
+			+ "join p.storageMovesGroups grp "
+				+ "join grp.storageMoves sf "
 						+ "join sf.processItem pi "
 							+ "join pi.item item "
 								+ "join item.unit item_unit "

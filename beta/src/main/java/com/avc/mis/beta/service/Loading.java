@@ -14,11 +14,14 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.exportdoc.InventoryExportDoc;
 import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
+import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.ContainerLoading;
+import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
 import com.avc.mis.beta.service.report.LoadingReports;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -48,12 +51,15 @@ public class Loading {
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false) 
 	public void addLoading(ContainerLoading loading) {
-		loading.setProcessType(dao.getProcessTypeByValue(ProcessName.CONTAINER_LOADING)); 
+		loading.setProcessType(dao.getProcessTypeByValue(ProcessName.CONTAINER_LOADING));
 		if(dao.isShippingCodeFree(loading.getShipmentCode().getId())) {
-			dao.addTransactionProcessEntity(loading); 
+			dao.setStorageMovesProcessItem(loading.getStorageMovesGroups());
+			dao.addPoProcessEntity(loading);
 			dao.checkUsedInventoryAvailability(loading);
 			dao.setPoWeights(loading);
 			dao.setUsedProcesses(loading);
+			//check if storage moves match the amounts of the used item
+			dao.checkRelocationBalance(loading);
 		}
 		else {
 			throw new IllegalArgumentException("Shipment Code is already used for another shipping");
@@ -76,7 +82,16 @@ public class Loading {
 						()->new IllegalArgumentException("No container loading with given process id")));
 		loadingDTO.setContainerLoadingInfo(getContainerLoadingRepository().findContainerLoadingInfo(processId));
 		
-		getProcessReader().setTransactionProcessCollections(loadingDTO);
+		loadingDTO.setPoProcessInfo(getContainerLoadingRepository()
+				.findPoProcessInfoByProcessId(processId, ContainerLoading.class).orElse(null));
+		loadingDTO.setStorageMovesGroups(
+				CollectionItemWithGroup.getFilledGroups(
+						getContainerLoadingRepository()
+						.findStorageMovesWithGroup(processId)));
+		loadingDTO.setItemCounts(
+				CollectionItemWithGroup.getFilledGroups(
+						getContainerLoadingRepository()
+						.findItemCountWithAmount(processId)));
 		
 		loadingDTO.setLoadedItems(getContainerLoadingRepository().findLoadedItems(processId));
 
@@ -91,14 +106,20 @@ public class Loading {
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false) 
 	public void editLoading(ContainerLoading loading) {
+		dao.setStorageMovesProcessItem(loading.getStorageMovesGroups());
+		
 		dao.checkRemovingUsedProduct(loading);
 		
-		dao.editTransactionProcessEntity(loading); 
+		dao.editPoProcessEntity(loading);
 		
-		dao.checkUsingProcesessConsistency(loading);
 		dao.checkUsedInventoryAvailability(loading);
-		dao.setPoWeights(loading);
 		dao.setUsedProcesses(loading);
+		List<ItemAmountWithPoCode> usedPos = dao.setPoWeights(loading);
+		dao.checkDAGmaintained(usedPos, loading.getId());
+
+		dao.checkUsingProcesessConsistency(loading);
+		dao.checkRelocationBalance(loading);
+
 	}
 
 	//----------------------------Duplicate in LoadingReports - Should remove------------------------------------------

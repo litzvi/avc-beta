@@ -48,6 +48,8 @@ import lombok.NonNull;
 @Transactional(readOnly = true)
 public class WarehouseManagement {
 	
+	public static ProductionFunctionality[] EXCLUDED_FUNCTIONALITIES = new ProductionFunctionality[] {ProductionFunctionality.LOADING};
+	
 	@Autowired private ProcessInfoDAO dao;
 	
 	@Autowired private InventoryRepository inventoryRepository;
@@ -67,7 +69,7 @@ public class WarehouseManagement {
 		}
 		boolean checkExcludedProcessIds = (excludedProcessIds != null && excludedProcessIds.length > 0);
 		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()
-				.findAvailableInventoryByStorage(checkProductionUses, productionUses, 
+				.findAvailableInventoryByStorage(EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, 
 						checkFunctionalities, functionalities, 
 						group, itemId, 
 						checkPoCodes, poCodeIds,
@@ -127,7 +129,8 @@ public class WarehouseManagement {
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
 			ItemGroup itemGroup, Integer itemId,
 			Integer poCodeId) {
-		return getInventoryRepository().findAvailableInventoryItemsByType(checkProductionUses, productionUses, 
+		return getInventoryRepository().findAvailableInventoryItemsByType(
+				EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, 
 				checkFunctionalities, functionalities, itemGroup, itemId, poCodeId);		
 	}
 	
@@ -184,7 +187,8 @@ public class WarehouseManagement {
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
 			ItemGroup itemGroup, Integer itemId) {
-		return getInventoryRepository().findAvailableInventoryPoCodeByType(checkProductionUses, productionUses, 
+		return getInventoryRepository().findAvailableInventoryPoCodeByType(
+				EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, 
 				checkFunctionalities, functionalities, itemGroup, itemId);		
 	}
 

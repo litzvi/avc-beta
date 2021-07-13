@@ -76,7 +76,7 @@ public class RelocationTest {
 
 		//get inventory storages for relocation
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-		relocation.setStorageMovesGroups(getStorageMoves(poInventory));
+		relocation.setStorageMovesGroups(service.getStorageMoves(poInventory));
 		relocation.setItemCounts(getItemCounts(poInventory));
 
 		try {
@@ -101,37 +101,7 @@ public class RelocationTest {
 				
 	}
 	
-	/**
-	 * @param poInventory
-	 * @return
-	 */
-	private StorageMovesGroup[] getStorageMoves(List<ProcessItemInventory> poInventory) {
-		StorageMovesGroup[] storageMovesGroups = new StorageMovesGroup[poInventory.size()];
-		int i = 0;
-		for(ProcessItemInventory processItemRow: poInventory) {
-			StorageMove[] storageMoves = new StorageMove[processItemRow.getStorageForms().size()];
-			int j = 0;
-			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
-				storageMoves[j] = new StorageMove();
-				Storage storage = new Storage();
-				storageMoves[j].setStorage(storage);
-				storage.setId(storagesRow.getId());
-				storage.setVersion(storagesRow.getVersion());
-				storageMoves[j].setNumberUsedUnits(storagesRow.getNumberUnits());
-				storageMoves[j].setUnitAmount(storagesRow.getUnitAmount());
-				storageMoves[j].setNumberUnits(storagesRow.getNumberUnits());
-//				storageMoves[j].setAccessWeight(storagesRow.getAccessWeight());
-				storageMoves[j].setWarehouseLocation(service.getWarehouse());
-				j++;
-			}
-			storageMovesGroups[i] = new StorageMovesGroup();
-//			storageMovesGroups[i].setMeasureUnit(processItemRow.getItem().getMeasureUnit());
-			storageMovesGroups[i].setStorageMoves(storageMoves);
-			i++;
-
-		}
-		return storageMovesGroups;
-	}
+	
 
 	private ItemCount[] getItemCounts(List<ProcessItemInventory> poInventory) {
 		ItemCount[] itemCounts = new ItemCount[poInventory.size()];

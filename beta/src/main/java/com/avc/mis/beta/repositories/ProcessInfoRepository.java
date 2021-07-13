@@ -183,7 +183,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	Boolean isProcessReferenced(Integer processId);
 	
 	@Query("select new java.lang.Boolean(count(*) > 0) "
-			+ "from StorageRelocation p "
+			+ "from RelocationProcess p "
 				+ "join p.storageMovesGroups grp "
 					+ "join grp.storageMoves s "
 						+ "join s.usedItems ui "
@@ -247,7 +247,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	Boolean isRemovingUsedProduct(Integer processId, Set<Integer> storageIds);
 	
 	@Query("select new java.lang.Boolean(count(*) > 0) "
-			+ "from StorageRelocation p "
+			+ "from RelocationProcess p "
 				+ "join p.storageMovesGroups grp "
 					+ "join grp.storageMoves sf "
 						+ "join sf.usedItems using_items "
@@ -316,7 +316,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "((ui.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor) "
 				+ " * coalesce(w_po.weight, 1)"
 			+ ") as po_item_amount ) "
-		+ "from StorageRelocation p "
+		+ "from RelocationProcess p "
 			+ "join p.storageMovesGroups grp "
 				+ "join grp.storageMoves ui "
 					+ "join ui.storage sf "
@@ -354,7 +354,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 		
 	@Query("select new com.avc.mis.beta.dto.query.UsedProcess( "
 			+ "used_p.id, used_p.version, used_type.processName, type(used_p), used_p.recordedTime) "
-		+ "from StorageRelocation p "
+		+ "from RelocationProcess p "
 			+ "join p.storageMovesGroups grp "
 				+ "join grp.storageMoves ui "
 					+ "join ui.storage sf "
