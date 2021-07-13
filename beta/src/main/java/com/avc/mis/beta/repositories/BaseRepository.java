@@ -116,6 +116,10 @@ interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 				+ "and t.productionFunctionality in :functionalities "
 			+ "order by t.value ")
 	List<ProductionLine> findProductionLinesByFuncionality(ProductionFunctionality[] functionalities);
+	
+	@Query("select t.productionFunctionality from ProductionLine t "
+			+ "where t.id in :productionLineId ")
+	ProductionFunctionality findFunctionalityByProductionLine(Integer productionLineId);
 
 	@Query("select t from CashewStandard t "
 			+ "where t.active = true ")

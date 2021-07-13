@@ -10,8 +10,8 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
- * Version: 19.6
- * issues 448, 540
+ * Version: 19.7
+ * issues 540
  * 
  * @author zvi
  *

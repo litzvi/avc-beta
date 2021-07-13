@@ -17,6 +17,7 @@ import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
@@ -52,6 +53,10 @@ public class Loading {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false) 
 	public void addLoading(ContainerLoading loading) {
 		loading.setProcessType(dao.getProcessTypeByValue(ProcessName.CONTAINER_LOADING));
+		if(loading.getProductionLine() == null || 
+				containerLoadingRepository.findFunctionalityByProductionLine(loading.getProductionLine().getId()) != ProductionFunctionality.LOADING) {
+			throw new IllegalStateException("Container Loading has to have a Production Line with ProductionFunctionality.LOADING");
+		}
 		if(dao.isShippingCodeFree(loading.getShipmentCode().getId())) {
 			dao.setStorageMovesProcessItem(loading.getStorageMovesGroups());
 			dao.addPoProcessEntity(loading);
@@ -106,6 +111,11 @@ public class Loading {
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false) 
 	public void editLoading(ContainerLoading loading) {
+		if(loading.getProductionLine() == null || 
+				containerLoadingRepository.findFunctionalityByProductionLine(loading.getProductionLine().getId()) != ProductionFunctionality.LOADING) {
+			throw new IllegalStateException("Container Loading has to have a Production Line with ProductionFunctionality.LOADING");
+		}
+		
 		dao.setStorageMovesProcessItem(loading.getStorageMovesGroups());
 		
 		dao.checkRemovingUsedProduct(loading);

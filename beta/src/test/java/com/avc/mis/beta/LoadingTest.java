@@ -29,6 +29,7 @@ import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.ContainerArrival;
 import com.avc.mis.beta.entities.process.ContainerBooking;
@@ -98,6 +99,7 @@ public class LoadingTest {
 		
 		//test loading
 		ContainerLoading loading = new ContainerLoading();
+		loading.setProductionLine(service.getProductionLine(ProductionFunctionality.LOADING));
 //		ContainerBooking refBooking = new ContainerBooking();
 //		refBooking.setId(booking.getId());
 //		refBooking.setVersion(booking.getVersion());
