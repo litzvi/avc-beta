@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.basic;
 import com.avc.mis.beta.dto.BasicValueDTO;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
@@ -17,15 +18,15 @@ import lombok.Value;
  * @author Zvi
  *
  */
-@Value
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class PoCodeBasic extends BasicValueDTO {
 
-	String code;
-	String contractTypeCode;
-	String contractTypeSuffix;
-	String supplierName;	
+	private String code;
+	private String contractTypeCode;
+	private String contractTypeSuffix;
+	private String supplierName;	
 	
 	/**
 	 * @param id

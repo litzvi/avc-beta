@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
@@ -329,7 +330,7 @@ public class TestService {
 	}
 	
 	public PoCodeBasic getPoCodeBasic() {
-		List<PoCodeBasic> poCodes = objectTablesReader.findAllPoCodes();
+		List<PoCodeBasicWithProductCompany> poCodes = objectTablesReader.findAllPoCodes();
 		if(poCodes.isEmpty())
 			fail("No po codes in database for running this test");
 		return poCodes.get(randNum.nextInt(poCodes.size()));

@@ -7,12 +7,7 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.OffsetTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,8 +21,8 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.basic.UserBasic;
@@ -143,7 +138,7 @@ public class QueryTest {
 		objectTablesReader.findOpenAndPendingCashewOrdersPoCodes().forEach(row -> System.out.println(row));
 		
 		//get list of cashew orders and receipts
-		List<PoCodeBasic> activeCashewBasic =  objectTablesReader.findAllPoCodes();
+		List<PoCodeBasicWithProductCompany> activeCashewBasic =  objectTablesReader.findAllPoCodes();
 		activeCashewBasic.forEach(row -> System.out.println(row));
 		
 		//get active po codes - so we can add QC for them
@@ -381,13 +376,13 @@ public class QueryTest {
 		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocations(null);
 		relocationRows.forEach(i -> System.out.println(i));
 		
-		List<PoCodeBasic> poCodes = objectTablesReader.findAllPoCodes();
-		if(poCodes.isEmpty())
+		List<PoCodeBasicWithProductCompany> poCodesWithProductCompanies = objectTablesReader.findAllPoCodes();
+		if(poCodesWithProductCompanies.isEmpty())
 			fail("No po codes to test");
 		
-		poCodes.forEach(c -> System.out.println(objectWriter.getPoCode(c.getId())));
+		poCodesWithProductCompanies.forEach(c -> System.out.println(objectWriter.getPoCode(c.getId())));
 		
-		poCodes = objectTablesReader.findFreePoCodes();
+		List<PoCodeBasic> poCodes = objectTablesReader.findFreePoCodes();
 		poCodes.forEach(i -> System.out.println(i));
 		
 		List<PoCodeBasic> freePoCodes = objectTablesReader.findFreeMixPoCodes();
@@ -447,12 +442,12 @@ public class QueryTest {
 		
 		
 		//get list of cashew orders and receipts
-		List<PoCodeBasic> activeCashewBasic =  objectTablesReader.findAllPoCodes();
+		List<PoCodeBasicWithProductCompany> activeCashewBasic =  objectTablesReader.findAllPoCodes();
 		System.out.println("cashew:");
 		System.out.println("size:" + activeCashewBasic.size());
 		activeCashewBasic.forEach(row -> System.out.println(row));
 
-		List<PoCodeBasic> activeGeneralBasic =  objectTablesReader.findAllGeneralPoCodes();
+		List<PoCodeBasicWithProductCompany> activeGeneralBasic =  objectTablesReader.findAllGeneralPoCodes();
 		System.out.println("general:");
 		System.out.println("size:" + activeGeneralBasic.size());
 		activeGeneralBasic.forEach(row -> System.out.println(row));

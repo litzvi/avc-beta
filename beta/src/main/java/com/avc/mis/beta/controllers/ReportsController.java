@@ -1,9 +1,11 @@
 package com.avc.mis.beta.controllers;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.data.Supplier;
@@ -35,6 +37,7 @@ import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
+import com.avc.mis.beta.service.report.row.SupplierQualityRow;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -192,7 +195,7 @@ public class ReportsController {
 	}
 	
 	@RequestMapping("/getAllPoCodes")
-	public List<PoCodeBasic> getAllPoCodes(){
+	public List<PoCodeBasicWithProductCompany> getAllPoCodes(){
 		return objectTableReader.findAllPoCodes();
 	}
 	
@@ -304,6 +307,17 @@ public class ReportsController {
 		return valueTablesReader.getSuppliersBasicByGroup(SupplyGroup.SHIPPED_PRODUCT);
 	}
 	
+	
+	@RequestMapping("/sumQcBySupplier")
+	public List<SupplierQualityRow> sumQcBySupplier(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return processSummaryReader.getSupplierQualityLines(null, begin, end);
+	}
+//	
+//	@RequestMapping("/getQcItemsCashewBulk")
+//	public List<ItemDTO> getQcItemsCashewBulk() {
+//		return valueTablesReader.getItems(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.RAW_KERNEL, ProductionUse.CLEAN, ProductionUse.ROAST}, PackageType.BULK);
+//	}
 	
 //	@RequestMapping("/allProductionByRange/{start}/{end}")
 //	public List<ProcessRow> allProductionByRange(@PathVariable("start") OffsetDateTime start, @PathVariable("end") OffsetDateTime end) {

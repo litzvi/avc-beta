@@ -25,12 +25,12 @@ public class ScheduleController {
 	@RequestMapping("/getAllCashewOrders")
 	public List<PoItemRow> getAllCashewOrders(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		return orderReports.findAllCashewOrderItems(begin != null? begin.toLocalDate() : null, begin != null? end.toLocalDate() : null);
+		return orderReports.findAllCashewOrderItems(begin != null? begin.toLocalDate() : null, end != null? end.toLocalDate() : null);
 	}
 	
 	@RequestMapping("/getAllGeneralOrders")
 	public List<PoItemRow> getAllGeneralOrders(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		return orderReports.findAllGeneralOrderItems(begin != null? begin.toLocalDate() : null, begin != null? end.toLocalDate() : null);
+		return orderReports.findAllGeneralOrderItems(begin != null? begin.toLocalDate() : null, end != null? end.toLocalDate() : null);
 	}
 }

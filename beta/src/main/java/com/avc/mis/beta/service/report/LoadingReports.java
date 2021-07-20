@@ -57,7 +57,7 @@ public class LoadingReports {
 //				.findAllUsedItemsByProcessIds(processIds)
 //				.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		Map<Integer, List<ContainerPoItemRow>> usedByPoMap = getContainerLoadingRepository()
-				.findLoadedTotals(processIds)
+				.findLoadedTotals(processIds, poCodeId)
 				.stream()
 				.collect(Collectors.groupingBy(ContainerPoItemRow::getId));
 		for(LoadingRow row: loadingRows) {
@@ -72,7 +72,7 @@ public class LoadingReports {
 		InventoryExportDoc doc = new InventoryExportDoc();
 		Optional<ExportInfo> optInfo = getContainerLoadingRepository().findInventoryExportDocById(processId);
 		doc.setExportInfo(optInfo.orElseThrow( ()->new IllegalArgumentException("No container loading with given process id")));
-		doc.setLoadedTotals(getContainerLoadingRepository().findLoadedTotals(new int[] {processId}));
+		doc.setLoadedTotals(getContainerLoadingRepository().findLoadedTotals(new int[] {processId}, null));
 		
 		return doc; 
 		

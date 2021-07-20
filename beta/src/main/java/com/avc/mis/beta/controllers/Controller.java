@@ -5,6 +5,7 @@ package com.avc.mis.beta.controllers;
 import com.avc.mis.beta.dto.BaseEntityDTO;
 import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
@@ -278,7 +279,7 @@ public class Controller {
 //	}
 	
 	@RequestMapping("/findAllPoCodes")
-	public List<PoCodeBasic> findAllPoCodes() {
+	public List<PoCodeBasicWithProductCompany> findAllPoCodes() {
 		return objectTableReader.findAllPoCodes();
 	}
 	

@@ -34,7 +34,7 @@ public class CashewItem extends Item {
 	@Positive(message = "Number of bags has to be positive", groups = PositiveAmount.class)
 	private int numBags = 1;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "gradeId")
 	private CashewGrade grade;
 

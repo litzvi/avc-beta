@@ -10,6 +10,7 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.ObjectDataEntity;
@@ -136,14 +137,15 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 
 
 	//will also give old (history) po_codes
-	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
-			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
+	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany("
+			+ "po_code.id, po_code.code, c.code, c.suffix, s.name, pc.name) "
 		+ "from BasePoCode po_code "
 				+ "join po_code.contractType c "
 				+ "join po_code.supplier s "
+				+ "left join po_code.productCompany pc "
 		+ "where type(po_code) = :clazz "
 		+ "order by po_code.id desc ")
-	 <T extends BasePoCode> List<PoCodeBasic> findAllPoCodeBasics(Class<T> clazz);
+	 <T extends BasePoCode> List<PoCodeBasicWithProductCompany> findAllPoCodeBasics(Class<T> clazz);
 	
 	//will also give old (history) shipment codes
 	@Query("select new com.avc.mis.beta.dto.basic.ShipmentCodeBasic("

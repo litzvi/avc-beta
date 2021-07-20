@@ -4,6 +4,7 @@
 package com.avc.mis.beta.controllers;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
@@ -209,7 +210,7 @@ public class OrdersController {
 	@RequestMapping("/getHistoryCashewOrders")
 	public List<PoItemRow> getHistoryCashewOrders(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		return orderReports.findAllCashewOrderItemsHistory(begin != null? begin.toLocalDate() : null, begin != null? end.toLocalDate() : null);
+		return orderReports.findAllCashewOrderItemsHistory(begin != null? begin.toLocalDate() : null, end != null? end.toLocalDate() : null);
 	}
 	
 	@RequestMapping("/findCashewReceiptsHistory")
@@ -232,7 +233,7 @@ public class OrdersController {
 	@RequestMapping("/getAllGeneralOrders")
 	public List<PoItemRow> getAllGeneralOrders(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		return orderReports.findAllGeneralOrderItemsHistory(begin != null? begin.toLocalDate() : null, begin != null? end.toLocalDate() : null);
+		return orderReports.findAllGeneralOrderItemsHistory(begin != null? begin.toLocalDate() : null, end != null? end.toLocalDate() : null);
 	}
 	
 	@RequestMapping("/getCashewSuppliers")
@@ -266,7 +267,7 @@ public class OrdersController {
 	}
 	
 	@RequestMapping("/findAllPoCodes")
-	public List<PoCodeBasic> findAllPoCodes() {
+	public List<PoCodeBasicWithProductCompany> findAllPoCodes() {
 		return objectTableReader.findAllPoCodes();
 	}
 	
@@ -305,7 +306,7 @@ public class OrdersController {
 	}
 	
 	@RequestMapping("/findAllGeneralPoCodes")
-	public List<PoCodeBasic> findAllGeneralPoCodes() {
+	public List<PoCodeBasicWithProductCompany> findAllGeneralPoCodes() {
 		return objectTableReader.findAllGeneralPoCodes();
 	}
 	

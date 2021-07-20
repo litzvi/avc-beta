@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
@@ -157,7 +158,7 @@ public class ObjectTablesReader {
 	 * Can be used for searching reports for any PO.
 	 * @return List of PoCodeBasic
 	 */
-	public List<PoCodeBasic> findAllPoCodes() {
+	public List<PoCodeBasicWithProductCompany> findAllPoCodes() {
 		return getObjectTablesRepository().findAllPoCodeBasics(PoCode.class);
 	}
 	
@@ -166,7 +167,7 @@ public class ObjectTablesReader {
 	 * Can be used for searching reports for any PO.
 	 * @return List of PoCodeBasic
 	 */
-	public List<PoCodeBasic> findAllGeneralPoCodes() {
+	public List<PoCodeBasicWithProductCompany> findAllGeneralPoCodes() {
 		return getObjectTablesRepository().findAllPoCodeBasics(GeneralPoCode.class);
 	}
 	
