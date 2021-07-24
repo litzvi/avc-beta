@@ -272,7 +272,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ ", 0)"
 				+ ") "
 		+ "group by po_code, item ")
-	List<ItemAmountWithPo> findProductsByPos(int[] poCodeIds);
+	Stream<ItemAmountWithPo> findProductsByPos(int[] poCodeIds);
 	
 	/**
 	 * LIST OF INVENTORY ITEMS FOR REPORT	 

@@ -135,7 +135,8 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 								+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "				
 		+ "where p.id in :processIds "
 			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
-		+ "group by p, item.id ")
+		+ "group by p, item.id "
+		+ "order by p")
 	List<ContainerPoItemRow> findLoadedTotals(int[] processIds, Integer poCodeId);
 
 	@Query("select new com.avc.mis.beta.dto.exportdoc.ContainerPoItemStorageRow( "

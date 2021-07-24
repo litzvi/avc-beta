@@ -10,8 +10,8 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
- * Version: 20.0
- * fixed slow 'qc totals' report
+ * Version: 20.1
+ * 
  * 
  * @author zvi
  *

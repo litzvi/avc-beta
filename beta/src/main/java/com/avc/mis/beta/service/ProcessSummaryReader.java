@@ -186,30 +186,15 @@ public class ProcessSummaryReader {
 	}
 
 	public List<SupplierQualityRow> getSupplierQualityLines(Integer supplierId, LocalDateTime startTime, LocalDateTime endTime) {
-		long start = System.currentTimeMillis();
 		List<SupplierQualityRow> rows = getSupplierRepository().findSupplierWithPos(ProcessName.CASHEW_RECEIPT, supplierId, startTime, endTime);
 		int[] poCodeIds = rows.stream().mapToInt(SupplierQualityRow::getId).toArray();
-		long end  = System.currentTimeMillis();
-		System.out.println("Query Time in miliseconds point 1: "+ (end-start));
 		
-		start = System.currentTimeMillis();
-		List<ItemAmountWithPo> itemAmountWithPos = new ArrayList<>();
-		int squerySearchGroupSize=16;
-		for(int i=0; i<poCodeIds.length; i += squerySearchGroupSize) {
-			itemAmountWithPos.addAll(getInventoryRepository().findProductsByPos(Arrays.copyOfRange(poCodeIds, i, Math.min(i+squerySearchGroupSize, poCodeIds.length))));
-		}
 		//get and set QC and currentAmount
-		Map<Integer, List<ItemAmountWithPo>> amountsMap = itemAmountWithPos
-				.stream().collect(Collectors.groupingBy(ItemAmountWithPo::getPoCodeId));
-		end  = System.currentTimeMillis();
-		System.out.println("Query Time in miliseconds point 2: "+ (end-start));
-		System.out.println("number of values: " + amountsMap.entrySet().size());
+		Map<Integer, List<ItemAmountWithPo>> amountsMap = getInventoryRepository().findProductsByPos(poCodeIds)
+				.collect(Collectors.groupingBy(ItemAmountWithPo::getPoCodeId));
 		
-		start = System.currentTimeMillis();
 		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, false);
 		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getPoCodeId));
-		end  = System.currentTimeMillis();
-		System.out.println("Query Time in miliseconds point 3: "+ (end-start));
 
 		for(SupplierQualityRow row: rows) {
 			row.setOutAmounts(amountsMap.get(row.getId()));
