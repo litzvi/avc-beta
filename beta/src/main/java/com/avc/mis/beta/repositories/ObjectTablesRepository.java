@@ -17,6 +17,7 @@ import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.codes.ShipmentCode;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
@@ -27,7 +28,6 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
-import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.utilities.ProgramSequence;
 
 /**

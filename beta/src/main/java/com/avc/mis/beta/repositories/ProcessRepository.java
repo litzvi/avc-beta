@@ -47,7 +47,7 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 	Optional<GeneralProcessInfo> findGeneralProcessInfoByProcessId(int processId, Class<? extends T> clazz);
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
-			+ "p.id, pt.processName, "
+			+ "p.id, pt.value, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', po_code.id)), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "

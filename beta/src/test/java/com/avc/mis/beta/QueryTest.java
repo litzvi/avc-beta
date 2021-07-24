@@ -82,6 +82,7 @@ import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
+import com.avc.mis.beta.service.report.row.SupplierQualityRow;
 
 /**
  * @author Zvi
@@ -526,13 +527,18 @@ public class QueryTest {
 	@Test
 	void newTest() {				
 		try {
-			processSummaryReader.getSupplierQualityLines(null, null, null)
-				.forEach(i -> System.out.println(i 
-					+ " loss: " + i.getLoss() 
-					+ " waste: " + i.getWaste() 
-					+ " bad quality: " + i.getBadQuality() 
-					+ " rawDefectsAndDamage: " + i.getRawDefectsAndDamage() 
-					+ " roastDefectsAndDamage: " + i.getRoastDefectsAndDamage()));
+			long start = System.currentTimeMillis();
+			List<SupplierQualityRow> supplierQualityRows = processSummaryReader.getSupplierQualityLines(null, null, null);
+			long end  = System.currentTimeMillis();
+
+//			supplierQualityRows.forEach(i -> System.out.println(i 
+//					+ " loss: " + i.getLoss() 
+//					+ " waste: " + i.getWaste() 
+//					+ " bad quality: " + i.getBadQuality() 
+//					+ " rawDefectsAndDamage: " + i.getRawDefectsAndDamage() 
+//					+ " roastDefectsAndDamage: " + i.getRoastDefectsAndDamage()));
+			
+			System.out.println("Query Time in miliseconds: "+ (end-start));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -4,7 +4,7 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
-import com.avc.mis.beta.entities.process.ShipmentCode;
+import com.avc.mis.beta.entities.codes.ShipmentCode;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;

@@ -23,6 +23,7 @@ import org.hibernate.annotations.Where;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.ShipmentCode;
 import com.avc.mis.beta.entities.process.collection.LoadedItem;
 import com.avc.mis.beta.entities.process.collection.ProcessGroup;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;

@@ -10,6 +10,7 @@ import java.time.OffsetDateTime;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -41,13 +42,16 @@ public class ContainerArrivalRow extends BasicDTO {
 	private String containerSize;
 	private ShippingPort portOfDischarge;
 	
+	private ShipmentCodeBasic shipmentCode;
+	
 	private DataObjectWithName<Supplier> productCompany; 
 
 
 	public ContainerArrivalRow(@NonNull Integer id, 
 			LocalDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, 			
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType,
-			Integer productCompanyId, Integer productCompanyVersion, String productCompanyName) {
+			Integer productCompanyId, Integer productCompanyVersion, String productCompanyName, 
+			Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue) {
 		super(id);
 		this.recordedTime = recordedTime;
 		this.duration = duration;
@@ -68,6 +72,9 @@ public class ContainerArrivalRow extends BasicDTO {
 		
 		if(productCompanyId != null)
 			this.productCompany = new DataObjectWithName<Supplier>(productCompanyId, productCompanyVersion, productCompanyName);
+		
+		if(shipmentCodeId != null)
+			this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, shipmentCodeCode, portOfDischargeCode, portOfDischargeValue);
 
 	}
 

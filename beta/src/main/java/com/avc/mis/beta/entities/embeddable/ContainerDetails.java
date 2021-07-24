@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Embeddable
 public class ContainerDetails {
 
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	@NotNull(message = "Container number is mandatory")
 	private String containerNumber;
 

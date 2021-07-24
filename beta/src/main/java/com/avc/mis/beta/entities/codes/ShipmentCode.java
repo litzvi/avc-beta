@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.entities.process;
+package com.avc.mis.beta.entities.codes;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +17,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

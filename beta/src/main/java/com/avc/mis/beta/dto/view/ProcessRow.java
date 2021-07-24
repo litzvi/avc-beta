@@ -44,7 +44,7 @@ public class ProcessRow extends BasicDTO {
 	private List<MeasureUnit> displayMeasureUnits = Arrays.asList(MeasureUnit.LBS);
 
 
-	private ProcessName processName;
+	private String processName;
 //	private PoCodeBasic poCode;//should be removed
 	private int[] poCodeIds;
 	private String[] poCodes;
@@ -65,12 +65,12 @@ public class ProcessRow extends BasicDTO {
 	private List<ProductionProcessWithItemAmount> itemCounts;
 	@JsonIgnore private Optional<AmountWithUnit> countAmounts;
 	
-	public ProcessRow(@NonNull Integer id, ProcessName processName, 
+	public ProcessRow(@NonNull Integer id, String processType, 
 //			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			String poCodeIds, String poCodes, String suppliers,
 			LocalDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, String remarks) {
 		super(id);
-		this.processName = processName;
+		this.processName = processType;
 //		if(poCodeId != null)
 //			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		if(poCodeIds != null)

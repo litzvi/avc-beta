@@ -15,6 +15,7 @@ import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.codes.ShipmentCode;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
@@ -27,7 +28,6 @@ import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 
 import lombok.AccessLevel;

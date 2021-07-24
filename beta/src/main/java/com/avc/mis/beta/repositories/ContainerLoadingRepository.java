@@ -199,7 +199,7 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 			+ "and type(item) = com.avc.mis.beta.entities.item.CashewItem "
 			+ "and (:startTime is null or p.recordedTime >= :startTime) "
 			+ "and (:endTime is null or p.recordedTime < :endTime) "
-		+ "group by item, po_code, pi.measureUnit "
+		+ "group by p.id, item.itemGroup, item, po_code, pi.measureUnit "
 		+ "order by p.id, item.itemGroup, item ")	
 	List<CashewExportReportRow> findCashewExportReportRows(LocalDateTime startTime, LocalDateTime endTime);
 

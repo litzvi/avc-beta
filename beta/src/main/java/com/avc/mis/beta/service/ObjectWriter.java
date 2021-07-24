@@ -14,8 +14,8 @@ import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.MixPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.codes.ShipmentCode;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
-import com.avc.mis.beta.entities.process.ShipmentCode;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 import com.avc.mis.beta.utilities.ProgramSequence;
 
