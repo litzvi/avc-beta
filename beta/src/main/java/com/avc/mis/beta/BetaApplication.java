@@ -10,8 +10,8 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
- * Version: 19.9
- * issues 552 and others
+ * Version: 20.0
+ * fixed slow 'qc totals' report
  * 
  * @author zvi
  *
