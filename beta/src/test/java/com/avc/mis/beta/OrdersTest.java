@@ -20,6 +20,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
@@ -105,7 +106,7 @@ public class OrdersTest {
 		} catch (Exception e1) {}		
 		try {
 			tasks.forEach(t -> {
-				PoProcessDTO p = processReader.getProcess(t.getProcessId(), t.getProcessName());
+				GeneralProcessDTO p = processReader.getProcess(t.getProcessId(), t.getProcessName());
 				String processSnapshot = null;
 				try {
 					processSnapshot = objMapper.writeValueAsString(p);

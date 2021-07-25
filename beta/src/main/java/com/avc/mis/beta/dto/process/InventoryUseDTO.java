@@ -19,7 +19,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class InventoryUseDTO extends TransactionProcessDTO<ProcessItemDTO> {
+public class InventoryUseDTO extends RelocationProcessDTO {
 	
 	public InventoryUseDTO(InventoryUse inventoryUse) {
 		super(inventoryUse);

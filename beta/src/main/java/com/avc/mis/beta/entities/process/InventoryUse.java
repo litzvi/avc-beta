@@ -21,6 +21,6 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "INVENTORY_USES")
 @PrimaryKeyJoinColumn(name = "processId")
-public class InventoryUse extends TransactionProcess<ProcessItem> {
+public class InventoryUse extends RelocationProcess {
 
 }

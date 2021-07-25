@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.process.ProcessWithProductDTO;
@@ -48,6 +49,8 @@ public class ProcessReader {
 	@Autowired private WarehouseManagement warehouseManagement;
 	@Autowired private ProductionProcesses productionProcesses;
 	@Autowired private Loading loading;
+	@Autowired private InventoryUses inventoryUses;
+	@Autowired private ContainerArrivals containerArrivals;
 	
 	
 	/**
@@ -95,7 +98,8 @@ public class ProcessReader {
 	 * @param processTypeName
 	 * @return GeneralProcessDTO with information of the requested process.
 	 */
-	public PoProcessDTO getProcess(int processId, ProcessName processName) {
+	public GeneralProcessDTO getProcess(int processId, ProcessName processName) {
+		
 //		ProcessName processName = Enum.valueOf(ProcessName.class, processTypeName);
 		switch(processName) {
 		case CASHEW_ORDER:
@@ -108,6 +112,7 @@ public class ProcessReader {
 		case SUPPLIER_QC:
 		case VINA_CONTROL_QC:
 		case SAMPLE_QC:
+		case ROASTED_CASHEW_QC:
 			return qualityChecks.getQcByProcessId(processId);
 		case SAMPLE_RECEIPET:
 			return samples.getSampleReceiptByProcessId(processId);
@@ -117,13 +122,21 @@ public class ProcessReader {
 			return warehouseManagement.getStorageRelocation(processId);
 		case CASHEW_CLEANING:
 		case CASHEW_ROASTING:
+		case CASHEW_TOFFEE:
 		case PACKING:
+		case BAD_QUALITY_PACKING:
 			return productionProcesses.getProductionProcess(processId);
+		case CONTAINER_ARRIVAL:
+			return containerArrivals.getArrival(processId);
 		case CONTAINER_LOADING:
 			return loading.getLoading(processId);
+		case PRODUCT_USE:
+		case GENERAL_USE:
+			return inventoryUses.getInventoryUse(processId);
+			
 			default:
+				throw new IllegalStateException("Process doesn't exist or Process type not set");
 		}
-		return null;
 	}
 	
 	/**

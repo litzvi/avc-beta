@@ -14,15 +14,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
+import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.InventoryUse;
+import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
+import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.entities.process.inventory.UsedItem;
 import com.avc.mis.beta.repositories.InventoryUseRepository;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -44,28 +49,43 @@ public class InventoryUses {
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addGeneralInventoryUse(InventoryUse inventoryUse) {
-		//Check that used items are from general
-		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.GENERAL)) {
-			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
-		}				
 		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_USE));
-		dao.addTransactionProcessEntity(inventoryUse);
+		if(inventoryUse.getProductionLine() == null || 
+				valueTablesRepository.findFunctionalityByProductionLine(inventoryUse.getProductionLine().getId()) != ProductionFunctionality.GENERAL_USE) {
+			throw new IllegalStateException("Inventory Use has to have a Production Line with ProductionFunctionality.GENERAL_USE");
+		}
+		//Check that used items are from general
+		if(!isUsedInItemGroup(inventoryUse.getStorageMovesGroups(), ItemGroup.GENERAL)) {
+			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
+		}
+		dao.setStorageMovesProcessItem(inventoryUse.getStorageMovesGroups());
+		dao.addPoProcessEntity(inventoryUse);
 		dao.checkUsedInventoryAvailability(inventoryUse);
-		dao.setGeneralPoWeights(inventoryUse);
+		dao.setPoWeights(inventoryUse);
 		dao.setUsedProcesses(inventoryUse);
+		//check if storage moves match the amounts of the used item
+		dao.checkRelocationBalance(inventoryUse);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addProductInventoryUse(InventoryUse inventoryUse) {
-		//Check that used items are from general
-		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.PRODUCT)) {
-			throw new IllegalArgumentException("Inventory use can only be for PRODUCT item groups");
-		}				
 		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.PRODUCT_USE));
-		dao.addTransactionProcessEntity(inventoryUse);
+		if(inventoryUse.getProductionLine() == null || 
+				valueTablesRepository.findFunctionalityByProductionLine(inventoryUse.getProductionLine().getId()) != ProductionFunctionality.PRODUCT_USE) {
+			throw new IllegalStateException("Inventory Use has to have a Production Line with ProductionFunctionality.PRODUCT_USE");
+		}
+		//Check that used items are from product (cashew)
+		if(!isUsedInItemGroup(inventoryUse.getStorageMovesGroups(), ItemGroup.PRODUCT)) {
+			throw new IllegalArgumentException("Inventory use can only be for PRODUCT item groups");
+		}
+		dao.setStorageMovesProcessItem(inventoryUse.getStorageMovesGroups());
+		dao.addPoProcessEntity(inventoryUse);
 		dao.checkUsedInventoryAvailability(inventoryUse);
 		dao.setPoWeights(inventoryUse);
 		dao.setUsedProcesses(inventoryUse);
+		//check if storage moves match the amounts of the used item
+		dao.checkRelocationBalance(inventoryUse);
+		
 	}
 	
 	public InventoryUseDTO getInventoryUse(int processId) {
@@ -77,41 +97,75 @@ public class InventoryUses {
 		inventoryUseDTO.setPoProcessInfo(getInventoryUseRepository()
 				.findPoProcessInfoByProcessId(processId, InventoryUse.class).orElse(null));
 		
-		getProcessReader().setTransactionProcessCollections(inventoryUseDTO);
+		inventoryUseDTO.setStorageMovesGroups(
+				CollectionItemWithGroup.getFilledGroups(
+						getInventoryUseRepository()
+						.findStorageMovesWithGroup(processId)));
+		inventoryUseDTO.setItemCounts(
+				CollectionItemWithGroup.getFilledGroups(
+						getInventoryUseRepository()
+						.findItemCountWithAmount(processId)));
 		
 		return inventoryUseDTO;
 	}
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editGeneralInventoryUse(InventoryUse inventoryUse) {
+		if(inventoryUse.getProductionLine() == null || 
+				inventoryUseRepository.findFunctionalityByProductionLine(inventoryUse.getProductionLine().getId()) != ProductionFunctionality.GENERAL_USE) {
+			throw new IllegalStateException("Inventory Use has to have a Production Line with ProductionFunctionality.GENERAL_USE");
+		}
 		//Check that used items are from general
-		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.GENERAL)) {
+		if(!isUsedInItemGroup(inventoryUse.getStorageMovesGroups(), ItemGroup.GENERAL)) {
 			throw new IllegalArgumentException("Inventory use can only be for GENERAL item groups");
-		}			
-		dao.editTransactionProcessEntity(inventoryUse);
+		}
+		
+		dao.setStorageMovesProcessItem(inventoryUse.getStorageMovesGroups());
+		
+		dao.checkRemovingUsedProduct(inventoryUse);
+		
+		dao.editPoProcessEntity(inventoryUse);
 		
 		dao.checkUsedInventoryAvailability(inventoryUse);
-		dao.setGeneralPoWeights(inventoryUse);
 		dao.setUsedProcesses(inventoryUse);
+		List<ItemAmountWithPoCode> usedPos = dao.setPoWeights(inventoryUse);
+		dao.checkDAGmaintained(usedPos, inventoryUse.getId());
+
+		dao.checkUsingProcesessConsistency(inventoryUse);
+		dao.checkRelocationBalance(inventoryUse);
+
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editProductInventoryUse(InventoryUse inventoryUse) {
-		//Check that used items are from product
-		if(!isUsedInItemGroup(inventoryUse.getUsedItemGroups(), ItemGroup.PRODUCT)) {
+		if(inventoryUse.getProductionLine() == null || 
+				inventoryUseRepository.findFunctionalityByProductionLine(inventoryUse.getProductionLine().getId()) != ProductionFunctionality.PRODUCT_USE) {
+			throw new IllegalStateException("Inventory Use has to have a Production Line with ProductionFunctionality.PRODUCT_USE");
+		}
+		//Check that used items are from product (cashew)
+		if(!isUsedInItemGroup(inventoryUse.getStorageMovesGroups(), ItemGroup.PRODUCT)) {
 			throw new IllegalArgumentException("Inventory use can only be for PRODUCT item groups");
-		}			
-		dao.editTransactionProcessEntity(inventoryUse);
+		}
+		
+		dao.setStorageMovesProcessItem(inventoryUse.getStorageMovesGroups());
+		
+		dao.checkRemovingUsedProduct(inventoryUse);
+		
+		dao.editPoProcessEntity(inventoryUse);
 		
 		dao.checkUsedInventoryAvailability(inventoryUse);
-		dao.setPoWeights(inventoryUse);
 		dao.setUsedProcesses(inventoryUse);
+		List<ItemAmountWithPoCode> usedPos = dao.setPoWeights(inventoryUse);
+		dao.checkDAGmaintained(usedPos, inventoryUse.getId());
+
+		dao.checkUsingProcesessConsistency(inventoryUse);
+		dao.checkRelocationBalance(inventoryUse);
 	}
 
-	private boolean isUsedInItemGroup(UsedItemsGroup[] usedItemGroups, ItemGroup itemGroup) {
+	private boolean isUsedInItemGroup(StorageMovesGroup[] storageMovesGroups, ItemGroup itemGroup) {
 		Set<Integer> usedStorageIds = null;
-		for(UsedItemsGroup uig: usedItemGroups) {
-			usedStorageIds = Arrays.stream(uig.getUsedItems()).map(UsedItem::getStorage).map(StorageBase::getId).collect(Collectors.toSet());
+		for(StorageMovesGroup smg: storageMovesGroups) {
+			usedStorageIds = Arrays.stream(smg.getStorageMoves()).map(StorageMove::getStorage).map(StorageBase::getId).collect(Collectors.toSet());
 		}
 		if(usedStorageIds != null) {
 			List<ItemWithUnitDTO> items = getValueTablesRepository().findStoragesItems(usedStorageIds);

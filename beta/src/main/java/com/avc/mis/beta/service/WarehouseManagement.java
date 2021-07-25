@@ -48,7 +48,8 @@ import lombok.NonNull;
 @Transactional(readOnly = true)
 public class WarehouseManagement {
 	
-	public static ProductionFunctionality[] EXCLUDED_FUNCTIONALITIES = new ProductionFunctionality[] {ProductionFunctionality.LOADING};
+	public static ProductionFunctionality[] EXCLUDED_FUNCTIONALITIES = new ProductionFunctionality[] {
+			ProductionFunctionality.LOADING, ProductionFunctionality.GENERAL_USE, ProductionFunctionality.PRODUCT_USE,};
 	
 	@Autowired private ProcessInfoDAO dao;
 	

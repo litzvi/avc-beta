@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.InventoryUse;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -63,11 +64,12 @@ public class InventoryUseTest {
 		GeneralPoCode poCode = new GeneralPoCode();
 		poCode.setId(receipt.getPoCode().getId());
 		inventoryUse.setPoCode(receipt.getPoCode());
+		inventoryUse.setProductionLine(service.getProductionLine(ProductionFunctionality.GENERAL_USE));
 
 
 		//get inventory storages for use
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-		inventoryUse.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+		inventoryUse.setStorageMovesGroups(service.getStorageMoves(poInventory));
 
 		try {
 			inventoryUses.addGeneralInventoryUse(inventoryUse);
@@ -115,11 +117,12 @@ public class InventoryUseTest {
 		PoCode poCode = new PoCode();
 		poCode.setId(receipt.getPoCode().getId());
 		inventoryUse.setPoCode(receipt.getPoCode());
+		inventoryUse.setProductionLine(service.getProductionLine(ProductionFunctionality.PRODUCT_USE));
 
 
 		//get inventory storages for use
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-		inventoryUse.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
+		inventoryUse.setStorageMovesGroups(service.getStorageMoves(poInventory));
 
 		try {
 			inventoryUses.addProductInventoryUse(inventoryUse);
