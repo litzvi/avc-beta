@@ -161,7 +161,6 @@ public class ManagmentControler {
 //		ManagementType approvalType = ManagementType.valueOf(alerts.get("approvalType").toString());
 //		List<UserEntity> listChanges = mapper.readValue((alerts.get("users")).toString(), new TypeReference<List<UserEntity>>(){});
 		for(JsonNode var: mapper.readValue((alerts.get("adding")).toString(), new TypeReference<List<JsonNode>>(){})) {
-			System.out.println(var);
 			ManagementType approvalType = ManagementType.valueOf(var.get("managementType").asText());
 			processInfoWriter.addProcessTypeAlert(var.get("userId").asInt(), processName, approvalType);
 		}

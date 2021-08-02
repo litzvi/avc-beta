@@ -309,9 +309,10 @@ public class ReportsController {
 	
 	
 	@RequestMapping("/sumQcBySupplier")
-	public List<SupplierQualityRow> sumQcBySupplier(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+	public List<SupplierQualityRow> sumQcBySupplier(@QueryParam("supplier") Integer supplier, 
+			@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		return processSummaryReader.getSupplierQualityLines(null, begin, end);
+		return processSummaryReader.getSupplierQualityLines(supplier, begin, end);
 	}
 //	
 //	@RequestMapping("/getQcItemsCashewBulk")

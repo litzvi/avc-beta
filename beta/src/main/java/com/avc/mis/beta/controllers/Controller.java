@@ -246,7 +246,6 @@ public class Controller {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ProcessName type = mapper.readValue((remarkSnapshot.get("processName")).toString(), ProcessName.class);
 		ObjectNode childNode1 = mapper.createObjectNode();
-		System.out.println(processReader.getProcess(processId, type));
 		childNode1.put("approvals", (processReader.getProcess(processId, type)).getApprovals());
 		return childNode1;
 	}

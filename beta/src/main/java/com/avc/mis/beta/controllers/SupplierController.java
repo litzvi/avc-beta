@@ -62,7 +62,6 @@ public class SupplierController {
 
 	@DeleteMapping(value ="/removeSupplier/{id}")
 	public ResponseEntity<?> removeSupplier(@PathVariable("id") int id) {
-		System.out.println(id);
 		suppliersDao.removeSupplier(id);
 		return ResponseEntity.ok().build();
 	}

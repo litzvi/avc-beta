@@ -184,15 +184,13 @@ public class OrdersController {
 	}
 	
 	@RequestMapping("/getPendingCashew")
-	public List<ReceiptRow> getPendingCashew(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
-			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		return receiptReports.findPendingCashewReceipts(begin, end);
+	public List<ReceiptRow> getPendingCashew() {
+		return receiptReports.findPendingCashewReceipts();
 	}
 	
 	@RequestMapping("/getPendingGeneral")
-	public List<ReceiptRow> getPendingGeneral(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
-			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		return receiptReports.findPendingGeneralReceipts(begin, end);
+	public List<ReceiptRow> getPendingGeneral() {
+		return receiptReports.findPendingGeneralReceipts();
 	}
 	
 	@RequestMapping("/getReceivedCashew")

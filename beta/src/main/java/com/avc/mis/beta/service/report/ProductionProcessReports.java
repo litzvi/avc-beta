@@ -19,6 +19,7 @@ import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.process.RelocationProcess;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
@@ -83,7 +84,7 @@ public class ProductionProcessReports {
 					.findAllUsedItemsByProcessIds(processIds)
 					.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));
 		}
-		else if(StorageRelocation.class.isAssignableFrom(processClass)) {
+		else if(RelocationProcess.class.isAssignableFrom(processClass)) {
 			usedMap = getRelocationRepository()
 					.findAllMovedItemsByProcessIds(processIds)
 					.collect(Collectors.groupingBy(ProductionProcessWithItemAmount::getId));

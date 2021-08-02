@@ -76,7 +76,7 @@ public class ProductionController {
 	
 	@RequestMapping("/getAllPosQc")
 	public Set<PoCodeBasic> getAllPosQc() {
-		return objectTableReader.findAvailableInventoryPoCodes(ItemGroup.QC);
+		return objectTableReader.findAvailableInventoryPoCodes(ItemGroup.WASTE);
 	}
 	
 	@RequestMapping("/findFreeMixPoCodes")
@@ -99,7 +99,7 @@ public class ProductionController {
 	}
 	@RequestMapping("/getStorageQcPo/{id}")
 	public List<ProcessItemInventory> getStorageQcPo(@PathVariable("id") int poCode) {
-		return warehouseManagement.getAvailableInventory(ItemGroup.QC, null, null, null, new Integer[] {poCode}, null);
+		return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, null, null, new Integer[] {poCode}, null);
 	}
 	@RequestMapping("/getStorageRoastPos/{poCodes}")
 	public List<ProcessItemInventory> getStorageRoastPos(@PathVariable("poCodes") Integer[] poCodes) {
