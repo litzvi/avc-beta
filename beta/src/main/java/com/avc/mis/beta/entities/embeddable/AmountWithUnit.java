@@ -89,9 +89,10 @@ public class AmountWithUnit implements Cloneable {
 	
 	public AmountWithUnit add(BigDecimal augendAmount, MeasureUnit augendMeasureUnit) {
 		BigDecimal augendConvertedAmount = MeasureUnit.convert(augendAmount, augendMeasureUnit, this.measureUnit);
-		if(augendConvertedAmount == null)
+		if(augendConvertedAmount == null) {
 			throw new UnsupportedOperationException(
 					"Convertion from " + augendMeasureUnit + " to " + this.measureUnit + " not supported");
+		}
 		return new AmountWithUnit(this.amount.add(augendConvertedAmount), this.measureUnit);
 	}
 	

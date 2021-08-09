@@ -139,12 +139,12 @@ public class ContainerController {
 	
 	@RequestMapping("/getStorageRoastPackedPo/{id}")
 	public List<ProcessItemInventory> getStorageRoastPackedPo(@PathVariable("id") int poCode) {
-		return warehouseManagement.getAvailableInventory(null, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.PACKED}, null, null, new Integer[] {poCode}, null);
+		return warehouseManagement.getAvailableInventory(null, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.PACKED, ProductionUse.TOFFEE, ProductionUse.PACKING_SUPPLYES}, null, null, new Integer[] {poCode}, null);
 	}
 	
 	@RequestMapping("/getAllPosRoastPacked")
 	public Set<PoCodeBasic> getAllPosRoastPacked() {
-		return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{ProductionUse.ROAST, ProductionUse.PACKED});
+		return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{ProductionUse.ROAST, ProductionUse.PACKED, ProductionUse.TOFFEE, ProductionUse.PACKING_SUPPLYES});
 	}
 	
 	@RequestMapping("/findFreeShipmentCodes")

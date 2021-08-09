@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.process.collection;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
@@ -88,17 +89,39 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 	}
 	
 	public List<AmountWithUnit> getTotalAmount() {
-		
-		AmountWithUnit totalAmount = this.storageMoves.stream()
-				.map(m -> m.getTotal())
-				.reduce(AmountWithUnit::add).orElse(null);
-//		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
-		if(totalAmount == null) {
+		if(storageMoves == null || storageMoves.isEmpty()) {
 			return null;
 		}
-//		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+		AmountWithUnit totalAmount;
+		try {
+			totalAmount = storageMoves.stream()
+				.map(ui -> {
+					if(MeasureUnit.NONE == ui.getItem().getUnit().getMeasureUnit()) {
+						return new AmountWithUnit(ui.getTotal(), ui.getMeasureUnit());
+					}
+					else {
+						return ui.getItem().getUnit().multiply(ui.getTotal());
+					}
+				})
+				.reduce(AmountWithUnit::add).get();
+		} catch (NoSuchElementException | UnsupportedOperationException e) {
+			return null;
+		}
 		return Arrays.asList(totalAmount.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
 	}
+	
+//	public List<AmountWithUnit> getTotalAmount() {
+//		
+//		AmountWithUnit totalAmount = this.storageMoves.stream()
+//				.map(m -> m.getTotal())
+//				.reduce(AmountWithUnit::add).orElse(null);
+////		AmountWithUnit totalAmount = new AmountWithUnit(total, this.measureUnit);
+//		if(totalAmount == null) {
+//			return null;
+//		}
+////		return AmountWithUnit.weightDisplay(totalAmount, Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS));
+//		return Arrays.asList(totalAmount.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
+//	}
 	
 	/**
 	 * static function for building List of StorageMovesGroupDTO from a List of StorageMoveWithGroup

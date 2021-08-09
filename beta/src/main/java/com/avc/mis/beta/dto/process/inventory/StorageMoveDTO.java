@@ -86,15 +86,13 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 	}
 	
 	@JsonIgnore
-	public AmountWithUnit getTotal() {
+	public BigDecimal getTotal() {
 		if(getUnitAmount() == null || getNumberUnits() == null) {
 			return null;
 		}
 		else {
-			return new AmountWithUnit(getUnitAmount()
-				.multiply(getNumberUnits())
-//				.subtract(Optional.ofNullable(getAccessWeight()).orElse(BigDecimal.ZERO))
-				, getMeasureUnit());
+			return getUnitAmount()
+				.multiply(getNumberUnits());
 		}
 	}
 	

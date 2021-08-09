@@ -69,6 +69,8 @@ public class ProductionController {
 				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{usage}, new ProductionFunctionality[]{ProductionFunctionality.RAW_STATION});
 			case CLEAN:
 				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{usage}, new ProductionFunctionality[]{ProductionFunctionality.ROASTER_IN});
+			case TOFFEE:
+				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{usage, ProductionUse.ROAST});
 			default:
 				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{usage});
 		}
@@ -97,13 +99,17 @@ public class ProductionController {
 	public List<ProcessItemInventory> getStorageRoastPo(@PathVariable("id") int poCode) {
 		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST}, null, null, new Integer[] {poCode}, null);
 	}
+	@RequestMapping("/getStorageToPackPo/{id}")
+	public List<ProcessItemInventory> getStorageToPackPo(@PathVariable("id") int poCode) {
+		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.TOFFEE}, null, null, new Integer[] {poCode}, null);
+	}
 	@RequestMapping("/getStorageQcPo/{id}")
 	public List<ProcessItemInventory> getStorageQcPo(@PathVariable("id") int poCode) {
 		return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, null, null, new Integer[] {poCode}, null);
 	}
-	@RequestMapping("/getStorageRoastPos/{poCodes}")
+	@RequestMapping("/getStorageToPackPos/{poCodes}")
 	public List<ProcessItemInventory> getStorageRoastPos(@PathVariable("poCodes") Integer[] poCodes) {
-		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST}, null, null, poCodes, null);
+		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.TOFFEE}, null, null, poCodes, null);
 	}
 	
 	@RequestMapping("/getProduction/{id}")
