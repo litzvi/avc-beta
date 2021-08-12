@@ -18,7 +18,7 @@ public interface TransactionProcessRepository<T extends TransactionProcess<?>> e
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount("
 			+ "p.id, item.id, item.value, item.measureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((ui.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor), "
+			+ "SUM((ui.numberUnits * coalesce(sf.unitAmount, 1)) * uom.multiplicand / uom.divisor), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', wh.value))) "
 		+ "from TransactionProcess p "
 			+ "join p.usedItemGroups grp "

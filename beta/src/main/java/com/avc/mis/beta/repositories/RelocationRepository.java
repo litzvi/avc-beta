@@ -23,8 +23,8 @@ public interface RelocationRepository extends PoProcessRepository<RelocationProc
 
 	@Query("select new com.avc.mis.beta.dto.query.ProcessItemTransactionDifference("
 			+ "pi.id, "
-			+ "SUM(used_sf.unitAmount * storageMove.numberUnits * uom_used.multiplicand / uom_used.divisor), "
-			+ "SUM(storageMove.unitAmount * storageMove.numberUnits * uom_produced.multiplicand / uom_produced.divisor), "
+			+ "SUM(coalesce(used_sf.unitAmount, 1) * storageMove.numberUnits * uom_used.multiplicand / uom_used.divisor), "
+			+ "SUM(coalesce(storageMove.unitAmount, 1) * storageMove.numberUnits * uom_produced.multiplicand / uom_produced.divisor), "
 			+ "item.measureUnit) "
 		+ "from RelocationProcess p "
 			+ "join p.storageMovesGroups g "
@@ -51,7 +51,7 @@ public interface RelocationRepository extends PoProcessRepository<RelocationProc
 
 	@Query("select new com.avc.mis.beta.dto.view.RelocationWithItemAmount("
 			+ "p.id, item.id, item.value, item.measureUnit, item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((m.numberUnits * sf.unitAmount) * uom.multiplicand / uom.divisor), "
+			+ "SUM((m.numberUnits * coalesce(sf.unitAmount, 1)) * uom.multiplicand / uom.divisor), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', wh.value)), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', new_wh.value))) "
 		+ "from RelocationProcess p "

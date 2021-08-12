@@ -18,6 +18,7 @@ import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
+import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
@@ -54,13 +55,20 @@ public class WarehouseManagement {
 	@Autowired private ProcessInfoDAO dao;
 	
 	@Autowired private InventoryRepository inventoryRepository;
-
+	
 	public List<ProcessItemInventory> getAvailableInventory(
 			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
 			Integer itemId, Integer[] poCodeIds, Integer excludeProcessId) {
+		return getAvailableInventory(group, productionUses, functionalities, itemId, null, poCodeIds, excludeProcessId);
+	}
+
+	public List<ProcessItemInventory> getAvailableInventory(
+			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
+			Integer itemId, PackageType packageType, Integer[] poCodeIds, Integer excludeProcessId) {
 		
 		boolean checkProductionUses = (productionUses != null);
 		boolean checkFunctionalities = (functionalities != null);
+		Integer packageTypeOrdinal = packageType != null ? packageType.ordinal() : null;
 		boolean checkPoCodes = (poCodeIds != null);
 		Integer[] excludedProcessIds = null;
 		if(poCodeIds != null && excludeProcessId != null) {
@@ -72,7 +80,7 @@ public class WarehouseManagement {
 		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()
 				.findAvailableInventoryByStorage(EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, 
 						checkFunctionalities, functionalities, 
-						group, itemId, 
+						group, itemId, packageTypeOrdinal,
 						checkPoCodes, poCodeIds,
 						checkExcludedProcessIds, excludedProcessIds);
 				
@@ -144,7 +152,7 @@ public class WarehouseManagement {
 	 * @return Set of PoCodeBasic for all inventory Cashew.
 	 */
 	public Set<PoCodeBasic> findCashewAvailableInventoryPoCodes() {
-		return findAvailableInventoryPoCodes(false,  null, false, null, ItemGroup.PRODUCT, null);		
+		return findAvailableInventoryPoCodes(false,  null, false, null, ItemGroup.PRODUCT, null, null);		
 	}
 	
 	/**
@@ -154,7 +162,7 @@ public class WarehouseManagement {
 	 * @return Set of PoCodeBasic for all General inventory.
 	 */
 	public Set<PoCodeBasic> findGeneralAvailableInventoryPoCodes() {
-		return findAvailableInventoryPoCodes(false,  null, false, null, ItemGroup.GENERAL, null);		
+		return findAvailableInventoryPoCodes(false,  null, false, null, ItemGroup.GENERAL, null, null);		
 	}
 	
 	/**
@@ -164,33 +172,35 @@ public class WarehouseManagement {
 	 * @return Set of PoCodeBasic
 	 */
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(Integer itemId) {
-		return findAvailableInventoryPoCodes(false, null, false, null, null, itemId);		
+		return findAvailableInventoryPoCodes(false, null, false, null, null, itemId, null);		
 	}
 	
-	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
-		return findAvailableInventoryPoCodes(true, productionUses, false, null, null, null);		
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses, PackageType packageType) {
+		return findAvailableInventoryPoCodes(true, productionUses, false, null, null, null, packageType);		
 	}
 	
-	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses, ProductionFunctionality[] functionalities) {
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(
+			@NonNull ProductionUse[] productionUses, ProductionFunctionality[] functionalities, PackageType packageType) {
 		boolean checkFunctionalities = (functionalities != null);
-		return findAvailableInventoryPoCodes(true, productionUses, checkFunctionalities, functionalities, null, null);		
+		return findAvailableInventoryPoCodes(true, productionUses, checkFunctionalities, functionalities, null, null, packageType);		
 	}
 	
-	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ItemGroup group) {
-		return findAvailableInventoryPoCodes(false,  null, false, null, group, null);		
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ItemGroup group, PackageType packageType) {
+		return findAvailableInventoryPoCodes(false,  null, false, null, group, null, packageType);		
 	}
 	
-	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
-		return findAvailableInventoryPoCodes(true,  productionUses, false, null, group, null);		
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group, PackageType packageType) {
+		return findAvailableInventoryPoCodes(true,  productionUses, false, null, group, null, packageType);		
 	}
 	
 	private Set<PoCodeBasic> findAvailableInventoryPoCodes(
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
-			ItemGroup itemGroup, Integer itemId) {
+			ItemGroup itemGroup, Integer itemId, PackageType packageType) {
+		Integer packageTypeOrdinal = packageType != null ? packageType.ordinal() : null;
 		return getInventoryRepository().findAvailableInventoryPoCodeByType(
 				EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, 
-				checkFunctionalities, functionalities, itemGroup, itemId);		
+				checkFunctionalities, functionalities, itemGroup, itemId, packageTypeOrdinal);		
 	}
 
 	

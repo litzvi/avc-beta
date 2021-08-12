@@ -47,14 +47,15 @@ public class AmountWithUnit implements Cloneable {
 	public static final AmountWithUnit NEUTRAL = new AmountWithUnit(BigDecimal.ONE, MeasureUnit.NONE);;
 
 
-	@NotNull(message = "Amount is required")
+//	@NotNull(message = "Amount is required") -- now could be null, null regarded as 1.
 	@Positive(message = "Amount has to be positive", groups = PositiveAmount.class)
-	private BigDecimal amount = BigDecimal.ONE;
+	private BigDecimal amount; // = BigDecimal.ONE;
 	
 	@Enumerated(EnumType.STRING)
 	@NotNull(message = "Measure unit required")
 	private MeasureUnit measureUnit;
-
+	
+	
 	public AmountWithUnit(BigDecimal amount, String measureUnit) {
 		super();
 		this.amount = amount;
@@ -69,13 +70,17 @@ public class AmountWithUnit implements Cloneable {
 	
 	public AmountWithUnit(String amount, String measureUnit) {
 		super();
-		this.amount = (new BigDecimal(amount));
+		this.amount = new BigDecimal(amount);
 		this.measureUnit = MeasureUnit.valueOf(measureUnit);
 	}
 	
 	public AmountWithUnit(MeasureUnit measureUnit) {
 		super();
 		this.measureUnit = measureUnit;
+	}
+	
+	public BigDecimal getAmount() {
+		return this.amount != null ? this.amount : BigDecimal.ONE;
 	}
 	
 	public AmountWithUnit add(AmountWithUnit augend) {
@@ -93,11 +98,11 @@ public class AmountWithUnit implements Cloneable {
 			throw new UnsupportedOperationException(
 					"Convertion from " + augendMeasureUnit + " to " + this.measureUnit + " not supported");
 		}
-		return new AmountWithUnit(this.amount.add(augendConvertedAmount), this.measureUnit);
+		return new AmountWithUnit(getAmount().add(augendConvertedAmount), this.measureUnit);
 	}
 	
 	private AmountWithUnit negate() {
-		return new AmountWithUnit(this.amount.negate(), measureUnit);
+		return new AmountWithUnit(getAmount().negate(), measureUnit);
 	}
 	
 	public AmountWithUnit subtract(AmountWithUnit subtrahend) {
@@ -105,15 +110,15 @@ public class AmountWithUnit implements Cloneable {
 		if(subtrahendAmount == null)
 			throw new UnsupportedOperationException(
 					"Convertion from " + subtrahend.getMeasureUnit() + " to " + this.measureUnit + " not supported");
-		return new AmountWithUnit(this.amount.subtract(subtrahendAmount), this.measureUnit);
+		return new AmountWithUnit(getAmount().subtract(subtrahendAmount), this.measureUnit);
 	}
 	
 	public AmountWithUnit subtract(BigDecimal subtrahend) {
-		return new AmountWithUnit(this.amount.subtract(subtrahend), this.measureUnit);
+		return new AmountWithUnit(getAmount().subtract(subtrahend), this.measureUnit);
 	}
 	
 	public AmountWithUnit convert(MeasureUnit measureUnit) {
-		BigDecimal convertedAmount = MeasureUnit.convert(this.amount, this.measureUnit, measureUnit);
+		BigDecimal convertedAmount = MeasureUnit.convert(getAmount(), this.measureUnit, measureUnit);
 		if(convertedAmount == null)
 			throw new UnsupportedOperationException(
 					"Convertion from " + this.measureUnit + " to " + measureUnit + " not supported");
@@ -121,7 +126,7 @@ public class AmountWithUnit implements Cloneable {
 	}
 	
 	public AmountWithUnit multiply(BigDecimal multiplicand) {
-		return new AmountWithUnit(this.amount.multiply(multiplicand, MathContext.DECIMAL64), this.measureUnit);
+		return new AmountWithUnit(getAmount().multiply(multiplicand, MathContext.DECIMAL64), this.measureUnit);
 	}
 			
 	@Override
@@ -139,27 +144,31 @@ public class AmountWithUnit implements Cloneable {
 	
 	public AmountWithUnit setScale(int newScale) {
 //		this.amount = amount.setScale(newScale, RoundingMode.HALF_DOWN);
-		return new AmountWithUnit(amount.setScale(newScale, RoundingMode.HALF_DOWN), this.measureUnit);
+		if(this.amount != null) {
+			return new AmountWithUnit(getAmount().setScale(newScale, RoundingMode.HALF_DOWN), this.measureUnit);
+		}
+		else {
+			return this.clone();
+		}
 	}
 	
 	public String getValue() {
-		if(!isFilled()) {
+		if(this.measureUnit == null) {
 			return null;
 		}
-		return String.format("%s %s", 
-				DECIMAL_FORMAT.format(this.amount), 
-				this.measureUnit);
+		else if(this.amount != null) {
+			return String.format("%s %s", 
+					DECIMAL_FORMAT.format(getAmount()), 
+					this.measureUnit);
+		}
+		else {
+			return this.measureUnit.toString();
+		}
 	}
 	
-	public boolean isFilled() {
-		return this.amount != null && this.measureUnit != null;
-	}
 	
 	public int signum() {
-		if(amount == null) {
-			throw new NullPointerException();
-		}
-		return amount.signum();
+		return getAmount().signum();
 	}
 
 	/**
@@ -211,7 +220,7 @@ public class AmountWithUnit implements Cloneable {
 
 
 	public static BigDecimal divide(AmountWithUnit numerator, AmountWithUnit denominator) {
-		if(numerator == null || denominator == null || denominator.amount.equals(BigDecimal.ZERO)) {
+		if(numerator == null || denominator == null || denominator.getAmount().equals(BigDecimal.ZERO)) {
 			return null;
 		}
 		BigDecimal denominatorAmount = MeasureUnit.convert(denominator, numerator.getMeasureUnit());
@@ -278,6 +287,7 @@ public class AmountWithUnit implements Cloneable {
 		return weights;
 	}
 
+	
 
 
 

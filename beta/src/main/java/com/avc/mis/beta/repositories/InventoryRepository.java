@@ -19,6 +19,7 @@ import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
@@ -49,7 +50,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "ELSE 0 "
 				+ "END)"
 			+ " ) AS total_used, "
-			+ "(sf.unitAmount * uom.multiplicand / uom.divisor) "
+			+ "(coalesce(sf.unitAmount, 1) * uom.multiplicand / uom.divisor) "
 				+ " * item_unit.amount "
 				+ " * (sf.numberUnits - SUM("
 					+ "(CASE "
@@ -87,6 +88,13 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
 			+ "and (item.id = :itemId or :itemId is null) "
+			+ "and (:packageTypeOrdinal = "
+				+ "(CASE "
+					+ "WHEN item_unit.measureUnit = com.avc.mis.beta.entities.enums.MeasureUnit.NONE "
+						+ "THEN 0 "
+					+ "ELSE 1 "
+				+ "END) "
+				+ "or :packageTypeOrdinal is null) "
 			+ "and (:checkExcludedProcessIds = false or sf_p.id not in :excludedProcessIds) "
 			+ "and "
 			+ "(:checkPoCodes = false "
@@ -114,7 +122,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
-			ItemGroup itemGroup, Integer itemId, 
+			ItemGroup itemGroup, Integer itemId, Integer packageTypeOrdinal, 
 			boolean checkPoCodes, Integer[] poCodeIds,
 			boolean checkExcludedProcessIds, Integer[] excludedProcessIds);
 	
@@ -159,7 +167,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	@Query("select new com.avc.mis.beta.dto.report.ItemAmount( "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
+			+ "SUM((coalesce(sf.unitAmount, 1) * uom.multiplicand / uom.divisor) "
 				+ " * "
 				+ "(CASE "
 					+ "WHEN ui is null THEN sf.numberUnits "
@@ -230,7 +238,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	@Query("select new com.avc.mis.beta.dto.report.ItemAmountWithPo( "
 			+ "po_code.id, item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
+			+ "SUM((coalesce(sf.unitAmount, 1) * uom.multiplicand / uom.divisor) "
 				+ " * "
 				+ "(CASE "
 					+ "WHEN ui is null THEN sf.numberUnits "
@@ -283,7 +291,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "p.recordedTime, r.recordedTime, "
 			+ "coalesce(w_po.weight, 1), "
-			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
+			+ "SUM((coalesce(sf.unitAmount, 1) * uom.multiplicand / uom.divisor) "
 //				+ " * item_unit.amount "
 				+ " * "
 				+ "(CASE "
@@ -424,6 +432,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name) "
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
+				+ "join item.unit item_unit "
 			+ "join pi.process p "
 				+ "left join p.poCode p_po_code "
 				+ "left join p.weightedPos w_po "
@@ -449,6 +458,13 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses)  "
 			+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
 			+ "and (item.id = :itemId or :itemId is null)  "
+			+ "and (:packageTypeOrdinal = "
+				+ "(CASE "
+					+ "WHEN item_unit.measureUnit = com.avc.mis.beta.entities.enums.MeasureUnit.NONE "
+						+ "THEN 0 "
+					+ "ELSE 1 "
+				+ "END) "
+				+ "or :packageTypeOrdinal is null) "
 		+ "group by sf.id, sf.numberUnits, po_code.id "
 //		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) "
 		+ "having sf.numberUnits > "
@@ -463,7 +479,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
-			ItemGroup itemGroup, Integer itemId);
+			ItemGroup itemGroup, Integer itemId, Integer packageTypeOrdinal);
 		
 	
 	/**
@@ -572,9 +588,9 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
 					+ "END) as string)+0, "
 					+ "'x', "
-					+ "cast(sf.unitAmount as string)+0, "
+					+ "cast(coalesce(sf.unitAmount, '') as string)+0, "
 					+ "ri.measureUnit)), "
-			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
+			+ "SUM((coalesce(sf.unitAmount, 1) * uom.multiplicand / uom.divisor) "
 				+ " * "
 				+ "(CASE "
 					+ "WHEN ui is null THEN sf.numberUnits "
@@ -649,7 +665,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', cast(r.recordedTime as date))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', cast(p.recordedTime as date))), "
-			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
+			+ "SUM((coalesce(sf.unitAmount, 1) * uom.multiplicand / uom.divisor) "
 				+ " * coalesce(w_po.weight, 1) "
 				+ " * "
 				+ "(CASE "
@@ -737,7 +753,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item_unit, type(item), "
 			+ "item.brand, item.code, item.whole, item.roast, item.toffee, "
 			+ "grade.id, grade.value, item.saltLevel, item.numBags, "
-			+ "SUM((sf.unitAmount * uom.multiplicand / uom.divisor) "
+			+ "SUM((coalesce(sf.unitAmount, 1) * uom.multiplicand / uom.divisor) "
 				+ " * "
 				+ "(CASE "
 					+ "WHEN ui is null THEN sf.numberUnits "

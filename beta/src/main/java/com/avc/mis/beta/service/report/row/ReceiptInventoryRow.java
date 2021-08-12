@@ -6,6 +6,9 @@ package com.avc.mis.beta.service.report.row;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Currency;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
@@ -59,7 +62,14 @@ public class ReceiptInventoryRow {
 		this.receiptDate = receiptDate;
 		this.productionFunctionality = productionFunctionality;
 		if(bags != null) {
-			this.bags = Stream.of(bags.split(",")).toArray(String[]::new);
+//			this.bags = Stream.of(bags.split(",")).toArray(String[]::new);
+			this.bags = Stream.of(bags.split(","))
+					.map(s -> {
+						String[] array = s.split("x");						
+						return new Object[] {Double.valueOf(array[0]), array[1]};
+					})
+					.collect(Collectors.groupingBy(array -> (String)array[1], LinkedHashMap::new, Collectors.summingDouble(array -> (Double)array[0])))
+					.entrySet().stream().map(entry -> Math.round(entry.getValue()) + "x" + entry.getKey()).toArray(String[]::new);
 		}
 		else {
 			this.bags = null;

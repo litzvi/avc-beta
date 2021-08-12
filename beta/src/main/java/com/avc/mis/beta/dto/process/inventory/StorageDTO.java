@@ -38,7 +38,8 @@ public class StorageDTO extends SubjectDataDTO implements StorageBaseDTO {
 			Integer warehouseLocationId,  String warehouseLocationValue,
 			String remarks, Class<? extends Storage> clazz) {
 		super(id, version, ordinal);
-		this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
+		if(unitAmount != null)
+			this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 //		this.accessWeight = accessWeight;
 		if(warehouseLocationId != null && warehouseLocationValue != null)
@@ -68,15 +69,7 @@ public class StorageDTO extends SubjectDataDTO implements StorageBaseDTO {
 		this.className = storage.getClass().getSimpleName();
 	}
 
-	/**
-	 * @param storageId
-	 * @param storageVersion
-	 * @param unitAmount2
-	 * @param measureUnit2
-	 * @param numberUnits2
-	 * @param warehouseLocation2
-	 * @param description
-	 */
+	
 	public StorageDTO(Integer id, Integer version, Integer ordinal,
 			BigDecimal unitAmount, BigDecimal numberUnits, //BigDecimal accessWeight,
 			BasicValueEntity<Warehouse> warehouseLocation, String remarks, Class<? extends Storage> clazz) {
@@ -90,8 +83,11 @@ public class StorageDTO extends SubjectDataDTO implements StorageBaseDTO {
 	
 	@JsonIgnore
 	public BigDecimal getTotal() {
-		if(getUnitAmount() == null || getNumberUnits() == null) {
+		if(getNumberUnits() == null) {
 			return null;
+		}
+		else if(getUnitAmount() == null) {
+			return getNumberUnits();
 		}
 		else {
 			return getUnitAmount()

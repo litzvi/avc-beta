@@ -52,7 +52,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "SUM( "
 				+ "CASE "
 					+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN null  "
-					+ "ELSE (sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor) "
+					+ "ELSE (coalesce(sf.unitAmount, 1) * sf.numberUnits * uom.multiplicand / uom.divisor) "
 				+ "END) ) "
 		+ "from OrderItem i "
 			+ "join i.po po "
@@ -250,7 +250,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 
 	@Query("select new com.avc.mis.beta.dto.generic.ValueObject( "
 			+ "oi.id, "
-			+ "SUM(sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor)) "
+			+ "SUM(coalesce(sf.unitAmount, 1) * sf.numberUnits * uom.multiplicand / uom.divisor)) "
 		+ "from OrderItem oi "
 			+ "join oi.numberUnits units "
 			+ "left join oi.receiptItems ri "

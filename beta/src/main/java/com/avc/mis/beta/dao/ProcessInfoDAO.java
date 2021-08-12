@@ -457,6 +457,7 @@ public class ProcessInfoDAO extends DAO {
 
 		for(ProcessManagement a: alerts) {			
 			switch(a.getManagementType()) {
+//			/*
 			case APPROVAL:
 				ApprovalTask processApproval = new ApprovalTask();
 				processApproval.setProcess(process);
@@ -464,6 +465,7 @@ public class ProcessInfoDAO extends DAO {
 				processApproval.setDecision(DecisionType.NOT_ATTENDED);
 				processApproval.setDescription("Process added");
 				addEntity(processApproval); //user already in the persistence context
+//			*/
 			case REVIEW:
 				addMessage(a.getUser(), process, "New process added");
 				break;
@@ -482,6 +484,7 @@ public class ProcessInfoDAO extends DAO {
 		List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(process.getId());
 
 		for(ApprovalTask approval: approvals) {
+//			NO NEED IF BECAUSE THERE IS NO NOT ATTENDED
 			if(approval.getDecision() != DecisionType.NOT_ATTENDED) {
 				approval.setDecision(DecisionType.EDIT_NOT_ATTENDED);
 			}			
@@ -566,8 +569,9 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public void setUserProcessDecision(int processId, DecisionType decision, 
 			String processSnapshot, String remarks) {
-		
+
 		Optional<ApprovalTask> optional = getProcessRepository().findProcessApprovalByProcessAndUser(processId, getCurrentUserId());
+		//(change) if exists send to previous method, otherwise IF THE USER NEEDS APPROVAL, create one and add
 		ApprovalTask approval = optional.orElseThrow(() -> new AccessControlException("No approval task for current user"));
 		approval.setDecision(decision);
 		approval.setProcessSnapshot(processSnapshot);

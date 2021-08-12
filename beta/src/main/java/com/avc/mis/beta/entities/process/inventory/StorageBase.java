@@ -50,10 +50,10 @@ public class StorageBase extends UsedItemBase {
 	@NotNull(message = "Storage has to reference a process item")
 	private ProcessItem processItem;
 	
-	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
-	@NotNull(message = "Unit amount is mandatory")
+	@Column(precision = 19, scale = MeasureUnit.SCALE)
+//	@NotNull(message = "Unit amount is mandatory")
 	@Positive(message = "Unit amount has to be positive")
-	private BigDecimal unitAmount = BigDecimal.ONE;
+	private BigDecimal unitAmount;
 
 //	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 //	@NotNull(message = "Number of units is required")

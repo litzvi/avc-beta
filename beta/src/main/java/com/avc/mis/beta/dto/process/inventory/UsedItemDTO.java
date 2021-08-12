@@ -2,6 +2,7 @@ package com.avc.mis.beta.dto.process.inventory;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -44,12 +45,11 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 	
 	@JsonIgnore
 	public BigDecimal getTotal() {
-		if(getStorage() == null || getStorage().getUnitAmount() == null || getNumberUsedUnits() == null) {
+		if(getStorage() == null || getNumberUsedUnits() == null) {
 			return null;
 		}
 		else {
-			return getStorage()
-				.getUnitAmount()
+			return Optional.ofNullable(getStorage().getUnitAmount()).orElse(BigDecimal.ONE)
 				.multiply(getNumberUsedUnits());
 //				.subtract(Optional.ofNullable(getAccessWeight()).orElse(BigDecimal.ZERO));
 		}

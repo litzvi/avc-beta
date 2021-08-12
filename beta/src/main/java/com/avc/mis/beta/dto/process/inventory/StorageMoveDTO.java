@@ -57,7 +57,8 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 				storageId, stoageVersion, storageOrdinal, 
 				storageUnitAmount, storageNumberUnits, storgeOtherUsedUnits, //storageContainerWeight,
 				storageWarehouseLocationId, storageWarehouseLocationValue, storageRemarks);
-		this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
+		if(unitAmount != null)
+			this.unitAmount = unitAmount.setScale(MeasureUnit.SCALE);
 		this.numberUnits = numberUnits.setScale(MeasureUnit.SCALE);
 //		this.accessWeight = accessWeight;
 		if(warehouseLocationId != null && warehouseLocationValue != null)
@@ -87,8 +88,11 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
 	
 	@JsonIgnore
 	public BigDecimal getTotal() {
-		if(getUnitAmount() == null || getNumberUnits() == null) {
+		if(getNumberUnits() == null) {
 			return null;
+		}
+		else if(getUnitAmount() == null) {
+			return getNumberUnits();
 		}
 		else {
 			return getUnitAmount()

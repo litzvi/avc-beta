@@ -91,7 +91,7 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
 			+ "s.name, "
 			+ "item.value,  r.recordedTime, "
-			+ "SUM(sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor), item.measureUnit ) "
+			+ "SUM(coalesce(sf.unitAmount, 1) * sf.numberUnits * uom.multiplicand / uom.divisor), item.measureUnit ) "
 		+ "from Receipt r "
 			+ "join r.lifeCycle lc "
 			+ "join r.poCode po_code "

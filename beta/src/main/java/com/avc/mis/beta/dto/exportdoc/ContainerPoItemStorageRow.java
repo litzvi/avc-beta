@@ -27,14 +27,15 @@ public class ContainerPoItemStorageRow {
 	PoCodeBasic poCode;
 	String[] poCodes;
 	AmountWithUnit unitAmount;
-	BigDecimal numberUnits;	
+	BigDecimal numberUnits;
+	BigDecimal numberBoxes;
 
 	public ContainerPoItemStorageRow(
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz,  
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,  
 			String poCodes,
-			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits) {
+			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal numberBoxes) {
 		super();
 		this.itemWithUnit = new ItemWithUnit(itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz);
 		if(poCodeId != null)
@@ -47,8 +48,15 @@ public class ContainerPoItemStorageRow {
 			this.poCodes = null;
 		this.unitAmount = new AmountWithUnit(unitAmount, measureUnit);
 		this.numberUnits = numberUnits;
-		
+		this.numberBoxes = numberBoxes;
 	}
+	
+//	public BigDecimal getNumberBoxes() {
+//		if(this.unitAmount.getAmount() == null) {
+//			return null;
+//		}
+//		return this.numberUnits;
+//	}
 	
 	public String getItem() {
 		return itemWithUnit.getValue();

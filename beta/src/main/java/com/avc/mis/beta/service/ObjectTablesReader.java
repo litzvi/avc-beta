@@ -196,19 +196,19 @@ public class ObjectTablesReader {
 	}
 	
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
-		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses);		
+		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses, null);		
 	}
 	
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses, ProductionFunctionality[] functionalities) {
-		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses, functionalities);		
+		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses, functionalities, null);		
 	}
 	
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ItemGroup group) {
-		return getWarehouseManagement().findAvailableInventoryPoCodes(group);		
+		return getWarehouseManagement().findAvailableInventoryPoCodes(group, null);		
 	}
 	
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
-		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses, group);
+		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses, group, null);
 	}
 
 
