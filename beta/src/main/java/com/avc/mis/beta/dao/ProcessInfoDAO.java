@@ -34,6 +34,7 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.EditStatus;
+import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -457,15 +458,15 @@ public class ProcessInfoDAO extends DAO {
 
 		for(ProcessManagement a: alerts) {			
 			switch(a.getManagementType()) {
-//			/*
 			case APPROVAL:
+			/*
 				ApprovalTask processApproval = new ApprovalTask();
 				processApproval.setProcess(process);
 				processApproval.setUser(a.getUser());
 				processApproval.setDecision(DecisionType.NOT_ATTENDED);
 				processApproval.setDescription("Process added");
 				addEntity(processApproval); //user already in the persistence context
-//			*/
+			*/
 			case REVIEW:
 				addMessage(a.getUser(), process, "New process added");
 				break;
@@ -474,6 +475,7 @@ public class ProcessInfoDAO extends DAO {
 			}
 		}
 	}
+	
 	
 	/**
 	 * Sets up needed approvals and messages (notifications), for editing the given process.
@@ -485,9 +487,10 @@ public class ProcessInfoDAO extends DAO {
 
 		for(ApprovalTask approval: approvals) {
 //			NO NEED IF BECAUSE THERE IS NO NOT ATTENDED
-			if(approval.getDecision() != DecisionType.NOT_ATTENDED) {
-				approval.setDecision(DecisionType.EDIT_NOT_ATTENDED);
-			}			
+//			if(approval.getDecision() != DecisionType.NOT_ATTENDED) {
+//				approval.setDecision(DecisionType.EDIT_NOT_ATTENDED);
+//			}			
+			approval.setDecision(DecisionType.EDIT_NOT_ATTENDED);
 			approval.setDescription("Process added and edited");
 		}
 		sendMessageAlerts(process, "Old process edited");
@@ -534,29 +537,7 @@ public class ProcessInfoDAO extends DAO {
 		addEntity(userMessage);	//user already in the persistence context
 	}
 	
-	/**
-	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.
-	 * @param approvalId the ApprovalTask id.
-	 * @param decisionType the decision made.
-	 * @param processSnapshot snapshot of the process as seen by the approver.
-	 * @param remarks
-	 * @throws IllegalArgumentException trying to approve for another user.
-	 */
-	public void setProcessDecision(int approvalId, DecisionType decision, 
-			String processSnapshot, String remarks) {
-		ApprovalTask approval = getEntityManager().getReference(ApprovalTask.class, approvalId);
-		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
-//			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
-			approval.setDecision(decision);
-			approval.setProcessSnapshot(processSnapshot);
-			approval.setRemarks(remarks);
-			editEntity(approval);
-			approvalAlerts(approval);
-		}
-		else {
-			throw new AccessControlException("Can't approve for another user");
-		}		
-	}
+	
 	
 	/**
 	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.
@@ -570,16 +551,58 @@ public class ProcessInfoDAO extends DAO {
 	public void setUserProcessDecision(int processId, DecisionType decision, 
 			String processSnapshot, String remarks) {
 
-		Optional<ApprovalTask> optional = getProcessRepository().findProcessApprovalByProcessAndUser(processId, getCurrentUserId());
-		//(change) if exists send to previous method, otherwise IF THE USER NEEDS APPROVAL, create one and add
-		ApprovalTask approval = optional.orElseThrow(() -> new AccessControlException("No approval task for current user"));
-		approval.setDecision(decision);
-		approval.setProcessSnapshot(processSnapshot);
-		approval.setRemarks(remarks);
-		editEntity(approval);
-		approvalAlerts(approval);
+		if(getProcessRepository().findProcessManagement(processId, getCurrentUserId(), ManagementType.APPROVAL) == null) {
+			throw new AccessControlException("No approval task for given user");
+		}
+
+		Optional<Integer> approvalId = getProcessRepository().findProcessApprovalIdByProcessAndUser(processId, getCurrentUserId());
+		if(approvalId.isPresent()) {
+			setProcessDecision(approvalId.get(), decision, processSnapshot, remarks);
+		}
+		else {
+			addApproval(processId, decision, processSnapshot, remarks);
+		}
 			
 	}
+	
+	private void addApproval(Integer processId, DecisionType decision, String processSnapshot, String remarks) {
+		UserEntity user = getEntityManager().getReference(UserEntity.class, getCurrentUserId());
+		GeneralProcess process = getEntityManager().getReference(GeneralProcess.class, processId);
+		ApprovalTask processApproval = new ApprovalTask();
+		processApproval.setProcess(process);
+		processApproval.setUser(user);
+		processApproval.setDecision(decision);
+		processApproval.setProcessSnapshot(processSnapshot);
+		processApproval.setDescription("Process " + decision.toString());
+		processApproval.setRemarks(remarks);
+		addEntity(processApproval); //user already in the persistence context
+	}
+	
+	/**
+	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.
+	 * @param approvalId the ApprovalTask id.
+	 * @param decisionType the decision made.
+	 * @param processSnapshot snapshot of the process as seen by the approver.
+	 * @param remarks
+	 * @throws IllegalArgumentException trying to approve for another user.
+	 */
+	private void setProcessDecision(int approvalId, DecisionType decision, 
+			String processSnapshot, String remarks) {
+		ApprovalTask approval = getEntityManager().getReference(ApprovalTask.class, approvalId);
+		if(getCurrentUserId().equals(approval.getUser().getId())) {//sign it's own approval
+//			DecisionType decision = Enum.valueOf(DecisionType.class, decisionType);
+			approval.setDescription("Process " + decision.toString());
+			approval.setDecision(decision);
+			approval.setProcessSnapshot(processSnapshot);
+			approval.setRemarks(remarks);
+			editEntity(approval);
+			approvalAlerts(approval);
+		}
+		else {
+			throw new AccessControlException("Can't approve for another user");
+		}		
+	}
+	
 	
 	/**
 	 * Sets the record status for the process life cycle. e.g. FINAL - process items show in inventory
@@ -598,10 +621,13 @@ public class ProcessInfoDAO extends DAO {
 			
 			//check that for all required approvals satisfied if changed to final
 			if(processStatus == ProcessStatus.FINAL) {
-				List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(processId);
-				if(approvals.stream().anyMatch(a -> a.getDecision() != DecisionType.APPROVED)) {
+				if(getProcessRepository().waitingApprovals(processId).size() > 0) {
 					throw new IllegalStateException("Can't finalize process before fully approved");
-				}				
+				}
+//				List<ApprovalTask> approvals = getProcessRepository().findProcessApprovals(processId);
+//				if(approvals.stream().anyMatch(a -> a.getDecision() != DecisionType.APPROVED)) {
+//					throw new IllegalStateException("Can't finalize process before fully approved");
+//				}				
 			}
 			
 			//check that process items aren't used so can be cancelled

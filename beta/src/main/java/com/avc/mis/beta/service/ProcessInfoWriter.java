@@ -88,9 +88,10 @@ public class ProcessInfoWriter {
 	 * @param remarks
 	 * @throws IllegalArgumentException trying to approve for another user.
 	 */
-	public void setApprovalDecision(int approvalId, DecisionType decisionType, String processSnapshot, String remarks) {
-		dao.setProcessDecision(approvalId, decisionType, processSnapshot, remarks);		
-	}
+//	Should only do it through a process - checks if approval if user still has approval registered.
+//	public void setApprovalDecision(int approvalId, DecisionType decisionType, String processSnapshot, String remarks) {
+//		dao.setProcessDecision(approvalId, decisionType, processSnapshot, remarks);		
+//	}
 	
 	/**
 	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.

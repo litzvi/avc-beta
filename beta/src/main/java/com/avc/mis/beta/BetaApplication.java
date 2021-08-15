@@ -11,7 +11,7 @@ import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
  * Version: 20.4
- * issue 562, 561
+ * issue 562, 561, 566
  * 
  * @author zvi
  *

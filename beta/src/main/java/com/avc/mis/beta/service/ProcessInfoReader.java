@@ -27,8 +27,10 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 import com.avc.mis.beta.service.report.InventoryReports;
+import com.avc.mis.beta.service.report.row.TaskRow;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -140,8 +142,8 @@ public class ProcessInfoReader {
 		return getProcessInfoRepository().findUserMassagesNumber(dao.getCurrentUserId(), lables);
 	}
 		
-	public Integer getUserTasksNumber(DecisionType[] decisions) {		
-		return getProcessInfoRepository().findUserTasksNumber(dao.getCurrentUserId(), decisions);
+	public Integer getUserTasksNumber(ProcessStatus[] statuses, DecisionType[] decisions) {		
+		return getProcessInfoRepository().findUserTasksNumber(dao.getCurrentUserId(), statuses, decisions);
 	}
 		
 	/**
@@ -161,6 +163,10 @@ public class ProcessInfoReader {
 		List<ProcessManagementDTO> processManagements = getProcessInfoRepository().findAllUserProcessPrivilige(dao.getCurrentUserId());
 		return processManagements.stream().collect(Collectors.groupingBy(ProcessManagementDTO::getProcessName, 
 				Collectors.mapping(ProcessManagementDTO::getManagementType, Collectors.toList())));
+	}
+	
+	public  List<TaskRow> getTaskRows(ProcessStatus[] statuses, Instant startTime, Instant endTime) {
+		return getProcessInfoRepository().findTaskRows(dao.getCurrentUserId(), DecisionType.values(), statuses, startTime, endTime);
 	}
 	
 	

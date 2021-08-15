@@ -34,6 +34,7 @@ import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
+import com.avc.mis.beta.service.report.row.TaskRow;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -176,9 +177,9 @@ public class Controller {
 	}
 	
 	@RequestMapping("/getUserTasks")
-	public List<ApprovalTaskDTO> getUserTasks(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant begin, 
+	public List<TaskRow> getUserTasks(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant end) {
-		return processDao.getAllApprovals(begin, end);
+		return processDao.getTaskRows(new ProcessStatus[]{ProcessStatus.PENDING}, begin, end);
 	}
 	
 	@RequestMapping("/getUserMassagesNumber")
@@ -188,7 +189,7 @@ public class Controller {
 	
 	@RequestMapping("/getUserTasksNumber")
 	public int getUserTasksNumber() {
-		return processDao.getUserTasksNumber(new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED});
+		return processDao.getUserTasksNumber(new ProcessStatus[] {ProcessStatus.PENDING}, new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED});
 	}
 	
 	

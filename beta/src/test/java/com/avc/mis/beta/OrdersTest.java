@@ -114,8 +114,8 @@ public class OrdersTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				processInfoWriter.setApprovalDecision(t.getId(), 
-						DecisionType.APPROVED, processSnapshot, null);
+//				processInfoWriter.setApprovalDecision(t.getId(), DecisionType.APPROVED, processSnapshot, null);
+				processInfoWriter.setUserProcessDecision(p.getId(), DecisionType.APPROVED, processSnapshot, null);
 				
 			});
 		} catch (Exception e) {

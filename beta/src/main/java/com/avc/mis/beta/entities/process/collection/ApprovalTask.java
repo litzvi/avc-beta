@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.GeneralInfoEntity;
@@ -33,7 +34,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-@Table(name = "PROCESS_APPROVALS")
+@Table(name = "PROCESS_APPROVALS", uniqueConstraints = { @UniqueConstraint(columnNames = {"processId", "userId"}) })
 public class ApprovalTask extends GeneralInfoEntity {	
 
 	@JsonIgnore

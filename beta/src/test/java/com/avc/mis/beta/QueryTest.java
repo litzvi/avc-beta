@@ -51,8 +51,10 @@ import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
@@ -83,6 +85,7 @@ import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 import com.avc.mis.beta.service.report.row.SupplierQualityRow;
+import com.avc.mis.beta.service.report.row.TaskRow;
 
 /**
  * @author Zvi
@@ -520,29 +523,18 @@ public class QueryTest {
 		//get messages for logged in user
 		userMessages = processInfoReader.getAllMessages(null, null, Instant.parse("2021-07-07T09:42:30.680Z"), null, 4);
 		userMessages.forEach(m -> System.out.println(m));
+		
+		
 
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void newTest() {				
-		try {
-			long start = System.currentTimeMillis();
-			List<SupplierQualityRow> supplierQualityRows = processSummaryReader.getSupplierQualityLines(null, null, null);
-			long end  = System.currentTimeMillis();
-
-//			supplierQualityRows.forEach(i -> System.out.println(i 
-//					+ " loss: " + i.getLoss() 
-//					+ " waste: " + i.getWaste() 
-//					+ " bad quality: " + i.getBadQuality() 
-//					+ " rawDefectsAndDamage: " + i.getRawDefectsAndDamage() 
-//					+ " roastDefectsAndDamage: " + i.getRoastDefectsAndDamage()));
-			
-			System.out.println("Query Time in miliseconds: "+ (end-start));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
+		List<TaskRow> tasks = processInfoReader.getTaskRows(new ProcessStatus[] {ProcessStatus.PENDING}, null, null);
+		tasks.forEach(i -> System.out.println(i));
+		int numTasks = processInfoReader.getUserTasksNumber(new ProcessStatus[] {ProcessStatus.PENDING}, 
+				new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED});
+		System.out.println(numTasks);
 	}
 }

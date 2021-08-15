@@ -23,10 +23,12 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.collection.ApprovalTask;
+import com.avc.mis.beta.service.report.row.TaskRow;
 
 /**
  * Spring repository for accessing all notification information and requirements of production processes.
@@ -43,6 +45,17 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "on p.processType = a.processType "
 			+ "where p.id = ?1")
 	List<ProcessManagement> findProcessTypeAlertsByProcess(Integer processId);
+	
+	@Query("select a "
+			+ "from ProcessManagement a "
+			+ "join a.user u "
+			+ "join GeneralProcess p "
+				+ "on p.processType = a.processType "
+			+ "where p.id = :processId "
+				+ "and u.id = :userId "
+				+ "and a.managementType = :managementType ")
+	ProcessManagement findProcessManagement(Integer processId, Integer userId, ManagementType managementType);
+
 
 	@Query("select user "
 			+ "from ProcessManagement a "
@@ -54,7 +67,18 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	
 	@Query("select p.approvals from GeneralProcess p where p.id = :processId")
 	List<ApprovalTask> findProcessApprovals(Integer processId);
-
+	
+	@Query("select pm "
+			+ "from ProcessManagement pm "
+			+ "join GeneralProcess p "
+				+ "on p.processType = pm.processType "
+			+ "left join p.approvals a "
+				+ "on pm.user = a.user "
+			+ "where p.id = :processId "
+				+ "and pm.managementType = com.avc.mis.beta.entities.enums.ManagementType.APPROVAL "
+				+ "and (a is null or a.decision <> com.avc.mis.beta.entities.enums.DecisionType.APPROVED) ")
+	List<ProcessManagement> waitingApprovals(Integer processId);
+	
 	@Query("select new com.avc.mis.beta.dto.process.collection.UserMessageDTO("
 			+ "m.id, m.version, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
@@ -119,6 +143,43 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			+ "ORDER BY p.modifiedDate DESC ")
 	List<ApprovalTaskDTO> findApprovals(Integer userId, DecisionType[] decisions, Instant startTime, Instant endTime);
 	
+	@Query("select new com.avc.mis.beta.service.report.row.TaskRow("
+			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
+			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
+//			+ "pa.description, "
+			+ "p.id, pt.processName, pt.value, p.createdDate, p.modifiedDate, p_pr.name, "
+			+ "aprv.decision, "
+			+ "aprv.processSnapshot) "
+		+ "from ProcessManagement pm "
+			+ "join pm.processType pt "
+			+ "join pm.user u "
+				+ "join u.person u_pr "
+			+ "join GeneralProcess p "
+				+ "on p.processType = pt "
+				+ "join p.lifeCycle lc "
+				+ "join p.modifiedBy p_u "
+					+ "join p_u.person p_pr "
+				+ "left join p.approvals aprv "
+			+ "left join PoProcess po_p "
+				+ "on p.id = po_p.id "
+				+ "left join po_p.poCode p_po_code "
+				+ "left join po_p.weightedPos w_po "
+					+ "left join w_po.poCode w_po_code "
+					+ "left join BasePoCode po_code "
+							+ "on (po_code = p_po_code or po_code = w_po_code) "
+						+ "left join po_code.contractType t "
+						+ "left join po_code.supplier s "
+			+ "where pm.managementType = com.avc.mis.beta.entities.enums.ManagementType.APPROVAL "
+				+ "and u.id = :userId "
+				+ "and (aprv is null "
+					+ "or (aprv.user = u and aprv.decision in :decisions)) "
+				+ "and lc.processStatus in :statuses "
+				+ "and (:startTime is null or p.modifiedDate >= :startTime) "
+				+ "and (:endTime is null or p.modifiedDate < :endTime) "
+			+ "group by u, p "
+			+ "ORDER BY p.modifiedDate DESC ")
+	List<TaskRow> findTaskRows(Integer userId, DecisionType[] decisions, ProcessStatus[] statuses, Instant startTime, Instant endTime);
+	
 	@Query("select count(*) "
 		+ "from UserMessage m "
 			+ "join m.user u "
@@ -127,11 +188,24 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	Integer findUserMassagesNumber(Integer userId, List<MessageLabel> lables);
 	
 	@Query("select count(*) "
-		+ "from ApprovalTask pa "
-			+ "join pa.user u "
-		+ "where pa.decision in :decisions "
-			+ "and u.id = :userId ")
-	Integer findUserTasksNumber(Integer userId, DecisionType[] decisions);
+		+ "from ProcessManagement pm "
+			+ "join pm.user u "
+		+ "join GeneralProcess p "
+			+ "on p.processType = pm.processType "
+		+ "join p.lifeCycle lc "
+		+ "left join p.approvals a "
+			+ "on u = a.user "
+		+ "where pm.managementType = com.avc.mis.beta.entities.enums.ManagementType.APPROVAL "
+			+ "and u.id = :userId "
+			+ "and lc.processStatus in :statuses "
+			+ "and (a is null or a.decision in :decisions) ")
+	Integer findUserTasksNumber(Integer userId, ProcessStatus[] statuses, DecisionType[] decisions);
+//	@Query("select count(*) "
+//		+ "from ApprovalTask pa "
+//			+ "join pa.user u "
+//		+ "where pa.decision in :decisions "
+//			+ "and u.id = :userId ")
+//	Integer findUserTasksNumber(Integer userId, DecisionType[] decisions);
 
 	@Query("select a "
 			+ "from ProcessManagement a "
@@ -215,13 +289,13 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	List<ManagementType> findUserProcessPrivilige(ProcessName processName, Integer currentUserId);
 
 
-	@Query("select a "
+	@Query("select a.id "
 		+ "from ApprovalTask a "
 			+ "join a.process p "
 			+ "join a.user u "
 		+ "where p.id = :processId "
 			+ "and u.id = :currentUserId ")
-	Optional<ApprovalTask> findProcessApprovalByProcessAndUser(int processId, Integer currentUserId);
+	Optional<Integer> findProcessApprovalIdByProcessAndUser(int processId, Integer currentUserId);
 
 
 	@Query("select new com.avc.mis.beta.dto.data.ProcessManagementDTO(a.id, t.processName, "
@@ -375,6 +449,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			+ "where w_po_code.id in :poCodeIds "
 			+ "group by used_p.id, using_p.id ")
 	List<Integer[]> findTransactionProcessVertices(Integer[] poCodeIds);
+
 
 
 
