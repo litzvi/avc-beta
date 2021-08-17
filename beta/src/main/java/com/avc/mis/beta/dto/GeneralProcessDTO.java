@@ -56,7 +56,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 	private EditStatus editStatus;
 	private String remarks;
 	@EqualsAndHashCode.Exclude // don't compare for testing
-	private String approvals;
+	private String[] approvals;
 		
 //	public GeneralProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 //			ProcessName processName, ProductionLine productionLine, 
@@ -97,7 +97,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 		this.processStatus = process.getLifeCycle().getProcessStatus();
 		this.editStatus = process.getLifeCycle().getEditStatus();
 		this.remarks = process.getRemarks();
-		this.approvals = process.getApprovals().stream().map(t -> t.getUser().getUsername()).collect(Collectors.joining());
+		this.approvals = process.getApprovals().stream().map(t -> t.getUser().getUsername()).toArray(String[]::new);
 
 	}
 	

@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.OffsetDateTime;
+import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
@@ -40,7 +41,7 @@ public class GeneralProcessInfo extends DataDTO {
 	ProcessStatus processStatus;
 	EditStatus editStatus;
 	String remarks;
-	String approvals;
+	String[] approvals;
 
 	
 	public GeneralProcessInfo(Integer id, Integer version, Instant createdDate, String userRecording, 
@@ -64,6 +65,9 @@ public class GeneralProcessInfo extends DataDTO {
 		this.processStatus = processStatus;
 		this.editStatus = editStatus;
 		this.remarks = remarks;
-		this.approvals = approvals;
+		if(approvals != null)
+			this.approvals = Stream.of(approvals.split(",")).distinct().toArray(String[]::new);
+		else
+			this.approvals = null;
 	}
 }
