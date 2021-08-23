@@ -248,7 +248,7 @@ public class Controller {
 		ProcessName type = mapper.readValue((remarkSnapshot.get("processName")).toString(), ProcessName.class);
 		ObjectNode childNode1 = mapper.createObjectNode();
 //		childNode1.put("approvals", (processReader.getProcess(processId, type)).getApprovals());
-		return childNode1;
+		return childNode1; 
 	}
 	
 	@PostMapping("/taskManagment")
