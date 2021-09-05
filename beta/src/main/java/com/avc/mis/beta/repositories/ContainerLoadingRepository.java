@@ -181,7 +181,8 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, item.unit, type(item), item.brand, item.code, "
 			+ "item.whole, item.roast, item.toffee, "
 			+ "grade.id, grade.value, item.saltLevel, item.numBags, "
-			+ "sum(sf.numberUnits), pi.measureUnit, coalesce(w_po.weight, 1), "
+			+ "sum(sf.numberUnits * coalesce(w_po.weight, 1)), pi.measureUnit, "
+//			+ "coalesce(w_po.weight, 1), "
 			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
 			+ "p.recordedTime, "
 			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, "
@@ -214,7 +215,7 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 			+ "and (:startTime is null or p.recordedTime >= :startTime) "
 			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by p.id, item.itemGroup, item, po_code, pi.measureUnit "
-		+ "order by p.id, item.itemGroup, item ")	
+		+ "order by p.recordedTime, item.itemGroup, item ")	
 	List<CashewExportReportRow> findCashewExportReportRows(LocalDateTime startTime, LocalDateTime endTime);
 
 }

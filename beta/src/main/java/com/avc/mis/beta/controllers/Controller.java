@@ -25,6 +25,7 @@ import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.values.CashewStandard;
+import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.ProcessInfoReader;
@@ -71,6 +72,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Zvi
  *
+ *aws_access_key_id=AKIA4VPSAJVE5SWRKUBW
+	aws_secret_access_key=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
+
  */
 @RestController
 @RequestMapping(path = "/api")
@@ -161,8 +165,8 @@ public class Controller {
 		List<DataObjectWithName<Supplier>> GeneralSuppliers = refeDao.getGeneralSuppliersBasic();
 		result.add(GeneralSuppliers);
 		
-//		List<BasicValueEntity<Item>> CashewItemsraw = refeDao.getItemsByCategry(ItemCategory.RAW);
-//		result.add(CashewItemsraw);
+//		List<ProcessType> processTypes = refeDao.getAllProcessTypes();
+//		result.add(processTypes);
 //		List<BasicValueEntity<Item>> CashewItemsclean = refeDao.getItemsByCategry(ItemCategory.CLEAN);
 //		result.add(CashewItemsclean);
 //		List<BasicValueEntity<Item>> CashewItemsroast = refeDao.getItemsByCategry(ItemCategory.ROAST);
@@ -179,7 +183,7 @@ public class Controller {
 	@RequestMapping("/getUserTasks")
 	public List<TaskRow> getUserTasks(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Instant end) {
-		return processDao.getTaskRows(new ProcessStatus[]{ProcessStatus.PENDING}, begin, end);
+		return processDao.getTaskRows(new ProcessStatus[] {ProcessStatus.PENDING}, begin, end);
 	}
 	
 	@RequestMapping("/getUserMassagesNumber")
@@ -228,7 +232,7 @@ public class Controller {
 //	}
 	
 	@PostMapping("/approveTaskAndManagment/{approve}")
-	public ObjectNode approveTaskAndManagment(@RequestBody JsonNode remarkSnapshot, @PathVariable("approve") DecisionType approve) throws JsonMappingException, JsonProcessingException {
+	public String[] approveTaskAndManagment(@RequestBody JsonNode remarkSnapshot, @PathVariable("approve") DecisionType approve) throws JsonMappingException, JsonProcessingException {
 		int processId = (remarkSnapshot.get("id")).asInt();
 		if(remarkSnapshot.get("remarks") == null) {
 			processInfoWriter.setUserProcessDecision(processId, approve, (remarkSnapshot.get("snapshot")).toString(), null);
@@ -246,9 +250,7 @@ public class Controller {
 		}
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ProcessName type = mapper.readValue((remarkSnapshot.get("processName")).toString(), ProcessName.class);
-		ObjectNode childNode1 = mapper.createObjectNode();
-//		childNode1.put("approvals", (processReader.getProcess(processId, type)).getApprovals());
-		return childNode1; 
+		return (processReader.getProcess(processId, type)).getApprovals();
 	}
 	
 	@PostMapping("/taskManagment")

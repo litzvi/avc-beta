@@ -5,6 +5,7 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
+import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.ItemGroup;
@@ -66,14 +67,17 @@ public class ProductionController {
 	public Set<PoCodeBasic> getAllPos(@PathVariable("id") ProductionUse usage) {
 		switch (usage) {
 			case RAW_KERNEL:
-				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{usage}, new ProductionFunctionality[]{ProductionFunctionality.RAW_STATION});
+				return warehouseManagement.findAvailableInventoryPoCodes(new ProductionUse[]{usage}, new ProductionFunctionality[]{ProductionFunctionality.RAW_STATION}, null);
 			case CLEAN:
-				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{usage}, new ProductionFunctionality[]{ProductionFunctionality.ROASTER_IN});
-			case TOFFEE:
-				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{usage, ProductionUse.ROAST});
+				return warehouseManagement.findAvailableInventoryPoCodes(new ProductionUse[]{usage}, new ProductionFunctionality[]{ProductionFunctionality.ROASTER_IN}, null);
 			default:
-				return objectTableReader.findAvailableInventoryPoCodes(new ProductionUse[]{usage});
+				return warehouseManagement.findAvailableInventoryPoCodes(new ProductionUse[]{usage}, null);
 		}
+	}
+	
+	@RequestMapping("/getAllPosToPack/{id}")
+	public Set<PoCodeBasic> getAllPosToPack(@PathVariable("id") Boolean withPacked) {
+			return warehouseManagement.findAvailableInventoryPoCodes(new ProductionUse[]{ProductionUse.TOFFEE, ProductionUse.ROAST}, withPacked? null : PackageType.BULK);
 	}
 	
 	@RequestMapping("/getAllPosQc")
@@ -99,17 +103,17 @@ public class ProductionController {
 	public List<ProcessItemInventory> getStorageRoastPo(@PathVariable("id") int poCode) {
 		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST}, null, null, new Integer[] {poCode}, null);
 	}
-	@RequestMapping("/getStorageToPackPo/{id}")
-	public List<ProcessItemInventory> getStorageToPackPo(@PathVariable("id") int poCode) {
-		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.TOFFEE}, null, null, new Integer[] {poCode}, null);
+	@RequestMapping("/getStorageToPackPo/{id}/{id1}")
+	public List<ProcessItemInventory> getStorageToPackPo(@PathVariable("id") int poCode, @PathVariable("id1") Boolean withPacked) {
+		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.TOFFEE}, null, null, withPacked? null : PackageType.BULK, new Integer[] {poCode}, null);
 	}
 	@RequestMapping("/getStorageQcPo/{id}")
 	public List<ProcessItemInventory> getStorageQcPo(@PathVariable("id") int poCode) {
 		return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, null, null, new Integer[] {poCode}, null);
 	}
-	@RequestMapping("/getStorageToPackPos/{poCodes}")
-	public List<ProcessItemInventory> getStorageRoastPos(@PathVariable("poCodes") Integer[] poCodes) {
-		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.TOFFEE}, null, null, poCodes, null);
+	@RequestMapping("/getStorageToPackPos/{poCodes}/{id}")
+	public List<ProcessItemInventory> getStorageRoastPos(@PathVariable("poCodes") Integer[] poCodes, @PathVariable("id") Boolean withPacked) {
+		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.TOFFEE}, null, null, withPacked? null : PackageType.BULK, poCodes, null);
 	}
 	
 	@RequestMapping("/getProduction/{id}")

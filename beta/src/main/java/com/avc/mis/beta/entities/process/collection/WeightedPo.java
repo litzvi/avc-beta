@@ -39,7 +39,7 @@ public class WeightedPo extends ProcessInfoEntity {
 	
 //	@Column(nullable = false, precision = 19, scale = MeasureUnit.SCALE)
 //	@NotNull(message = "weight for every po is mandatory") set by code when needed
-	@Column(precision = 19, scale = MeasureUnit.SCALE)
+	@Column(precision = 19, scale = MeasureUnit.DIVISION_SCALE)
 	private BigDecimal weight;
 
 }
