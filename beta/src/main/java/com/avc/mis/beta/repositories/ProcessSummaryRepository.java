@@ -17,6 +17,7 @@ import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.QcCompany;
+import com.avc.mis.beta.entities.item.ProductionUse;
 
 /**
  * @author zvi
@@ -170,9 +171,10 @@ public interface ProcessSummaryRepository {
 			+ "join qc.lifeCycle lc "
 		+ "where (qc.id in :processIds or po_code.id in :poCodeIds) "
 			+ "and (qc.checkedBy = :checkedBy or :checkedBy is null) "
+			+ "and (i.productionUse = :productionUse or :productionUse is null) "
 			+ "and ((:cancelled is true) or (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED)) "
 		+ "order by qc.recordedTime ASC , ti.ordinal ")
-	Stream<ItemQc> findCashewQcItems(int[] processIds, int[] poCodeIds, QcCompany checkedBy, boolean cancelled);
+	Stream<ItemQc> findCashewQcItems(int[] processIds, int[] poCodeIds, QcCompany checkedBy, ProductionUse productionUse, boolean cancelled);
 
 	/**
 	 * Gets loading summary for final report by 'PO code' (also if product is from a combination of other POs besides the given one). 

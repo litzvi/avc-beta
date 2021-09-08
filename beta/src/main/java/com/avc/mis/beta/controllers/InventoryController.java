@@ -159,7 +159,7 @@ public class InventoryController {
 	
 	@RequestMapping("/getCashewInventoryOrder")
 	public List<ItemInventoryAmountWithOrder> getCashewInventoryOrder() {
-		return inventoryReports.getInventoryWithOrderByItem(ItemGroup.PRODUCT);
+		return inventoryReports.getInventoryWithOrderByItem(ItemGroup.PRODUCT, null);
 	}
 	
 	@RequestMapping("/getGeneralInventoryItem")
@@ -186,7 +186,7 @@ public class InventoryController {
 	
 	@RequestMapping("/getGeneralInventoryOrder")
 	public List<ItemInventoryAmountWithOrder> getGeneralInventoryOrder() {
-		return inventoryReports.getInventoryWithOrderByItem(ItemGroup.GENERAL);
+		return inventoryReports.getInventoryWithOrderByItem(ItemGroup.GENERAL, null);
 	}
 	
 	@RequestMapping("/getPoCashewCodesInventory")

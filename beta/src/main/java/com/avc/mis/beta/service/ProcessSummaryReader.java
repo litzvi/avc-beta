@@ -54,7 +54,7 @@ public class ProcessSummaryReader {
 
 	public InventoryReportLine getInventorySummary(@NonNull Integer poCodeId) {
 		List<ItemAmount> inventory = getInventoryRepository().findInventoryItemAmounts(
-				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, false, null, ItemGroup.PRODUCT, null, poCodeId);
+				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, false, null, ItemGroup.PRODUCT, null, poCodeId, null);
 		
 		List<ProcessStateInfo> processes = getProcessSummaryRepository().findProcessReportLines(ProcessName.PRODUCT_USE, poCodeId, false);
 		int[] processIds = processes.stream().mapToInt(ProcessStateInfo::getId).toArray();
@@ -155,7 +155,7 @@ public class ProcessSummaryReader {
 			return null;
 		}
 		
-		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(processIds, new int[] {}, null, false);
+		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(processIds, new int[] {}, null, null, false);
 		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getProcessId));
 		
 		for(QcReportLine line: lines) {
@@ -193,7 +193,7 @@ public class ProcessSummaryReader {
 		Map<Integer, List<ItemAmountWithPo>> amountsMap = getInventoryRepository().findProductsByPos(poCodeIds)
 				.collect(Collectors.groupingBy(ItemAmountWithPo::getPoCodeId));
 		
-		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, false);
+		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, null, false);
 		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getPoCodeId));
 
 		for(SupplierQualityRow row: rows) {

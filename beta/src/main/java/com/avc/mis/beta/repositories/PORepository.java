@@ -110,8 +110,10 @@ public interface PORepository extends PoProcessRepository<PO> {
 				+ " - "
 				+ "coalesce(SUM("
 					+ "CASE "
-						+ "WHEN rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.FINAL THEN null  "
-						+ "ELSE (rou.amount * rou_uom.multiplicand / rou_uom.divisor) " 
+						+ "WHEN (:pointOfTime is null or r.recordedTime <= :pointOfTime) "
+							+ "and rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+						+ "THEN (rou.amount * rou_uom.multiplicand / rou_uom.divisor) "
+						+ "ELSE null " 
 					+ "END), "
 				+ "0)) * uom.multiplicand / uom.divisor) "
 		+ "from PO po "
@@ -134,16 +136,20 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
 //			+ "and (rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+			+ "and (:pointOfTime is null "
+				+ "or po.recordedTime <= :pointOfTime) "
 		+ "group by oi, units "
 		+ "having coalesce("
 			+ "SUM("
 				+ "CASE "
-					+ "WHEN rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.FINAL THEN null  "
-					+ "ELSE (rou.amount * rou_uom.multiplicand / rou_uom.divisor) " 
+					+ "WHEN (:pointOfTime is null or r.recordedTime <= :pointOfTime) "
+						+ "and rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+					+ "THEN (rou.amount * rou_uom.multiplicand / rou_uom.divisor) "
+					+ "ELSE null " 
 				+ "END), "
 //				+ "(rou.amount * rou_uom.multiplicand / rou_uom.divisor)), "
 			+ "0) < units.amount ")
-	List<ItemAmount> findOpenOrPendingReceiptOrdersItemAmounts(ProcessName orderType, ItemGroup itemGroup);
+	List<ItemAmount> findOpenOrPendingReceiptOrdersItemAmounts(ProcessName orderType, ItemGroup itemGroup, LocalDateTime pointOfTime);
 
 	/**
 	 * Gets rows of all orders (history) for the given order type with their order status. 

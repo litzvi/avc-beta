@@ -7,41 +7,48 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Currency;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.report.ItemAmountWithPo;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 /**
  * @author zvi
  *
  */
-@Value
-public class ReceiptInventoryRow {
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class ReceiptInventoryRow extends BasicDTO {
 
-	String supplier;
-//	CashewItemDTO cashewItem;
-	String productCompany;
-	String item;
-	String poCode;
-	LocalDateTime receiptDate;
-	ProductionFunctionality productionFunctionality;
-	String[] bags;
-	AmountWithUnit amount;
-	String[] warehouses;
-	AmountWithCurrency unitPrice;
-	Currency currency;
-	ProcessStatus status;
+	private String supplier;
+//	private CashewItemDTO cashewItem;
+	private String productCompany;
+	private String item;
+	private String poCode;
+	private LocalDateTime receiptDate;
+	private ProductionFunctionality productionFunctionality;
+	private String[] bags;
+	private AmountWithUnit amount;
+	private String[] warehouses;
+	private AmountWithCurrency unitPrice;
+	private Currency currency;
+	private ProcessStatus status;
 
+	private BigDecimal rawDefectsAndDamage;
 		
-	public ReceiptInventoryRow(String supplier, String productCompany, 
+	public ReceiptInventoryRow(Integer poCodeId, String supplier, String productCompany, 
 			String item,
 //			Integer itemId, String itemValue, 
 //			String itemCode, String itemBrand, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, ProductionUse itemProductionUse, 
@@ -52,7 +59,7 @@ public class ReceiptInventoryRow {
 			BigDecimal amount, MeasureUnit measureUnit,
 			String warehouses, 
 			AmountWithCurrency unitPrice, Currency currency, ProcessStatus status) {
-		super();
+		super(poCodeId);
 		this.supplier = supplier;
 		this.productCompany = productCompany;
 		this.item = item;

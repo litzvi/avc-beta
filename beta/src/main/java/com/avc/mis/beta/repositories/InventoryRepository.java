@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
@@ -171,11 +172,21 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 				+ " * "
 				+ "(CASE "
 					+ "WHEN ui is null THEN sf.numberUnits "
-					+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+					+ "WHEN (used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+							+ "and (:pointOfTime is null or used_p.recordedTime <= :pointOfTime)) "
 						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
 					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
 				+ "END) "
 			+ " ) AS balance, "
+//			+ "SUM((coalesce(sf.unitAmount, 1) * uom.multiplicand / uom.divisor) "
+//				+ " * "
+//				+ "(CASE "
+//					+ "WHEN ui is null THEN sf.numberUnits "
+//					+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+//						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
+//					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
+//				+ "END) "
+//			+ " ) AS balance, "
 			+ "coalesce(w_po.weight, 1)) "
 		+ "from ProcessItem pi "
 			+ "left join ReceiptItem ri "
@@ -212,6 +223,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (item.id = :itemId or :itemId is null) "
 			+ "and (po_code.id = :poCodeId or :poCodeId is null) "
+			+ "and (:pointOfTime is null "
+				+ "or (p.recordedTime <= :pointOfTime and sf_p.recordedTime <= :pointOfTime)) "
 			+ "and"
 				+ "(sf.numberUnits > "
 					+ "coalesce("
@@ -220,7 +233,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 							+ "join usedStorage.group usedGroup "
 								+ "join usedGroup.process usedProcess "
 									+ "join usedProcess.lifeCycle usedLc "
-						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+							+ "and (:pointOfTime is null or usedProcess.recordedTime <= :pointOfTime)) "
 					+ ", 0)"
 				+ ") "
 		+ "group by item "
@@ -230,7 +244,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	List<ItemAmount> findInventoryItemAmounts(
 			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
-			ItemGroup itemGroup, Integer itemId, Integer poCodeId);
+			ItemGroup itemGroup, Integer itemId, Integer poCodeId, 
+			LocalDateTime pointOfTime);
 	
 	/**
 	 * INVENTORY FOR CHECKING LOSS OF SUPPLIER'S POS
@@ -360,17 +375,18 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 							+ "join usedStorage.group usedGroup "
 								+ "join usedGroup.process usedProcess "
 									+ "join usedProcess.lifeCycle usedLc "
-						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
+						+ "where usedLc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+							+ "and (:pointOfTime is null or usedProcess.recordedTime <= :pointOfTime)) "
 					+ ", 0)"
 				+ ") "
 		+ "group by pi, w_po "
-		+ "order by r.recordedTime, p.recordedTime " 
+//		+ "order by r.recordedTime, p.recordedTime " 
 		+ "")
 	List<ProcessItemInventoryRow> findInventoryProcessItemRows(
 			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			ItemGroup itemGroup, Integer itemId, Integer poCodeId, 
-			LocalDateTime pointOfTime);
+			LocalDateTime pointOfTime, Sort sort);
 
 	/**
 	 * ITEMS THAT HAVE AVAILABLE INVENTORY
@@ -571,7 +587,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	 * LIST OF INVENTORY POS FOR REPORT, including price and bags. (Used for raw material inventory)
 	 */
 	@Query("select new com.avc.mis.beta.service.report.row.ReceiptInventoryRow( "
-			+ "s.name, pc.name, "
+			+ "po_code.id, s.name, pc.name, "
 			+ "item.value, "
 //			+ "item.id, item.value, item.code, item.brand, item.measureUnit, "
 //			+ "item.itemGroup, item.productionUse, item.unit, type(item), "

@@ -44,7 +44,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 						+ "ELSE 1 "
 					+ "END) "
 					+ "or :packageTypeOrdinal is null) "
-			+ "order by i.value ")
+			+ "order by i.productionUse, i.code, i.value ")
 	List<ItemDTO> findItemsByGroupBasic(ItemGroup itemGroup, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			Integer packageTypeOrdinal);
@@ -69,7 +69,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 				+ "END) "
 				+ "or :packageTypeOrdinal is null) "
 //			+ "and i.numBags >= :minBagsInBox "
-		+ "order by i.brand, i.code, i.value ")
+		+ "order by i.productionUse, i.brand, i.code, i.value ")
 	List<CashewItemDTO> findCashewItems(ItemGroup itemGroup, ProductionUse productionUse, Integer gradeId, Integer packageTypeOrdinal);
 
 	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
@@ -77,7 +77,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 			+ "where (i.itemGroup = :itemGroup or :itemGroup is null)"
 				+ "and (i.productionUse = :productionUse or :productionUse is null)"
 				+ "and i.active = true "
-			+ "order by i.value ")
+			+ "order by i.productionUse, i.code, i.value ")
 	List<BasicValueEntity<Item>> findBasicItems(ItemGroup itemGroup, ProductionUse productionUse);
 
 	@Query("select new com.avc.mis.beta.dto.basic.ProductionLineBasic(t.id, t.value, t.productionFunctionality) "
@@ -96,6 +96,6 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 					+ "join i.unit u "
 		+ "where s.id in :storageIds "
 		+ "group by i ")
-	List<ItemWithUnitDTO>  findStoragesItems(Set<Integer> storageIds);
+	List<ItemWithUnitDTO> findStoragesItems(Set<Integer> storageIds);
 		
 }

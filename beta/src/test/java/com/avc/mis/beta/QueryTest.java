@@ -400,10 +400,10 @@ public class QueryTest {
 
 		poCodes.forEach(c -> System.out.println(processSummaryReader.getFinalReport(c.getId())));
 				
-		List<ItemInventoryAmountWithOrder> inventoryWithOrder = inventoryReports.getInventoryWithOrderByItem(ItemGroup.GENERAL);	
+		List<ItemInventoryAmountWithOrder> inventoryWithOrder = inventoryReports.getInventoryWithOrderByItem(ItemGroup.GENERAL, null);	
 		inventoryWithOrder.forEach(i -> System.out.println(i));
 
-		inventoryWithOrder = inventoryReports.getInventoryWithOrderByItem(ItemGroup.PRODUCT);	
+		inventoryWithOrder = inventoryReports.getInventoryWithOrderByItem(ItemGroup.PRODUCT, null);	
 		inventoryWithOrder.forEach(i -> System.out.println(i));
 		
 		List<ShipmentCodeBasic> shipmentCodes = objectTablesReader.findFreeShipmentCodes();

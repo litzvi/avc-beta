@@ -1,112 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="com.avc.mis.beta.entities.item.CashewItem" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/item/CashewItem.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="914" y="584"/>    
+  <enumeration id="1" language="java" name="com.avc.mis.beta.entities.enums.SaltLevel" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/enums/SaltLevel.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="509" y="571"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
-  </class>  
+  </enumeration>  
   <class id="2" language="java" name="com.avc.mis.beta.entities.item.Item" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/entities/item/Item.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="907" y="170"/>    
+    <position height="-1" width="-1" x="897" y="164"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <enumeration id="3" language="java" name="com.avc.mis.beta.entities.item.ItemGroup" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/item/ItemGroup.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="492" y="159"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </enumeration>  
-  <enumeration id="4" language="java" name="com.avc.mis.beta.entities.item.ProductionUse" project="beta" 
+  <enumeration id="3" language="java" name="com.avc.mis.beta.entities.item.ProductionUse" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/entities/item/ProductionUse.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1398" y="165"/>    
+    <position height="-1" width="-1" x="1329" y="165"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </enumeration>  
-  <enumeration id="5" language="java" name="com.avc.mis.beta.entities.enums.SaltLevel" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/enums/SaltLevel.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="502" y="584"/>    
+  <enumeration id="4" language="java" name="com.avc.mis.beta.entities.item.ItemGroup" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/item/ItemGroup.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="518" y="163"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </enumeration>  
-  <enumeration id="6" language="java" name="com.avc.mis.beta.entities.enums.CashewGrade" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/enums/CashewGrade.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1333" y="583"/>    
+  <class id="5" language="java" name="com.avc.mis.beta.entities.item.CashewItem" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/item/CashewItem.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="897" y="569"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
-  </enumeration>  
-  <association id="7">    
+  </class>  
+  <association id="6">    
+    <end type="SOURCE" refId="5" navigable="false">      
+      <attribute id="7" name="saltLevel"/>      
+      <multiplicity id="8" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="1" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <generalization id="9">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="2"/>  
+  </generalization>  
+  <association id="10">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="8" name="itemGroup">        
-        <position height="0" width="0" x="17" y="-233"/>      
-      </attribute>      
-      <multiplicity id="9" minimum="0" maximum="1">        
-        <position height="0" width="0" x="17" y="-233"/>      
-      </multiplicity>    
+      <attribute id="11" name="productionUse"/>      
+      <multiplicity id="12" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="10">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="11" name="grade">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="12" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="6" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
   <association id="13">    
     <end type="SOURCE" refId="2" navigable="false">      
-      <attribute id="14" name="productionUse">        
-        <position height="0" width="0" x="35" y="-219"/>      
-      </attribute>      
-      <multiplicity id="15" minimum="0" maximum="1">        
-        <position height="0" width="0" x="35" y="-219"/>      
-      </multiplicity>    
+      <attribute id="14" name="itemGroup"/>      
+      <multiplicity id="15" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="16">    
-    <end type="SOURCE" refId="1" navigable="false">      
-      <attribute id="17" name="saltLevel">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="18" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="19">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="2"/>  
-  </generalization>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    
