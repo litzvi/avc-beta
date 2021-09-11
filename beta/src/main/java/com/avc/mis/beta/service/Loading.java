@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
@@ -50,7 +51,7 @@ public class Loading {
 	 * @param loading container loading with all required details
 	 * @throws IllegalArgumentException if used items don't match current inventory.
 	 */
-	@Transactional(rollbackFor = Throwable.class, readOnly = false) 
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE) 
 	public void addLoading(ContainerLoading loading) {
 		loading.setProcessType(dao.getProcessTypeByValue(ProcessName.CONTAINER_LOADING));
 		if(loading.getProductionLine() == null || 
@@ -109,7 +110,7 @@ public class Loading {
 	 * 
 	 * @param loading ContainerLoading updated with edited state
 	 */
-	@Transactional(rollbackFor = Throwable.class, readOnly = false) 
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE) 
 	public void editLoading(ContainerLoading loading) {
 		if(loading.getProductionLine() == null || 
 				containerLoadingRepository.findFunctionalityByProductionLine(loading.getProductionLine().getId()) != ProductionFunctionality.LOADING) {

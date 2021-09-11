@@ -716,9 +716,9 @@ public class ProcessInfoDAO extends DAO {
 		return true;
 	}
 	
-	public boolean isPoCodeReceived(Integer poCodeId) {
-		return getObjectTablesRepository().isPoCodeReceived(poCodeId);
-	}
+//	public boolean isPoCodeReceived(Integer poCodeId) {
+//		return getObjectTablesRepository().isPoCodeReceived(poCodeId);
+//	}
 
 	public ProgramSequence getSequnce(SequenceIdentifier sequenceIdentifier) {
 		return getObjectTablesRepository().findSequence(sequenceIdentifier);

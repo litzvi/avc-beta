@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
@@ -50,36 +51,36 @@ public class Receipts {
 	@Autowired private ReceiptRepository receiptRepository;	
 	@Autowired private PORepository poRepository;
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addCashewReceipt(Receipt receipt) {
 		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT));
 		addReceipt(receipt, PoCode.class);
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addCashewOrderReceipt(Receipt receipt) {
-		//check that there wasn't another receipt for the same po
-		if(dao.isPoCodeReceived(receipt.getPoCode().getId())) {
-			throw new IllegalArgumentException("Po Code of Product can only be received once, "
-					+ "in order to correctly reference receipt date by po code");
-		}
+		//check that there wasn't another receipt for the same po - removed because can receive in parts
+//		if(dao.isPoCodeReceived(receipt.getPoCode().getId())) {
+//			throw new IllegalArgumentException("Po Code of Product can only be received once, "
+//					+ "in order to correctly reference receipt date by po code");
+//		}
 		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT));
 		addOrderReceipt(receipt);
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addGeneralReceipt(Receipt receipt) {
 		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_RECEIPT));
 		addReceipt(receipt, GeneralPoCode.class);
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addGeneralOrderReceipt(Receipt receipt) {
 		receipt.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_RECEIPT));
 		addOrderReceipt(receipt);
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	private void addOrderReceipt(Receipt receipt) {
 		//checks if order item was already fully received(even if pending)
 		if(!isOrderOpen(receipt.getReceiptItems())) {
@@ -88,7 +89,7 @@ public class Receipts {
 		dao.addPoProcessEntity(receipt);
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	private <T extends BasePoCode> void addReceipt(Receipt receipt, Class<T> clazz) {
 		//using save rather than persist in case POid was assigned by user
 //		dao.addEntityWithFlexibleGenerator(receipt.getPoCode());
@@ -103,7 +104,7 @@ public class Receipts {
 		
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addExtra(ExtraAdded[] added, Integer receiptItemId) {
 		Ordinal.setOrdinals(added);
 		Arrays.stream(added).forEach(r -> dao.addEntity(r, ReceiptItem.class, receiptItemId));
@@ -130,7 +131,7 @@ public class Receipts {
 		return receiptDTO;
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editReceipt(Receipt receipt) {
 		dao.checkRemovingUsedProduct(receipt);		
 		dao.editPoProcessEntity(receipt);

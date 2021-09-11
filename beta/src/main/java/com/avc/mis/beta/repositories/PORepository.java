@@ -95,9 +95,12 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "join po.lifeCycle lc "
 			+ "left join po.approvals approval "
 				+ "left join approval.user u "
-		+ "where po.id = :processId or po_code.id = :poCodeId "
-			+ "and (:processId is null or :poCodeId is null) "
+		+ "where ((po.id = :processId and :poCodeId is null) "
+				+ "or (:processId is null and  po_code.id = :poCodeId)) "
 			+ "and lc.processStatus in :statuses "
+//		+ "where po.id = :processId or po_code.id = :poCodeId "
+//			+ "and (:processId is null or :poCodeId is null) "
+//			+ "and lc.processStatus in :statuses "
 		+ "group by po "
 		+ "order by lc.processStatus ")
 	Optional<PoDTO> findOrderById(Integer processId, Integer poCodeId, ProcessStatus[] statuses);

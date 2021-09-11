@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
@@ -43,7 +44,7 @@ public class StorageRelocations {
 		
 	@Autowired private StorageRelocationRepository relocationRepository;
 
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addStorageRelocation(StorageRelocation relocation) {
 		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
 		dao.setStorageMovesProcessItem(relocation.getStorageMovesGroups());
@@ -76,7 +77,7 @@ public class StorageRelocations {
 		return relocationDTO;
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editStorageRelocation(StorageRelocation relocation) {
 		dao.setStorageMovesProcessItem(relocation.getStorageMovesGroups());
 		

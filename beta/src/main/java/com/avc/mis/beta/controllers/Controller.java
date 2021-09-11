@@ -72,9 +72,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * @author Zvi
  *
- *aws_access_key_id=AKIA4VPSAJVE5SWRKUBW
-	aws_secret_access_key=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
-
+ *
  */
 @RestController
 @RequestMapping(path = "/api")

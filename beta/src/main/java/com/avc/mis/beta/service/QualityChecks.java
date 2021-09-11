@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
@@ -38,13 +39,13 @@ public class QualityChecks {
 	@Autowired private ProcessReader processReader;
 	
 				
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addCashewReceiptCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT_QC));
 		dao.addPoProcessEntity(check);
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addRoastedCashewCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.ROASTED_CASHEW_QC));
 		dao.addPoProcessEntity(check);
@@ -67,7 +68,7 @@ public class QualityChecks {
 		return qualityCheckDTO;
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editCheck(QualityCheck check) {
 		dao.editGeneralProcessEntity(check);
 	}

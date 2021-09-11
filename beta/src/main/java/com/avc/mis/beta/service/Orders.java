@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
@@ -46,7 +47,7 @@ public class Orders {
 	 * @param po Cashew purchase order with all required details
 	 * @throws IllegalArgumentException if supplier or order items aren't set.
 	 */
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addCashewOrder(PO po) {
 		po.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_ORDER));
 		if(po.getPoCode() == null) {
@@ -65,7 +66,7 @@ public class Orders {
 	 * @param po General purchase order with all required details
 	 * @throws IllegalArgumentException if supplier or order items aren't set.
 	 */
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addGeneralOrder(PO po) {		
 		po.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_ORDER));
 		if(po.getPoCode() == null) {
@@ -127,7 +128,7 @@ public class Orders {
 	 * Ignores changed non editable fields.
 	 * @param po PO updated with edited state
 	 */
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editOrder(PO po) {
 		dao.editGeneralProcessEntity(po);
 	}
@@ -165,7 +166,7 @@ public class Orders {
 	}
 	
 	
-//	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+//	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 //	private void addOrder(PO po) {
 //		//using save rather than persist in case POid was assigned by user
 ////		dao.addEntityWithFlexibleGenerator(po.getPoCode());

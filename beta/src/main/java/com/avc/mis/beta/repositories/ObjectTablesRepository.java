@@ -196,14 +196,14 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 		+ "order by s_code.id desc ")
 	List<ShipmentCodeBasic> findFreeShipmentCodes(Integer shipmentCodeId);
 
-	@Query("select count(*) > 0 "
-		+ "from PoCode po_code "
-			+ "join Receipt r "
-				+ "on r.poCode = po_code "
-				+ "join r.lifeCycle lc "
-		+ "where po_code.id = :poCodeId "
-			+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED ")
-	boolean isPoCodeReceived(Integer poCodeId);
+//	@Query("select count(*) > 0 "
+//		+ "from PoCode po_code "
+//			+ "join Receipt r "
+//				+ "on r.poCode = po_code "
+//				+ "join r.lifeCycle lc "
+//		+ "where po_code.id = :poCodeId "
+//			+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED ")
+//	boolean isPoCodeReceived(Integer poCodeId);
 
 	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "

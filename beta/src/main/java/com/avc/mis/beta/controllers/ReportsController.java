@@ -69,9 +69,6 @@ public class ReportsController {
 	private Receipts receipts;
 	
 	@Autowired
-	private Samples samplesControl;
-	
-	@Autowired
 	private QualityChecks qualityChecks;
 	
 	@Autowired
@@ -91,9 +88,6 @@ public class ReportsController {
 	
 	@Autowired
 	private ContainerArrivals containerArrivals;
-	
-	@Autowired
-	private ProcessInfoReader processInfoReader;
 	
 	@Autowired
 	private ObjectTablesReader objectTableReader;
@@ -238,6 +232,8 @@ public class ReportsController {
 		return productionProcessReports.getProductionProcessesByType(null, begin, end);
 	}
 	
+	
+	
 //	@RequestMapping("/getCashewInventoryPacked")
 //	public List<ItemInventoryRow> getCashewInventoryPacked() {
 //		List<ItemInventoryRow> allInventoryItem = inventoryReports.getInventoryTableByItem(ItemGroup.PRODUCT);
@@ -287,6 +283,11 @@ public class ReportsController {
 	@RequestMapping("/getCashewInventoryBagged")
 	public List<CashewBaggedInventoryRow> getCashewInventoryBagged(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
 		return inventoryReports.getCashewBaggedInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.PACKED}, date);
+	}
+	
+	@RequestMapping("/getGeneralInventoryByTime")
+	public List<ItemInventoryRow> getGeneralInventoryByTime(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+		return inventoryReports.getInventoryTableByItem(ItemGroup.GENERAL, date);
 	}
 	
 	@RequestMapping("/getCashewExportReport")

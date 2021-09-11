@@ -163,7 +163,7 @@ public class InventoryReports {
 				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, itemGroup, pointOfTime);
 		int[] poCodeIds = rows.stream().mapToInt(ReceiptInventoryRow::getId).toArray();
 		
-		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, ProductionUse.RAW_KERNEL, false);
+		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, ProductionUse.ROAST, false);
 		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getPoCodeId));
 
 		for(ReceiptInventoryRow row: rows) {

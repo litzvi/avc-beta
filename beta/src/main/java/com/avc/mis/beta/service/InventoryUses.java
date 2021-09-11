@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
@@ -47,7 +48,7 @@ public class InventoryUses {
 	@Autowired private ValueTablesRepository valueTablesRepository;
 	@Autowired private ProcessReader processReader;
 
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addGeneralInventoryUse(InventoryUse inventoryUse) {
 		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_USE));
 		if(inventoryUse.getProductionLine() == null || 
@@ -67,7 +68,7 @@ public class InventoryUses {
 		dao.checkRelocationBalance(inventoryUse);
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addProductInventoryUse(InventoryUse inventoryUse) {
 		inventoryUse.setProcessType(dao.getProcessTypeByValue(ProcessName.PRODUCT_USE));
 		if(inventoryUse.getProductionLine() == null || 
@@ -109,7 +110,7 @@ public class InventoryUses {
 		return inventoryUseDTO;
 	}
 
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editGeneralInventoryUse(InventoryUse inventoryUse) {
 		if(inventoryUse.getProductionLine() == null || 
 				inventoryUseRepository.findFunctionalityByProductionLine(inventoryUse.getProductionLine().getId()) != ProductionFunctionality.GENERAL_USE) {
@@ -136,7 +137,7 @@ public class InventoryUses {
 
 	}
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editProductInventoryUse(InventoryUse inventoryUse) {
 		if(inventoryUse.getProductionLine() == null || 
 				inventoryUseRepository.findFunctionalityByProductionLine(inventoryUse.getProductionLine().getId()) != ProductionFunctionality.PRODUCT_USE) {

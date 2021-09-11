@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
@@ -41,7 +42,7 @@ public class ProductionProcesses implements ProductionProcessService {
 		
 		
 	@Override
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addProductionProcess(ProductionProcess process, ProcessName processName) {
 		process.setProcessType(dao.getProcessTypeByValue(processName));
 		dao.addTransactionProcessEntity(process);	
@@ -63,7 +64,7 @@ public class ProductionProcesses implements ProductionProcessService {
 		return processDTO;
 	}
 		
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	@Override
 	public void editProductionProcess(ProductionProcess process) {
 		dao.checkRemovingUsedProduct(process);

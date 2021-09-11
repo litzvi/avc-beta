@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
@@ -209,7 +210,7 @@ public class WarehouseManagement {
 	@Autowired private InventoryUses inventoryUseService;
 	@Autowired private InventoryUseReports inventoryUseReports;
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addGeneralInventoryUse(InventoryUse inventoryUse) {
 		getInventoryUseService().addGeneralInventoryUse(inventoryUse);
 	}	
@@ -219,7 +220,7 @@ public class WarehouseManagement {
 		return getInventoryUseService().getInventoryUse(processId);
 	}
 		
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editGeneralInventoryUse(InventoryUse inventoryUse) {
 		getInventoryUseService().editGeneralInventoryUse(inventoryUse);
 	}
@@ -237,7 +238,7 @@ public class WarehouseManagement {
 	@Autowired private StorageRelocations relocationService;
 	@Autowired private StorageRelocationReports relocationReports;
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addStorageRelocation(StorageRelocation relocation) {
 		getRelocationService().addStorageRelocation(relocation);
 	}
@@ -246,7 +247,7 @@ public class WarehouseManagement {
 		return getRelocationService().getStorageRelocation(processId);
 	}
 
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editStorageRelocation(StorageRelocation relocation) {
 		getRelocationService().editStorageRelocation(relocation);
 	}
@@ -273,7 +274,7 @@ public class WarehouseManagement {
 	 * @param transfer StorageTransfer entity object
 	 */
 	@Deprecated
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addStorageTransfer(StorageTransfer transfer) {
 		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
 		dao.addTransactionProcessEntity(transfer);
@@ -350,7 +351,7 @@ public class WarehouseManagement {
 	}
 	
 	
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editStorageTransfer(StorageTransfer transfer) {
 		//check used items amounts don't exceed the storage amounts
 		dao.checkRemovingUsedProduct(transfer);
