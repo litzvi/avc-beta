@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.exportdoc.ContainerPoItemRow;
@@ -15,6 +16,8 @@ import com.avc.mis.beta.dto.exportdoc.ExportInfo;
 import com.avc.mis.beta.dto.process.collection.LoadedItemDTO;
 import com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.view.LoadingRow;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 
@@ -142,7 +145,7 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 	@Query("select new com.avc.mis.beta.dto.exportdoc.ContainerPoItemStorageRow( "
 			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
+//			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "sf.unitAmount, pi.measureUnit, "
 			+ "sum(sf.numberUnits * coalesce(w_po.weight, 1)), "
@@ -167,7 +170,7 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 								+ "left join used_p.poCode p_po_code "
 								+ "left join used_p.weightedPos w_po "
 									+ "left join w_po.poCode w_po_code "
-								+ "left join PoCode po_code "
+								+ "left join BasePoCode po_code "
 									+ "on (po_code = p_po_code or po_code = w_po_code) "
 									+ "left join po_code.contractType t "
 									+ "left join po_code.supplier s "
@@ -206,16 +209,22 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 								+ "left join used_p.poCode p_po_code "
 								+ "left join used_p.weightedPos w_po "
 									+ "left join w_po.poCode w_po_code "
-								+ "left join PoCode po_code "
+								+ "left join BasePoCode po_code "
 									+ "on (po_code = p_po_code or po_code = w_po_code) "
 									+ "left join po_code.contractType t "
 									+ "left join po_code.supplier s "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
-			+ "and type(item) = com.avc.mis.beta.entities.item.CashewItem "
+//			+ "and type(item) = com.avc.mis.beta.entities.item.CashewItem "
+			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
+			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:startTime is null or p.recordedTime >= :startTime) "
 			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by p.id, item.itemGroup, item, po_code, pi.measureUnit "
-		+ "order by p.recordedTime, item.itemGroup, item ")	
-	List<CashewExportReportRow> findCashewExportReportRows(LocalDateTime startTime, LocalDateTime endTime);
+//		+ "order by p.recordedTime, item.itemGroup, item "
+		)	
+	List<CashewExportReportRow> findCashewExportReportRows(
+			boolean checkProductionUses, ProductionUse[] productionUses,
+			ItemGroup itemGroup, 
+			LocalDateTime startTime, LocalDateTime endTime, Sort sort);
 
 }

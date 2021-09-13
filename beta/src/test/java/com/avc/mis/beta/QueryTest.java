@@ -117,7 +117,7 @@ public class QueryTest {
 	@Autowired LoadingReports loadingReports;
 	@Autowired ContainerArrivals containerArrivals;
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void queryTest() {
 
@@ -440,7 +440,7 @@ public class QueryTest {
 
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void oneQueryTest() {
 		
@@ -456,8 +456,15 @@ public class QueryTest {
 		System.out.println("size:" + activeGeneralBasic.size());
 		activeGeneralBasic.forEach(row -> System.out.println(row));
 		
-		List<ReceiptInventoryRow> receiptInventoryRows = inventoryReports.getReceiptInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.RAW_KERNEL}, 
-				LocalDateTime.now());
+		List<ReceiptInventoryRow> receiptInventoryRows = null;
+		try {
+			receiptInventoryRows = inventoryReports.getReceiptInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.RAW_KERNEL}, 
+					LocalDateTime.now());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 //				LocalDateTime.of(2021, 5, 1, 0, 0));
 		receiptInventoryRows.forEach(row -> {System.out.println(row); });
 		
@@ -524,17 +531,30 @@ public class QueryTest {
 		userMessages = processInfoReader.getAllMessages(null, null, Instant.parse("2021-07-07T09:42:30.680Z"), null, 4);
 		userMessages.forEach(m -> System.out.println(m));
 		
-		
-
-	}
-	
-//	@Disabled
-	@Test
-	void newTest() {				
 		List<TaskRow> tasks = processInfoReader.getTaskRows(new ProcessStatus[] {ProcessStatus.PENDING}, null, null);
 		tasks.forEach(i -> System.out.println(i));
 		int numTasks = processInfoReader.getUserTasksNumber(new ProcessStatus[] {ProcessStatus.PENDING}, 
 				new DecisionType[] {DecisionType.EDIT_NOT_ATTENDED, DecisionType.NOT_ATTENDED});
 		System.out.println(numTasks);
+
+		List<CashewBaggedInventoryRow> loadedBagged = loadingReports.getCashewBaggedExportReportRows(
+				ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.PACKED}, null, null);
+		loadedBagged.forEach(i -> System.out.println(i));
+	}
+	
+//	@Disabled
+	@Test
+	void newTest() {				
+		List<ProcessRow> processReport;
+		try {
+			processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_CLEANING);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			throw e2;
+		}
+		processReport.forEach(i -> System.out.println(i));
+		
+
 	}
 }

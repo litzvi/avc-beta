@@ -24,7 +24,7 @@ public class ContainerPoItemStorageRow {
 
 	@JsonIgnore
 	ItemWithUnit itemWithUnit;
-	PoCodeBasic poCode;
+//	PoCodeBasic poCode;
 	String[] poCodes;
 	AmountWithUnit unitAmount;
 	BigDecimal numberUnits;
@@ -33,15 +33,15 @@ public class ContainerPoItemStorageRow {
 	public ContainerPoItemStorageRow(
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz,  
-			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,  
+//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,  
 			String poCodes,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal numberBoxes) {
 		super();
 		this.itemWithUnit = new ItemWithUnit(itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz);
-		if(poCodeId != null)
-			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
-		else
-			this.poCode = null;
+//		if(poCodeId != null)
+//			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
+//		else
+//			this.poCode = null;
 		if(poCodes != null)
 			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
 		else

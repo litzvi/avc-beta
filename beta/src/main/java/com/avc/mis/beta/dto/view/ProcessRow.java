@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -45,13 +46,18 @@ public class ProcessRow extends BasicDTO {
 
 
 	private String processName;
+	private String productionLine;
 //	private PoCodeBasic poCode;//should be removed
 	private int[] poCodeIds;
 	private String[] poCodes;
 	private String[] suppliers;
 //	private String supplierName;//should be removed
 	private LocalDateTime recordedTime;
+	private LocalTime startTime;
+	private LocalTime endTime;
 	private Duration duration;
+//	private Duration downTime;
+	private Integer numOfWorkers;
 	private ProcessStatus status;
 	private String[] approvals;
 	private String remarks;
@@ -65,12 +71,15 @@ public class ProcessRow extends BasicDTO {
 	private List<ProductionProcessWithItemAmount> itemCounts;
 	@JsonIgnore private Optional<AmountWithUnit> countAmounts;
 	
-	public ProcessRow(@NonNull Integer id, String processType, 
+	public ProcessRow(@NonNull Integer id, String processName, String productionLine, 
 //			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			String poCodeIds, String poCodes, String suppliers,
-			LocalDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, String remarks) {
+			LocalDateTime recordedTime, 
+			LocalTime startTime, LocalTime endTime, Duration duration, Integer numOfWorkers, 
+			ProcessStatus status, String approvals, String remarks) {
 		super(id);
-		this.processName = processType;
+		this.processName = processName;
+		this.productionLine = productionLine;
 //		if(poCodeId != null)
 //			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		if(poCodeIds != null)
@@ -81,7 +90,10 @@ public class ProcessRow extends BasicDTO {
 			this.suppliers = Stream.of(suppliers.split(",")).toArray(String[]::new);
 //		this.supplierName = supplierName;
 		this.recordedTime = recordedTime;
+		this.startTime = startTime;
+		this.endTime = endTime;
 		this.duration = duration;
+		this.numOfWorkers = numOfWorkers;
 		this.status = status;
 		if(approvals == null || approvals.startsWith(":")) {
 			this.approvals = null;

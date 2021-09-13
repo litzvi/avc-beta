@@ -1,6 +1,8 @@
 package com.avc.mis.beta.repositories;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -60,11 +62,13 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 	Optional<GeneralProcessInfo> findGeneralProcessInfoByProcessId(int processId, Class<? extends T> clazz);
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
-			+ "p.id, pt.value, "
+			+ "p.id, pt.value, p_line.value, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', po_code.id)), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
-			+ "p.recordedTime, p.duration, lc.processStatus, "
+			+ "p.recordedTime, "
+			+ "p.startTime, p.endTime, p.duration, p.numOfWorkers, "
+			+ "lc.processStatus, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(u.username, ': ', approval.decision))), p.remarks) "
 		+ "from PoProcess p "
 			+ "left join p.poCode p_po_code "

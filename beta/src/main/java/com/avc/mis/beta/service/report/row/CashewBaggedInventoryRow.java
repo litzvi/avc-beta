@@ -85,6 +85,40 @@ public class CashewBaggedInventoryRow {
 		this.weightCoefficient = weightCoefficient;
 	}
 	
+	public CashewBaggedInventoryRow(ItemWithUnitDTO item, String brand, String code, boolean whole, boolean roast,
+			boolean toffee, BasicValueEntity<CashewGrade> grade, AmountWithUnit bagSize, SaltLevel saltLevel,
+			int bagsInBox, AmountWithUnit totalAmount, BigDecimal weightCoefficient) {
+		super();
+		this.item = item;
+		this.brand = brand;
+		this.code = code;
+		this.whole = whole;
+		this.roast = roast;
+		this.toffee = toffee;
+		this.grade = grade;
+		this.bagSize = bagSize;
+		this.saltLevel = saltLevel;
+		this.bagsInBox = bagsInBox;
+		this.totalAmount = totalAmount;
+		this.weightCoefficient = weightCoefficient;
+	}
+	
+	public CashewBaggedInventoryRow(CashewBaggedInventoryRow row) {
+		super();
+		this.item = row.getItem();
+		this.brand = row.getBrand();
+		this.code = row.getCode();
+		this.whole = row.isWhole();
+		this.roast = row.isRoast();
+		this.toffee = row.isToffee();
+		this.grade = row.getGrade();
+		this.saltLevel = row.getSaltLevel();
+		this.bagsInBox = row.getBagsInBox();
+		this.bagSize = row.getBagSize();
+		this.totalAmount = row.getTotalAmount();
+		this.weightCoefficient = row.getWeightCoefficient();
+	}
+
 	public BigDecimal getBagQuantity() {
 		if(getTotalAmount() != null && MeasureUnit.DISCRETE_UNITS.contains(getTotalAmount().getMeasureUnit()) && getBagsInBox() > 1) {
 			return getTotalAmount()
@@ -158,5 +192,7 @@ public class CashewBaggedInventoryRow {
 	public ItemGroup getItemGroup() {
 		return this.item.getGroup();
 	}
+
+	
 
 }

@@ -167,7 +167,10 @@ public class InventoryReports {
 		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getPoCodeId));
 
 		for(ReceiptInventoryRow row: rows) {
-			row.setRawDefectsAndDamage(itemsMap.get(row.getId()).get(0).getTotalDefectsAndDamage());
+			List<ItemQc> listItemQc = itemsMap.get(row.getId());
+			if(listItemQc != null && !listItemQc.isEmpty()) {
+				row.setRawDefectsAndDamage(listItemQc.get(0).getTotalDefectsAndDamage());
+			}
 		}
 				
 		return rows;
