@@ -36,6 +36,7 @@ public class ReceiptInventoryRow extends BasicDTO {
 //	private CashewItemDTO cashewItem;
 	private String productCompany;
 	private String item;
+	private boolean whole;
 	private String poCode;
 	private LocalDateTime receiptDate;
 	private ProductionFunctionality productionFunctionality;
@@ -49,7 +50,7 @@ public class ReceiptInventoryRow extends BasicDTO {
 	private BigDecimal rawDefectsAndDamage;
 		
 	public ReceiptInventoryRow(Integer poCodeId, String supplier, String productCompany, 
-			String item,
+			String item, boolean whole,
 //			Integer itemId, String itemValue, 
 //			String itemCode, String itemBrand, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, ProductionUse itemProductionUse, 
 //			AmountWithUnit itemUnit, Class<? extends Item> itemClazz, 
@@ -63,6 +64,7 @@ public class ReceiptInventoryRow extends BasicDTO {
 		this.supplier = supplier;
 		this.productCompany = productCompany;
 		this.item = item;
+		this.whole = whole;
 //		this.cashewItem = new CashewItemDTO(itemId, itemValue, itemCode, itemBrand, itemMeasureUnit, itemGroup, itemProductionUse, itemUnit, itemClazz, 
 //				itemNumBags, itemGrade, itemWhole, itemRoast, itemToffee, itemSaltLevel);
 		this.poCode = poCode;
@@ -103,6 +105,15 @@ public class ReceiptInventoryRow extends BasicDTO {
 			return getAmount().convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE).getAmount();
 		} catch (UnsupportedOperationException e) {
 			return null;
+		}
+	}
+	
+	public String getType() {
+		if(isWhole()) {
+			return "WHOLE";
+		}
+		else {
+			return "H&P";
 		}
 	}
 

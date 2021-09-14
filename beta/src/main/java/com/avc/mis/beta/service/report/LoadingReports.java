@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.service.report;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +118,7 @@ public class LoadingReports {
 					.map(CashewBaggedInventoryRow::getTotalAmount)
 					.reduce(AmountWithUnit::add).get()
 					.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
-			row.setWeightCoefficient(null);
+			row.setWeightCoefficient(BigDecimal.ONE);
 			baggedRows.add(row);
 		}
 		
