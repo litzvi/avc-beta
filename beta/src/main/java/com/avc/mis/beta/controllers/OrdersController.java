@@ -87,12 +87,8 @@ public class OrdersController {
 	@Autowired
 	private ReceiptReports receiptReports;
 	
-//	@PostMapping(value="/addCashewOrder")
-//	public void addCashewOrder(@RequestBody JsonNode po) {
-//		System.out.println(po);
-//	}
 	@PostMapping(value="/addCashewOrder")
-	public PoDTO addCashewOrder(@RequestBody PO po) {
+	public PoDTO addCashewOrder(@RequestBody PO po) throws InterruptedException {
 		ordersDao.addCashewOrder(po);
 		return ordersDao.getOrderByProcessId(po.getId());
 	}
@@ -161,11 +157,7 @@ public class OrdersController {
 	
 	@RequestMapping("/orderDetailsPo/{id}")
 	public PoDTO orderDetailsPo(@PathVariable("id") int poCode) {
-		try {
 			return ordersDao.getOrder(poCode);
-		} catch(IllegalArgumentException e) {
-			return null;
-		}
 	}
 	
 	@RequestMapping("/receiveDetails/{id}")

@@ -6,7 +6,9 @@ import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
+import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -280,6 +282,11 @@ public class ReportsController {
 		return inventoryReports.getReceiptInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.RAW_KERNEL}, date);
 	}
 	
+	@RequestMapping("/getCashewInventoryClean")
+	public List<ReceiptInventoryRow> getCashewInventoryClean(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+		return inventoryReports.getReceiptInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.CLEAN}, date);
+	}
+	
 	@RequestMapping("/getCashewInventoryBagged")
 	public List<CashewBaggedInventoryRow> getCashewInventoryBagged(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
 		return inventoryReports.getCashewBaggedInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.PACKED}, date);
@@ -290,10 +297,26 @@ public class ReportsController {
 		return inventoryReports.getInventoryTableByItem(ItemGroup.GENERAL, date);
 	}
 	
+	@RequestMapping("/getGeneralInventoryByPo")
+	public List<PoInventoryRow> getGeneralInventoryByPo(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+		return inventoryReports.getInventoryTableByPo(ItemGroup.GENERAL, date);
+	}
+	
+	@RequestMapping("/getGeneralInventoryOrder")
+	public List<ItemInventoryAmountWithOrder> getGeneralInventoryOrder(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+		return inventoryReports.getInventoryWithOrderByItem(ItemGroup.GENERAL, date);
+	}
+	
 	@RequestMapping("/getCashewExportReport")
 	public List<CashewExportReportRow> getCashewExportReport(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
 		return loadingReports.getCashewExportReportRows(begin, end);
+	}
+	
+	@RequestMapping("/getCashewExportBagged")
+	public List<CashewBaggedInventoryRow> getCashewExportBagged(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return loadingReports.getCashewBaggedExportReportRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.PACKED}, begin, end);
 	}
 	
 	@RequestMapping("/getBulkPackCashewItems/{packageType}")

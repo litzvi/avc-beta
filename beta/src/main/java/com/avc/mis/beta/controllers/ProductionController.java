@@ -111,6 +111,10 @@ public class ProductionController {
 	public List<ProcessItemInventory> getStorageQcPo(@PathVariable("id") int poCode, @QueryParam("itemId") Integer itemId) {
 		return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, null, itemId, new Integer[] {poCode}, null);
 	}
+	@RequestMapping("/getStorageQcPos/{poCodes}/{id}")
+	public List<ProcessItemInventory> getStorageQcPos(@PathVariable("poCodes") Integer[] poCodes, @QueryParam("itemId") Integer itemId) {
+		return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, null, itemId, poCodes, null);
+	}
 	@RequestMapping("/getStorageToPackPos/{poCodes}/{id}")
 	public List<ProcessItemInventory> getStorageRoastPos(@PathVariable("poCodes") Integer[] poCodes, @PathVariable("id") Boolean withPacked) {
 		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.TOFFEE}, null, null, withPacked? null : PackageType.BULK, poCodes, null);
