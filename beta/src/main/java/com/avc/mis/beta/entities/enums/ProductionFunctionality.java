@@ -15,6 +15,7 @@ public enum ProductionFunctionality {
 	ROASTER,
 	ROASTER_OUT,
 	PACKING,
+	TOFFEE,
 	FINAL_PRODUCT,
 	LOADING,
 	PRODUCT_STORAGE,
