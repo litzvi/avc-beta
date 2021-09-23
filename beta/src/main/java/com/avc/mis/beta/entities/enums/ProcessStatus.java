@@ -12,6 +12,6 @@ public enum ProcessStatus {
 //	LOCKED,
 	PENDING,
 	FINAL,
-	CANCELLED //should also be final
-//	HISTORY //might be needed and need to update inventory queries accordingly
+	CANCELLED, //should also be final
+	HISTORY //might be needed and need to update inventory queries accordingly
 }

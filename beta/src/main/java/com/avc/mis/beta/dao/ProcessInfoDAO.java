@@ -228,13 +228,14 @@ public class ProcessInfoDAO extends DAO {
 	
 	public void setPoWeights(TransactionProcess<?> process) {
 		removeOldWeightedPos(process.getId());
-		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findTransactionWeightedPos(process.getId(), ItemGroup.PRODUCT);
+		List<ItemAmountWithPoCode> poWeights = 
+				getProcessRepository().findTransactionWeightedPos(process.getId(), new ItemGroup[] {ItemGroup.PRODUCT, ItemGroup.QC});
 		addPoWeights(poWeights, process, true);		
 	}
 	
 	public void setGeneralPoWeights(TransactionProcess<?> process) {
 		removeOldWeightedPos(process.getId());
-		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findTransactionWeightedPos(process.getId(), ItemGroup.GENERAL);
+		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findTransactionWeightedPos(process.getId(), new ItemGroup[] {ItemGroup.GENERAL});
 		addPoWeights(poWeights, process, false);		
 	}
 	

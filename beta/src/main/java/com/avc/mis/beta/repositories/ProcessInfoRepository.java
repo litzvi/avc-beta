@@ -376,11 +376,11 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 										+ "join po_code.contractType t "
 										+ "join po_code.supplier s "
 			+ "where p.id = :processId "
-				+ "and item.itemGroup = :itemGroup "
+				+ "and item.itemGroup in :itemGroups "
 			+ "group by po_code, item "
 //			+ "group by used_p, po_code, item "
 			+ "order by po_item_amount desc ")
-	List<ItemAmountWithPoCode> findTransactionWeightedPos(Integer processId, ItemGroup itemGroup);
+	List<ItemAmountWithPoCode> findTransactionWeightedPos(Integer processId, ItemGroup[] itemGroups);
 	
 	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithPoCode("
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "

@@ -28,6 +28,7 @@ public enum MeasureUnit {
 	
 	NONE(""),
 	PERCENT("%"),
+	TON("TON"),
 	KG("KG"),
 	LBS("LBS"),
 	LOT("LOT"),
@@ -62,7 +63,7 @@ public enum MeasureUnit {
 	 */
 	public static final Map<MeasureUnit, Map<MeasureUnit, UOM>> CONVERTION_MAP;
 	
-	public static final Set<MeasureUnit> WEIGHT_UNITS = EnumSet.of(KG, LBS, LOT, OZ, GRAM);
+	public static final Set<MeasureUnit> WEIGHT_UNITS = EnumSet.of(TON, KG, LBS, LOT, OZ, GRAM);
 	public static final Set<MeasureUnit> DISCRETE_UNITS = EnumSet.of(UNIT, BOX, TANK, BAG, ROLL);
 
 	
@@ -77,7 +78,17 @@ public enum MeasureUnit {
 	static {
 		CONVERTION_MAP = new HashMap<MeasureUnit, Map<MeasureUnit, UOM>>();
 		
+		Map<MeasureUnit, UOM> tonMap = new HashMap<MeasureUnit, UOM>();
+		tonMap.put(TON, new UOM(TON, TON, BigDecimal.ONE, BigDecimal.ONE));
+		tonMap.put(KG, new UOM(TON, KG, new BigDecimal("1000"), BigDecimal.ONE));
+		tonMap.put(GRAM, new UOM(TON, GRAM, new BigDecimal("1000000"), BigDecimal.ONE));
+		tonMap.put(LBS, new UOM(TON, LBS, new BigDecimal("1000"), new BigDecimal("0.4536")));
+		tonMap.put(LOT, new UOM(TON, LOT, new BigDecimal("1000"), new BigDecimal("15876")));
+		tonMap.put(OZ, new UOM(TON, OZ, new BigDecimal("16000"), new BigDecimal("0.4536")));
+		CONVERTION_MAP.put(TON, tonMap);
+		
 		Map<MeasureUnit, UOM> kgMap = new HashMap<MeasureUnit, UOM>();
+		kgMap.put(TON, new UOM(KG, TON, BigDecimal.ONE, new BigDecimal("1000")));
 		kgMap.put(KG, new UOM(KG, KG, BigDecimal.ONE, BigDecimal.ONE));
 		kgMap.put(GRAM, new UOM(KG, GRAM, new BigDecimal("1000"), BigDecimal.ONE));
 		kgMap.put(LBS, new UOM(KG, LBS, BigDecimal.ONE, new BigDecimal("0.4536")));
@@ -86,6 +97,7 @@ public enum MeasureUnit {
 		CONVERTION_MAP.put(KG, kgMap);
 		
 		Map<MeasureUnit, UOM> gramMap = new HashMap<MeasureUnit, UOM>();
+		gramMap.put(TON, new UOM(GRAM, TON, BigDecimal.ONE, new BigDecimal("1000000")));
 		gramMap.put(KG, new UOM(GRAM, KG, new BigDecimal("0.001"), BigDecimal.ONE));
 		gramMap.put(GRAM, new UOM(GRAM, GRAM, BigDecimal.ONE, BigDecimal.ONE));
 		gramMap.put(LBS, new UOM(GRAM, LBS, BigDecimal.ONE, new BigDecimal("453.6")));
@@ -94,6 +106,7 @@ public enum MeasureUnit {
 		CONVERTION_MAP.put(GRAM, gramMap);
 		
 		Map<MeasureUnit, UOM> lbsMap = new HashMap<MeasureUnit, UOM>();
+		lbsMap.put(TON, new UOM(LBS, TON, new BigDecimal("0.4536"), new BigDecimal("1000")));
 		lbsMap.put(KG, new UOM(LBS, KG, new BigDecimal("0.4536"), BigDecimal.ONE));
 		lbsMap.put(GRAM, new UOM(LBS, GRAM, new BigDecimal("453.6"), BigDecimal.ONE));
 		lbsMap.put(LBS, new UOM(LBS, LBS, BigDecimal.ONE, BigDecimal.ONE));
@@ -102,6 +115,7 @@ public enum MeasureUnit {
 		CONVERTION_MAP.put(LBS, lbsMap);
 		
 		Map<MeasureUnit, UOM> lotMap = new HashMap<MeasureUnit, UOM>();
+		lotMap.put(TON, new UOM(LOT, TON, new BigDecimal("15.876"), BigDecimal.ONE));
 		lotMap.put(KG, new UOM(LOT, KG, new BigDecimal("15876"), BigDecimal.ONE));
 		lotMap.put(GRAM, new UOM(LOT, GRAM, new BigDecimal("15876000"), BigDecimal.ONE));
 		lotMap.put(LBS, new UOM(LOT, LBS, new BigDecimal("35000"), BigDecimal.ONE));
@@ -110,6 +124,7 @@ public enum MeasureUnit {
 		CONVERTION_MAP.put(LOT, lotMap);
 		
 		Map<MeasureUnit, UOM> ozMap = new HashMap<MeasureUnit, UOM>();
+		ozMap.put(TON, new UOM(OZ, TON, new BigDecimal("0.4536"), new BigDecimal("16000")));
 		ozMap.put(KG, new UOM(OZ, KG, new BigDecimal("0.4536"), new BigDecimal("16")));
 		ozMap.put(GRAM, new UOM(OZ, GRAM, new BigDecimal("453.6"), new BigDecimal("16")));
 		ozMap.put(LBS, new UOM(OZ, LBS, BigDecimal.ONE, new BigDecimal("16")));
