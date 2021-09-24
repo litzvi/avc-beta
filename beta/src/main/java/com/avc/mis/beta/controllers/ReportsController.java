@@ -283,8 +283,8 @@ public class ReportsController {
 	}
 	
 	@RequestMapping("/getCashewInventoryClean")
-	public List<ReceiptInventoryRow> getCashewInventoryClean(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-		return inventoryReports.getReceiptInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.CLEAN}, date);
+	public List<FinishedProductInventoryRow> getCashewInventoryClean(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
+		return inventoryReports.getFinishedProductInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.CLEAN}, date);
 	}
 	
 	@RequestMapping("/getCashewInventoryBagged")

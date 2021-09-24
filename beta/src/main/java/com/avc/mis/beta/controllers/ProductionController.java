@@ -111,7 +111,7 @@ public class ProductionController {
 	public List<ProcessItemInventory> getStorageQcPo(@PathVariable("id") int poCode, @QueryParam("itemId") Integer itemId) {
 		return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, null, itemId, new Integer[] {poCode}, null);
 	}
-	@RequestMapping("/getStorageQcPos/{poCodes}/{id}")
+	@RequestMapping("/getStorageQcPos/{poCodes}")
 	public List<ProcessItemInventory> getStorageQcPos(@PathVariable("poCodes") Integer[] poCodes, @QueryParam("itemId") Integer itemId) {
 		return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, null, itemId, poCodes, null);
 	}

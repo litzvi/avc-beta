@@ -39,6 +39,8 @@ public class CashewBaggedInventoryRow {
 	private AmountWithUnit totalAmount;//amount of boxes
 	private BigDecimal weightCoefficient;
 	
+	private BigDecimal boxQuantity;
+	
 	public CashewBaggedInventoryRow(
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			ItemGroup itemGroup, ProductionUse productionUse, 
@@ -47,7 +49,7 @@ public class CashewBaggedInventoryRow {
 			boolean whole, boolean roast, boolean toffee,
 			Integer gradeId,  String gradeValue,
 			SaltLevel saltLevel, int numBags, 
-			BigDecimal amount, MeasureUnit measureUnit) {
+			BigDecimal amount, MeasureUnit measureUnit, BigDecimal boxQuantity) {
 		this(itemId, itemValue, defaultMeasureUnit, 
 				itemGroup, productionUse, 
 				unit, clazz, 
@@ -55,7 +57,7 @@ public class CashewBaggedInventoryRow {
 				whole, roast, toffee,
 				gradeId, gradeValue, 
 				saltLevel, numBags, 
-				amount, measureUnit, BigDecimal.ONE);
+				amount, measureUnit, boxQuantity, BigDecimal.ONE);
 	}
 	
 	public CashewBaggedInventoryRow(
@@ -66,7 +68,7 @@ public class CashewBaggedInventoryRow {
 			boolean whole, boolean roast, boolean toffee,
 			Integer gradeId,  String gradeValue,
 			SaltLevel saltLevel, int numBags, 
-			BigDecimal amount, MeasureUnit measureUnit, BigDecimal weightCoefficient) {
+			BigDecimal amount, MeasureUnit measureUnit, BigDecimal boxQuantity, BigDecimal weightCoefficient) {
 		super();
 		this.item = new ItemWithUnitDTO(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unit, clazz);
 		this.brand = brand;
@@ -82,12 +84,14 @@ public class CashewBaggedInventoryRow {
 		this.bagsInBox = numBags;
 		this.bagSize = this.item.getUnit().divide(BigDecimal.valueOf(numBags));
 		this.totalAmount = new AmountWithUnit(amount, measureUnit);
+		this.boxQuantity = boxQuantity;
 		this.weightCoefficient = weightCoefficient;
+		
 	}
 	
 	public CashewBaggedInventoryRow(ItemWithUnitDTO item, String brand, String code, boolean whole, boolean roast,
 			boolean toffee, BasicValueEntity<CashewGrade> grade, AmountWithUnit bagSize, SaltLevel saltLevel,
-			int bagsInBox, AmountWithUnit totalAmount, BigDecimal weightCoefficient) {
+			int bagsInBox, AmountWithUnit totalAmount, BigDecimal boxQuantity, BigDecimal weightCoefficient) {
 		super();
 		this.item = item;
 		this.brand = brand;
@@ -100,6 +104,7 @@ public class CashewBaggedInventoryRow {
 		this.saltLevel = saltLevel;
 		this.bagsInBox = bagsInBox;
 		this.totalAmount = totalAmount;
+		this.boxQuantity = boxQuantity;
 		this.weightCoefficient = weightCoefficient;
 	}
 	
@@ -116,6 +121,7 @@ public class CashewBaggedInventoryRow {
 		this.bagsInBox = row.getBagsInBox();
 		this.bagSize = row.getBagSize();
 		this.totalAmount = row.getTotalAmount();
+		this.boxQuantity = row.getBoxQuantity();
 		this.weightCoefficient = row.getWeightCoefficient();
 	}
 
@@ -132,17 +138,17 @@ public class CashewBaggedInventoryRow {
 		}
 	}
 	
-	public BigDecimal getBoxQuantity() {
-		if(getTotalAmount() != null && MeasureUnit.DISCRETE_UNITS.contains(getTotalAmount().getMeasureUnit())) {
-			return getTotalAmount()
-					.getAmount()
-					.multiply(getWeightCoefficient(), MathContext.DECIMAL64)
-					.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
-		}
-		else {
-			return null;
-		}
-	}
+//	public BigDecimal getBoxQuantity() {
+//		if(getTotalAmount() != null && MeasureUnit.DISCRETE_UNITS.contains(getTotalAmount().getMeasureUnit())) {
+//			return getTotalAmount()
+//					.getAmount()
+//					.multiply(getWeightCoefficient(), MathContext.DECIMAL64)
+//					.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
+//		}
+//		else {
+//			return null;
+//		}
+//	}
 	
 	public BigDecimal getWeightInLbs() {
 		if(getTotalAmount() == null) {

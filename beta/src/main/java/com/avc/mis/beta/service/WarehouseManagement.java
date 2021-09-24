@@ -194,6 +194,11 @@ public class WarehouseManagement {
 		return findAvailableInventoryPoCodes(true,  productionUses, false, null, group, null, packageType);		
 	}
 	
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionFunctionality[] functionalities, ItemGroup group, Integer itemId) {
+		boolean checkFunctionalities = (functionalities != null);
+		return findAvailableInventoryPoCodes(false, null, checkFunctionalities, functionalities, group, itemId, null);		
+	}
+	
 	private Set<PoCodeBasic> findAvailableInventoryPoCodes(
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
