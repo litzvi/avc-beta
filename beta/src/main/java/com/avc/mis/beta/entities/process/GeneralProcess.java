@@ -43,7 +43,7 @@ import lombok.ToString;
  * Entity that holds core information recoded for every process:
  * type of process (Cashew order, receive order, roasting etc.),
  * production line (needed for process types with multiple lines), 
- * user recorded time, start time, end time, duration, number of workers and process life cycle.
+ * user recorded time, start time, end time, down time, number of workers and process life cycle.
  * 
  * @author zvi
  *
@@ -72,7 +72,7 @@ public abstract class GeneralProcess extends AuditedEntity {
 	
 	private LocalTime startTime;
 	private LocalTime endTime;
-	private Duration duration;
+	private Duration downtime;
 	private Integer numOfWorkers;
 	
 	@OneToOne(mappedBy = "process", cascade = {CascadeType.PERSIST, CascadeType.REMOVE},

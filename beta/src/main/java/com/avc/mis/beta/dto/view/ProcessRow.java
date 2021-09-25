@@ -55,8 +55,7 @@ public class ProcessRow extends BasicDTO {
 	private LocalDateTime recordedTime;
 	private LocalTime startTime;
 	private LocalTime endTime;
-	private Duration duration;
-//	private Duration downTime;
+	private Duration downtime;
 	private Integer numOfWorkers;
 	private ProcessStatus status;
 	private String[] approvals;
@@ -75,7 +74,7 @@ public class ProcessRow extends BasicDTO {
 //			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			String poCodeIds, String poCodes, String suppliers,
 			LocalDateTime recordedTime, 
-			LocalTime startTime, LocalTime endTime, Duration duration, Integer numOfWorkers, 
+			LocalTime startTime, LocalTime endTime, Duration downtime, Integer numOfWorkers, 
 			ProcessStatus status, String approvals, String remarks) {
 		super(id);
 		this.processName = processName;
@@ -92,7 +91,7 @@ public class ProcessRow extends BasicDTO {
 		this.recordedTime = recordedTime;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.duration = duration;
+		this.downtime = downtime;
 		this.numOfWorkers = numOfWorkers;
 		this.status = status;
 		if(approvals == null || approvals.startsWith(":")) {

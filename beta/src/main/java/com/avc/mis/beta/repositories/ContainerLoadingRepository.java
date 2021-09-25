@@ -72,7 +72,7 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 			+ "function('GROUP_CONCAT', function('DISTINCT', po_code.id)), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
-			+ "p.recordedTime, p.duration, lc.processStatus, "
+			+ "p.recordedTime, p.downtime, lc.processStatus, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(u.username, ': ', approval.decision))), "
 			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, "
 			+ "ship.eta, cont.containerNumber, cont.sealNumber, cont.containerType) "

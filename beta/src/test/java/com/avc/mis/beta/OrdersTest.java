@@ -69,7 +69,7 @@ public class OrdersTest {
 		assertEquals(expected, actual, "failed test adding po");
 
 		//edit order status
-		po.setDuration(Duration.ofHours(15));
+		po.setDowntime(Duration.ofHours(15));
 		expected = new PoDTO(po);
 		try {
 			orders.editOrder(po);

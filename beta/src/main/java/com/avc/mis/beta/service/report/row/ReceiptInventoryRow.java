@@ -39,7 +39,7 @@ public class ReceiptInventoryRow extends BasicDTO {
 	private boolean whole;
 	private String poCode;
 	private LocalDateTime receiptDate;
-	private LocalDateTime processDate;
+//	private LocalDateTime processDate;
 	private ProductionFunctionality productionFunctionality;
 	private String[] bags;
 	private AmountWithUnit amount;
@@ -72,7 +72,7 @@ public class ReceiptInventoryRow extends BasicDTO {
 //				itemNumBags, itemGrade, itemWhole, itemRoast, itemToffee, itemSaltLevel);
 		this.poCode = poCode;
 		this.receiptDate = receiptDate;
-		this.processDate = processDate;
+//		this.processDate = processDate;
 		this.productionFunctionality = productionFunctionality;
 		if(bags != null) {
 //			this.bags = Stream.of(bags.split(",")).toArray(String[]::new);

@@ -58,14 +58,14 @@ public class PoDTO extends PoProcessDTO {
 			Integer supplierId, Integer supplierVersion, String supplierName, 
 			ProcessName processName, Integer productionLineId, String productionLineValue, ProductionFunctionality productionFunctionality,
 			LocalDateTime recordedTime, LocalTime startTime, LocalTime endTime, 
-			Duration duration, Integer numOfWorkers, 
+			Duration downtime, Integer numOfWorkers, 
 			ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
 			String personInCharge) {
 		super();
 		super.setGeneralProcessInfo(new GeneralProcessInfo(id, version, createdDate, staffRecording, 
 				processName, productionLineId, productionLineValue, productionFunctionality,
 				recordedTime, startTime, endTime, 
-				duration, numOfWorkers, processStatus, editStatus, remarks, approvals));
+				downtime, numOfWorkers, processStatus, editStatus, remarks, approvals));
 		super.setPoCode(new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName));
 		this.personInCharge = personInCharge;
 

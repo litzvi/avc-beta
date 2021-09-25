@@ -50,7 +50,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 	private LocalTime startTime;
 	private LocalTime endTime;
 
-	private Duration duration;
+	private Duration downtime;
 	private Integer numOfWorkers;
 	private ProcessStatus processStatus;
 	private EditStatus editStatus;
@@ -92,7 +92,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 		this.recordedTime = process.getRecordedTime();
 		this.startTime = process.getStartTime();
 		this.endTime = process.getEndTime();
-		this.duration = process.getDuration();
+		this.downtime = process.getDowntime();
 		this.numOfWorkers = process.getNumOfWorkers();
 		this.processStatus = process.getLifeCycle().getProcessStatus();
 		this.editStatus = process.getLifeCycle().getEditStatus();
@@ -111,7 +111,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 		this.recordedTime = info.getRecordedTime();
 		this.startTime = info.getStartTime();
 		this.endTime = info.getEndTime();
-		this.duration = info.getDuration();
+		this.downtime = info.getDowntime();
 		this.numOfWorkers = info.getNumOfWorkers();
 		this.processStatus = info.getProcessStatus();
 		this.editStatus = info.getEditStatus();

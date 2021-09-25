@@ -13,6 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -161,8 +162,8 @@ public class InventoryReports {
 		
 		List<ReceiptInventoryRow> rows = getInventoryRepository().findReceiptInventoryRows(
 				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, itemGroup, pointOfTime);
-		int[] poCodeIds = rows.stream().mapToInt(ReceiptInventoryRow::getId).toArray();
 		
+		int[] poCodeIds = rows.stream().mapToInt(ReceiptInventoryRow::getId).toArray();		
 		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, ProductionUse.ROAST, false);
 		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getPoCodeId));
 
@@ -175,11 +176,26 @@ public class InventoryReports {
 				
 		return rows;
 	}
-	
+		
 	public List<FinishedProductInventoryRow> getFinishedProductInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDateTime pointOfTime) {
 		boolean checkProductionUses = (productionUses != null);
-		return getInventoryRepository().findFinishedProductInventoryRows(
+		List<FinishedProductInventoryRow> rows = getInventoryRepository().findFinishedProductInventoryRows(
 				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, itemGroup, pointOfTime);	
+		
+		if(itemGroup == ItemGroup.PRODUCT && ArrayUtils.contains(productionUses, ProductionUse.CLEAN)) {
+			int[] poCodeIds = rows.stream().mapToInt(FinishedProductInventoryRow::getPoCodeId).toArray();
+			Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, ProductionUse.ROAST, false);
+			Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getPoCodeId));
+
+			for(FinishedProductInventoryRow row: rows) {
+				List<ItemQc> listItemQc = itemsMap.get(row.getPoCodeId());
+				if(listItemQc != null && !listItemQc.isEmpty()) {
+					row.setRawDefectsAndDamage(listItemQc.get(0).getTotalDefectsAndDamage());
+				}
+			}
+		}
+		
+		return rows;
 	}
 	
 	public List<CashewBaggedInventoryRow> getCashewBaggedInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDateTime pointOfTime) {

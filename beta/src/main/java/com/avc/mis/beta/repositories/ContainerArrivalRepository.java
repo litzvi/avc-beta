@@ -30,7 +30,7 @@ public interface ContainerArrivalRepository extends ProcessRepository<ContainerA
 
 	@Query("select new com.avc.mis.beta.dto.view.ContainerArrivalRow( "
 			+ "p.id, "
-			+ "p.recordedTime, p.duration, lc.processStatus, "
+			+ "p.recordedTime, p.downtime, lc.processStatus, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(u.username, ': ', approval.decision))), "
 			+ "ship.eta, cont.containerNumber, cont.sealNumber, cont.containerType, "
 			+ "pc.id, pc.version, pc.name, "

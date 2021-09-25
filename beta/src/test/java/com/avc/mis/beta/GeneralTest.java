@@ -134,7 +134,7 @@ public class GeneralTest {
 			fail("Should not be able to change to previous life cycle status");
 		} catch (Exception e1) {}
 		//check that process can't be edited after it's locked
-		po.setDuration(Duration.ofHours(24));
+		po.setDowntime(Duration.ofHours(24));
 		try {
 			orders.editOrder(po);
 			fail("Should not be able to edit at locked status life cycle");

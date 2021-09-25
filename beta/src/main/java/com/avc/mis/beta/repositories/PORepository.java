@@ -81,7 +81,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "po.id, po.version, po.createdDate, p_user.username, "
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line.id, p_line.value, p_line.productionFunctionality,  "
-			+ "po.recordedTime, po.startTime, po.endTime, po.duration, po.numOfWorkers, "
+			+ "po.recordedTime, po.startTime, po.endTime, po.downtime, po.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, po.remarks, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(u.username, ':', approval.decision))), "
 			+ "po.personInCharge) "

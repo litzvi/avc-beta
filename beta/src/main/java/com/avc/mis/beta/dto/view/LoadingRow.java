@@ -37,7 +37,7 @@ public class LoadingRow extends BasicDTO {
 	private String[] poCodes;
 	@JsonIgnore private String[] suppliers;
 	private LocalDateTime recordedTime;
-	private Duration duration;
+	private Duration downtime;
 	private ProcessStatus status;
 	private String[] approvals;
 
@@ -52,7 +52,7 @@ public class LoadingRow extends BasicDTO {
 	
 	public LoadingRow(@NonNull Integer id, 
 			String poCodeIds, String poCodes, String suppliers,
-			LocalDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, 			
+			LocalDateTime recordedTime, Duration downtime, ProcessStatus status, String approvals, 			
 			Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue, 
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType) {
 		super(id);
@@ -63,7 +63,7 @@ public class LoadingRow extends BasicDTO {
 		if(suppliers != null)
 			this.suppliers = Stream.of(suppliers.split(",")).toArray(String[]::new);
 		this.recordedTime = recordedTime;
-		this.duration = duration;
+		this.downtime = downtime;
 		this.status = status;
 		if(approvals == null || approvals.startsWith(":")) {
 			this.approvals = null;

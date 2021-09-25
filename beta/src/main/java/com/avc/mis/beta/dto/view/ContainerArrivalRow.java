@@ -32,7 +32,7 @@ import lombok.ToString;
 public class ContainerArrivalRow extends BasicDTO {
 
 	private LocalDateTime recordedTime;
-	private Duration duration;
+	private Duration downtime;
 	private ProcessStatus status;
 	private String[] approvals;
 
@@ -48,13 +48,13 @@ public class ContainerArrivalRow extends BasicDTO {
 
 
 	public ContainerArrivalRow(@NonNull Integer id, 
-			LocalDateTime recordedTime, Duration duration, ProcessStatus status, String approvals, 			
+			LocalDateTime recordedTime, Duration downtime, ProcessStatus status, String approvals, 			
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType,
 			Integer productCompanyId, Integer productCompanyVersion, String productCompanyName, 
 			Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue) {
 		super(id);
 		this.recordedTime = recordedTime;
-		this.duration = duration;
+		this.downtime = downtime;
 		this.status = status;
 		if(approvals == null || approvals.startsWith(":")) {
 			this.approvals = null;
