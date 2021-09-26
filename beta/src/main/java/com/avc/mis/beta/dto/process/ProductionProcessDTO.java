@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
-import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.process.Loadi;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,7 +34,7 @@ public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> 
 //				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
 //	}
 	
-	public ProductionProcessDTO(@NonNull ProductionProcess process) {
+	public ProductionProcessDTO(@NonNull Loadi process) {
 		super(process);
 		super.setProcessItems( Arrays.stream(process.getProcessItems())
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));

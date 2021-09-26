@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.avc.mis.beta.dto.data.UserLogin;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.process.ContainerLoading;
+import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.Orders;
 
 import lombok.AccessLevel;
@@ -99,6 +101,7 @@ public abstract class DAO extends ReadDAO {
 		 */
 //		Session session = getEntityManager().unwrap(Session.class); 
 //		session.update(entity);
+		
 		return getEntityManager().merge(entity);
 	}
 	

@@ -15,7 +15,7 @@ import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.process.Loadi;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
 import com.avc.mis.beta.service.interfaces.ProductionProcessService;
 import com.avc.mis.beta.service.report.ProductionProcessReports;
@@ -43,7 +43,7 @@ public class ProductionProcesses implements ProductionProcessService {
 		
 	@Override
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void addProductionProcess(ProductionProcess process, ProcessName processName) {
+	public void addProductionProcess(Loadi process, ProcessName processName) {
 		process.setProcessType(dao.getProcessTypeByValue(processName));
 		dao.addTransactionProcessEntity(process);	
 		dao.checkUsedInventoryAvailability(process);
@@ -55,18 +55,18 @@ public class ProductionProcesses implements ProductionProcessService {
 	public ProductionProcessDTO getProductionProcess(int processId) {
 		ProductionProcessDTO processDTO = new ProductionProcessDTO();
 		processDTO.setGeneralProcessInfo(getProcessRepository()
-				.findGeneralProcessInfoByProcessId(processId, ProductionProcess.class)
+				.findGeneralProcessInfoByProcessId(processId, Loadi.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No production process with given process id")));
 		processDTO.setPoProcessInfo(getProcessRepository()
-				.findPoProcessInfoByProcessId(processId, ProductionProcess.class).orElse(null));		
+				.findPoProcessInfoByProcessId(processId, Loadi.class).orElse(null));		
 		getProcessReader().setTransactionProcessCollections(processDTO);		
 		return processDTO;
 	}
 		
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	@Override
-	public void editProductionProcess(ProductionProcess process) {
+	public void editProductionProcess(Loadi process) {
 		dao.checkRemovingUsedProduct(process);
 				
 		dao.editTransactionProcessEntity(process);		
