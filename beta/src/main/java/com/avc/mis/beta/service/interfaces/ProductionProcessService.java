@@ -8,7 +8,7 @@ import java.util.List;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.Loadi;
+import com.avc.mis.beta.entities.process.ProductioProcess;
 
 /**
  * @author zvi
@@ -38,7 +38,7 @@ public interface ProductionProcessService {
 	 * @param process the new ProductionProcess entity
 	 * @param processName the name of the process type to be added. (CASHEW_CLEANING\CASHEW_ROASTING\PACKING)
 	 */
-	public void addProductionProcess(Loadi process, ProcessName processName);
+	public void addProductionProcess(ProductioProcess process, ProcessName processName);
 	
 	/**
 	 * Get the full Production Process information
@@ -51,7 +51,7 @@ public interface ProductionProcessService {
 	 * Edit/Change a persisted ProductionProcess to the given ProductionProcess data
 	 * @param process ProductionProcess with underlying database id and updated data.
 	 */
-	public void editProductionProcess(Loadi process);
+	public void editProductionProcess(ProductioProcess process);
 	
 	
 }

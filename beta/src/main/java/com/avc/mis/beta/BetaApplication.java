@@ -10,8 +10,8 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
- * Version: 21.5
- * issues 589
+ * Version: 21.6
+ * issues fixed typo
  * 
  * @author zvi
  *

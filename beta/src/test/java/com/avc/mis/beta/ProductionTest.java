@@ -29,7 +29,7 @@ import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.process.Loadi;
+import com.avc.mis.beta.entities.process.ProductioProcess;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.ProductionProcesses;
@@ -58,7 +58,7 @@ public class ProductionTest {
 		infoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		infoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
-		Loadi process = new Loadi();
+		ProductioProcess process = new ProductioProcess();
 		process.setPoCode((PoCode) receipt.getPoCode());
 		process.setRecordedTime(LocalDateTime.now());
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
@@ -106,7 +106,7 @@ public class ProductionTest {
 			infoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 			infoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 			
-			Loadi process = new Loadi();
+			ProductioProcess process = new ProductioProcess();
 			process.setPoCode((PoCode) receipt.getPoCode());
 			process.setRecordedTime(LocalDateTime.now());
 			poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
@@ -145,7 +145,7 @@ public class ProductionTest {
 		infoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		infoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
-		Loadi process = new Loadi();
+		ProductioProcess process = new ProductioProcess();
 		process.setPoCode((PoCode) receipt.getPoCode());
 		process.setRecordedTime(LocalDateTime.now());
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);

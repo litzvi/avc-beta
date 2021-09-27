@@ -26,7 +26,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "PRODUCTION_PROCESS")
 @PrimaryKeyJoinColumn(name = "processId")
-public class Loadi extends TransactionProcess<ProcessItem> {
+public class ProductioProcess extends TransactionProcess<ProcessItem> {
 	
 	
 	
