@@ -483,6 +483,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "ELSE 1 "
 				+ "END) "
 				+ "or :packageTypeOrdinal is null) "
+			+ "and (:startTime is null or p.recordedTime >= :startTime) "
+			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by sf.id, sf.numberUnits, po_code.id "
 //		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) "
 		+ "having sf.numberUnits > "
@@ -497,7 +499,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
-			ItemGroup itemGroup, Integer itemId, Integer packageTypeOrdinal);
+			ItemGroup itemGroup, Integer itemId, Integer packageTypeOrdinal, 
+			LocalDateTime startTime, LocalDateTime endTime);
 		
 	
 	/**

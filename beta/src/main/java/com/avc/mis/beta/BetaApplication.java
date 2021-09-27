@@ -11,7 +11,7 @@ import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
  * Version: 21.6
- * issues fixed typo
+ * issues 601
  * 
  * @author zvi
  *

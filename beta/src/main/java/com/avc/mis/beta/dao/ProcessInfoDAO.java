@@ -288,7 +288,7 @@ public class ProcessInfoDAO extends DAO {
 		EditStatus status = lifeCycle.getEditStatus();
 		if(status != EditStatus.EDITABLE) {
 			throw new AccessControlException("Process was closed for edit");
-		}
+		} 
 		editEntity(process);
 		editAlerts(process);
 	}

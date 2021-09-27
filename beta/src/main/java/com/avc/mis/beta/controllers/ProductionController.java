@@ -1,22 +1,6 @@
 
 package com.avc.mis.beta.controllers;
 
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.process.ProductionProcessDTO;
-import com.avc.mis.beta.dto.view.ProcessItemInventory;
-import com.avc.mis.beta.dto.view.ProcessRow;
-import com.avc.mis.beta.entities.enums.PackageType;
-import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.process.ProductioProcess;
-import com.avc.mis.beta.service.ObjectTablesReader;
-import com.avc.mis.beta.service.ProductionProcesses;
-import com.avc.mis.beta.service.ValueTablesReader;
-import com.avc.mis.beta.service.WarehouseManagement;
-import com.avc.mis.beta.service.report.ProductionProcessReports;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -31,6 +15,22 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.view.ProcessItemInventory;
+import com.avc.mis.beta.dto.view.ProcessRow;
+import com.avc.mis.beta.entities.enums.PackageType;
+import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.service.ObjectTablesReader;
+import com.avc.mis.beta.service.ProductionProcesses;
+import com.avc.mis.beta.service.ValueTablesReader;
+import com.avc.mis.beta.service.WarehouseManagement;
+import com.avc.mis.beta.service.report.ProductionProcessReports;
 
 @RestController
 @RequestMapping(path = "/api/production")
@@ -80,9 +80,12 @@ public class ProductionController {
 			return warehouseManagement.findAvailableInventoryPoCodes(new ProductionUse[]{ProductionUse.TOFFEE, ProductionUse.ROAST}, withPacked? null : PackageType.BULK);
 	}
 	
-	@RequestMapping("/getAllPosQc")
-	public Set<PoCodeBasic> getAllPosQc() {
-		return objectTableReader.findAvailableInventoryPoCodes(ItemGroup.WASTE);
+	@RequestMapping("/getAllPosQc/{id}")
+	public Set<PoCodeBasic> getAllPosQc(@PathVariable("id") Boolean withAll) {
+		if(withAll) {
+			return warehouseManagement.findAvailableInventoryPoCodes(null, ItemGroup.WASTE, 4, null, null);
+		}
+		return warehouseManagement.findAvailableInventoryPoCodes(new ProductionFunctionality[]{ProductionFunctionality.ROASTER, ProductionFunctionality.PACKING}, ItemGroup.WASTE, 4, null , null);
 	}
 	
 	@RequestMapping("/findFreeMixPoCodes")
@@ -107,13 +110,19 @@ public class ProductionController {
 	public List<ProcessItemInventory> getStorageToPackPo(@PathVariable("id") int poCode, @PathVariable("id1") Boolean withPacked) {
 		return warehouseManagement.getAvailableInventory(ItemGroup.PRODUCT, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.TOFFEE}, null, null, withPacked? null : PackageType.BULK, new Integer[] {poCode}, null);
 	}
-	@RequestMapping("/getStorageQcPo/{id}")
-	public List<ProcessItemInventory> getStorageQcPo(@PathVariable("id") int poCode, @QueryParam("itemId") Integer itemId) {
-		return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, null, itemId, new Integer[] {poCode}, null);
+	@RequestMapping("/getStorageQcPo/{id}/{id1}")
+	public List<ProcessItemInventory> getStorageQcPo(@PathVariable("id") int poCode, @PathVariable("id1") Boolean withAll) {
+		if(withAll) {
+			return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, null, 4, new Integer[] {poCode}, null);
+		}
+		return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, new ProductionFunctionality[]{ProductionFunctionality.ROASTER, ProductionFunctionality.PACKING}, 4, new Integer[] {poCode}, null);
 	}
-	@RequestMapping("/getStorageQcPos/{poCodes}")
-	public List<ProcessItemInventory> getStorageQcPos(@PathVariable("poCodes") Integer[] poCodes, @QueryParam("itemId") Integer itemId) {
-		return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, null, itemId, poCodes, null);
+	@RequestMapping("/getStorageQcPos/{poCodes}/{id1}")
+	public List<ProcessItemInventory> getStorageQcPos(@PathVariable("poCodes") Integer[] poCodes, @PathVariable("id1") Boolean withAll) {
+		if(withAll) {
+			return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, null, 4, poCodes, null);
+		}
+		return warehouseManagement.getAvailableInventory(ItemGroup.WASTE, null, new ProductionFunctionality[]{ProductionFunctionality.ROASTER, ProductionFunctionality.PACKING}, 4, poCodes, null);
 	}
 	@RequestMapping("/getStorageToPackPos/{poCodes}/{id}")
 	public List<ProcessItemInventory> getStorageRoastPos(@PathVariable("poCodes") Integer[] poCodes, @PathVariable("id") Boolean withPacked) {
@@ -126,37 +135,37 @@ public class ProductionController {
 	}
 	
 	@PostMapping(value="/addCleaningTransfer")
-	public ProductionProcessDTO addCleaningTransfer(@RequestBody ProductioProcess process) {
+	public ProductionProcessDTO addCleaningTransfer(@RequestBody ProductionProcess process) {
 		productionProcesses.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
 		return productionProcesses.getProductionProcess(process.getId());
 	}
 	
 	@PostMapping(value="/addRoastingTransfer")
-	public ProductionProcessDTO addRoastingTransfer(@RequestBody ProductioProcess process) {
+	public ProductionProcessDTO addRoastingTransfer(@RequestBody ProductionProcess process) {
 		productionProcesses.addProductionProcess(process, ProcessName.CASHEW_ROASTING);
 		return productionProcesses.getProductionProcess(process.getId());
 	}
 	
 	@PostMapping(value="/addToffeeTransfer")
-	public ProductionProcessDTO addToffeeTransfer(@RequestBody ProductioProcess process) {
+	public ProductionProcessDTO addToffeeTransfer(@RequestBody ProductionProcess process) {
 		productionProcesses.addProductionProcess(process, ProcessName.CASHEW_TOFFEE);
 		return productionProcesses.getProductionProcess(process.getId());
 	}
 	
 	@PostMapping(value="/addPackingTransfer")
-	public ProductionProcessDTO addPackingTransfer(@RequestBody ProductioProcess process) {
+	public ProductionProcessDTO addPackingTransfer(@RequestBody ProductionProcess process) {
 		productionProcesses.addProductionProcess(process, ProcessName.PACKING);
 		return productionProcesses.getProductionProcess(process.getId());
 	}
 	
 	@PostMapping(value="/addQcPackingTransfer")
-	public ProductionProcessDTO addQcPackingTransfer(@RequestBody ProductioProcess process) {
+	public ProductionProcessDTO addQcPackingTransfer(@RequestBody ProductionProcess process) {
 		productionProcesses.addProductionProcess(process, ProcessName.BAD_QUALITY_PACKING);
 		return productionProcesses.getProductionProcess(process.getId());
 	}
 	
 	@PutMapping(value="/editProductionTransfer")
-	public ProductionProcessDTO editProductionTransfer(@RequestBody ProductioProcess process) {
+	public ProductionProcessDTO editProductionTransfer(@RequestBody ProductionProcess process) {
 		productionProcesses.editProductionProcess(process);
 		return productionProcesses.getProductionProcess(process.getId());
 	}

@@ -1,6 +1,7 @@
 package com.avc.mis.beta.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -194,19 +195,30 @@ public class WarehouseManagement {
 		return findAvailableInventoryPoCodes(true,  productionUses, false, null, group, null, packageType);		
 	}
 	
-	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionFunctionality[] functionalities, ItemGroup group, Integer itemId) {
+	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionFunctionality[] functionalities, ItemGroup group, Integer itemId, 
+			LocalDateTime startTime, LocalDateTime endTime) {
 		boolean checkFunctionalities = (functionalities != null);
-		return findAvailableInventoryPoCodes(false, null, checkFunctionalities, functionalities, group, itemId, null);		
+		return findAvailableInventoryPoCodes(false, null, checkFunctionalities, functionalities, group, itemId, null, startTime, endTime);		
 	}
 	
 	private Set<PoCodeBasic> findAvailableInventoryPoCodes(
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
 			ItemGroup itemGroup, Integer itemId, PackageType packageType) {
+		return findAvailableInventoryPoCodes(checkProductionUses, productionUses, 
+				checkFunctionalities, functionalities, itemGroup, itemId, packageType, null, null);
+	}
+	
+	private Set<PoCodeBasic> findAvailableInventoryPoCodes(
+			boolean checkProductionUses, ProductionUse[] productionUses, 
+			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
+			ItemGroup itemGroup, Integer itemId, PackageType packageType, 
+			LocalDateTime startTime, LocalDateTime endTime) {
 		Integer packageTypeOrdinal = packageType != null ? packageType.ordinal() : null;
 		return getInventoryRepository().findAvailableInventoryPoCodeByType(
 				EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, 
-				checkFunctionalities, functionalities, itemGroup, itemId, packageTypeOrdinal);		
+				checkFunctionalities, functionalities, itemGroup, itemId, packageTypeOrdinal, 
+				startTime, endTime);		
 	}
 
 	

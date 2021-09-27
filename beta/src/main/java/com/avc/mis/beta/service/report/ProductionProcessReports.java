@@ -18,7 +18,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
-import com.avc.mis.beta.entities.process.ProductioProcess;
+import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.process.RelocationProcess;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.TransactionProcess;
@@ -57,7 +57,7 @@ public class ProductionProcessReports {
 	
 	public List<ProcessRow> getProductionProcessesByTypeAndPoCode(ProcessName processName, Integer poCodeId, 
 			LocalDateTime startTime, LocalDateTime endTime) {
-		return getProcessesByTypeAndPoCode(ProductioProcess.class, processName, poCodeId, null, true, startTime, endTime);
+		return getProcessesByTypeAndPoCode(ProductionProcess.class, processName, poCodeId, null, true, startTime, endTime);
 	}
 	
 	public <T extends PoProcess> List<ProcessRow> getProcessesByTypeAndPoCode(
