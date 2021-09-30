@@ -4,6 +4,7 @@
 package com.avc.mis.beta.entities;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
@@ -45,6 +46,22 @@ public interface Insertable {
 			.collect(Collectors.toSet());
 	}
 	
+	/**
+	 * Applies the setReference operator for every element.
+	 * @param <T> 
+	 * @param tSet set of entities
+	 * @param p operator that sets the reference of T with the owning entity.
+	 * @return Set of entities to insert/update with their reference set.
+	 */
+	public static <T extends Insertable> Set<T> setReferences(Set<T> tSet, UnaryOperator<T> p) {
+		if(tSet == null) {
+			return null;
+		}
+		return tSet.stream()
+			.filter(t -> t != null)
+			.map(t -> p.apply(t))
+			.collect(Collectors.toSet());
+	}
 
 	
 }

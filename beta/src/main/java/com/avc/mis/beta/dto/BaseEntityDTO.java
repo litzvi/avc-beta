@@ -3,6 +3,9 @@
  */
 package com.avc.mis.beta.dto;
 
+import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.LinkEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -36,6 +39,10 @@ public abstract class BaseEntityDTO {
 	
 	@EqualsAndHashCode.Include
 	private Integer id;
+	
+	public BaseEntityDTO(BaseEntity entity) {
+		this.id = entity.getId();
+	}
 
 	/**
 	 * When comparing two DTO objects of the same class: 
@@ -74,6 +81,7 @@ public abstract class BaseEntityDTO {
 	    final int PRIME = 59;
 		return PRIME;
 	}
+
 
 
 }

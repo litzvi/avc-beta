@@ -14,6 +14,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -27,6 +29,7 @@ import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.AuditedEntity;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.Shift;
 import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
@@ -69,6 +72,9 @@ public abstract class GeneralProcess extends AuditedEntity {
 	@Column(nullable = false)
 	@NotNull(message = "process recorded date and time is mandetory")
 	private LocalDateTime recordedTime;
+	
+	@Enumerated(EnumType.STRING)
+	private Shift shift; 
 	
 	private LocalTime startTime;
 	private LocalTime endTime;

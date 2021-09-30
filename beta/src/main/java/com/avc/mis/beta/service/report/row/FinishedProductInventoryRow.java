@@ -118,12 +118,12 @@ public class FinishedProductInventoryRow {
 		}
 	}
 	
-	public BigInteger getBoxes() {
+	public BigDecimal getBoxes() {
 		if(MeasureUnit.NONE == getItem().getUnit().getMeasureUnit()){ 
 			return null;
 		}
 		else {
-			return getTotalAmount().getAmount().setScale(0, RoundingMode.HALF_DOWN).toBigInteger();
+			return getTotalAmount().getAmount();
 		}
 	}
 }

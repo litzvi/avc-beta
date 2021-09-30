@@ -10,8 +10,8 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
- * Version: 21.6
- * issues 601
+ * Version: 21.7
+ * fixed Finished report boxQuantity display to BigDecimal
  * 
  * @author zvi
  *

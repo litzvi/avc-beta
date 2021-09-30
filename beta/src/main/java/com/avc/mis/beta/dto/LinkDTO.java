@@ -3,6 +3,9 @@
  */
 package com.avc.mis.beta.dto;
 
+import com.avc.mis.beta.entities.LinkEntity;
+import com.avc.mis.beta.entities.SubjectLinkEntity;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -21,5 +24,10 @@ public abstract class LinkDTO extends BaseEntityDTO {
 
 	public LinkDTO(Integer id) {
 		super(id);
+	}
+
+	
+	public LinkDTO(LinkEntity entity) {
+		super(entity);
 	}
 }

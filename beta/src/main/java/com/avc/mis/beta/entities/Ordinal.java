@@ -5,6 +5,7 @@ package com.avc.mis.beta.entities;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Interface for object that have an Integer as an ordinal value,
@@ -49,6 +50,19 @@ public interface Ordinal {
 		if(Arrays.stream(array).allMatch(o -> o.getOrdinal() == null)) {
 			for(int i=0; i<array.length; i++) {
 				array[i].setOrdinal(i);
+			}
+		}
+	}
+	
+	/**
+	 * Helper function for setting default ordinal values, when not set.
+	 * If one all the ordinal values are null, will set according to received order.
+	 * @param list of objects with ordinal field to set.
+	 */
+	public static <E extends Ordinal> void setOrdinals(List<E> list) {
+		if(list != null && list.stream().allMatch(o -> o.getOrdinal() == null)) {
+			for(int i=0; i<list.size(); i++) {
+				list.get(i).setOrdinal(i);
 			}
 		}
 	}

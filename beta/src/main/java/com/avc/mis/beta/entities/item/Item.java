@@ -5,6 +5,7 @@ package com.avc.mis.beta.entities.item;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -16,8 +17,10 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -85,6 +88,9 @@ public class Item extends ValueEntity implements ValueInterface {
 	@Column(nullable = false)
 	@NotNull(message = "Item production use/stage is mandatory")
 	private ProductionUse productionUse;
+	
+	@OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
+	private BillOfMaterials billOfMeterials;
 	
 	public static void measureUnitItemCompatiable(MeasureUnit itemDefault, MeasureUnit measureUnit) {
 //		MeasureUnit itemDefaultMU = item.getMeasureUnit();
