@@ -33,7 +33,7 @@ import com.avc.mis.beta.entities.process.collection.OrderItem;
 public interface PORepository extends PoProcessRepository<PO> {
 
 	
-	@Query("select new com.avc.mis.beta.dto.processInfo.OrderProcessInfo(po.personInCharge) "
+	@Query("select new com.avc.mis.beta.dto.processInfo.OrderProcessInfo(po.closed, po.personInCharge) "
 		+ "from PO po "
 		+ "where po.id = :processId ")
 	OrderProcessInfo findPoInfo(Integer processId);
@@ -81,10 +81,10 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "po.id, po.version, po.createdDate, p_user.username, "
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name, "
 			+ "pt.processName, p_line.id, p_line.value, p_line.productionFunctionality,  "
-			+ "po.recordedTime, po.startTime, po.endTime, po.downtime, po.numOfWorkers, "
+			+ "po.recordedTime, po.shift, po.startTime, po.endTime, po.downtime, po.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, po.remarks, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(u.username, ':', approval.decision))), "
-			+ "po.personInCharge) "
+			+ "po.closed, po.personInCharge) "
 		+ "from PO po "
 			+ "join po.poCode po_code "
 				+ "join po_code.contractType t "
@@ -159,7 +159,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 	 * @param orderType e.g. GENERAL_ORDER, CASHEW_ORDER
 	 * @return List of PoItemRow for all orders.
 	 */
-	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.personInCharge, "
+	@Query("select new com.avc.mis.beta.dto.view.PoItemRow(po.id, po.closed, po.personInCharge, "
 			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(coalesce(user.username, ''), ': ', coalesce(approval.decision, '')))), "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit, type(item), "
@@ -218,7 +218,9 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "and (:endTime is null or oi.deliveryDate < :endTime) "
 			+ "and ( "
 					+ ":onlyOpen = false "
-				+ "or (coalesce("
+				+ "or (po.closed = false "
+					+ "and "
+					+ "coalesce("
 					+ "(select sum(rou_2.amount * rou_uom_2.multiplicand / rou_uom_2.divisor) "
 					+ "from oi.receiptItems ri_2 "
 							+ "join ri_2.process r_2 "
@@ -282,7 +284,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "join oi.numberUnits units "
 			+ "left join oi.receiptItems ri "
 				+ "left join ri.process r "
-					+ "left join r.lifeCycle rlc "		
+					+ "left join r.lifeCycle rlc "
 				+ "left join ri.receivedOrderUnits rou "
 				+ "left join UOM rou_uom "
 					+ "on rou_uom.fromUnit = rou.measureUnit and rou_uom.toUnit = units.measureUnit "

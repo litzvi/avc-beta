@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -24,6 +25,7 @@ import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.process.collection.OrderItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -45,6 +47,11 @@ import lombok.Setter;
 @Table(name = "PURCHASE_ORDERS")
 @PrimaryKeyJoinColumn(name = "processId")
 public class PO extends PoProcess {
+	
+	@JsonIgnore
+	@Setter(value = AccessLevel.NONE)
+	@Column(nullable = false, updatable = false, columnDefinition = "boolean not null default 0")
+	private boolean closed = false;
 	
 	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "po", orphanRemoval = true, 

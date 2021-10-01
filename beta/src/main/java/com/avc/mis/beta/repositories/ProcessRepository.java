@@ -33,7 +33,7 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 	@Query("select new com.avc.mis.beta.dto.processInfo.GeneralProcessInfo("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
 			+ "pt.processName, p_line.id, p_line.value, p_line.productionFunctionality, "
-			+ "r.recordedTime, r.startTime, r.endTime, r.downtime, r.numOfWorkers, "
+			+ "r.recordedTime, r.shift, r.startTime, r.endTime, r.downtime, r.numOfWorkers, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(u.username, ':', approval.decision)))) "
 //			+ "function('GROUP_CONCAT', function('DISTINCT', "

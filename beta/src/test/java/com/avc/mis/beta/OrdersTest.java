@@ -124,6 +124,14 @@ public class OrdersTest {
 			throw e;
 		}
 		
+		try {
+			orders.closeOrder(po.getId(), true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+		
 		//cleanup
 		service.cleanup(po);
 

@@ -6,6 +6,9 @@ package com.avc.mis.beta.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -128,9 +131,14 @@ public class Orders {
 	 * Ignores changed non editable fields.
 	 * @param po PO updated with edited state
 	 */
-	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editOrder(PO po) {
 		dao.editGeneralProcessEntity(po);
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void closeOrder(Integer processId, boolean closed) {
+		dao.closePO(processId, closed);
 	}
 			
 	

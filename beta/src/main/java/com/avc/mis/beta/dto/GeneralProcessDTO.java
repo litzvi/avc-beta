@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.processInfo.GeneralProcessInfo;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.Shift;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 
 import lombok.Data;
@@ -47,6 +48,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 	private ProductionLineBasic productionLine;
 	private LocalDateTime recordedTime;
 
+	private Shift shift; 
 	private LocalTime startTime;
 	private LocalTime endTime;
 
@@ -90,6 +92,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 		if(process.getProductionLine() != null)
 			this.productionLine = new ProductionLineBasic(process.getProductionLine());
 		this.recordedTime = process.getRecordedTime();
+		this.shift = process.getShift();
 		this.startTime = process.getStartTime();
 		this.endTime = process.getEndTime();
 		this.downtime = process.getDowntime();
@@ -109,6 +112,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 		this.processName = info.getProcessName();
 		this.productionLine = info.getProductionLine();
 		this.recordedTime = info.getRecordedTime();
+		this.shift = info.getShift();
 		this.startTime = info.getStartTime();
 		this.endTime = info.getEndTime();
 		this.downtime = info.getDowntime();

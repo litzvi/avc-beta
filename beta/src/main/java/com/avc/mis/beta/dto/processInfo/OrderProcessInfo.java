@@ -12,6 +12,7 @@ import lombok.Value;
 @Value
 public class OrderProcessInfo {
 
+	boolean closed;
 	String personInCharge;
 	
 }

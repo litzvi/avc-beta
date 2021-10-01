@@ -17,6 +17,7 @@ import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.enums.Shift;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;
@@ -34,6 +35,7 @@ public class GeneralProcessInfo extends DataDTO {
 	ProcessName processName;
 	ProductionLineBasic productionLine;
 	LocalDateTime recordedTime;
+	Shift shift; 
 	LocalTime startTime;
 	LocalTime endTime;
 	Duration downtime;
@@ -46,7 +48,7 @@ public class GeneralProcessInfo extends DataDTO {
 	
 	public GeneralProcessInfo(Integer id, Integer version, Instant createdDate, String userRecording, 
 			ProcessName processName, Integer productionLineId, String productionLineValue, ProductionFunctionality productionFunctionality,
-			LocalDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration downtime, Integer numOfWorkers, 
+			LocalDateTime recordedTime, Shift shift, LocalTime startTime, LocalTime endTime, Duration downtime, Integer numOfWorkers, 
 			ProcessStatus processStatus, EditStatus editStatus,
 			String remarks, String approvals) {
 		super(id, version);
@@ -58,6 +60,7 @@ public class GeneralProcessInfo extends DataDTO {
 		else
 			this.productionLine = null;
 		this.recordedTime = recordedTime;
+		this.shift = shift;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.downtime = downtime;

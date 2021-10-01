@@ -42,6 +42,7 @@ import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
@@ -651,6 +652,14 @@ public class ProcessInfoDAO extends DAO {
 			throw new IllegalArgumentException("Can't change life cycle process status, from: " + 
 					processLifeCycle.getProcessStatus() + " to: " + processStatus);
 		}
+	}
+	
+	public void closePO(Integer poId, boolean closed) {
+		CriteriaUpdate<PO> update = 
+	    		getEntityManager().getCriteriaBuilder().createCriteriaUpdate(PO.class);
+	    Root<PO> root = update.from(PO.class);
+	    getEntityManager().createQuery(update.
+	    		set("closed", closed).where(root.get("id").in(poId))).executeUpdate();
 	}
 	
 	/**

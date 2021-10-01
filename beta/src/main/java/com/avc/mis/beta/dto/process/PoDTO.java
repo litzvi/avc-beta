@@ -22,6 +22,7 @@ import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.enums.Shift;
 import com.avc.mis.beta.entities.process.PO;
 
 import lombok.Data;
@@ -47,6 +48,7 @@ public class PoDTO extends PoProcessDTO {
 	
 	private List<OrderItemDTO> orderItems;
 	
+	private boolean closed;
 	private String personInCharge;
 	
 	/**
@@ -57,18 +59,18 @@ public class PoDTO extends PoProcessDTO {
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
 			Integer supplierId, Integer supplierVersion, String supplierName, 
 			ProcessName processName, Integer productionLineId, String productionLineValue, ProductionFunctionality productionFunctionality,
-			LocalDateTime recordedTime, LocalTime startTime, LocalTime endTime, 
+			LocalDateTime recordedTime, Shift shift, LocalTime startTime, LocalTime endTime, 
 			Duration downtime, Integer numOfWorkers, 
 			ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
-			String personInCharge) {
+			boolean closed, String personInCharge) {
 		super();
 		super.setGeneralProcessInfo(new GeneralProcessInfo(id, version, createdDate, staffRecording, 
 				processName, productionLineId, productionLineValue, productionFunctionality,
-				recordedTime, startTime, endTime, 
+				recordedTime, shift, startTime, endTime, 
 				downtime, numOfWorkers, processStatus, editStatus, remarks, approvals));
 		super.setPoCode(new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName));
+		this.closed = closed;
 		this.personInCharge = personInCharge;
-
 	}
 	
 	/**
@@ -77,12 +79,14 @@ public class PoDTO extends PoProcessDTO {
 	 */
 	public PoDTO(@NonNull PO po) {
 		super(po);
+		this.closed = po.isClosed();
 		this.personInCharge = po.getPersonInCharge();
 		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toList());
 
 	}
 	
 	public void setOrderProcessInfo(OrderProcessInfo info) {
+		this.closed = info.isClosed();
 		this.personInCharge = info.getPersonInCharge();		
 	}
 	

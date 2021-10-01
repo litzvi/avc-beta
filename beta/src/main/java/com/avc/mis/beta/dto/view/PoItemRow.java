@@ -47,6 +47,7 @@ public class PoItemRow extends BasicValueDTO {
 	@Getter(value = AccessLevel.NONE)
 	@NonFinal @Setter List<MeasureUnit> displayMeasureUnits = Arrays.asList(MeasureUnit.KG, MeasureUnit.LBS);
 	
+	@JsonIgnore boolean closed;
 	String personInCharge;
 	PoCodeBasic poCode;
 	String[] approvals;
@@ -69,7 +70,7 @@ public class PoItemRow extends BasicValueDTO {
 	 * All arguments Constructor ,
 	 * used to project directly from database without nested fetching.
 	 */
-	public PoItemRow(@NonNull Integer id, String personInCharge,
+	public PoItemRow(@NonNull Integer id, boolean closed, String personInCharge,
 			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, 
 			String approvals,
 			Integer itemId, String itemValue, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, 
@@ -79,6 +80,7 @@ public class PoItemRow extends BasicValueDTO {
 			String defects, BigDecimal unitPrice, Currency currency, 
 			ProcessStatus status) {
 		super(id);
+		this.closed = closed;
 		this.personInCharge = personInCharge;
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
 		if(approvals == null || approvals.startsWith(":")) {
@@ -129,6 +131,10 @@ public class PoItemRow extends BasicValueDTO {
 		
 		if(this.receiptsCancelled > 0) {
 			orderStatus.add("REJECTED");
+		}
+		
+		if(this.closed) {
+			orderStatus.add("CLOSED");
 		}
 		
 		return orderStatus;
