@@ -11,19 +11,15 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
-import com.avc.mis.beta.entities.LinkEntity;
 import com.avc.mis.beta.entities.SubjectLinkEntity;
-import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
 import lombok.Data;

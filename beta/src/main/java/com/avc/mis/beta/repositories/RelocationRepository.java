@@ -12,7 +12,6 @@ import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
 import com.avc.mis.beta.dto.view.RelocationWithItemAmount;
 import com.avc.mis.beta.entities.process.RelocationProcess;
-import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 
 /**

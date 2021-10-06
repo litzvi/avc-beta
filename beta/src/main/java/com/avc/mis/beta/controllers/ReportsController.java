@@ -1,11 +1,26 @@
 package com.avc.mis.beta.controllers;
 
-import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+import javax.ws.rs.QueryParam;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
-import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
@@ -23,13 +38,11 @@ import com.avc.mis.beta.service.ContainerArrivals;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.Orders;
-import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessReader;
 import com.avc.mis.beta.service.ProcessSummaryReader;
 import com.avc.mis.beta.service.ProductionProcesses;
 import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.Receipts;
-import com.avc.mis.beta.service.Samples;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.report.InventoryReports;
@@ -40,25 +53,6 @@ import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 import com.avc.mis.beta.service.report.row.SupplierQualityRow;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
-import javax.ws.rs.QueryParam;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/api/reports")
@@ -274,7 +268,7 @@ public class ReportsController {
 	
 	@RequestMapping("/getCashewInventoryFinished")
 	public List<FinishedProductInventoryRow> getCashewInventoryFinished(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-		return inventoryReports.getFinishedProductInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.PACKED, ProductionUse.ROAST, ProductionUse.TOFFEE}, date);
+		return inventoryReports.getFinishedProductInventoryRows(new ItemGroup[] {ItemGroup.PRODUCT, ItemGroup.QC}, new ProductionUse[] {ProductionUse.PACKED, ProductionUse.ROAST, ProductionUse.TOFFEE}, date);
 	}
 	
 	@RequestMapping("/getCashewInventoryRaw")
@@ -284,7 +278,7 @@ public class ReportsController {
 	
 	@RequestMapping("/getCashewInventoryClean")
 	public List<FinishedProductInventoryRow> getCashewInventoryClean(@QueryParam("date")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-		return inventoryReports.getFinishedProductInventoryRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.CLEAN}, date);
+		return inventoryReports.getFinishedProductInventoryRows(new ItemGroup[] {ItemGroup.PRODUCT}, new ProductionUse[] {ProductionUse.CLEAN}, date);
 	}
 	
 	@RequestMapping("/getCashewInventoryBagged")

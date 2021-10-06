@@ -9,7 +9,6 @@ import com.avc.mis.beta.entities.codes.BasePoCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import lombok.Value;
 
 /**
  * DTO for PoCode containing id and the fields needed 

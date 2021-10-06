@@ -4,7 +4,6 @@
 package com.avc.mis.beta.entities;
 
 import java.time.Instant;
-import java.time.OffsetDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;

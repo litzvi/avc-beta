@@ -13,14 +13,13 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.query.StorageBalance;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.report.ItemAmountWithPo;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
-import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
@@ -128,7 +127,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			boolean checkExcludedProcessIds, Integer[] excludedProcessIds);
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessItemInventory( "
-			+ "pi.id, "
+			+ "pi.id, pi.version, "
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit, type(item), "
 			+ "pi.measureUnit, "
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
@@ -393,7 +392,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	/**
 	 * ITEMS THAT HAVE AVAILABLE INVENTORY
 	 */
-	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(item.id, item.value)  "
+	@Query("select new com.avc.mis.beta.dto.reference.BasicValueEntity(item.id, item.value)  "
 			+ "from ProcessItem pi "
 				+ "join pi.item item "
 				+ "join pi.process p "
@@ -824,7 +823,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
-			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
+			+ "and (:checkItemGroups = false or item.itemGroup in :itemGroups) "
+//			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:pointOfTime is null "
 				+ "or (p.recordedTime <= :pointOfTime and sf_p.recordedTime <= :pointOfTime)) "
 			+ "and"
@@ -839,16 +839,17 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 							+ "and (:pointOfTime is null or usedProcess.recordedTime <= :pointOfTime)) "
 					+ ", 0)"
 				+ ") "
-		+ "GROUP BY item, "
-			+ "CASE "
-				+ "WHEN item.itemGroup = com.avc.mis.beta.entities.item.ItemGroup.PRODUCT "
-					+ "THEN po_code "
-				+ "ELSE null "
-			+ "END "
-		+ "ORDER BY item ")
+		+ "GROUP BY item, po_code "
+//			+ "CASE "
+//				+ "WHEN item.itemGroup = com.avc.mis.beta.entities.item.ItemGroup.PRODUCT " //also qc
+//					+ "THEN po_code "
+//				+ "ELSE null "
+//			+ "END "
+		+ "ORDER BY item.code ")
 	List<FinishedProductInventoryRow> findFinishedProductInventoryRows(
 			ProductionFunctionality[] excludedFunctionalities, 
-			boolean checkProductionUses, ProductionUse[] productionUses, ItemGroup itemGroup,
+			boolean checkProductionUses, ProductionUse[] productionUses, 
+			boolean checkItemGroups, ItemGroup[] itemGroups,
 			LocalDateTime pointOfTime);
 
 	/**

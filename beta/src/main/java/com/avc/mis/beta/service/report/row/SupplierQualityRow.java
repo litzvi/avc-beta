@@ -6,9 +6,6 @@ package com.avc.mis.beta.service.report.row;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-
-import org.apache.commons.lang3.builder.ToStringExclude;
 
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.dto.report.ItemAmount;
@@ -19,10 +16,8 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.ToString;
 
 /**

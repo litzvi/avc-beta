@@ -5,7 +5,7 @@ package com.avc.mis.beta.dto;
 
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.SubjectLinkEntity;
-import com.avc.mis.beta.entities.item.BomLine;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -37,5 +37,12 @@ public abstract class SubjectLinkDTO extends LinkDTO implements Ordinal {
 	public SubjectLinkDTO(SubjectLinkEntity entity) {
 		super(entity);
 		this.ordinal = entity.getOrdinal();
+	}
+	
+	@JsonIgnore
+	public SubjectLinkEntity fillEntity(SubjectLinkEntity entity) {
+		super.fillEntity(entity);
+		entity.setOrdinal(getOrdinal());
+		return entity;
 	}
 }

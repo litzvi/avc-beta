@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;

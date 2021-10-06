@@ -15,12 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.generic.ValueEntityObject;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.view.BillOfMaterialsRow;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
@@ -167,6 +168,10 @@ public class ValueTablesReader {
 		return getValueTablesRepository().findAllBankBranchesDTO();
 	}
 	
+	public List<BillOfMaterialsRow> getAllBillOfMaterials() {
+		return getValueTablesRepository().findAllBillOfMaterials();
+	}
+	
 //---------------------------Basic values---------------------------------------------------
 	
 	/**
@@ -246,6 +251,10 @@ public class ValueTablesReader {
 	
 	public List<BasicValueEntity<Item>> getBasicItems(ItemGroup itemGroup, ProductionUse productionUse) {
 		return getValueTablesRepository().findBasicItems(itemGroup, productionUse);
+	}
+	
+	public List<ItemDTO> getProductBillOfMaterials(Integer product, ItemGroup itemGroup, ProductionUse productionUse) {
+		return getValueTablesRepository().findProductBillOfMaterials(product, itemGroup, productionUse);
 	}
 	
 	public List<ProductionLineBasic> getAllBasicProductionLines() {

@@ -85,7 +85,7 @@ public class ProductionController {
 		if(withAll) {
 			return warehouseManagement.findAvailableInventoryPoCodes(null, ItemGroup.WASTE, 4, null, null);
 		}
-		return warehouseManagement.findAvailableInventoryPoCodes(new ProductionFunctionality[]{ProductionFunctionality.ROASTER, ProductionFunctionality.PACKING}, ItemGroup.WASTE, 4, null , null);
+		return warehouseManagement.findAvailableInventoryPoCodes(new ProductionFunctionality[]{ProductionFunctionality.ROASTER, ProductionFunctionality.PACKING}, ItemGroup.WASTE, 4, null, null);
 	}
 	
 	@RequestMapping("/findFreeMixPoCodes")

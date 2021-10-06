@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @NoArgsConstructor
-public abstract class BasicSubjectDataDTO extends BasicDataDTO {
+public abstract class BasicSubjectDataDTO extends BasicDataValueDTO {
 
 	private Integer ordinal;
 	

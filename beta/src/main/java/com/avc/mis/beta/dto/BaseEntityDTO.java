@@ -4,7 +4,6 @@
 package com.avc.mis.beta.dto;
 
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.LinkEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -80,6 +79,11 @@ public abstract class BaseEntityDTO {
 	public int hashCode() {
 	    final int PRIME = 59;
 		return PRIME;
+	}
+
+	public BaseEntity fillEntity(BaseEntity baseEntity) {
+		baseEntity.setId(getId());
+		return baseEntity;
 	}
 
 

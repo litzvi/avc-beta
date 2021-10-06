@@ -16,7 +16,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public abstract class BasicDataDTO extends BasicValueDTO {
+public abstract class BasicDataDTO extends BasicDTO {
 
 	private Integer version;
 	

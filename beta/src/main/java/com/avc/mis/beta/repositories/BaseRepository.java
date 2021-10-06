@@ -11,8 +11,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -45,12 +45,12 @@ import com.avc.mis.beta.entities.values.Warehouse;
 @NoRepositoryBean
 interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 	
-	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(s.id, s.value) "
+	@Query("select new com.avc.mis.beta.dto.reference.BasicValueEntity(s.id, s.value) "
 			+ "from Warehouse s where s.active = true "
 			+ "order by s.value ")
 	List<BasicValueEntity<Warehouse>> findAllWarehousesDTO();
 	
-	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(s.id, s.value) "
+	@Query("select new com.avc.mis.beta.dto.reference.BasicValueEntity(s.id, s.value) "
 			+ "from CashewGrade s where s.active = true "
 			+ "order by s.value ")
 	List<BasicValueEntity<CashewGrade>> findAllCashewGradesDTO();

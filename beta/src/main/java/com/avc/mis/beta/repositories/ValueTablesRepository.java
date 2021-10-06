@@ -9,10 +9,11 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.dto.view.BillOfMaterialsRow;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
@@ -72,7 +73,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 		+ "order by i.productionUse, i.brand, i.code, i.value ")
 	List<CashewItemDTO> findCashewItems(ItemGroup itemGroup, ProductionUse productionUse, Integer gradeId, Integer packageTypeOrdinal);
 
-	@Query("select new com.avc.mis.beta.dto.values.BasicValueEntity(i.id, i.value) "
+	@Query("select new com.avc.mis.beta.dto.reference.BasicValueEntity(i.id, i.value) "
 			+ "from Item i "
 			+ "where (i.itemGroup = :itemGroup or :itemGroup is null)"
 				+ "and (i.productionUse = :productionUse or :productionUse is null)"
@@ -97,5 +98,28 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 		+ "where s.id in :storageIds "
 		+ "group by i ")
 	List<ItemWithUnitDTO> findStoragesItems(Set<Integer> storageIds);
+
+	@Query("select new com.avc.mis.beta.dto.values.ItemDTO("
+			+ "i.id, i.value, i.code, i.brand, "
+			+ "i.measureUnit, i.itemGroup, i.productionUse, "
+			+ "u, type(i)) "
+		+ "from BillOfMaterials bom "
+			+ "join bom.product product "
+			+ "join bom.bomList bom_line "
+				+ "join bom_line.material i "
+					+ "join i.unit u "
+		+ "where product = product "
+			+ "and (i.itemGroup = :itemGroup or :itemGroup is null)"
+			+ "and (i.productionUse = :productionUse or :productionUse is null)"
+			+ "and i.active = true "
+		+ "order by i.productionUse, i.code, i.value ")
+	List<ItemDTO> findProductBillOfMaterials(Integer product, ItemGroup itemGroup, ProductionUse productionUse);
+	
+	@Query("select new com.avc.mis.beta.dto.view.BillOfMaterialsRow( "
+			+ "bom.id, prod.id, prod.value, bom.defaultBatch) "
+			+ "from BillOfMaterials bom "
+				+ "join bom.product prod ")
+	List<BillOfMaterialsRow> findAllBillOfMaterials();
+	
 		
 }

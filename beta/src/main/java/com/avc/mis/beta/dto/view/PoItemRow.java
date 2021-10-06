@@ -134,6 +134,7 @@ public class PoItemRow extends BasicValueDTO {
 		}
 		
 		if(this.closed) {
+			orderStatus.remove("OPEN");
 			orderStatus.add("CLOSED");
 		}
 		

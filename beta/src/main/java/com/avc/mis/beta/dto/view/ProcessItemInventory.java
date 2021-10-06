@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.BasicDataDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -40,7 +40,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageInventoryRow> {
+public class ProcessItemInventory extends BasicDataDTO implements ListGroup<StorageInventoryRow> {
 
 	private ItemWithUnitDTO item;
 	private MeasureUnit measureUnit;
@@ -60,7 +60,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 	 * All database fields (the fields in the form they are fetched from the db) arguments constructor, 
 	 * excluding list of storage forms and calculated totals.
 	 */
-	public ProcessItemInventory(Integer id, 
+	public ProcessItemInventory(Integer id, Integer version, 
 			Integer itemId, String itemValue, MeasureUnit itemMeasureUnit, ItemGroup itemGroup, 
 			AmountWithUnit unit, Class<? extends Item> clazz,
 			MeasureUnit processItemMeasureUnit, 
@@ -68,7 +68,7 @@ public class ProcessItemInventory extends BasicDTO implements ListGroup<StorageI
 			String poCodes, String suppliers, 
 			Integer gradeId,  String gradeValue, 
 			LocalDateTime processDate, LocalDateTime receiptDate, boolean tableView) {
-		super(id);
+		super(id, version);
 		this.item = new ItemWithUnitDTO(itemId, itemValue, itemMeasureUnit, itemGroup, null, unit, clazz);
 		this.measureUnit = processItemMeasureUnit;
 		this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);

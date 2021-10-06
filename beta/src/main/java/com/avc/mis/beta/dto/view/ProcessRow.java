@@ -5,10 +5,8 @@ package com.avc.mis.beta.dto.view;
 
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,7 +16,6 @@ import java.util.stream.Stream;
 import com.avc.mis.beta.dto.BasicDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -138,18 +135,17 @@ public class ProcessRow extends BasicDTO {
 		try {
 			AmountWithUnit processGain = producedAmounts.get().subtract(usedAmounts.get());
 			List<AmountWithUnit> diff =  AmountWithUnit.weightDisplay(processGain, displayMeasureUnits);
-			diff.add(0, new AmountWithUnit(getProcessPercentageGain(), MeasureUnit.PERCENT));
+			diff.add(0, getProcessPercentageGain());
 			return diff;
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
 		}
-		
-
 	}
 	
-	public BigDecimal getProcessPercentageGain() {
+	public AmountWithUnit getProcessPercentageGain() {
 		try {
-			return AmountWithUnit.percentageLoss(producedAmounts.get(), usedAmounts.get());
+			BigDecimal percentageGain = AmountWithUnit.percentageLoss(producedAmounts.get(), usedAmounts.get());
+			return new AmountWithUnit(percentageGain, MeasureUnit.PERCENT);
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
 		}
@@ -161,7 +157,7 @@ public class ProcessRow extends BasicDTO {
 		try {
 			AmountWithUnit countDifference = countAmounts.get().subtract(usedAmounts.get());			
 			List<AmountWithUnit> diff = AmountWithUnit.weightDisplay(countDifference, displayMeasureUnits);
-			diff.add(0, new AmountWithUnit(getUsedCountPercentageDifference(), MeasureUnit.PERCENT));
+			diff.add(0, getUsedCountPercentageDifference());
 			return diff;
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
@@ -169,9 +165,10 @@ public class ProcessRow extends BasicDTO {
 		
 	}
 	
-	public BigDecimal getUsedCountPercentageDifference() {
+	public AmountWithUnit getUsedCountPercentageDifference() {
 		try {
-			return AmountWithUnit.percentageLoss(countAmounts.get(), usedAmounts.get());
+			BigDecimal percentageLoss = AmountWithUnit.percentageLoss(countAmounts.get(), usedAmounts.get());
+			return new AmountWithUnit(percentageLoss, MeasureUnit.PERCENT);
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
 		}
@@ -182,7 +179,7 @@ public class ProcessRow extends BasicDTO {
 		try {
 			AmountWithUnit countDifference = countAmounts.get().subtract(producedAmounts.get());
 			List<AmountWithUnit> diff =  AmountWithUnit.weightDisplay(countDifference, displayMeasureUnits);
-			diff.add(0, new AmountWithUnit(getProducedCountPercentageDifference(), MeasureUnit.PERCENT));
+			diff.add(0, getProducedCountPercentageDifference());
 			return diff;
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
@@ -190,9 +187,10 @@ public class ProcessRow extends BasicDTO {
 		
 	}
 	
-	public BigDecimal getProducedCountPercentageDifference() {
+	public AmountWithUnit getProducedCountPercentageDifference() {
 		try {
-			return AmountWithUnit.percentageLoss(countAmounts.get(), producedAmounts.get());
+			BigDecimal percentageDifference = AmountWithUnit.percentageLoss(countAmounts.get(), producedAmounts.get());
+			return new AmountWithUnit(percentageDifference, MeasureUnit.PERCENT);
 		} catch (NullPointerException | NoSuchElementException e) {
 			return null;
 		}

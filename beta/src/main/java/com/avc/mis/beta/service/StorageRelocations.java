@@ -3,12 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,13 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
-import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.StorageRelocation;
-import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
-import com.avc.mis.beta.entities.process.inventory.StorageBase;
-import com.avc.mis.beta.entities.process.inventory.StorageMove;
-import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.StorageRelocationRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 

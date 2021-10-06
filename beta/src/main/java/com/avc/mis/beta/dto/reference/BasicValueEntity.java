@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.avc.mis.beta.dto.values;
+package com.avc.mis.beta.dto.reference;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.ValueInterface;
@@ -9,6 +9,7 @@ import com.avc.mis.beta.entities.ValueInterface;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.ToString;
 
 /**
  * Generic class for holding only id and value of an entity, 
@@ -19,6 +20,7 @@ import lombok.NonNull;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 public class BasicValueEntity<T extends ValueInterface> extends ValueDTO implements ValueInterface {
 	
 	String value;

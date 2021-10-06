@@ -4,7 +4,7 @@
 package com.avc.mis.beta.dto.generic;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.ValueInterface;
 
 import lombok.EqualsAndHashCode;

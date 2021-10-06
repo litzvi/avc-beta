@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.basic;
 
-import com.avc.mis.beta.dto.BasicDataDTO;
+import com.avc.mis.beta.dto.BasicDataValueDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -22,7 +22,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class ProcessBasic <T extends GeneralProcess> extends BasicDataDTO {
+public class ProcessBasic <T extends GeneralProcess> extends BasicDataValueDTO {
 	
 	ProcessName processName;
 	Class<? extends T> processClazz;

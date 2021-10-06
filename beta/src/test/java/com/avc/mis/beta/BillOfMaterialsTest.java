@@ -19,7 +19,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
 import com.avc.mis.beta.dto.item.BomLineDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.view.BillOfMaterialsRow;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.values.Country;
@@ -37,6 +39,7 @@ public class BillOfMaterialsTest {
 	static final int BOM_LIST_LENGTH = 5;
 
 	@Autowired BillOfMaterialService billOfMaterialService;
+	@Autowired ValueTablesReader valueTablesReader;
 	@Autowired TestService service;
 	
 	@Test
@@ -67,6 +70,12 @@ public class BillOfMaterialsTest {
 		assertEquals(expected, actual, "failed test adding bill of materials");
 		
 		billOfMaterialService.editBillOfMaterials(actual);
+		
+		List<ItemDTO> bomItems = valueTablesReader.getProductBillOfMaterials(expected.getProduct().getId(), null, null);
+		bomItems.forEach(i -> System.out.println(i));
+		
+		List<BillOfMaterialsRow> billOfMaterialsRows = valueTablesReader.getAllBillOfMaterials();
+		billOfMaterialsRows.forEach(i -> System.out.println(i));
 		
 		billOfMaterialService.removeBillOfMaterials(actual.getId());
 

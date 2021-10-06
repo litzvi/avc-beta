@@ -3,10 +3,6 @@
  */
 package com.avc.mis.beta.entities.item;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Set;
-
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -24,7 +20,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 

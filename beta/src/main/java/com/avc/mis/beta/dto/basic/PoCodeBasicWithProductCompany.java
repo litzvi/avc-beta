@@ -5,7 +5,6 @@ package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.entities.codes.BasePoCode;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;

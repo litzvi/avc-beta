@@ -3,7 +3,7 @@
  */
 package com.avc.mis.beta.dto.basic;
 
-import com.avc.mis.beta.dto.BasicDataDTO;
+import com.avc.mis.beta.dto.BasicDataValueDTO;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.process.ContainerArrival;
@@ -21,7 +21,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class ContainerArrivalBasic extends BasicDataDTO {
+public class ContainerArrivalBasic extends BasicDataValueDTO {
 
 	@JsonIgnore
 	@ToString.Exclude

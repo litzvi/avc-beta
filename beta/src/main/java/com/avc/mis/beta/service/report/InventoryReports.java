@@ -3,9 +3,7 @@
  */
 package com.avc.mis.beta.service.report;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -20,13 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.report.ItemAmountWithPo;
 import com.avc.mis.beta.dto.report.ItemQc;
 import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
-import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -38,7 +34,6 @@ import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
-import com.avc.mis.beta.service.report.row.SupplierQualityRow;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
@@ -177,12 +172,14 @@ public class InventoryReports {
 		return rows;
 	}
 		
-	public List<FinishedProductInventoryRow> getFinishedProductInventoryRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDateTime pointOfTime) {
+	public List<FinishedProductInventoryRow> getFinishedProductInventoryRows(ItemGroup[] itemGroups, ProductionUse[] productionUses, LocalDateTime pointOfTime) {
 		boolean checkProductionUses = (productionUses != null);
+		boolean checkItemGroups = (itemGroups != null);
 		List<FinishedProductInventoryRow> rows = getInventoryRepository().findFinishedProductInventoryRows(
-				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, itemGroup, pointOfTime);	
+				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, 
+				checkItemGroups, itemGroups, pointOfTime);	
 		
-		if(itemGroup == ItemGroup.PRODUCT && ArrayUtils.contains(productionUses, ProductionUse.CLEAN)) {
+		if(ArrayUtils.contains(itemGroups, ItemGroup.PRODUCT) && ArrayUtils.contains(productionUses, ProductionUse.CLEAN)) {
 			int[] poCodeIds = rows.stream().mapToInt(FinishedProductInventoryRow::getPoCodeId).toArray();
 			Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, ProductionUse.ROAST, false);
 			Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getPoCodeId));

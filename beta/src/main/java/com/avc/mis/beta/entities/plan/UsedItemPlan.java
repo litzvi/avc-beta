@@ -20,7 +20,6 @@ import javax.validation.groups.Default;
 import com.avc.mis.beta.entities.RankedAuditedEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
@@ -63,4 +62,14 @@ public class UsedItemPlan extends RankedAuditedEntity {
 	@Valid
 	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
 	private AmountWithUnit numberUnits;
+	
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof ProductionPlanRow) {
+			this.setPlan((ProductionPlanRow)referenced);
+		}
+		else {
+			throw new ClassCastException("Referenced object isn't a production plan row");
+		}		
+	}
 }

@@ -4,11 +4,33 @@
  */
 package com.avc.mis.beta.controllers;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.avc.mis.beta.dto.basic.UserBasic;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.data.UserDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.data.Person;
@@ -33,38 +55,19 @@ import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.Users;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.ValueWriter;
+import com.avc.mis.beta.service.report.OrderReports;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Data;
 
@@ -95,6 +98,11 @@ public class ManagmentControler {
 	@Autowired
 	private ValueWriter refeDaoWrite;
 	
+	@Autowired
+	private OrderReports orderReports;
+	
+	@Autowired
+	private Orders orders;
 	
 	@RequestMapping("/getAllUsers")
 	public List<UserRow> getUsersTable() {
@@ -416,6 +424,17 @@ public class ManagmentControler {
 	@DeleteMapping(value="/removeProcess/{id}")
 	public ResponseEntity<?> removeProcess(@PathVariable("id") int processId) {
 		processInfoWriter.removeProcess(processId);
+		return ResponseEntity.ok().build();
+	}
+	
+	@RequestMapping("/getCashewOrdersOpen")
+	public List<PoItemRow> getCashewOrdersOpen() {
+		return orderReports.findOpenCashewOrderItems();
+	}
+	
+	@PatchMapping(value="/closeOrder/{id}")
+	public ResponseEntity<?> editMaterialUse(@PathVariable("id") int processId) {
+		orders.closeOrder(processId, true);
 		return ResponseEntity.ok().build();
 	}
 	

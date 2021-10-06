@@ -30,10 +30,11 @@ import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.dto.view.ContainerArrivalRow;
 import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
@@ -117,7 +118,7 @@ public class QueryTest {
 	@Autowired LoadingReports loadingReports;
 	@Autowired ContainerArrivals containerArrivals;
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void queryTest() {
 
@@ -440,7 +441,7 @@ public class QueryTest {
 
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void oneQueryTest() {
 		
@@ -470,7 +471,7 @@ public class QueryTest {
 		
 		List<FinishedProductInventoryRow> finishedProductInventoryRows;
 		try {
-			finishedProductInventoryRows = inventoryReports.getFinishedProductInventoryRows(ItemGroup.PRODUCT, 
+			finishedProductInventoryRows = inventoryReports.getFinishedProductInventoryRows(new ItemGroup[] {ItemGroup.PRODUCT}, 
 					new ProductionUse[] {ProductionUse.PACKED, ProductionUse.ROAST, ProductionUse.ROAST, ProductionUse.TOFFEE}, 
 					LocalDateTime.now());
 //					LocalDateTime.of(2021, 5, 1, 0, 0));
@@ -555,6 +556,7 @@ public class QueryTest {
 		}
 		processReport.forEach(i -> System.out.println(i));
 		
-
+		List<ItemDTO> bomItems = valueTablesReader.getProductBillOfMaterials(service.getItem().getId(), null, null);
+		bomItems.forEach(i -> System.out.println(i));
 	}
 }

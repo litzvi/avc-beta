@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dto;
 
+import com.avc.mis.beta.entities.DataEntity;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -27,5 +29,16 @@ public abstract class DataDTO extends BaseEntityDTO {
 	public DataDTO(Integer id, Integer version) {
 		super(id);
 		this.version = version;
+	}
+	
+	public DataDTO(DataEntity entity) {
+		super(entity);
+		this.version = entity.getVersion();
+	}
+	
+	public DataEntity fillEntity(DataEntity dataEntity) {
+		super.fillEntity(dataEntity);
+		dataEntity.setVersion(getVersion());
+		return dataEntity;
 	}
 }

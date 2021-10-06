@@ -15,7 +15,6 @@ import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.values.CashewGrade;
 
 import lombok.Value;
 

@@ -6,9 +6,6 @@ package com.avc.mis.beta.service;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;

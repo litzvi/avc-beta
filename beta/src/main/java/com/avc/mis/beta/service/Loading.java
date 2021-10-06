@@ -20,7 +20,6 @@ import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.ContainerLoading;
-import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
 import com.avc.mis.beta.service.report.LoadingReports;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;

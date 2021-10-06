@@ -61,4 +61,14 @@ public class ProcessItemPlan extends RankedAuditedEntity {
 	@Valid
 	@ConvertGroup(from = Default.class, to = PositiveAmount.class)
 	private AmountWithUnit numberUnits;
+	
+	@Override
+	public void setReference(Object referenced) {
+		if(referenced instanceof ProductionPlanRow) {
+			this.setPlan((ProductionPlanRow)referenced);
+		}
+		else {
+			throw new ClassCastException("Referenced object isn't a production plan row");
+		}		
+	}
 }

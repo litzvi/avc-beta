@@ -6,8 +6,8 @@ package com.avc.mis.beta.dto.view;
 import java.util.List;
 import java.util.Optional;
 
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;

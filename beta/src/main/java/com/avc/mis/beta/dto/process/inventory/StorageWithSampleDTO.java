@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.generic.OrdinalAmount;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageWithSample;

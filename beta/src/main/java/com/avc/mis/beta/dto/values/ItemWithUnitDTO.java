@@ -3,8 +3,6 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import java.math.BigDecimal;
-
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;

@@ -4,16 +4,14 @@
 package com.avc.mis.beta.service.report.row;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.Currency;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.report.ItemAmountWithPo;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -22,7 +20,6 @@ import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Value;
 
 /**
  * @author zvi
@@ -101,15 +98,18 @@ public class ReceiptInventoryRow extends BasicDTO {
 	} 
 	
 	public BigDecimal getWeightInLbs() {
+		BigDecimal weightInLbs;
 		if(getAmount().getMeasureUnit() == MeasureUnit.LBS) {
-			return getAmount().getAmount();
+			weightInLbs = getAmount().getAmount();
 		}
 		
 		try {
-			return getAmount().convert(MeasureUnit.LBS).setScale(MeasureUnit.SCALE).getAmount();
+			weightInLbs = getAmount().convert(MeasureUnit.LBS).getAmount();
 		} catch (UnsupportedOperationException e) {
 			return null;
 		}
+		
+		return weightInLbs.setScale(0, RoundingMode.HALF_DOWN);
 	}
 	
 	public String getType() {

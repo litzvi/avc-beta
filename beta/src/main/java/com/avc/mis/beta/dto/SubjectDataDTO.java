@@ -4,6 +4,9 @@
 package com.avc.mis.beta.dto;
 
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.RankedAuditedEntity;
+import com.avc.mis.beta.entities.SubjectDataEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,6 +28,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public abstract class SubjectDataDTO extends DataDTO implements Ordinal {
 
+	@EqualsAndHashCode.Exclude
 	private Integer ordinal;
 	
 	public SubjectDataDTO(Integer id, Integer version, Integer ordinal) {
@@ -34,5 +38,31 @@ public abstract class SubjectDataDTO extends DataDTO implements Ordinal {
 	
 	public SubjectDataDTO(Integer id, Integer version) {
 		super(id, version);
+	}
+	
+	public SubjectDataDTO(RankedAuditedEntity entity) {
+		super(entity);
+		this.ordinal = entity.getOrdinal();
+	}
+	
+	@JsonIgnore
+	public SubjectDataEntity fillEntity(SubjectDataEntity entity) {
+		super.fillEntity(entity);
+		entity.setOrdinal(getOrdinal());
+		return entity;
+	}
+	
+//	@JsonIgnore
+//	public SubjectLinkEntity fillEntity(SubjectLinkEntity entity) {
+//		super.fillEntity(entity);
+//		entity.setOrdinal(getOrdinal());
+//		return entity;
+//	}
+//	
+	@JsonIgnore
+	public RankedAuditedEntity fillEntity(RankedAuditedEntity entity) {
+		super.fillEntity(entity);
+		entity.setOrdinal(getOrdinal());
+		return entity;
 	}
 }

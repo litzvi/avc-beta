@@ -27,6 +27,7 @@ import lombok.NonNull;
 public enum MeasureUnit {
 	
 	NONE(""),
+	INFINITY("∞"),
 	PERCENT("%"),
 	TON("TON"),
 	KG("KG"),

@@ -3,8 +3,6 @@
  */
 package com.avc.mis.beta.repositories;
 
-import com.avc.mis.beta.entities.process.StorageRelocation;
-
 /**
  * @author zvi
  *

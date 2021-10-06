@@ -4,7 +4,7 @@
 package com.avc.mis.beta.dto;
 
 import com.avc.mis.beta.entities.LinkEntity;
-import com.avc.mis.beta.entities.SubjectLinkEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,5 +29,10 @@ public abstract class LinkDTO extends BaseEntityDTO {
 	
 	public LinkDTO(LinkEntity entity) {
 		super(entity);
+	}
+
+	@JsonIgnore
+	public void fillEntity(LinkEntity linkEntity) {
+		super.fillEntity(linkEntity);	
 	}
 }

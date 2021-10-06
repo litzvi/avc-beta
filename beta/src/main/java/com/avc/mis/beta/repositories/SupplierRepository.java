@@ -6,15 +6,12 @@ package com.avc.mis.beta.repositories;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.generic.ValueObject;
-import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.report.ItemAmountWithPo;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.Supplier;

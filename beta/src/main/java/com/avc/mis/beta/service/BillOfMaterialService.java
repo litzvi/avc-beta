@@ -31,7 +31,7 @@ public class BillOfMaterialService {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void addBillOfMaterials(BillOfMaterialsDTO billOfMaterials) {
-		dao.addEntity(billOfMaterials.getEntity());
+		dao.addEntity(billOfMaterials.fillEntity(new BillOfMaterials()));
 	}
 	
 	public BillOfMaterialsDTO getBillOfMaterialsByProduct(int productId) {
@@ -42,13 +42,16 @@ public class BillOfMaterialService {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void editBillOfMaterials(BillOfMaterialsDTO billOfMaterials) {
-		dao.editEntity(billOfMaterials.getEntity());
+		dao.editEntity(billOfMaterials.fillEntity(new BillOfMaterials()));
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public void removeBillOfMaterials(Integer billOfMaterialsId) {
 		dao.permenentlyRemoveEntity(BillOfMaterials.class, billOfMaterialsId);
 	}
+	
+	
+	
 		
 
 }

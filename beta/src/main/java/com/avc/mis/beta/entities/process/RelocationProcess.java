@@ -14,13 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Where;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.process.collection.ProcessGroup;
 import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 

@@ -5,11 +5,8 @@ package com.avc.mis.beta.dto;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
-import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.processInfo.GeneralProcessInfo;
@@ -18,6 +15,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.Shift;
 import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.values.ProductionLine;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -54,7 +52,9 @@ public abstract class GeneralProcessDTO extends DataDTO {
 
 	private Duration downtime;
 	private Integer numOfWorkers;
+	@EqualsAndHashCode.Exclude
 	private ProcessStatus processStatus;
+	@EqualsAndHashCode.Exclude
 	private EditStatus editStatus;
 	private String remarks;
 	@EqualsAndHashCode.Exclude // don't compare for testing
@@ -121,6 +121,29 @@ public abstract class GeneralProcessDTO extends DataDTO {
 		this.editStatus = info.getEditStatus();
 		this.remarks = info.getRemarks();
 		this.approvals = info.getApprovals();
+	}
+	
+	public GeneralProcess fillEntity(GeneralProcess generalProcess) {
+		super.fillEntity(generalProcess);
+		
+//		generalProcess.setCreatedDate(getCreatedDate());
+//		generalProcess.setUserRecording(getUserRecording());
+//		generalProcess.setProcessType(processType); info.getProcessName();
+
+		if(getProductionLine() != null)
+			generalProcess.setProductionLine(getProductionLine().fillEntity(new ProductionLine()));
+		generalProcess.setRecordedTime(getRecordedTime());
+		generalProcess.setShift(getShift());
+		generalProcess.setStartTime(getStartTime());
+		generalProcess.setEndTime(getEndTime());
+		generalProcess.setDowntime(getDowntime());
+		generalProcess.setNumOfWorkers(getNumOfWorkers());
+//		generalProcess.processStatus = info.getProcessStatus();
+//		generalProcess.editStatus = info.getEditStatus();
+		generalProcess.setRemarks(getRemarks());
+//		generalProcess.approvals = info.getApprovals();
+		
+		return generalProcess;
 	}
 
 	

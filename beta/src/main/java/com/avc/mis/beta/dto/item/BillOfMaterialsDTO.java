@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.LinkDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
-import com.avc.mis.beta.entities.Insertable;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -59,14 +58,12 @@ public class BillOfMaterialsDTO extends LinkDTO {
 	}
 	
 	@JsonIgnore
-	public BillOfMaterials getEntity() {
-		BillOfMaterials billOfMaterials = new BillOfMaterials();
+	public BillOfMaterials fillEntity(BillOfMaterials billOfMaterials) {		
+		super.fillEntity(billOfMaterials);
 		
-		billOfMaterials.setId(getId());
 		if(getProduct() != null) {
 			Item product = new Item();
 			product.setId(getProduct().getId());
-			product.setValue(getProduct().getValue());
 			billOfMaterials.setProduct(product);
 		}
 		if (getDefaultBatch() != null) {
@@ -74,7 +71,7 @@ public class BillOfMaterialsDTO extends LinkDTO {
 		}
 		if(getBomList() != null) {
 			Ordinal.setOrdinals(getBomList());
-			billOfMaterials.setBomList(bomList.stream().map(i -> i.getEntity()).collect(Collectors.toSet()));
+			billOfMaterials.setBomList(getBomList().stream().map(i -> i.fillEntity(new BomLine())).collect(Collectors.toSet()));
 		}
 		
 		return billOfMaterials;

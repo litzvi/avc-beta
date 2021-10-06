@@ -3,29 +3,18 @@
  */
 package com.avc.mis.beta.service.report;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dto.generic.ValueObject;
-import com.avc.mis.beta.dto.report.ItemAmount;
-import com.avc.mis.beta.dto.report.ItemAmountWithPo;
-import com.avc.mis.beta.dto.report.ItemQc;
-import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.dto.view.SupplierRow;
-import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.QcCompany;
-import com.avc.mis.beta.repositories.InventoryRepository;
-import com.avc.mis.beta.repositories.ProcessSummaryRepository;
 import com.avc.mis.beta.repositories.SupplierRepository;
-import com.avc.mis.beta.service.report.row.SupplierQualityRow;
 
 import lombok.AccessLevel;
 import lombok.Getter;

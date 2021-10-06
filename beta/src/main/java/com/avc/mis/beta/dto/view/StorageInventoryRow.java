@@ -6,7 +6,7 @@ package com.avc.mis.beta.dto.view;
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.BasicSubjectDataDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Warehouse;

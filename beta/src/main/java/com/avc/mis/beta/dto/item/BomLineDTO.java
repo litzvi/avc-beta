@@ -6,10 +6,9 @@ package com.avc.mis.beta.dto.item;
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.SubjectLinkDTO;
-import com.avc.mis.beta.dto.values.BasicValueEntity;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.BillOfMaterials;
 import com.avc.mis.beta.entities.item.BomLine;
 import com.avc.mis.beta.entities.item.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -49,15 +48,12 @@ public class BomLineDTO extends SubjectLinkDTO {
 	}
 
 	@JsonIgnore
-	public BomLine getEntity() {
-		BomLine bomLine = new BomLine();
-		bomLine.setId(getId());
-		bomLine.setOrdinal(getOrdinal());
+	public BomLine fillEntity(BomLine bomLine) {
+		super.fillEntity(bomLine);
 		
 		if(getMaterial() != null) {
 			Item material = new Item();
 			material.setId(getMaterial().getId());
-			material.setValue(getMaterial().getValue());
 			bomLine.setMaterial(material);
 		}
 		if (getDefaultAmount() != null) {

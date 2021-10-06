@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dto.process;
 
-import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.entities.process.InventoryUse;
 
 import lombok.Data;

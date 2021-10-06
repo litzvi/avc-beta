@@ -18,7 +18,6 @@ import com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 
 /**

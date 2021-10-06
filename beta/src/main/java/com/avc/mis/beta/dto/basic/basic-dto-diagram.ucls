@@ -10,8 +10,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="com.avc.mis.beta.dto.BasicDataDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/BasicDataDTO.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="2" language="java" name="com.avc.mis.beta.dto.BasicDataValueDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/BasicDataValueDTO.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="883" y="583"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -74,15 +74,15 @@
     </display>  
   </class>  
   <dependency id="9">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="10">    
     <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="2"/>  
   </dependency>  
-  <dependency id="11">    
+  <dependency id="10">    
     <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 

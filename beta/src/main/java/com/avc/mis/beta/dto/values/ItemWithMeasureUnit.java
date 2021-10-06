@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.values;
 
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 
