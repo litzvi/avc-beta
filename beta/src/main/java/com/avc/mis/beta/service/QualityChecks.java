@@ -15,6 +15,7 @@ import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.repositories.QCRepository;
 import com.avc.mis.beta.service.report.QualityCheckReports;
@@ -42,6 +43,10 @@ public class QualityChecks {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addCashewReceiptCheck(QualityCheck check) {
 		check.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT_QC));
+//		if(check.getProductionLine() == null || 
+//				qcRepository.findFunctionalityByProductionLine(check.getProductionLine().getId()) != ProductionFunctionality.QUALITY_CONTROL_CHECK) {
+//			throw new IllegalStateException("QC check has to have a Production Line with ProductionFunctionality.QUALITY_CONTROL_CHECK");
+//		}
 		dao.addPoProcessEntity(check);
 	}
 	
@@ -70,6 +75,10 @@ public class QualityChecks {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editCheck(QualityCheck check) {
+//		if(check.getProductionLine() == null || 
+//				qcRepository.findFunctionalityByProductionLine(check.getProductionLine().getId()) != ProductionFunctionality.QUALITY_CONTROL_CHECK) {
+//			throw new IllegalStateException("QC check has to have a Production Line with ProductionFunctionality.QUALITY_CONTROL_CHECK");
+//		}
 		dao.editGeneralProcessEntity(check);
 	}
 

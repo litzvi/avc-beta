@@ -119,6 +119,10 @@ public class LoadingReports {
 					.map(CashewBaggedInventoryRow::getTotalAmount)
 					.reduce(AmountWithUnit::add).get()
 					.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
+			row.setBoxQuantity(map.get(key).stream()
+					.map(CashewBaggedInventoryRow::getBoxQuantity)
+					.reduce(BigDecimal::add).get()
+					.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
 			row.setWeightCoefficient(BigDecimal.ONE);
 			baggedRows.add(row);
 		}
