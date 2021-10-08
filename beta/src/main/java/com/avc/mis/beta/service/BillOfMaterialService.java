@@ -3,14 +3,19 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
+import com.avc.mis.beta.dto.query.BomProductWithMaterialLine;
+import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.item.BillOfMaterials;
 import com.avc.mis.beta.repositories.BillOfMaterialsRepository;
+import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -49,9 +54,17 @@ public class BillOfMaterialService {
 	public void removeBillOfMaterials(Integer billOfMaterialsId) {
 		dao.permenentlyRemoveEntity(BillOfMaterials.class, billOfMaterialsId);
 	}
-	
-	
-	
 		
-
+	public List<BillOfMaterialsDTO> getAllBillOfMaterials() {
+		return CollectionItemWithGroup.getFilledGroups(getBomRepository().findAllBomProductWithMaterialLine(), 
+				BomProductWithMaterialLine::getBillOfMaterials, 
+				BomProductWithMaterialLine::getBomLine, 
+				BillOfMaterialsDTO::setBomList);
+		
+	}
+		
+//TODO
+//	public List<ProcessItemInventory> getProductBomInventory() {
+//		
+//	}
 }

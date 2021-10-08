@@ -13,7 +13,6 @@ import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
-import com.avc.mis.beta.dto.view.BillOfMaterialsRow;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
@@ -114,12 +113,5 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 			+ "and i.active = true "
 		+ "order by i.productionUse, i.code, i.value ")
 	List<ItemDTO> findProductBillOfMaterials(Integer product, ItemGroup itemGroup, ProductionUse productionUse);
-	
-	@Query("select new com.avc.mis.beta.dto.view.BillOfMaterialsRow( "
-			+ "bom.id, prod.id, prod.value, bom.defaultBatch) "
-			+ "from BillOfMaterials bom "
-				+ "join bom.product prod ")
-	List<BillOfMaterialsRow> findAllBillOfMaterials();
-	
 		
 }

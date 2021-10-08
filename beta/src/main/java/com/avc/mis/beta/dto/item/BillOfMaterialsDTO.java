@@ -37,10 +37,10 @@ public class BillOfMaterialsDTO extends LinkDTO {
 	
 	private List<BomLineDTO> bomList;
 
-	public BillOfMaterialsDTO(Integer id, Integer productId, String productValue, BigDecimal defaultBatchAmount, MeasureUnit defaultBatchMU) {
+	public BillOfMaterialsDTO(Integer id, Integer productId, String productValue, AmountWithUnit defaultBatch) {
 		super(id);
 		this.product = new BasicValueEntity<Item>(productId, productValue);
-		this.defaultBatch = new AmountWithUnit(defaultBatchAmount, defaultBatchMU);
+		this.defaultBatch = defaultBatch;
 	} 
 	
 	public BillOfMaterialsDTO(BillOfMaterials billOfMaterials) {

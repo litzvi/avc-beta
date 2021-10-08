@@ -21,7 +21,6 @@ import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.view.BillOfMaterialsRow;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
@@ -166,10 +165,6 @@ public class ValueTablesReader {
 	
 	public List<BankBranchDTO> getAllBankBranchesDTO() {
 		return getValueTablesRepository().findAllBankBranchesDTO();
-	}
-	
-	public List<BillOfMaterialsRow> getAllBillOfMaterials() {
-		return getValueTablesRepository().findAllBillOfMaterials();
 	}
 	
 //---------------------------Basic values---------------------------------------------------

@@ -4,14 +4,9 @@
 package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +16,9 @@ import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
 import com.avc.mis.beta.dto.item.BomLineDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.view.BillOfMaterialsRow;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.values.Country;
 import com.avc.mis.beta.service.BillOfMaterialService;
 import com.avc.mis.beta.service.ValueTablesReader;
-import com.avc.mis.beta.service.ValueWriter;
 
 /**
  * @author Zvi
@@ -74,7 +65,7 @@ public class BillOfMaterialsTest {
 		List<ItemDTO> bomItems = valueTablesReader.getProductBillOfMaterials(expected.getProduct().getId(), null, null);
 		bomItems.forEach(i -> System.out.println(i));
 		
-		List<BillOfMaterialsRow> billOfMaterialsRows = valueTablesReader.getAllBillOfMaterials();
+		List<BillOfMaterialsDTO> billOfMaterialsRows = billOfMaterialService.getAllBillOfMaterials();
 		billOfMaterialsRows.forEach(i -> System.out.println(i));
 		
 		billOfMaterialService.removeBillOfMaterials(actual.getId());

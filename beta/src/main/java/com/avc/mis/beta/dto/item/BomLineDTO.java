@@ -33,10 +33,10 @@ public class BomLineDTO extends SubjectLinkDTO {
 	private AmountWithUnit defaultAmount;
 
 	public BomLineDTO(Integer id, Integer ordinal, 
-			Integer materialId, String meterialValue, BigDecimal defaultAmount, MeasureUnit defaultMeasureUnit) {
+			Integer materialId, String meterialValue, AmountWithUnit defaultAmount) {
 		super(id, ordinal);
 		this.material = new BasicValueEntity<Item>(materialId, meterialValue);
-		this.defaultAmount = new AmountWithUnit(defaultAmount, defaultMeasureUnit);
+		this.defaultAmount = defaultAmount;
 	}
 	
 	public BomLineDTO(BomLine bomLine) {
