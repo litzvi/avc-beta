@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
 import com.avc.mis.beta.dto.item.BomLineDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.service.BillOfMaterialService;
 import com.avc.mis.beta.service.ValueTablesReader;
@@ -67,6 +68,9 @@ public class BillOfMaterialsTest {
 		
 		List<BillOfMaterialsDTO> billOfMaterialsRows = billOfMaterialService.getAllBillOfMaterials();
 		billOfMaterialsRows.forEach(i -> System.out.println(i));
+		
+		List<ProcessItemInventory> bomInventories = billOfMaterialService.getProductBomInventory(expected.getProduct().getId(), null, null, null, null, null, null);
+		bomInventories.forEach(i -> System.out.println(i));
 		
 		billOfMaterialService.removeBillOfMaterials(actual.getId());
 

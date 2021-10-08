@@ -62,15 +62,24 @@ public class WarehouseManagement {
 	public List<ProcessItemInventory> getAvailableInventory(
 			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
 			Integer itemId, Integer[] poCodeIds, Integer excludeProcessId) {
-		return getAvailableInventory(group, productionUses, functionalities, itemId, null, poCodeIds, excludeProcessId);
+		Integer[] itemIds = itemId != null ? new Integer[] {itemId} : null;
+		return getAvailableInventory(group, productionUses, functionalities, itemIds, null, poCodeIds, excludeProcessId);
 	}
+	
+//	public List<ProcessItemInventory> getAvailableInventory(
+//			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
+//			Integer itemId, PackageType packageType, Integer[] poCodeIds, Integer excludeProcessId) {
+//		Integer[] itemIds = itemId != null ? new Integer[] {itemId} : null;
+//		return getAvailableInventory(group, productionUses, functionalities, itemIds, packageType, poCodeIds, excludeProcessId);
+//	}
 
 	public List<ProcessItemInventory> getAvailableInventory(
 			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
-			Integer itemId, PackageType packageType, Integer[] poCodeIds, Integer excludeProcessId) {
+			Integer[] itemIds, PackageType packageType, Integer[] poCodeIds, Integer excludeProcessId) {
 		
 		boolean checkProductionUses = (productionUses != null);
 		boolean checkFunctionalities = (functionalities != null);
+		boolean checkItemIds = (itemIds != null);
 		Integer packageTypeOrdinal = packageType != null ? packageType.ordinal() : null;
 		boolean checkPoCodes = (poCodeIds != null);
 		Integer[] excludedProcessIds = null;
@@ -83,7 +92,9 @@ public class WarehouseManagement {
 		List<StorageInventoryRow> storageInventoryRows = getInventoryRepository()
 				.findAvailableInventoryByStorage(EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, 
 						checkFunctionalities, functionalities, 
-						group, itemId, packageTypeOrdinal,
+						group, 
+						checkItemIds, itemIds, 
+						packageTypeOrdinal,
 						checkPoCodes, poCodeIds,
 						checkExcludedProcessIds, excludedProcessIds);
 				

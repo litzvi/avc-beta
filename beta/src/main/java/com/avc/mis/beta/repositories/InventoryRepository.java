@@ -87,7 +87,8 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
-			+ "and (item.id = :itemId or :itemId is null) "
+//			+ "and (item.id = :itemId or :itemId is null) "
+			+ "and (:checkItemIds = false or item.id in :itemIds) "
 			+ "and (:packageTypeOrdinal = "
 				+ "(CASE "
 					+ "WHEN item_unit.measureUnit = com.avc.mis.beta.entities.enums.MeasureUnit.NONE "
@@ -122,7 +123,9 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			boolean checkFunctionalities, ProductionFunctionality[] functionalities,
-			ItemGroup itemGroup, Integer itemId, Integer packageTypeOrdinal, 
+			ItemGroup itemGroup, 
+			boolean checkItemIds, Integer[] itemIds, 
+			Integer packageTypeOrdinal, 
 			boolean checkPoCodes, Integer[] poCodeIds,
 			boolean checkExcludedProcessIds, Integer[] excludedProcessIds);
 	
