@@ -4,6 +4,7 @@
 package com.avc.mis.beta.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -62,6 +64,11 @@ public class QualityChecks {
 				.findGeneralProcessInfoByProcessId(processId, QualityCheck.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No quality check with given process id")));
+		
+		List<ProcessFileDTO> processFiles = getQcRepository().findProcessFiles(processId);
+		if(processFiles != null && !processFiles.isEmpty())
+			qualityCheckDTO.setProcessFiles(processFiles);
+		
 		qualityCheckDTO.setPoProcessInfo(getQcRepository()
 				.findPoProcessInfoByProcessId(processId, QualityCheck.class)
 				.orElseThrow(

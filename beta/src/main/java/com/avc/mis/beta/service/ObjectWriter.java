@@ -9,13 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dto.basic.ProcessBasic;
+import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.MixPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
+import com.avc.mis.beta.entities.data.ProcessFile;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
+import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 import com.avc.mis.beta.utilities.ProgramSequence;
 
@@ -29,7 +34,8 @@ import com.avc.mis.beta.utilities.ProgramSequence;
 public class ObjectWriter {
 	
 	@Autowired private ProcessInfoDAO dao;
-	
+	@Autowired private DeletableDAO deletableDAO;
+	@Autowired private ProcessReader processReader;
 	@Autowired private ObjectTablesRepository objectTablesRepository;
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -67,6 +73,25 @@ public class ObjectWriter {
 	public void editShipmentCode(ShipmentCode shipmentCode) {
 		dao.editEntity(shipmentCode);
 	}	
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void addProcessFile(ProcessFileDTO processFile) {
+		dao.checkProcessEditablity(processFile.getProcessId());
+		ProcessBasic<GeneralProcess> processBasic = processReader.getProcessesBasic(processFile.getProcessId());		
+		dao.addEntity(processFile.fillEntity(new ProcessFile()), processBasic.getProcessClazz(), processBasic.getId());
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void editProcessFile(ProcessFileDTO processFile) {
+		dao.checkProcessEditablity(processFile.getProcessId());
+		dao.editEntity(processFile.fillEntity(new ProcessFile()));
+	}
+	
+	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	public void removeProcessFile(ProcessFileDTO processFile) {
+		dao.checkProcessEditablity(processFile.getProcessId());
+		deletableDAO.permenentlyRemoveEntity(ProcessFile.class, processFile.getProcessId());
+	}
 
 
 	

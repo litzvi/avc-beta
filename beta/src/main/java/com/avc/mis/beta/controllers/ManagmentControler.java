@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,9 +27,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.avc.mis.beta.dto.basic.UserBasic;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.data.UserDTO;
+import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.data.Person;
@@ -55,6 +54,7 @@ import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.service.BillOfMaterialService;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessInfoWriter;
@@ -103,6 +103,9 @@ public class ManagmentControler {
 	
 	@Autowired
 	private Orders orders;
+	
+	@Autowired
+	private BillOfMaterialService billOfMaterialService;
 	
 	@RequestMapping("/getAllUsers")
 	public List<UserRow> getUsersTable() {
@@ -427,15 +430,31 @@ public class ManagmentControler {
 		return ResponseEntity.ok().build();
 	}
 	
-	@RequestMapping("/getCashewOrdersOpen")
-	public List<PoItemRow> getCashewOrdersOpen() {
-		return orderReports.findOpenCashewOrderItems();
+//	@RequestMapping("/getCashewOrdersOpen")
+//	public List<PoItemRow> getCashewOrdersOpen() {
+//		return orderReports.findOpenCashewOrderItems();
+//	}
+//	
+	@RequestMapping("/getItemBom/{id}")
+	public BillOfMaterialsDTO getItemBom(@PathVariable("id") int productId) {
+		return billOfMaterialService.getBillOfMaterialsByProduct(productId);
 	}
 	
-	@PatchMapping(value="/closeOrder/{id}")
-	public ResponseEntity<?> editMaterialUse(@PathVariable("id") int processId) {
-		orders.closeOrder(processId, true);
-		return ResponseEntity.ok().build();
+	@PostMapping(value="/addItemBom")
+	public BillOfMaterialsDTO addItemBom(@RequestBody BillOfMaterialsDTO bom) {
+		billOfMaterialService.addBillOfMaterials(bom);
+		return bom;
+	}
+	
+	@PutMapping(value="/editItemBom")
+	public BillOfMaterialsDTO editItemBom(@RequestBody BillOfMaterialsDTO bom) {
+		billOfMaterialService.editBillOfMaterials(bom);
+		return bom;
+	}
+	
+	@RequestMapping("/getAllBoms")
+	public List<BillOfMaterialsDTO> getItemBom() {
+		return billOfMaterialService.getAllBillOfMaterials();
 	}
 	
 	@Data

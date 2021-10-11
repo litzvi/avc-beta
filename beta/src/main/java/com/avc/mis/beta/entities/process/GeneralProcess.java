@@ -26,6 +26,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.AuditedEntity;
+import com.avc.mis.beta.entities.data.ProcessFile;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.Shift;
 import com.avc.mis.beta.entities.process.collection.ApprovalTask;
@@ -83,7 +84,9 @@ public abstract class GeneralProcess extends AuditedEntity {
 			fetch = FetchType.LAZY, optional = false)
 	private ProcessLifeCycle lifeCycle;
 	
-	
+	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	private Set<ProcessFile> processFiles = new HashSet<>();
+
 	@OneToMany(mappedBy = "process", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private Set<ApprovalTask> approvals = new HashSet<>();
 		

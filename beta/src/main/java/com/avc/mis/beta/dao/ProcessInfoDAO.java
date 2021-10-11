@@ -284,13 +284,17 @@ public class ProcessInfoDAO extends DAO {
 	 * @param process GeneralProcess to be edited.
 	 */
 	public <T extends GeneralProcess> void editGeneralProcessEntity(T process) {
-		ProcessLifeCycle lifeCycle = getProcessRepository().findProcessEditStatus(process.getId());
+		checkProcessEditablity(process.getId());
+		editEntity(process);
+		editAlerts(process);
+	}
+	
+	public void checkProcessEditablity(Integer processId) {
+		ProcessLifeCycle lifeCycle = getProcessRepository().findProcessEditStatus(processId);
 		EditStatus status = lifeCycle.getEditStatus();
 		if(status != EditStatus.EDITABLE) {
 			throw new AccessControlException("Process was closed for edit");
 		} 
-		editEntity(process);
-		editAlerts(process);
 	}
 	
 	public void editPoProcessEntity(PoProcess process) {
@@ -654,6 +658,11 @@ public class ProcessInfoDAO extends DAO {
 	}
 	
 	public void closePO(Integer poId, boolean closed) {
+
+		getProcessRepository().findProcessLifeCycleManagerByUser(poId, getCurrentUserId())
+			.orElseThrow(() -> new AccessControlException("You don't have permission to close an order"));
+
+		
 		CriteriaUpdate<PO> update = 
 	    		getEntityManager().getCriteriaBuilder().createCriteriaUpdate(PO.class);
 	    Root<PO> root = update.from(PO.class);

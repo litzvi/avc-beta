@@ -1,5 +1,10 @@
 package com.avc.mis.beta.controllers;
 
+import com.avc.mis.beta.security.JwtRequest;
+import com.avc.mis.beta.security.JwtResponse;
+import com.avc.mis.beta.security.JwtTokenUtil;
+import com.avc.mis.beta.security.UserDetailsServiceImp;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,11 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.avc.mis.beta.security.JwtRequest;
-import com.avc.mis.beta.security.JwtResponse;
-import com.avc.mis.beta.security.JwtTokenUtil;
-import com.avc.mis.beta.security.UserDetailsServiceImp;
 
 @RestController
 @CrossOrigin

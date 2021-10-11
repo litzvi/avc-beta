@@ -1,5 +1,6 @@
 package com.avc.mis.beta.repositories;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +9,7 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ProcessBasic;
+import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
 import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
 import com.avc.mis.beta.dto.processInfo.GeneralProcessInfo;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
@@ -58,6 +60,16 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 			+ "and r.id = :processId "
 		+ "group by r ")
 	Optional<GeneralProcessInfo> findGeneralProcessInfoByProcessId(int processId, Class<? extends T> clazz);
+	
+	@Query("select new com.avc.mis.beta.dto.process.collection.ProcessFileDTO("
+			+ "f.id, f.version, p.id, f.address, "
+			+ "f.description, f.remarks, f.createdDate, pr.name) "
+		+ "from GeneralProcess p "
+			+ "join p.processFiles f "
+				+ "join f.modifiedBy u "
+					+ "join u.person pr "
+		+ "where p.id = :processId ")
+	List<ProcessFileDTO> findProcessFiles(Integer processId);
 	
 	@Query("select new com.avc.mis.beta.dto.view.ProcessRow("
 			+ "p.id, pt.value, p_line.value, "

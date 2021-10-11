@@ -7,9 +7,17 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
+import com.avc.mis.beta.dto.process.collection.CashewItemQualityDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
 import com.avc.mis.beta.dto.processInfo.GeneralProcessInfo;
+import com.avc.mis.beta.entities.data.ProcessFile;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -59,6 +67,8 @@ public abstract class GeneralProcessDTO extends DataDTO {
 	private String remarks;
 	@EqualsAndHashCode.Exclude // don't compare for testing
 	private String[] approvals;
+	
+	private List<ProcessFileDTO> processFiles;
 		
 //	public GeneralProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 //			ProcessName processName, ProductionLine productionLine, 
@@ -101,6 +111,11 @@ public abstract class GeneralProcessDTO extends DataDTO {
 		this.editStatus = process.getLifeCycle().getEditStatus();
 		this.remarks = process.getRemarks();
 		this.approvals = process.getApprovals().stream().map(t -> t.getUser().getUsername()).toArray(String[]::new);
+		
+		if(process.getProcessFiles() != null && !process.getProcessFiles().isEmpty())
+			this.processFiles = process.getProcessFiles().stream()
+					.map(i->{return new ProcessFileDTO(i);}).collect(Collectors.toList());
+
 
 	}
 	

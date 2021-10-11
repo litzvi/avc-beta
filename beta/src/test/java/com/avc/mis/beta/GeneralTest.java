@@ -9,10 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.Currency;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +31,9 @@ import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
 import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.data.ProcessFile;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -63,6 +67,8 @@ import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.ValueWriter;
 
+import lombok.NonNull;
+
 /**
  * @author Zvi
  *
@@ -73,7 +79,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800195;
+	static final Integer PO_CODE = 800204;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -218,10 +224,20 @@ public class GeneralTest {
 		check.setTestedItems(rawItemQualities);
 		checks.addCashewReceiptCheck(check);
 		QualityCheckDTO checkDTO;
+		ProcessFileDTO processFile = new ProcessFileDTO(null, null, check.getId(), "address", 
+				"description", "remarks", null, null);
+		objectWriter.addProcessFile(processFile);
+		check.getProcessFiles().add(processFile.fillEntity(new ProcessFile()));
 		checkDTO = checks.getQcByProcessId(check.getId());
 //		System.out.println(checkDTO);
 //		fail("finished");
-		assertEquals(new QualityCheckDTO(check), checkDTO, "QC not added or fetched correctly");
+		try {
+			assertEquals(new QualityCheckDTO(check), checkDTO, "QC not added or fetched correctly");
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 
 		//add receipt sample check for received orders
 		SampleReceipt sampleReceipt = new SampleReceipt();
