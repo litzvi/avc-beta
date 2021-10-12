@@ -28,9 +28,11 @@ import com.avc.mis.beta.entities.ValueInterface;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Item entity, has a name-value, item's default measure unit, 
@@ -84,6 +86,8 @@ public class Item extends ValueEntity implements ValueInterface {
 	@NotNull(message = "Item production use/stage is mandatory")
 	private ProductionUse productionUse;
 	
+	@JsonIgnore
+	@ToString.Exclude 
 	@OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
 	private BillOfMaterials billOfMeterials;
 	
