@@ -17,6 +17,7 @@ import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.view.InventoryTransactionRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
@@ -99,7 +100,14 @@ public class WarehouseManagement {
 						checkExcludedProcessIds, excludedProcessIds);
 				
 		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
-	}	
+	}
+	
+	public List<InventoryTransactionRow> getInventoryTransactions(ItemGroup itemGroup, Integer[] itemIds, Integer[] poCodeIds, 
+			LocalDateTime startTime, LocalDateTime endTime) {		
+		boolean checkItemIds = (itemIds != null);
+		boolean checkPoCodes = (poCodeIds != null);
+		return getInventoryRepository().findInventoryTransactions(itemGroup, checkItemIds, itemIds, checkPoCodes, poCodeIds, startTime, endTime);
+	}
 	
 //	--------------------------------------Items available in inventory----------------------------------------
 	

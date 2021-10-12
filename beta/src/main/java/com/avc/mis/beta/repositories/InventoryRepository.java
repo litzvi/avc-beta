@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.repositories;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
@@ -16,10 +17,13 @@ import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.report.ItemAmountWithPo;
+import com.avc.mis.beta.dto.view.InventoryTransactionRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
@@ -922,5 +926,60 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses,
 			ItemGroup itemGroup, LocalDateTime pointOfTime);
+
+	@Query("select new com.avc.mis.beta.dto.view.InventoryTransactionRow( "
+			+ "uib.id, "
+			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
+			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
+			+ "pt.value, p_line.value, u_p.recordedTime, p.recordedTime, "
+			+ "coalesce(u_item.id, p_item.id), coalesce(u_item.value, p_item.value), coalesce(u_item.measureUnit, p_item.measureUnit), "
+			+ "SUM((coalesce(u_sf.unitAmount, 1) * u_uom.multiplicand / u_uom.divisor) "
+				+ " * coalesce(w_po.weight, 1) "
+				+ " * uib.numberUnits "
+			+ "), "
+			+ "SUM((coalesce(p_sf.unitAmount, 1) * p_uom.multiplicand / p_uom.divisor) "
+				+ " * coalesce(w_po.weight, 1) "
+				+ " * uib.numberUnits "
+			+ "), "
+			+ "lc.processStatus, "
+			+ "function('GROUP_CONCAT', function('DISTINCT', concat(u.username, ': ', approval.decision))), p.remarks)"
+		+ "from UsedItemBase uib "
+			+ "join uib.group grp "
+				+ "join grp.process p "
+					+ "left join p.poCode p_po_code "
+					+ "left join p.weightedPos w_po "
+						+ "left join w_po.poCode w_po_code "
+						+ "left join BasePoCode po_code "
+							+ "on (po_code = p_po_code or po_code = w_po_code) "
+							+ "left join po_code.contractType t "
+							+ "left join po_code.supplier s "
+					+ "join p.processType pt "
+					+ "join p.lifeCycle lc "
+					+ "left join p.productionLine p_line "
+					+ "left join p.approvals approval "
+						+ "left join approval.user u "
+			+ "left join uib.storage u_sf "
+				+ "left join u_sf.processItem u_pi "
+					+ "left join u_pi.process u_p "
+					+ "left join u_pi.item u_item "
+						+ "left join UOM u_uom "
+							+ "on u_uom.fromUnit = u_pi.measureUnit and u_uom.toUnit = u_item.measureUnit "
+			+ "left join StorageBase p_sf "
+				+ "on uib.id = p_sf.id "
+				+ "left join p_sf.processItem p_pi "
+					+ "left join p_pi.item p_item "
+						+ "left join UOM p_uom "
+							+ "on p_uom.fromUnit = p_pi.measureUnit and p_uom.toUnit = p_item.measureUnit "
+		+ "where (coalesce(u_item.itemGroup, p_item.itemGroup) = :itemGroup or :itemGroup is null) "
+			+ "and (:checkItemIds = false or coalesce(u_item.id, p_item.id) in :itemIds) "
+			+ "and (:checkPoCodes = false or po_code.id in :poCodeIds) "
+			+ "and (:startTime is null or p.recordedTime >= :startTime) "
+			+ "and (:endTime is null or p.recordedTime < :endTime) "
+		+ "group by uib "
+		+ "order by p.recordedTime desc ")
+	List<InventoryTransactionRow> findInventoryTransactions(ItemGroup itemGroup, 
+			boolean checkItemIds, Integer[] itemIds, 
+			boolean checkPoCodes, Integer[] poCodeIds,
+			LocalDateTime startTime, LocalDateTime endTime);
 
 }

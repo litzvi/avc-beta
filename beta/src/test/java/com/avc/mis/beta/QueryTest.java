@@ -37,6 +37,7 @@ import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.dto.view.ContainerArrivalRow;
+import com.avc.mis.beta.dto.view.InventoryTransactionRow;
 import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
@@ -541,11 +542,7 @@ public class QueryTest {
 		List<CashewBaggedInventoryRow> loadedBagged = loadingReports.getCashewBaggedExportReportRows(
 				ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.PACKED}, null, null);
 		loadedBagged.forEach(i -> System.out.println(i));
-	}
-	
-//	@Disabled
-	@Test
-	void newTest() {				
+		
 		List<ProcessRow> processReport;
 		try {
 			processReport = productionProcesses.getProductionProcessesByType(ProcessName.CASHEW_CLEANING);
@@ -558,5 +555,14 @@ public class QueryTest {
 		
 		List<ItemDTO> bomItems = valueTablesReader.getProductBillOfMaterials(service.getItem().getId(), null, null);
 		bomItems.forEach(i -> System.out.println(i));
+		
+		List<InventoryTransactionRow> inventoryTransactionRows = warehouseManagement.getInventoryTransactions(null, null, null, null, null);
+		inventoryTransactionRows.forEach(i->System.out.println(i));
+	}
+	
+//	@Disabled
+	@Test
+	void newTest() {				
+		
 	}
 }
