@@ -18,6 +18,7 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.Item;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,7 +31,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class InventoryTransactionRow extends BasicDTO {
+public abstract class InventoryTransactionRow extends BasicDTO {
 
 	private String poCodes;
 	private String suppliers;
@@ -39,18 +40,17 @@ public class InventoryTransactionRow extends BasicDTO {
 	private LocalDateTime receiptDate;
 	private LocalDateTime transactionDate;
 	private BasicValueEntity<Item> item;
-	private AmountWithUnit amountSubtracted;
-	private AmountWithUnit amountAdded;
+	@JsonIgnore 
+	private AmountWithUnit amount;
 	private ProcessStatus status;
-	private String[] approvals;
 	private String remarks;
 	
 	
 	public InventoryTransactionRow(Integer id, String poCodes, String suppliers, 
 			String processName, String productionLine, LocalDateTime receiptDate, LocalDateTime transactionDate,
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit,
-			BigDecimal amountSubtracted, BigDecimal amountAdded,
-			ProcessStatus status, String approvals, String remarks) {
+			BigDecimal amount,
+			ProcessStatus status, String remarks) {
 		super(id);
 		this.poCodes = poCodes;
 		this.suppliers = suppliers;
@@ -59,17 +59,9 @@ public class InventoryTransactionRow extends BasicDTO {
 		this.receiptDate = receiptDate;
 		this.transactionDate = transactionDate;
 		this.item = new BasicValueEntity<Item>(itemId, itemValue);
-		if(amountSubtracted != null)
-			this.amountSubtracted = new AmountWithUnit(amountSubtracted, defaultMeasureUnit);
-		if(amountAdded != null)
-			this.amountAdded = new AmountWithUnit(amountAdded, defaultMeasureUnit);
+		if(amount != null)
+			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 		this.status = status;
-		if(approvals == null || approvals.startsWith(":")) {
-			this.approvals = null;
-		}
-		else {
-			this.approvals = Stream.of(approvals.split(",")).toArray(String[]::new);
-		}
 		this.remarks = remarks;
 	}
 	

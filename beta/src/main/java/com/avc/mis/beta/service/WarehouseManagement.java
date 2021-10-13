@@ -2,6 +2,8 @@ package com.avc.mis.beta.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -17,7 +19,9 @@ import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.view.InventoryTransactionAddRow;
 import com.avc.mis.beta.dto.view.InventoryTransactionRow;
+import com.avc.mis.beta.dto.view.InventoryTransactionSubtractRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
@@ -106,7 +110,70 @@ public class WarehouseManagement {
 			LocalDateTime startTime, LocalDateTime endTime) {		
 		boolean checkItemIds = (itemIds != null);
 		boolean checkPoCodes = (poCodeIds != null);
-		return getInventoryRepository().findInventoryTransactions(itemGroup, checkItemIds, itemIds, checkPoCodes, poCodeIds, startTime, endTime);
+		
+		List<InventoryTransactionAddRow> added = getInventoryRepository().findInventoryTransactionAdditions(
+				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, 
+//				new ProductionFunctionality[] {ProductionFunctionality.LOADING},
+				itemGroup, checkItemIds, itemIds, checkPoCodes, poCodeIds, startTime, endTime);
+		
+		List<InventoryTransactionSubtractRow> subtracted = getInventoryRepository().findInventoryTransactionSubtractions(
+				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, 
+				itemGroup, checkItemIds, itemIds, checkPoCodes, poCodeIds, startTime, endTime);
+		
+		List<InventoryTransactionRow> transactionRows = new ArrayList<InventoryTransactionRow>(added.size() + subtracted.size());
+		
+		Iterator<InventoryTransactionAddRow> iteratorAdded = added.iterator();
+		Iterator<InventoryTransactionSubtractRow> iteratorSubtracted = subtracted.iterator(); 
+		InventoryTransactionAddRow addRow = null;
+		InventoryTransactionSubtractRow subtractRow = null;
+		do {
+			if(addRow == null && iteratorAdded.hasNext()) {
+				addRow = iteratorAdded.next();
+			}
+			if(subtractRow == null && iteratorSubtracted.hasNext()) {
+				subtractRow = iteratorSubtracted.next();
+			}
+			
+			if(addRow == null) {
+				transactionRows.add(subtractRow);
+				subtractRow = null;
+				iteratorSubtracted.forEachRemaining(i -> transactionRows.add(i));
+			}
+			else if(subtractRow == null) {
+				transactionRows.add(addRow);
+				addRow = null;
+				iteratorAdded.forEachRemaining(i -> transactionRows.add(i));
+			}
+			else {
+				int comperatorDate = addRow.getTransactionDate().compareTo(subtractRow.getTransactionDate());
+				if(comperatorDate < 0) {
+					transactionRows.add(subtractRow);
+					subtractRow = null;
+				}
+				else if(comperatorDate > 0) {
+					transactionRows.add(addRow);
+					addRow = null;
+				}
+				else {
+					int comperatorId = addRow.getId() - subtractRow.getId();
+					if(comperatorId < 0) {
+						transactionRows.add(subtractRow);
+						subtractRow = null;
+					}
+					else if(comperatorId > 0) {
+						transactionRows.add(addRow);
+						addRow = null;
+					}
+					else {
+						transactionRows.add(subtractRow);
+						subtractRow = null;						
+					}
+				}
+			}
+		} while(addRow != null || subtractRow != null);
+//		transactionRows.addAll(added);
+//		transactionRows.addAll(subtracted);
+		return transactionRows;
 	}
 	
 //	--------------------------------------Items available in inventory----------------------------------------

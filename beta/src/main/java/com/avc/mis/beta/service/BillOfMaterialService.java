@@ -3,7 +3,9 @@
  */
 package com.avc.mis.beta.service;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,5 +81,14 @@ public class BillOfMaterialService {
 		BillOfMaterialsDTO billOfMaterials = getBillOfMaterialsByProduct(productId);
 		Integer[] itemIds = billOfMaterials.getBomList().stream().map(i -> i.getMaterial().getId()).toArray(Integer[]::new);
 		return warehouseManagement.getAvailableInventory(group, productionUses, functionalities, itemIds, packageType, poCodeIds, excludeProcessId);
+	}
+	
+	public Object[] getProductBomInventoryAndMissingItems(@NonNull Integer productId, 
+			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
+			PackageType packageType, Integer[] poCodeIds, Integer excludeProcessId) {
+		BillOfMaterialsDTO billOfMaterials = getBillOfMaterialsByProduct(productId);
+		Integer[] itemIds = billOfMaterials.getBomList().stream().map(i -> i.getMaterial().getId()).toArray(Integer[]::new);
+		List<ProcessItemInventory> inventory = warehouseManagement.getAvailableInventory(group, productionUses, functionalities, itemIds, packageType, poCodeIds, excludeProcessId);
+		return new Object[]{inventory, Arrays.asList(itemIds).removeAll(inventory.stream().map(i -> i.getItem().getId()).collect(Collectors.toList()))};
 	}
 }

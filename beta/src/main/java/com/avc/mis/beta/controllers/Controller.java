@@ -29,6 +29,7 @@ import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.service.BillOfMaterialService;
 import com.avc.mis.beta.service.ObjectTablesReader;
+import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.ProcessReader;
@@ -97,6 +98,9 @@ public class Controller {
 	
 	@Autowired
 	private QualityChecks qualityChecks;
+	
+	@Autowired
+	private Orders ordersDao;
 	
 	@Autowired
 	private WarehouseManagement warehouseManagement;
@@ -251,6 +255,9 @@ public class Controller {
 		if((remarkSnapshot.get("toCancal")).asBoolean()) {
 			processInfoWriter.setProcessStatus(ProcessStatus.CANCELLED, processId);
 		}
+		if((remarkSnapshot.get("toClose")).asBoolean()) {
+			ordersDao.closeOrder(processId, (remarkSnapshot.get("toClose")).asBoolean());
+		}
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		ProcessName type = mapper.readValue((remarkSnapshot.get("processName")).toString(), ProcessName.class);
 		return (processReader.getProcess(processId, type)).getApprovals();
@@ -267,6 +274,9 @@ public class Controller {
 		}
 		if((remarkSnapshot.get("toCancal")).asBoolean()) {
 			processInfoWriter.setProcessStatus(ProcessStatus.CANCELLED, processId);
+		}
+		if(remarkSnapshot.has("toClose")) {
+			ordersDao.closeOrder(processId, (remarkSnapshot.get("toClose")).asBoolean());
 		}
 		return ResponseEntity.ok().build();
 	}
@@ -301,7 +311,12 @@ public class Controller {
 	
 	@RequestMapping("/getProductBomInventory/{id}")
 	public List<ProcessItemInventory> getProductBomInventory(@PathVariable("id") int itemId) {
-		return billOfMaterialService.getProductBomInventory(itemId, ItemGroup.GENERAL, null, null, null, null, null);
+		try {
+			return billOfMaterialService.getProductBomInventory(itemId, ItemGroup.GENERAL, null, null, null, null, null);
+		} catch (IllegalArgumentException e) {
+			// TODO: handle exception
+			return null;
+		}
 	}
 
 	

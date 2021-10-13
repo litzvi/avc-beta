@@ -6,6 +6,7 @@ import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.view.InventoryTransactionRow;
 import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
@@ -234,7 +235,11 @@ public class ReportsController {
 		return productionProcessReports.getProductionProcessesByType(null, begin, end);
 	}
 	
-	
+	@RequestMapping("/getInventoryTransactions")
+	public List<InventoryTransactionRow> getInventoryTransactions(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return warehouseManagement.getInventoryTransactions(ItemGroup.GENERAL, null, null, begin, end);
+	}
 	
 //	@RequestMapping("/getCashewInventoryPacked")
 //	public List<ItemInventoryRow> getCashewInventoryPacked() {

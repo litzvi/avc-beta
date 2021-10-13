@@ -318,12 +318,6 @@ public class OrdersController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@PatchMapping(value="/closeOrder/{id}")
-	public ResponseEntity<?> editMaterialUse(@PathVariable("id") int processId, @RequestBody boolean close) {
-		ordersDao.closeOrder(processId, close);
-		return ResponseEntity.ok().build();
-	}
-	
 	@RequestMapping("/getAllSuppliers")
 	public List<DataObjectWithName<Supplier>> getAllSuppliers() {
 		return refeDao.getSuppliersBasic();
