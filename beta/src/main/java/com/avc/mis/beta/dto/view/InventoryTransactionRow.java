@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -31,7 +32,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public abstract class InventoryTransactionRow extends BasicDTO {
+public abstract class InventoryTransactionRow extends BasicDTO implements Comparable<InventoryTransactionRow> {
 
 	private String poCodes;
 	private String suppliers;
@@ -63,6 +64,34 @@ public abstract class InventoryTransactionRow extends BasicDTO {
 			this.amount = new AmountWithUnit(amount, defaultMeasureUnit);
 		this.status = status;
 		this.remarks = remarks;
+	}
+	
+	@Override
+	public int compareTo(@NonNull InventoryTransactionRow other) {
+		int compareDate = getTransactionDate().compareTo(other.getTransactionDate());
+		if(compareDate != 0) {
+			return compareDate;
+		}
+		else {
+			return getId().compareTo(other.getId());
+//			if(compareId != 0) {
+//				return compareId;
+//			}
+//			else if(this instanceof InventoryTransactionSubtractRow) {
+//				if(other instanceof InventoryTransactionAddRow) {
+//					return 1;
+//				}
+//				else {
+//					return 0;
+//				}
+//			}
+//			else if(other instanceof InventoryTransactionSubtractRow) {
+//				return -1;
+//			}
+//			else {
+//				return 0;
+//			}
+		}
 	}
 	
 	

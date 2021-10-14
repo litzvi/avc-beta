@@ -30,6 +30,7 @@ import lombok.NoArgsConstructor;
 public class ProcessFile extends GeneralInfoEntity {
 
 	@Lob
+	@Column(unique = true)
 	private String address;
 	
 	

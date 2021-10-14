@@ -134,7 +134,17 @@ public class WarehouseManagement {
 				subtractRow = iteratorSubtracted.next();
 			}
 			
-			if(addRow == null) {
+			if(addRow != null && subtractRow != null) {
+				if(addRow.compareTo(subtractRow) > 0) {
+					transactionRows.add(addRow);
+					addRow = null;
+				}
+				else {
+					transactionRows.add(subtractRow);
+					subtractRow = null;
+				}
+			}
+			else if(addRow == null) {
 				transactionRows.add(subtractRow);
 				subtractRow = null;
 				iteratorSubtracted.forEachRemaining(i -> transactionRows.add(i));
@@ -144,32 +154,7 @@ public class WarehouseManagement {
 				addRow = null;
 				iteratorAdded.forEachRemaining(i -> transactionRows.add(i));
 			}
-			else {
-				int comperatorDate = addRow.getTransactionDate().compareTo(subtractRow.getTransactionDate());
-				if(comperatorDate < 0) {
-					transactionRows.add(subtractRow);
-					subtractRow = null;
-				}
-				else if(comperatorDate > 0) {
-					transactionRows.add(addRow);
-					addRow = null;
-				}
-				else {
-					int comperatorId = addRow.getId() - subtractRow.getId();
-					if(comperatorId < 0) {
-						transactionRows.add(subtractRow);
-						subtractRow = null;
-					}
-					else if(comperatorId > 0) {
-						transactionRows.add(addRow);
-						addRow = null;
-					}
-					else {
-						transactionRows.add(subtractRow);
-						subtractRow = null;						
-					}
-				}
-			}
+			
 		} while(addRow != null || subtractRow != null);
 //		transactionRows.addAll(added);
 //		transactionRows.addAll(subtracted);

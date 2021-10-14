@@ -128,7 +128,7 @@ public class Orders {
 	 * Ignores changed non editable fields.
 	 * @param po PO updated with edited state
 	 */
-	@Transactional(rollbackFor = Throwable.class, readOnly = false)
+	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editOrder(PO po) {
 		dao.editGeneralProcessEntity(po);
 	}

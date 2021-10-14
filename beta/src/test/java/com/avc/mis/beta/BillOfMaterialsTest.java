@@ -69,8 +69,8 @@ public class BillOfMaterialsTest {
 		List<BillOfMaterialsDTO> billOfMaterialsRows = billOfMaterialService.getAllBillOfMaterials();
 		billOfMaterialsRows.forEach(i -> System.out.println(i));
 		
-		List<ProcessItemInventory> bomInventories = billOfMaterialService.getProductBomInventory(expected.getProduct().getId(), null, null, null, null, null, null);
-		bomInventories.forEach(i -> System.out.println(i));
+//		List<ProcessItemInventory> bomInventories = billOfMaterialService.getProductBomInventory(expected.getProduct().getId(), null, null, null, null, null, null);
+//		bomInventories.forEach(i -> System.out.println(i));
 		
 		billOfMaterialService.removeBillOfMaterials(actual.getId());
 

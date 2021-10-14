@@ -8,6 +8,7 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
 import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
@@ -20,10 +21,13 @@ import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
+import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.values.CashewStandard;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -45,6 +49,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import lombok.NonNull;
+
 import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
@@ -55,6 +61,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.QueryParam;
 
@@ -80,9 +87,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/api")
 public class Controller {
-	
-	@Autowired
-	private SignedUrlsAws signedUrlsAws;
 	
 	@Autowired
 	private ValueTablesReader refeDao;
@@ -117,16 +121,6 @@ public class Controller {
 	@GetMapping("/")
 	public String index() {
 		return "Greetings from Spring Boot!";
-	}
-	
-	@PostMapping("/urli")
-	public URL urli(@RequestBody JsonNode path) throws IOException {
-		return signedUrlsAws.uploadRequest(path.get("fileName").toString());
-	}
-	
-	@PostMapping("/getUrls")
-	public URL getUrls(@RequestBody JsonNode path) throws IOException {
-		return signedUrlsAws.getRequest(path.get("fileName").toString());
 	}
 	
 	
@@ -309,10 +303,15 @@ public class Controller {
 		return warehouseManagement.findAvailableInventoryItems(ItemGroup.GENERAL);
 	}
 	
-	@RequestMapping("/getProductBomInventory/{id}")
-	public List<ProcessItemInventory> getProductBomInventory(@PathVariable("id") int itemId) {
+	@RequestMapping("/getProductBomInventoryMissing/{id}")
+	public Object[] getProductBomInventoryMissing(@PathVariable("id") int itemId) {
 		try {
-			return billOfMaterialService.getProductBomInventory(itemId, ItemGroup.GENERAL, null, null, null, null, null);
+			BillOfMaterialsDTO boMaterials = billOfMaterialService.getBillOfMaterialsByProduct(itemId);
+			Integer[] itemIds = boMaterials.getBomList().stream().map(i -> i.getMaterial().getId()).toArray(Integer[]::new);
+			List<ProcessItemInventory> inventory = warehouseManagement.getAvailableInventory(ItemGroup.GENERAL, null, null, itemIds, null, null, null);
+			ArrayList<Integer> itemsList = new ArrayList(Arrays.asList(itemIds));
+			itemsList.removeAll(inventory.stream().map(i -> i.getItem().getId()).collect(Collectors.toList()));
+			return new Object[]{inventory, itemsList};
 		} catch (IllegalArgumentException e) {
 			// TODO: handle exception
 			return null;

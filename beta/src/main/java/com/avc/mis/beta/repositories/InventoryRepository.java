@@ -929,84 +929,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			boolean checkProductionUses, ProductionUse[] productionUses,
 			ItemGroup itemGroup, LocalDateTime pointOfTime);
 
-//	@Query("select new com.avc.mis.beta.dto.view.InventoryTransactionRow( "
-//			+ "uib.id, "
-//			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
-//			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
-//			+ "pt.value, p_line.value, r.recordedTime, p.recordedTime, "
-//			+ "item.id, item.value, item.measureUnit, "
-//			+ "SUM("
-//				+ "CASE "
-//					+ "WHEN u_pl.productionFunctionality in :excludedFunctionalities THEN null "
-//					+ "ELSE ((coalesce(u_sf.unitAmount, 1) * u_uom.multiplicand / u_uom.divisor) "
-//						+ " * coalesce(w_po.weight, 1) "
-//						+ " * uib.numberUnits) "
-//				+ "END "
-//			+ "), "
-//			+ "SUM("
-//				+ "CASE "
-//					+ "WHEN p_pl.productionFunctionality in :excludedFunctionalities THEN null "
-//					+ "ELSE ((coalesce(p_sf.unitAmount, 1) * p_uom.multiplicand / p_uom.divisor) "
-//						+ " * coalesce(w_po.weight, 1) "
-//						+ " * uib.numberUnits) "
-//				+ "END "
-//			+ "), "
-//			+ "lc.processStatus, p.remarks)"
-//		+ "from UsedItemBase uib "
-//			+ "join uib.group grp "
-//				+ "join grp.process p "
-////					+ "left join p.poCode p_po_code "
-////					+ "left join p.weightedPos w_po "
-////						+ "left join w_po.poCode w_po_code "
-////						+ "left join BasePoCode po_code "
-////							+ "on (po_code = p_po_code or po_code = w_po_code) "
-////							+ "left join po_code.contractType t "
-////							+ "left join po_code.supplier s "
-//					+ "join p.processType pt "
-//					+ "join p.lifeCycle lc "
-//					+ "left join p.productionLine p_line "
-//			+ "left join uib.storage u_sf "
-//				+ "left join u_sf.processItem u_pi "
-//					+ "left join u_pi.process u_p "
-//						+ "left join u_p.productionLine u_pl "
-//					+ "left join u_pi.item u_item "
-//						+ "left join UOM u_uom "
-//							+ "on u_uom.fromUnit = u_pi.measureUnit and u_uom.toUnit = u_item.measureUnit "
-//			+ "left join StorageBase p_sf "
-//				+ "on uib.id = p_sf.id "
-//				+ "left join p_sf.processItem p_pi "
-//					+ "left join p_pi.process p_p "
-//						+ "left join p_p.productionLine p_pl "
-//					+ "left join p_pi.item p_item "
-//						+ "left join UOM p_uom "
-//							+ "on p_uom.fromUnit = p_pi.measureUnit and p_uom.toUnit = p_item.measureUnit "
-//			+ "join ProcessItem pi "
-//				+ "on (pi = u_pi or (u_pi is null and pi = p_pi)) "
-//					+ "join pi.item item "
-//					+ "join pi.process s_p "
-//						+ "left join s_p.poCode p_po_code "
-//						+ "left join s_p.weightedPos w_po "
-//							+ "left join w_po.poCode w_po_code "
-//							+ "left join BasePoCode po_code "
-//								+ "on (po_code = p_po_code or po_code = w_po_code) "
-//								+ "left join po_code.contractType t "
-//								+ "left join po_code.supplier s "
-//					+ "left join Receipt r "
-//						+ "on r.id = s_p.id "
-//		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
-//			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
-//			+ "and (:checkItemIds = false or item.id in :itemIds) "
-//			+ "and (:checkPoCodes = false or po_code.id in :poCodeIds) "
-//			+ "and (:startTime is null or p.recordedTime >= :startTime) "
-//			+ "and (:endTime is null or p.recordedTime < :endTime) "
-//		+ "group by uib, p "
-//		+ "order by p.recordedTime desc ")
-//	List<InventoryTransactionRow> findInventoryTransactions(
-//			ProductionFunctionality[] excludedFunctionalities, 
-//			ItemGroup itemGroup, 
-//			boolean checkItemIds, Integer[] itemIds, 
-//			boolean checkPoCodes, Integer[] poCodeIds,
-//			LocalDateTime startTime, LocalDateTime endTime);
 	
 	@Query("select new com.avc.mis.beta.dto.view.InventoryTransactionSubtractRow( "
 			+ "uib.id, "
@@ -1049,7 +971,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (:startTime is null or p.recordedTime >= :startTime) "
 			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by uib "
-		+ "order by p.recordedTime desc ")
+		+ "order by p.recordedTime desc, uib.id desc ")
 	List<InventoryTransactionSubtractRow> findInventoryTransactionSubtractions(
 			ProductionFunctionality[] excludedFunctionalities, 
 			ItemGroup itemGroup, 
@@ -1096,7 +1018,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (:startTime is null or p.recordedTime >= :startTime) "
 			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by sf "
-		+ "order by p.recordedTime desc ")
+		+ "order by p.recordedTime desc, sf.id desc ")
 	List<InventoryTransactionAddRow> findInventoryTransactionAdditions(
 			ProductionFunctionality[] excludedFunctionalities, 
 			ItemGroup itemGroup, 
