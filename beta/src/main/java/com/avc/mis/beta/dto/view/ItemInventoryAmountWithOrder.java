@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.view;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,6 +56,31 @@ public class ItemInventoryAmountWithOrder {
 					.reduce(AmountWithUnit::add).get()	
 					.setScale(MeasureUnit.SCALE);	
 		}
+	}
+	
+	public BigDecimal getInventoryAmountNumber() {
+		if(getInventoryAmount() == null)
+			return null;
+		return getInventoryAmount().getAmount();
+	}
+	
+	public MeasureUnit getInventoryAmountUnit() {
+		if(getInventoryAmount() == null)
+			return null;
+		return getInventoryAmount().getMeasureUnit();		
+	}
+	
+	public BigDecimal getOrderedAmountNumber() {
+		if(getOrderedAmount() == null)
+			return null;
+		return getOrderedAmount().getAmount();
+	}
+	
+	public MeasureUnit getOrderedAmountUnit() {
+		if(getOrderedAmount() == null)
+			return null;
+		return getOrderedAmount().getMeasureUnit();
+
 	}
 
 	
