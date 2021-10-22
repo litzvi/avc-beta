@@ -10,8 +10,8 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
- * Version: 22.7
- * issues 619
+ * Version: 22.9
+ * issues 236, fixed mismatch of units between order and receipt
  * 
  * @author zvi
  *
