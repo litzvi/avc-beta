@@ -47,7 +47,7 @@ public class PoDTO extends PoProcessDTO {
 	private List<OrderItemDTO> orderItems;
 	
 	private boolean closed;
-	private String personInCharge;
+//	private String personInCharge;
 	
 	/**
 	 * All arguments (besides for order items) Constructor ,
@@ -58,17 +58,16 @@ public class PoDTO extends PoProcessDTO {
 			Integer supplierId, Integer supplierVersion, String supplierName, 
 			ProcessName processName, Integer productionLineId, String productionLineValue, ProductionFunctionality productionFunctionality,
 			LocalDateTime recordedTime, Shift shift, LocalTime startTime, LocalTime endTime, 
-			Duration downtime, Integer numOfWorkers, 
+			Duration downtime, Integer numOfWorkers, String personInCharge, 
 			ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals,
-			boolean closed, String personInCharge) {
+			boolean closed) {
 		super();
 		super.setGeneralProcessInfo(new GeneralProcessInfo(id, version, createdDate, staffRecording, 
 				processName, productionLineId, productionLineValue, productionFunctionality,
 				recordedTime, shift, startTime, endTime, 
-				downtime, numOfWorkers, processStatus, editStatus, remarks, approvals));
+				downtime, numOfWorkers, personInCharge, processStatus, editStatus, remarks, approvals));
 		super.setPoCode(new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName));
 		this.closed = closed;
-		this.personInCharge = personInCharge;
 	}
 	
 	/**
@@ -78,14 +77,12 @@ public class PoDTO extends PoProcessDTO {
 	public PoDTO(@NonNull PO po) {
 		super(po);
 		this.closed = po.isClosed();
-		this.personInCharge = po.getPersonInCharge();
 		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toList());
 
 	}
 	
 	public void setOrderProcessInfo(OrderProcessInfo info) {
 		this.closed = info.isClosed();
-		this.personInCharge = info.getPersonInCharge();		
 	}
 	
 	@Override

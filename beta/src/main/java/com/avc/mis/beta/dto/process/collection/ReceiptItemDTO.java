@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -21,6 +22,7 @@ import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
+import com.avc.mis.beta.utilities.ListGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -34,7 +36,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class ReceiptItemDTO extends ProcessItemDTO {
+public class ReceiptItemDTO extends ProcessItemDTO  implements ListGroup<StorageDTO> {
 	
 	private AmountWithUnit receivedOrderUnits;
 	private AmountWithCurrency unitPrice;
@@ -126,6 +128,24 @@ public class ReceiptItemDTO extends ProcessItemDTO {
 				.map(s -> ((StorageWithSampleDTO)s).getWeighedDifferance())
 				.filter(d -> d != null)
 				.reduce(BigDecimal::add);
+	}
+	
+	@Override
+	public ReceiptItem fillEntity(Object entity) {
+		ReceiptItem receiptItem;
+		if(entity instanceof ReceiptItem) {
+			receiptItem = (ReceiptItem) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be ReceiptItem class");
+		}
+		super.fillEntity(receiptItem);
+		receiptItem.setOrderItem((OrderItem) getOrderItem().fillEntity(new OrderItem()));
+		receiptItem.setReceivedOrderUnits(getReceivedOrderUnits());
+		receiptItem.setUnitPrice(getUnitPrice());
+		receiptItem.setExtraRequested(getExtraRequested());
+		
+		return receiptItem;
 	}
 
 }

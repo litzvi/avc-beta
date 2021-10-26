@@ -19,6 +19,8 @@ public interface Ordinal {
 	public Integer getOrdinal();
 	public void setOrdinal(Integer ordinal);
 	
+	public Integer getId();
+	
 
 	/**
 	 * Compares two objects by their ordinal value, smaller values are first in order.
@@ -34,8 +36,12 @@ public interface Ordinal {
 			public int compare(T o1, T o2) {
 				int result = o1.getOrdinal()-o2.getOrdinal();
 				if(result == 0) {
-					return o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName());
+					result = o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName());
+//					if(result == 0) {
+//						result = Integer.compare(o1.getId(), o2.getId());
+//					}
 				}
+				
 				return result;
 			}};
 		

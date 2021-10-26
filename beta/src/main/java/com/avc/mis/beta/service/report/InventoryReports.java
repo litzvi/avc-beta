@@ -34,6 +34,7 @@ import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
+import com.avc.mis.beta.service.report.row.ReceiptUsageRow;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
@@ -157,6 +158,25 @@ public class InventoryReports {
 		
 		List<ReceiptInventoryRow> rows = getInventoryRepository().findReceiptInventoryRows(
 				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, checkProductionUses, productionUses, itemGroup, pointOfTime);
+		
+		int[] poCodeIds = rows.stream().mapToInt(ReceiptInventoryRow::getId).toArray();		
+		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, ProductionUse.ROAST, false);
+		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getPoCodeId));
+
+		for(ReceiptInventoryRow row: rows) {
+			List<ItemQc> listItemQc = itemsMap.get(row.getId());
+			if(listItemQc != null && !listItemQc.isEmpty()) {
+				row.setRawDefectsAndDamage(listItemQc.get(0).getTotalDefectsAndDamage());
+			}
+		}
+				
+		return rows;
+	}
+	
+	public List<ReceiptUsageRow> getReceiptUsageRows(ItemGroup itemGroup, ProductionUse[] productionUses, LocalDateTime startTime, LocalDateTime endTime) {
+		boolean checkProductionUses = (productionUses != null);
+		
+		List<ReceiptUsageRow> rows = getInventoryRepository().findReceiptUsageRows(checkProductionUses, productionUses, itemGroup, startTime, endTime);
 		
 		int[] poCodeIds = rows.stream().mapToInt(ReceiptInventoryRow::getId).toArray();		
 		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, ProductionUse.ROAST, false);

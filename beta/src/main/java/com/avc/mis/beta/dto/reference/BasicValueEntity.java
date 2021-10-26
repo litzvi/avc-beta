@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.reference;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.ValueInterface;
 
 import lombok.Data;
@@ -41,4 +42,20 @@ public class BasicValueEntity<T extends ValueInterface> extends ValueDTO impleme
 		super(entity.getId());
 		this.value = entity.getValue();
 	}
+	
+	@Override
+	public ValueEntity fillEntity(Object entity) {
+		ValueEntity item;
+		if(entity instanceof ValueEntity) {
+			item = (ValueEntity) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be ValueEntity class");
+		}
+		super.fillEntity(item);
+		item.setValue(getValue());
+		
+		return item;
+	}
+
 }

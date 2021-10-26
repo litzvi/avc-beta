@@ -60,7 +60,7 @@ public class PO extends PoProcess {
 	@NotEmpty(message = "Purchase Order has to have at least one order line")
 	private Set<OrderItem> orderItems = new HashSet<>();
 	
-	private String personInCharge;
+//	private String personInCharge;
 	
 	public void setGeneralPoCode(GeneralPoCode poCode) {
 		super.setPoCode(poCode);

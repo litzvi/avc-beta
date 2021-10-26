@@ -9,7 +9,11 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
 import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
 import com.avc.mis.beta.dto.processInfo.PoProcessInfo;
+import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.process.PoProcess;
+import com.avc.mis.beta.entities.process.collection.ItemCount;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -56,6 +60,25 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 			return null;
 		}
 		return this.weightedPos;
+	}
+	
+	@Override
+	public PoProcess fillEntity(Object entity) {
+		PoProcess poProcess;
+		if(entity instanceof PoProcess) {
+			poProcess = (PoProcess) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be PoProcess class");
+		}
+		super.fillEntity(poProcess);
+		poProcess.setPoCode(getPoCode().fillEntity(new BasePoCode()));
+		if(getItemCounts() != null) {
+			Ordinal.setOrdinals(getItemCounts());
+			poProcess.setItemCounts(getItemCounts().stream().map(i -> i.fillEntity(new ItemCount())).toArray(ItemCount[]::new));
+		}
+		
+		return poProcess;
 	}
 
 	

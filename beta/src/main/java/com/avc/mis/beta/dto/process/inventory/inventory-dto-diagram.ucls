@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" always-add-relationships="true" generalizations="false" realizations="false" 
   associations="true" dependencies="true" nesting-relationships="false" router="FAN">  
-  <interface id="1" language="java" name="com.avc.mis.beta.dto.process.inventory.StorageBaseDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/process/inventory/StorageBaseDTO.java" binary="false" 
+  <interface id="1" language="java" name="com.avc.mis.beta.dto.process.inventory.StorageBaseInterface" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/process/inventory/StorageBaseInterface.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1135" y="67"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
@@ -41,8 +41,8 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="com.avc.mis.beta.dto.process.inventory.StorageDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/process/inventory/StorageDTO.java" binary="false" 
+  <class id="5" language="java" name="com.avc.mis.beta.dto.process.inventory.StorageBaseDTO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/process/inventory/StorageBaseDTO.java" binary="false" 
     corner="BOTTOM_RIGHT">    
     <position height="133" width="384" x="238" y="328"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
@@ -121,73 +121,73 @@
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <association id="13">    
-    <end type="SOURCE" refId="8" navigable="false">      
-      <attribute id="14" name="storage">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </attribute>      
-      <multiplicity id="15" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
-      </multiplicity>    
-    </end>    
-    <end type="TARGET" refId="5" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <dependency id="16">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="5"/>  
+  <dependency id="13">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="7"/>  
   </dependency>  
-  <dependency id="17">    
-    <end type="SOURCE" refId="9"/>    
+  <dependency id="14">    
+    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="8"/>  
   </dependency>  
-  <association id="18">    
+  <dependency id="15">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="16">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <association id="17">    
     <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="19" name="amounts">        
+      <attribute id="18" name="amounts">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="20" minimum="0" maximum="2147483647">        
+      <multiplicity id="19" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="21">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="1"/>  
+  <dependency id="20">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="5"/>  
   </dependency>  
-  <dependency id="22">    
+  <dependency id="21">    
     <end type="SOURCE" refId="10"/>    
     <end type="TARGET" refId="12"/>  
   </dependency>  
-  <dependency id="23">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="24">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="5"/>  
-  </dependency>  
-  <dependency id="25">    
-    <end type="SOURCE" refId="4"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <association id="26">    
+  <association id="22">    
     <end type="SOURCE" refId="11" navigable="false">      
-      <attribute id="27" name="amounts">        
+      <attribute id="23" name="amounts">        
         <position height="0" width="0" x="52" y="34"/>      
       </attribute>      
-      <multiplicity id="28" minimum="0" maximum="2147483647">        
+      <multiplicity id="24" minimum="0" maximum="2147483647">        
         <position height="0" width="0" x="52" y="34"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="2" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="29">    
-    <end type="SOURCE" refId="6"/>    
+  <association id="25">    
+    <end type="SOURCE" refId="8" navigable="false">      
+      <attribute id="26" name="storage">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </attribute>      
+      <multiplicity id="27" minimum="0" maximum="1">        
+        <position height="0" width="0" x="0" y="0"/>      
+      </multiplicity>    
+    </end>    
+    <end type="TARGET" refId="5" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <dependency id="28">    
+    <end type="SOURCE" refId="9"/>    
     <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="29">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="1"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
     sort-features="false" accessors="true" visibility="true">    

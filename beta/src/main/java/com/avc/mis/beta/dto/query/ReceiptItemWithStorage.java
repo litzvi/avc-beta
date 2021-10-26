@@ -13,6 +13,7 @@ import com.avc.mis.beta.dto.generic.OrdinalAmount;
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
 import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -32,7 +33,7 @@ import lombok.Data;
  */
 @Data
 //@EqualsAndHashCode(callSuper = true)
-public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDTO, ProcessItemDTO> {
+public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDTO, ReceiptItemDTO> {
 
 	private ReceiptItemDTO receiptItem;
 	private StorageWithSampleDTO storage;

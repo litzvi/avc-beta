@@ -45,7 +45,14 @@ public class TransferTest {
 	@Test
 	void transferTest() {
 		try {
-			Receipt receipt = service.addBasicCashewReceipt();
+			Receipt receipt;
+			try {
+				receipt = service.addBasicCashewReceipt();
+			} catch (Exception e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+				throw e2;
+			}
 			processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 			

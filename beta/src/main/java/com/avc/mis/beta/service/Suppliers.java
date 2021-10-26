@@ -191,6 +191,10 @@ public class Suppliers {
 		}
 		dao.addEntity(contact, Company.class, companyId);
 	}
+	
+	public void removeContactPerson(int contactId) {
+		getDao().removeEntity(CompanyContact.class, contactId);	
+	}
 
 	//----------------------------Duplicate in SupplierReports - Should remove------------------------------------------
 

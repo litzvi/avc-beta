@@ -46,9 +46,6 @@ public class CompanyContact extends ObjectDataEntity {
 	@JoinColumn(name = "positionId")
 	private CompanyPosition position;
 	
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
 
 	/**
 	 * Sets the company reference

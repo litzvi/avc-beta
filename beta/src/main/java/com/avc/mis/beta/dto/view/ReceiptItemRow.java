@@ -24,6 +24,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
+import lombok.experimental.NonFinal;
 
 /**
  * @author Zvi
@@ -44,7 +45,7 @@ public class ReceiptItemRow extends BasicDTO {
 	@JsonIgnore
 	AmountWithUnit receiptAmt;
 	AmountWithUnit orderAmount;
-	AmountWithUnit orderBalance;
+	@NonFinal AmountWithUnit orderBalance;
 	@JsonIgnore
 	LocalDateTime receiptDate;
 	@JsonIgnore
@@ -68,7 +69,9 @@ public class ReceiptItemRow extends BasicDTO {
 
 		this.receivedOrderUnits = new AmountWithUnit(receivedOrderAmount, receivedOrderMU);
 		this.receiptAmt = new AmountWithUnit(receiptAmount, receiptMU);
-		this.orderBalance = this.receiptAmt.subtract(this.receivedOrderUnits);
+		try {
+			this.orderBalance = this.receiptAmt.subtract(this.receivedOrderUnits);
+		} catch (UnsupportedOperationException e) {}
 		if(orderAmount != null) {
 			this.orderAmount = new AmountWithUnit(orderAmount, orderMU);
 		}

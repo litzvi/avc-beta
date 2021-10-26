@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.BasicValueDTO;
 import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -62,6 +63,22 @@ public class PoCodeBasic extends BasicValueDTO {
 	@Override
 	public String getValue() {	
 		return String.format("%s-%s%s", this.contractTypeCode, this.getCode(), this.contractTypeSuffix);
+	}
+	
+	@JsonIgnore
+	@Override
+	public BasePoCode fillEntity(Object entity) {
+		BasePoCode basePoCode;
+		if(entity instanceof BasePoCode) {
+			basePoCode = (BasePoCode) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be BasePoCode class");
+		}
+		super.fillEntity(basePoCode);
+		basePoCode.setId(getId());
+		
+		return basePoCode;
 	}
 		
 }

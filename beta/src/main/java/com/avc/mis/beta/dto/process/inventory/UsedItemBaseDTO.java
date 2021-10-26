@@ -35,7 +35,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	//UsedItemBase fields
 	private BigDecimal numberUsedUnits;
 	@EqualsAndHashCode.Exclude
-	private StorageDTO storage;
+	private StorageBaseDTO storage;
 //	private DataObject<StorageBase> storage;
 
 	//storage processItem info - for display on edit
@@ -88,7 +88,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		super(id, version, ordinal);
 		this.numberUsedUnits = numberUsedUnits;
 //		this.storage = new DataObject<StorageBase>(storageId, stoageVersion);
-		this.storage = new StorageDTO(storageId, stoageVersion, storageOrdinal, 
+		this.storage = new StorageBaseDTO(storageId, stoageVersion, storageOrdinal, 
 				storageUnitAmount, storageNumberUnits, //storageContainerWeight, 
 				storageWarehouseLocationId, storageWarehouseLocationValue, 
 				storageRemarks, null);
@@ -125,7 +125,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		super(usedItem.getId(), usedItem.getVersion(), usedItem.getOrdinal());
 		this.numberUsedUnits = usedItem.getNumberUsedUnits();
 		StorageBase storage = usedItem.getStorage();
-		this.storage = new StorageDTO(storage);
+		this.storage = new StorageBaseDTO(storage);
 //		this.storage = new DataObject<StorageBase>(storage);
 		this.storageId = storage.getId();
 		ProcessItem processItem = storage.getProcessItem();
@@ -155,7 +155,7 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 	@JsonIgnore
 	public Storage getNewStorage() {
 		Storage storage = new Storage();
-		StorageDTO storageDTO = this.getStorage();
+		StorageBaseDTO storageDTO = this.getStorage();
 		storage.setOrdinal(storageDTO.getOrdinal());
 		storage.setUnitAmount(storageDTO.getUnitAmount());
 //		storage.setAccessWeight(storageDTO.getAccessWeight());

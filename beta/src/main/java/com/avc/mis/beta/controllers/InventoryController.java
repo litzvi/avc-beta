@@ -4,6 +4,7 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
+import com.avc.mis.beta.dto.view.InventoryTransactionRow;
 import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
@@ -178,6 +179,13 @@ public class InventoryController {
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end){
 		return inventoryUseReports.getInventoryUses(ProcessName.PRODUCT_USE, begin, end);
 	}
+	
+	@RequestMapping("/getInventoryTransactions")
+	public List<InventoryTransactionRow> getInventoryTransactions(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+		return warehouseManagement.getInventoryTransactions(ItemGroup.GENERAL, null, null, begin, end);
+	}
+
 	
 	@RequestMapping("/getGeneralInventoryByPo")
 	public List<PoInventoryRow> getGeneralInventoryByPo() {

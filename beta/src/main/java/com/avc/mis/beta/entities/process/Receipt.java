@@ -59,17 +59,7 @@ public class Receipt extends ProcessWithProduct<ReceiptItem> {
 		getLifeCycle().setProcessStatus(ProcessStatus.PENDING);
 	
 	}
-	
-//	@Override
-//	public void setPoCode(BasePoCode poCode) {
-//		if(poCode instanceof PoCode) {
-//			super.setPoCode((PoCode)poCode);
-//		}
-//		else {
-//			throw new ClassCastException("Referenced object isn't a PoCode");
-//		}	
-//	}
-	
+		
 	@NotNull(message = "Receipt has to reference a po code")
 	@Override
 	public BasePoCode getPoCode() {

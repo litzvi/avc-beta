@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto;
 
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,8 +33,16 @@ public abstract class BasicValueDTO extends BasicDTO {
 	}
 	
 	@JsonIgnore
-	public ValueEntity fillEntity(ValueEntity entity) {
-		super.fillEntity(entity);
-		return entity;
+	@Override
+	public BaseEntity fillEntity(Object entity) {
+		BaseEntity baseEntity;
+		if(entity instanceof BaseEntity) {
+			baseEntity = (BaseEntity) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be BaseEntity class");
+		}
+		super.fillEntity(baseEntity);
+		return baseEntity;
 	}
 }

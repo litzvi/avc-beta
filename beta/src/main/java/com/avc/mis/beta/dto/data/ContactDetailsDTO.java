@@ -3,7 +3,9 @@
  */
 package com.avc.mis.beta.dto.data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -33,8 +35,10 @@ public class ContactDetailsDTO extends LinkDTO {
 	private SortedSet<FaxDTO> faxes = new TreeSet<>(Ordinal.ordinalComparator());
 	private SortedSet<EmailDTO> emails = new TreeSet<>(Ordinal.ordinalComparator());
 	private AddressDTO addresses;
-	private SortedSet<PaymentAccountDTO> paymentAccounts = new TreeSet<>(Ordinal.ordinalComparator());
-	
+//	private SortedSet<PaymentAccountDTO> paymentAccounts = new TreeSet<>(Ordinal.ordinalComparator());
+
+	private List<PaymentAccountDTO> paymentAccounts = new ArrayList<>();
+
 	/**
 	 * @param contactDetails
 	 */
@@ -48,8 +52,11 @@ public class ContactDetailsDTO extends LinkDTO {
 				.map(e->{return new EmailDTO(e);}).collect(Collectors.toCollection(() -> new TreeSet<>(Ordinal.ordinalComparator())));		
 		this.addresses = Arrays.stream(contactDetails.getAddresses()).sorted(Ordinal.ordinalComparator())
 				.findFirst().map(e -> {return new AddressDTO(e);}).orElse(null);
+//		this.paymentAccounts = Arrays.stream(contactDetails.getPaymentAccounts())
+//				.map(p->{return new PaymentAccountDTO(p);}).collect(Collectors.toCollection(() -> new TreeSet<>(Ordinal.ordinalComparator())));
+		
 		this.paymentAccounts = Arrays.stream(contactDetails.getPaymentAccounts())
-				.map(p->{return new PaymentAccountDTO(p);}).collect(Collectors.toCollection(() -> new TreeSet<>(Ordinal.ordinalComparator())));
+				.map(p->{return new PaymentAccountDTO(p);}).sorted(Ordinal.ordinalComparator()).collect(Collectors.toList());
 		
 		
 	}

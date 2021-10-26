@@ -46,10 +46,18 @@ public abstract class SubjectDataDTO extends DataDTO implements Ordinal {
 	}
 	
 	@JsonIgnore
-	public SubjectDataEntity fillEntity(SubjectDataEntity entity) {
-		super.fillEntity(entity);
-		entity.setOrdinal(getOrdinal());
-		return entity;
+	@Override
+	public SubjectDataEntity fillEntity(Object entity) {
+		SubjectDataEntity subjectDataEntity;
+		if(entity instanceof SubjectDataEntity) {
+			subjectDataEntity = (SubjectDataEntity) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be SubjectDataEntity class");
+		}
+		super.fillEntity(subjectDataEntity);
+		subjectDataEntity.setOrdinal(getOrdinal());
+		return subjectDataEntity;
 	}
 	
 //	@JsonIgnore
@@ -59,10 +67,10 @@ public abstract class SubjectDataDTO extends DataDTO implements Ordinal {
 //		return entity;
 //	}
 //	
-	@JsonIgnore
-	public RankedAuditedEntity fillEntity(RankedAuditedEntity entity) {
-		super.fillEntity(entity);
-		entity.setOrdinal(getOrdinal());
-		return entity;
-	}
+//	@JsonIgnore
+//	public RankedAuditedEntity fillEntity(RankedAuditedEntity entity) {
+//		super.fillEntity(entity);
+//		entity.setOrdinal(getOrdinal());
+//		return entity;
+//	}
 }

@@ -58,7 +58,15 @@ public class BillOfMaterialsDTO extends LinkDTO {
 	}
 	
 	@JsonIgnore
-	public BillOfMaterials fillEntity(BillOfMaterials billOfMaterials) {		
+	@Override
+	public BillOfMaterials fillEntity(Object entity) {	
+		BillOfMaterials billOfMaterials;
+		if(entity instanceof BillOfMaterials) {
+			billOfMaterials = (BillOfMaterials) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be BillOfMaterials class");
+		}
 		super.fillEntity(billOfMaterials);
 		
 		if(getProduct() != null) {

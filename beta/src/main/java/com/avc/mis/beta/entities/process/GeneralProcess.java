@@ -80,6 +80,8 @@ public abstract class GeneralProcess extends AuditedEntity {
 	private Duration downtime;
 	private Integer numOfWorkers;
 	
+	private String personInCharge;
+
 	@OneToOne(mappedBy = "process", cascade = {CascadeType.PERSIST, CascadeType.REMOVE},
 			fetch = FetchType.LAZY, optional = false)
 	private ProcessLifeCycle lifeCycle;

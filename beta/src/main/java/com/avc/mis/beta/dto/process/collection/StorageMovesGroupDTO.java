@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.MovedItemTableDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -70,7 +70,7 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 					movedItemTable.setNewWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 				movedItemTable.setItemPoCodes(m.getItemPoCodes());
 				movedItemTable.setItemSuppliers(m.getItemSuppliers());
-				StorageDTO storage = m.getStorage();
+				StorageBaseDTO storage = m.getStorage();
 //				movedItemTable.setAccessWeight(storage.getAccessWeight());
 				warehouse = storage.getWarehouseLocation();
 				if(warehouse != null)
@@ -79,7 +79,7 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 			});
 			
 			List<BasicUsedStorageDTO> used = this.storageMoves.stream().map((m) -> {
-				StorageDTO storage = m.getStorage();
+				StorageBaseDTO storage = m.getStorage();
 				return new BasicUsedStorageDTO(m.getId(), m.getVersion(), 
 						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits(), 
 						m.getNumberUsedUnits(), m.getNumberAvailableUnits());

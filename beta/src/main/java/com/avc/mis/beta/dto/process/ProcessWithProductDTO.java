@@ -8,6 +8,7 @@ import java.util.List;
 import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -47,6 +48,20 @@ public abstract class ProcessWithProductDTO<T extends ProcessItemDTO> extends Po
 	
 	public ProcessWithProductDTO(@NonNull ProcessWithProduct<?> process) {
 		super(process);
+	}
+	
+	@Override
+	public ProcessWithProduct<? extends ProcessItem> fillEntity(Object entity) {
+		ProcessWithProduct<? extends ProcessItem> processWithProduct;
+		if(entity instanceof ProcessWithProduct) {
+			processWithProduct = (ProcessWithProduct<? extends ProcessItem>) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be ProcessWithProduct class");
+		}
+		super.fillEntity(processWithProduct);
+		
+		return processWithProduct;
 	}
 
 

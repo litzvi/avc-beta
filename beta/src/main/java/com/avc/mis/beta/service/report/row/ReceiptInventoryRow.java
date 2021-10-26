@@ -120,5 +120,28 @@ public class ReceiptInventoryRow extends BasicDTO {
 			return "H&P";
 		}
 	}
+	
+	public BigDecimal getBalance() {
+		BigDecimal balance = getAmount().getAmount();
+		if(balance.compareTo(BigDecimal.ZERO) == 0)
+			return null;
+		return balance;
+	}
+	
+	public MeasureUnit getMeasureUnit() {
+		return getAmount().getMeasureUnit();
+	}
+	
+	public String[] getWarehouses() {
+		if(getBalance() == null)
+			return null;
+		return warehouses;
+	}
+	
+	public String[] getBags() {
+		if(getBalance() == null)
+			return null;
+		return bags;
+	}
 
 }

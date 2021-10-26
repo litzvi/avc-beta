@@ -60,6 +60,9 @@ public abstract class GeneralProcessDTO extends DataDTO {
 
 	private Duration downtime;
 	private Integer numOfWorkers;
+	
+	private String personInCharge;
+
 	@EqualsAndHashCode.Exclude
 	private ProcessStatus processStatus;
 	@EqualsAndHashCode.Exclude
@@ -107,6 +110,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 		this.endTime = process.getEndTime();
 		this.downtime = process.getDowntime();
 		this.numOfWorkers = process.getNumOfWorkers();
+		this.personInCharge = process.getPersonInCharge();
 		this.processStatus = process.getLifeCycle().getProcessStatus();
 		this.editStatus = process.getLifeCycle().getEditStatus();
 		this.remarks = process.getRemarks();
@@ -132,13 +136,22 @@ public abstract class GeneralProcessDTO extends DataDTO {
 		this.endTime = info.getEndTime();
 		this.downtime = info.getDowntime();
 		this.numOfWorkers = info.getNumOfWorkers();
+		this.personInCharge = info.getPersonInCharge();		
 		this.processStatus = info.getProcessStatus();
 		this.editStatus = info.getEditStatus();
 		this.remarks = info.getRemarks();
 		this.approvals = info.getApprovals();
 	}
 	
-	public GeneralProcess fillEntity(GeneralProcess generalProcess) {
+	@Override
+	public GeneralProcess fillEntity(Object entity) {
+		GeneralProcess generalProcess;
+		if(entity instanceof GeneralProcess) {
+			generalProcess = (GeneralProcess) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be GeneralProcess class");
+		}
 		super.fillEntity(generalProcess);
 		
 //		generalProcess.setCreatedDate(getCreatedDate());
@@ -153,6 +166,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 		generalProcess.setEndTime(getEndTime());
 		generalProcess.setDowntime(getDowntime());
 		generalProcess.setNumOfWorkers(getNumOfWorkers());
+		generalProcess.setPersonInCharge(getPersonInCharge());
 //		generalProcess.processStatus = info.getProcessStatus();
 //		generalProcess.editStatus = info.getEditStatus();
 		generalProcess.setRemarks(getRemarks());

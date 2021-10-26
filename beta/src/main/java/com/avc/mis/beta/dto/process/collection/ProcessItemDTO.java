@@ -9,15 +9,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
+import com.avc.mis.beta.entities.process.collection.ReceiptItem;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.utilities.ListGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -172,6 +177,24 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 	}
 
 
+	@Override
+	public ProcessItem fillEntity(Object entity) {
+		ProcessItem processItem;
+		if(entity instanceof ProcessItem) {
+			processItem = (ProcessItem) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be ProcessItem class");
+		}
+		super.fillEntity(processItem);
+		processItem.setItem(getItem().fillEntity(new Item()));
+		if(getStorageForms() != null) {
+			Ordinal.setOrdinals(getStorageForms());
+			processItem.setStorageForms(getStorageForms().stream().map(i -> i.fillEntity(new Storage())).toArray(Storage[]::new));
+		}
+		
+		return processItem;
+	}
 
 		
 }

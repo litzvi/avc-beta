@@ -85,7 +85,15 @@ public class ProductionPlanRowDTO extends DataDTO {
 	}
 	
 	@JsonIgnore
-	public ProductionPlanRow fillEntity(ProductionPlanRow productionPlanRow) {
+	@Override
+	public ProductionPlanRow fillEntity(Object entity) {
+		ProductionPlanRow productionPlanRow;
+		if(entity instanceof ProductionPlanRow) {
+			productionPlanRow = (ProductionPlanRow) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be ProductionPlanRow class");
+		}
 		super.fillEntity(productionPlanRow);
 		if(getProcessType() != null) {
 			ProcessType processType = new ProcessType();

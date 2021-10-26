@@ -20,6 +20,7 @@ import com.avc.mis.beta.service.Orders;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
 
 /**
  * Abstract base class for modifying data access objects repositories(dao).
@@ -42,7 +43,7 @@ public abstract class DAO extends ReadDAO {
 	 * @param reference detached entity referenced by entity (the owner of the association).
 	 * @throws IllegalArgumentException, EntityNotFoundException, EntityExistsException, TransactionRequiredException
 	 */
-	public void addEntity(BaseEntity entity, BaseEntity reference) {
+	public void addEntity(BaseEntity entity, @NonNull BaseEntity reference) {
 		setEntityReference(entity, reference.getClass(), reference.getId());
 		addEntity(entity);
 	}

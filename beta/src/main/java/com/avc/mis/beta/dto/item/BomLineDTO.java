@@ -48,7 +48,15 @@ public class BomLineDTO extends SubjectLinkDTO {
 	}
 
 	@JsonIgnore
-	public BomLine fillEntity(BomLine bomLine) {
+	@Override
+	public BomLine fillEntity(Object entity) {
+		BomLine bomLine;
+		if(entity instanceof BomLine) {
+			bomLine = (BomLine) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be BomLine class");
+		}
 		super.fillEntity(bomLine);
 		
 		if(getMaterial() != null) {

@@ -86,6 +86,7 @@ import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
+import com.avc.mis.beta.service.report.row.ReceiptUsageRow;
 import com.avc.mis.beta.service.report.row.SupplierQualityRow;
 import com.avc.mis.beta.service.report.row.TaskRow;
 
@@ -119,7 +120,7 @@ public class QueryTest {
 	@Autowired LoadingReports loadingReports;
 	@Autowired ContainerArrivals containerArrivals;
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void queryTest() {
 
@@ -442,7 +443,7 @@ public class QueryTest {
 
 	}
 	
-//	@Disabled
+	@Disabled
 	@Test
 	void oneQueryTest() {
 		
@@ -469,6 +470,17 @@ public class QueryTest {
 		}
 //				LocalDateTime.of(2021, 5, 1, 0, 0));
 		receiptInventoryRows.forEach(row -> {System.out.println(row); });
+		
+		List<ReceiptUsageRow> receiptUsageRows = null;
+		try {
+			receiptUsageRows = inventoryReports.getReceiptUsageRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.RAW_KERNEL}, 
+					null, null);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			throw e1;
+		}
+		receiptUsageRows.forEach(row -> {System.out.println(row); });
+
 		
 		List<FinishedProductInventoryRow> finishedProductInventoryRows;
 		try {
@@ -563,6 +575,15 @@ public class QueryTest {
 //	@Disabled
 	@Test
 	void newTest() {				
-		
+		List<ReceiptUsageRow> receiptUsageRows = null;
+		try {
+			receiptUsageRows = inventoryReports.getReceiptUsageRows(ItemGroup.PRODUCT, new ProductionUse[] {ProductionUse.RAW_KERNEL}, 
+					null, null);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+			throw e1;
+		}
+		receiptUsageRows.forEach(row -> {System.out.println(row); });
+
 	}
 }

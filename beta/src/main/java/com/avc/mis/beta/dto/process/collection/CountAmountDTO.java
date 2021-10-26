@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.process.collection;
 
 import java.math.BigDecimal;
 
+import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.collection.CountAmount;
@@ -20,7 +21,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CountAmountDTO extends SubjectDataDTO {
+public class CountAmountDTO extends RankedAuditedDTO {
 
 	private BigDecimal amount;
 	
@@ -32,6 +33,21 @@ public class CountAmountDTO extends SubjectDataDTO {
 	public CountAmountDTO(CountAmount countAmount) {
 		super(countAmount.getId(), countAmount.getVersion(), countAmount.getOrdinal());
 		this.amount = countAmount.getAmount().setScale(MeasureUnit.SCALE);
+	}
+	
+	@Override
+	public CountAmount fillEntity(Object entity) {
+		CountAmount countAmount;
+		if(entity instanceof CountAmount) {
+			countAmount = (CountAmount) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be CountAmount class");
+		}
+		super.fillEntity(countAmount);
+		countAmount.setAmount(getAmount());
+		
+		return countAmount;
 	}
 
 }

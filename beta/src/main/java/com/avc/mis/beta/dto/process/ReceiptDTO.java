@@ -8,8 +8,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
+import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.data.ProcessFile;
+import com.avc.mis.beta.entities.item.BomLine;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.collection.ReceiptItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -84,6 +88,24 @@ public class ReceiptDTO extends ProcessWithProductDTO<ReceiptItemDTO> {
 ////		this.receiptItems.sort(Ordinal.ordinalComparator());
 //	}	
 
+	@Override
+	public Receipt fillEntity(Object entity) {
+		Receipt receipt;
+		if(entity instanceof Receipt) {
+			receipt = (Receipt) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be Receipt class");
+		}
+		super.fillEntity(receipt);
+		if(getReceiptItems() != null) {
+			Ordinal.setOrdinals(getReceiptItems());
+			receipt.setReceiptItems(getReceiptItems().stream().map(i -> i.fillEntity(new ReceiptItem())).toArray(ReceiptItem[]::new));
+		}
+		
+		return receipt;
+	}
+	
 	@Override
 	public String getProcessTypeDescription() {
 		return "Receipt";

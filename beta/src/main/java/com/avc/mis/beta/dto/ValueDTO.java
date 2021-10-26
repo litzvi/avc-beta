@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dto;
 
+import com.avc.mis.beta.entities.ValueEntity;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -26,4 +28,19 @@ public abstract class ValueDTO extends BaseEntityDTO {
 	}
 	
 	public abstract String getValue();
+	
+	
+	@Override
+	public ValueEntity fillEntity(Object entity) {
+		ValueEntity valueEntity;
+		if(entity instanceof ValueEntity) {
+			valueEntity = (ValueEntity) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be ValueEntity class");
+		}
+		super.fillEntity(valueEntity);
+		
+		return valueEntity;
+	}
 }

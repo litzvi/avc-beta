@@ -32,7 +32,17 @@ public abstract class LinkDTO extends BaseEntityDTO {
 	}
 
 	@JsonIgnore
-	public void fillEntity(LinkEntity linkEntity) {
-		super.fillEntity(linkEntity);	
+	@Override
+	public LinkEntity fillEntity(Object entity) {
+		LinkEntity linkEntity;
+		if(entity instanceof LinkEntity) {
+			linkEntity = (LinkEntity) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be LinkEntity class");
+		}
+		super.fillEntity(linkEntity);
+		
+		return linkEntity;
 	}
 }

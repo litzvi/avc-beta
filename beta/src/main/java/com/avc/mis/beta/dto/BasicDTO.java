@@ -31,8 +31,15 @@ public abstract class BasicDTO {
 	private Integer id;
 	
 	@JsonIgnore
-	public BaseEntity fillEntity(BaseEntity entity) {
-		entity.setId(getId());
-		return entity;
+	public BaseEntity fillEntity(Object entity) {
+		BaseEntity baseEntity;
+		if(entity instanceof BaseEntity) {
+			baseEntity = (BaseEntity) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be BaseEntity class");
+		}
+		baseEntity.setId(getId());
+		return baseEntity;
 	}
 }

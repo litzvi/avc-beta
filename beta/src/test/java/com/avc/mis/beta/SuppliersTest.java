@@ -4,8 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.validation.ConstraintViolationException;
 
@@ -16,8 +20,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
+import com.avc.mis.beta.dto.data.CompanyContactDTO;
 import com.avc.mis.beta.dto.data.ContactDetailsDTO;
 import com.avc.mis.beta.dto.data.FaxDTO;
+import com.avc.mis.beta.dto.data.PaymentAccountDTO;
 import com.avc.mis.beta.dto.data.PhoneDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.entities.data.Address;
@@ -194,7 +200,13 @@ class SuppliersTest {
 		
 		//add, remove supply categories
 		supplier = fullSupplier();
-		expected = new SupplierDTO(supplier, true);
+		try {
+			expected = new SupplierDTO(supplier, true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
 		suppliers.addSupplier(supplier);
 		Set<SupplyCategory> categories = supplier.getSupplyCategories();
 		if(categories.size() < 2)
@@ -220,6 +232,18 @@ class SuppliersTest {
 		suppliers.addSupplier(supplier);
 		actual = suppliers.getSupplier(supplier.getId());
 		assertEquals(expected, actual, "Failed test adding supplier contact details");
+		
+		//check removing contacts
+		Arrays.stream(supplier.getContactDetails().getPaymentAccounts()).forEach(i -> suppliers.removeAccount(i.getId()));
+		actual = suppliers.getSupplier(supplier.getId());
+		expected.getContactDetails().setPaymentAccounts(new ArrayList<PaymentAccountDTO>());
+		assertEquals(expected, actual, "Failed test removing company contacts");
+		
+		//check removing contacts
+		Arrays.stream(supplier.getCompanyContacts()).forEach(i -> suppliers.removeContactPerson(i.getId()));
+		actual = suppliers.getSupplier(supplier.getId());
+		expected.setCompanyContacts(new HashSet<CompanyContactDTO>());
+		assertEquals(expected, actual, "Failed test removing company contacts");
 		service.cleanup(supplier);
 		
 		//add supplier with full details add, remove and update a phones and faxes.

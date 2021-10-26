@@ -5,6 +5,7 @@ package com.avc.mis.beta.service.report;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -133,7 +134,8 @@ public class OrderReports {
 		int[] orderItemIds = poItemRows.stream().mapToInt(PoItemRow::getOrderItemId).toArray();
 		Map<Integer, BigDecimal> receivedAmountMap = getPoRepository()
 				.findReceivedAmountByOrderItemIds(orderItemIds)
-				.collect(Collectors.toMap(ValueObject<BigDecimal>::getId, ValueObject<BigDecimal>::getValue));
+				.collect(HashMap::new, (m,v)->m.put(v.getId(), v.getValue()), HashMap::putAll);
+//				.collect(Collectors.toMap(ValueObject<BigDecimal>::getId, ValueObject<BigDecimal>::getValue));
 		Map<Integer, BigDecimal> receivedOrderUnitsMap = getPoRepository()
 				.findReceivedOrderUnitsByOrderItemIds(orderItemIds)
 				.collect(Collectors.toMap(ValueObject<BigDecimal>::getId, ValueObject<BigDecimal>::getValue));

@@ -81,7 +81,14 @@ public abstract class BaseEntityDTO {
 		return PRIME;
 	}
 
-	public BaseEntity fillEntity(BaseEntity baseEntity) {
+	public BaseEntity fillEntity(Object entity) {
+		BaseEntity baseEntity;
+		if(entity instanceof BaseEntity) {
+			baseEntity = (BaseEntity) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be BaseEntity class");
+		}
 		baseEntity.setId(getId());
 		return baseEntity;
 	}

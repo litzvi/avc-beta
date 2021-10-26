@@ -38,6 +38,7 @@ public class GeneralProcessInfo extends DataDTO {
 	LocalTime endTime;
 	Duration downtime;
 	Integer numOfWorkers;
+	String personInCharge;
 	ProcessStatus processStatus;
 	EditStatus editStatus;
 	String remarks;
@@ -46,7 +47,7 @@ public class GeneralProcessInfo extends DataDTO {
 	
 	public GeneralProcessInfo(Integer id, Integer version, Instant createdDate, String userRecording, 
 			ProcessName processName, Integer productionLineId, String productionLineValue, ProductionFunctionality productionFunctionality,
-			LocalDateTime recordedTime, Shift shift, LocalTime startTime, LocalTime endTime, Duration downtime, Integer numOfWorkers, 
+			LocalDateTime recordedTime, Shift shift, LocalTime startTime, LocalTime endTime, Duration downtime, Integer numOfWorkers, String personInCharge, 
 			ProcessStatus processStatus, EditStatus editStatus,
 			String remarks, String approvals) {
 		super(id, version);
@@ -63,6 +64,7 @@ public class GeneralProcessInfo extends DataDTO {
 		this.endTime = endTime;
 		this.downtime = downtime;
 		this.numOfWorkers = numOfWorkers;
+		this.personInCharge = personInCharge;
 		this.processStatus = processStatus;
 		this.editStatus = editStatus;
 		this.remarks = remarks;

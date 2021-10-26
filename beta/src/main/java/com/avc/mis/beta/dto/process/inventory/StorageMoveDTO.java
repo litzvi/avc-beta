@@ -24,7 +24,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseDTO {
+public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseInterface {
 
 	private BigDecimal unitAmount;
 	private BigDecimal numberUnits;	

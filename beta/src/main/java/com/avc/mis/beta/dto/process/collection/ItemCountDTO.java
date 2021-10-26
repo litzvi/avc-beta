@@ -9,12 +9,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.ItemWithUse;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.collection.CountAmount;
 import com.avc.mis.beta.entities.process.collection.ItemCount;
 import com.avc.mis.beta.utilities.ListGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,7 +34,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ItemCountDTO extends SubjectDataDTO implements ListGroup<CountAmountDTO> {
+public class ItemCountDTO extends RankedAuditedDTO implements ListGroup<CountAmountDTO> {
 
 	private ItemWithUse item;
 	private MeasureUnit measureUnit;
@@ -102,6 +105,28 @@ public class ItemCountDTO extends SubjectDataDTO implements ListGroup<CountAmoun
 	@Override
 	public void setList(List<CountAmountDTO> list) {
 		setAmounts(list);
+	}
+	
+	@Override
+	public ItemCount fillEntity(Object entity) {
+		ItemCount itemCount;
+		if(entity instanceof ItemCount) {
+			itemCount = (ItemCount) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be ItemCount class");
+		}
+		super.fillEntity(itemCount);
+		itemCount.setItem(getItem().fillEntity(new Item()));;
+		itemCount.setMeasureUnit(getMeasureUnit());
+		itemCount.setContainerWeight(getContainerWeight());
+		itemCount.setAccessWeight(getAccessWeight());
+		if(getAmounts() != null) {
+			Ordinal.setOrdinals(getAmounts());
+			itemCount.setAmounts(getAmounts().stream().map(i -> i.fillEntity(new CountAmount())).toArray(CountAmount[]::new));
+		}
+		
+		return itemCount;
 	}
 	
 	

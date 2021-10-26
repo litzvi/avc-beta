@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemTableDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
@@ -63,7 +63,7 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 				usedItemTable.setMeasureUnit(ui.getMeasureUnit());
 				usedItemTable.setItemPo(ui.getItemPo());
 				usedItemTable.setItemProcessDate(ui.getItemProcessDate());
-				StorageDTO storage = ui.getStorage();
+				StorageBaseDTO storage = ui.getStorage();
 //				usedItemTable.setAccessWeight(storage.getAccessWeight());
 				BasicValueEntity<Warehouse> warehouse = storage.getWarehouseLocation();
 				if(warehouse != null)
@@ -74,7 +74,7 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 				usedItemTable.setCashewGrade(ui.getCashewGrade());
 			});
 			List<BasicUsedStorageDTO> used = this.usedItems.stream().map((i) -> {
-				StorageDTO storage = i.getStorage();
+				StorageBaseDTO storage = i.getStorage();
 				return new BasicUsedStorageDTO(i.getId(), i.getVersion(), 
 						storage.getId(), storage.getVersion(), storage.getOrdinal(), storage.getNumberUnits(), 
 						i.getNumberUsedUnits(), i.getNumberAvailableUnits());

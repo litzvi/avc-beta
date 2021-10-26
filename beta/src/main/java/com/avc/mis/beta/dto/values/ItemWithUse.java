@@ -38,5 +38,20 @@ public class ItemWithUse extends ValueDTO {
 		this.productionUse = item.getProductionUse();
 		this.clazz = item.getClass();
 	}
+	
+	@Override
+	public Item fillEntity(Object entity) {
+		Item item;
+		if(entity instanceof Item) {
+			item = (Item) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be Item class");
+		}
+		super.fillEntity(item);
+		
+		return item;
+	}
+
 
 }

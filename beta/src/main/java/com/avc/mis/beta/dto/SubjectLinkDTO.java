@@ -40,9 +40,17 @@ public abstract class SubjectLinkDTO extends LinkDTO implements Ordinal {
 	}
 	
 	@JsonIgnore
-	public SubjectLinkEntity fillEntity(SubjectLinkEntity entity) {
-		super.fillEntity(entity);
-		entity.setOrdinal(getOrdinal());
-		return entity;
+	@Override
+	public SubjectLinkEntity fillEntity(Object entity) {
+		SubjectLinkEntity subjectLinkEntity;
+		if(entity instanceof SubjectLinkEntity) {
+			subjectLinkEntity = (SubjectLinkEntity) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be SubjectLinkEntity class");
+		}
+		super.fillEntity(subjectLinkEntity);
+		subjectLinkEntity.setOrdinal(getOrdinal());
+		return subjectLinkEntity;
 	}
 }

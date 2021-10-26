@@ -89,7 +89,7 @@ public class OrdersController {
 	private ReceiptReports receiptReports;
 	
 	@PostMapping(value="/addCashewOrder")
-	public PoDTO addCashewOrder(@RequestBody PO po) throws InterruptedException {
+	public PoDTO addCashewOrder(@RequestBody PO po) {
 		ordersDao.addCashewOrder(po);
 		return ordersDao.getOrderByProcessId(po.getId());
 	}

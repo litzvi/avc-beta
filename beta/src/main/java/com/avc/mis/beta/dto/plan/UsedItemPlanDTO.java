@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.plan;
 
+import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.reference.BasicDataEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -23,7 +24,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class UsedItemPlanDTO extends SubjectDataDTO {
+public class UsedItemPlanDTO extends RankedAuditedDTO {
 
 	@EqualsAndHashCode.Exclude
 	private Integer planId;
@@ -50,7 +51,15 @@ public class UsedItemPlanDTO extends SubjectDataDTO {
 	}
 	
 	@JsonIgnore
-	public UsedItemPlan fillEntity(UsedItemPlan usedItemPlan) {
+	@Override
+	public UsedItemPlan fillEntity(Object entity) {
+		UsedItemPlan usedItemPlan;
+		if(entity instanceof UsedItemPlan) {
+			usedItemPlan = (UsedItemPlan) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be UsedItemPlan class");
+		}
 		super.fillEntity(usedItemPlan);
 		
 		if(getProcessItem() != null) {

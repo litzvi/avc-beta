@@ -45,7 +45,15 @@ public class ProductionPlanDTO extends GeneralProcessDTO {
 	}
 	
 	@JsonIgnore
-	public ProductionPlan fillEntity(ProductionPlan productionPlan) {
+	@Override
+	public ProductionPlan fillEntity(Object entity) {
+		ProductionPlan productionPlan;
+		if(entity instanceof ProductionPlan) {
+			productionPlan = (ProductionPlan) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be ProductionPlan class");
+		}
 		super.fillEntity(productionPlan);
 		
 		if(getProductionPlanRows() != null) {

@@ -139,4 +139,22 @@ public class StorageWithSampleDTO extends StorageDTO {
 	}
 	
 
+	@Override
+	public StorageWithSample fillEntity(Object entity) {
+		StorageWithSample storage;
+		if(entity instanceof StorageWithSample) {
+			storage = (StorageWithSample) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be StorageWithSample class");
+		}
+		super.fillEntity(storage);
+		storage.setSampleContainerWeights(getSampleContainerWeights());
+		storage.setSampleWeights(getSampleWeights());
+		storage.setNumberOfSamples(getNumberOfSamples());
+		storage.setAvgTestedWeight(getAvgTestedWeight());
+		
+		return storage;
+	}
+	
 }

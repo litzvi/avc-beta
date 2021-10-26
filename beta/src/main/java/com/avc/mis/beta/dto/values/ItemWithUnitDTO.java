@@ -9,6 +9,7 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -51,6 +52,20 @@ public class ItemWithUnitDTO extends ValueDTO {
 		this.productionUse = item.getProductionUse();
 		this.unit = item.getUnit();
 		this.clazz = item.getClass();
+	}
+	
+	@Override
+	public Item fillEntity(Object entity) {
+		Item item;
+		if(entity instanceof Item) {
+			item = (Item) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be Item class");
+		}
+		super.fillEntity(item);
+		
+		return item;
 	}
 
 }

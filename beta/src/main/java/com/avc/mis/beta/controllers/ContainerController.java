@@ -28,10 +28,18 @@ import com.avc.mis.beta.service.WarehouseManagement;
 import com.avc.mis.beta.service.report.ContainerArrivalReports;
 import com.avc.mis.beta.service.report.LoadingReports;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.QueryParam;
 
@@ -44,11 +52,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestClientException;
 
 @RestController
 @RequestMapping(path = "/api/container")
 public class ContainerController {
-
+	
+	@Autowired
+	private ContainersArrive containersArrive;
+	
 	@Autowired
 	private Loading loading;
 	
@@ -60,9 +72,6 @@ public class ContainerController {
 	
 	@Autowired
 	private ValueTablesReader refeDao;
-	
-	@Autowired
-	private ContainerBookings containerBookings;
 	
 	@Autowired
 	private ContainerArrivals containerArrivals;
@@ -137,6 +146,7 @@ public class ContainerController {
 		return loadingReports.getLoadings(begin, end);
 	}
 	
+	
 	@RequestMapping("/getStorageRoastPackedPo/{id}")
 	public List<ProcessItemInventory> getStorageRoastPackedPo(@PathVariable("id") int poCode) {
 		return warehouseManagement.getAvailableInventory(null, new ProductionUse[]{ProductionUse.ROAST, ProductionUse.PACKED, ProductionUse.TOFFEE}, null, null, new Integer[] {poCode}, null);
@@ -166,6 +176,33 @@ public class ContainerController {
 	public List<ContainerArrivalRow> findContainerArrivals(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
 		return containerArrivalReports.getContainerArrivals(begin, end);
+	}
+	
+	@RequestMapping("/getAllRealEta")
+	public Map<String, String> getAllRealEta(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) throws InterruptedException {
+		Instant first = Instant.now();
+		List<String> conts = containerArrivalReports.getContainerArrivals(begin, end).stream().distinct().map(ContainerArrivalRow::getContainerNumber).collect(Collectors.toList());
+		Map<String, String> contDates = new HashMap<>();
+		
+		ExecutorService es = Executors.newCachedThreadPool();
+		for(int i=0;i<conts.size();i++) {
+			final int j = i;
+//			TimeUnit.SECONDS.sleep(1);
+		    es.execute(new Runnable() { 
+		    	public void run() {
+		    		contDates.put(conts.get(j), containersArrive.getContainer(conts.get(j)));
+	    		}
+	    	});
+		}
+		es.shutdown();
+		boolean finished = es.awaitTermination(4, TimeUnit.MINUTES);
+		
+//		System.out.println(contDates);
+		Instant second = Instant.now();
+		Long dur = Duration.between(first, second).toMillis();
+		System.out.println(dur);
+		return contDates;
 	}
 	
 	@RequestMapping("/getSetUpContianer")

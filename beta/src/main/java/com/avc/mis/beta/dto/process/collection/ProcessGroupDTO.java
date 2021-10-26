@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.process.collection;
 
+import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.entities.process.collection.ProcessGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,7 +19,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class ProcessGroupDTO extends SubjectDataDTO {
+public abstract class ProcessGroupDTO extends RankedAuditedDTO {
 
 	private String groupName;
 

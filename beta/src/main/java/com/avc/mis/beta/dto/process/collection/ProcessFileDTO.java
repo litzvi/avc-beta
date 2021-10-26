@@ -7,6 +7,7 @@ import java.time.Instant;
 
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.GeneralInfoDTO;
+import com.avc.mis.beta.entities.DataEntity;
 import com.avc.mis.beta.entities.data.ProcessFile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -64,7 +65,15 @@ public class ProcessFileDTO extends DataDTO {
 	}
 	
 	@JsonIgnore
-	public ProcessFile fillEntity(ProcessFile processFile) {
+	@Override
+	public ProcessFile fillEntity(Object entity) {
+		ProcessFile processFile;
+		if(entity instanceof ProcessFile) {
+			processFile = (ProcessFile) entity;
+		}
+		else {
+			throw new IllegalArgumentException("Param has to be ProcessFile class");
+		}
 		super.fillEntity(processFile);
 		processFile.setAddress(getAddress());
 		processFile.setDescription(getDescription());

@@ -28,6 +28,7 @@ public enum MeasureUnit {
 	
 	NONE(""),
 	INFINITY("∞"),
+	NEGATIVE_INFINITY("-∞"),
 	PERCENT("%"),
 	TON("TON"),
 	KG("KG"),

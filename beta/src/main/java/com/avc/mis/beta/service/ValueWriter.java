@@ -77,7 +77,9 @@ public class ValueWriter {
 		dao.addEntity(country);
 	}
 	
-	public void addCity(City city) {		
+	public void addCity(City city) {
+		if(city.getCountry() == null)
+			throw new IllegalArgumentException("Country is mandatory");
 		dao.addEntity(city, city.getCountry());
 	}
 	
@@ -86,6 +88,8 @@ public class ValueWriter {
 	}
 	
 	public void addBankBranch(BankBranch branch) {
+		if(branch.getBank() == null)
+			throw new IllegalArgumentException("Bank is mandatory");
 		dao.addEntity(branch, branch.getBank());
 	}
 	

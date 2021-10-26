@@ -256,7 +256,7 @@ public class ProcessInfoDAO extends DAO {
 							poMap.get(poCode).get()
 	//						poWeight.getWeightAmount()
 							.divide(usedWeight)
-							.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_EVEN));
+							.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_DOWN));
 				}
 				weightedPo.setOrdinal(ordinal++);
 				addEntity(weightedPo, process);
