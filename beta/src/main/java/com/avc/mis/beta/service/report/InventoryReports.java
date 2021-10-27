@@ -23,6 +23,7 @@ import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
 import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
+import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
@@ -36,6 +37,7 @@ import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptUsageRow;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
+import com.avc.mis.beta.utilities.KeyValueObject;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -178,11 +180,18 @@ public class InventoryReports {
 		
 		List<ReceiptUsageRow> rows = getInventoryRepository().findReceiptUsageRows(checkProductionUses, productionUses, itemGroup, startTime, endTime);
 		
-		int[] poCodeIds = rows.stream().mapToInt(ReceiptInventoryRow::getId).toArray();		
+		int[] poCodeIds = rows.stream().mapToInt(ReceiptInventoryRow::getId).toArray();	
+		
+		Map<Integer, String> datesMap = getProcessSummaryRepository()
+				.findProcessDatesByPoCodes(poCodeIds, 
+						new ProcessName[] {ProcessName.CASHEW_CLEANING, ProcessName.CASHEW_ROASTING, ProcessName.CASHEW_TOFFEE, ProcessName.PACKING})
+				.collect(Collectors.toMap(KeyValueObject::getKey, KeyValueObject::getValue));
+		
 		Stream<ItemQc> itemQcs = getProcessSummaryRepository().findCashewQcItems(new int[]{}, poCodeIds, QcCompany.AVC_LAB, ProductionUse.ROAST, false);
 		Map<Integer, List<ItemQc>> itemsMap = itemQcs.collect(Collectors.groupingBy(ItemQc::getPoCodeId));
 
-		for(ReceiptInventoryRow row: rows) {
+		for(ReceiptUsageRow row: rows) {
+			row.setUsedDates(datesMap.get(row.getId()));
 			List<ItemQc> listItemQc = itemsMap.get(row.getId());
 			if(listItemQc != null && !listItemQc.isEmpty()) {
 				row.setRawDefectsAndDamage(listItemQc.get(0).getTotalDefectsAndDamage());

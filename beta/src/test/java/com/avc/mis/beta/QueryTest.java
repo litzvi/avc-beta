@@ -120,7 +120,7 @@ public class QueryTest {
 	@Autowired LoadingReports loadingReports;
 	@Autowired ContainerArrivals containerArrivals;
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void queryTest() {
 
@@ -443,7 +443,7 @@ public class QueryTest {
 
 	}
 	
-	@Disabled
+//	@Disabled
 	@Test
 	void oneQueryTest() {
 		
@@ -512,7 +512,7 @@ public class QueryTest {
 			System.out.print("size="+row.getBagSize().getValue()+", ");
 			System.out.print("salt="+row.getSaltLevel()+", ");
 			System.out.print("box quanyity="+row.getBagsInBox()+", ");
-			System.out.print("boxes="+row.getBoxQuantity()+", ");
+			System.out.print("boxes="+row.getBoxQuantityReal()+", ");
 			System.out.print("bags="+row.getBagQuantity()+", ");
 			System.out.print("lbs="+row.getWeightInLbs()+", ");
 			System.out.println();
@@ -528,7 +528,7 @@ public class QueryTest {
 			System.out.print("item="+row.getItem().getValue()+", ");
 			System.out.print("whole?="+row.isWhole()+", ");
 			System.out.print("salt="+row.getSaltLevel()+", ");
-			System.out.print("boxes="+row.getBoxQuantity()+", ");
+			System.out.print("boxes="+row.getBoxQuantityReal()+", ");
 			System.out.print("bags="+row.getBagQuantity()+", ");
 			System.out.print("lbs="+row.getWeightInLbs()+", ");
 			System.out.println(row);

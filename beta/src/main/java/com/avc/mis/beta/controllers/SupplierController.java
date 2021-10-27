@@ -95,7 +95,7 @@ public class SupplierController {
 			suppliersDao.editContactPerson(var);
 		}
 		for(CompanyContact var: mapper.readValue((listChanges.get("removed")).toString(), new TypeReference<List<CompanyContact>>(){})) {
-			//suppliersDao.removeContactPerson(contact);
+//			suppliersDao.removeContactPerson(var);
 		}
 		return suppliersDao.getSupplier(companyId);
 	}

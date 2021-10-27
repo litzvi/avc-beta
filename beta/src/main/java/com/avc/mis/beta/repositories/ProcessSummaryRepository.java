@@ -18,6 +18,7 @@ import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.QcCompany;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.utilities.KeyValueObject;
 
 /**
  * @author zvi
@@ -47,6 +48,22 @@ public interface ProcessSummaryRepository {
 		+ "order by p.recordedTime desc ")
 	List<ProcessStateInfo> findProcessReportLines(ProcessName processName, Integer poCodeId, boolean cancelled);
 
+	@Query("select new com.avc.mis.beta.utilities.KeyValueObject( "
+			+ "po_code.id, "
+			+ "function('GROUP_CONCAT', function('DISTINCT', cast(p.recordedTime as date))) "
+			+ ") "
+		+ "from PoProcess p "
+			+ "left join p.poCode po_code "
+			+ "left join p.weightedPos w_po "
+				+ "left join w_po.poCode w_po_code "
+			+ "join p.processType pt "
+			+ "join p.lifeCycle lc "
+		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
+			+ "and coalesce(po_code.id, w_po_code.id) in :poCodeIds "
+			+ "and pt.processName in :processNames "
+		+ "group by po_code.id ")
+	Stream<KeyValueObject<Integer, String>> findProcessDatesByPoCodes(int[] poCodeIds, ProcessName[] processNames);
+	
 	@Query("select new com.avc.mis.beta.dto.report.ItemAmount("
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "

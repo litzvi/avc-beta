@@ -16,6 +16,7 @@ import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.values.CashewGrade;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -39,6 +40,8 @@ public class CashewBaggedInventoryRow {
 	private AmountWithUnit totalAmount;//amount of boxes
 	private BigDecimal weightCoefficient;
 	
+	@JsonIgnore
+	private BigDecimal boxQuantityReal;
 	private BigDecimal boxQuantity;
 	
 	public CashewBaggedInventoryRow(
@@ -84,6 +87,7 @@ public class CashewBaggedInventoryRow {
 		this.bagsInBox = numBags;
 		this.bagSize = this.item.getUnit().divide(BigDecimal.valueOf(numBags));
 		this.totalAmount = new AmountWithUnit(amount, measureUnit);
+		this.boxQuantityReal = boxQuantity;
 		this.boxQuantity = boxQuantity;
 		this.weightCoefficient = weightCoefficient;
 		
@@ -104,6 +108,7 @@ public class CashewBaggedInventoryRow {
 		this.saltLevel = saltLevel;
 		this.bagsInBox = bagsInBox;
 		this.totalAmount = totalAmount;
+		this.boxQuantityReal = boxQuantity;
 		this.boxQuantity = boxQuantity;
 		this.weightCoefficient = weightCoefficient;
 	}
@@ -121,17 +126,29 @@ public class CashewBaggedInventoryRow {
 		this.bagsInBox = row.getBagsInBox();
 		this.bagSize = row.getBagSize();
 		this.totalAmount = row.getTotalAmount();
-		this.boxQuantity = row.getBoxQuantity();
+		this.boxQuantityReal = row.getBoxQuantityReal();
+		this.boxQuantity = getBagQuantity();
 		this.weightCoefficient = row.getWeightCoefficient();
 	}
 
-	public BigDecimal getBagQuantity() {
+	@JsonIgnore
+	public BigDecimal getBagQuantityReal() {
 		if(getTotalAmount() != null && MeasureUnit.DISCRETE_UNITS.contains(getTotalAmount().getMeasureUnit()) && getBagsInBox() > 1) {
 			return getTotalAmount()
 					.getAmount()
 					.multiply(getWeightCoefficient(), MathContext.DECIMAL64)
 					.multiply(BigDecimal.valueOf(getBagsInBox()))
 					.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
+		}
+		else {
+			return null;
+		}
+	}
+	
+	public BigDecimal getBagQuantity() {
+		if(getBoxQuantity() != null && getBagsInBox() > 1) {
+			return getBoxQuantity()
+					.multiply(BigDecimal.valueOf(getBagsInBox()));
 		}
 		else {
 			return null;

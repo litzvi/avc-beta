@@ -751,10 +751,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "join po_code.supplier s "
 					+ "left join po_code.productCompany pc "
 			+ "join ri.storageForms sf "
-//				+ "join sf.group sf_group "
-//					+ "join sf_group.process sf_p "
-//						+ "left join sf_p.productionLine sf_p_line "
-//						+ "join sf_p.lifeCycle sf_lc "
 				+ "left join sf.warehouseLocation sto "
 			+ "join StorageBase sb "
 				+ "on sb.id = sf.id "
@@ -763,8 +759,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "left join used_g.process used_p "
 							+ "left join used_p.lifeCycle used_lc "
 		+ "where receipt_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
-//			+ "and (r = sf_p or sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
-//			+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:startTime is null or r.recordedTime >= :startTime) "
@@ -772,7 +766,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 		+ "group by ri "
 		+ "order by r.recordedTime ")
 	List<ReceiptUsageRow> findReceiptUsageRows(
-//			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
 			ItemGroup itemGroup,
 			LocalDateTime startTime, LocalDateTime endTime);

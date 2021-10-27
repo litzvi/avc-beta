@@ -192,6 +192,7 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 				+ "END)"
 			+ "), "
 //			+ "coalesce(w_po.weight, 1), "
+//			+ "used_p.id, "
 			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
 			+ "p.recordedTime, "
 			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, "
@@ -227,6 +228,7 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 			+ "and (:startTime is null or p.recordedTime >= :startTime) "
 			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by p.id, item.itemGroup, item, po_code, pi.measureUnit "
+//		+ "group by p.id, used_p.id, item.itemGroup, item, po_code, pi.measureUnit "
 //		+ "order by p.recordedTime, item.itemGroup, item "
 		)	
 	List<CashewExportReportRow> findCashewExportReportRows(

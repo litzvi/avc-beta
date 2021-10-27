@@ -4,6 +4,8 @@
 package com.avc.mis.beta.service.report;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -12,15 +14,19 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.exportdoc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.exportdoc.ExportInfo;
 import com.avc.mis.beta.dto.exportdoc.InventoryExportDoc;
 import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -29,6 +35,7 @@ import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
 import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.CashewExportReportRow;
+import com.avc.mis.beta.utilities.KeyValueObject;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -94,9 +101,35 @@ public class LoadingReports {
 		
 	}
 
-	public List<CashewExportReportRow> getCashewExportReportRows(LocalDateTime startTime, LocalDateTime endTime) {
+	public List<CashewExportReportRow> getCashewExportReportRowsOld(LocalDateTime startTime, LocalDateTime endTime) {
 		return getContainerLoadingRepository().findCashewExportReportRows(false, null, null, 
-				startTime, endTime, Sort.by("recordedTime", "item.itemGroup", "item.id"));	
+				startTime, endTime, Sort.by("recordedTime", "id", "item.itemGroup", "item.id"));	
+	}
+	
+	public List<CashewExportReportRow> getCashewExportReportRows(LocalDateTime startTime, LocalDateTime endTime) {
+		List<CashewExportReportRow> rows = getContainerLoadingRepository().findCashewExportReportRows(false, null, null, 
+				startTime, endTime, Sort.by("recordedTime", "id", "item.itemGroup", "item.id", "w_po.ordinal"));
+//		startTime, endTime, Sort.by("recordedTime", "id", "item.itemGroup", "item.id", "used_p.id", "w_po.ordinal"));
+		
+		Map<Pair<Integer, Integer>, List<CashewExportReportRow>> map = rows.stream().collect(Collectors.groupingBy(
+				i -> Pair.of(i.getShipmentCode().getId(), i.getItem().getId())));
+		
+		for(Pair<Integer, Integer> key: map.keySet()) {
+			List<CashewExportReportRow> keyRows = map.get(key);
+			BigDecimal remainder = BigDecimal.ZERO;
+			for(CashewExportReportRow r: keyRows) {
+				BigDecimal boxQuantity = r.getBoxQuantityReal();
+				BigDecimal[] divideAndRemainder = boxQuantity.divideAndRemainder(BigDecimal.ONE);
+				r.setBoxQuantity(divideAndRemainder[0]);
+				remainder = remainder.add(divideAndRemainder[1]);
+			}
+			remainder = remainder.setScale(0, RoundingMode.HALF_DOWN);
+			CashewExportReportRow rowToAddRemainder = keyRows.get(0);
+			rowToAddRemainder.setBoxQuantity(rowToAddRemainder.getBoxQuantity().add(remainder));
+			
+		}
+		
+		return rows;
 	}
 	
 	public List<CashewBaggedInventoryRow> getCashewBaggedExportReportRows(ItemGroup itemGroup, ProductionUse[] productionUses, 
@@ -119,8 +152,8 @@ public class LoadingReports {
 					.map(CashewBaggedInventoryRow::getTotalAmount)
 					.reduce(AmountWithUnit::add).get()
 					.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
-			row.setBoxQuantity(map.get(key).stream()
-					.map(CashewBaggedInventoryRow::getBoxQuantity)
+			row.setBoxQuantityReal(map.get(key).stream()
+					.map(CashewBaggedInventoryRow::getBoxQuantityReal)
 					.reduce(BigDecimal::add).get()
 					.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
 			row.setWeightCoefficient(BigDecimal.ONE);

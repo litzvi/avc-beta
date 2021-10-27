@@ -15,6 +15,7 @@ import com.avc.mis.beta.entities.enums.ShippingContainerType;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Value;
 
@@ -26,6 +27,7 @@ import lombok.Value;
 public class CashewExportReportRow extends CashewBaggedInventoryRow {
 
 
+//	@JsonIgnore Integer usedProcess;
 	String poCode;
 	LocalDateTime processDate;
 	
@@ -43,11 +45,13 @@ public class CashewExportReportRow extends CashewBaggedInventoryRow {
 			Integer gradeId,  String gradeValue,
 			SaltLevel saltLevel, int numBags, 
 			BigDecimal amount, MeasureUnit measureUnit, BigDecimal boxQuantity, //BigDecimal weightCoefficient, 
+//			Integer usedProcess, 
 			String poCode, LocalDateTime processDate, 
 			Integer shipmentCodeId, String shipmentCodeCode, String portOfDischargeCode, String portOfDischargeValue, 
 			LocalDate eta, String containerNumber, String sealNumber, ShippingContainerType containerType, String remarks) {
 		super(itemId, itemValue, defaultMeasureUnit, itemGroup, productionUse, unit, clazz,
 				brand, code, whole, roast, toffee, gradeId, gradeValue, saltLevel, numBags, amount, measureUnit, boxQuantity);
+//		this.usedProcess = usedProcess;
 		this.poCode = poCode;
 		this.processDate = processDate;
 		this.shipmentCode = new ShipmentCodeBasic(shipmentCodeId, shipmentCodeCode, portOfDischargeCode, portOfDischargeValue);

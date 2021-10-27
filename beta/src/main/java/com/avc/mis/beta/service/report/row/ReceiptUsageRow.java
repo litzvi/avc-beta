@@ -49,6 +49,21 @@ public class ReceiptUsageRow extends ReceiptInventoryRow {
 
 	}
 	
+//	public ReceiptUsageRow(Integer poCodeId, String supplier, String productCompany, String item, boolean whole,
+//			String poCode, LocalDateTime receiptDate, ProductionFunctionality productionFunctionality, String bags,
+//			BigDecimal amount, MeasureUnit measureUnit, String warehouses, AmountWithCurrency unitPrice,
+//			Currency currency, ProcessStatus status, 
+//			BigDecimal importedAmount, BigDecimal usedAmount) {
+//		this(poCodeId, supplier, productCompany, item, whole,
+//				poCode, receiptDate, productionFunctionality, bags,
+//				amount, measureUnit, warehouses, unitPrice,
+//				currency, status, 
+//				importedAmount, usedAmount, null);
+//	}
 	
+	public void setUsedDates(String usedDates) {
+		if(usedDates != null)
+			this.usedDates = Stream.of(usedDates.split(",")).toArray(String[]::new);
+	}
 	
 }

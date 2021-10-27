@@ -180,10 +180,11 @@ public class InventoryController {
 		return inventoryUseReports.getInventoryUses(ProcessName.PRODUCT_USE, begin, end);
 	}
 	
-	@RequestMapping("/getInventoryTransactions")
-	public List<InventoryTransactionRow> getInventoryTransactions(@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
+	@RequestMapping("/getInventoryTransactions/{itemGroup}")
+	public List<InventoryTransactionRow> getInventoryTransactions(@PathVariable("itemGroup") ItemGroup itemGroup,
+			@QueryParam("begin")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime begin, 
 			@QueryParam("end")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
-		return warehouseManagement.getInventoryTransactions(ItemGroup.GENERAL, null, null, begin, end);
+		return warehouseManagement.getInventoryTransactions(itemGroup, null, null, begin, end);
 	}
 
 	
