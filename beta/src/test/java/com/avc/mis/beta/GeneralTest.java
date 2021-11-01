@@ -13,6 +13,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashSet;
 import java.util.List;
@@ -26,12 +27,19 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
+import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.ProcessFile;
 import com.avc.mis.beta.entities.data.Supplier;
@@ -79,7 +87,7 @@ import lombok.NonNull;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800204;
+	static final Integer PO_CODE = 800213;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -147,38 +155,41 @@ public class GeneralTest {
 		} catch (Exception e1) {}
 		
 		//receive both order lines in parts and different storages
-		Receipt receipt = new Receipt();
-		receipt.setPoCode(poCode);
+		ReceiptDTO receipt = new ReceiptDTO();
+		receipt.setPoCode(new PoCodeBasic(poCode));
 		receipt.setRecordedTime(LocalDateTime.now());
-		ReceiptItem[] receiptItems = new ReceiptItem[NUM_PO_ITEMS];
+		List<ReceiptItemDTO> receiptItems = new ArrayList<>();
 		List<Warehouse> storages = valueTablesReader.getAllWarehouses();
-		for(int i=0; i < receiptItems.length; i++) {
-			receiptItems[i] = new ReceiptItem();
+		for(int i=0; i < NUM_PO_ITEMS; i++) {
+			ReceiptItemDTO receiptItem = new ReceiptItemDTO();
 			Item item = orderItems[i].getItem();
-			receiptItems[i].setItem(item);
-			receiptItems[i].setMeasureUnit(item.getMeasureUnit());
-			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
-			receiptItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
-			receiptItems[i].setOrderItem(orderItems[i]);
+			receiptItem.setItem(new ItemWithUnitDTO(item));
+			receiptItem.setMeasureUnit(item.getMeasureUnit());
+			receiptItem.setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
+			receiptItem.setUnitPrice(new AmountWithCurrency("2.99", "USD"));
+			receiptItem.setOrderItem(new DataObject<OrderItem>(orderItems[i]));
 			
-			StorageWithSample[] storageForms = new StorageWithSample[2];
-			storageForms[0] = new StorageWithSample();
-			storageForms[0].setUnitAmount(BigDecimal.valueOf(50));
-			storageForms[0].setNumberUnits(BigDecimal.valueOf(326));
-			storageForms[0].setWarehouseLocation(storages.get(i));
-//			storageForms[0].setMeasureUnit("KG");
+			StorageWithSampleDTO[] storageForms = new StorageWithSampleDTO[2];
+			StorageWithSampleDTO storage = new StorageWithSampleDTO();
+			storage.setUnitAmount(BigDecimal.valueOf(50));
+			storage.setNumberUnits(BigDecimal.valueOf(326));
+			storage.setWarehouseLocation(new BasicValueEntity<Warehouse>(storages.get(i)));
+//			storage.setMeasureUnit("KG");
+			storageForms[0] = storage;
 			
-			storageForms[1] = new StorageWithSample();
-			storageForms[0].setUnitAmount(BigDecimal.valueOf(26));
-			storageForms[1].setNumberUnits(BigDecimal.valueOf(1));
-			storageForms[1].setWarehouseLocation(storages.get(i));
-//			storageForms[1].setMeasureUnit("KG");
+			storage = new StorageWithSampleDTO();
+			storage.setUnitAmount(BigDecimal.valueOf(26));
+			storage.setNumberUnits(BigDecimal.valueOf(1));
+			storage.setWarehouseLocation(new BasicValueEntity<Warehouse>(storages.get(i)));
+//			storage.setMeasureUnit("KG");
+			storageForms[1] = storage;
 			
-			receiptItems[i].setStorageForms(storageForms);
+			receiptItem.setStorageForms(storageForms);
+			receiptItems.add(receiptItem);
 		}
 		receipt.setReceiptItems(receiptItems);
 		try {
-			receipts.addCashewOrderReceipt(receipt);
+			receipt.setId(receipts.addCashewOrderReceipt(receipt));
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -186,7 +197,7 @@ public class GeneralTest {
 		}
 		ReceiptDTO receiptDTO;
 		receiptDTO = receipts.getReceiptByProcessId(receipt.getId());
-		assertEquals(new ReceiptDTO(receipt), receiptDTO, "Order Receipt not added or fetched correctly");
+		assertEquals(receipt, receiptDTO, "Order Receipt not added or fetched correctly");
 		
 		
 		//add QC for received order

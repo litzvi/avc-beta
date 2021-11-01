@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.DataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.Role;
@@ -49,5 +50,10 @@ public class UserDTO extends DataDTO {
 		this.username = user.getUsername();
 //		this.password = user.getPassword();
 		this.roles = user.getRoles().stream().map(u->u.name()).collect(Collectors.toSet());
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return UserEntity.class;
 	}
 }

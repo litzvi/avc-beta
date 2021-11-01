@@ -24,6 +24,7 @@ import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
 import com.avc.mis.beta.dto.process.ContainerBookingDTO;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
+import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
@@ -62,7 +63,7 @@ public class LoadingTest {
 	
 	@Test
 	void bookingTest() {
-		Receipt receipt;
+		ReceiptDTO receipt;
 		try {
 			receipt = service.addBasicCashewReceipt();
 		} catch (Exception e1) {
@@ -82,7 +83,7 @@ public class LoadingTest {
 		assertEquals(expectedBooking, actualBooking, "Failed test adding container loading");
 		
 		//test container arrival
-		ContainerArrival arrival = new ContainerArrival();
+		ContainerArrivalDTO arrival = new ContainerArrivalDTO();
 		arrival.setRecordedTime(LocalDateTime.now());
 		ContainerDetails containerDetails = new ContainerDetails();
 		containerDetails.setContainerNumber("CONT01");
@@ -91,7 +92,7 @@ public class LoadingTest {
 		arrival.setContainerDetails(containerDetails);
 		arrival.setShipingDetails(service.getShipingDetails());
 		arrivals.addArrival(arrival);
-		ContainerArrivalDTO expectedArrival = new ContainerArrivalDTO(arrival);
+		ContainerArrivalDTO expectedArrival = arrival;
 		ContainerArrivalDTO actualArrival = arrivals.getArrival(arrival.getId());		
 		arrivals.editArrival(arrival);		
 		assertEquals(expectedArrival, actualArrival, "Failed test adding container loading");

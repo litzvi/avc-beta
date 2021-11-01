@@ -14,6 +14,7 @@ import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.collection.ItemCount;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -69,10 +70,11 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 			poProcess = (PoProcess) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be PoProcess class");
+			throw new IllegalStateException("Param has to be PoProcess class");
 		}
 		super.fillEntity(poProcess);
-		poProcess.setPoCode(getPoCode().fillEntity(new BasePoCode()));
+		if(getPoCode() != null)
+			poProcess.setPoCode(getPoCode().fillEntity(new BasePoCode()));
 		if(getItemCounts() != null) {
 			Ordinal.setOrdinals(getItemCounts());
 			poProcess.setItemCounts(getItemCounts().stream().map(i -> i.fillEntity(new ItemCount())).toArray(ItemCount[]::new));

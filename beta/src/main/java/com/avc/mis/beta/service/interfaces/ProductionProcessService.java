@@ -38,7 +38,7 @@ public interface ProductionProcessService {
 	 * @param process the new ProductionProcess entity
 	 * @param processName the name of the process type to be added. (CASHEW_CLEANING\CASHEW_ROASTING\PACKING)
 	 */
-	public void addProductionProcess(ProductionProcess process, ProcessName processName);
+	public Integer addProductionProcess(ProductionProcessDTO process, ProcessName processName);
 	
 	/**
 	 * Get the full Production Process information
@@ -51,7 +51,7 @@ public interface ProductionProcessService {
 	 * Edit/Change a persisted ProductionProcess to the given ProductionProcess data
 	 * @param process ProductionProcess with underlying database id and updated data.
 	 */
-	public void editProductionProcess(ProductionProcess process);
+	public void editProductionProcess(ProductionProcessDTO process);
 	
 	
 }

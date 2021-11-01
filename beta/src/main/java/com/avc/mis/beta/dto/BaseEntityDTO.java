@@ -4,6 +4,8 @@
 package com.avc.mis.beta.dto;
 
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -80,18 +82,30 @@ public abstract class BaseEntityDTO {
 	    final int PRIME = 59;
 		return PRIME;
 	}
+	
+	public static <E extends BaseEntity> E getNewEntity(Class<E> clazz) {
+		try {
+			return clazz.getConstructor().newInstance();
+		} catch (Exception e) {
+			throw new IllegalArgumentException("Can't initiate new Entity");
+		}
+	}
+	
+	public abstract Class<? extends BaseEntity> getEntityClass();
 
+	@JsonIgnore
 	public BaseEntity fillEntity(Object entity) {
 		BaseEntity baseEntity;
 		if(entity instanceof BaseEntity) {
 			baseEntity = (BaseEntity) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be BaseEntity class");
+			throw new IllegalStateException("Param has to be BaseEntity class");
 		}
 		baseEntity.setId(getId());
 		return baseEntity;
 	}
+
 
 
 

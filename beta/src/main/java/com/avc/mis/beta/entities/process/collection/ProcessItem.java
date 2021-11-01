@@ -87,7 +87,7 @@ public class ProcessItem extends ProcessGroupWithStorages {
 	}
 	
 	@JsonIgnore
-	Set<Storage> getStorageFormsField() {
+	protected Set<Storage> getStorageFormsField() {
 		return this.storageForms;
 	}
 

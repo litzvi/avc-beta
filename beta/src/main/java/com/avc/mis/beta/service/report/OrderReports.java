@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -134,8 +135,8 @@ public class OrderReports {
 		int[] orderItemIds = poItemRows.stream().mapToInt(PoItemRow::getOrderItemId).toArray();
 		Map<Integer, BigDecimal> receivedAmountMap = getPoRepository()
 				.findReceivedAmountByOrderItemIds(orderItemIds)
-				.collect(HashMap::new, (m,v)->m.put(v.getId(), v.getValue()), HashMap::putAll);
-//				.collect(Collectors.toMap(ValueObject<BigDecimal>::getId, ValueObject<BigDecimal>::getValue));
+//				.collect(HashMap::new, (m,v)->m.put(v.getId(), v.getValue()), HashMap::putAll); //Allows null values
+				.collect(Collectors.toMap(ValueObject<BigDecimal>::getId, ValueObject<BigDecimal>::getValue));
 		Map<Integer, BigDecimal> receivedOrderUnitsMap = getPoRepository()
 				.findReceivedOrderUnitsByOrderItemIds(orderItemIds)
 				.collect(Collectors.toMap(ValueObject<BigDecimal>::getId, ValueObject<BigDecimal>::getValue));

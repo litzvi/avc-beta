@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.process.collection.SampleItemDTO;
 import com.avc.mis.beta.dto.query.SampleItemWithWeight;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.process.SampleReceipt;
 
@@ -73,6 +74,11 @@ public class SampleReceiptDTO extends PoProcessDTO {
 				this.sampleItems.add(sampleItem);
 			}
 //			this.sampleItems.sort(Ordinal.ordinalComparator());
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return SampleReceipt.class;
 	}
 
 	@Override

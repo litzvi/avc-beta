@@ -45,7 +45,6 @@ public abstract class SubjectDataDTO extends DataDTO implements Ordinal {
 		this.ordinal = entity.getOrdinal();
 	}
 	
-	@JsonIgnore
 	@Override
 	public SubjectDataEntity fillEntity(Object entity) {
 		SubjectDataEntity subjectDataEntity;
@@ -53,7 +52,7 @@ public abstract class SubjectDataDTO extends DataDTO implements Ordinal {
 			subjectDataEntity = (SubjectDataEntity) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be SubjectDataEntity class");
+			throw new IllegalStateException("Param has to be SubjectDataEntity class");
 		}
 		super.fillEntity(subjectDataEntity);
 		subjectDataEntity.setOrdinal(getOrdinal());

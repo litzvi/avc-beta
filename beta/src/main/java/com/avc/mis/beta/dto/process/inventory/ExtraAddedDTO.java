@@ -10,10 +10,12 @@ import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -22,6 +24,7 @@ import lombok.ToString;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @ToString(callSuper = true)
 public class ExtraAddedDTO extends StorageWithSampleDTO {
 	
@@ -60,6 +63,20 @@ public class ExtraAddedDTO extends StorageWithSampleDTO {
 //		setNewStorageFields(storage, numberUnits, newLocation);
 //		return storage;
 //	}
+	
+	@Override
+	public ExtraAdded fillEntity(Object entity) {
+		ExtraAdded extraAdded;
+		if(entity instanceof ExtraAdded) {
+			extraAdded = (ExtraAdded) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be ExtraAdded class");
+		}
+		super.fillEntity(extraAdded);
+		
+		return extraAdded;
+	}
 
 	
 }

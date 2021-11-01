@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 
 import lombok.Data;
@@ -28,5 +29,10 @@ public class PaymentAccountDTO extends SubjectDataDTO {
 		super(account.getId(), account.getVersion(), account.getOrdinal());
 		if(account.getBankAccount() != null)
 			this.bankAccount = new BankAccountDTO(account.getBankAccount());
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return PaymentAccount.class;
 	}
 }

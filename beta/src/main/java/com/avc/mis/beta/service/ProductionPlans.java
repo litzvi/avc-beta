@@ -46,7 +46,7 @@ public class ProductionPlans {
 	public Integer addProductionPlan(ProductionPlanDTO productionPlanDTO) {
 		ProductionPlan productionPlan = productionPlanDTO.fillEntity(new ProductionPlan());
 		productionPlan.setProcessType(dao.getProcessTypeByValue(ProcessName.PRODUCTION_PLAN));
-		deletableDAO.addEntity(productionPlan);
+		dao.addEntity(productionPlan);
 		return productionPlan.getId();
 	}
 	
@@ -83,7 +83,7 @@ public class ProductionPlans {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public Integer editProductionPlan(ProductionPlanDTO productionPlanDTO) {
 		ProductionPlan productionPlan = productionPlanDTO.fillEntity(new ProductionPlan());
-		deletableDAO.editEntity(productionPlan);
+		dao.editEntity(productionPlan);
 		return productionPlan.getId();
 	}
 	

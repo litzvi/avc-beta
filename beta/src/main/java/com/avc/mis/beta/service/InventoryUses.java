@@ -60,7 +60,7 @@ public class InventoryUses {
 		dao.setStorageMovesProcessItem(inventoryUse.getStorageMovesGroups());
 		dao.addPoProcessEntity(inventoryUse);
 		dao.checkUsedInventoryAvailability(inventoryUse);
-		dao.setPoWeights(inventoryUse);
+		dao.setRelocationPoWeights(inventoryUse);
 		dao.setUsedProcesses(inventoryUse);
 		//check if storage moves match the amounts of the used item
 		dao.checkRelocationBalance(inventoryUse);
@@ -80,7 +80,7 @@ public class InventoryUses {
 		dao.setStorageMovesProcessItem(inventoryUse.getStorageMovesGroups());
 		dao.addPoProcessEntity(inventoryUse);
 		dao.checkUsedInventoryAvailability(inventoryUse);
-		dao.setPoWeights(inventoryUse);
+		dao.setRelocationPoWeights(inventoryUse);
 		dao.setUsedProcesses(inventoryUse);
 		//check if storage moves match the amounts of the used item
 		dao.checkRelocationBalance(inventoryUse);
@@ -127,7 +127,7 @@ public class InventoryUses {
 		
 		dao.checkUsedInventoryAvailability(inventoryUse);
 		dao.setUsedProcesses(inventoryUse);
-		List<ItemAmountWithPoCode> usedPos = dao.setPoWeights(inventoryUse);
+		List<ItemAmountWithPoCode> usedPos = dao.setRelocationPoWeights(inventoryUse);
 		dao.checkDAGmaintained(usedPos, inventoryUse.getId());
 
 		dao.checkUsingProcesessConsistency(inventoryUse);
@@ -154,7 +154,7 @@ public class InventoryUses {
 		
 		dao.checkUsedInventoryAvailability(inventoryUse);
 		dao.setUsedProcesses(inventoryUse);
-		List<ItemAmountWithPoCode> usedPos = dao.setPoWeights(inventoryUse);
+		List<ItemAmountWithPoCode> usedPos = dao.setRelocationPoWeights(inventoryUse);
 		dao.checkDAGmaintained(usedPos, inventoryUse.getId());
 
 		dao.checkUsingProcesessConsistency(inventoryUse);

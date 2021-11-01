@@ -13,6 +13,7 @@ import com.avc.mis.beta.dto.view.ReceiptItemRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
 
 /**
  * @author Zvi
@@ -90,5 +91,12 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 	List<ReceiptItemRow> findAllReceiptsByType(
 			ProcessName[] processNames, ProcessStatus[] statuses, Integer poCodeId, 
 			LocalDateTime startTime, LocalDateTime endTime);
+
+	@Query("select e.id "
+			+ "from ReceiptItem ri "
+				+ "join ExtraAdded e "
+					+ "on e.processItem.id = ri.id "
+			+ "where ri.id = :receiptItemId ")
+	List<Integer> findAddedByReceiptItem(Integer receiptItemId);
 
 }

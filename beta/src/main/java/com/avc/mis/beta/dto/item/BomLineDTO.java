@@ -3,12 +3,10 @@
  */
 package com.avc.mis.beta.dto.item;
 
-import java.math.BigDecimal;
-
 import com.avc.mis.beta.dto.SubjectLinkDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.BomLine;
 import com.avc.mis.beta.entities.item.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -46,8 +44,12 @@ public class BomLineDTO extends SubjectLinkDTO {
 		if(bomLine.getDefaultAmount() != null)
 			this.defaultAmount = bomLine.getDefaultAmount().clone();
 	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return BomLine.class;
+	}
 
-	@JsonIgnore
 	@Override
 	public BomLine fillEntity(Object entity) {
 		BomLine bomLine;
@@ -55,7 +57,7 @@ public class BomLineDTO extends SubjectLinkDTO {
 			bomLine = (BomLine) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be BomLine class");
+			throw new IllegalStateException("Param has to be BomLine class");
 		}
 		super.fillEntity(bomLine);
 		

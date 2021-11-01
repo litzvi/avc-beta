@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.process.collection;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -11,19 +12,26 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemTableDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
+import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.entities.process.inventory.UsedItem;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.utilities.ListGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author zvi
@@ -31,6 +39,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<UsedItemDTO> {
 
 	private List<UsedItemDTO> usedItems;
@@ -46,6 +55,35 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 		this.usedItems = (Arrays.stream(group.getUsedItems())
 				.map(u->{return new UsedItemDTO(u);})
 				.collect(Collectors.toList()));
+	}
+	
+	/**
+	 * Setter for adding list of Used items that share the same common measure unit, 
+	 * empty container weight and each only have one unit, that are usually represented as a table in ProcessItem.
+	 * Used in order to match used storages from a ProcessItem that was set by corresponding setStorage(storageTable) in ProcessItem.
+	 * Usefully presented in a table or list of only ordinal (number) and amount, since they all share all other parameters.
+	 * @param usedItemTable
+	 */
+	public void setUsedItem(UsedItemTableDTO usedItemTable) {
+			
+		setTableView(true);
+		
+		List<BasicUsedStorageDTO> basicUsedStorages = usedItemTable.getAmounts();
+		List<UsedItemDTO> usedItems = new ArrayList<UsedItemDTO>();
+		for(BasicUsedStorageDTO basicUsedStorage: basicUsedStorages) {
+			UsedItemDTO usedItem = new UsedItemDTO();
+			usedItems.add(usedItem);
+			usedItem.setId(basicUsedStorage.getId());
+			usedItem.setVersion(basicUsedStorage.getVersion());
+			usedItem.setNumberUsedUnits(basicUsedStorage.getAmount());
+			StorageDTO storage = new StorageDTO();
+			storage.setId(basicUsedStorage.getStorageId());
+			storage.setVersion(basicUsedStorage.getStorageVersion());
+			usedItem.setStorage(storage);
+			
+			
+		}
+		setUsedItems(usedItems);
 	}
 	
 	public List<UsedItemDTO> getUsedItems() {
@@ -154,4 +192,31 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 	public void setList(List<UsedItemDTO> list) {
 		setUsedItems(list);
 	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return UsedItemsGroup.class;
+	}
+	
+	@Override
+	public UsedItemsGroup fillEntity(Object entity) {
+		UsedItemsGroup usedItemsGroup;
+		if(entity instanceof UsedItemsGroup) {
+			usedItemsGroup = (UsedItemsGroup) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be UsedItemsGroup class");
+		}
+		super.fillEntity(usedItemsGroup);
+		if(this.usedItems == null || this.usedItems.isEmpty()) {
+			throw new IllegalArgumentException("UsedItemGroup has to containe at least one used item");
+		}
+		else {
+			Ordinal.setOrdinals(this.usedItems);
+			usedItemsGroup.setUsedItems(this.usedItems.stream().map(i -> i.fillEntity(new UsedItem())).toArray(UsedItem[]::new));
+		}
+		
+		return usedItemsGroup;
+	}
 }
+

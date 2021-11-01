@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,8 +23,14 @@ import javax.persistence.criteria.Root;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.avc.mis.beta.dto.GeneralProcessDTO;
+import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
+import com.avc.mis.beta.dto.process.ProcessWithProductDTO;
+import com.avc.mis.beta.dto.process.TransactionProcessDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageBalance;
@@ -104,9 +111,17 @@ public class ProcessInfoDAO extends DAO {
 	 * Adds the process and adds required notifications.
 	 * @param process GeneralProcess to be added.
 	 */
-	public void addGeneralProcessEntity(GeneralProcess process) {		
+	public void addGeneralProcessEntity(GeneralProcess process) {			
 		addEntity(process);		
 		addAlerts(process);
+	}
+	public Integer addGeneralProcessEntity(GeneralProcessDTO process, Supplier<? extends GeneralProcess> supplier) {
+		GeneralProcess processEntity = process.fillEntity(supplier.get());
+		processEntity.setProcessType(getProcessTypeByValue(process.getProcessName()));
+		addEntity(processEntity);		
+		addAlerts(processEntity);
+		
+		return processEntity.getId();
 	}
 	
 	/**
@@ -117,6 +132,9 @@ public class ProcessInfoDAO extends DAO {
 	public void addPoProcessEntity(PoProcess process) {
 		addGeneralProcessEntity(process);			
 	}
+	public Integer addPoProcessEntity(PoProcessDTO process, Supplier<? extends PoProcess> supplier) {
+		return addGeneralProcessEntity(process, supplier);			
+	}
 	
 	/**
 	 * Adding (persisting) a transaction process (may have used and stored items). 
@@ -125,16 +143,25 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public void addTransactionProcessEntity(TransactionProcess<?> process) {
 		addPoProcessEntity(process);
-//		//check used items amounts () don't exceed the storage amounts
+///		//check used items amounts () don't exceed the storage amounts
 //		if(!isUsedInventorySufficiant(process.getId())) {
 //			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 //		}	
 //		setPoWeights(process);
 //		setUsedProcesses(process);
 	}
+	public Integer addTransactionProcessEntity(TransactionProcessDTO<?> process, Supplier<? extends TransactionProcess<?>> supplier) {
+		return addPoProcessEntity(process, supplier);
+	}
 	
 	public void checkUsedInventoryAvailability(TransactionProcess<?> process) {
 		List<StorageBalance> storageBalances = getInventoryRepository().findUsedStorageBalances(process.getId());
+		if(storageBalances != null && storageBalances.stream().anyMatch(b -> !b.isLegal())) {
+			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+		}
+	}
+	public void checkUsedInventoryAvailability(Integer processId) {
+		List<StorageBalance> storageBalances = getInventoryRepository().findUsedStorageBalances(processId);
 		if(storageBalances != null && storageBalances.stream().anyMatch(b -> !b.isLegal())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
@@ -194,52 +221,64 @@ public class ProcessInfoDAO extends DAO {
 	public void setUsedProcesses(RelocationProcess process) {
 		removeOldProcessParents(process.getId());
 		List<UsedProcess> usedProcesses = getProcessRepository().findRelocationUsedProcess(process.getId());
-		addUsedProcesses(usedProcesses, process);
+		addUsedProcesses(usedProcesses, process.getId());
 	}
 	
-	public void setUsedProcesses(TransactionProcess<?> process) {
+	public void setTransactionUsedProcesses(TransactionProcess<?> process) {
 		removeOldProcessParents(process.getId());
 		List<UsedProcess> usedProcesses = getProcessRepository().findTransactionUsedProcess(process.getId());
-		addUsedProcesses(usedProcesses, process);
-	}	
+		addUsedProcesses(usedProcesses, process.getId());
+	}
+	public void setTransactionUsedProcesses(Integer processId) {
+		removeOldProcessParents(processId);
+		List<UsedProcess> usedProcesses = getProcessRepository().findTransactionUsedProcess(processId);
+		addUsedProcesses(usedProcesses, processId);
+	}
 	
-	private void addUsedProcesses(List<UsedProcess> usedProcesses, PoProcess process) {
+	
+	private void addUsedProcesses(List<UsedProcess> usedProcesses, Integer processId) {
 		if(usedProcesses != null && !usedProcesses.isEmpty()) {
 			int ordinal = 0;
 			for(UsedProcess usedProcess: usedProcesses) {
 				//check processes are in order, for consistency when searching inventory at point of time.
-				if(process.getRecordedTime().isBefore(usedProcess.getRecordedTime())) {
+				if(usedProcess.getUsingProcessRecordedTime().isBefore(usedProcess.getRecordedTime())) {
 					throw new IllegalArgumentException("Process can't have a date earlier than a used process.\n "
 							+ "Either change the current process time, or edit the used process time.");
 				}
 				ProcessParent processParent = usedProcess.getProcessParent();
 				processParent.setOrdinal(ordinal++);
-				addEntity(processParent, process);
+				addEntity(processParent, PoProcess.class, processId);
 			}
 		}
 	}
 	
-	public List<ItemAmountWithPoCode> setPoWeights(RelocationProcess process) {
+	public List<ItemAmountWithPoCode> setRelocationPoWeights(RelocationProcess process) {
 		removeOldWeightedPos(process.getId());
 		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findRelocationWeightedPos(process.getId());
-		addPoWeights(poWeights, process, false);
+		addPoWeights(poWeights, process.getId(), false);
 		return poWeights;
 	}	
 	
-	public void setPoWeights(TransactionProcess<?> process) {
+	public void setTransactionPoWeights(TransactionProcess<?> process) {
 		removeOldWeightedPos(process.getId());
 		List<ItemAmountWithPoCode> poWeights = 
 				getProcessRepository().findTransactionWeightedPos(process.getId(), new ItemGroup[] {ItemGroup.PRODUCT, ItemGroup.WASTE});
-		addPoWeights(poWeights, process, true);		
+		addPoWeights(poWeights, process.getId(), true);		
+	}
+	public void setTransactionPoWeights(Integer processId) {
+		removeOldWeightedPos(processId);
+		List<ItemAmountWithPoCode> poWeights = 
+				getProcessRepository().findTransactionWeightedPos(processId, new ItemGroup[] {ItemGroup.PRODUCT, ItemGroup.WASTE});
+		addPoWeights(poWeights, processId, true);		
 	}
 	
 	public void setGeneralPoWeights(TransactionProcess<?> process) {
 		removeOldWeightedPos(process.getId());
 		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findTransactionWeightedPos(process.getId(), new ItemGroup[] {ItemGroup.GENERAL});
-		addPoWeights(poWeights, process, false);		
+		addPoWeights(poWeights, process.getId(), false);		
 	}
 	
-	private void addPoWeights(List<ItemAmountWithPoCode> poWeights, PoProcess process, boolean setWeight) {
+	private void addPoWeights(List<ItemAmountWithPoCode> poWeights, Integer processId, boolean setWeight) {
 		if(poWeights != null && !poWeights.isEmpty()) {
 			AmountWithUnit usedWeight = null;
 			if(setWeight) {
@@ -259,7 +298,7 @@ public class ProcessInfoDAO extends DAO {
 							.setScale(MeasureUnit.DIVISION_SCALE, RoundingMode.HALF_DOWN));
 				}
 				weightedPo.setOrdinal(ordinal++);
-				addEntity(weightedPo, process);
+				addEntity(weightedPo, PoProcess.class, processId);
 			}
 		}
 	}
@@ -288,6 +327,12 @@ public class ProcessInfoDAO extends DAO {
 		editEntity(process);
 		editAlerts(process);
 	}
+	public void editGeneralProcessEntity(GeneralProcessDTO process, Supplier<? extends GeneralProcess> supplier) {
+		checkProcessEditablity(process.getId());
+		GeneralProcess processEntity = process.fillEntity(supplier.get());
+		editEntity(processEntity);
+		editAlerts(processEntity);
+	}
 	
 	public void checkProcessEditablity(Integer processId) {
 		ProcessLifeCycle lifeCycle = getProcessRepository().findProcessEditStatus(processId);
@@ -300,6 +345,9 @@ public class ProcessInfoDAO extends DAO {
 	public void editPoProcessEntity(PoProcess process) {
 		editGeneralProcessEntity(process);			
 	}
+	public void editPoProcessEntity(PoProcessDTO process, Supplier<? extends PoProcess> supplier) {
+		editGeneralProcessEntity(process, supplier);			
+	}
 	
 	/**
 	 * editing (merging) a transaction process or process information(may have used and stored items). 
@@ -308,6 +356,9 @@ public class ProcessInfoDAO extends DAO {
 	 */
 	public <T extends TransactionProcess<?>> void editTransactionProcessEntity(T process) {
 		editPoProcessEntity(process);
+	}
+	public <T extends TransactionProcessDTO<?>> void editTransactionProcessEntity(T process, Supplier<? extends TransactionProcess<?>> supplier) {
+		editPoProcessEntity(process, supplier);
 	}
 
 //	public void editStorageRelocationProcessEntity(StorageRelocation relocation) {
@@ -339,6 +390,18 @@ public class ProcessInfoDAO extends DAO {
 //	}
 	
 	public <T extends ProcessWithProduct<?>> void checkUsingProcesessConsistency(T process) {
+		//check that processes who use this product are synchronized (are later) with this edited process
+		if(!getProcessRepository().isProcessSynchronized(process.getId())) {
+			throw new IllegalArgumentException("Process recorded time is after a process using it's product");			
+		}
+		
+		//checks if not reducing produced amounts already used by other processes
+		Stream<StorageBalance> storageBalances = getInventoryRepository().findProducedStorageBalances(process.getId());		
+		if(storageBalances.anyMatch(b -> !b.isLegal())) {
+			throw new IllegalArgumentException("Process produced amounts can't be reduced because already in use");
+		}
+	}
+	public <T extends ProcessWithProductDTO<?>> void checkUsingProcesessConsistency(T process) {
 		//check that processes who use this product are synchronized (are later) with this edited process
 		if(!getProcessRepository().isProcessSynchronized(process.getId())) {
 			throw new IllegalArgumentException("Process recorded time is after a process using it's product");			
@@ -383,6 +446,15 @@ public class ProcessInfoDAO extends DAO {
 		HashSet<Integer> storageIds = new HashSet<Integer>();
 		for(ProcessItem pi: CollectionItemWithGroup.safeCollection(Arrays.asList(process.getProcessItems()))) {
 			storageIds.addAll(Arrays.stream(pi.getStorageForms()).map(Storage::getId).collect(Collectors.toSet()));
+		}
+		if(getProcessRepository().isRemovingUsedProduct(process.getId(), storageIds)) {
+			throw new AccessControlException("Process items can't be edited because they are already in use");
+		}	
+	}
+	public <T extends ProcessWithProductDTO<?>> void checkRemovingUsedProduct(T process) {
+		HashSet<Integer> storageIds = new HashSet<Integer>();
+		for(ProcessItemDTO pi: CollectionItemWithGroup.safeCollection((process.getProcessItems()))) {
+			storageIds.addAll(pi.getStorageForms().stream().map(StorageDTO::getId).collect(Collectors.toSet()));
 		}
 		if(getProcessRepository().isRemovingUsedProduct(process.getId(), storageIds)) {
 			throw new AccessControlException("Process items can't be edited because they are already in use");

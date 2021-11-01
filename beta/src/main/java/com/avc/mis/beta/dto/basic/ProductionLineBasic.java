@@ -37,7 +37,6 @@ public class ProductionLineBasic extends BasicValueDTO {
 		this.productionFunctionality = productionLine.getProductionFunctionality();		
 	}
 	
-	@JsonIgnore
 	@Override
 	public ProductionLine fillEntity(Object entity) {
 		ProductionLine productionLine;
@@ -45,7 +44,7 @@ public class ProductionLineBasic extends BasicValueDTO {
 			productionLine = (ProductionLine) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be ProductionLine class");
+			throw new IllegalStateException("Param has to be ProductionLine class");
 		}
 		super.fillEntity(productionLine);
 		productionLine.setValue(getValue());

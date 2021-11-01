@@ -8,7 +8,9 @@ import java.math.BigInteger;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.ItemWeight;
 
 import lombok.EqualsAndHashCode;
@@ -57,6 +59,11 @@ public class ItemWeightDTO extends SubjectDataDTO {
 	
 	public BigDecimal getAvgTestedWeight() {
 		return Optional.ofNullable(this.avgTestedWeight).orElse(this.unitAmount);
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ItemWeight.class;
 	}
 	
 	

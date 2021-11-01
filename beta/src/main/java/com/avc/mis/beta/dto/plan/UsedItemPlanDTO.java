@@ -4,8 +4,8 @@
 package com.avc.mis.beta.dto.plan;
 
 import com.avc.mis.beta.dto.RankedAuditedDTO;
-import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.reference.BasicDataEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.plan.UsedItemPlan;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
@@ -50,7 +50,11 @@ public class UsedItemPlanDTO extends RankedAuditedDTO {
 			this.numberUnits = usedItemPlan.getNumberUnits().clone();
 	}
 	
-	@JsonIgnore
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return UsedItemPlan.class;
+	}
+	
 	@Override
 	public UsedItemPlan fillEntity(Object entity) {
 		UsedItemPlan usedItemPlan;
@@ -58,7 +62,7 @@ public class UsedItemPlanDTO extends RankedAuditedDTO {
 			usedItemPlan = (UsedItemPlan) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be UsedItemPlan class");
+			throw new IllegalStateException("Param has to be UsedItemPlan class");
 		}
 		super.fillEntity(usedItemPlan);
 		

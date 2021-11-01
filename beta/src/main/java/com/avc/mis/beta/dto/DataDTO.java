@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto;
 
 import com.avc.mis.beta.entities.DataEntity;
 import com.avc.mis.beta.entities.data.ProcessFile;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -44,7 +45,7 @@ public abstract class DataDTO extends BaseEntityDTO {
 			dataEntity = (DataEntity) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be DataEntity class");
+			throw new IllegalStateException("Param has to be DataEntity class");
 		}
 		super.fillEntity(dataEntity);
 		dataEntity.setVersion(getVersion());

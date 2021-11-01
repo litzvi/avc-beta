@@ -11,8 +11,10 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.LinkDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.data.ContactDetails;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -59,6 +61,11 @@ public class ContactDetailsDTO extends LinkDTO {
 				.map(p->{return new PaymentAccountDTO(p);}).sorted(Ordinal.ordinalComparator()).collect(Collectors.toList());
 		
 		
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ContactDetails.class;
 	}
 
 }

@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -55,5 +56,10 @@ public class ItemDTO  extends ValueDTO {
 		this.group = item.getItemGroup();
 		this.productionUse = item.getProductionUse();
 		this.clazz = item.getClass();
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return Item.class;
 	}
 }

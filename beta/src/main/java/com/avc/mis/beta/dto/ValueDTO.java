@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto;
 
 import com.avc.mis.beta.entities.ValueEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,7 +30,6 @@ public abstract class ValueDTO extends BaseEntityDTO {
 	
 	public abstract String getValue();
 	
-	
 	@Override
 	public ValueEntity fillEntity(Object entity) {
 		ValueEntity valueEntity;
@@ -37,7 +37,7 @@ public abstract class ValueDTO extends BaseEntityDTO {
 			valueEntity = (ValueEntity) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be ValueEntity class");
+			throw new IllegalStateException("Param has to be ValueEntity class");
 		}
 		super.fillEntity(valueEntity);
 		

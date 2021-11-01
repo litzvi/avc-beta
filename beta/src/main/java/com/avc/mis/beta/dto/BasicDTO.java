@@ -37,7 +37,7 @@ public abstract class BasicDTO {
 			baseEntity = (BaseEntity) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be BaseEntity class");
+			throw new IllegalStateException("Param has to be BaseEntity class");
 		}
 		baseEntity.setId(getId());
 		return baseEntity;

@@ -12,11 +12,13 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.ItemWithUse;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.CountAmount;
 import com.avc.mis.beta.entities.process.collection.ItemCount;
 import com.avc.mis.beta.utilities.ListGroup;
@@ -85,26 +87,15 @@ public class ItemCountDTO extends RankedAuditedDTO implements ListGroup<CountAmo
 		return Arrays.asList(totalAmount.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
 	}
 	
-	
-//	public static List<ItemCountDTO> getItemCounts(List<ItemCountWithAmount> amounts) {
-//		Map<Integer, List<ItemCountWithAmount>> map = amounts.stream()
-//				.collect(Collectors.groupingBy(ItemCountWithAmount::getId, LinkedHashMap::new, Collectors.toList()));
-//		List<ItemCountDTO> itemCounts = new ArrayList<>();
-//		for(List<ItemCountWithAmount> list: map.values()) {
-//			ItemCountDTO itemCount = list.get(0).getItemCount();
-//			itemCount.setAmounts(list.stream().map(i -> i.getAmount())
-////					.sorted(Ordinal.ordinalComparator())
-//					.collect(Collectors.toList()));
-//			itemCounts.add(itemCount);
-//		}
-////		itemCounts.sort(Ordinal.ordinalComparator());
-//		return itemCounts;
-//	}
-
 	@JsonIgnore
 	@Override
 	public void setList(List<CountAmountDTO> list) {
 		setAmounts(list);
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ItemCount.class;
 	}
 	
 	@Override
@@ -114,14 +105,23 @@ public class ItemCountDTO extends RankedAuditedDTO implements ListGroup<CountAmo
 			itemCount = (ItemCount) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be ItemCount class");
+			throw new IllegalStateException("Param has to be ItemCount class");
 		}
 		super.fillEntity(itemCount);
-		itemCount.setItem(getItem().fillEntity(new Item()));;
-		itemCount.setMeasureUnit(getMeasureUnit());
+		
+		if(getItem() == null)
+			throw new IllegalArgumentException("Item is mandatory");
+		else
+			itemCount.setItem(getItem().fillEntity(new Item()));
+		
+		itemCount.setMeasureUnit(getMeasureUnit());		
 		itemCount.setContainerWeight(getContainerWeight());
 		itemCount.setAccessWeight(getAccessWeight());
-		if(getAmounts() != null) {
+		
+		if(getAmounts() == null || getAmounts().isEmpty()) {
+			throw new IllegalArgumentException("Sample has to contain at least one sampled amount");	
+		}
+		else {
 			Ordinal.setOrdinals(getAmounts());
 			itemCount.setAmounts(getAmounts().stream().map(i -> i.fillEntity(new CountAmount())).toArray(CountAmount[]::new));
 		}

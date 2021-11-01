@@ -19,6 +19,7 @@ import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Process of receiving purchased items (with or without an order).
@@ -28,6 +29,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "ORDER_RECEIPTS")
 @PrimaryKeyJoinColumn(name = "processId")

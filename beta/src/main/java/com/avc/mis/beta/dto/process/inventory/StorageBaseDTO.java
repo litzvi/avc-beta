@@ -9,7 +9,9 @@ import java.util.Optional;
 import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -17,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Zvi
@@ -24,6 +27,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class StorageBaseDTO extends RankedAuditedDTO implements StorageBaseInterface {
 	
 	private BigDecimal unitAmount;
@@ -32,6 +36,7 @@ public class StorageBaseDTO extends RankedAuditedDTO implements StorageBaseInter
 	private BasicValueEntity<Warehouse> warehouseLocation;
 //	private BigDecimal numberUsedUnits;
 
+	@EqualsAndHashCode.Exclude
 	private String className; //to differentiate between storage to ExtraAdded nad perhaps storageMoves
 		
 	public StorageBaseDTO(Integer id, Integer version, Integer ordinal,
@@ -82,6 +87,20 @@ public class StorageBaseDTO extends RankedAuditedDTO implements StorageBaseInter
 		this.className = clazz.getSimpleName();
 	}
 	
+	public BigDecimal getUnitAmount() {
+		if(this.unitAmount == null) {
+			return null;
+		}
+		return this.unitAmount.setScale(MeasureUnit.SCALE);
+	}
+	
+	public BigDecimal getNumberUnits() {
+		if(this.numberUnits == null) {
+			return null;
+		}
+		return this.numberUnits.setScale(MeasureUnit.SCALE);
+	}
+	
 	@JsonIgnore
 	public BigDecimal getTotal() {
 		if(getNumberUnits() == null) {
@@ -98,18 +117,24 @@ public class StorageBaseDTO extends RankedAuditedDTO implements StorageBaseInter
 	}
 	
 	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return StorageBase.class;
+	}
+	
+	@Override
 	public StorageBase fillEntity(Object entity) {
 		StorageBase storageBase;
 		if(entity instanceof StorageBase) {
 			storageBase = (StorageBase) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be StorageBase class");
+			throw new IllegalStateException("Param has to be StorageBase class");
 		}
 		super.fillEntity(storageBase);
 		storageBase.setUnitAmount(getUnitAmount());
 		storageBase.setNumberUnits(getNumberUnits());
-		storageBase.setWarehouseLocation((Warehouse) getWarehouseLocation().fillEntity(new Warehouse()));
+		if(getWarehouseLocation() != null)
+			storageBase.setWarehouseLocation((Warehouse) getWarehouseLocation().fillEntity(new Warehouse()));
 		
 		return storageBase;
 	}

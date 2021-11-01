@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.avc.mis.beta.dto.DataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.Role;
 
@@ -84,6 +85,11 @@ public class UserLogin extends DataDTO implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return UserEntity.class;
 	}
 
 }

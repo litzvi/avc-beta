@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.inventory.UsedItem;
@@ -11,10 +12,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @ToString(callSuper = true)
 public class UsedItemDTO extends UsedItemBaseDTO {
 	
@@ -53,6 +56,25 @@ public class UsedItemDTO extends UsedItemBaseDTO {
 				.multiply(getNumberUsedUnits());
 //				.subtract(Optional.ofNullable(getAccessWeight()).orElse(BigDecimal.ZERO));
 		}
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return UsedItem.class;
+	}
+	
+	@Override
+	public UsedItem fillEntity(Object entity) {
+		UsedItem usedItem;
+		if(entity instanceof UsedItem) {
+			usedItem = (UsedItem) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be UsedItem class");
+		}
+		super.fillEntity(usedItem);
+		
+		return usedItem;
 	}
 
 	

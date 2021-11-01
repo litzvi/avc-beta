@@ -63,7 +63,7 @@ public class SettingsWriter {
 		for(ProcessBasic<PoProcess> processBasic: processes) {
 			PoProcess process = processBasic.getProcess();
 			if(process instanceof TransactionProcess) {
-				processInfoDAO.setUsedProcesses((TransactionProcess)process);
+				processInfoDAO.setTransactionUsedProcesses((TransactionProcess)process);
 			}
 			if(process instanceof StorageRelocation) {
 				processInfoDAO.setUsedProcesses((StorageRelocation)process);

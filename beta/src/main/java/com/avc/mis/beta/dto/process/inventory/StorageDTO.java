@@ -3,12 +3,14 @@
  */
 package com.avc.mis.beta.dto.process.inventory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
@@ -17,6 +19,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author Zvi
@@ -24,6 +28,8 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@ToString(callSuper = true)
 public class StorageDTO extends StorageBaseDTO {
 	
 		
@@ -44,6 +50,10 @@ public class StorageDTO extends StorageBaseDTO {
 		super(id, version, ordinal, unitAmount, numberUnits, warehouseLocation, remarks, clazz);
 	}
 	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return Storage.class;
+	}
 	
 	@Override
 	public Storage fillEntity(Object entity) {
@@ -52,7 +62,7 @@ public class StorageDTO extends StorageBaseDTO {
 			storage = (Storage) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be Storage class");
+			throw new IllegalStateException("Param has to be Storage class");
 		}
 		super.fillEntity(storage);
 		

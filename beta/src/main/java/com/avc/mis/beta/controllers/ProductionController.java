@@ -135,37 +135,37 @@ public class ProductionController {
 	}
 	
 	@PostMapping(value="/addCleaningTransfer")
-	public ProductionProcessDTO addCleaningTransfer(@RequestBody ProductionProcess process) {
-		productionProcesses.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
-		return productionProcesses.getProductionProcess(process.getId());
+	public ProductionProcessDTO addCleaningTransfer(@RequestBody ProductionProcessDTO process) {
+		Integer processId = productionProcesses.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
+		return productionProcesses.getProductionProcess(processId);
 	}
 	
 	@PostMapping(value="/addRoastingTransfer")
-	public ProductionProcessDTO addRoastingTransfer(@RequestBody ProductionProcess process) {
-		productionProcesses.addProductionProcess(process, ProcessName.CASHEW_ROASTING);
-		return productionProcesses.getProductionProcess(process.getId());
+	public ProductionProcessDTO addRoastingTransfer(@RequestBody ProductionProcessDTO process) {
+		Integer processId = productionProcesses.addProductionProcess(process, ProcessName.CASHEW_ROASTING);
+		return productionProcesses.getProductionProcess(processId);
 	}
 	
 	@PostMapping(value="/addToffeeTransfer")
-	public ProductionProcessDTO addToffeeTransfer(@RequestBody ProductionProcess process) {
-		productionProcesses.addProductionProcess(process, ProcessName.CASHEW_TOFFEE);
-		return productionProcesses.getProductionProcess(process.getId());
+	public ProductionProcessDTO addToffeeTransfer(@RequestBody ProductionProcessDTO process) {
+		Integer processId = productionProcesses.addProductionProcess(process, ProcessName.CASHEW_TOFFEE);
+		return productionProcesses.getProductionProcess(processId);
 	}
 	
 	@PostMapping(value="/addPackingTransfer")
-	public ProductionProcessDTO addPackingTransfer(@RequestBody ProductionProcess process) {
-		productionProcesses.addProductionProcess(process, ProcessName.PACKING);
-		return productionProcesses.getProductionProcess(process.getId());
+	public ProductionProcessDTO addPackingTransfer(@RequestBody ProductionProcessDTO process) {
+		Integer processId = productionProcesses.addProductionProcess(process, ProcessName.PACKING);
+		return productionProcesses.getProductionProcess(processId);
 	}
 	
 	@PostMapping(value="/addQcPackingTransfer")
-	public ProductionProcessDTO addQcPackingTransfer(@RequestBody ProductionProcess process) {
-		productionProcesses.addProductionProcess(process, ProcessName.BAD_QUALITY_PACKING);
-		return productionProcesses.getProductionProcess(process.getId());
+	public ProductionProcessDTO addQcPackingTransfer(@RequestBody ProductionProcessDTO process) {
+		Integer processId = productionProcesses.addProductionProcess(process, ProcessName.BAD_QUALITY_PACKING);
+		return productionProcesses.getProductionProcess(processId);
 	}
 	
 	@PutMapping(value="/editProductionTransfer")
-	public ProductionProcessDTO editProductionTransfer(@RequestBody ProductionProcess process) {
+	public ProductionProcessDTO editProductionTransfer(@RequestBody ProductionProcessDTO process) {
 		productionProcesses.editProductionProcess(process);
 		return productionProcesses.getProductionProcess(process.getId());
 	}

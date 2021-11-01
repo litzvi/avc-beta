@@ -6,6 +6,9 @@ package com.avc.mis.beta.dto.process.inventory;
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
+import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -63,4 +66,8 @@ public class BasicUsedStorageDTO extends SubjectDataDTO {
 //	}
 	
 
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return UsedItemBase.class;
+	}
 }

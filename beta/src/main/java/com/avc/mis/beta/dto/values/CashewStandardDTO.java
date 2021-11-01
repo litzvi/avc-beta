@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.item.Item;
@@ -124,5 +125,10 @@ public class CashewStandardDTO extends ValueDTO {
 
 	public String getValue() {
 		return String.format("%s", this.standardOrganization);
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return CashewStandard.class;
 	}
 }

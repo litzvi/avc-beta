@@ -16,6 +16,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
@@ -45,7 +46,7 @@ public class TransferTest {
 	@Test
 	void transferTest() {
 		try {
-			Receipt receipt;
+			ReceiptDTO receipt;
 			try {
 				receipt = service.addBasicCashewReceipt();
 			} catch (Exception e2) {
@@ -57,7 +58,9 @@ public class TransferTest {
 			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 			
 			StorageTransfer transfer = new StorageTransfer();
-			transfer.setPoCode((PoCode) receipt.getPoCode());
+			PoCode poCode = new PoCode();
+			poCode.setId(receipt.getPoCode().getId());
+			transfer.setPoCode(poCode);
 			transfer.setRecordedTime(LocalDateTime.now());
 
 
@@ -95,7 +98,8 @@ public class TransferTest {
 					
 			//TODO check if usedItems exceeds inventory should fail
 			transfer = new StorageTransfer();
-			transfer.setPoCode((PoCode) receipt.getPoCode());
+			poCode.setId(receipt.getPoCode().getId());
+			transfer.setPoCode(poCode);
 			transfer.setRecordedTime(LocalDateTime.now());
 			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
 			transfer.setProcessItems(service.getProcessItems(poInventory));
@@ -111,7 +115,8 @@ public class TransferTest {
 			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 					
 			transfer = new StorageTransfer();
-			transfer.setPoCode((PoCode) receipt.getPoCode());
+			poCode.setId(receipt.getPoCode().getId());
+			transfer.setPoCode(poCode);
 			transfer.setRecordedTime(LocalDateTime.now());
 			
 			poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
@@ -144,7 +149,8 @@ public class TransferTest {
 			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 					
 			transfer = new StorageTransfer();
-			transfer.setPoCode((PoCode) receipt.getPoCode());
+			poCode.setId(receipt.getPoCode().getId());
+			transfer.setPoCode(poCode);
 			transfer.setRecordedTime(LocalDateTime.now());
 			
 			poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
@@ -187,12 +193,14 @@ public class TransferTest {
 //	@Disabled
 	@Test
 	void transferWithCountTest() {
-		Receipt receipt = service.addBasicCashewReceipt();
+		ReceiptDTO receipt = service.addBasicCashewReceipt();
 		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
 		StorageTransfer transfer = new StorageTransfer();
-		transfer.setPoCode((PoCode) receipt.getPoCode());
+		PoCode poCode = new PoCode();
+		poCode.setId(receipt.getPoCode().getId());
+		transfer.setPoCode(poCode);
 		transfer.setRecordedTime(LocalDateTime.now());
 
 

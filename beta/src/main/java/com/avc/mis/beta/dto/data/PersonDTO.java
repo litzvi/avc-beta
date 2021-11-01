@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.dto.DataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Person;
 
 import lombok.Data;
@@ -36,6 +37,11 @@ public class PersonDTO extends DataDTO {
 			this.idCard = new IdCardDTO(person.getIdCard());
 		if(person.getContactDetails() != null)
 			this.contactDetails = new ContactDetailsDTO(person.getContactDetails());
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return Person.class;
 	}
 
 }

@@ -41,7 +41,6 @@ public abstract class RankedAuditedDTO extends DataDTO implements Ordinal {
 		this.ordinal = entity.getOrdinal();
 	}
 	
-	@JsonIgnore
 	@Override
 	public RankedAuditedEntity fillEntity(Object entity) {
 		RankedAuditedEntity rankedAuditedEntity;
@@ -49,7 +48,7 @@ public abstract class RankedAuditedDTO extends DataDTO implements Ordinal {
 			rankedAuditedEntity = (RankedAuditedEntity) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be RankedAuditedEntity class");
+			throw new IllegalStateException("Param has to be RankedAuditedEntity class");
 		}
 		super.fillEntity(rankedAuditedEntity);
 		rankedAuditedEntity.setOrdinal(getOrdinal());

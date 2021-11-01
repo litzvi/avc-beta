@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Phone;
 
 import lombok.Data;
@@ -33,5 +34,10 @@ public class PhoneDTO extends SubjectDataDTO {
 	public PhoneDTO(Integer id, Integer version, String value, int ordinal) {
 		super(id, version, ordinal);
 		this.value = value;
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return Phone.class;
 	}
 }

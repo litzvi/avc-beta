@@ -11,6 +11,7 @@ import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
 import com.avc.mis.beta.dto.process.collection.LoadedItemDTO;
 import com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.values.ShipmentCodeDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 
 import lombok.Data;
@@ -47,6 +48,11 @@ public class ContainerLoadingDTO extends RelocationProcessDTO {
 	public void setContainerLoadingInfo(ContainerLoadingInfo info) {
 		this.arrival = info.getArrival();
 		this.shipmentCode = info.getShipmentCode();
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ContainerLoading.class;
 	}
 
 	@Override

@@ -8,8 +8,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.avc.mis.beta.dto.DataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -67,6 +69,11 @@ public class CompanyDTO extends DataDTO {
 	 */
 	public void addCompanyContact(@NonNull CompanyContact contact) {
 		this.companyContacts.add(new CompanyContactDTO(contact));
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return Company.class;
 	}
 	
 }

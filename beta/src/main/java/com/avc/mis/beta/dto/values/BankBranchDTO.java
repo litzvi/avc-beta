@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.values.BankBranch;
 
 import lombok.EqualsAndHashCode;
@@ -31,5 +32,10 @@ public class BankBranchDTO extends ValueDTO {
 		super(branch.getId());
 		this.value = branch.getValue();
 		this.bankName = branch.getBank().getValue();
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return BankBranch.class;
 	}
 }

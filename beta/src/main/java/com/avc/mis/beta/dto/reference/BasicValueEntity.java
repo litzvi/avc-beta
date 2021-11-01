@@ -4,11 +4,13 @@
 package com.avc.mis.beta.dto.reference;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.ValueInterface;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 
@@ -21,6 +23,7 @@ import lombok.ToString;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@NoArgsConstructor
 @ToString(callSuper = true)
 public class BasicValueEntity<T extends ValueInterface> extends ValueDTO implements ValueInterface {
 	
@@ -44,13 +47,18 @@ public class BasicValueEntity<T extends ValueInterface> extends ValueDTO impleme
 	}
 	
 	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ValueEntity.class;
+	}
+	
+	@Override
 	public ValueEntity fillEntity(Object entity) {
 		ValueEntity item;
 		if(entity instanceof ValueEntity) {
 			item = (ValueEntity) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be ValueEntity class");
+			throw new IllegalStateException("Param has to be ValueEntity class");
 		}
 		super.fillEntity(item);
 		item.setValue(getValue());

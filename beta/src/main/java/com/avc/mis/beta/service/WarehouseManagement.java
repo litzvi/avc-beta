@@ -368,8 +368,8 @@ public class WarehouseManagement {
 		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
 		dao.addTransactionProcessEntity(transfer);
 		dao.checkUsedInventoryAvailability(transfer);
-		dao.setPoWeights(transfer);
-		dao.setUsedProcesses(transfer);
+		dao.setTransactionPoWeights(transfer);
+		dao.setTransactionUsedProcesses(transfer);
 		//check if process items match the used item (items are equal, perhaps also check amounts difference and send warning)
 		checkTransferBalance(transfer);
 	}
@@ -449,8 +449,8 @@ public class WarehouseManagement {
 		
 		dao.checkUsingProcesessConsistency(transfer);
 		dao.checkUsedInventoryAvailability(transfer);
-		dao.setPoWeights(transfer);
-		dao.setUsedProcesses(transfer);
+		dao.setTransactionPoWeights(transfer);
+		dao.setTransactionUsedProcesses(transfer);
 		checkTransferBalance(transfer);
 	}
 

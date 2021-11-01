@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.entities.process.collection;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -98,16 +99,17 @@ public class ReceiptItem extends ProcessItem {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param extraAdded the extraAdded to set
 	 */
-	public void setExtraAdded(ExtraAdded[] extraAdded) {
-		getStorageFormsField().removeAll(this.extraAdded);
-		Ordinal.setOrdinals(extraAdded);
-		this.extraAdded = Insertable.setReferences(extraAdded, (t) -> {t.setReference(this);	return t;});
-		getStorageFormsField().addAll(this.extraAdded);
-	}
-		
-	public void setStorageForms(StorageWithSample[] storageForms) { 		
-		super.setStorageForms(storageForms);
-		getStorageFormsField().addAll(this.extraAdded);
-	}
+//	public void setExtraAdded(ExtraAdded[] extraAdded) {
+//		getStorageFormsField().removeAll(this.extraAdded);
+////		Ordinal.setOrdinals(extraAdded);
+//		this.extraAdded = Insertable.setReferences(extraAdded, (t) -> {t.setReference(this);	return t;});
+//		getStorageFormsField().addAll(this.extraAdded);
+////		getStorageFormsField().stream().forEach(i -> System.out.println(i));
+//	}
+//		
+//	public void setStorageForms(StorageWithSample[] storageForms) { 		
+//		super.setStorageForms(storageForms);
+//		getStorageFormsField().addAll(this.extraAdded);
+//	}
 	
 }

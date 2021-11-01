@@ -8,17 +8,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.BaseEntityDTO;
 import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.process.collection.ReceiptItem;
@@ -27,8 +30,12 @@ import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.utilities.ListGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -37,6 +44,7 @@ import lombok.ToString;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @ToString(callSuper = true)
 public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<StorageDTO> {
 
@@ -45,6 +53,7 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 	private String description;
 	private String remarks;
 	
+//	@Setter(value = AccessLevel.PROTECTED) @Getter(value = AccessLevel.NONE)
 	private List<StorageDTO> storageForms;
 	
 //	private AmountWithUnit[] totalAmount;
@@ -141,39 +150,16 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 
 	}
 
-	
-	/**
-	 * static function for building List of ProcessItemDTO from a List of ProcessItemWithStorage
-	 * received by a join query of storages with their processItem.
-	 * @param itemWithStorages a List<ProcessItemWithStorage>
-	 * @return List<ProcessItemDTO> as in the DTO structure.
-	 */
-//	public static List<ProcessItemDTO> getProcessItems(List<ProcessItemWithStorage> itemWithStorages) {
-//		Map<Integer, List<ProcessItemWithStorage>> map = itemWithStorages.stream()
-//				.collect(Collectors.groupingBy(ProcessItemWithStorage::getId, LinkedHashMap::new, Collectors.toList()));
-//		List<ProcessItemDTO> processItems = new ArrayList<>();
-//		for(List<ProcessItemWithStorage> list: map.values()) {
-//			ProcessItemDTO processItem = list.get(0).getProcessItem();
-////			List<StorageDTO> storages = list.stream().map(i -> i.getStorage()).collect(Collectors.toList());
-////			storages.sort(Ordinal.ordinalComparator());
-////			processItem.setStorageForms(storages);
-//			processItem.setStorageForms(list.stream()
-//					.map(i -> i.getStorage())
-////					.sorted(Ordinal.ordinalComparator()) // done in query
-//					.collect(Collectors.toList()));
-//
-//			processItems.add(processItem);
-//		}
-////		processItems.sort(Ordinal.ordinalComparator());
-//		return processItems;
-//	}
-
-
 	@JsonIgnore
 	@Override
 	public void setList(List<StorageDTO> list) {
 		setStorageForms(list);
 //		setStorageForms((List<StorageDTO>) list.stream().collect(Collectors.toCollection(ArrayList<StorageDTO>::new)));
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ProcessItem.class;
 	}
 
 
@@ -184,13 +170,23 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 			processItem = (ProcessItem) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be ProcessItem class");
+			throw new IllegalStateException("Param has to be ProcessItem class");
 		}
 		super.fillEntity(processItem);
-		processItem.setItem(getItem().fillEntity(new Item()));
-		if(getStorageForms() != null) {
+		if(getItem() != null)
+			processItem.setItem(getItem().fillEntity(new Item()));
+		processItem.setMeasureUnit(getMeasureUnit());
+		processItem.setDescription(getDescription());
+		processItem.setRemarks(getRemarks());
+		if(processItem instanceof ReceiptItem) {
+			
+		}
+		else if(getStorageForms() == null || getStorageForms().isEmpty()) {
+			throw new IllegalArgumentException("Process line has to contain at least one storage line");
+		}
+		else {
 			Ordinal.setOrdinals(getStorageForms());
-			processItem.setStorageForms(getStorageForms().stream().map(i -> i.fillEntity(new Storage())).toArray(Storage[]::new));
+			processItem.setStorageForms(this.storageForms.stream().map(i -> i.fillEntity(new Storage())).toArray(Storage[]::new));
 		}
 		
 		return processItem;

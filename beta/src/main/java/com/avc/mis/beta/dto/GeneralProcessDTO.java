@@ -24,6 +24,7 @@ import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.Shift;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.values.ProductionLine;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -150,7 +151,7 @@ public abstract class GeneralProcessDTO extends DataDTO {
 			generalProcess = (GeneralProcess) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be GeneralProcess class");
+			throw new IllegalStateException("Param has to be GeneralProcess class");
 		}
 		super.fillEntity(generalProcess);
 		

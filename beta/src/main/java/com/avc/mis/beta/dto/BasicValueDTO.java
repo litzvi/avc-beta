@@ -32,7 +32,6 @@ public abstract class BasicValueDTO extends BasicDTO {
 		super(id);
 	}
 	
-	@JsonIgnore
 	@Override
 	public BaseEntity fillEntity(Object entity) {
 		BaseEntity baseEntity;
@@ -40,7 +39,7 @@ public abstract class BasicValueDTO extends BasicDTO {
 			baseEntity = (BaseEntity) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be BaseEntity class");
+			throw new IllegalStateException("Param has to be BaseEntity class");
 		}
 		super.fillEntity(baseEntity);
 		return baseEntity;

@@ -6,7 +6,9 @@ package com.avc.mis.beta.dto.process.inventory;
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 
 import lombok.Data;
@@ -46,5 +48,10 @@ public class BasicStorageDTO extends SubjectDataDTO {
 	public BasicStorageDTO(@NonNull Storage storage) {
 		super(storage.getId(), storage.getVersion(), storage.getOrdinal());
 		this.amount = storage.getNumberUnits().setScale(MeasureUnit.SCALE);
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return Storage.class;
 	}
 }

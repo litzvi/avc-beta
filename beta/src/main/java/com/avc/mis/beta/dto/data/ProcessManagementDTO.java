@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.data;
 import com.avc.mis.beta.dto.LinkDTO;
 import com.avc.mis.beta.dto.basic.UserBasic;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ManagementType;
@@ -48,6 +49,11 @@ public class ProcessManagementDTO extends LinkDTO {
 	
 	public BasicValueEntity<ProcessManagement> getApprovalType() {
 		return new BasicValueEntity<ProcessManagement>(this.getId(), this.managementType.toString());
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ProcessManagement.class;
 	}
 	
 	

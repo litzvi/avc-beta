@@ -42,15 +42,21 @@ public abstract class BaseEntity implements Insertable {
 	    if (o == null || !(o instanceof BaseEntity)) return false;
 	    BaseEntity other = (BaseEntity) o;
 	    
-	    if(this.getId() == null && other.getId() == null) {
-	    	return false;
+	    if(this.getId() != null && other.getId() != null) {
+	    	return this.getId().equals(other.getId());
 	    }
 	    
-	    if(this.getId() == null) { //other.getId() is not null
-	    	return false;
-	    }
+	    return false;
 	    
-	    return this.getId().equals(other.getId());
+//	    if(this.getId() == null && other.getId() == null) {
+//	    	return false;
+//	    }
+//	    
+//	    if(this.getId() == null) { //other.getId() is not null
+//	    	return false;
+//	    }
+//	    
+//	    return this.getId().equals(other.getId());
 	}
 	  
 	/**

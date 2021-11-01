@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.process;
 import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.processInfo.ContainerArrivalInfo;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
@@ -51,6 +52,30 @@ public class ContainerArrivalDTO extends GeneralProcessDTO {
 		this.containerDetails = info.getContainerDetails();
 		this.shipingDetails = info.getShipingDetails();		
 		this.productCompany = info.getProductCompany();
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ContainerArrival.class;
+	}
+	
+	@Override
+	public ContainerArrival fillEntity(Object entity) {
+		ContainerArrival containerArrival;
+		if(entity instanceof ContainerArrival) {
+			containerArrival = (ContainerArrival) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be ContainerArrival class");
+		}
+		super.fillEntity(containerArrival);
+		containerArrival.setContainerDetails(getContainerDetails());
+		containerArrival.setShipingDetails(getShipingDetails());
+		if(getProductCompany() != null) {
+			containerArrival.setProductCompany((Supplier) getProductCompany().fillEntity(new Supplier()));
+		}		
+		
+		return containerArrival;
 	}
 
 	

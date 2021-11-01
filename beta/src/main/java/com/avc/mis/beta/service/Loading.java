@@ -61,7 +61,7 @@ public class Loading {
 			dao.setStorageMovesProcessItem(loading.getStorageMovesGroups());
 			dao.addPoProcessEntity(loading);
 			dao.checkUsedInventoryAvailability(loading);
-			dao.setPoWeights(loading);
+			dao.setRelocationPoWeights(loading);
 			dao.setUsedProcesses(loading);
 			//check if storage moves match the amounts of the used item
 			dao.checkRelocationBalance(loading);
@@ -124,7 +124,7 @@ public class Loading {
 		
 		dao.checkUsedInventoryAvailability(loading);
 		dao.setUsedProcesses(loading);
-		List<ItemAmountWithPoCode> usedPos = dao.setPoWeights(loading);
+		List<ItemAmountWithPoCode> usedPos = dao.setRelocationPoWeights(loading);
 		dao.checkDAGmaintained(usedPos, loading.getId());
 
 		dao.checkUsingProcesessConsistency(loading);

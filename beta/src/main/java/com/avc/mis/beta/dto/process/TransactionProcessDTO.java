@@ -12,7 +12,9 @@ import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.process.TransactionProcess;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
 
 import lombok.Data;
@@ -69,6 +71,20 @@ public abstract class TransactionProcessDTO<T extends ProcessItemDTO> extends Pr
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public TransactionProcess<? extends ProcessItem> fillEntity(Object entity) {
+		TransactionProcess<? extends ProcessItem> transactionProcess;
+		if(entity instanceof TransactionProcess) {
+			transactionProcess = (TransactionProcess<? extends ProcessItem>) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be TransactionProcess class");
+		}
+		super.fillEntity(transactionProcess);	
+		
+		return transactionProcess;
 	}
 	
 	

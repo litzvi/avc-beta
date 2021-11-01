@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
+import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
@@ -16,6 +17,7 @@ import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
+import com.avc.mis.beta.entities.process.inventory.UsedItem;
 import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
 import com.avc.mis.beta.entities.values.CashewGrade;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -23,6 +25,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * @author zvi
@@ -30,7 +34,9 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public abstract class UsedItemBaseDTO extends SubjectDataDTO {
+@NoArgsConstructor
+@ToString(callSuper = true)
+public abstract class UsedItemBaseDTO extends RankedAuditedDTO {
 
 	//UsedItemBase fields
 	private BigDecimal numberUsedUnits;
@@ -165,6 +171,25 @@ public abstract class UsedItemBaseDTO extends SubjectDataDTO {
 		return storage;
 	}
 	
+	@Override
+	public UsedItemBase fillEntity(Object entity) {
+		UsedItemBase usedItemBase;
+		if(entity instanceof UsedItemBase) {
+			usedItemBase = (UsedItemBase) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be UsedItemBase class");
+		}
+		super.fillEntity(usedItemBase);
+		if(getStorage() != null) {
+			usedItemBase.setStorage(getStorage().fillEntity(new Storage()));
+			setStorageId(getStorage().getId()); //for test comparing
+		}
+		usedItemBase.setNumberUnits(getNumberUsedUnits());
+		
+		
+		return usedItemBase;
+	}
 
 	
 }

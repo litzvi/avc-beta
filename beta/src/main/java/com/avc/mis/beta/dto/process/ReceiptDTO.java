@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.data.ProcessFile;
-import com.avc.mis.beta.entities.item.BomLine;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -36,24 +35,20 @@ public class ReceiptDTO extends ProcessWithProductDTO<ReceiptItemDTO> {
 	@EqualsAndHashCode.Exclude
 	private Integer referencedOrder;
 	
-//	public ReceiptDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-//			Integer supplierId, Integer supplierVersion, String supplierName, String display,
-//			ProcessName processName, ProductionLine productionLine, 
-//			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
-//			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
-//		super(id, version, createdDate, userRecording, 
-//				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
-//				supplierId, supplierVersion, supplierName, display, 
-//				processName, productionLine, recordedTime, startTime, endTime, duration,
-//				numOfWorkers, processStatus, editStatus, remarks, approvals);
-//	}
-
 	public ReceiptDTO(@NonNull Receipt receipt) {
 		super(receipt);
 		setReceiptItems(Arrays.stream(receipt.getReceiptItems())
 				.map(i->{return new ReceiptItemDTO((ReceiptItem) i);}).collect(Collectors.toList()));
 
+	}
+	
+	/**
+	 * Always null for Receipt - use getReceiptItems instead
+	 */
+	@JsonIgnore
+	@Override
+	public List<ReceiptItemDTO> getProcessItems() {
+		return null;
 	}
 	
 	public List<ReceiptItemDTO> getReceiptItems() {
@@ -66,27 +61,10 @@ public class ReceiptDTO extends ProcessWithProductDTO<ReceiptItemDTO> {
 	}
 
 	
-	/**
-	 * Used for setting receiptItems from a flat form produced by a join of receipt items and it's storage info, 
-	 * to receiptItems that each have a Set of storages.
-	 * @param receiptItemsWithStorage collection of ReceiptItemWithStorage that contain all receipt items with storage detail.
-	 */
-//	public void setReceiptItemsWithStorage(List<ReceiptItemWithStorage> receiptItemsWithStorage) {
-//		Map<Integer, List<ReceiptItemWithStorage>> map = receiptItemsWithStorage.stream()
-//			.collect(Collectors.groupingBy(ReceiptItemWithStorage::getId, LinkedHashMap::new, Collectors.toList()));
-//		List<ReceiptItemDTO> receiptItems = new ArrayList<ReceiptItemDTO>();
-//		for(List<ReceiptItemWithStorage> list: map.values()) {
-//			ReceiptItemDTO receiptItem = list.get(0).getReceiptItem();
-//			//group list to storage/extraAdded and set accordingly
-//			receiptItem.setStorageForms(list.stream()
-//					.map(i -> i.getStorage())
-////					.sorted(Ordinal.ordinalComparator())
-//					.collect(Collectors.toList()));
-//			receiptItems.add(receiptItem);
-//		}
-//		setReceiptItems(receiptItems);
-////		this.receiptItems.sort(Ordinal.ordinalComparator());
-//	}	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return Receipt.class;
+	}
 
 	@Override
 	public Receipt fillEntity(Object entity) {
@@ -95,10 +73,13 @@ public class ReceiptDTO extends ProcessWithProductDTO<ReceiptItemDTO> {
 			receipt = (Receipt) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be Receipt class");
+			throw new IllegalStateException("Param has to be Receipt class");
 		}
 		super.fillEntity(receipt);
-		if(getReceiptItems() != null) {
+		if(getReceiptItems() == null || getReceiptItems().isEmpty()) {
+			throw new IllegalArgumentException("Has to containe at least one received item");
+		}
+		else {
 			Ordinal.setOrdinals(getReceiptItems());
 			receipt.setReceiptItems(getReceiptItems().stream().map(i -> i.fillEntity(new ReceiptItem())).toArray(ReceiptItem[]::new));
 		}

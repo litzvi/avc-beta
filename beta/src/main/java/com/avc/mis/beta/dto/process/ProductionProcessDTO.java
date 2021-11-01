@@ -6,7 +6,13 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
+import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.ProductionProcess;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
+import com.avc.mis.beta.entities.process.collection.ReceiptItem;
+import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,50 +26,47 @@ import lombok.ToString;
 @NoArgsConstructor
 public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> {
 	
-	
-//	public ProductionProcessDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-//			Integer supplierId, Integer supplierVersion, String supplierName, String display,
-//			ProcessName processName, ProductionLine productionLine, 
-//			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
-//			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, String approvals) {
-//		super(id, version, createdDate, userRecording, 
-//				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
-//				supplierId, supplierVersion, supplierName, display,
-//				processName, productionLine, recordedTime, startTime, endTime, 
-//				duration, numOfWorkers, processStatus, editStatus, remarks, approvals);
-//	}
-	
 	public ProductionProcessDTO(@NonNull ProductionProcess process) {
 		super(process);
 		super.setProcessItems( Arrays.stream(process.getProcessItems())
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));
-//		super.setUsedItemGroups(Arrays.stream(process.getUsedItemGroups())
-//				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
 		super.setWeightedPos(Arrays.stream(process.getWeightedPos())
 				.map(i->{return new WeightedPoDTO(i);}).collect(Collectors.toList()));
 
 	}
-	
+		
 	@Override
-	public List<ProcessItemDTO> getProcessItems() {
-		return super.getProcessItems();
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ProductionProcess.class;
 	}
 	
-//	@Override
-//	public void setProcessItems(List<ProcessItemDTO> processItems) {
-//		super.setProcessItems(processItems);
-//	}
-
-//	@Override
-//	public List<UsedItemsGroupDTO> getUsedItemGroups() {
-//		return super.getUsedItemGroups();
-//	}
-
-//	@Override
-//	public void setUsedItemGroups(List<UsedItemsGroupDTO> usedItemGroups) {
-//		super.setUsedItemGroups(usedItemGroups);
-//	}
+	@Override
+	public ProductionProcess fillEntity(Object entity) {
+		ProductionProcess productionProcess;
+		if(entity instanceof ProductionProcess) {
+			productionProcess = (ProductionProcess) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be ProductionProcess class");
+		}
+		super.fillEntity(productionProcess);
+		if(getProcessItems() == null || getProcessItems().isEmpty()) {
+			throw new IllegalArgumentException("Has to containe at least one process item");
+		}
+		else {
+			Ordinal.setOrdinals(getProcessItems());
+			productionProcess.setProcessItems(getProcessItems().stream().map(i -> i.fillEntity(new ProcessItem())).toArray(ProcessItem[]::new));
+		}
+		if(getUsedItemGroups() == null || getUsedItemGroups().isEmpty()) {
+			throw new IllegalArgumentException("Has to containe at least one used item group");
+		}
+		else {
+			Ordinal.setOrdinals(getUsedItemGroups());
+			productionProcess.setUsedItemGroups(getUsedItemGroups().stream().map(i -> i.fillEntity(new UsedItemsGroup())).toArray(UsedItemsGroup[]::new));
+		}
+		
+		return productionProcess;
+	}
 
 	@Override
 	public String getProcessTypeDescription() {

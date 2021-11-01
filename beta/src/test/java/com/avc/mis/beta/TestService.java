@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -17,8 +19,18 @@ import org.springframework.stereotype.Service;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
+import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.process.PoDTO;
+import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
+import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
+import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
+import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
@@ -196,10 +208,10 @@ public class TestService {
 		return orderItems;
 	}
 	
-	public Receipt addOneItemCashewReceipt() {
+	public ReceiptDTO addOneItemCashewReceipt() {
 		//build order receipt
-		Receipt receipt = new Receipt();
-		PoCode poCode = addPoCode();
+		ReceiptDTO receipt = new ReceiptDTO();
+		PoCodeBasic poCode = new PoCodeBasic(addPoCode());
 //		poCode.setCode(Integer.toString(randCode++));
 //		Supplier supplier = addBasicSupplier();
 //		poCode.setSupplier(supplier);
@@ -209,59 +221,62 @@ public class TestService {
 		receipt.setRecordedTime(LocalDateTime.now());
 		//add order items
 		receipt.setReceiptItems(getReceiptItems(1));
-		receipts.addCashewReceipt(receipt);
+		receipt.setId(receipts.addCashewReceipt(receipt));
 		return receipt;
 	}
 	
-	public Receipt addBasicCashewReceipt() {
+	public ReceiptDTO addBasicCashewReceipt() {
 		//build order receipt
-		Receipt receipt = new Receipt();
-		PoCode poCode = addPoCode();
+		ReceiptDTO receipt = new ReceiptDTO();
+		PoCodeBasic poCode = new PoCodeBasic(addPoCode());
 		receipt.setPoCode(poCode);
 		//build process
 		receipt.setRecordedTime(LocalDateTime.now());
 		receipt.setStartTime(LocalTime.parse("20:15"));
 		//add order items
 		receipt.setReceiptItems(getReceiptItems(OrdersTest.NUM_ITEMS));
-		receipts.addCashewReceipt(receipt);
+		receipt.setId(receipts.addCashewReceipt(receipt));
 		return receipt;
 	}
 
-	private ReceiptItem[] getReceiptItems(int numOfItems) {
-		ReceiptItem[] receiptItems = new ReceiptItem[numOfItems];
-		StorageWithSample[] storageForms = new StorageWithSample[receiptItems.length];
-		ExtraAdded[] added = new ExtraAdded[receiptItems.length];
-		Warehouse storage = getWarehouse();
-		for(int i=0; i<receiptItems.length; i++) {
-			storageForms[i] = new StorageWithSample();
-			storageForms[i].setUnitAmount(BigDecimal.ONE);
-//			storageForms[i].setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
-			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
-			storageForms[i].setWarehouseLocation(storage);
-//			storageForms[i].setSampleContainerWeight(BigDecimal.valueOf(0.002));
-			storageForms[i].setNumberOfSamples(BigInteger.valueOf(30));
-			storageForms[i].setAvgTestedWeight(BigDecimal.valueOf(50.01));
+ List<ReceiptItemDTO> getReceiptItems(int numOfItems) {
+		List<ReceiptItemDTO> receiptItems = new ArrayList<>();
+//		List<StorageDTO> storageForms = new ArrayList<StorageDTO>();
+		List<ExtraAddedDTO> added = new ArrayList<>();
+		BasicValueEntity<Warehouse> warehouse = new BasicValueEntity<Warehouse>(getWarehouse());
+		for(int i=0; i<numOfItems; i++) {
+			StorageWithSampleDTO storageForm = new StorageWithSampleDTO();
+//			storageForms.add(storageForm);
+			storageForm.setUnitAmount(BigDecimal.ONE);
+//			storageForm.setUnitAmount(new AmountWithUnit(BigDecimal.valueOf(1), "LBS"));
+			storageForm.setNumberUnits(BigDecimal.valueOf(35000));
+			storageForm.setWarehouseLocation(warehouse);
+//			storageForm.setSampleContainerWeight(BigDecimal.valueOf(0.002));
+			storageForm.setNumberOfSamples(BigInteger.valueOf(30));
+			storageForm.setAvgTestedWeight(BigDecimal.valueOf(50.01));
 			//build receipt item
-			receiptItems[i] = new ReceiptItem();
+			ReceiptItemDTO receiptItem = new ReceiptItemDTO();
+			receiptItems.add(receiptItem);
 			Item item = getItem();
-			receiptItems[i].setItem(item);
-			receiptItems[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
-			receiptItems[i].setMeasureUnit(item.getMeasureUnit());
-			receiptItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
-			receiptItems[i].setStorageForms(new Storage[] {storageForms[i]});
+			receiptItem.setItem(new ItemWithUnitDTO(item));
+			receiptItem.setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
+			receiptItem.setMeasureUnit(item.getMeasureUnit());
+			receiptItem.setUnitPrice(new AmountWithCurrency("2.99", "USD"));
+			receiptItem.setStorageForms(new StorageWithSampleDTO[] {storageForm});
 			//add extra bonus
-			added[i] = new ExtraAdded();
-			added[i].setUnitAmount(BigDecimal.ONE);//because database is set to scale 2
-			added[i].setNumberUnits(new BigDecimal(4).setScale(2));
-			receiptItems[i].setExtraAdded(new ExtraAdded[] {added[i]});
+			ExtraAddedDTO add = new ExtraAddedDTO();
+			added.add(add);
+			add.setUnitAmount(BigDecimal.ONE);//because database is set to scale 2
+			add.setNumberUnits(new BigDecimal(4).setScale(2));
+			receiptItem.setExtraAdded(Arrays.asList(add));
 		}
 		return receiptItems;
 	}
 	
-	public Receipt getCashewOrderReceipt(int orderPoCode) {
+	public ReceiptDTO getCashewOrderReceipt(int orderPoCode) {
 		//build order receipt
-		Receipt receipt = new Receipt();
-		PoCode poCode = new PoCode();
+		ReceiptDTO receipt = new ReceiptDTO();
+		PoCodeBasic poCode = new PoCodeBasic();
 		poCode.setId(orderPoCode);
 		receipt.setPoCode(poCode);
 		//build process
@@ -269,14 +284,14 @@ public class TestService {
 		//add order items
 		PoDTO poDTO = orders.getOrder(orderPoCode);
 		receipt.setReceiptItems(getOrderReceiptItems(poDTO));
-		receipts.addCashewOrderReceipt(receipt);
+		receipt.setId(receipts.addCashewOrderReceipt(receipt));
 		return receipt;		
 	}
 	
-	public Receipt getGeneralOrderReceipt(int orderPoCode) {
+	public ReceiptDTO getGeneralOrderReceipt(int orderPoCode) {
 		//build order receipt
-		Receipt receipt = new Receipt();
-		PoCode poCode = new PoCode();
+		ReceiptDTO receipt = new ReceiptDTO();
+		PoCodeBasic poCode = new PoCodeBasic();
 		poCode.setId(orderPoCode);
 		receipt.setPoCode(poCode);
 		//build process
@@ -284,42 +299,44 @@ public class TestService {
 		//add order items
 		PoDTO poDTO = orders.getOrder(orderPoCode);
 		receipt.setReceiptItems(getOrderReceiptItems(poDTO));
-		receipts.addGeneralOrderReceipt(receipt);
+		receipt.setId(receipts.addGeneralOrderReceipt(receipt));
 		return receipt;		
 	}
 	
-	private ReceiptItem[] getOrderReceiptItems(PoDTO poDTO) {
+	private List<ReceiptItemDTO> getOrderReceiptItems(PoDTO poDTO) {
 		List<OrderItemDTO> orderItems = poDTO.getOrderItems();
 
-		ReceiptItem[] items = new ReceiptItem[orderItems.size()];
-		StorageWithSample[] storageForms = new StorageWithSample[items.length];
-		Warehouse storage = getWarehouse();
-		OrderItem oi;
+		List<ReceiptItemDTO> receiptItems = new ArrayList<>();
+//		List<StorageDTO> storageForms = new ArrayList<StorageDTO>();
+		BasicValueEntity<Warehouse>warehouse = new BasicValueEntity<Warehouse>(getWarehouse());
+		DataObject<OrderItem> oi;
 		int i=0;
 		for(OrderItemDTO oItem: orderItems) {
-			items[i] = new ReceiptItem();
-			storageForms[i] = new StorageWithSample();
+			ReceiptItemDTO receiptItem = new ReceiptItemDTO();
+			receiptItems.add(receiptItem);
+			StorageWithSampleDTO storageForm = new StorageWithSampleDTO();
+//			storageForms.add(storageForm);
 			int itemId = oItem.getItem().getId();
-			ItemDTO item = getItemsByGroup(null).stream().filter(j -> j.getId() == itemId).findAny().get();
-			items[i].setItem(getItem(item));
-			items[i].setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
-			items[i].setMeasureUnit(item.getMeasureUnit());
-			items[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
-			storageForms[i].setUnitAmount(BigDecimal.ONE);
-			storageForms[i].setNumberUnits(BigDecimal.valueOf(35000));
-			storageForms[i].setWarehouseLocation(storage);
-//			storageForms[i].setSampleContainerWeight(BigDecimal.valueOf(0.002));
-			storageForms[i].setNumberOfSamples(BigInteger.valueOf(30));
-			storageForms[i].setAvgTestedWeight(BigDecimal.valueOf(50.01));
-			items[i].setStorageForms(new StorageWithSample[] {storageForms[i]});
-			oi  = new OrderItem();
-			oi.setId(oItem.getId());
-			oi.setVersion(oItem.getVersion());
-			items[i].setOrderItem(oi);
-			items[i].setExtraRequested(new AmountWithUnit(BigDecimal.valueOf(200), "KG"));
+			ItemDTO itemDTO = getItemsByGroup(null).stream().filter(j -> j.getId() == itemId).findAny().get();
+			ItemWithUnitDTO item = new ItemWithUnitDTO(itemDTO.getId());
+			item.setMeasureUnit(itemDTO.getMeasureUnit());
+			receiptItem.setItem(item);
+			receiptItem.setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
+			receiptItem.setMeasureUnit(item.getMeasureUnit());
+			receiptItem.setUnitPrice(new AmountWithCurrency("2.99", "USD"));
+			storageForm.setUnitAmount(BigDecimal.ONE);
+			storageForm.setNumberUnits(BigDecimal.valueOf(35000));
+			storageForm.setWarehouseLocation(warehouse);
+//			storageForm.setSampleContainerWeight(BigDecimal.valueOf(0.002));
+			storageForm.setNumberOfSamples(BigInteger.valueOf(30));
+			storageForm.setAvgTestedWeight(BigDecimal.valueOf(50.01));
+			receiptItem.setStorageForms(new StorageWithSampleDTO[] {storageForm});
+			oi  = new DataObject<OrderItem>(oItem.getId(), oItem.getVersion());
+			receiptItem.setOrderItem(oi);
+			receiptItem.setExtraRequested(new AmountWithUnit(BigDecimal.valueOf(200), "KG"));
 			i++;
 		}
-		return items;
+		return receiptItems;
 	}
 	
 	public Warehouse getWarehouse() {
@@ -422,6 +439,11 @@ public class TestService {
 //		receipts.removeReceipt(receipt.getId());
 	}
 	
+	public void cleanup(ReceiptDTO receipt) {
+		processInfoWriter.removeProcess(receipt.getId());
+//		receipts.removeReceipt(receipt.getId());
+	}
+	
 	public static UsedItemsGroup[] getUsedItemsGroups(List<ProcessItemInventory> poInventory) {
 		UsedItemsGroup[] usedItemsGroups = new UsedItemsGroup[poInventory.size()];
 		int i = 0;
@@ -440,6 +462,26 @@ public class TestService {
 			usedItemsGroups[i] = new UsedItemsGroup();
 			usedItemsGroups[i].setUsedItems(usedItems);
 			i++;
+
+		}
+		return usedItemsGroups;
+	}	
+	public static List<UsedItemsGroupDTO> getUsedItemsGroupsDTOs(List<ProcessItemInventory> poInventory) {
+		List<UsedItemsGroupDTO> usedItemsGroups = new ArrayList<UsedItemsGroupDTO>();
+		for(ProcessItemInventory processItemRow: poInventory) {
+			List<UsedItemDTO> usedItems = new ArrayList<UsedItemDTO>();
+			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
+				UsedItemDTO usedItem = new UsedItemDTO();
+				StorageDTO storage = new StorageDTO();
+				usedItem.setStorage(storage);
+				storage.setId(storagesRow.getId());
+				storage.setVersion(storagesRow.getVersion());
+				usedItem.setNumberUsedUnits(storagesRow.getNumberUnits());
+				usedItems.add(usedItem);
+			}
+			UsedItemsGroupDTO usedItemsGroup = new UsedItemsGroupDTO();
+			usedItemsGroup.setUsedItems(usedItems);
+			usedItemsGroups.add(usedItemsGroup);
 
 		}
 		return usedItemsGroups;
@@ -532,6 +574,31 @@ public class TestService {
 			}
 			
 			processItems[i].setStorageForms(storageForms);
+		}
+		return processItems;
+	}
+	public List<ProcessItemDTO> getProcessItemsDTOs(List<ProcessItemInventory> poInventory) {
+		List<ProcessItemDTO> processItems = new ArrayList<>();
+		List<StorageDTO> storageForms;
+		for(ProcessItemInventory processItemRow: poInventory) {
+			//build process item
+			ProcessItemDTO processItem = new ProcessItemDTO();
+			processItems.add(processItem);
+			processItem.setItem(processItemRow.getItem());
+			processItem.setMeasureUnit(processItemRow.getItem().getMeasureUnit());
+			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
+			storageForms = new ArrayList<StorageDTO>();
+			int j=0;
+			for(StorageInventoryRow storageRow: storagesRows) {
+				StorageDTO storage = new StorageDTO();
+				storageForms.add(storage);
+				storage.setUnitAmount(storageRow.getUnitAmount());
+				storage.setNumberUnits(storageRow.getNumberUnits());
+				storage.setWarehouseLocation(new BasicValueEntity<Warehouse>(getWarehouse()));
+				
+				j++;
+			}			
+			processItem.setStorageForms(storageForms);
 		}
 		return processItems;
 	}

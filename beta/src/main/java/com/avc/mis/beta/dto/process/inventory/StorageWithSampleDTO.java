@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import com.avc.mis.beta.dto.generic.OrdinalAmount;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
@@ -19,6 +20,7 @@ import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -26,8 +28,9 @@ import lombok.ToString;
  *
  */
 @Data
-@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@ToString(callSuper = true)
 public class StorageWithSampleDTO extends StorageDTO {
 	
 	private static final Integer SAMPLE_SCALE = 5;
@@ -138,6 +141,11 @@ public class StorageWithSampleDTO extends StorageDTO {
 				.setScale(SAMPLE_SCALE, RoundingMode.HALF_DOWN);
 	}
 	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return StorageWithSample.class;
+	}
+	
 
 	@Override
 	public StorageWithSample fillEntity(Object entity) {
@@ -146,7 +154,7 @@ public class StorageWithSampleDTO extends StorageDTO {
 			storage = (StorageWithSample) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be StorageWithSample class");
+			throw new IllegalStateException("Param has to be StorageWithSample class");
 		}
 		super.fillEntity(storage);
 		storage.setSampleContainerWeights(getSampleContainerWeights());

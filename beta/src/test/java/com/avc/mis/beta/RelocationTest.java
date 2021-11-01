@@ -16,6 +16,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
@@ -64,12 +65,14 @@ public class RelocationTest {
 
 	@Test
 	void transferWithCountTest() {
-		Receipt receipt = service.addBasicCashewReceipt();
+		ReceiptDTO receipt = service.addBasicCashewReceipt();
 		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
 		StorageRelocation relocation = new StorageRelocation();
-		relocation.setPoCode((PoCode) receipt.getPoCode());
+		PoCode poCode = new PoCode();
+		poCode.setId(receipt.getPoCode().getId());
+		relocation.setPoCode(poCode);
 		relocation.setRecordedTime(LocalDateTime.now());
 		relocation.setProductionLine(service.getProductionLine(ProductionFunctionality.RAW_STATION));
 

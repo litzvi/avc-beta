@@ -11,9 +11,11 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.SampleItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -98,6 +100,11 @@ public class SampleItemDTO extends SubjectDataDTO {
 						.multiply(iw.getNumberUnits()))
 				.reduce(BigDecimal::add)
 				.map(s -> new AmountWithUnit(s, this.measureUnit));
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return SampleItem.class;
 	}
 	
 }

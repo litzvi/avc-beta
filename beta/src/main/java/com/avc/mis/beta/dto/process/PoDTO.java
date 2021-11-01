@@ -16,6 +16,7 @@ import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
 import com.avc.mis.beta.dto.processInfo.GeneralProcessInfo;
 import com.avc.mis.beta.dto.processInfo.OrderProcessInfo;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
@@ -83,6 +84,11 @@ public class PoDTO extends PoProcessDTO {
 	
 	public void setOrderProcessInfo(OrderProcessInfo info) {
 		this.closed = info.isClosed();
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return PO.class;
 	}
 	
 	@Override

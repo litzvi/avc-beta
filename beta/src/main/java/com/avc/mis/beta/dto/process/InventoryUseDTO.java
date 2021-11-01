@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.process;
 
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.process.InventoryUse;
 
 import lombok.Data;
@@ -22,6 +23,11 @@ public class InventoryUseDTO extends RelocationProcessDTO {
 	
 	public InventoryUseDTO(InventoryUse inventoryUse) {
 		super(inventoryUse);
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return InventoryUse.class;
 	}
 	
 	@Override

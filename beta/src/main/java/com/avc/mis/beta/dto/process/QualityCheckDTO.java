@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.process.collection.CashewItemQualityDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.processInfo.QualityCheckInfo;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.process.QualityCheck;
 
 import lombok.Data;
@@ -71,10 +72,10 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 		this.sampleTaker = info.getSampleTaker();
 	}
 		
-	@Override
-	public List<ProcessItemDTO> getProcessItems() {
-		return super.getProcessItems();
-	}
+//	@Override
+//	public List<ProcessItemDTO> getProcessItems() {
+//		return super.getProcessItems();
+//	}
 	
 	@Override
 	public void setProcessItems(List<ProcessItemDTO> processItems) {
@@ -103,6 +104,11 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 //		setProcessItems(processItems);
 ////		this.processItems.sort(Ordinal.ordinalComparator());
 //	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return QualityCheck.class;
+	}
 	
 	
 	@Override

@@ -5,7 +5,9 @@ package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.BankAccount;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,5 +34,10 @@ public class BankAccountDTO extends DataDTO {
 		this.accountNo = account.getAccountNo();
 		this.ownerName = account.getOwnerName();
 		this.branch = new BankBranchDTO(account.getBranch());
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return BankAccount.class;
 	}
 }

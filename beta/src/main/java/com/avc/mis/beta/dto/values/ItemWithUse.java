@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
 
@@ -40,13 +41,18 @@ public class ItemWithUse extends ValueDTO {
 	}
 	
 	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return Item.class;
+	}
+	
+	@Override
 	public Item fillEntity(Object entity) {
 		Item item;
 		if(entity instanceof Item) {
 			item = (Item) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be Item class");
+			throw new IllegalStateException("Param has to be Item class");
 		}
 		super.fillEntity(item);
 		

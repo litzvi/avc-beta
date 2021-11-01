@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.process.collection;
 import java.time.Instant;
 
 import com.avc.mis.beta.dto.GeneralInfoDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.collection.ApprovalTask;
@@ -48,5 +49,10 @@ public class ApprovalTaskDTO extends GeneralInfoDTO {
 		this.userName = approval.getUser().getPerson().getName();
 		this.decisionType = approval.getDecision().name();
 		this.processSnapshot = approval.getProcessSnapshot();
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ApprovalTask.class;
 	}
 }

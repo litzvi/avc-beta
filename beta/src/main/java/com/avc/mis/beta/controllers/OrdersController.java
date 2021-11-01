@@ -9,6 +9,7 @@ import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
+import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
@@ -101,19 +102,19 @@ public class OrdersController {
 	}
 	
 	@PostMapping(value="/receiveCashewOrder")
-	public ReceiptDTO receiptCashewOrder(@RequestBody Receipt receipt) {
+	public ReceiptDTO receiptCashewOrder(@RequestBody ReceiptDTO receipt) {
 		orderRecipt.addCashewOrderReceipt(receipt);
 		return orderRecipt.getReceiptByProcessId(receipt.getId());
 	}
 	
 	@PostMapping(value="/receiveCashewNoOrder")
-	public ReceiptDTO addCashewReceipt(@RequestBody Receipt receipt) {
-		orderRecipt.addCashewReceipt(receipt);
-		return orderRecipt.getReceiptByProcessId(receipt.getId());
+	public ReceiptDTO addCashewReceipt(@RequestBody ReceiptDTO receipt) {
+		Integer id = orderRecipt.addCashewReceipt(receipt);
+		return orderRecipt.getReceiptByProcessId(id);
 	}
 	
 	@PostMapping(value="/receiveGeneralOrder")
-	public ReceiptDTO receiveGeneralOrder(@RequestBody Receipt receipt) {
+	public ReceiptDTO receiveGeneralOrder(@RequestBody ReceiptDTO receipt) {
 		orderRecipt.addGeneralOrderReceipt(receipt);
 		return orderRecipt.getReceiptByProcessId(receipt.getId());
 	}
@@ -132,7 +133,7 @@ public class OrdersController {
 	}
 	
 	@PutMapping(value="/editReciving")
-	public ReceiptDTO editReciving(@RequestBody Receipt receipt) {
+	public ReceiptDTO editReciving(@RequestBody ReceiptDTO receipt) {
 		orderRecipt.editReceipt(receipt);
 		return orderRecipt.getReceiptByProcessId(receipt.getId());
 	}
@@ -144,7 +145,7 @@ public class OrdersController {
 	}
 	
 	@PostMapping("/receiveExtra/{id}")
-	public ReceiptDTO receiveExtra(@RequestBody Map<String, Map<String, ExtraAdded[]>> listChanges, @PathVariable("id") int reciptId) {
+	public ReceiptDTO receiveExtra(@RequestBody Map<String, Map<String, List<ExtraAddedDTO>>> listChanges, @PathVariable("id") int reciptId) {
 		listChanges.forEach((k, v) -> {
 					orderRecipt.addExtra(v.get("extraAdded"), Integer.parseInt(k));
 		});

@@ -3,15 +3,14 @@
  */
 package com.avc.mis.beta.dto.item;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.LinkDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
-import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.BillOfMaterials;
 import com.avc.mis.beta.entities.item.BomLine;
 import com.avc.mis.beta.entities.item.Item;
@@ -57,7 +56,11 @@ public class BillOfMaterialsDTO extends LinkDTO {
 		}
 	}
 	
-	@JsonIgnore
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return BillOfMaterials.class;
+	}
+	
 	@Override
 	public BillOfMaterials fillEntity(Object entity) {	
 		BillOfMaterials billOfMaterials;
@@ -65,7 +68,7 @@ public class BillOfMaterialsDTO extends LinkDTO {
 			billOfMaterials = (BillOfMaterials) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be BillOfMaterials class");
+			throw new IllegalStateException("Param has to be BillOfMaterials class");
 		}
 		super.fillEntity(billOfMaterials);
 		

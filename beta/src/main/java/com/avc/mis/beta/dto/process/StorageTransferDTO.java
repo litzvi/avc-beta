@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.entities.process.collection.ItemCount;
 import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
@@ -59,10 +60,10 @@ public class StorageTransferDTO extends TransactionProcessDTO<ProcessItemDTO> {
 
 	}
 	
-	@Override
-	public List<ProcessItemDTO> getProcessItems() {
-		return super.getProcessItems();
-	}
+//	@Override
+//	public List<ProcessItemDTO> getProcessItems() {
+//		return super.getProcessItems();
+//	}
 	
 	@Override
 	public void setProcessItems(List<ProcessItemDTO> processItems) {
@@ -80,7 +81,10 @@ public class StorageTransferDTO extends TransactionProcessDTO<ProcessItemDTO> {
 		super.setUsedItemGroups(usedItemGroups);
 	}
 
-
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return StorageTransfer.class;
+	}
 	
 	@Override
 	public String getProcessTypeDescription() {

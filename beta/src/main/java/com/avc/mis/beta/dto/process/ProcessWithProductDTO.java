@@ -9,6 +9,7 @@ import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Data;
@@ -29,8 +30,10 @@ import lombok.ToString;
 @NoArgsConstructor
 public abstract class ProcessWithProductDTO<T extends ProcessItemDTO> extends PoProcessDTO {
 	
-	@Setter(value = AccessLevel.PUBLIC) @Getter(value = AccessLevel.PROTECTED)
+
+//	@Setter(value = AccessLevel.PUBLIC) @Getter(value = AccessLevel.PROTECTED)
 	private List<T> processItems;
+	
 	
 //	public ProcessWithProductDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
 //			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
@@ -46,6 +49,7 @@ public abstract class ProcessWithProductDTO<T extends ProcessItemDTO> extends Po
 //	}
 	
 	
+	
 	public ProcessWithProductDTO(@NonNull ProcessWithProduct<?> process) {
 		super(process);
 	}
@@ -57,7 +61,7 @@ public abstract class ProcessWithProductDTO<T extends ProcessItemDTO> extends Po
 			processWithProduct = (ProcessWithProduct<? extends ProcessItem>) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be ProcessWithProduct class");
+			throw new IllegalStateException("Param has to be ProcessWithProduct class");
 		}
 		super.fillEntity(processWithProduct);
 		

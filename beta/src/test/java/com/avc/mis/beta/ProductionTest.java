@@ -22,7 +22,9 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
+import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.codes.PoCode;
@@ -54,28 +56,31 @@ public class ProductionTest {
 //	@Disabled
 	@Test
 	void cleaningTest() {
-		Receipt receipt = service.addBasicCashewReceipt();
+		ReceiptDTO receipt = service.addBasicCashewReceipt();
 		infoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		infoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
-		ProductionProcess process = new ProductionProcess();
-		process.setPoCode((PoCode) receipt.getPoCode());
+		ProductionProcessDTO process = new ProductionProcessDTO();
+		PoCodeBasic poCode = new PoCodeBasic();
+		poCode.setId(receipt.getPoCode().getId());
+		process.setPoCode(poCode);
 		process.setRecordedTime(LocalDateTime.now());
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-		process.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-		process.setProcessItems(service.getProcessItems(poInventory));
+		process.setUsedItemGroups(TestService.getUsedItemsGroupsDTOs(poInventory));
+		process.setProcessItems(service.getProcessItemsDTOs(poInventory));
 //		process.setWeightedPos(service.getProductWeightedPos(2));
 		
+		Integer processId;
 		try {
-			productionService.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
+			processId = productionService.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw e;
 		}
 		
-		ProductionProcessDTO expected = new ProductionProcessDTO(process);		
-		ProductionProcessDTO actual = productionService.getProductionProcess(process.getId());		
+		ProductionProcessDTO expected = process;		
+		ProductionProcessDTO actual = productionService.getProductionProcess(processId);		
 
 		assertEquals(expected, actual, "Cleaning production process not added or fetched correctly");
 		
@@ -98,7 +103,7 @@ public class ProductionTest {
 		int iterations = 2048;
 		long totalTime = 0;
 		long queryTime;
-		Receipt receipt; List<ProcessItemInventory> poInventory; long start, end;
+		ReceiptDTO receipt; List<ProcessItemInventory> poInventory; long start, end;
 		for(int i=1; i<= iterations; i++) {
 			System.out.println("iteration: " + i);
 //			-------------------------------------
@@ -106,15 +111,18 @@ public class ProductionTest {
 			infoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 			infoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 			
-			ProductionProcess process = new ProductionProcess();
-			process.setPoCode((PoCode) receipt.getPoCode());
+			ProductionProcessDTO process = new ProductionProcessDTO();
+			PoCodeBasic poCode = new PoCodeBasic();
+			poCode.setId(receipt.getPoCode().getId());
+			process.setPoCode(poCode);
 			process.setRecordedTime(LocalDateTime.now());
 			poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-			process.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-			process.setProcessItems(service.getProcessItems(poInventory));
+			process.setUsedItemGroups(TestService.getUsedItemsGroupsDTOs(poInventory));
+			process.setProcessItems(service.getProcessItemsDTOs(poInventory));
 			
+			Integer processId;
 			try {
-				productionService.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
+				processId = productionService.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -141,19 +149,22 @@ public class ProductionTest {
 	
 //	@RepeatedTest(2048)
 	void cleaning() {
-		Receipt receipt = service.addBasicCashewReceipt();
+		ReceiptDTO receipt = service.addBasicCashewReceipt();
 		infoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		infoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
-		ProductionProcess process = new ProductionProcess();
-		process.setPoCode((PoCode) receipt.getPoCode());
+		ProductionProcessDTO process = new ProductionProcessDTO();
+		PoCodeBasic poCode = new PoCodeBasic();
+		poCode.setId(receipt.getPoCode().getId());
+		process.setPoCode(poCode);
 		process.setRecordedTime(LocalDateTime.now());
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-		process.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-		process.setProcessItems(service.getProcessItems(poInventory));
+		process.setUsedItemGroups(TestService.getUsedItemsGroupsDTOs(poInventory));
+		process.setProcessItems(service.getProcessItemsDTOs(poInventory));
 		
+		Integer processId;
 		try {
-			productionService.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
+			processId = productionService.addProductionProcess(process, ProcessName.CASHEW_CLEANING);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -7,6 +7,7 @@ import java.util.Currency;
 
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
@@ -62,5 +63,10 @@ public class PoCodeDTO extends ValueDTO {
 //			return this.display;
 //		}
 		return String.format("%s-%s%s", this.contractType.getCode(), this.code, this.contractType.getSuffix());
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return BasePoCode.class;
 	}
 }

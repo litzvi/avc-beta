@@ -12,6 +12,7 @@ import com.avc.mis.beta.entities.process.GeneralProcess;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  * Abstract class for entities representing information notifying about general processes -
@@ -27,6 +28,7 @@ import lombok.EqualsAndHashCode;
 @MappedSuperclass
 public abstract class GeneralInfoEntity extends AuditedEntity {
 	
+	@ToString.Exclude
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "processId", updatable = false)
 	private GeneralProcess process;

@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Fax;
 
 import lombok.Data;
@@ -27,5 +28,10 @@ public class FaxDTO extends SubjectDataDTO {
 	public FaxDTO(@NonNull Fax fax) {
 		super(fax.getId(), fax.getVersion(), fax.getOrdinal());
 		this.value = fax.getValue();
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return Fax.class;
 	}
 }

@@ -60,7 +60,7 @@ public class Item extends ValueEntity implements ValueInterface {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "defaultMeasureUnit", nullable = false)
 	@NotNull(message = "Item has to have a default measure unit")
-	private MeasureUnit measureUnit = MeasureUnit.UNIT;
+	private MeasureUnit measureUnit;
 	
 	@AttributeOverrides({
         @AttributeOverride(name="amount",

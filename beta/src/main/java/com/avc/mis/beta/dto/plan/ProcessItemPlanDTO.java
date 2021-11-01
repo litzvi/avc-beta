@@ -4,8 +4,8 @@
 package com.avc.mis.beta.dto.plan;
 
 import com.avc.mis.beta.dto.RankedAuditedDTO;
-import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.plan.ProcessItemPlan;
@@ -48,7 +48,11 @@ public class ProcessItemPlanDTO extends RankedAuditedDTO {
 			this.numberUnits = processItemPlan.getNumberUnits().clone();
 	}
 	
-	@JsonIgnore
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ProcessItemPlan.class;
+	}
+	
 	@Override
 	public ProcessItemPlan fillEntity(Object entity) {
 		ProcessItemPlan processItemPlan;
@@ -56,7 +60,7 @@ public class ProcessItemPlanDTO extends RankedAuditedDTO {
 			processItemPlan = (ProcessItemPlan) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be ProcessItemPlan class");
+			throw new IllegalStateException("Param has to be ProcessItemPlan class");
 		}
 		super.fillEntity(processItemPlan);
 		

@@ -43,12 +43,15 @@ public class ProductionProcesses implements ProductionProcessService {
 	
 	@Override
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void addProductionProcess(ProductionProcess process, ProcessName processName) {
-		process.setProcessType(dao.getProcessTypeByValue(processName));
-		dao.addTransactionProcessEntity(process);	
-		dao.checkUsedInventoryAvailability(process);
-		dao.setPoWeights(process);
-		dao.setUsedProcesses(process);
+	public Integer addProductionProcess(ProductionProcessDTO process, ProcessName processName) {
+		process.setProcessName(processName);
+//		process.setProcessType(dao.getProcessTypeByValue(processName));
+		Integer processId = dao.addTransactionProcessEntity(process, ProductionProcess::new);	
+		dao.checkUsedInventoryAvailability(processId);
+		dao.setTransactionPoWeights(processId);
+		dao.setTransactionUsedProcesses(processId);
+		
+		return processId;
 	}
 	
 	@Override
@@ -66,14 +69,14 @@ public class ProductionProcesses implements ProductionProcessService {
 		
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	@Override
-	public void editProductionProcess(ProductionProcess process) {
+	public void editProductionProcess(ProductionProcessDTO process) {
 		dao.checkRemovingUsedProduct(process);
 		
-		dao.editTransactionProcessEntity(process);		
+		dao.editTransactionProcessEntity(process, ProductionProcess::new);		
 		dao.checkUsingProcesessConsistency(process);
-		dao.checkUsedInventoryAvailability(process);
-		dao.setPoWeights(process);
-		dao.setUsedProcesses(process);
+		dao.checkUsedInventoryAvailability(process.getId());
+		dao.setTransactionPoWeights(process.getId());
+		dao.setTransactionUsedProcesses(process.getId());
 	}
 
 	//----------------------------Duplicate in ProductionProcessReports - Should remove------------------------------------------

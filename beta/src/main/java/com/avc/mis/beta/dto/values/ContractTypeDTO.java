@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.values;
 import java.util.Currency;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.values.ContractType;
 
@@ -50,6 +51,11 @@ public class ContractTypeDTO extends ValueDTO {
 
 	public String getSuffix() {
 		return suffix != null ? suffix : "";
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ContractType.class;
 	}
 	
 }

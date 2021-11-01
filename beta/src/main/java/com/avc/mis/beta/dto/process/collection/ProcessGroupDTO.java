@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO class for ProcessGroup which contains information used by all groups in collection of groups in a processes.
@@ -19,6 +20,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public abstract class ProcessGroupDTO extends RankedAuditedDTO {
 
 	private String groupName;
@@ -37,6 +39,22 @@ public abstract class ProcessGroupDTO extends RankedAuditedDTO {
 		super(group.getId(), group.getVersion(), group.getOrdinal());
 		this.groupName = group.getGroupName();
 		this.tableView = group.isTableView();
+	}
+	
+	@Override
+	public ProcessGroup fillEntity(Object entity) {
+		ProcessGroup processGroup;
+		if(entity instanceof ProcessGroup) {
+			processGroup = (ProcessGroup) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be ProcessGroup class");
+		}
+		super.fillEntity(processGroup);
+		processGroup.setGroupName(getGroupName());
+		processGroup.setTableView(isTableView());
+		
+		return processGroup;
 	}
 	
 }

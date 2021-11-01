@@ -44,7 +44,7 @@ public abstract class ProcessGroup extends ProcessInfoEntity {
 	@JsonIgnore
 	private String dtype;
 
-	@Setter(value = AccessLevel.PROTECTED) 
+//	@Setter(value = AccessLevel.PROTECTED) 
 	@JsonIgnore
 	@Column(nullable = false)
 	private boolean tableView = false;

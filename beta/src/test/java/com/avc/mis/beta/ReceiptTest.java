@@ -6,6 +6,10 @@ package com.avc.mis.beta;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.process.ReceiptDTO;
+import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
@@ -35,17 +40,22 @@ import com.avc.mis.beta.service.Suppliers;
 @WithUserDetails("eli")
 public class ReceiptTest {
 
-	@Autowired TestService service;	
-	@Autowired Receipts receipts;	
-	@Autowired Orders orders;	
-	@Autowired Suppliers suppliers;
-	@Autowired ProcessInfoWriter processInfoWriter;
-	
+	@Autowired
+	TestService service;
+	@Autowired
+	Receipts receipts;
+	@Autowired
+	Orders orders;
+	@Autowired
+	Suppliers suppliers;
+	@Autowired
+	ProcessInfoWriter processInfoWriter;
+
 //	@Disabled
 	@Test
 	void receiptTest() {
-		//insert order receipt without order
-		Receipt receipt;
+		// insert order receipt without order
+		ReceiptDTO receipt;
 		try {
 			receipt = service.addBasicCashewReceipt();
 		} catch (Exception e) {
@@ -54,12 +64,12 @@ public class ReceiptTest {
 			throw e;
 		}
 		ReceiptDTO expected;
-		expected = new ReceiptDTO(receipt);
-		ReceiptDTO actual = receipts.getReceiptByProcessId(receipt.getId());
-		assertEquals(expected, actual, "failed test adding receipt without order");
+		expected = receipt;
+		ReceiptDTO actualReceipt = receipts.getReceiptByProcessId(receipt.getId());
+		assertEquals(expected, actualReceipt, "failed test adding receipt without order");
 		service.cleanup(receipt);
 
-		//insert order receipt for order
+		// insert order receipt for order
 		PO po = service.addBasicCashewOrder();
 		System.out.println("po code: " + po.getPoCode().getId());
 		try {
@@ -69,26 +79,28 @@ public class ReceiptTest {
 			e.printStackTrace();
 			throw e;
 		}
-		expected = new ReceiptDTO(receipt);
-		actual = receipts.getReceiptByProcessId(receipt.getId());
-		assertEquals(expected, actual, "failed test adding order receipt");
-		
-		//change receipt process life cycle to lock process for editing
+		expected = receipt;
+		actualReceipt = receipts.getReceiptByProcessId(receipt.getId());
+		assertEquals(expected, actualReceipt, "failed test adding order receipt");
+
+		// change receipt process life cycle to lock process for editing
 		processInfoWriter.setEditStatus(EditStatus.LOCKED, po.getId());
-				
-		//add extra bonus
-		ExtraAdded[] added = new ExtraAdded[1];
-		added[0] = new ExtraAdded();
-		added[0].setUnitAmount(BigDecimal.valueOf(500));//because database is set to scale 2
-		added[0].setNumberUnits(new BigDecimal(4).setScale(2));
-		receipts.addExtra(added, receipt.getReceiptItems()[0].getId());
-		receipt.getReceiptItems()[0].setExtraAdded(added);;
+
+		// add extra bonus
+		List<ExtraAddedDTO> added = new ArrayList<>();
+		ExtraAddedDTO add = new ExtraAddedDTO();
+		added.add(add);
+		add.setUnitAmount(BigDecimal.valueOf(500));// because database is set to scale 2
+		add.setNumberUnits(new BigDecimal(4).setScale(2));
+		receipts.addExtra(added, actualReceipt.getReceiptItems().get(0).getId());
+		receipt.getReceiptItems().get(0).setExtraAdded(added);
+		;
 //		receipt.getReceiptItems()[0]
 //				.setStorageForms(ArrayUtils.addAll(receipt.getReceiptItems()[0].getStorageForms(), added));
-		expected = new ReceiptDTO(receipt);
-		actual = receipts.getReceiptByProcessId(receipt.getId());
-		assertEquals(expected, actual, "failed test adding extra bonus");
-		service.cleanup(receipt);		
-		service.cleanup(po);		
+		expected = receipt;
+		actualReceipt = receipts.getReceiptByProcessId(receipt.getId());
+		assertEquals(expected, actualReceipt, "failed test adding extra bonus");
+		service.cleanup(receipt);
+		service.cleanup(po);
 	}
 }

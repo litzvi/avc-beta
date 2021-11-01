@@ -38,9 +38,9 @@ public class ContainerArrivals {
 	@Autowired private ContainerArrivalRepository containerArrivalRepository;
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addArrival(ContainerArrival arrival) {
-		arrival.setProcessType(dao.getProcessTypeByValue(ProcessName.CONTAINER_ARRIVAL));
-		dao.addGeneralProcessEntity(arrival);			
+	public Integer addArrival(ContainerArrivalDTO arrival) {
+		arrival.setProcessName(ProcessName.CONTAINER_ARRIVAL);
+		return dao.addGeneralProcessEntity(arrival, ContainerArrival::new);			
 	}
 	
 	public ContainerArrivalDTO getArrival(int processId) {
@@ -60,8 +60,8 @@ public class ContainerArrivals {
 	 * @param arrival ContainerArrival updated with edited state
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editArrival(ContainerArrival arrival) {
-		dao.editGeneralProcessEntity(arrival);
+	public void editArrival(ContainerArrivalDTO arrival) {
+		dao.editGeneralProcessEntity(arrival, ContainerArrival::new);
 	}
 	
 	//----------------------------Duplicate in ContainerArrivalReports - Should remove------------------------------------------

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.processInfo.ContainerBookingInfo;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.process.ContainerBooking;
 
 import lombok.Data;
@@ -51,6 +52,11 @@ public class ContainerBookingDTO extends GeneralProcessDTO {
 		this.bookingNumber = info.getBookingNumber();
 		this.bookingDate = info.getBookingDate();
 		this.personInCharge = info.getPersonInCharge();		
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ContainerBooking.class;
 	}
 
 	

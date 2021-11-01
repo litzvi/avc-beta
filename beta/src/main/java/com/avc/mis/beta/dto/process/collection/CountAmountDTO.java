@@ -7,7 +7,9 @@ import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.CountAmount;
 
 import lombok.Data;
@@ -36,13 +38,18 @@ public class CountAmountDTO extends RankedAuditedDTO {
 	}
 	
 	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return CountAmount.class;
+	}
+	
+	@Override
 	public CountAmount fillEntity(Object entity) {
 		CountAmount countAmount;
 		if(entity instanceof CountAmount) {
 			countAmount = (CountAmount) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be CountAmount class");
+			throw new IllegalStateException("Param has to be CountAmount class");
 		}
 		super.fillEntity(countAmount);
 		countAmount.setAmount(getAmount());

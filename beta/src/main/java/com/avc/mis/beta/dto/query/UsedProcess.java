@@ -22,13 +22,15 @@ public class UsedProcess {
 
 	ProcessBasic<? extends PoProcess> usedProcess;
 	LocalDateTime recordedTime;
+	LocalDateTime usingProcessRecordedTime;
 
 	public UsedProcess(
 			Integer usedProcessId, Integer usedProcessVersion, ProcessName processName, Class<? extends PoProcess> ProcessClazz, 
-			LocalDateTime recordedTime) {
+			LocalDateTime recordedTime, LocalDateTime usingProcessRecordedTime) {
 		super();
 		this.usedProcess = new ProcessBasic<>(usedProcessId, usedProcessVersion, processName, ProcessClazz);
 		this.recordedTime = recordedTime;
+		this.usingProcessRecordedTime = usingProcessRecordedTime;
 	}	
 
 	@JsonIgnore

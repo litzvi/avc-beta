@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -20,6 +21,7 @@ import lombok.ToString;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@NoArgsConstructor
 @ToString(callSuper = true)
 public class PoCodeBasic extends BasicValueDTO {
 
@@ -28,12 +30,6 @@ public class PoCodeBasic extends BasicValueDTO {
 	private String contractTypeSuffix;
 	private String supplierName;	
 	
-	/**
-	 * @param id
-	 * @param contractTypeCode
-	 * @param contractTypeSuffix
-	 * @param supplierName
-	 */
 	public PoCodeBasic(Integer id, String code,
 			String contractTypeCode, String contractTypeSuffix, String supplierName
 			) {
@@ -44,9 +40,6 @@ public class PoCodeBasic extends BasicValueDTO {
 		this.contractTypeSuffix = contractTypeSuffix != null ? contractTypeSuffix : "";
 	}	
 	
-	/**
-	 * @param poCode
-	 */
 	public PoCodeBasic(BasePoCode poCode) {
 		super(poCode.getId());
 		this.code = poCode.getCode();
@@ -65,7 +58,6 @@ public class PoCodeBasic extends BasicValueDTO {
 		return String.format("%s-%s%s", this.contractTypeCode, this.getCode(), this.contractTypeSuffix);
 	}
 	
-	@JsonIgnore
 	@Override
 	public BasePoCode fillEntity(Object entity) {
 		BasePoCode basePoCode;
@@ -73,10 +65,9 @@ public class PoCodeBasic extends BasicValueDTO {
 			basePoCode = (BasePoCode) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be BasePoCode class");
+			throw new IllegalStateException("Param has to be BasePoCode class");
 		}
 		super.fillEntity(basePoCode);
-		basePoCode.setId(getId());
 		
 		return basePoCode;
 	}

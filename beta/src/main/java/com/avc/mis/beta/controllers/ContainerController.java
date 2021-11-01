@@ -110,13 +110,13 @@ public class ContainerController {
 	}
 	
 	@PostMapping("/addContainerArrival")
-	public ContainerArrivalDTO addContainerArrival(@RequestBody ContainerArrival arrival) {
-		containerArrivals.addArrival(arrival);
-		return containerArrivals.getArrival(arrival.getId());
+	public ContainerArrivalDTO addContainerArrival(@RequestBody ContainerArrivalDTO arrival) {
+		Integer arrivalId = containerArrivals.addArrival(arrival);
+		return containerArrivals.getArrival(arrivalId);
 	}
 	
 	@PutMapping("/editContainerArrival")
-	public ContainerArrivalDTO editContainerArrival(@RequestBody ContainerArrival arrival) {
+	public ContainerArrivalDTO editContainerArrival(@RequestBody ContainerArrivalDTO arrival) {
 		containerArrivals.editArrival(arrival);
 		return containerArrivals.getArrival(arrival.getId());
 	}

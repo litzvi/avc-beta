@@ -6,8 +6,10 @@ package com.avc.mis.beta.dto.process.collection;
 import java.time.Instant;
 
 import com.avc.mis.beta.dto.GeneralInfoDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.UserMessage;
 
 import lombok.Data;
@@ -47,5 +49,10 @@ public class UserMessageDTO extends GeneralInfoDTO {
 		super(message);
 		this.userName = message.getUser().getPerson().getName();
 		this.label = message.getLabel();
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return UserMessage.class;
 	}
 }

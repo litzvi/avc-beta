@@ -9,10 +9,12 @@ import java.util.Currency;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.ItemWithMeasureUnit;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 import com.avc.mis.beta.entities.process.inventory.Storage;
@@ -102,6 +104,11 @@ public class OrderItemDTO extends SubjectDataDTO {
 		else {
 			this.amountReceived = null;		
 		}
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return OrderItem.class;
 	}
 	
 }

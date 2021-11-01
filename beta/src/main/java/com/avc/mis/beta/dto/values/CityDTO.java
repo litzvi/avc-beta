@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.values.City;
 
 import lombok.EqualsAndHashCode;
@@ -31,5 +32,10 @@ public class CityDTO extends ValueDTO {
 		super(city.getId());
 		this.value = city.getValue();
 		this.countryName = city.getCountry().getValue();
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return City.class;
 	}
 }

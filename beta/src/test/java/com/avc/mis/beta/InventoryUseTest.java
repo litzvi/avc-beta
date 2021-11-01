@@ -17,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
+import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
@@ -55,7 +56,7 @@ public class InventoryUseTest {
 	@Test
 	void generalInventoryUseTest() {
 		PO po = service.addBasicGeneralOrder();
-		Receipt receipt = service.getGeneralOrderReceipt(po.getPoCode().getId());
+		ReceiptDTO receipt = service.getGeneralOrderReceipt(po.getPoCode().getId());
 		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
@@ -63,7 +64,7 @@ public class InventoryUseTest {
 		inventoryUse.setRecordedTime(LocalDateTime.now());
 		GeneralPoCode poCode = new GeneralPoCode();
 		poCode.setId(receipt.getPoCode().getId());
-		inventoryUse.setPoCode(receipt.getPoCode());
+		inventoryUse.setPoCode(poCode);
 		inventoryUse.setProductionLine(service.getProductionLine(ProductionFunctionality.GENERAL_USE));
 
 
@@ -108,7 +109,14 @@ public class InventoryUseTest {
 	@Test
 	void productInventoryUseTest() {
 		PO po = service.addBasicCashewOrder();
-		Receipt receipt = service.getCashewOrderReceipt(po.getPoCode().getId());
+		ReceiptDTO receipt;
+		try {
+			receipt = service.getCashewOrderReceipt(po.getPoCode().getId());
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
@@ -116,7 +124,7 @@ public class InventoryUseTest {
 		inventoryUse.setRecordedTime(LocalDateTime.now());
 		PoCode poCode = new PoCode();
 		poCode.setId(receipt.getPoCode().getId());
-		inventoryUse.setPoCode(receipt.getPoCode());
+		inventoryUse.setPoCode(poCode);
 		inventoryUse.setProductionLine(service.getProductionLine(ProductionFunctionality.PRODUCT_USE));
 
 

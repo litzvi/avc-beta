@@ -12,6 +12,7 @@ import com.avc.mis.beta.entities.item.Item;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 
@@ -21,6 +22,7 @@ import lombok.ToString;
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@NoArgsConstructor
 @ToString(callSuper = true)
 public class ItemWithUnit extends BasicValueEntity<Item> {
 

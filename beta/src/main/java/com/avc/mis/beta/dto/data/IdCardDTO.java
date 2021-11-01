@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.data;
 import java.time.LocalDate;
 
 import com.avc.mis.beta.dto.DataDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.IdCard;
 import com.avc.mis.beta.entities.values.Country;
 
@@ -38,5 +39,10 @@ public class IdCardDTO extends DataDTO {
 		this.dateOfIssue = idCard.getDateOfIssue();
 		this.placeOfIssue = idCard.getPlaceOfIssue();
 		this.nationality = idCard.getNationality();
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return IdCard.class;
 	}
 }

@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.values.ShippingPort;
 
 import lombok.EqualsAndHashCode;
@@ -33,5 +34,10 @@ public class ShippingPortDTO extends ValueDTO {
 		super(id);
 		this.value = value;
 		this.code = code;
-	}	
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ShippingPort.class;
+	}
 }

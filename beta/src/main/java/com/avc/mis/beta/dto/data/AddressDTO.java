@@ -5,7 +5,9 @@ package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Address;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -31,5 +33,10 @@ public class AddressDTO extends SubjectDataDTO {
 		this.streetAddress = address.getStreetAddress();
 		if(address.getCity() != null)
 			this.city = new CityDTO(address.getCity());
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return Address.class;
 	}
 }

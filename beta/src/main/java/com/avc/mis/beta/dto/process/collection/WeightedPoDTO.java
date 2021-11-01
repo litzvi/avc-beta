@@ -7,7 +7,9 @@ import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.WeightedPo;
 
 import lombok.Data;
@@ -37,6 +39,11 @@ public class WeightedPoDTO extends SubjectDataDTO {
 		super(weightedPo.getId(), weightedPo.getVersion(), weightedPo.getOrdinal());
 		this.poCode = new PoCodeBasic(weightedPo.getPoCode());
 		this.weight = weightedPo.getWeight().setScale(MeasureUnit.SCALE);
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return WeightedPo.class;
 	}
 
 }

@@ -31,7 +31,6 @@ public abstract class LinkDTO extends BaseEntityDTO {
 		super(entity);
 	}
 
-	@JsonIgnore
 	@Override
 	public LinkEntity fillEntity(Object entity) {
 		LinkEntity linkEntity;
@@ -39,7 +38,7 @@ public abstract class LinkDTO extends BaseEntityDTO {
 			linkEntity = (LinkEntity) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be LinkEntity class");
+			throw new IllegalStateException("Param has to be LinkEntity class");
 		}
 		super.fillEntity(linkEntity);
 		

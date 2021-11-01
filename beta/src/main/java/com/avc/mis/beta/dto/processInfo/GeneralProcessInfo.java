@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.stream.Stream;
 
+import com.avc.mis.beta.dto.BasicDataDTO;
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -26,7 +27,7 @@ import lombok.Value;
  */
 @Value
 @EqualsAndHashCode(callSuper = true)
-public class GeneralProcessInfo extends DataDTO {
+public class GeneralProcessInfo extends BasicDataDTO {
 
 	Instant createdDate;
 	String userRecording;

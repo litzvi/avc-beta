@@ -13,8 +13,10 @@ import com.avc.mis.beta.dto.process.inventory.MovedItemTableDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.utilities.ListGroup;
@@ -151,5 +153,10 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 	@Override
 	public void setList(List<StorageMoveDTO> list) {
 		setStorageMoves(list);
+	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return StorageMovesGroup.class;
 	}
 }

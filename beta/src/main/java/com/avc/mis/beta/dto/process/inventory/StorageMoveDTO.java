@@ -8,8 +8,10 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -102,5 +104,10 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseInterf
 //	public BasicValueEntity<Warehouse> getOldWarehouseLocation() {
 //		return getStorage() == null ? null: getStorage().getWarehouseLocation();
 //	}
+	
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return StorageMove.class;
+	}
 
 }

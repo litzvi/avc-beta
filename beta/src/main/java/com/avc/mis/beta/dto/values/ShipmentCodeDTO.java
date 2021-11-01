@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
 
 import lombok.EqualsAndHashCode;
@@ -42,14 +43,10 @@ public class ShipmentCodeDTO extends ValueDTO {
 		return String.format("%s-%s", portOfDischarge.getCode(), this.getCode());
 	}
 
-//	/**
-//	 * Used as a synonymous for getting id
-//	 * @return the code/id
-//	 */
-//	public Integer getCode() {
-//		return getId();
-//	}
-
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ShipmentCode.class;
+	}
 
 
 }

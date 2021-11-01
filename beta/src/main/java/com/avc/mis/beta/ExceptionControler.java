@@ -121,7 +121,7 @@ public class ExceptionControler {
     private ResponseEntity<String> internalError(HttpStatus status, Throwable e) {
         log.error("Exception : ", e);
         return ResponseEntity.status(status).body(
-        		"Internal server error, please contact system manager\n");
+        		"Internal server error: " + e.getLocalizedMessage() + "\nPlease contact system manager\n");
     }
 	
 	@ExceptionHandler({DataIntegrityViolationException.class, InvalidFormatException.class})

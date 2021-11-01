@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.Shift;
 import com.avc.mis.beta.entities.plan.ProcessItemPlan;
@@ -84,7 +85,11 @@ public class ProductionPlanRowDTO extends DataDTO {
 		}
 	}
 	
-	@JsonIgnore
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return ProductionPlanRow.class;
+	}
+	
 	@Override
 	public ProductionPlanRow fillEntity(Object entity) {
 		ProductionPlanRow productionPlanRow;
@@ -92,7 +97,7 @@ public class ProductionPlanRowDTO extends DataDTO {
 			productionPlanRow = (ProductionPlanRow) entity;
 		}
 		else {
-			throw new IllegalArgumentException("Param has to be ProductionPlanRow class");
+			throw new IllegalStateException("Param has to be ProductionPlanRow class");
 		}
 		super.fillEntity(productionPlanRow);
 		if(getProcessType() != null) {
