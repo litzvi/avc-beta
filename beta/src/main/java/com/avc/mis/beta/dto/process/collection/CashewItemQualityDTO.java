@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.process.collection;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.BaseEntity;
@@ -17,7 +18,9 @@ import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.CashewItemQuality;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.Value;
 
@@ -27,37 +30,40 @@ import lombok.Value;
  * @author Zvi
  *
  */
-@Value
-@ToString(callSuper = true)
+@Data
 @EqualsAndHashCode(callSuper = true)
-public class CashewItemQualityDTO extends SubjectDataDTO {
+@ToString(callSuper = true)
+@NoArgsConstructor
+public class CashewItemQualityDTO extends RankedAuditedDTO {
 	
 
 	
-	BasicValueEntity<Item> item;
-	MeasureUnit measureUnit;
-	BigDecimal sampleWeight;
-	BigInteger numberOfSamples;
-
-	Boolean precentage;
+	private BasicValueEntity<Item> item;
+	private MeasureUnit measureUnit;
+	private BigDecimal sampleWeight;
+	private BigInteger numberOfSamples;
+   
+	private boolean precentage = false;
 	
-	RawDefects defects;
-	RawDamage damage;
+	private RawDefects defects;
+	private RawDamage damage;
 	
-	BigDecimal totalDefects;
-	BigDecimal totalDamage;
+	@EqualsAndHashCode.Exclude
+	private BigDecimal totalDefects;
+	@EqualsAndHashCode.Exclude
+	private BigDecimal totalDamage;
 	
-	BigInteger wholeCountPerLb;
-	BigDecimal smallSize;
-	BigDecimal ws;
-	BigDecimal lp;
-	BigDecimal breakage;
-	BigDecimal foreignMaterial;
-	BigDecimal humidity;
+	private BigInteger wholeCountPerLb;
+	private BigDecimal smallSize;
+	private BigDecimal ws;
+	private BigDecimal lp;
+	private BigDecimal breakage;
+	private BigDecimal foreignMaterial;
+	private BigDecimal humidity;
 	
-	BigDecimal roastingWeightLoss;
-	CheckStatus colour; 
-	CheckStatus flavour; 
+	private BigDecimal roastingWeightLoss;
+	private CheckStatus colour; 
+	private CheckStatus flavour; 
 	
 
 	public CashewItemQualityDTO(Integer id, Integer version, Integer ordinal,
@@ -130,6 +136,45 @@ public class CashewItemQualityDTO extends SubjectDataDTO {
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {
 		return CashewItemQuality.class;
+	}
+	
+	@Override
+	public CashewItemQuality fillEntity(Object entity) {
+		CashewItemQuality itemQuality;
+		if(entity instanceof CashewItemQuality) {
+			itemQuality = (CashewItemQuality) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be CashewItemQuality class");
+		}
+		super.fillEntity(itemQuality);
+		
+		itemQuality.setPrecentage(isPrecentage());
+		try {
+			itemQuality.setItem((Item) getItem().fillEntity(new Item()));
+		} catch (NullPointerException e) {
+			throw new IllegalArgumentException("Item is mandatory");
+		}
+		itemQuality.setMeasureUnit(getMeasureUnit());
+		itemQuality.setSampleWeight(getSampleWeight());
+		itemQuality.setNumberOfSamples(getNumberOfSamples());
+		
+		itemQuality.setWholeCountPerLb(getWholeCountPerLb());
+		itemQuality.setSmallSize(getSmallSize());
+		itemQuality.setWs(getWs());
+		itemQuality.setLp(getLp());
+		itemQuality.setBreakage(getBreakage());
+		itemQuality.setForeignMaterial(getForeignMaterial());
+		itemQuality.setHumidity(getHumidity());
+		
+		itemQuality.setDefects(getDefects());
+		itemQuality.setDamage(getDamage());
+		
+		itemQuality.setRoastingWeightLoss(getRoastingWeightLoss());
+		itemQuality.setColour(getColour());
+		itemQuality.setFlavour(getFlavour());
+				
+		return itemQuality;
 	}
 
 }

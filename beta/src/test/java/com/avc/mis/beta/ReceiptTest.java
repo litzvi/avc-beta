@@ -19,6 +19,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -70,7 +71,14 @@ public class ReceiptTest {
 		service.cleanup(receipt);
 
 		// insert order receipt for order
-		PO po = service.addBasicCashewOrder();
+		PoDTO po;
+		try {
+			po = service.addBasicCashewOrder();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			throw e1;
+		}
 		System.out.println("po code: " + po.getPoCode().getId());
 		try {
 			receipt = service.getCashewOrderReceipt(po.getPoCode().getId());

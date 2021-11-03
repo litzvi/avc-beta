@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.process.collection;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
@@ -14,6 +15,7 @@ import com.avc.mis.beta.entities.process.collection.CountAmount;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO class with the amount(weight). Part of a collection in ItemCountDTO class.
@@ -23,6 +25,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class CountAmountDTO extends RankedAuditedDTO {
 
 	private BigDecimal amount;
@@ -35,6 +38,12 @@ public class CountAmountDTO extends RankedAuditedDTO {
 	public CountAmountDTO(CountAmount countAmount) {
 		super(countAmount.getId(), countAmount.getVersion(), countAmount.getOrdinal());
 		this.amount = countAmount.getAmount().setScale(MeasureUnit.SCALE);
+	}
+	
+	public BigDecimal getAmount() {
+		if(this.amount != null)
+			return this.amount.setScale(MeasureUnit.SCALE, RoundingMode.HALF_DOWN);
+		return null;
 	}
 	
 	@Override

@@ -7,11 +7,13 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.collection.ApprovalTask;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -19,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author zvi
@@ -26,6 +29,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseInterface {
 
 	private BigDecimal unitAmount;
@@ -33,6 +37,10 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseInterf
 //	private BigDecimal accessWeight;	
 	private BasicValueEntity<Warehouse> warehouseLocation;
 
+	@JsonIgnore //for referencing storage move to processItem besides for it's group before persist/merge
+	@EqualsAndHashCode.Exclude
+	private DataObject<ProcessItem> processItem;
+	@EqualsAndHashCode.Exclude
 	private String className; //to differentiate between storage to ExtraAdded nad perhaps storageMoves
 	
 	
@@ -108,6 +116,32 @@ public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseInterf
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {
 		return StorageMove.class;
+	}
+	
+	@Override
+	public StorageMove fillEntity(Object entity) {
+		StorageMove storageMove;
+		if(entity instanceof StorageMove) {
+			storageMove = (StorageMove) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be StorageMove class");
+		}
+		super.fillEntity(storageMove);
+		if(getStorage() == null) {
+			throw new IllegalArgumentException("Internal error: Used item has no referance to storage");
+		}
+		storageMove.setUnitAmount(getUnitAmount());
+//		storageMove.setNumberUnits(getNumberUnits());
+		if(getWarehouseLocation() != null)
+			storageMove.setWarehouseLocation((Warehouse) getWarehouseLocation().fillEntity(new Warehouse()));
+		try {
+			storageMove.setProcessItem((ProcessItem) getProcessItem().fillEntity(new ProcessItem()));
+		} catch (NullPointerException e) {
+			throw new IllegalArgumentException("Internal error: Used item has no referance to process item");
+		}
+		
+		return storageMove;
 	}
 
 }

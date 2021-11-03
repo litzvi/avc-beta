@@ -18,6 +18,7 @@ import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
 import com.avc.mis.beta.entities.ProcessInfoEntity;
+import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -55,7 +56,7 @@ public class LoadedItem extends ProcessInfoEntity {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(updatable = false, nullable = false)
-	private PoCode poCode;	
+	private BasePoCode poCode;	
 	
 	@AttributeOverrides({
         @AttributeOverride(name="amount",

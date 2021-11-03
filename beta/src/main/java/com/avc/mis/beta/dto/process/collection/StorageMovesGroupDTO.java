@@ -14,16 +14,20 @@ import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.process.RelocationProcess;
 import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
+import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.utilities.ListGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author zvi
@@ -31,6 +35,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<StorageMoveDTO> {
 
 //	@JsonIgnore
@@ -158,5 +163,26 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {
 		return StorageMovesGroup.class;
+	}
+	
+	@Override
+	public StorageMovesGroup fillEntity(Object entity) {
+		StorageMovesGroup group;
+		if(entity instanceof StorageMovesGroup) {
+			group = (StorageMovesGroup) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be StorageMovesGroup class");
+		}
+		super.fillEntity(group);
+		if(getStorageMoves() == null || getStorageMoves().isEmpty()) {
+			throw new IllegalArgumentException("Has to containe at least one storage move");
+		}
+		else {
+			Ordinal.setOrdinals(getStorageMoves());
+			group.setStorageMoves(getStorageMoves().stream().map(i -> i.fillEntity(new StorageMove())).toArray(StorageMove[]::new));
+		}
+		
+		return group;
 	}
 }

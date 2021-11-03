@@ -12,7 +12,13 @@ import com.avc.mis.beta.dto.process.collection.LoadedItemDTO;
 import com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.values.ShipmentCodeDTO;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.ShipmentCode;
+import com.avc.mis.beta.entities.process.ContainerArrival;
 import com.avc.mis.beta.entities.process.ContainerLoading;
+import com.avc.mis.beta.entities.process.Receipt;
+import com.avc.mis.beta.entities.process.collection.LoadedItem;
+import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -54,6 +60,38 @@ public class ContainerLoadingDTO extends RelocationProcessDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return ContainerLoading.class;
 	}
+	
+	@Override
+	public ContainerLoading fillEntity(Object entity) {
+		ContainerLoading loading;
+		if(entity instanceof ContainerLoading) {
+			loading = (ContainerLoading) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be ContainerLoading class");
+		}
+		super.fillEntity(loading);
+		
+		try {
+			loading.setArrival(getArrival().fillEntity(new ContainerArrival()));
+		} catch (NullPointerException e) {
+			throw new IllegalArgumentException("Container Arrival is mandatory");
+		}
+		
+		try {
+			loading.setShipmentCode(getShipmentCode().fillEntity(new ShipmentCode()));
+		} catch (NullPointerException e) {
+			throw new IllegalArgumentException("Shipment code is mandatory");
+		}
+		
+		if(getLoadedItems() != null && !getLoadedItems().isEmpty()) {
+			Ordinal.setOrdinals(getLoadedItems());
+			loading.setLoadedItems(getLoadedItems().stream().map(i -> i.fillEntity(new LoadedItem())).toArray(LoadedItem[]::new));
+		}
+		
+		return loading;
+	}
+
 
 	@Override
 	public String getProcessTypeDescription() {

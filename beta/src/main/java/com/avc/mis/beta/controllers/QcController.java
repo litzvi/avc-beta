@@ -47,20 +47,20 @@ public class QcController {
 	private ValueTablesReader refeDao;
 	
 	@PostMapping("/addCashewReceiveCheck")
-	public QualityCheckDTO addCashewReceiptCheck(@RequestBody QualityCheck check) {
-		qualityChecks.addCashewReceiptCheck(check);
-		return qualityChecks.getQcByProcessId(check.getId());
+	public QualityCheckDTO addCashewReceiptCheck(@RequestBody QualityCheckDTO check) {
+		Integer id = qualityChecks.addCashewReceiptCheck(check);
+		return qualityChecks.getQcByProcessId(id);
 	}
 	
 	@PostMapping("/addCashewRoastCheck")
-	public QualityCheckDTO addCashewRoastCheck(@RequestBody QualityCheck check) {
+	public QualityCheckDTO addCashewRoastCheck(@RequestBody QualityCheckDTO check) {
 		check.setCheckedBy("avc lab");
-		qualityChecks.addRoastedCashewCheck(check);
-		return qualityChecks.getQcByProcessId(check.getId());
+		Integer id = qualityChecks.addRoastedCashewCheck(check);
+		return qualityChecks.getQcByProcessId(id);
 	}
 	
 	@PutMapping("/editCashewReceiveCheck")
-	public QualityCheckDTO editCashewReceiveCheck(@RequestBody QualityCheck check) {
+	public QualityCheckDTO editCashewReceiveCheck(@RequestBody QualityCheckDTO check) {
 		qualityChecks.editCheck(check);
 		return qualityChecks.getQcByProcessId(check.getId());
 	}

@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.dto;
 
+import com.avc.mis.beta.entities.DataEntity;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -24,4 +26,20 @@ public abstract class BasicDataValueDTO extends BasicValueDTO {
 		super(id);
 		this.version = version;
 	}
+	
+	@Override
+	public DataEntity fillEntity(Object entity) {
+		DataEntity dataEntity;
+		if(entity instanceof DataEntity) {
+			dataEntity = (DataEntity) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be DataEntity class");
+		}
+		super.fillEntity(dataEntity);
+		dataEntity.setVersion(getVersion());
+		
+		return dataEntity;
+	}
+
 }

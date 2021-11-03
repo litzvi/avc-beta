@@ -51,20 +51,17 @@ public class Loading {
 	 * @throws IllegalArgumentException if used items don't match current inventory.
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE) 
-	public void addLoading(ContainerLoading loading) {
-		loading.setProcessType(dao.getProcessTypeByValue(ProcessName.CONTAINER_LOADING));
+	public Integer addLoading(ContainerLoadingDTO loading) {
+		loading.setProcessName(ProcessName.CONTAINER_LOADING);
 		if(loading.getProductionLine() == null || 
 				containerLoadingRepository.findFunctionalityByProductionLine(loading.getProductionLine().getId()) != ProductionFunctionality.LOADING) {
 			throw new IllegalStateException("Container Loading has to have a Production Line with ProductionFunctionality.LOADING");
 		}
-		if(dao.isShippingCodeFree(loading.getShipmentCode().getId())) {
-			dao.setStorageMovesProcessItem(loading.getStorageMovesGroups());
-			dao.addPoProcessEntity(loading);
-			dao.checkUsedInventoryAvailability(loading);
-			dao.setRelocationPoWeights(loading);
-			dao.setUsedProcesses(loading);
-			//check if storage moves match the amounts of the used item
-			dao.checkRelocationBalance(loading);
+		if(loading.getShipmentCode() == null) {
+			throw new IllegalArgumentException("Shipment code is mandatory");
+		}
+		else if(dao.isShippingCodeFree(loading.getShipmentCode().getId())) {
+			return dao.addRelocationProcessEntity(loading, ContainerLoading::new);
 		}
 		else {
 			throw new IllegalArgumentException("Shipment Code is already used for another shipping");
@@ -110,25 +107,13 @@ public class Loading {
 	 * @param loading ContainerLoading updated with edited state
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE) 
-	public void editLoading(ContainerLoading loading) {
+	public void editLoading(ContainerLoadingDTO loading) {
 		if(loading.getProductionLine() == null || 
 				containerLoadingRepository.findFunctionalityByProductionLine(loading.getProductionLine().getId()) != ProductionFunctionality.LOADING) {
 			throw new IllegalStateException("Container Loading has to have a Production Line with ProductionFunctionality.LOADING");
 		}
 		
-		dao.setStorageMovesProcessItem(loading.getStorageMovesGroups());
-		
-		dao.checkRemovingUsedProduct(loading);
-		
-		dao.editPoProcessEntity(loading);
-		
-		dao.checkUsedInventoryAvailability(loading);
-		dao.setUsedProcesses(loading);
-		List<ItemAmountWithPoCode> usedPos = dao.setRelocationPoWeights(loading);
-		dao.checkDAGmaintained(usedPos, loading.getId());
-
-		dao.checkUsingProcesessConsistency(loading);
-		dao.checkRelocationBalance(loading);
+		dao.editRelocationProcessEntity(loading, ContainerLoading::new);
 
 	}
 

@@ -71,13 +71,6 @@ public class WarehouseManagement {
 		return getAvailableInventory(group, productionUses, functionalities, itemIds, null, poCodeIds, excludeProcessId);
 	}
 	
-//	public List<ProcessItemInventory> getAvailableInventory(
-//			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
-//			Integer itemId, PackageType packageType, Integer[] poCodeIds, Integer excludeProcessId) {
-//		Integer[] itemIds = itemId != null ? new Integer[] {itemId} : null;
-//		return getAvailableInventory(group, productionUses, functionalities, itemIds, packageType, poCodeIds, excludeProcessId);
-//	}
-
 	public List<ProcessItemInventory> getAvailableInventory(
 			ItemGroup group, ProductionUse[] productionUses, ProductionFunctionality[] functionalities, 
 			Integer[] itemIds, PackageType packageType, Integer[] poCodeIds, Integer excludeProcessId) {
@@ -300,7 +293,7 @@ public class WarehouseManagement {
 	@Autowired private InventoryUseReports inventoryUseReports;
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void addGeneralInventoryUse(InventoryUse inventoryUse) {
+	public void addGeneralInventoryUse(InventoryUseDTO inventoryUse) {
 		getInventoryUseService().addGeneralInventoryUse(inventoryUse);
 	}	
 	
@@ -310,7 +303,7 @@ public class WarehouseManagement {
 	}
 		
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void editGeneralInventoryUse(InventoryUse inventoryUse) {
+	public void editGeneralInventoryUse(InventoryUseDTO inventoryUse) {
 		getInventoryUseService().editGeneralInventoryUse(inventoryUse);
 	}
 	
@@ -328,8 +321,8 @@ public class WarehouseManagement {
 	@Autowired private StorageRelocationReports relocationReports;
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void addStorageRelocation(StorageRelocation relocation) {
-		getRelocationService().addStorageRelocation(relocation);
+	public Integer addStorageRelocation(StorageRelocationDTO relocation) {
+		return getRelocationService().addStorageRelocation(relocation);
 	}
 
 	public StorageRelocationDTO getStorageRelocation(int processId) {
@@ -337,7 +330,7 @@ public class WarehouseManagement {
 	}
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void editStorageRelocation(StorageRelocation relocation) {
+	public void editStorageRelocation(StorageRelocationDTO relocation) {
 		getRelocationService().editStorageRelocation(relocation);
 	}
 	

@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * DTO Class representing a count/weight check for inventory check,
@@ -36,6 +37,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class ItemCountDTO extends RankedAuditedDTO implements ListGroup<CountAmountDTO> {
 
 	private ItemWithUse item;

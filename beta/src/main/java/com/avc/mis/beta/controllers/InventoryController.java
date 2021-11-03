@@ -80,21 +80,21 @@ public class InventoryController {
 	}
 	
 	@PostMapping(value="/addRelocationTransfer")
-	public StorageRelocationDTO addRelocationTransfer(@RequestBody StorageRelocation relocation) {
-		warehouseManagement.addStorageRelocation(relocation);
-		return warehouseManagement.getStorageRelocation(relocation.getId());
+	public StorageRelocationDTO addRelocationTransfer(@RequestBody StorageRelocationDTO relocation) {
+		Integer relocatioId = warehouseManagement.addStorageRelocation(relocation);
+		return warehouseManagement.getStorageRelocation(relocatioId);
 	}
 	
 	@PostMapping(value="/addMaterialUse")
-	public InventoryUseDTO addMaterialUse(@RequestBody InventoryUse inventoryUse) {
-		inventoryUses.addGeneralInventoryUse(inventoryUse);
-		return inventoryUses.getInventoryUse(inventoryUse.getId());
+	public InventoryUseDTO addMaterialUse(@RequestBody InventoryUseDTO inventoryUse) {
+		Integer id = inventoryUses.addGeneralInventoryUse(inventoryUse);
+		return inventoryUses.getInventoryUse(id);
 	}
 	
 	@PostMapping(value="/addCashewUse")
-	public InventoryUseDTO addCashewUse(@RequestBody InventoryUse inventoryUse) {
-		inventoryUses.addProductInventoryUse(inventoryUse);
-		return inventoryUses.getInventoryUse(inventoryUse.getId());
+	public InventoryUseDTO addCashewUse(@RequestBody InventoryUseDTO inventoryUse) {
+		Integer id = inventoryUses.addProductInventoryUse(inventoryUse);
+		return inventoryUses.getInventoryUse(id);
 	}
 	
 	@PutMapping(value="/editStorageTransfer")
@@ -104,19 +104,19 @@ public class InventoryController {
 	}
 	
 	@PutMapping(value="/editRelocationTransfer")
-	public StorageRelocationDTO editRelocationTransfer(@RequestBody StorageRelocation relocation) {
+	public StorageRelocationDTO editRelocationTransfer(@RequestBody StorageRelocationDTO relocation) {
 		warehouseManagement.editStorageRelocation(relocation);
 		return warehouseManagement.getStorageRelocation(relocation.getId());
 	}
 	
 	@PutMapping(value="/editMaterialUse")
-	public InventoryUseDTO editMaterialUse(@RequestBody InventoryUse inventoryUse) {
+	public InventoryUseDTO editMaterialUse(@RequestBody InventoryUseDTO inventoryUse) {
 		inventoryUses.editGeneralInventoryUse(inventoryUse);
 		return inventoryUses.getInventoryUse(inventoryUse.getId());
 	}
 	
 	@PutMapping(value="/editCashewUse")
-	public InventoryUseDTO editCashewUse(@RequestBody InventoryUse inventoryUse) {
+	public InventoryUseDTO editCashewUse(@RequestBody InventoryUseDTO inventoryUse) {
 		inventoryUses.editProductInventoryUse(inventoryUse);
 		return inventoryUses.getInventoryUse(inventoryUse.getId());
 	}

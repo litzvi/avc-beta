@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.avc.mis.beta.dto.process.PoDTO;
+import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -77,7 +79,7 @@ public class XlxsImportController {
 	
 //	just for adding from xlex
 	@PostMapping(value="/addAllCashewReceiveCheck")
-	public void addAllCashewReceiveCheck(@RequestBody List<QualityCheck> listChanges) {
+	public void addAllCashewReceiveCheck(@RequestBody List<QualityCheckDTO> listChanges) {
 		System.out.println(listChanges);
 		listChanges.forEach(k -> {
 			System.out.println(k);
@@ -87,7 +89,7 @@ public class XlxsImportController {
 
 //	just for adding from xlex
 	@PostMapping(value="/addAllCashewOrders")
-	public void addAllCashewOrders(@RequestBody List<PO> listChanges) throws JsonMappingException, JsonProcessingException {
+	public void addAllCashewOrders(@RequestBody List<PoDTO> listChanges) throws JsonMappingException, JsonProcessingException {
 		System.out.println(listChanges);
 		listChanges.forEach(k -> {
 			System.out.println(k);

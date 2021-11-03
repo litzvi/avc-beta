@@ -4,7 +4,12 @@
 package com.avc.mis.beta.dto.process;
 
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.ShipmentCode;
+import com.avc.mis.beta.entities.process.ContainerArrival;
+import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.process.StorageRelocation;
+import com.avc.mis.beta.entities.process.collection.LoadedItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,6 +35,25 @@ public class StorageRelocationDTO extends RelocationProcessDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return StorageRelocation.class;
 	}
+	
+	@Override
+	public StorageRelocation fillEntity(Object entity) {
+		StorageRelocation relocation;
+		if(entity instanceof StorageRelocation) {
+			relocation = (StorageRelocation) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be StorageRelocation class");
+		}
+		super.fillEntity(relocation);
+		
+		if(getPoCode() == null) {
+			throw new IllegalArgumentException("Storage relocation has to reference a po code");
+		}
+		
+		return relocation;
+	}
+
 	
 	@Override
 	public String getProcessTypeDescription() {

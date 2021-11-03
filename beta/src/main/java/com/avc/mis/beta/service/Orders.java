@@ -48,13 +48,13 @@ public class Orders {
 	 * @throws IllegalArgumentException if supplier or order items aren't set.
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void addCashewOrder(PO po) {
-		po.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_ORDER));
+	public Integer addCashewOrder(PoDTO po) {
+		po.setProcessName(ProcessName.CASHEW_ORDER);
 		if(po.getPoCode() == null) {
 			throw new IllegalArgumentException("Purchase Order has to reference a po code");
 		}
-		if(dao.isPoCodeFree(po.getPoCode().getId(), PoCode.class)) {
-			dao.addPoProcessEntity(po);						
+		else if(dao.isPoCodeFree(po.getPoCode().getId(), PoCode.class)) {
+			return dao.addPoProcessEntity(po, PO::new);						
 		}
 		else {
 			throw new IllegalArgumentException("Po Code is already used for another order or receipt");
@@ -67,17 +67,13 @@ public class Orders {
 	 * @throws IllegalArgumentException if supplier or order items aren't set.
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void addGeneralOrder(PO po) {		
-		po.setProcessType(dao.getProcessTypeByValue(ProcessName.GENERAL_ORDER));
+	public Integer addGeneralOrder(PoDTO po) {		
+		po.setProcessName(ProcessName.GENERAL_ORDER);
 		if(po.getPoCode() == null) {
 			throw new IllegalArgumentException("Purchase Order has to reference a po code");
 		}
-//		addGeneralPoCode((GeneralPoCode) po.getPoCode()); - now the code is set by the user
-//		dao.addEntity(po.getPoCode());
-//				
-//		dao.addPoProcessEntity(po);	
-		if(dao.isPoCodeFree(po.getPoCode().getId(), GeneralPoCode.class)) {
-			dao.addPoProcessEntity(po);						
+		else if(dao.isPoCodeFree(po.getPoCode().getId(), GeneralPoCode.class)) {
+			return dao.addPoProcessEntity(po, PO::new);						
 		}
 		else {
 			throw new IllegalArgumentException("Po Code is already used for another order or receipt");
@@ -129,8 +125,8 @@ public class Orders {
 	 * @param po PO updated with edited state
 	 */
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void editOrder(PO po) {
-		dao.editGeneralProcessEntity(po);
+	public void editOrder(PoDTO po) {
+		dao.editPoProcessEntity(po, PO::new);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

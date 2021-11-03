@@ -43,19 +43,19 @@ public class QualityChecks {
 	
 				
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void addCashewReceiptCheck(QualityCheck check) {
-		check.setProcessType(dao.getProcessTypeByValue(ProcessName.CASHEW_RECEIPT_QC));
+	public Integer addCashewReceiptCheck(QualityCheckDTO check) {
+		check.setProcessName(ProcessName.CASHEW_RECEIPT_QC);
 //		if(check.getProductionLine() == null || 
 //				qcRepository.findFunctionalityByProductionLine(check.getProductionLine().getId()) != ProductionFunctionality.QUALITY_CONTROL_CHECK) {
 //			throw new IllegalStateException("QC check has to have a Production Line with ProductionFunctionality.QUALITY_CONTROL_CHECK");
 //		}
-		dao.addPoProcessEntity(check);
+		return dao.addPoProcessEntity(check, QualityCheck::new);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void addRoastedCashewCheck(QualityCheck check) {
-		check.setProcessType(dao.getProcessTypeByValue(ProcessName.ROASTED_CASHEW_QC));
-		dao.addPoProcessEntity(check);
+	public Integer addRoastedCashewCheck(QualityCheckDTO check) {
+		check.setProcessName(ProcessName.ROASTED_CASHEW_QC);
+		return dao.addPoProcessEntity(check, QualityCheck::new);
 	}
 	
 	public QualityCheckDTO getQcByProcessId(int processId) {
@@ -81,12 +81,12 @@ public class QualityChecks {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void editCheck(QualityCheck check) {
+	public void editCheck(QualityCheckDTO check) {
 //		if(check.getProductionLine() == null || 
 //				qcRepository.findFunctionalityByProductionLine(check.getProductionLine().getId()) != ProductionFunctionality.QUALITY_CONTROL_CHECK) {
 //			throw new IllegalStateException("QC check has to have a Production Line with ProductionFunctionality.QUALITY_CONTROL_CHECK");
 //		}
-		dao.editGeneralProcessEntity(check);
+		dao.editGeneralProcessEntity(check, QualityCheck::new);
 	}
 
 	public CashewStandardDTO getCashewStatndard(Integer itemId, String standardOrganization) {

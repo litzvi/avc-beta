@@ -90,15 +90,15 @@ public class OrdersController {
 	private ReceiptReports receiptReports;
 	
 	@PostMapping(value="/addCashewOrder")
-	public PoDTO addCashewOrder(@RequestBody PO po) {
-		ordersDao.addCashewOrder(po);
-		return ordersDao.getOrderByProcessId(po.getId());
+	public PoDTO addCashewOrder(@RequestBody PoDTO po) {
+		Integer poId = ordersDao.addCashewOrder(po);
+		return ordersDao.getOrderByProcessId(poId);
 	}
 	
 	@PostMapping(value="/addGeneralOrder")
-	public PoDTO addGeneralOrder(@RequestBody PO po) {
-		ordersDao.addGeneralOrder(po);
-		return ordersDao.getOrderByProcessId(po.getId());
+	public PoDTO addGeneralOrder(@RequestBody PoDTO po) {
+		Integer poId = ordersDao.addGeneralOrder(po);
+		return ordersDao.getOrderByProcessId(poId);
 	}
 	
 	@PostMapping(value="/receiveCashewOrder")
@@ -127,7 +127,7 @@ public class OrdersController {
 	
 	
 	@PutMapping(value="/editOrder")
-	public PoDTO editOrder(@RequestBody PO po) {
+	public PoDTO editOrder(@RequestBody PoDTO po) {
 		ordersDao.editOrder(po);
 		return ordersDao.getOrderByProcessId(po.getId());
 	}

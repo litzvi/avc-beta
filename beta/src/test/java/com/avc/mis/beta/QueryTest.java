@@ -28,6 +28,7 @@ import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.basic.UserBasic;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.data.UserDTO;
+import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
 import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
@@ -124,7 +125,7 @@ public class QueryTest {
 	@Test
 	void queryTest() {
 
-		PO po;
+		PoDTO po;
 		try {
 			po = service.addBasicCashewOrder();
 		} catch (Exception e2) {

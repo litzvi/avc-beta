@@ -7,19 +7,25 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Currency;
 
+import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.ItemWithMeasureUnit;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Value;
 
@@ -32,18 +38,19 @@ import lombok.Value;
  * @author Zvi
  *
  */
-@Value
+@Data
 @EqualsAndHashCode(callSuper = true)
-public class OrderItemDTO extends SubjectDataDTO {
+@NoArgsConstructor
+public class OrderItemDTO extends RankedAuditedDTO {
 
 //	BasicValueEntity<Item> item;
-	ItemWithMeasureUnit item;
-	AmountWithUnit numberUnits;
-	AmountWithCurrency unitPrice;
-	LocalDate deliveryDate;
-	String defects;
-	String remarks;
-	BigDecimal amountReceived;
+	private ItemWithMeasureUnit item;
+	private AmountWithUnit numberUnits;
+	private AmountWithCurrency unitPrice;
+	private LocalDate deliveryDate;
+	private String defects;
+	private String remarks;
+	private BigDecimal amountReceived;
 	
 	
 	/**
@@ -106,9 +113,43 @@ public class OrderItemDTO extends SubjectDataDTO {
 		}
 	}
 	
+	public void setDeliveryDate(String deliveryDate) {
+		if(deliveryDate != null)
+			this.deliveryDate = LocalDate.parse(deliveryDate);
+	}
+	
+	public AmountWithUnit getNumberUnits() {
+		return this.numberUnits.setScale(MeasureUnit.SCALE);
+	}
+	
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {
 		return OrderItem.class;
+	}
+	
+	@Override
+	public OrderItem fillEntity(Object entity) {
+		OrderItem orderItem;
+		if(entity instanceof OrderItem) {
+			orderItem = (OrderItem) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be OrderItem class");
+		}
+		super.fillEntity(orderItem);
+		
+		try {
+			orderItem.setItem(getItem().fillEntity(new Item()));
+		} catch (NullPointerException e) {
+			throw new IllegalArgumentException("Item is mandatory");
+		}
+		orderItem.setNumberUnits(getNumberUnits());
+		orderItem.setUnitPrice(getUnitPrice());
+		orderItem.setDeliveryDate(getDeliveryDate());
+		orderItem.setDefects(getDefects());
+		orderItem.setRemarks(getRemarks());
+		
+		return orderItem;
 	}
 	
 }

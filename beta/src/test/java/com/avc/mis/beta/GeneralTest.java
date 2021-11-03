@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Currency;
 import java.util.HashSet;
 import java.util.List;
@@ -34,11 +35,15 @@ import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
+import com.avc.mis.beta.dto.process.collection.CashewItemQualityDTO;
+import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.values.ItemWithMeasureUnit;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.ProcessFile;
@@ -87,7 +92,7 @@ import lombok.NonNull;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800213;
+	static final Integer PO_CODE = 800241;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
@@ -115,36 +120,37 @@ public class GeneralTest {
 		assertEquals(new SupplierDTO(supplier, true), supplierDTO, "Supplier not added or fetched correctly");
 		
 		//create a cashew order with 2 order lines
-		PO po = new PO();
+		PoDTO po = new PoDTO();
 		PoCode poCode = new PoCode();
 		poCode.setCode(Integer.toString(PO_CODE));
 		poCode.setContractType(valueTablesRepository.findContractTypeByCodeAndCurrency("VAT", Currency.getInstance("VND")));
 		poCode.setSupplier(supplier);
 		objectWriter.addPoCode(poCode);
-		po.setPoCode(poCode);
+		po.setPoCode(new PoCodeBasic(poCode));
 		po.setRecordedTime(LocalDateTime.now());
-		OrderItem[] orderItems = new OrderItem[NUM_PO_ITEMS];
+		List<OrderItemDTO> orderItems = new ArrayList<OrderItemDTO>();
 		List<Item> items = valueTablesReader.getAllItems();
 		for(int i=0; i < NUM_PO_ITEMS; i++) {
-			orderItems[i] = new OrderItem();
-			orderItems[i].setItem(items.get(i));
-			orderItems[i].setNumberUnits(new AmountWithUnit("35000", "LBS"));
-//			orderItems[i].setCurrency("USD");
-//			orderItems[i].setMeasureUnit("LBS");
-			orderItems[i].setUnitPrice(new AmountWithCurrency("2.99", "USD"));
-			orderItems[i].setDeliveryDate(LocalDate.now().toString());			
+			OrderItemDTO orderItem = new OrderItemDTO();
+			orderItems.add(orderItem);
+			orderItem.setItem(new ItemWithMeasureUnit(items.get(i)));
+			orderItem.setNumberUnits(new AmountWithUnit("35000", "LBS"));
+//			orderItem.setCurrency("USD");
+//			orderItem.setMeasureUnit("LBS");
+			orderItem.setUnitPrice(new AmountWithCurrency("2.99", "USD"));
+			orderItem.setDeliveryDate(LocalDate.now().toString());			
 		}
 		po.setOrderItems(orderItems);
-		orders.addCashewOrder(po);
-		PoDTO poDTO = orders.getOrderByProcessId(po.getId());
-		assertEquals(new PoDTO(po), poDTO, "PO not added or fetched correctly");
+		Integer poId = orders.addCashewOrder(po);
+		PoDTO poDTO = orders.getOrderByProcessId(poId);
+		assertEquals(po, poDTO, "PO not added or fetched correctly");
 		
 		//change order process life cycle to lock process for editing
-		processInfoWriter.setEditStatus(EditStatus.LOCKED, po.getId());
-		poDTO = orders.getOrderByProcessId(po.getId());
+		processInfoWriter.setEditStatus(EditStatus.LOCKED, poId);
+		poDTO = orders.getOrderByProcessId(poId);
 		assertEquals(EditStatus.LOCKED, poDTO.getEditStatus(), "Didn't change life cycle record edit status");
 		try {
-			processInfoWriter.setProcessStatus(ProcessStatus.PENDING, po.getId());
+			processInfoWriter.setProcessStatus(ProcessStatus.PENDING, poId);
 			fail("Should not be able to change to previous life cycle status");
 		} catch (Exception e1) {}
 		//check that process can't be edited after it's locked
@@ -160,14 +166,15 @@ public class GeneralTest {
 		receipt.setRecordedTime(LocalDateTime.now());
 		List<ReceiptItemDTO> receiptItems = new ArrayList<>();
 		List<Warehouse> storages = valueTablesReader.getAllWarehouses();
+		List<OrderItemDTO> fetchedOrderItems = poDTO.getOrderItems();
 		for(int i=0; i < NUM_PO_ITEMS; i++) {
 			ReceiptItemDTO receiptItem = new ReceiptItemDTO();
-			Item item = orderItems[i].getItem();
-			receiptItem.setItem(new ItemWithUnitDTO(item));
+			ItemWithMeasureUnit item = fetchedOrderItems.get(i).getItem();
+			receiptItem.setItem(new ItemWithUnitDTO((Item)item.fillEntity(new Item())));
 			receiptItem.setMeasureUnit(item.getMeasureUnit());
 			receiptItem.setReceivedOrderUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
 			receiptItem.setUnitPrice(new AmountWithCurrency("2.99", "USD"));
-			receiptItem.setOrderItem(new DataObject<OrderItem>(orderItems[i]));
+			receiptItem.setOrderItem(new DataObject<OrderItem>(fetchedOrderItems.get(i).getId(), fetchedOrderItems.get(i).getVersion()));
 			
 			StorageWithSampleDTO[] storageForms = new StorageWithSampleDTO[2];
 			StorageWithSampleDTO storage = new StorageWithSampleDTO();
@@ -201,49 +208,70 @@ public class GeneralTest {
 		
 		
 		//add QC for received order
-		QualityCheck check = new QualityCheck();
-		check.setPoCode(poCode);
+		QualityCheckDTO check = new QualityCheckDTO();
+		check.setPoCode(new PoCodeBasic(poCode));
 		check.setRecordedTime(LocalDateTime.now());
 		check.setCheckedBy("avc lab");
-		CashewItemQuality[] rawItemQualities = new CashewItemQuality[NUM_PO_ITEMS];
-		ProcessItem[] processItems = new ProcessItem[NUM_PO_ITEMS];
+		List<CashewItemQualityDTO> rawItemQualities = new ArrayList<CashewItemQualityDTO>();
+		List<ProcessItemDTO> processItems = new ArrayList<ProcessItemDTO>();
 		for(int i=0; i < NUM_PO_ITEMS; i++) {
-			rawItemQualities[i] = new CashewItemQuality();
-			rawItemQualities[i].setItem(orderItems[i].getItem());
-			rawItemQualities[i].setMeasureUnit(MeasureUnit.OZ);
-			rawItemQualities[i].setSampleWeight(BigDecimal.valueOf(8).setScale(QualityCheck.SCALE));
-			rawItemQualities[i].setNumberOfSamples(BigInteger.TEN);
-			rawItemQualities[i].setDefects(new RawDefects());
-			rawItemQualities[i].setDamage(new RawDamage());
+			CashewItemQualityDTO rawItemQuality = new CashewItemQualityDTO();
+			rawItemQualities.add(rawItemQuality);
+			ItemWithMeasureUnit item = orderItems.get(i).getItem();
+			rawItemQuality.setItem(new BasicValueEntity<Item>(item.getId(), item.getValue()));
+			rawItemQuality.setMeasureUnit(MeasureUnit.OZ);
+			rawItemQuality.setSampleWeight(BigDecimal.valueOf(8).setScale(QualityCheck.SCALE));
+			rawItemQuality.setNumberOfSamples(BigInteger.TEN);
+			rawItemQuality.setDefects(new RawDefects());
+			rawItemQuality.setDamage(new RawDamage());
 			
-			processItems[i] = new ProcessItem();
-			Item item = orderItems[i].getItem();
-			processItems[i].setItem(item);
-			processItems[i].setMeasureUnit(item.getMeasureUnit());
+			ProcessItemDTO processItem = new ProcessItemDTO();
+			processItems.add(processItem);
+			ItemWithUnitDTO itemWithUnitDTO = new ItemWithUnitDTO(orderItems.get(i).getItem().fillEntity(new Item()));
+			processItem.setItem(itemWithUnitDTO);
+			processItem.setMeasureUnit(item.getMeasureUnit());
 			
-			Storage[] QCStorageForms = new Storage[1];
-			QCStorageForms[0] = new Storage();
-			QCStorageForms[0].setUnitAmount(BigDecimal.valueOf(8));
-			QCStorageForms[0].setNumberUnits(BigDecimal.valueOf(2));
-			QCStorageForms[0].setWarehouseLocation(storages.get(i));
-//			QCStorageForms[0].setMeasureUnit("OZ");
+			List<StorageDTO> QCStorageForms = new ArrayList<StorageDTO>();
+			StorageDTO QCStorageForm = new StorageDTO();
+			QCStorageForms.add(QCStorageForm);
+			QCStorageForm.setUnitAmount(BigDecimal.valueOf(8));
+			QCStorageForm.setNumberUnits(BigDecimal.valueOf(2));
+			QCStorageForm.setWarehouseLocation(new BasicValueEntity<Warehouse>(storages.get(i)));
+//			QCStorageForm.setMeasureUnit("OZ");
 			
-			processItems[i].setStorageForms(QCStorageForms);
+			processItem.setStorageForms(QCStorageForms);
 			
 		}
 		check.setProcessItems(processItems);
 		check.setTestedItems(rawItemQualities);
-		checks.addCashewReceiptCheck(check);
+		Integer checkId;
+		try {
+			checkId = checks.addCashewReceiptCheck(check);
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			throw e2;
+		}
 		QualityCheckDTO checkDTO;
-		ProcessFileDTO processFile = new ProcessFileDTO(null, null, check.getId(), "address", 
+		checkDTO = checks.getQcByProcessId(checkId);
+		assertEquals(check, checkDTO, "QC not added or fetched correctly");
+
+		ProcessFileDTO processFile = new ProcessFileDTO(null, null, checkId, "address", 
 				"description", "remarks", null, null);
 		objectWriter.addProcessFile(processFile);
-		check.getProcessFiles().add(processFile.fillEntity(new ProcessFile()));
-		checkDTO = checks.getQcByProcessId(check.getId());
+		try {
+			
+			check.setProcessFiles(Arrays.asList(processFile));
+		} catch (Exception e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+			throw e2;
+		}
+		checkDTO = checks.getQcByProcessId(checkId);
 //		System.out.println(checkDTO);
 //		fail("finished");
 		try {
-			assertEquals(new QualityCheckDTO(check), checkDTO, "QC not added or fetched correctly");
+			assertEquals(check, checkDTO, "QC not added or fetched correctly");
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

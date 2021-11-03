@@ -86,13 +86,13 @@ public class ContainerController {
 	private ContainerArrivalReports containerArrivalReports;
 	
 	@PostMapping("/addLoading")
-	public ContainerLoadingDTO addLoading(@RequestBody ContainerLoading load) {
-		loading.addLoading(load);
-		return loading.getLoading(load.getId());
+	public ContainerLoadingDTO addLoading(@RequestBody ContainerLoadingDTO load) {
+		Integer id = loading.addLoading(load);
+		return loading.getLoading(id);
 	}
 	
 	@PutMapping("/editLoading")
-	public ContainerLoadingDTO editLoading(@RequestBody ContainerLoading load) {
+	public ContainerLoadingDTO editLoading(@RequestBody ContainerLoadingDTO load) {
 		loading.editLoading(load);
 		return loading.getLoading(load.getId());
 	}

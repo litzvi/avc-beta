@@ -185,7 +185,7 @@ public abstract class UsedItemBaseDTO extends RankedAuditedDTO {
 			usedItemBase.setStorage(getStorage().fillEntity(new Storage()));
 			setStorageId(getStorage().getId()); //for test comparing
 		}
-		usedItemBase.setNumberUnits(getNumberUsedUnits());
+		usedItemBase.setNumberUsedUnits(getNumberUsedUnits());
 		
 		
 		return usedItemBase;

@@ -19,12 +19,15 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
+import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.exportdoc.InventoryExportDoc;
 import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
 import com.avc.mis.beta.dto.process.ContainerBookingDTO;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
+import com.avc.mis.beta.dto.values.ShipmentCodeDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
@@ -91,40 +94,41 @@ public class LoadingTest {
 		containerDetails.setContainerType("20'");		
 		arrival.setContainerDetails(containerDetails);
 		arrival.setShipingDetails(service.getShipingDetails());
-		arrivals.addArrival(arrival);
+		Integer arrivalId = arrivals.addArrival(arrival);
 		ContainerArrivalDTO expectedArrival = arrival;
-		ContainerArrivalDTO actualArrival = arrivals.getArrival(arrival.getId());		
-		arrivals.editArrival(arrival);		
+		ContainerArrivalDTO actualArrival = arrivals.getArrival(arrivalId);		
+		arrivals.editArrival(actualArrival);		
 		assertEquals(expectedArrival, actualArrival, "Failed test adding container loading");
 
 		
 		//test loading
-		ContainerLoading loading = new ContainerLoading();
-		loading.setProductionLine(service.getProductionLine(ProductionFunctionality.LOADING));
+		ContainerLoadingDTO loading = new ContainerLoadingDTO();
+		loading.setProductionLine(new ProductionLineBasic(service.getProductionLine(ProductionFunctionality.LOADING)));
 //		ContainerBooking refBooking = new ContainerBooking();
 //		refBooking.setId(booking.getId());
 //		refBooking.setVersion(booking.getVersion());
-		loading.setArrival(arrival);
-		loading.setShipmentCode(service.addShipmentCode());
+		loading.setArrival(new ContainerArrivalBasic(actualArrival));
+		loading.setShipmentCode(new ShipmentCodeDTO(service.addShipmentCode()));
 		loading.setRecordedTime(LocalDateTime.now());
 
 		//get inventory storages for transfer
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-		loading.setStorageMovesGroups(service.getStorageMoves(poInventory));
+		loading.setStorageMovesGroups(service.getStorageMovesDTOs(poInventory));
 		
+		Integer loadingId;
 		try {
-			loadingService.addLoading(loading);
+			loadingId = loadingService.addLoading(loading);
 		} catch (Exception e3) {
 			// TODO Auto-generated catch block
 			e3.printStackTrace();
 			throw e3;
 		}
 
-		ContainerLoadingDTO expectedLoading = new ContainerLoadingDTO(loading);
-		ContainerLoadingDTO actualLoading = loadingService.getLoading(loading.getId());
+		ContainerLoadingDTO expectedLoading = loading;
+		ContainerLoadingDTO actualLoading = loadingService.getLoading(loadingId);
 
 		try {
-			InventoryExportDoc inventoryExportDoc = loadingService.getInventoryExportDoc(loading.getId());
+			InventoryExportDoc inventoryExportDoc = loadingService.getInventoryExportDoc(loadingId);
 			System.out.println(inventoryExportDoc);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
@@ -134,7 +138,7 @@ public class LoadingTest {
 		
 		SecurityExportDoc securityExportDoc;
 		try {
-			securityExportDoc = loadingService.getSecurityExportDoc(loading.getId());
+			securityExportDoc = loadingService.getSecurityExportDoc(loadingId);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -143,17 +147,18 @@ public class LoadingTest {
 		System.out.println(securityExportDoc);
 		
 		try {
-			loadingService.editLoading(loading);		
+			loadingService.editLoading(actualLoading);
+			expectedLoading = loadingService.getLoading(actualLoading.getId());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw e;
 		}		
-		assertEquals(expectedLoading, actualLoading, "Failed test adding container loading");
+		assertEquals(expectedLoading, actualLoading, "Failed test editing container loading");
 		
-		processInfoWriter.removeProcess(loading.getId());
+		processInfoWriter.removeProcess(loadingId);
 //		loadingService.removeLoading(loading.getId());
-		processInfoWriter.removeProcess(arrival.getId());
+		processInfoWriter.removeProcess(arrivalId);
 //		arrivals.removeArrival(arrival.getId());
 		bookings.removeBooking(booking.getId());
 

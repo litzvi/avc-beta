@@ -20,19 +20,25 @@ import org.springframework.stereotype.Service;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.data.DataObject;
+import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
+import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
 import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ItemWithMeasureUnit;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.BasePoCode;
@@ -153,12 +159,12 @@ public class TestService {
 	}
 
 	
-	public PO addBasicCashewOrder() {
+	public PoDTO addBasicCashewOrder() {
 		
 		//build purchase order
-		PO po = new PO();
+		PoDTO po = new PoDTO();
 		PoCode poCode = addPoCode();
-		po.setPoCode(poCode);
+		po.setPoCode(new PoCodeBasic(poCode));
 //		poCode.setCode(Integer.toString(randCode++));
 //		Supplier supplier = addBasicSupplier();
 //		poCode.setSupplier(supplier);
@@ -168,42 +174,46 @@ public class TestService {
 		po.setRecordedTime(LocalDateTime.now());
 		
 		//add order items
-		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS, ItemGroup.PRODUCT);				
+		List<OrderItemDTO> items = getOrderItems(OrdersTest.NUM_ITEMS, ItemGroup.PRODUCT);				
 		po.setOrderItems(items);
-		orders.addCashewOrder(po);
+		Integer poId = orders.addCashewOrder(po);
+		po.setId(poId);
 		return po;
 	}
 	
-	public PO addBasicGeneralOrder() {
+	public PoDTO addBasicGeneralOrder() {
 		
 		//build purchase order
-		PO po = new PO();
+		PoDTO po = new PoDTO();
 		GeneralPoCode poCode = addGeneralPoCode();
 //		Supplier supplier = addBasicSupplier();
 //		poCode.setCode(Integer.toString(randCode++));
 //		poCode.setSupplier(supplier);
 //		poCode.setContractType(getContractType());
-		po.setPoCode(poCode);
+		po.setPoCode(new PoCodeBasic(poCode));
 		
 		//build process
 		po.setRecordedTime(LocalDateTime.now());
 		
 		//add order items
-		OrderItem[] items = getOrderItems(OrdersTest.NUM_ITEMS, ItemGroup.GENERAL);				
+		List<OrderItemDTO> items = getOrderItems(OrdersTest.NUM_ITEMS, ItemGroup.GENERAL);				
 		po.setOrderItems(items);
-		orders.addGeneralOrder(po);
+		Integer poId = orders.addGeneralOrder(po);
+		po.setId(poId);
 		return po;
 	}
 	
-	private OrderItem[] getOrderItems(int numOfItems, ItemGroup group) {
-		OrderItem[] orderItems = new OrderItem[numOfItems];
-		for(int i=0; i<orderItems.length; i++) {
-			orderItems[i] = new OrderItem();
+	private List<OrderItemDTO> getOrderItems(int numOfItems, ItemGroup group) {
+		List<OrderItemDTO> orderItems = new ArrayList<OrderItemDTO>();
+		for(int i=0; i<numOfItems; i++) {
+			OrderItemDTO orderItem = new OrderItemDTO();
+			orderItems.add(orderItem);
 			Item item = getItemByGroup(group);
-			orderItems[i].setItem(item);
-			orderItems[i].setNumberUnits(new AmountWithUnit(new BigDecimal(i+1), item.getMeasureUnit()));
-			orderItems[i].setUnitPrice(new AmountWithCurrency("1.16", "USD"));
-			orderItems[i].setDeliveryDate("1983-11-23");
+			ItemWithMeasureUnit itemWithMeasureUnit = new ItemWithMeasureUnit(item.getId(), item.getValue(), item.getMeasureUnit());
+			orderItem.setItem(itemWithMeasureUnit);
+			orderItem.setNumberUnits(new AmountWithUnit(new BigDecimal(i+1), item.getMeasureUnit()));
+			orderItem.setUnitPrice(new AmountWithCurrency("1.16", "USD"));
+			orderItem.setDeliveryDate("1983-11-23");
 		}
 		return orderItems;
 	}
@@ -422,6 +432,9 @@ public class TestService {
 	public void cleanup(Supplier supplier) {
 		suppliers.permenentlyRemoveSupplier(supplier.getId());		
 	}
+	public void cleanupSupplier(Integer supplierId) {
+		suppliers.permenentlyRemoveSupplier(supplierId);		
+	}
 	
 	public void cleanup(PO po) {
 		BasePoCode poCode = po.getPoCode();
@@ -431,6 +444,14 @@ public class TestService {
 //		orders.removeOrder(po.getId());
 //		suppliers.permenentlyRemoveEntity(poCode);
 		cleanup(supplier);
+		
+	}
+	public void cleanup(PoDTO po) {
+		PoCodeBasic poCode = po.getPoCode();
+		PoCodeDTO poCodeDTO = objectWriter.getPoCode(poCode.getId());
+		DataObjectWithName<Supplier> supplier = poCodeDTO.getSupplier();
+		processInfoWriter.removeAllProcesses(poCode.getId());
+		cleanupSupplier(supplier.getId());
 		
 	}
 
@@ -486,11 +507,7 @@ public class TestService {
 		}
 		return usedItemsGroups;
 	}
-	
-	/**
-	 * @param poInventory
-	 * @return
-	 */
+
 	public StorageMovesGroup[] getStorageMoves(List<ProcessItemInventory> poInventory) {
 		StorageMovesGroup[] storageMovesGroups = new StorageMovesGroup[poInventory.size()];
 		int i = 0;
@@ -514,6 +531,29 @@ public class TestService {
 //			storageMovesGroups[i].setMeasureUnit(processItemRow.getItem().getMeasureUnit());
 			storageMovesGroups[i].setStorageMoves(storageMoves);
 			i++;
+
+		}
+		return storageMovesGroups;
+	}
+	public List<StorageMovesGroupDTO> getStorageMovesDTOs(List<ProcessItemInventory> poInventory) {
+		List<StorageMovesGroupDTO> storageMovesGroups = new ArrayList<StorageMovesGroupDTO>();
+		for(ProcessItemInventory processItemRow: poInventory) {
+			StorageMovesGroupDTO storageMovesGroup = new StorageMovesGroupDTO();
+			storageMovesGroups.add(storageMovesGroup);
+			List<StorageMoveDTO> storageMoves = new ArrayList<StorageMoveDTO>();
+			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
+				StorageMoveDTO storageMove = new StorageMoveDTO();
+				storageMoves.add(storageMove);
+				StorageBaseDTO storage = new StorageBaseDTO();
+				storageMove.setStorage(storage);
+				storage.setId(storagesRow.getId());
+				storage.setVersion(storagesRow.getVersion());
+				storageMove.setNumberUsedUnits(storagesRow.getNumberUnits());
+				storageMove.setUnitAmount(storagesRow.getUnitAmount());
+				storageMove.setNumberUnits(storagesRow.getNumberUnits());
+				storageMove.setWarehouseLocation(new BasicValueEntity<Warehouse>(getWarehouse()));
+			}
+			storageMovesGroup.setStorageMoves(storageMoves);
 
 		}
 		return storageMovesGroups;

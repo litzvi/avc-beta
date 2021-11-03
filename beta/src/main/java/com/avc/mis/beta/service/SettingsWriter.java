@@ -66,7 +66,7 @@ public class SettingsWriter {
 				processInfoDAO.setTransactionUsedProcesses((TransactionProcess)process);
 			}
 			if(process instanceof StorageRelocation) {
-				processInfoDAO.setUsedProcesses((StorageRelocation)process);
+				processInfoDAO.setRelocationUsedProcesses((StorageRelocation)process);
 			}
 		}
 	}

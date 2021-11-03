@@ -33,6 +33,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * Purchase Order with order items.
@@ -43,6 +44,7 @@ import lombok.Setter;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "PURCHASE_ORDERS")
 @PrimaryKeyJoinColumn(name = "processId")
@@ -86,17 +88,7 @@ public class PO extends PoProcess {
 		Ordinal.setOrdinals(orderItems);
 		this.orderItems = Insertable.setReferences(orderItems, (t) -> {t.setReference(this);	return t;});
 	}
-	
-//	@Override
-//	public void setPoCode(BasePoCode poCode) {
-//		if(poCode instanceof PoCode) {
-//			super.setPoCode((PoCode)poCode);
-//		}
-//		else {
-//			throw new ClassCastException("Referenced object isn't a PoCode");
-//		}	
-//	}
-	
+		
 	@NotNull(message = "Purchase Order has to reference a po code")
 	@Override
 	public BasePoCode getPoCode() {

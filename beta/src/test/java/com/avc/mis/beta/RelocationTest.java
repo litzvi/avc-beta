@@ -6,6 +6,7 @@ package com.avc.mis.beta;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,13 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
+import com.avc.mis.beta.dto.process.collection.CountAmountDTO;
+import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
+import com.avc.mis.beta.dto.values.ItemWithUse;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.PoCode;
@@ -69,21 +75,22 @@ public class RelocationTest {
 		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
-		StorageRelocation relocation = new StorageRelocation();
-		PoCode poCode = new PoCode();
+		StorageRelocationDTO relocation = new StorageRelocationDTO();
+		PoCodeBasic poCode = new PoCodeBasic();
 		poCode.setId(receipt.getPoCode().getId());
 		relocation.setPoCode(poCode);
 		relocation.setRecordedTime(LocalDateTime.now());
-		relocation.setProductionLine(service.getProductionLine(ProductionFunctionality.RAW_STATION));
+		relocation.setProductionLine(new ProductionLineBasic(service.getProductionLine(ProductionFunctionality.RAW_STATION)));
 
 
 		//get inventory storages for relocation
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-		relocation.setStorageMovesGroups(service.getStorageMoves(poInventory));
+		relocation.setStorageMovesGroups(service.getStorageMovesDTOs(poInventory));
 		relocation.setItemCounts(getItemCounts(poInventory));
 
+		Integer relocationId;
 		try {
-			warehouseManagement.addStorageRelocation(relocation);
+			relocationId = warehouseManagement.addStorageRelocation(relocation);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -92,13 +99,13 @@ public class RelocationTest {
 		
 		StorageRelocationDTO expected;
 		try {
-			expected = new StorageRelocationDTO(relocation);
+			expected = relocation;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw e;
 		}
-		StorageRelocationDTO actual = warehouseManagement.getStorageRelocation(relocation.getId());
+		StorageRelocationDTO actual = warehouseManagement.getStorageRelocation(relocationId);
 		
 		assertEquals(expected, actual, "Failed test adding storageRelocation with Counts");
 				
@@ -106,31 +113,27 @@ public class RelocationTest {
 	
 	
 
-	private ItemCount[] getItemCounts(List<ProcessItemInventory> poInventory) {
-		ItemCount[] itemCounts = new ItemCount[poInventory.size()];
-		CountAmount[] countAmounts;
-		for(int i=0; i<itemCounts.length; i++) {
+	private List<ItemCountDTO> getItemCounts(List<ProcessItemInventory> poInventory) {
+		List<ItemCountDTO> itemCounts = new ArrayList<ItemCountDTO>();
+		for(ProcessItemInventory processItemRow: poInventory) {
 			//build item count
-			ProcessItemInventory processItemRow = poInventory.get(i);
-			itemCounts[i] = new ItemCount();
+			ItemCountDTO itemCount = new ItemCountDTO();
+			itemCounts.add(itemCount);
+			List<CountAmountDTO> countAmounts = new ArrayList<CountAmountDTO>();
 			Item item = new Item();
 			item.setId(processItemRow.getItem().getId());
-			itemCounts[i].setItem(item);
+			itemCount.setItem(new ItemWithUse(item));
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
 			StorageInventoryRow randStorage = storagesRows.get(0);
-			itemCounts[i].setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
-//			itemCounts[i].setContainerWeight(randStorage.getAccessWeight());
-			countAmounts = new CountAmount[storagesRows.size()];
-			int j=0;
+			itemCount.setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
+//			itemCount.setContainerWeight(randStorage.getAccessWeight());
 			for(StorageInventoryRow storageRow: storagesRows) {
-				countAmounts[j] = new CountAmount();
-				countAmounts[j].setAmount(storageRow.getTotalBalance().getAmount());
-				countAmounts[j].setOrdinal((storageRow.getOrdinal()));
-				
-				j++;
-			}
-			
-			itemCounts[i].setAmounts(countAmounts);
+				CountAmountDTO countAmount = new CountAmountDTO();
+				countAmounts.add(countAmount);
+				countAmount.setAmount(storageRow.getTotalBalance().getAmount());
+				countAmount.setOrdinal((storageRow.getOrdinal()));
+			}			
+			itemCount.setAmounts(countAmounts);
 		}
 		return itemCounts;
 	}

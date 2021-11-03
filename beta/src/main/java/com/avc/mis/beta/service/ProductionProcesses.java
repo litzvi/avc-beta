@@ -47,7 +47,7 @@ public class ProductionProcesses implements ProductionProcessService {
 		process.setProcessName(processName);
 //		process.setProcessType(dao.getProcessTypeByValue(processName));
 		Integer processId = dao.addTransactionProcessEntity(process, ProductionProcess::new);	
-		dao.checkUsedInventoryAvailability(processId);
+		dao.checkTransactionUsedInventoryAvailability(processId);
 		dao.setTransactionPoWeights(processId);
 		dao.setTransactionUsedProcesses(processId);
 		
@@ -74,7 +74,7 @@ public class ProductionProcesses implements ProductionProcessService {
 		
 		dao.editTransactionProcessEntity(process, ProductionProcess::new);		
 		dao.checkUsingProcesessConsistency(process);
-		dao.checkUsedInventoryAvailability(process.getId());
+		dao.checkTransactionUsedInventoryAvailability(process.getId());
 		dao.setTransactionPoWeights(process.getId());
 		dao.setTransactionUsedProcesses(process.getId());
 	}

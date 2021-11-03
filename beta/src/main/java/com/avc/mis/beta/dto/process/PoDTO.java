@@ -17,12 +17,14 @@ import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
 import com.avc.mis.beta.dto.processInfo.GeneralProcessInfo;
 import com.avc.mis.beta.dto.processInfo.OrderProcessInfo;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.enums.Shift;
 import com.avc.mis.beta.entities.process.PO;
+import com.avc.mis.beta.entities.process.collection.OrderItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -90,6 +92,29 @@ public class PoDTO extends PoProcessDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return PO.class;
 	}
+	
+	@Override
+	public PO fillEntity(Object entity) {
+		PO order;
+		if(entity instanceof PO) {
+			order = (PO) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be PO class");
+		}
+		super.fillEntity(order);
+				
+		if(getOrderItems() == null || getOrderItems().isEmpty()) {
+			throw new IllegalArgumentException("Purchase Order has to have at least one order line");
+		}
+		else {
+			Ordinal.setOrdinals(getOrderItems());
+			order.setOrderItems(getOrderItems().stream().map(i -> i.fillEntity(new OrderItem())).toArray(OrderItem[]::new));
+		}
+		
+		return order;
+	}
+
 	
 	@Override
 	public String getProcessTypeDescription() {

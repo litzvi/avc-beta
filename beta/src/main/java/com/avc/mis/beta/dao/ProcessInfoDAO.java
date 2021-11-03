@@ -27,10 +27,15 @@ import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
+import com.avc.mis.beta.dto.data.DataObject;
+import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.process.ProcessWithProductDTO;
+import com.avc.mis.beta.dto.process.RelocationProcessDTO;
 import com.avc.mis.beta.dto.process.TransactionProcessDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageBalance;
@@ -48,6 +53,7 @@ import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.PoProcess;
@@ -154,14 +160,26 @@ public class ProcessInfoDAO extends DAO {
 		return addPoProcessEntity(process, supplier);
 	}
 	
+	public <T extends RelocationProcessDTO> Integer addRelocationProcessEntity(T process, Supplier<? extends RelocationProcess> supplier) {
+		setStorageMovesProcessItem(process.getStorageMovesGroups());
+		Integer processId = addPoProcessEntity(process, supplier);
+		checkRelocationUsedInventoryAvailability(processId);
+		setRelocationPoWeights(processId);
+		setRelocationUsedProcesses(processId);
+		//check if storage moves match the amounts of the used item
+		checkRelocationBalance(processId);
+		return processId;
+	}
+
+	
 	public void checkUsedInventoryAvailability(TransactionProcess<?> process) {
 		List<StorageBalance> storageBalances = getInventoryRepository().findUsedStorageBalances(process.getId());
 		if(storageBalances != null && storageBalances.stream().anyMatch(b -> !b.isLegal())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
 	}
-	public void checkUsedInventoryAvailability(Integer processId) {
-		List<StorageBalance> storageBalances = getInventoryRepository().findUsedStorageBalances(processId);
+	public void checkTransactionUsedInventoryAvailability(Integer transactionProcessId) {
+		List<StorageBalance> storageBalances = getInventoryRepository().findUsedStorageBalances(transactionProcessId);
 		if(storageBalances != null && storageBalances.stream().anyMatch(b -> !b.isLegal())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
@@ -169,6 +187,12 @@ public class ProcessInfoDAO extends DAO {
 	
 	public void checkUsedInventoryAvailability(RelocationProcess process) {
 		List<StorageBalance> storageBalances = getInventoryRepository().findRelocationUseBalances(process.getId());
+		if(storageBalances != null && storageBalances.stream().anyMatch(b -> !b.isLegal())) {
+			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
+		}
+	}
+	public void checkRelocationUsedInventoryAvailability(Integer relocationProcessId) {
+		List<StorageBalance> storageBalances = getInventoryRepository().findRelocationUseBalances(relocationProcessId);
 		if(storageBalances != null && storageBalances.stream().anyMatch(b -> !b.isLegal())) {
 			throw new IllegalArgumentException("Process used item amounts exceed amount in inventory");
 		}
@@ -218,10 +242,15 @@ public class ProcessInfoDAO extends DAO {
 //		setUsedProcesses(process);
 //	}
 		
-	public void setUsedProcesses(RelocationProcess process) {
+	public void setRelocationUsedProcesses(RelocationProcess process) {
 		removeOldProcessParents(process.getId());
 		List<UsedProcess> usedProcesses = getProcessRepository().findRelocationUsedProcess(process.getId());
 		addUsedProcesses(usedProcesses, process.getId());
+	}
+	public void setRelocationUsedProcesses(Integer relocationProcessId) {
+		removeOldProcessParents(relocationProcessId);
+		List<UsedProcess> usedProcesses = getProcessRepository().findRelocationUsedProcess(relocationProcessId);
+		addUsedProcesses(usedProcesses, relocationProcessId);
 	}
 	
 	public void setTransactionUsedProcesses(TransactionProcess<?> process) {
@@ -257,7 +286,13 @@ public class ProcessInfoDAO extends DAO {
 		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findRelocationWeightedPos(process.getId());
 		addPoWeights(poWeights, process.getId(), false);
 		return poWeights;
-	}	
+	}
+	public List<ItemAmountWithPoCode> setRelocationPoWeights(Integer relocationProcessId) {
+		removeOldWeightedPos(relocationProcessId);
+		List<ItemAmountWithPoCode> poWeights = getProcessRepository().findRelocationWeightedPos(relocationProcessId);
+		addPoWeights(poWeights, relocationProcessId, false);
+		return poWeights;
+	}
 	
 	public void setTransactionPoWeights(TransactionProcess<?> process) {
 		removeOldWeightedPos(process.getId());
@@ -360,6 +395,22 @@ public class ProcessInfoDAO extends DAO {
 	public <T extends TransactionProcessDTO<?>> void editTransactionProcessEntity(T process, Supplier<? extends TransactionProcess<?>> supplier) {
 		editPoProcessEntity(process, supplier);
 	}
+	
+	public <T extends RelocationProcessDTO> void editRelocationProcessEntity(T process, Supplier<? extends RelocationProcess> supplier) {
+		setStorageMovesProcessItem(process.getStorageMovesGroups());
+		
+		checkRemovingUsedProduct(process);
+		
+		editPoProcessEntity(process, supplier);
+		
+		checkRelocationUsedInventoryAvailability(process.getId());
+		setRelocationUsedProcesses(process.getId());
+		List<ItemAmountWithPoCode> usedPos = setRelocationPoWeights(process.getId());
+		checkDAGmaintained(usedPos, process.getId());
+
+		checkUsingProcesessConsistency(process);
+		checkRelocationBalance(process.getId());			
+	}
 
 //	public void editStorageRelocationProcessEntity(StorageRelocation relocation) {
 //		
@@ -426,6 +477,18 @@ public class ProcessInfoDAO extends DAO {
 			throw new IllegalArgumentException("Process moved amounts can't be reduced because already in use");
 		}	
 	}
+	public void checkUsingProcesessConsistency(RelocationProcessDTO relocation) {
+		//check that processes who use this product are synchronized (are later) with this edited process
+		if(!getProcessRepository().isProcessSynchronized(relocation.getId())) {
+			throw new IllegalArgumentException("Process recorded time is after a process using it's product");			
+		}
+		
+		//checks if not reducing produced amounts already used by other processes
+		Stream<StorageBalance> storageBalances = getInventoryRepository().findStorageMoveBalances(relocation.getId());
+		if(!storageBalances.allMatch(b -> b.isLegal())) {
+			throw new IllegalArgumentException("Process moved amounts can't be reduced because already in use");
+		}	
+	}
 
 //	private boolean isProducedInventorySufficiant(Integer processId) {		
 //		Stream<StorageBalance> storageBalances = getInventoryRepository().findProducedStorageBalances(processId);
@@ -434,8 +497,17 @@ public class ProcessInfoDAO extends DAO {
 	
 	public void checkRemovingUsedProduct(RelocationProcess relocation) {
 		HashSet<Integer> storageIds = new HashSet<Integer>();
-		for(StorageMovesGroup pi: CollectionItemWithGroup.safeCollection(Arrays.asList(relocation.getStorageMovesGroups()))) {
-			storageIds.addAll(Arrays.stream(pi.getStorageMoves()).map(StorageBase::getId).collect(Collectors.toSet()));
+		for(StorageMovesGroup mg: CollectionItemWithGroup.safeCollection(Arrays.asList(relocation.getStorageMovesGroups()))) {
+			storageIds.addAll(Arrays.stream(mg.getStorageMoves()).map(StorageBase::getId).filter(i -> i != null).collect(Collectors.toSet()));
+		}
+		if(getProcessRepository().isRelocationRemovingUsedProduct(relocation.getId(), storageIds)) {
+			throw new AccessControlException("Process items can't be edited because they are already in use");
+		}		
+	}
+	public void checkRemovingUsedProduct(RelocationProcessDTO relocation) {
+		HashSet<Integer> storageIds = new HashSet<Integer>();
+		for(StorageMovesGroupDTO mg: CollectionItemWithGroup.safeCollection(relocation.getStorageMovesGroups())) {
+			storageIds.addAll((mg.getStorageMoves().stream().map(StorageMoveDTO::getId).filter(i -> i != null).collect(Collectors.toSet())));
 		}
 		if(getProcessRepository().isRelocationRemovingUsedProduct(relocation.getId(), storageIds)) {
 			throw new AccessControlException("Process items can't be edited because they are already in use");
@@ -445,7 +517,7 @@ public class ProcessInfoDAO extends DAO {
 	public <T extends ProcessWithProduct<?>> void checkRemovingUsedProduct(T process) {
 		HashSet<Integer> storageIds = new HashSet<Integer>();
 		for(ProcessItem pi: CollectionItemWithGroup.safeCollection(Arrays.asList(process.getProcessItems()))) {
-			storageIds.addAll(Arrays.stream(pi.getStorageForms()).map(Storage::getId).collect(Collectors.toSet()));
+			storageIds.addAll(Arrays.stream(pi.getStorageForms()).map(Storage::getId).filter(i -> i != null).collect(Collectors.toSet()));
 		}
 		if(getProcessRepository().isRemovingUsedProduct(process.getId(), storageIds)) {
 			throw new AccessControlException("Process items can't be edited because they are already in use");
@@ -454,7 +526,7 @@ public class ProcessInfoDAO extends DAO {
 	public <T extends ProcessWithProductDTO<?>> void checkRemovingUsedProduct(T process) {
 		HashSet<Integer> storageIds = new HashSet<Integer>();
 		for(ProcessItemDTO pi: CollectionItemWithGroup.safeCollection((process.getProcessItems()))) {
-			storageIds.addAll(pi.getStorageForms().stream().map(StorageDTO::getId).collect(Collectors.toSet()));
+			storageIds.addAll(pi.getStorageForms().stream().map(StorageDTO::getId).filter(i -> i != null).collect(Collectors.toSet()));
 		}
 		if(getProcessRepository().isRemovingUsedProduct(process.getId(), storageIds)) {
 			throw new AccessControlException("Process items can't be edited because they are already in use");
@@ -514,12 +586,36 @@ public class ProcessInfoDAO extends DAO {
 			move.setUnitAmount(storageBase.getUnitAmount());
 		});
 	}
+	public void setStorageMovesProcessItem(List<StorageMovesGroupDTO> storageMovesGroups) {
+		List<StorageMoveDTO> storageMoves = new ArrayList<>();
+		for(StorageMovesGroupDTO group: storageMovesGroups) {
+			group.getStorageMoves().forEach(storageMoves::add);
+		}
+		Map<Integer, StorageBase> storageMap = getRelocationRepository().findStoragesById(
+				storageMoves.stream()
+				.mapToInt(sm -> sm.getStorage().getId())
+				.toArray())
+				.collect(Collectors.toMap(StorageBase::getId, Function.identity()));
+		storageMoves.forEach(move -> {
+			StorageBase storageBase = storageMap.get(move.getStorage().getId());
+			move.setProcessItem(new DataObject<ProcessItem>(storageBase.getProcessItem()));
+			move.setUnitAmount(storageBase.getUnitAmount());
+		});
+	}
 	
 	public void checkRelocationBalance(RelocationProcess relocation) {
 		List<ProcessItemTransactionDifference> differences = getRelocationRepository().findRelocationDifferences(relocation.getId());		
 		for(ProcessItemTransactionDifference d: differences) {
 			if(d.getDifference().signum() != 0) {
 				sendMessageAlerts(relocation, "Relocated process items don't have matching amounts");
+			}
+		}
+	}
+	public void checkRelocationBalance(Integer relocationProcessId) {
+		List<ProcessItemTransactionDifference> differences = getRelocationRepository().findRelocationDifferences(relocationProcessId);		
+		for(ProcessItemTransactionDifference d: differences) {
+			if(d.getDifference().signum() != 0) {
+				sendMessageAlerts(relocationProcessId, "Relocated process items don't have matching amounts");
 			}
 		}
 	}
@@ -580,6 +676,12 @@ public class ProcessInfoDAO extends DAO {
 			addMessage(user, process, title);
 		}
 	}
+	public void sendMessageAlerts(Integer processId, String title) {
+		Set<UserEntity> users = getProcessRepository().findProcessTypeAlertsUsersByProcess(processId);
+		for(UserEntity user: users) {
+			addMessage(user, processId, title);
+		}
+	}
 	
 
 	/**
@@ -611,6 +713,16 @@ public class ProcessInfoDAO extends DAO {
 		userMessage.setUser(user);
 		userMessage.setDescription(title);
 		userMessage.setLabel(MessageLabel.NEW);
+		addEntity(userMessage);	//user already in the persistence context
+	}
+	public void addMessage(UserEntity user, int processId, String title) {
+		UserMessage userMessage = new UserMessage();		
+		userMessage.setUser(user);
+		userMessage.setDescription(title);
+		userMessage.setLabel(MessageLabel.NEW);
+		GeneralProcess process = getEntityManager().getReference(GeneralProcess.class, processId);
+		userMessage.setProcess(process);
+
 		addEntity(userMessage);	//user already in the persistence context
 	}
 	
@@ -813,5 +925,6 @@ public class ProcessInfoDAO extends DAO {
 	public ProgramSequence getSequnce(SequenceIdentifier sequenceIdentifier) {
 		return getObjectTablesRepository().findSequence(sequenceIdentifier);
 	}
+
 
 }

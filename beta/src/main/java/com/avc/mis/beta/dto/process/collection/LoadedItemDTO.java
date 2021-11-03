@@ -6,10 +6,12 @@ package com.avc.mis.beta.dto.process.collection;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.values.ItemWithUse;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -26,7 +28,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class LoadedItemDTO extends SubjectDataDTO {
+public class LoadedItemDTO extends RankedAuditedDTO {
 	
 	private ItemWithUse item; //change to itemDTO in order to get category
 	private PoCodeBasic poCode;
@@ -73,6 +75,33 @@ public class LoadedItemDTO extends SubjectDataDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return LoadedItem.class;
 	}
+	
+	@Override
+	public LoadedItem fillEntity(Object entity) {
+		LoadedItem loadedItem;
+		if(entity instanceof LoadedItem) {
+			loadedItem = (LoadedItem) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be LoadedItem class");
+		}
+		super.fillEntity(loadedItem);
+		if(getItem() == null) {
+			throw new IllegalArgumentException("Item is mandatory");
+		}
+		else {
+			loadedItem.setItem(getItem().fillEntity(new Item()));
+		}
+		if(getPoCode() != null) {
+			loadedItem.setPoCode(getPoCode().fillEntity(new PoCode()));
+		}
+		loadedItem.setDeclaredAmount(getDeclaredAmount());
+		loadedItem.setDescription(getDescription());
+		loadedItem.setRemarks(getRemarks());
+		
+		return loadedItem;
+	}
+
 
 
 }

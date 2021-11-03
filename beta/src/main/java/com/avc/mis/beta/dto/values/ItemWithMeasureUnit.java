@@ -6,6 +6,7 @@ package com.avc.mis.beta.dto.values;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.process.collection.OrderItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,8 +34,19 @@ public class ItemWithMeasureUnit extends BasicValueEntity<Item> {
 		this.measureUnit = item.getMeasureUnit();
 	}
 	
-//	public ItemWithMeasureUnit(Integer id, String value) {
-//		super(id, value);
-//	}
+	@Override
+	public Item fillEntity(Object entity) {
+		Item item;
+		if(entity instanceof Item) {
+			item = (Item) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be Item class");
+		}
+		super.fillEntity(item);
+		item.setMeasureUnit(getMeasureUnit());
+		
+		return item;
+	}
 
 }

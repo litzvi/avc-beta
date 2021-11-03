@@ -3,11 +3,16 @@
  */
 package com.avc.mis.beta.dto.values;
 
+import com.avc.mis.beta.dto.BaseEntityDTO;
 import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.ValueInterface;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
+import com.avc.mis.beta.entities.values.ShippingPort;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
@@ -16,13 +21,14 @@ import lombok.Value;
  * @author zvi
  *
  */
-@Value
+@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
+@NoArgsConstructor
 @ToString(callSuper = true)
-public class ShipmentCodeDTO extends ValueDTO {
+public class ShipmentCodeDTO extends BaseEntityDTO implements ValueInterface {
 	
-	String code;
-	ShippingPortDTO portOfDischarge;
+	private String code;
+	private ShippingPortDTO portOfDischarge;
 	
 	public ShipmentCodeDTO(@NonNull Integer id, String code, Integer portOfDischargeId, String portOfDischargeValue, String portOfDischargeCode) {
 		super(id);
@@ -47,6 +53,25 @@ public class ShipmentCodeDTO extends ValueDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return ShipmentCode.class;
 	}
+	
+	@Override
+	public ShipmentCode fillEntity(Object entity) {
+		ShipmentCode shipmentCode;
+		if(entity instanceof ShipmentCode) {
+			shipmentCode = (ShipmentCode) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be ShipmentCode class");
+		}
+		super.fillEntity(shipmentCode);
+		shipmentCode.setCode(getCode());
+		if(getPortOfDischarge() != null)
+			shipmentCode.setPortOfDischarge((ShippingPort) getPortOfDischarge().fillEntity(new ShippingPort()));
+		
+		
+		return shipmentCode;
+	}
+
 
 
 }

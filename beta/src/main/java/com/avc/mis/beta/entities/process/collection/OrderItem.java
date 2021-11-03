@@ -96,6 +96,9 @@ public class OrderItem extends RankedAuditedEntity {
 	@OneToMany(mappedBy = "orderItem", fetch = FetchType.LAZY)
 	private Set<ReceiptItem> receiptItems;
 	
+	public void setDeliveryDate(LocalDate deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
 	public void setDeliveryDate(String deliveryDate) {
 		if(deliveryDate != null)
 			this.deliveryDate = LocalDate.parse(deliveryDate);

@@ -16,7 +16,10 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
+import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
@@ -55,48 +58,43 @@ public class InventoryUseTest {
 
 	@Test
 	void generalInventoryUseTest() {
-		PO po = service.addBasicGeneralOrder();
+		PoDTO po = service.addBasicGeneralOrder();
 		ReceiptDTO receipt = service.getGeneralOrderReceipt(po.getPoCode().getId());
 		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
-		InventoryUse inventoryUse = new InventoryUse();
+		InventoryUseDTO inventoryUse = new InventoryUseDTO();
 		inventoryUse.setRecordedTime(LocalDateTime.now());
-		GeneralPoCode poCode = new GeneralPoCode();
+		PoCodeBasic poCode = new PoCodeBasic();
 		poCode.setId(receipt.getPoCode().getId());
 		inventoryUse.setPoCode(poCode);
-		inventoryUse.setProductionLine(service.getProductionLine(ProductionFunctionality.GENERAL_USE));
+		inventoryUse.setProductionLine(new ProductionLineBasic(service.getProductionLine(ProductionFunctionality.GENERAL_USE)));
 
 
 		//get inventory storages for use
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-		inventoryUse.setStorageMovesGroups(service.getStorageMoves(poInventory));
+		inventoryUse.setStorageMovesGroups(service.getStorageMovesDTOs(poInventory));
 
+		Integer inventoryUseId;
 		try {
-			inventoryUses.addGeneralInventoryUse(inventoryUse);
+			inventoryUseId = inventoryUses.addGeneralInventoryUse(inventoryUse);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw e;
 		}
 		
-		InventoryUseDTO expected;
-		try {
-			expected = new InventoryUseDTO(inventoryUse);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
-		InventoryUseDTO actual = inventoryUses.getInventoryUse(inventoryUse.getId());
+		InventoryUseDTO expected = inventoryUse;
+		InventoryUseDTO actual = inventoryUses.getInventoryUse(inventoryUseId);
 		
 		assertEquals(expected, actual, "Failed test adding InventoryUse");
 		
+		inventoryUse = actual;
 		LocalDateTime time =LocalDateTime.now();
 		inventoryUse.setRecordedTime(time);
 		expected.setRecordedTime(time);		
 		inventoryUses.editGeneralInventoryUse(inventoryUse);
-		actual = inventoryUses.getInventoryUse(inventoryUse.getId());
+		actual = inventoryUses.getInventoryUse(inventoryUseId);
 		
 		assertEquals(expected, actual, "Failed test edditing InventoryUse");
 		
@@ -108,7 +106,7 @@ public class InventoryUseTest {
 	
 	@Test
 	void productInventoryUseTest() {
-		PO po = service.addBasicCashewOrder();
+		PoDTO po = service.addBasicCashewOrder();
 		ReceiptDTO receipt;
 		try {
 			receipt = service.getCashewOrderReceipt(po.getPoCode().getId());
@@ -120,43 +118,38 @@ public class InventoryUseTest {
 		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
-		InventoryUse inventoryUse = new InventoryUse();
+		InventoryUseDTO inventoryUse = new InventoryUseDTO();
 		inventoryUse.setRecordedTime(LocalDateTime.now());
-		PoCode poCode = new PoCode();
+		PoCodeBasic poCode = new PoCodeBasic();
 		poCode.setId(receipt.getPoCode().getId());
 		inventoryUse.setPoCode(poCode);
-		inventoryUse.setProductionLine(service.getProductionLine(ProductionFunctionality.PRODUCT_USE));
+		inventoryUse.setProductionLine(new ProductionLineBasic(service.getProductionLine(ProductionFunctionality.PRODUCT_USE)));
 
 
 		//get inventory storages for use
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-		inventoryUse.setStorageMovesGroups(service.getStorageMoves(poInventory));
+		inventoryUse.setStorageMovesGroups(service.getStorageMovesDTOs(poInventory));
 
+		Integer inventoryUseId;
 		try {
-			inventoryUses.addProductInventoryUse(inventoryUse);
+			inventoryUseId = inventoryUses.addProductInventoryUse(inventoryUse);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			throw e;
 		}
 		
-		InventoryUseDTO expected;
-		try {
-			expected = new InventoryUseDTO(inventoryUse);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
-		InventoryUseDTO actual = inventoryUses.getInventoryUse(inventoryUse.getId());
+		InventoryUseDTO expected = inventoryUse;
+		InventoryUseDTO actual = inventoryUses.getInventoryUse(inventoryUseId);
 		
 		assertEquals(expected, actual, "Failed test adding InventoryUse");
 		
+		inventoryUse = actual;
 		LocalDateTime time =LocalDateTime.now();
 		inventoryUse.setRecordedTime(time);
 		expected.setRecordedTime(time);		
 		inventoryUses.editProductInventoryUse(inventoryUse);
-		actual = inventoryUses.getInventoryUse(inventoryUse.getId());
+		actual = inventoryUses.getInventoryUse(inventoryUseId);
 		
 		assertEquals(expected, actual, "Failed test edditing InventoryUse");
 		

@@ -35,15 +35,9 @@ public class StorageRelocations {
 	@Autowired private StorageRelocationRepository relocationRepository;
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void addStorageRelocation(StorageRelocation relocation) {
-		relocation.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_RELOCATION));
-		dao.setStorageMovesProcessItem(relocation.getStorageMovesGroups());
-		dao.addPoProcessEntity(relocation);
-		dao.checkUsedInventoryAvailability(relocation);
-		dao.setRelocationPoWeights(relocation);
-		dao.setUsedProcesses(relocation);
-		//check if storage moves match the amounts of the used item
-		dao.checkRelocationBalance(relocation);
+	public Integer addStorageRelocation(StorageRelocationDTO relocation) {
+		relocation.setProcessName(ProcessName.STORAGE_RELOCATION);
+		return dao.addRelocationProcessEntity(relocation, StorageRelocation::new);
 	}
 	
 	public StorageRelocationDTO getStorageRelocation(int processId) {
@@ -67,21 +61,10 @@ public class StorageRelocations {
 		return relocationDTO;
 	}
 	
+	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void editStorageRelocation(StorageRelocation relocation) {
-		dao.setStorageMovesProcessItem(relocation.getStorageMovesGroups());
-		
-		dao.checkRemovingUsedProduct(relocation);
-		
-		dao.editPoProcessEntity(relocation);
-		
-		dao.checkUsedInventoryAvailability(relocation);
-		dao.setUsedProcesses(relocation);
-		List<ItemAmountWithPoCode> usedPos = dao.setRelocationPoWeights(relocation);
-		dao.checkDAGmaintained(usedPos, relocation.getId());
-
-		dao.checkUsingProcesessConsistency(relocation);
-		dao.checkRelocationBalance(relocation);
+	public void editStorageRelocation(StorageRelocationDTO relocation) {
+		dao.editRelocationProcessEntity(relocation, StorageRelocation::new);
 	}
 		
 	

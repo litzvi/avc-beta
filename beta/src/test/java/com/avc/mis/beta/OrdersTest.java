@@ -24,6 +24,7 @@ import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PO;
@@ -62,17 +63,17 @@ public class OrdersTest {
 	void ordersTest() {
 		
 		//insert an order 
-		PO po = service.addBasicCashewOrder();
+		PoDTO po = service.addBasicCashewOrder();
 		PoDTO expected = null;
-		expected = new PoDTO(po);
+		expected = po;
 		PoDTO actual = orders.getOrder(po.getPoCode().getId());
 		assertEquals(expected, actual, "failed test adding po");
 
 		//edit order status
-		po.setDowntime(Duration.ofHours(15));
-		expected = new PoDTO(po);
+		actual.setDowntime(Duration.ofHours(15));
+		expected = actual;
 		try {
-			orders.editOrder(po);
+			orders.editOrder(actual);
 		} catch (Exception e2) {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
@@ -86,12 +87,14 @@ public class OrdersTest {
 
 		//remove a line/item from order
 		po = service.addBasicCashewOrder();
-		OrderItem[] oldItems = po.getOrderItems();
-		OrderItem[] items = new OrderItem[oldItems.length - 1];
-		IntStream.range(0, items.length).forEach(i -> items[i] = oldItems[i]);
-		po.setOrderItems(items);;
-		expected = new PoDTO(po);
-		orders.editOrder(po);
+		actual = orders.getOrderByProcessId(po.getId());	
+		List<OrderItemDTO> items = actual.getOrderItems();
+		items.remove(0);
+//		OrderItem[] items = new OrderItem[oldItems.length - 1];
+//		IntStream.range(0, items.length).forEach(i -> items[i] = oldItems[i]);
+		actual.setOrderItems(items);
+		orders.editOrder(actual);
+		expected = actual;
 		actual = orders.getOrderByProcessId(po.getId());	
 		assertEquals(expected, actual, "failed test editing po order status");
 				
@@ -139,7 +142,7 @@ public class OrdersTest {
 	
 	@Test
 	void generalOrdersTest() {
-		PO po;
+		PoDTO po;
 		try {
 			po = service.addBasicGeneralOrder();
 		} catch (Exception e) {
@@ -147,7 +150,7 @@ public class OrdersTest {
 			e.printStackTrace();
 			throw e;
 		}
-		PoDTO expected = new PoDTO(po);
+		PoDTO expected = po;
 		PoDTO actual = orders.getOrder(po.getPoCode().getId());
 		assertEquals(expected, actual, "failed test adding po");
 	}

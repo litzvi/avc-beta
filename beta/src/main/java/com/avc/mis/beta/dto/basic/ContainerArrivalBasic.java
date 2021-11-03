@@ -5,7 +5,9 @@ package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.BasicDataValueDTO;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.process.ContainerArrival;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -49,10 +51,36 @@ public class ContainerArrivalBasic extends BasicDataValueDTO {
 			
 	}
 	
+	public ContainerArrivalBasic(@NonNull ContainerArrivalDTO arrival) {
+		super(arrival.getId(), arrival.getVersion());
+		this.containerNumber = arrival.getContainerDetails().getContainerNumber();
+		this.productCompany = arrival.getProductCompany();			
+	}
+	
 	@ToString.Include(name = "value")
 	@Override
 	public String getValue() {
 		return getContainerNumber();
 	}
+	
+	@Override
+	public ContainerArrival fillEntity(Object entity) {
+		ContainerArrival arrival;
+		if(entity instanceof ContainerArrival) {
+			arrival = (ContainerArrival) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be ContainerArrival class");
+		}
+		super.fillEntity(arrival);
+		ContainerDetails containerDetails = new ContainerDetails();
+		containerDetails.setContainerNumber(getContainerNumber());
+		arrival.setContainerDetails(containerDetails);
+		if(getProductCompany() != null)
+			arrival.setProductCompany((Supplier) getProductCompany().fillEntity(new Supplier()));
+		
+		return arrival;
+	}
+
 	
 }
