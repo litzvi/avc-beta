@@ -66,7 +66,7 @@ public class ItemCountDTO extends RankedAuditedDTO implements ListGroup<CountAmo
 		this.measureUnit = itemCount.getMeasureUnit();
 		this.containerWeight = itemCount.getContainerWeight();
 		this.accessWeight = itemCount.getAccessWeight();
-		setAmounts(Arrays.stream(itemCount.getAmounts())
+		setAmounts(itemCount.getAmounts().stream()
 				.map(i->{return new CountAmountDTO(i);})
 				.collect(Collectors.toList()));
 	}
@@ -125,7 +125,7 @@ public class ItemCountDTO extends RankedAuditedDTO implements ListGroup<CountAmo
 		}
 		else {
 			Ordinal.setOrdinals(getAmounts());
-			itemCount.setAmounts(getAmounts().stream().map(i -> i.fillEntity(new CountAmount())).toArray(CountAmount[]::new));
+			itemCount.setAmounts(getAmounts().stream().map(i -> i.fillEntity(new CountAmount())).collect(Collectors.toSet()));
 		}
 		
 		return itemCount;

@@ -86,7 +86,7 @@ public class RelocationTest {
 		//get inventory storages for relocation
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
 		relocation.setStorageMovesGroups(service.getStorageMovesDTOs(poInventory));
-		relocation.setItemCounts(getItemCounts(poInventory));
+		relocation.setItemCounts(service.getItemCounts(poInventory));
 
 		Integer relocationId;
 		try {
@@ -113,28 +113,28 @@ public class RelocationTest {
 	
 	
 
-	private List<ItemCountDTO> getItemCounts(List<ProcessItemInventory> poInventory) {
-		List<ItemCountDTO> itemCounts = new ArrayList<ItemCountDTO>();
-		for(ProcessItemInventory processItemRow: poInventory) {
-			//build item count
-			ItemCountDTO itemCount = new ItemCountDTO();
-			itemCounts.add(itemCount);
-			List<CountAmountDTO> countAmounts = new ArrayList<CountAmountDTO>();
-			Item item = new Item();
-			item.setId(processItemRow.getItem().getId());
-			itemCount.setItem(new ItemWithUse(item));
-			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
-			StorageInventoryRow randStorage = storagesRows.get(0);
-			itemCount.setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
-//			itemCount.setContainerWeight(randStorage.getAccessWeight());
-			for(StorageInventoryRow storageRow: storagesRows) {
-				CountAmountDTO countAmount = new CountAmountDTO();
-				countAmounts.add(countAmount);
-				countAmount.setAmount(storageRow.getTotalBalance().getAmount());
-				countAmount.setOrdinal((storageRow.getOrdinal()));
-			}			
-			itemCount.setAmounts(countAmounts);
-		}
-		return itemCounts;
-	}
+//	private List<ItemCountDTO> getItemCounts(List<ProcessItemInventory> poInventory) {
+//		List<ItemCountDTO> itemCounts = new ArrayList<ItemCountDTO>();
+//		for(ProcessItemInventory processItemRow: poInventory) {
+//			//build item count
+//			ItemCountDTO itemCount = new ItemCountDTO();
+//			itemCounts.add(itemCount);
+//			List<CountAmountDTO> countAmounts = new ArrayList<CountAmountDTO>();
+//			Item item = new Item();
+//			item.setId(processItemRow.getItem().getId());
+//			itemCount.setItem(new ItemWithUse(item));
+//			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
+//			StorageInventoryRow randStorage = storagesRows.get(0);
+//			itemCount.setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
+////			itemCount.setContainerWeight(randStorage.getAccessWeight());
+//			for(StorageInventoryRow storageRow: storagesRows) {
+//				CountAmountDTO countAmount = new CountAmountDTO();
+//				countAmounts.add(countAmount);
+//				countAmount.setAmount(storageRow.getTotalBalance().getAmount());
+//				countAmount.setOrdinal((storageRow.getOrdinal()));
+//			}			
+//			itemCount.setAmounts(countAmounts);
+//		}
+//		return itemCounts;
+//	}
 }

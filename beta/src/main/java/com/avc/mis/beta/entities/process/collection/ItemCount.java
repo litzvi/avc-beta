@@ -61,20 +61,21 @@ public class ItemCount extends ProcessInfoEntity {
 	@Column(precision = 19, scale = MeasureUnit.SCALE)
 	private BigDecimal accessWeight;
 
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE) 
+//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "itemCount", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 //	@NotEmpty(message = "Sample has to contain at least one sampled amount")
 	private Set<CountAmount> amounts;
 	
-	public CountAmount[] getAmounts() {
-		CountAmount[] amounts = this.amounts.toArray(new CountAmount[this.amounts.size()]);
-		Arrays.sort(amounts, Ordinal.ordinalComparator());	
-		return amounts;
-	}
+//	public CountAmount[] getAmounts() {
+//		CountAmount[] amounts = this.amounts.toArray(new CountAmount[this.amounts.size()]);
+//		Arrays.sort(amounts, Ordinal.ordinalComparator());	
+//		return amounts;
+//	}
 	
-	public void setAmounts(CountAmount[] amounts) {
-		Ordinal.setOrdinals(amounts);
+	public void setAmounts(Set<CountAmount> amounts) {
+//		Ordinal.setOrdinals(amounts);
 		this.amounts = Insertable.setReferences(amounts, (t) -> {t.setReference(this);	return t;});
 	}
 	

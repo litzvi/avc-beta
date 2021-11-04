@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,8 +18,11 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
@@ -45,6 +50,7 @@ public class TransferTest {
 //	@Disabled
 	@Test
 	void transferTest() {
+		Integer transferId;
 		try {
 			ReceiptDTO receipt;
 			try {
@@ -57,8 +63,8 @@ public class TransferTest {
 			processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 			
-			StorageTransfer transfer = new StorageTransfer();
-			PoCode poCode = new PoCode();
+			StorageTransferDTO transfer = new StorageTransferDTO();
+			PoCodeBasic poCode = new PoCodeBasic();
 			poCode.setId(receipt.getPoCode().getId());
 			transfer.setPoCode(poCode);
 			transfer.setRecordedTime(LocalDateTime.now());
@@ -72,8 +78,8 @@ public class TransferTest {
 //				.stream()
 //				.map(PoProcessItemEntry::getProcessItem)
 //				.collect(Collectors.toList());
-			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-			transfer.setProcessItems(service.getProcessItems(poInventory));
+			transfer.setUsedItemGroups(TestService.getUsedItemsGroupsDTOs(poInventory));
+			transfer.setProcessItems(service.getProcessItemsDTOs(poInventory));
 			
 					
 //		System.out.println(transfer.getUsedItems().length);
@@ -84,7 +90,7 @@ public class TransferTest {
 
 			try {
 				try {
-					warehouseManagement.addStorageTransfer(transfer);
+					transferId = warehouseManagement.addStorageTransfer(transfer);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -97,12 +103,12 @@ public class TransferTest {
 			}
 					
 			//TODO check if usedItems exceeds inventory should fail
-			transfer = new StorageTransfer();
+			transfer = new StorageTransferDTO();
 			poCode.setId(receipt.getPoCode().getId());
 			transfer.setPoCode(poCode);
 			transfer.setRecordedTime(LocalDateTime.now());
-			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-			transfer.setProcessItems(service.getProcessItems(poInventory));
+			transfer.setUsedItemGroups(TestService.getUsedItemsGroupsDTOs(poInventory));
+			transfer.setProcessItems(service.getProcessItemsDTOs(poInventory));
 			
 			try {
 				warehouseManagement.addStorageTransfer(transfer);
@@ -114,26 +120,26 @@ public class TransferTest {
 			processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 					
-			transfer = new StorageTransfer();
+			transfer = new StorageTransferDTO();
 			poCode.setId(receipt.getPoCode().getId());
 			transfer.setPoCode(poCode);
 			transfer.setRecordedTime(LocalDateTime.now());
 			
 			poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
 			
-			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-			ProcessItem[] processItems = service.getProcessItems(poInventory);
+			transfer.setUsedItemGroups(TestService.getUsedItemsGroupsDTOs(poInventory));
+			List<ProcessItemDTO> processItems = service.getProcessItemsDTOs(poInventory);
 
 			List<ItemDTO> items = service.getItemsByGroup(null);
 			if(items.size() < 2) {
 				fail("not enough items for test");
 			}
 			ItemDTO item = items.get(0);
-			if(item.equals(processItems[0].getItem())) {
+			if(item.equals(processItems.get(0).getItem())) {
 				item = items.get(1);
 			}	
-			for(ProcessItem i: processItems) {
-				i.setItem(service.getItem(item));
+			for(ProcessItemDTO i: processItems) {
+				i.setItem(new ItemWithUnitDTO(service.getItem(item)));
 			}
 			transfer.setProcessItems(processItems);
 			try {
@@ -148,38 +154,32 @@ public class TransferTest {
 			processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 			processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 					
-			transfer = new StorageTransfer();
+			transfer = new StorageTransferDTO();
 			poCode.setId(receipt.getPoCode().getId());
 			transfer.setPoCode(poCode);
 			transfer.setRecordedTime(LocalDateTime.now());
 			
 			poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-			transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-			processItems = service.getProcessItems(poInventory);
-			for(ProcessItem i: processItems) {
-				Storage[] storages = i.getStorageForms();
-				for(Storage s: storages) {
+			transfer.setUsedItemGroups(TestService.getUsedItemsGroupsDTOs(poInventory));
+			processItems = service.getProcessItemsDTOs(poInventory);
+			for(ProcessItemDTO i: processItems) {
+				List<StorageDTO> storages = i.getStorageForms();
+				for(StorageDTO s: storages) {
 					s.setNumberUnits(s.getNumberUnits().divide(BigDecimal.TEN));
 				}
 			}
 			transfer.setProcessItems(processItems);
 			try {
-				warehouseManagement.addStorageTransfer(transfer);
+				transferId = warehouseManagement.addStorageTransfer(transfer);
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 				throw e1;
 			}
 			
-			StorageTransferDTO expected;
-			try {
-				expected = new StorageTransferDTO(transfer);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				throw e;
-			}
-			StorageTransferDTO actual = warehouseManagement.getStorageTransfer(transfer.getId());
+			StorageTransferDTO expected = transfer;
+			
+			StorageTransferDTO actual = warehouseManagement.getStorageTransfer(transferId);
 			
 			assertEquals(expected, actual, "Failed test adding storageTransfer");
 		} catch (Exception e) {
@@ -197,8 +197,8 @@ public class TransferTest {
 		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
 		
-		StorageTransfer transfer = new StorageTransfer();
-		PoCode poCode = new PoCode();
+		StorageTransferDTO transfer = new StorageTransferDTO();
+		PoCodeBasic poCode = new PoCodeBasic();
 		poCode.setId(receipt.getPoCode().getId());
 		transfer.setPoCode(poCode);
 		transfer.setRecordedTime(LocalDateTime.now());
@@ -206,27 +206,21 @@ public class TransferTest {
 
 		//get inventory storages for transfer
 		List<ProcessItemInventory> poInventory = warehouseManagement.getAvailableInventory(null, null, null, null, new Integer[] {receipt.getPoCode().getId()}, null);
-		transfer.setUsedItemGroups(TestService.getUsedItemsGroups(poInventory));
-		transfer.setProcessItems(service.getProcessItems(poInventory));
+		transfer.setUsedItemGroups(TestService.getUsedItemsGroupsDTOs(poInventory));
+		transfer.setProcessItems(service.getProcessItemsDTOs(poInventory));
 		transfer.setItemCounts(service.getItemCounts(poInventory));
 
+		Integer transferId;
 		try {
-			warehouseManagement.addStorageTransfer(transfer);
+			transferId = warehouseManagement.addStorageTransfer(transfer);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			throw e1;
 		}
 		
-		StorageTransferDTO expected;
-		try {
-			expected = new StorageTransferDTO(transfer);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
-		StorageTransferDTO actual = warehouseManagement.getStorageTransfer(transfer.getId());
+		StorageTransferDTO expected = transfer;
+		StorageTransferDTO actual = warehouseManagement.getStorageTransfer(transferId);
 		
 		assertEquals(expected, actual, "Failed test adding storageTransfer with counts");
 				

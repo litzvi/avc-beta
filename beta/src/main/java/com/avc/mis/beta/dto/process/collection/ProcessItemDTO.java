@@ -4,8 +4,10 @@
 package com.avc.mis.beta.dto.process.collection;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.BaseEntityDTO;
@@ -13,6 +15,7 @@ import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
+import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.BaseEntity;
@@ -83,7 +86,7 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 		this.description = processItem.getDescription();
 		this.remarks = processItem.getRemarks();
 		
-		setStorageForms(Arrays.stream(processItem.getStorageForms())
+		setStorageForms(processItem.getStorageForms().stream()
 				.map(i->{return new StorageDTO(i);})
 				.collect(Collectors.toList()));
 
@@ -104,6 +107,52 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 //		this.storageForms = storageForms;
 //	}
 	
+	/**
+	 * Setter for adding Storage forms for items that are processed (used items), 
+	 * the new storages will have the same form as the used ones with the given new location.
+	 * receives an array (which can be ordered, for later use to add an order to the items).
+	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
+	 * @param usedItems array of UsedItemDTOs that are used
+	 */
+	public void setUsedItems(Set<UsedItemDTO> usedItems) {
+		try {
+			setStorageForms(usedItems.stream()
+					.map(i -> i.getNewStorage())
+					.collect(Collectors.toList()));
+		} catch (NullPointerException e) {
+			throw new NullPointerException("Used item storage is null");
+		}		
+	}
+	
+	/**
+	 * Setter for adding list of Storage forms that share the same common measure unit, 
+	 * empty container weight and each only have one unit.
+	 * Usefully presented in a table or list of only ordinal (number) and amount,
+	 * since they all share all other parameters.
+	 * @param storageTable
+	 */
+	public void setStorage(StorageTableDTO storageTable) {
+		
+		
+		setTableView(true);
+		
+//		BigDecimal accessWeight = storageTable.getAccessWeight();
+		BasicValueEntity<Warehouse> warehouse = storageTable.getWarehouseLocation();
+		List<StorageDTO> storageForms = new ArrayList<StorageDTO>();
+		for(BasicStorageDTO amount: storageTable.getAmounts()) {
+			StorageDTO storage = new StorageDTO();
+			storageForms.add(storage);
+			storage.setId(amount.getId());
+			storage.setVersion(amount.getVersion());
+			storage.setOrdinal(amount.getOrdinal());
+			storage.setNumberUnits(amount.getAmount());
+//			storage.setAccessWeight(accessWeight);
+			storage.setWarehouseLocation(warehouse);
+		}
+		setStorageForms(storageForms);
+		
+	}
+	
 	public List<StorageDTO> getStorageForms() {
 		if(isTableView()) {
 			return null;
@@ -117,9 +166,9 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 			this.storageForms.stream().findAny().ifPresent(s -> {
 //				storageTable.setMeasureUnit(s.getUnitAmount().getMeasureUnit());
 //				storageTable.setAccessWeight(s.getAccessWeight());
-				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
-				if(warehouse != null)
-					storageTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+//				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
+//				if(warehouse != null)
+				storageTable.setWarehouseLocation(s.getWarehouseLocation());
 			});
 			List<BasicStorageDTO> amounts = this.storageForms.stream().map((s) -> {
 				return new BasicStorageDTO(s.getId(), s.getVersion(), s.getOrdinal(), s.getNumberUnits());
@@ -186,7 +235,7 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 		}
 		else {
 			Ordinal.setOrdinals(getStorageForms());
-			processItem.setStorageForms(this.storageForms.stream().map(i -> i.fillEntity(new Storage())).toArray(Storage[]::new));
+			processItem.setStorageForms(this.storageForms.stream().map(i -> i.fillEntity(new Storage())).collect(Collectors.toSet()));
 		}
 		
 		return processItem;

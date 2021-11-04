@@ -60,7 +60,8 @@ public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 	private String inspector;
 	private String sampleTaker;
 	
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE) 
+//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@NotEmpty(message = "Quality check has to contain at least one testsed item")
@@ -84,7 +85,7 @@ public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param processItems the processItems to set
 	 */
-	public void setProcessItems(ProcessItem[] processItems) {
+	public void setProcessItems(Set<ProcessItem> processItems) {
 		super.setProcessItems(processItems);
 	}
 
@@ -92,11 +93,11 @@ public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 	 * Gets the list of raw QC results as an array (can be ordered).
 	 * @return array of CahsewItemQuality QC info for cashew items
 	 */
-	public CashewItemQuality[] getTestedItems() {
-		CashewItemQuality[] testedItems = this.testedItems.toArray(new CashewItemQuality[this.testedItems.size()]);
-		Arrays.sort(testedItems, Ordinal.ordinalComparator());
-		return testedItems;
-	}
+//	public CashewItemQuality[] getTestedItems() {
+//		CashewItemQuality[] testedItems = this.testedItems.toArray(new CashewItemQuality[this.testedItems.size()]);
+//		Arrays.sort(testedItems, Ordinal.ordinalComparator());
+//		return testedItems;
+//	}
 
 	/**
 	 * Setter for adding items that where tested, 
@@ -104,8 +105,8 @@ public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param testedItems the testedItems to set
 	 */
-	public void setTestedItems(CashewItemQuality[] testedItems) {
-		Ordinal.setOrdinals(testedItems);
+	public void setTestedItems(Set<CashewItemQuality> testedItems) {
+//		Ordinal.setOrdinals(testedItems);
 		this.testedItems = Insertable.setReferences(testedItems, (t) -> {t.setReference(this);	return t;});
 	}
 	

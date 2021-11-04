@@ -63,7 +63,8 @@ public class ContainerLoading extends RelocationProcess {
 //	private ShipingDetails shipingDetails;
 
 	//not used for now
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE) 
+//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 //	@NotEmpty(message = "Loaded item line has to contain at least one storage line")
@@ -72,18 +73,18 @@ public class ContainerLoading extends RelocationProcess {
 	/**
 	 * @param loadedItems array of loaded items in order
 	 */
-	public void setLoadedItems(LoadedItem[] loadedItems) {
-		Ordinal.setOrdinals(loadedItems);
+	public void setLoadedItems(Set<LoadedItem> loadedItems) {
+//		Ordinal.setOrdinals(loadedItems);
 		this.loadedItems = Insertable.setReferences(loadedItems, (t) -> {t.setReference(this);	return t;});
 	}
 	
 	/**
 	 * @return array of loaded items in given order
 	 */
-	public LoadedItem[] getLoadedItems() {
-		LoadedItem[] loadedItems = this.loadedItems.toArray(new LoadedItem[this.loadedItems.size()]);
-		Arrays.sort(loadedItems, Ordinal.ordinalComparator());
-		return loadedItems;
-	}
+//	public LoadedItem[] getLoadedItems() {
+//		LoadedItem[] loadedItems = this.loadedItems.toArray(new LoadedItem[this.loadedItems.size()]);
+//		Arrays.sort(loadedItems, Ordinal.ordinalComparator());
+//		return loadedItems;
+//	}
 
 }

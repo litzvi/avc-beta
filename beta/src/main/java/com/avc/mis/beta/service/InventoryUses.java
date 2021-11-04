@@ -133,7 +133,7 @@ public class InventoryUses {
 	private boolean isUsedInItemGroup(StorageMovesGroup[] storageMovesGroups, ItemGroup itemGroup) {
 		Set<Integer> usedStorageIds = null;
 		for(StorageMovesGroup smg: storageMovesGroups) {
-			usedStorageIds = Arrays.stream(smg.getStorageMoves()).map(StorageMove::getStorage).map(StorageBase::getId).collect(Collectors.toSet());
+			usedStorageIds = smg.getStorageMoves().stream().map(StorageMove::getStorage).map(StorageBase::getId).collect(Collectors.toSet());
 		}
 		if(usedStorageIds != null) {
 			List<ItemWithUnitDTO> items = getValueTablesRepository().findStoragesItems(usedStorageIds);

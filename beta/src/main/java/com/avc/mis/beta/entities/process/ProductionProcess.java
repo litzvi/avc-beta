@@ -3,6 +3,8 @@
  */
 package com.avc.mis.beta.entities.process;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -37,7 +39,7 @@ public class ProductionProcess extends TransactionProcess<ProcessItem> {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param processItems the processItems to set
 	 */
-	public void setProcessItems(ProcessItem[] processItems) {
+	public void setProcessItems(Set<ProcessItem> processItems) {
 		super.setProcessItems(processItems);
 	}
 	
@@ -45,11 +47,11 @@ public class ProductionProcess extends TransactionProcess<ProcessItem> {
 	 * Gets the list of Process Items as an array (can be ordered).
 	 * @return the processItems
 	 */
-	@NotEmpty(message = "Has to containe at least one destination-storage-item (process item)")
-	@Override
-	public ProcessItem[] getProcessItems() {
-		return super.getProcessItems();
-	}
+//	@NotEmpty(message = "Has to containe at least one destination-storage-item (process item)")
+//	@Override
+//	public ProcessItem[] getProcessItems() {
+//		return super.getProcessItems();
+//	}
 	
 
 }

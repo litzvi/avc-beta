@@ -74,9 +74,9 @@ public class InventoryController {
 	
 	
 	@PostMapping(value="/addStorageTransfer")
-	public StorageTransferDTO addStorageTransfer(@RequestBody StorageTransfer transfer) {
-		warehouseManagement.addStorageTransfer(transfer);
-		return warehouseManagement.getStorageTransfer(transfer.getId());
+	public StorageTransferDTO addStorageTransfer(@RequestBody StorageTransferDTO transfer) {
+		Integer id = warehouseManagement.addStorageTransfer(transfer);
+		return warehouseManagement.getStorageTransfer(id);
 	}
 	
 	@PostMapping(value="/addRelocationTransfer")
@@ -98,7 +98,7 @@ public class InventoryController {
 	}
 	
 	@PutMapping(value="/editStorageTransfer")
-	public StorageTransferDTO editStorageTransfer(@RequestBody StorageTransfer transfer) {
+	public StorageTransferDTO editStorageTransfer(@RequestBody StorageTransferDTO transfer) {
 		warehouseManagement.editStorageTransfer(transfer);
 		return warehouseManagement.getStorageTransfer(transfer.getId());
 	}

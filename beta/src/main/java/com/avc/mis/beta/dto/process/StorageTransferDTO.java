@@ -2,14 +2,18 @@ package com.avc.mis.beta.dto.process;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.process.StorageTransfer;
+import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.process.collection.ItemCount;
+import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
 
 import lombok.Data;
@@ -29,33 +33,16 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class StorageTransferDTO extends TransactionProcessDTO<ProcessItemDTO> {
-	
-
-	
-//	public StorageTransferDTO(Integer id, Integer version, Instant createdDate, String userRecording, 
-//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, 
-//			Integer supplierId, Integer supplierVersion, String supplierName, String display,
-//			ProcessName processName, ProductionLine productionLine, 
-//			OffsetDateTime recordedTime, LocalTime startTime, LocalTime endTime, Duration duration,
-//			Integer numOfWorkers, ProcessStatus processStatus, EditStatus editStatus, String remarks, 
-//			String approvals) {
-//		super(id, version, createdDate, userRecording, 
-//				poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix,
-//				supplierId, supplierVersion, supplierName, display,
-//				processName, productionLine, recordedTime, startTime, endTime, duration, 
-//				numOfWorkers, processStatus, editStatus, remarks, approvals);
-//	}
-	
-	
+		
 	public StorageTransferDTO(@NonNull StorageTransfer transfer) {
 		super(transfer);
-		ItemCount[] itemCounts = transfer.getItemCounts();
+		Set<ItemCount> itemCounts = transfer.getItemCounts();
 		if(itemCounts != null)
-			this.setItemCounts(Arrays.stream(itemCounts)
+			this.setItemCounts(itemCounts.stream()
 					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toList()));
-		super.setProcessItems( Arrays.stream(transfer.getProcessItems())
+		super.setProcessItems(transfer.getProcessItems().stream()
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));
-		super.setUsedItemGroups(Arrays.stream(transfer.getUsedItemGroups())
+		super.setUsedItemGroups(transfer.getUsedItemGroups().stream()
 				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
 
 	}
@@ -84,6 +71,34 @@ public class StorageTransferDTO extends TransactionProcessDTO<ProcessItemDTO> {
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {
 		return StorageTransfer.class;
+	}
+	
+	@Override
+	public StorageTransfer fillEntity(Object entity) {
+		StorageTransfer transfer;
+		if(entity instanceof StorageTransfer) {
+			transfer = (StorageTransfer) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be StorageTransfer class");
+		}
+		super.fillEntity(transfer);	
+		if(getProcessItems() == null || getProcessItems().isEmpty()) {
+			throw new IllegalArgumentException("Has to containe at least one process item");
+		}
+		else {
+			Ordinal.setOrdinals(getProcessItems());
+			transfer.setProcessItems(getProcessItems().stream().map(i -> i.fillEntity(new ProcessItem())).collect(Collectors.toSet()));
+		}
+		if(getUsedItemGroups() == null || getUsedItemGroups().isEmpty()) {
+			throw new IllegalArgumentException("Has to containe at least one used item group");
+		}
+		else {
+			Ordinal.setOrdinals(getUsedItemGroups());
+			transfer.setUsedItemGroups(getUsedItemGroups().stream().map(i -> i.fillEntity(new UsedItemsGroup())).collect(Collectors.toSet()));
+		}
+
+		return transfer;
 	}
 	
 	@Override

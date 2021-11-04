@@ -28,9 +28,9 @@ public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> 
 	
 	public ProductionProcessDTO(@NonNull ProductionProcess process) {
 		super(process);
-		super.setProcessItems( Arrays.stream(process.getProcessItems())
+		super.setProcessItems(process.getProcessItems().stream()
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));
-		super.setWeightedPos(Arrays.stream(process.getWeightedPos())
+		super.setWeightedPos(process.getWeightedPos().stream()
 				.map(i->{return new WeightedPoDTO(i);}).collect(Collectors.toList()));
 
 	}
@@ -55,14 +55,14 @@ public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> 
 		}
 		else {
 			Ordinal.setOrdinals(getProcessItems());
-			productionProcess.setProcessItems(getProcessItems().stream().map(i -> i.fillEntity(new ProcessItem())).toArray(ProcessItem[]::new));
+			productionProcess.setProcessItems(getProcessItems().stream().map(i -> i.fillEntity(new ProcessItem())).collect(Collectors.toSet()));
 		}
 		if(getUsedItemGroups() == null || getUsedItemGroups().isEmpty()) {
 			throw new IllegalArgumentException("Has to containe at least one used item group");
 		}
 		else {
 			Ordinal.setOrdinals(getUsedItemGroups());
-			productionProcess.setUsedItemGroups(getUsedItemGroups().stream().map(i -> i.fillEntity(new UsedItemsGroup())).toArray(UsedItemsGroup[]::new));
+			productionProcess.setUsedItemGroups(getUsedItemGroups().stream().map(i -> i.fillEntity(new UsedItemsGroup())).collect(Collectors.toSet()));
 		}
 		
 		return productionProcess;

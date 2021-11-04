@@ -52,7 +52,7 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 
 	public UsedItemsGroupDTO(UsedItemsGroup group) {
 		super(group);
-		this.usedItems = (Arrays.stream(group.getUsedItems())
+		this.usedItems = (group.getUsedItems().stream()
 				.map(u->{return new UsedItemDTO(u);})
 				.collect(Collectors.toList()));
 	}
@@ -103,9 +103,10 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 				usedItemTable.setItemProcessDate(ui.getItemProcessDate());
 				StorageBaseDTO storage = ui.getStorage();
 //				usedItemTable.setAccessWeight(storage.getAccessWeight());
-				BasicValueEntity<Warehouse> warehouse = storage.getWarehouseLocation();
-				if(warehouse != null)
-					usedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+//				BasicValueEntity<Warehouse> warehouse = storage.getWarehouseLocation();
+//				if(warehouse != null)
+//					usedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+				usedItemTable.setWarehouseLocation(storage.getWarehouseLocation());
 				
 				usedItemTable.setItemPoCodes(ui.getItemPoCodes());
 				usedItemTable.setItemSuppliers(ui.getItemSuppliers());
@@ -213,7 +214,7 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 		}
 		else {
 			Ordinal.setOrdinals(this.usedItems);
-			usedItemsGroup.setUsedItems(this.usedItems.stream().map(i -> i.fillEntity(new UsedItem())).toArray(UsedItem[]::new));
+			usedItemsGroup.setUsedItems(this.usedItems.stream().map(i -> i.fillEntity(new UsedItem())).collect(Collectors.toSet()));
 		}
 		
 		return usedItemsGroup;

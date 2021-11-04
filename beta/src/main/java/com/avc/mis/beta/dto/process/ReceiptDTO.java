@@ -37,7 +37,7 @@ public class ReceiptDTO extends ProcessWithProductDTO<ReceiptItemDTO> {
 	
 	public ReceiptDTO(@NonNull Receipt receipt) {
 		super(receipt);
-		setReceiptItems(Arrays.stream(receipt.getReceiptItems())
+		setReceiptItems(receipt.getReceiptItems().stream()
 				.map(i->{return new ReceiptItemDTO((ReceiptItem) i);}).collect(Collectors.toList()));
 
 	}
@@ -81,7 +81,7 @@ public class ReceiptDTO extends ProcessWithProductDTO<ReceiptItemDTO> {
 		}
 		else {
 			Ordinal.setOrdinals(getReceiptItems());
-			receipt.setReceiptItems(getReceiptItems().stream().map(i -> i.fillEntity(new ReceiptItem())).toArray(ReceiptItem[]::new));
+			receipt.setReceiptItems(getReceiptItems().stream().map(i -> i.fillEntity(new ReceiptItem())).collect(Collectors.toSet()));
 		}
 		
 		return receipt;

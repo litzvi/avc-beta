@@ -80,7 +80,7 @@ public class PoDTO extends PoProcessDTO {
 	public PoDTO(@NonNull PO po) {
 		super(po);
 		this.closed = po.isClosed();
-		this.orderItems = Arrays.stream(po.getOrderItems()).map(i->{return new OrderItemDTO(i);}).collect(Collectors.toList());
+		this.orderItems = po.getOrderItems().stream().map(i->{return new OrderItemDTO(i);}).collect(Collectors.toList());
 
 	}
 	
@@ -109,7 +109,7 @@ public class PoDTO extends PoProcessDTO {
 		}
 		else {
 			Ordinal.setOrdinals(getOrderItems());
-			order.setOrderItems(getOrderItems().stream().map(i -> i.fillEntity(new OrderItem())).toArray(OrderItem[]::new));
+			order.setOrderItems(getOrderItems().stream().map(i -> i.fillEntity(new OrderItem())).collect(Collectors.toSet()));
 		}
 		
 		return order;

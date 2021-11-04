@@ -45,10 +45,8 @@ public class ContainerLoadingDTO extends RelocationProcessDTO {
 		super(loading);
 		this.arrival = new ContainerArrivalBasic(loading.getArrival());
 		this.shipmentCode = new ShipmentCodeDTO(loading.getShipmentCode());
-		this.loadedItems = Arrays.stream(loading.getLoadedItems())
+		this.loadedItems = loading.getLoadedItems().stream()
 				.map(i->{return new LoadedItemDTO(i);}).collect(Collectors.toList());
-//		super.setUsedItemGroups(Arrays.stream(loading.getUsedItemGroups())
-//				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
 	}
 	
 	public void setContainerLoadingInfo(ContainerLoadingInfo info) {
@@ -86,7 +84,7 @@ public class ContainerLoadingDTO extends RelocationProcessDTO {
 		
 		if(getLoadedItems() != null && !getLoadedItems().isEmpty()) {
 			Ordinal.setOrdinals(getLoadedItems());
-			loading.setLoadedItems(getLoadedItems().stream().map(i -> i.fillEntity(new LoadedItem())).toArray(LoadedItem[]::new));
+			loading.setLoadedItems(getLoadedItems().stream().map(i -> i.fillEntity(new LoadedItem())).collect(Collectors.toSet()));
 		}
 		
 		return loading;

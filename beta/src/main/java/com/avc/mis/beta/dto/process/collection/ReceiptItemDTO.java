@@ -88,7 +88,7 @@ public class ReceiptItemDTO extends ProcessItemDTO  implements ListGroup<Storage
 	public ReceiptItemDTO(ReceiptItem receiptItem) {
 		super(receiptItem);
 		
-		setStorageForms(Arrays.stream(receiptItem.getStorageForms())
+		setStorageForms(receiptItem.getStorageForms().stream()
 				.map(i->{
 					if(i instanceof ExtraAdded) {
 						return new ExtraAddedDTO((ExtraAdded)i);
@@ -183,7 +183,7 @@ public class ReceiptItemDTO extends ProcessItemDTO  implements ListGroup<Storage
 			Ordinal.setOrdinals(getExtraAdded());
 			storageWithExtra.addAll(getExtraAdded().stream().map(i -> i.fillEntity(new ExtraAdded())).collect(Collectors.toList()));
 		}
-		receiptItem.setStorageForms(storageWithExtra.stream().toArray(Storage[]::new));
+		receiptItem.setStorageForms(storageWithExtra.stream().collect(Collectors.toSet()));
 
 		return receiptItem;
 	}

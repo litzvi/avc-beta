@@ -42,7 +42,8 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "processId")
 public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProcess {
 
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE) 
+//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", targetEntity = ProcessGroup.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@Where(clause = "dtype = 'ProcessItem'")
@@ -52,13 +53,13 @@ public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProces
 	 * Gets the list of Items as an array (can be ordered).
 	 * @return the processItems
 	 */
-	public ProcessItem[] getProcessItems() {
-		if(this.processItems == null)
-			return null;
-		ProcessItem[] processItems = this.processItems.toArray(new ProcessItem[this.processItems.size()]);
-		Arrays.sort(processItems, Ordinal.ordinalComparator());
-		return processItems;
-	}
+//	public ProcessItem[] getProcessItems() {
+//		if(this.processItems == null)
+//			return null;
+//		ProcessItem[] processItems = this.processItems.toArray(new ProcessItem[this.processItems.size()]);
+//		Arrays.sort(processItems, Ordinal.ordinalComparator());
+//		return processItems;
+//	}
 
 	/**
 	 * Setter for adding items that are processed, 
@@ -66,8 +67,8 @@ public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProces
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param processItems the processItems to set
 	 */
-	protected void setProcessItems(T[] processItems) {
-		Ordinal.setOrdinals(processItems);
-		this.processItems = Insertable.setReferences(processItems, (t) -> {t.setReference(this);	return t;});
+	protected void setProcessItems(Set<T> processItems) {
+//		Ordinal.setOrdinals(processItems);
+		this.processItems = (Set<ProcessItem>) Insertable.setReferences(processItems, (t) -> {t.setReference(this);	return t;});
 	}
 }

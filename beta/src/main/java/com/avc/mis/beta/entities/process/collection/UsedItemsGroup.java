@@ -52,7 +52,8 @@ public class UsedItemsGroup extends ProcessGroup {
 		setDtype("UsedItemsGroup");
 	}
 	
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE) 
+//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "group", targetEntity = UsedItemBase.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 //	@NotEmpty(message = "Has to containe at least one used storage item") //probably because persists empty when doing merge on a new one
@@ -62,11 +63,11 @@ public class UsedItemsGroup extends ProcessGroup {
 	 * Gets the list of used items as an array (can be ordered).
 	 * @return the usedItems
 	 */
-	public UsedItem[] getUsedItems() {
-		UsedItem[] usedItems = this.usedItems.toArray(new UsedItem[this.usedItems.size()]);
-		Arrays.sort(usedItems, Ordinal.ordinalComparator());
-		return usedItems;
-	}
+//	public UsedItem[] getUsedItems() {
+//		UsedItem[] usedItems = this.usedItems.toArray(new UsedItem[this.usedItems.size()]);
+//		Arrays.sort(usedItems, Ordinal.ordinalComparator());
+//		return usedItems;
+//	}
 
 	/**
 	 * Setter for adding items used in a business/manufacturing process (process input), 
@@ -74,8 +75,8 @@ public class UsedItemsGroup extends ProcessGroup {
 	 * Filters the null objects and sets the needed references to satisfy needed foreign keys of database.
 	 * @param usedItems
 	 */
-	public void setUsedItems(UsedItem[] usedItems) {
-		Ordinal.setOrdinals(usedItems);
+	public void setUsedItems(Set<UsedItem> usedItems) {
+//		Ordinal.setOrdinals(usedItems);
 		this.usedItems = Insertable.setReferences(usedItems, (t) -> {t.setReference(this);	return t;});
 	}
 	
@@ -86,27 +87,27 @@ public class UsedItemsGroup extends ProcessGroup {
 	 * Usefully presented in a table or list of only ordinal (number) and amount, since they all share all other parameters.
 	 * @param usedItemTable
 	 */
-	public void setUsedItem(UsedItemTableDTO usedItemTable) {
-			
-		setTableView(true);
-		
-		List<BasicUsedStorageDTO> basicUsedStorages = usedItemTable.getAmounts();
-		UsedItem[] usedItems = new UsedItem[basicUsedStorages.size()];
-		for(int i=0; i<usedItems.length; i++) {
-			BasicUsedStorageDTO basicUsedStorage = basicUsedStorages.get(i);
-			usedItems[i] = new UsedItem();
-			usedItems[i].setId(basicUsedStorage.getId());
-			usedItems[i].setVersion(basicUsedStorage.getVersion());
-			usedItems[i].setNumberUsedUnits(basicUsedStorage.getAmount());
-			Storage storage = new Storage();
-			storage.setId(basicUsedStorage.getStorageId());
-			storage.setVersion(basicUsedStorage.getStorageVersion());
-			usedItems[i].setStorage(storage);
-			
-			
-		}
-		setUsedItems(usedItems);
-	}
+//	public void setUsedItem(UsedItemTableDTO usedItemTable) {
+//			
+//		setTableView(true);
+//		
+//		List<BasicUsedStorageDTO> basicUsedStorages = usedItemTable.getAmounts();
+//		UsedItem[] usedItems = new UsedItem[basicUsedStorages.size()];
+//		for(int i=0; i<usedItems.length; i++) {
+//			BasicUsedStorageDTO basicUsedStorage = basicUsedStorages.get(i);
+//			usedItems[i] = new UsedItem();
+//			usedItems[i].setId(basicUsedStorage.getId());
+//			usedItems[i].setVersion(basicUsedStorage.getVersion());
+//			usedItems[i].setNumberUsedUnits(basicUsedStorage.getAmount());
+//			Storage storage = new Storage();
+//			storage.setId(basicUsedStorage.getStorageId());
+//			storage.setVersion(basicUsedStorage.getStorageVersion());
+//			usedItems[i].setStorage(storage);
+//			
+//			
+//		}
+//		setUsedItems(usedItems);
+//	}
 
 
 }

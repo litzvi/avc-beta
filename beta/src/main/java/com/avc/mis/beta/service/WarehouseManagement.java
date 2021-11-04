@@ -354,17 +354,20 @@ public class WarehouseManagement {
 	/**
 	 * Adding a record about a storage transfer process
 	 * @param transfer StorageTransfer entity object
+	 * @return 
 	 */
 	@Deprecated
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void addStorageTransfer(StorageTransfer transfer) {
-		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
-		dao.addTransactionProcessEntity(transfer);
-		dao.checkUsedInventoryAvailability(transfer);
-		dao.setTransactionPoWeights(transfer);
-		dao.setTransactionUsedProcesses(transfer);
+	public Integer addStorageTransfer(StorageTransferDTO transfer) {
+		transfer.setProcessName(ProcessName.STORAGE_RELOCATION);
+//		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
+		Integer transferId = dao.addTransactionProcessEntity(transfer, StorageTransfer::new);
+		dao.checkTransactionUsedInventoryAvailability(transferId);
+		dao.setTransactionPoWeights(transferId);
+		dao.setTransactionUsedProcesses(transferId);
 		//check if process items match the used item (items are equal, perhaps also check amounts difference and send warning)
-		checkTransferBalance(transfer);
+		checkTransferBalance(transferId);
+		return transferId;
 	}
 	
 	public List<ProcessRow> getStorageTransfers() {
@@ -376,8 +379,8 @@ public class WarehouseManagement {
 	}
 
 	
-	private void checkTransferBalance(StorageTransfer transfer) {
-		List<ItemTransactionDifference> differences = getTransferRepository().findTransferDifferences(transfer.getId());
+	private void checkTransferBalance(Integer transferId) {
+		List<ItemTransactionDifference> differences = getTransferRepository().findTransferDifferences(transferId);
 		
 		for(ItemTransactionDifference d: differences) {
 			BigDecimal producedAmount = d.getProducedAmount();
@@ -385,7 +388,7 @@ public class WarehouseManagement {
 				throw new IllegalArgumentException("Storage transfer can't change item");
 			}
 			if(d.getDifference().signum() < 0) {
-				dao.sendMessageAlerts(transfer, "Transffered items don't have matching amounts");
+				dao.sendMessageAlerts(transferId, "Transffered items don't have matching amounts");
 			}
 		}
 	}
@@ -434,17 +437,17 @@ public class WarehouseManagement {
 	
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-	public void editStorageTransfer(StorageTransfer transfer) {
+	public void editStorageTransfer(StorageTransferDTO transfer) {
 		//check used items amounts don't exceed the storage amounts
 		dao.checkRemovingUsedProduct(transfer);
 		
-		dao.editTransactionProcessEntity(transfer);
+		dao.editTransactionProcessEntity(transfer, StorageTransfer::new);
 		
 		dao.checkUsingProcesessConsistency(transfer);
-		dao.checkUsedInventoryAvailability(transfer);
-		dao.setTransactionPoWeights(transfer);
-		dao.setTransactionUsedProcesses(transfer);
-		checkTransferBalance(transfer);
+		dao.checkTransactionUsedInventoryAvailability(transfer.getId());
+		dao.setTransactionPoWeights(transfer.getId());
+		dao.setTransactionUsedProcesses(transfer.getId());
+		checkTransferBalance(transfer.getId());
 	}
 
 }

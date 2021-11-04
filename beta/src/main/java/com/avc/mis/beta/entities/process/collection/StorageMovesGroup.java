@@ -50,7 +50,8 @@ public class StorageMovesGroup extends ProcessGroup {
 		setDtype("StorageMovesGroup");
 	}
 	
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE) 
+//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "group", targetEntity = UsedItemBase.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 //	@NotEmpty(message = "Has to containe at least one storage move")
@@ -60,11 +61,11 @@ public class StorageMovesGroup extends ProcessGroup {
 	 * Gets the list of storage moves as an array (can be ordered).
 	 * @return the storageMoves
 	 */
-	public StorageMove[] getStorageMoves() {
-		StorageMove[] storageMoves = this.storageMoves.toArray(new StorageMove[this.storageMoves.size()]);
-		Arrays.sort(storageMoves, Ordinal.ordinalComparator());
-		return storageMoves;
-	}
+//	public StorageMove[] getStorageMoves() {
+//		StorageMove[] storageMoves = this.storageMoves.toArray(new StorageMove[this.storageMoves.size()]);
+//		Arrays.sort(storageMoves, Ordinal.ordinalComparator());
+//		return storageMoves;
+//	}
 
 	/**
 	 * Setter for adding storage moves, 
@@ -72,40 +73,40 @@ public class StorageMovesGroup extends ProcessGroup {
 	 * Filters the not legal moves and set needed references to satisfy needed foreign keys of database.
 	 * @param storageMoves the storageMoves to set
 	 */
-	public void setStorageMoves(StorageMove[] storageMoves) {
-		Ordinal.setOrdinals(storageMoves);
+	public void setStorageMoves(Set<StorageMove> storageMoves) {
+//		Ordinal.setOrdinals(storageMoves);
 		this.storageMoves = Insertable.setReferences(storageMoves, (t) -> {t.setReference(this);	return t;});
 	}
 	
-	public void setStorageMove(MovedItemTableDTO movedItemTable) {
-		setTableView(true);
-		
-		//same as the original process item, for convenience in queries
-//		setMeasureUnit(movedItemTable.getMeasureUnit());
-//		BigDecimal accessWeight = movedItemTable.getAccessWeight();
-		Warehouse warehouse = movedItemTable.getNewWarehouseLocation();
-		List<BasicUsedStorageDTO> basicUsedStorages = movedItemTable.getAmounts();
-		StorageMove[] storageMoves = new StorageMove[basicUsedStorages.size()];
-		for(int i=0; i<storageMoves.length; i++) {
-			BasicUsedStorageDTO basicUsedStorage = basicUsedStorages.get(i);
-			storageMoves[i] = new StorageMove();
-			storageMoves[i].setId(basicUsedStorage.getId());
-			storageMoves[i].setVersion(basicUsedStorage.getVersion());
-			storageMoves[i].setNumberUsedUnits(basicUsedStorage.getAmount());
-			Storage storage = new Storage();
-			storage.setId(basicUsedStorage.getStorageId());
-			storage.setVersion(basicUsedStorage.getStorageVersion());
-			storageMoves[i].setStorage(storage);
-			
-			storageMoves[i].setOrdinal(basicUsedStorage.getOrdinal());
-//			storageMoves[i].setNumberUnits(basicUsedStorage.getAmount());
-//			storageMoves[i].setAccessWeight(accessWeight);
-			storageMoves[i].setWarehouseLocation(warehouse);
-
-		}
-		setStorageMoves(storageMoves);	
-		
-	}
+//	public void setStorageMove(MovedItemTableDTO movedItemTable) {
+//		setTableView(true);
+//		
+//		//same as the original process item, for convenience in queries
+////		setMeasureUnit(movedItemTable.getMeasureUnit());
+////		BigDecimal accessWeight = movedItemTable.getAccessWeight();
+//		Warehouse warehouse = movedItemTable.getNewWarehouseLocation();
+//		List<BasicUsedStorageDTO> basicUsedStorages = movedItemTable.getAmounts();
+//		StorageMove[] storageMoves = new StorageMove[basicUsedStorages.size()];
+//		for(int i=0; i<storageMoves.length; i++) {
+//			BasicUsedStorageDTO basicUsedStorage = basicUsedStorages.get(i);
+//			storageMoves[i] = new StorageMove();
+//			storageMoves[i].setId(basicUsedStorage.getId());
+//			storageMoves[i].setVersion(basicUsedStorage.getVersion());
+//			storageMoves[i].setNumberUsedUnits(basicUsedStorage.getAmount());
+//			Storage storage = new Storage();
+//			storage.setId(basicUsedStorage.getStorageId());
+//			storage.setVersion(basicUsedStorage.getStorageVersion());
+//			storageMoves[i].setStorage(storage);
+//			
+//			storageMoves[i].setOrdinal(basicUsedStorage.getOrdinal());
+////			storageMoves[i].setNumberUnits(basicUsedStorage.getAmount());
+////			storageMoves[i].setAccessWeight(accessWeight);
+//			storageMoves[i].setWarehouseLocation(warehouse);
+//
+//		}
+//		setStorageMoves(storageMoves);	
+//		
+//	}
 
 
 }

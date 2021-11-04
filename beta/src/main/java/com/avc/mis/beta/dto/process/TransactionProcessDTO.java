@@ -54,7 +54,7 @@ public abstract class TransactionProcessDTO<T extends ProcessItemDTO> extends Pr
 	
 	public TransactionProcessDTO(@NonNull TransactionProcess<?> transaction) {
 		super(transaction);
-		setUsedItemGroups(Arrays.stream(transaction.getUsedItemGroups())
+		setUsedItemGroups(transaction.getUsedItemGroups().stream()
 				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
 	}
 	

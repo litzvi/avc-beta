@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.process;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.PoProcessDTO;
@@ -35,11 +36,11 @@ public abstract class RelocationProcessDTO extends PoProcessDTO {
 
 	public RelocationProcessDTO(@NonNull RelocationProcess relocation) {
 		super(relocation);
-		this.storageMovesGroups = Arrays.stream(relocation.getStorageMovesGroups())
+		this.storageMovesGroups = relocation.getStorageMovesGroups().stream()
 				.map(i->{return new StorageMovesGroupDTO((StorageMovesGroup)i);}).collect(Collectors.toList());
-		ItemCount[] itemCounts = relocation.getItemCounts();
+		Set<ItemCount> itemCounts = relocation.getItemCounts();
 		if(itemCounts != null)
-			this.setItemCounts(Arrays.stream(itemCounts)
+			this.setItemCounts(itemCounts.stream()
 					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toList()));
 	}
 	
@@ -58,7 +59,7 @@ public abstract class RelocationProcessDTO extends PoProcessDTO {
 		}
 		else {
 			Ordinal.setOrdinals(getStorageMovesGroups());
-			process.setStorageMovesGroups(getStorageMovesGroups().stream().map(i -> i.fillEntity(new StorageMovesGroup())).toArray(StorageMovesGroup[]::new));
+			process.setStorageMovesGroups(getStorageMovesGroups().stream().map(i -> i.fillEntity(new StorageMovesGroup())).collect(Collectors.toSet()));
 		}
 		
 		return process;

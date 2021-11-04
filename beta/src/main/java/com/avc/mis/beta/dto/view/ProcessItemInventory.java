@@ -117,9 +117,10 @@ public class ProcessItemInventory extends BasicDataDTO implements ListGroup<Stor
 		if(tableView && this.storageForms != null && !this.storageForms.isEmpty()) {
 			StorageTableDTO storageTable = new StorageTableDTO();
 			this.storageForms.stream().findAny().ifPresent(s -> {
-				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
-				if(warehouse != null)
-					storageTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+//				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
+//				if(warehouse != null)
+//					storageTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+				storageTable.setWarehouseLocation(s.getWarehouseLocation());
 			});
 			List<BasicStorageDTO> amounts = this.storageForms.stream().map((s) -> {
 				return new BasicStorageDTO(s.getId(), s.getVersion(), s.getOrdinal(), s.getNumberUnits(), s.getNumberAvailableUnits());

@@ -32,7 +32,7 @@ public class UsedItemTableDTO {
 	private MeasureUnit measureUnit;
 //	private BigDecimal accessWeight;	
 	
-	private Warehouse warehouseLocation;
+	private BasicValueEntity<Warehouse> warehouseLocation;
 	
 	@EqualsAndHashCode.Exclude
 	private String[] itemPoCodes;

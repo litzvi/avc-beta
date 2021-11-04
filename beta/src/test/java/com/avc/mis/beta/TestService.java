@@ -23,6 +23,8 @@ import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
+import com.avc.mis.beta.dto.process.collection.CountAmountDTO;
+import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
 import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
@@ -38,6 +40,7 @@ import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.dto.values.ItemWithMeasureUnit;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.dto.values.ItemWithUse;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
@@ -54,21 +57,17 @@ import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.CashewItem;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.process.ContainerBooking;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.collection.CountAmount;
 import com.avc.mis.beta.entities.process.collection.ItemCount;
 import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
-import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
 import com.avc.mis.beta.entities.process.collection.WeightedPo;
-import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
-import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
 import com.avc.mis.beta.entities.process.inventory.UsedItem;
 import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.City;
@@ -77,7 +76,6 @@ import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
-import com.avc.mis.beta.service.ContainerBookings;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.ObjectWriter;
@@ -102,7 +100,6 @@ public class TestService {
 	@Autowired Orders orders;
 	@Autowired Receipts receipts;
 	@Autowired Loading loadings;
-	@Autowired ContainerBookings bookings;
 	
 	private int randCode = LocalDateTime.now().hashCode();
 	private Random randNum = new Random();
@@ -113,15 +110,7 @@ public class TestService {
 		suppliers.addSupplier(supplier);
 		return supplier;
 	}
-	
-	public ContainerBooking addBasicContainerBooking() {
-		ContainerBooking booking = new ContainerBooking();
-		booking.setBookingNumber("booking_no " + randCode++);
-		booking.setBookingDate("1983-11-23");
-		booking.setRecordedTime(LocalDateTime.now());
-		return booking;
-	}
-	
+		
 	public ShipingDetails getShipingDetails() {
 		ShipingDetails shipingDetails = new ShipingDetails();
 		shipingDetails.setEtd("2007-12-03");
@@ -465,28 +454,28 @@ public class TestService {
 //		receipts.removeReceipt(receipt.getId());
 	}
 	
-	public static UsedItemsGroup[] getUsedItemsGroups(List<ProcessItemInventory> poInventory) {
-		UsedItemsGroup[] usedItemsGroups = new UsedItemsGroup[poInventory.size()];
-		int i = 0;
-		for(ProcessItemInventory processItemRow: poInventory) {
-			UsedItem[] usedItems = new UsedItem[processItemRow.getStorageForms().size()];
-			int j = 0;
-			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
-				usedItems[j] = new UsedItem();
-				Storage storage = new Storage();
-				usedItems[j].setStorage(storage);
-				storage.setId(storagesRow.getId());
-				storage.setVersion(storagesRow.getVersion());
-				usedItems[j].setNumberUsedUnits(storagesRow.getNumberUnits());
-				j++;
-			}
-			usedItemsGroups[i] = new UsedItemsGroup();
-			usedItemsGroups[i].setUsedItems(usedItems);
-			i++;
-
-		}
-		return usedItemsGroups;
-	}	
+//	public static UsedItemsGroup[] getUsedItemsGroups(List<ProcessItemInventory> poInventory) {
+//		UsedItemsGroup[] usedItemsGroups = new UsedItemsGroup[poInventory.size()];
+//		int i = 0;
+//		for(ProcessItemInventory processItemRow: poInventory) {
+//			UsedItem[] usedItems = new UsedItem[processItemRow.getStorageForms().size()];
+//			int j = 0;
+//			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
+//				usedItems[j] = new UsedItem();
+//				Storage storage = new Storage();
+//				usedItems[j].setStorage(storage);
+//				storage.setId(storagesRow.getId());
+//				storage.setVersion(storagesRow.getVersion());
+//				usedItems[j].setNumberUsedUnits(storagesRow.getNumberUnits());
+//				j++;
+//			}
+//			usedItemsGroups[i] = new UsedItemsGroup();
+//			usedItemsGroups[i].setUsedItems(usedItems);
+//			i++;
+//
+//		}
+//		return usedItemsGroups;
+//	}	
 	public static List<UsedItemsGroupDTO> getUsedItemsGroupsDTOs(List<ProcessItemInventory> poInventory) {
 		List<UsedItemsGroupDTO> usedItemsGroups = new ArrayList<UsedItemsGroupDTO>();
 		for(ProcessItemInventory processItemRow: poInventory) {
@@ -508,33 +497,33 @@ public class TestService {
 		return usedItemsGroups;
 	}
 
-	public StorageMovesGroup[] getStorageMoves(List<ProcessItemInventory> poInventory) {
-		StorageMovesGroup[] storageMovesGroups = new StorageMovesGroup[poInventory.size()];
-		int i = 0;
-		for(ProcessItemInventory processItemRow: poInventory) {
-			StorageMove[] storageMoves = new StorageMove[processItemRow.getStorageForms().size()];
-			int j = 0;
-			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
-				storageMoves[j] = new StorageMove();
-				Storage storage = new Storage();
-				storageMoves[j].setStorage(storage);
-				storage.setId(storagesRow.getId());
-				storage.setVersion(storagesRow.getVersion());
-				storageMoves[j].setNumberUsedUnits(storagesRow.getNumberUnits());
-				storageMoves[j].setUnitAmount(storagesRow.getUnitAmount());
-				storageMoves[j].setNumberUnits(storagesRow.getNumberUnits());
-//				storageMoves[j].setAccessWeight(storagesRow.getAccessWeight());
-				storageMoves[j].setWarehouseLocation(getWarehouse());
-				j++;
-			}
-			storageMovesGroups[i] = new StorageMovesGroup();
-//			storageMovesGroups[i].setMeasureUnit(processItemRow.getItem().getMeasureUnit());
-			storageMovesGroups[i].setStorageMoves(storageMoves);
-			i++;
-
-		}
-		return storageMovesGroups;
-	}
+//	public StorageMovesGroup[] getStorageMoves(List<ProcessItemInventory> poInventory) {
+//		StorageMovesGroup[] storageMovesGroups = new StorageMovesGroup[poInventory.size()];
+//		int i = 0;
+//		for(ProcessItemInventory processItemRow: poInventory) {
+//			StorageMove[] storageMoves = new StorageMove[processItemRow.getStorageForms().size()];
+//			int j = 0;
+//			for(StorageInventoryRow storagesRow: processItemRow.getStorageForms()) {
+//				storageMoves[j] = new StorageMove();
+//				Storage storage = new Storage();
+//				storageMoves[j].setStorage(storage);
+//				storage.setId(storagesRow.getId());
+//				storage.setVersion(storagesRow.getVersion());
+//				storageMoves[j].setNumberUsedUnits(storagesRow.getNumberUnits());
+//				storageMoves[j].setUnitAmount(storagesRow.getUnitAmount());
+//				storageMoves[j].setNumberUnits(storagesRow.getNumberUnits());
+////				storageMoves[j].setAccessWeight(storagesRow.getAccessWeight());
+//				storageMoves[j].setWarehouseLocation(getWarehouse());
+//				j++;
+//			}
+//			storageMovesGroups[i] = new StorageMovesGroup();
+////			storageMovesGroups[i].setMeasureUnit(processItemRow.getItem().getMeasureUnit());
+//			storageMovesGroups[i].setStorageMoves(storageMoves);
+//			i++;
+//
+//		}
+//		return storageMovesGroups;
+//	}
 	public List<StorageMovesGroupDTO> getStorageMovesDTOs(List<ProcessItemInventory> poInventory) {
 		List<StorageMovesGroupDTO> storageMovesGroups = new ArrayList<StorageMovesGroupDTO>();
 		for(ProcessItemInventory processItemRow: poInventory) {
@@ -559,64 +548,84 @@ public class TestService {
 		return storageMovesGroups;
 	}
 	
-	/**
-	 * @param poInventory
-	 * @return
-	 */
-	public ItemCount[] getItemCounts(List<ProcessItemInventory> poInventory) {
-		ItemCount[] itemCounts = new ItemCount[poInventory.size()];
-		CountAmount[] countAmounts;
-		for(int i=0; i<itemCounts.length; i++) {
+//	public ItemCount[] getItemCounts(List<ProcessItemInventory> poInventory) {
+//		ItemCount[] itemCounts = new ItemCount[poInventory.size()];
+//		CountAmount[] countAmounts;
+//		for(int i=0; i<itemCounts.length; i++) {
+//			//build item count
+//			ProcessItemInventory processItemRow = poInventory.get(i);
+//			itemCounts[i] = new ItemCount();
+//			Item item = getItem(processItemRow.getItem());
+//			itemCounts[i].setItem(item);
+//			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
+//			StorageInventoryRow randStorage = storagesRows.get(0);
+//			itemCounts[i].setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
+////			itemCounts[i].setContainerWeight(randStorage.getAccessWeight());
+//			countAmounts = new CountAmount[storagesRows.size()];
+//			int j=0;
+//			for(StorageInventoryRow storageRow: storagesRows) {
+//				countAmounts[j] = new CountAmount();
+//				countAmounts[j].setAmount(storageRow.getTotalBalance().getAmount());
+//				countAmounts[j].setOrdinal((storageRow.getOrdinal()));
+//				
+//				j++;
+//			}
+//			
+//			itemCounts[i].setAmounts(countAmounts);
+//		}
+//		return itemCounts;
+//	}
+	public List<ItemCountDTO> getItemCounts(List<ProcessItemInventory> poInventory) {
+		List<ItemCountDTO> itemCounts = new ArrayList<ItemCountDTO>();
+		for(ProcessItemInventory processItemRow: poInventory) {
 			//build item count
-			ProcessItemInventory processItemRow = poInventory.get(i);
-			itemCounts[i] = new ItemCount();
-			Item item = getItem(processItemRow.getItem());
-			itemCounts[i].setItem(item);
+			ItemCountDTO itemCount = new ItemCountDTO();
+			itemCounts.add(itemCount);
+			List<CountAmountDTO> countAmounts = new ArrayList<CountAmountDTO>();
+			Item item = new Item();
+			item.setId(processItemRow.getItem().getId());
+			itemCount.setItem(new ItemWithUse(item));
 			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
 			StorageInventoryRow randStorage = storagesRows.get(0);
-			itemCounts[i].setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
-//			itemCounts[i].setContainerWeight(randStorage.getAccessWeight());
-			countAmounts = new CountAmount[storagesRows.size()];
-			int j=0;
+			itemCount.setMeasureUnit(randStorage.getTotalBalance().getMeasureUnit());
+//			itemCount.setContainerWeight(randStorage.getAccessWeight());
 			for(StorageInventoryRow storageRow: storagesRows) {
-				countAmounts[j] = new CountAmount();
-				countAmounts[j].setAmount(storageRow.getTotalBalance().getAmount());
-				countAmounts[j].setOrdinal((storageRow.getOrdinal()));
-				
-				j++;
-			}
-			
-			itemCounts[i].setAmounts(countAmounts);
+				CountAmountDTO countAmount = new CountAmountDTO();
+				countAmounts.add(countAmount);
+				countAmount.setAmount(storageRow.getTotalBalance().getAmount());
+				countAmount.setOrdinal((storageRow.getOrdinal()));
+			}			
+			itemCount.setAmounts(countAmounts);
 		}
 		return itemCounts;
 	}
 
-	public ProcessItem[] getProcessItems(List<ProcessItemInventory> poInventory) {
-		ProcessItem[] processItems = new ProcessItem[poInventory.size()];
-		Storage[] storageForms;
-		for(int i=0; i<processItems.length; i++) {
-			//build process item
-			ProcessItemInventory processItemRow = poInventory.get(i);
-			processItems[i] = new ProcessItem();
-			Item item = getItem(processItemRow.getItem());
-			processItems[i].setItem(item);
-			processItems[i].setMeasureUnit(item.getMeasureUnit());
-			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
-			storageForms = new Storage[storagesRows.size()];
-			int j=0;
-			for(StorageInventoryRow storageRow: storagesRows) {
-				storageForms[j] = new Storage();
-				storageForms[j].setUnitAmount(storageRow.getUnitAmount());
-				storageForms[j].setNumberUnits(storageRow.getNumberUnits());
-				storageForms[j].setWarehouseLocation(getWarehouse());
-				
-				j++;
-			}
-			
-			processItems[i].setStorageForms(storageForms);
-		}
-		return processItems;
-	}
+//	public ProcessItem[] getProcessItems(List<ProcessItemInventory> poInventory) {
+//		ProcessItem[] processItems = new ProcessItem[poInventory.size()];
+//		Storage[] storageForms;
+//		for(int i=0; i<processItems.length; i++) {
+//			//build process item
+//			ProcessItemInventory processItemRow = poInventory.get(i);
+//			processItems[i] = new ProcessItem();
+//			Item item = getItem(processItemRow.getItem());
+//			processItems[i].setItem(item);
+//			processItems[i].setMeasureUnit(item.getMeasureUnit());
+//			List<StorageInventoryRow> storagesRows = processItemRow.getStorageForms();
+//			storageForms = new Storage[storagesRows.size()];
+//			int j=0;
+//			for(StorageInventoryRow storageRow: storagesRows) {
+//				storageForms[j] = new Storage();
+//				storageForms[j].setUnitAmount(storageRow.getUnitAmount());
+//				storageForms[j].setNumberUnits(storageRow.getNumberUnits());
+//				storageForms[j].setWarehouseLocation(getWarehouse());
+//				
+//				j++;
+//			}
+//			
+//			processItems[i].setStorageForms(storageForms);
+//		}
+//		return processItems;
+//	}
 	public List<ProcessItemDTO> getProcessItemsDTOs(List<ProcessItemInventory> poInventory) {
 		List<ProcessItemDTO> processItems = new ArrayList<>();
 		List<StorageDTO> storageForms;

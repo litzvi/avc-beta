@@ -46,7 +46,8 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "processId")
 public abstract class TransactionProcess<T extends ProcessItem> extends ProcessWithProduct<T> {
 
-	@Setter(value = AccessLevel.NONE) @Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE) 
+//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", 
 		targetEntity = ProcessGroup.class,  //caused it to persist the group instead of merge
 		orphanRemoval = true, 
@@ -67,17 +68,17 @@ public abstract class TransactionProcess<T extends ProcessItem> extends ProcessW
 	/**
 	 * @return array of UsedItemsGroup in order
 	 */
-	public UsedItemsGroup[] getUsedItemGroups() {
-		UsedItemsGroup[] usedItemsGroups = this.usedItemGroups.toArray(new UsedItemsGroup[this.usedItemGroups.size()]);
-		Arrays.sort(usedItemsGroups, Ordinal.ordinalComparator());
-		return usedItemsGroups;
-	}
+//	public UsedItemsGroup[] getUsedItemGroups() {
+//		UsedItemsGroup[] usedItemsGroups = this.usedItemGroups.toArray(new UsedItemsGroup[this.usedItemGroups.size()]);
+//		Arrays.sort(usedItemsGroups, Ordinal.ordinalComparator());
+//		return usedItemsGroups;
+//	}
 
 	/**
 	 * @param usedItemGroups array of UsedItemsGroup in order, if required.
 	 */
-	public void setUsedItemGroups(UsedItemsGroup[] usedItemGroups) {
-		Ordinal.setOrdinals(usedItemGroups);
+	public void setUsedItemGroups(Set<UsedItemsGroup> usedItemGroups) {
+//		Ordinal.setOrdinals(usedItemGroups);
 		this.usedItemGroups = Insertable.setReferences(usedItemGroups, (t) -> {t.setReference(this);	return t;});
 	}
 

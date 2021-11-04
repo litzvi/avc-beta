@@ -497,8 +497,8 @@ public class ProcessInfoDAO extends DAO {
 	
 	public void checkRemovingUsedProduct(RelocationProcess relocation) {
 		HashSet<Integer> storageIds = new HashSet<Integer>();
-		for(StorageMovesGroup mg: CollectionItemWithGroup.safeCollection(Arrays.asList(relocation.getStorageMovesGroups()))) {
-			storageIds.addAll(Arrays.stream(mg.getStorageMoves()).map(StorageBase::getId).filter(i -> i != null).collect(Collectors.toSet()));
+		for(StorageMovesGroup mg: CollectionItemWithGroup.safeCollection(relocation.getStorageMovesGroups())) {
+			storageIds.addAll(mg.getStorageMoves().stream().map(StorageBase::getId).filter(i -> i != null).collect(Collectors.toSet()));
 		}
 		if(getProcessRepository().isRelocationRemovingUsedProduct(relocation.getId(), storageIds)) {
 			throw new AccessControlException("Process items can't be edited because they are already in use");
@@ -516,8 +516,8 @@ public class ProcessInfoDAO extends DAO {
 	
 	public <T extends ProcessWithProduct<?>> void checkRemovingUsedProduct(T process) {
 		HashSet<Integer> storageIds = new HashSet<Integer>();
-		for(ProcessItem pi: CollectionItemWithGroup.safeCollection(Arrays.asList(process.getProcessItems()))) {
-			storageIds.addAll(Arrays.stream(pi.getStorageForms()).map(Storage::getId).filter(i -> i != null).collect(Collectors.toSet()));
+		for(ProcessItem pi: CollectionItemWithGroup.safeCollection(process.getProcessItems())) {
+			storageIds.addAll(pi.getStorageForms().stream().map(Storage::getId).filter(i -> i != null).collect(Collectors.toSet()));
 		}
 		if(getProcessRepository().isRemovingUsedProduct(process.getId(), storageIds)) {
 			throw new AccessControlException("Process items can't be edited because they are already in use");
@@ -573,7 +573,7 @@ public class ProcessInfoDAO extends DAO {
 	public void setStorageMovesProcessItem(StorageMovesGroup[] storageMovesGroups) {
 		List<StorageMove> storageMoves = new ArrayList<StorageMove>();
 		for(StorageMovesGroup group: storageMovesGroups) {
-			Arrays.stream(group.getStorageMoves()).forEach(storageMoves::add);
+			group.getStorageMoves().stream().forEach(storageMoves::add);
 		}
 		Map<Integer, StorageBase> storageMap = getRelocationRepository().findStoragesById(
 				storageMoves.stream()

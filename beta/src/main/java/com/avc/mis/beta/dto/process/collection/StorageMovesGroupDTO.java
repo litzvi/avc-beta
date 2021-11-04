@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta.dto.process.collection;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,6 +21,7 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.process.RelocationProcess;
 import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
+import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.utilities.ListGroup;
@@ -52,9 +54,34 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 	public StorageMovesGroupDTO(StorageMovesGroup group) {
 		super(group);
 //		this.measureUnit = group.getMeasureUnit();
-		this.storageMoves = (Arrays.stream(group.getStorageMoves())
+		this.storageMoves = (group.getStorageMoves().stream()
 				.map(u->{return new StorageMoveDTO(u);})
 				.collect(Collectors.toList()));
+	}
+	
+	public void setStorageMove(MovedItemTableDTO movedItemTable) {
+		setTableView(true);
+		
+		List<StorageMoveDTO> storageMoves = new ArrayList<StorageMoveDTO>();
+		for(BasicUsedStorageDTO basicUsedStorage: movedItemTable.getAmounts()) {
+			StorageMoveDTO storageMove = new StorageMoveDTO();
+			storageMoves.add(storageMove);
+			storageMove.setId(basicUsedStorage.getId());
+			storageMove.setVersion(basicUsedStorage.getVersion());
+			storageMove.setNumberUsedUnits(basicUsedStorage.getAmount());
+			StorageBaseDTO storage = new StorageBaseDTO();
+			storage.setId(basicUsedStorage.getStorageId());
+			storage.setVersion(basicUsedStorage.getStorageVersion());
+			storageMove.setStorage(storage);
+			
+			storageMove.setOrdinal(basicUsedStorage.getOrdinal());
+//			storageMove.setNumberUnits(basicUsedStorage.getAmount());
+//			storageMove.setAccessWeight(accessWeight);
+			storageMove.setWarehouseLocation(movedItemTable.getNewWarehouseLocation());
+
+		}
+		setStorageMoves(storageMoves);	
+		
 	}
 	
 	public List<StorageMoveDTO> getStorageMoves() {
@@ -72,16 +99,18 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 				movedItemTable.setMeasureUnit(m.getMeasureUnit());
 				movedItemTable.setItemPo(m.getItemPo());
 				movedItemTable.setItemProcessDate(m.getItemProcessDate());
-				BasicValueEntity<Warehouse> warehouse = m.getWarehouseLocation();
-				if(warehouse != null)
-					movedItemTable.setNewWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+//				BasicValueEntity<Warehouse> warehouse = m.getWarehouseLocation();
+//				if(warehouse != null)
+//					movedItemTable.setNewWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+				movedItemTable.setNewWarehouseLocation(m.getWarehouseLocation());
 				movedItemTable.setItemPoCodes(m.getItemPoCodes());
 				movedItemTable.setItemSuppliers(m.getItemSuppliers());
 				StorageBaseDTO storage = m.getStorage();
 //				movedItemTable.setAccessWeight(storage.getAccessWeight());
-				warehouse = storage.getWarehouseLocation();
-				if(warehouse != null)
-					movedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+//				warehouse = storage.getWarehouseLocation();
+//				if(warehouse != null)
+//					movedItemTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
+				movedItemTable.setWarehouseLocation(storage.getWarehouseLocation());
 				
 			});
 			
@@ -180,7 +209,7 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 		}
 		else {
 			Ordinal.setOrdinals(getStorageMoves());
-			group.setStorageMoves(getStorageMoves().stream().map(i -> i.fillEntity(new StorageMove())).toArray(StorageMove[]::new));
+			group.setStorageMoves(getStorageMoves().stream().map(i -> i.fillEntity(new StorageMove())).collect(Collectors.toSet()));
 		}
 		
 		return group;

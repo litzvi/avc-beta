@@ -5,10 +5,7 @@ package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -24,24 +21,15 @@ import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.exportdoc.InventoryExportDoc;
 import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
-import com.avc.mis.beta.dto.process.ContainerBookingDTO;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.values.ShipmentCodeDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
-import com.avc.mis.beta.entities.codes.ShipmentCode;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
-import com.avc.mis.beta.entities.embeddable.ShipingDetails;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.process.ContainerArrival;
-import com.avc.mis.beta.entities.process.ContainerBooking;
-import com.avc.mis.beta.entities.process.ContainerLoading;
-import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.service.ContainerArrivals;
-import com.avc.mis.beta.service.ContainerBookings;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
@@ -59,7 +47,6 @@ public class LoadingTest {
 	@Autowired TestService service;	
 	@Autowired WarehouseManagement warehouseManagement;
 
-	@Autowired ContainerBookings bookings;
 	@Autowired ContainerArrivals arrivals;
 	@Autowired Loading loadingService;
 	@Autowired ProcessInfoWriter processInfoWriter;
@@ -76,14 +63,6 @@ public class LoadingTest {
 		}
 		processInfoWriter.setUserProcessDecision(receipt.getId(), DecisionType.APPROVED, null, null);
 		processInfoWriter.setProcessStatus(ProcessStatus.FINAL, receipt.getId());
-		
-		//test container booking
-		ContainerBooking booking = service.addBasicContainerBooking();		
-		bookings.addBooking(booking);		
-		ContainerBookingDTO expectedBooking = new ContainerBookingDTO(booking);		
-		ContainerBookingDTO actualBooking = bookings.getBooking(booking.getId());		
-		bookings.editBooking(booking);		
-		assertEquals(expectedBooking, actualBooking, "Failed test adding container loading");
 		
 		//test container arrival
 		ContainerArrivalDTO arrival = new ContainerArrivalDTO();
@@ -160,7 +139,6 @@ public class LoadingTest {
 //		loadingService.removeLoading(loading.getId());
 		processInfoWriter.removeProcess(arrivalId);
 //		arrivals.removeArrival(arrival.getId());
-		bookings.removeBooking(booking.getId());
 
 
 	}

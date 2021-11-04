@@ -48,9 +48,9 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 		this.checkedBy = check.getCheckedBy();
 		this.inspector = check.getInspector();
 		this.sampleTaker = check.getSampleTaker();
-		super.setProcessItems(Arrays.stream(check.getProcessItems())
+		super.setProcessItems(check.getProcessItems().stream()
 				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));
-		this.testedItems = Arrays.stream(check.getTestedItems())
+		this.testedItems = check.getTestedItems().stream()
 				.map(i->{return new CashewItemQualityDTO(i);}).collect(Collectors.toList());
 	}
 	
@@ -90,11 +90,11 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 		}
 		else {
 			Ordinal.setOrdinals(getTestedItems());
-			check.setTestedItems(getTestedItems().stream().map(i -> i.fillEntity(new CashewItemQuality())).toArray(CashewItemQuality[]::new));
+			check.setTestedItems(getTestedItems().stream().map(i -> i.fillEntity(new CashewItemQuality())).collect(Collectors.toSet()));
 		}
 		if(getProcessItems() != null) {
 			Ordinal.setOrdinals(getProcessItems());
-			check.setProcessItems(getProcessItems().stream().map(i -> i.fillEntity(new ProcessItem())).toArray(ProcessItem[]::new));
+			check.setProcessItems(getProcessItems().stream().map(i -> i.fillEntity(new ProcessItem())).collect(Collectors.toSet()));
 		}
 		
 		return check;

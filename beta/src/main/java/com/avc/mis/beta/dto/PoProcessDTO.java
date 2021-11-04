@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
@@ -77,7 +78,7 @@ public abstract class PoProcessDTO extends GeneralProcessDTO {
 			poProcess.setPoCode(getPoCode().fillEntity(new BasePoCode()));
 		if(getItemCounts() != null) {
 			Ordinal.setOrdinals(getItemCounts());
-			poProcess.setItemCounts(getItemCounts().stream().map(i -> i.fillEntity(new ItemCount())).toArray(ItemCount[]::new));
+			poProcess.setItemCounts(getItemCounts().stream().map(i -> i.fillEntity(new ItemCount())).collect(Collectors.toSet()));
 		}
 		
 		return poProcess;

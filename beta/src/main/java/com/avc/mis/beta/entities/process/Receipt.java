@@ -4,6 +4,8 @@
 package com.avc.mis.beta.entities.process;
 
 import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
 import javax.persistence.PrePersist;
@@ -38,7 +40,7 @@ public class Receipt extends ProcessWithProduct<ReceiptItem> {
 	/**
 	 * @param receiptItems
 	 */
-	public void setReceiptItems(ReceiptItem[] receiptItems) {
+	public void setReceiptItems(Set<ReceiptItem> receiptItems) {
 		super.setProcessItems(receiptItems);
 	}
 	
@@ -46,9 +48,10 @@ public class Receipt extends ProcessWithProduct<ReceiptItem> {
 	 * @return array of ReceiptItem in desired order
 	 */
 	@NotEmpty(message = "Has to containe at least one received item")
-	public ReceiptItem[] getReceiptItems() {
-		ProcessItem[] processItems = super.getProcessItems();
-		return Arrays.copyOf(processItems, processItems.length, ReceiptItem[].class);
+	public Set<ReceiptItem> getReceiptItems() {
+		Set<ProcessItem> processItems = super.getProcessItems();
+		return processItems.stream().map(i -> (ReceiptItem)i).collect(Collectors.toSet());
+//		return Arrays.copyOf(processItems, processItems.length, ReceiptItem[].class);
 	}
 
 	/**

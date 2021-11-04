@@ -77,7 +77,7 @@ public abstract class UsedItemBaseDTO extends RankedAuditedDTO {
 //	@EqualsAndHashCode.Exclude
 //	private BasicValueEntity<Warehouse> storageWarehouseLocation;
 	
-	private Warehouse NewLocation;
+	private BasicValueEntity<Warehouse> NewLocation;
 
 
 	
@@ -159,11 +159,11 @@ public abstract class UsedItemBaseDTO extends RankedAuditedDTO {
 	 * @return Storage with all fields besides for the ones managed by the persistence context. 
 	 */
 	@JsonIgnore
-	public Storage getNewStorage() {
-		Storage storage = new Storage();
-		StorageBaseDTO storageDTO = this.getStorage();
-		storage.setOrdinal(storageDTO.getOrdinal());
-		storage.setUnitAmount(storageDTO.getUnitAmount());
+	public StorageDTO getNewStorage() {
+		StorageDTO storage = new StorageDTO();
+		StorageBaseDTO storageBase = this.getStorage();
+		storage.setOrdinal(storageBase.getOrdinal());
+		storage.setUnitAmount(storageBase.getUnitAmount());
 //		storage.setAccessWeight(storageDTO.getAccessWeight());
 		storage.setNumberUnits(this.getNumberUsedUnits());
 		storage.setWarehouseLocation(this.getNewLocation());

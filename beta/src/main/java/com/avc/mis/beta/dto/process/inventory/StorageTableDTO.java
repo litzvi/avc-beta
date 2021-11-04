@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.process.inventory;
 
 import java.util.List;
 
+import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.Data;
@@ -20,7 +21,7 @@ public class StorageTableDTO {
 
 //	private BigDecimal accessWeight;	
 	
-	private Warehouse warehouseLocation;
+	private BasicValueEntity<Warehouse> warehouseLocation;
 
 	
 }
