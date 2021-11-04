@@ -11,7 +11,7 @@ import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
  * Version: 23.2
- * issues 630 fix for StorageTable inProcessItem
+ * issues 626, in 630 fix for StorageTable inProcessItem
  * 
  * @author zvi
  *
