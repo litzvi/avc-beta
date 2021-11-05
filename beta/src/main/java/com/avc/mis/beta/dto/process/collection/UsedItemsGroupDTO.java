@@ -15,18 +15,13 @@ import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemTableDTO;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
-import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.UsedItem;
-import com.avc.mis.beta.entities.values.Warehouse;
-import com.avc.mis.beta.utilities.ListGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -40,7 +35,9 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<UsedItemDTO> {
+public class UsedItemsGroupDTO extends ProcessGroupDTO 
+//implements ListGroup<UsedItemDTO> 
+{
 
 	private List<UsedItemDTO> usedItems;
 
@@ -188,11 +185,11 @@ public class UsedItemsGroupDTO extends ProcessGroupDTO implements ListGroup<Used
 		return totalWeight.orElse(null);
 	}
 	
-	@JsonIgnore
-	@Override
-	public void setList(List<UsedItemDTO> list) {
-		setUsedItems(list);
-	}
+//	@JsonIgnore
+//	@Override
+//	public void setList(List<UsedItemDTO> list) {
+//		setUsedItems(list);
+//	}
 	
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {

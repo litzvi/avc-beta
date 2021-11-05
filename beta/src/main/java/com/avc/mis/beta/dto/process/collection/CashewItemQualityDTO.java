@@ -7,7 +7,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import com.avc.mis.beta.dto.RankedAuditedDTO;
-import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
@@ -15,14 +14,12 @@ import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.CheckStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.CashewItemQuality;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.Value;
 
 /**
  * Contains the test results of a Quality Check made on Raw Cashew Kernel and Roasted Cashew item.

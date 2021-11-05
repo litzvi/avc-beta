@@ -10,9 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.BaseEntityDTO;
 import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
@@ -24,21 +22,14 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
-import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.values.Warehouse;
-import com.avc.mis.beta.utilities.ListGroup;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -49,7 +40,9 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @ToString(callSuper = true)
-public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<StorageDTO> {
+public class ProcessItemDTO extends ProcessGroupDTO 
+//implements ListGroup<StorageDTO> 
+{
 
 	private ItemWithUnitDTO item; //change to itemDTO in order to get category
 	private MeasureUnit measureUnit;
@@ -199,12 +192,12 @@ public class ProcessItemDTO extends ProcessGroupDTO implements ListGroup<Storage
 
 	}
 
-	@JsonIgnore
-	@Override
-	public void setList(List<StorageDTO> list) {
-		setStorageForms(list);
-//		setStorageForms((List<StorageDTO>) list.stream().collect(Collectors.toCollection(ArrayList<StorageDTO>::new)));
-	}
+//	@JsonIgnore
+//	@Override
+//	public void setList(List<StorageDTO> list) {
+//		setStorageForms(list);
+////		setStorageForms((List<StorageDTO>) list.stream().collect(Collectors.toCollection(ArrayList<StorageDTO>::new)));
+//	}
 	
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {

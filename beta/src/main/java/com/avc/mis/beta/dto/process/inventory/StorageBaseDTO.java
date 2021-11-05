@@ -7,11 +7,9 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import com.avc.mis.beta.dto.RankedAuditedDTO;
-import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -28,7 +26,9 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class StorageBaseDTO extends RankedAuditedDTO implements StorageBaseInterface {
+public class StorageBaseDTO extends RankedAuditedDTO 
+//implements StorageBaseInterface 
+{
 	
 	private BigDecimal unitAmount;
 	private BigDecimal numberUnits;	

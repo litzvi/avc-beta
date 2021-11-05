@@ -15,7 +15,11 @@ import com.avc.mis.beta.dto.process.collection.SampleItemDTO;
 import com.avc.mis.beta.dto.query.SampleItemWithWeight;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
+import com.avc.mis.beta.entities.codes.BasePoCode;
+import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.SampleReceipt;
+import com.avc.mis.beta.entities.process.collection.ItemCount;
+import com.avc.mis.beta.entities.process.collection.SampleItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -57,11 +61,11 @@ public class SampleReceiptDTO extends PoProcessDTO {
 				.collect(Collectors.toList());
 	}
 	
-//	public void setSampleItems(Collection<SampleItemDTO> sampleItems) {
-//		this.sampleItems = new HashMultiSet<SampleItemDTO>(sampleItems);
-//	}
+	public void setSampleItems(List<SampleItemDTO> sampleItems) {
+		this.sampleItems = sampleItems;
+	}
 	
-	public void setSampleItems(List<SampleItemWithWeight> sampleItems) {
+	public void setSampleItemsWithWeight(List<SampleItemWithWeight> sampleItems) {
 		Map<Integer, List<SampleItemWithWeight>> map = sampleItems.stream()
 				.collect(Collectors.groupingBy(SampleItemWithWeight::getId, LinkedHashMap::new, Collectors.toList()));
 			this.sampleItems = new ArrayList<SampleItemDTO>();
@@ -80,6 +84,26 @@ public class SampleReceiptDTO extends PoProcessDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return SampleReceipt.class;
 	}
+	
+	@Override
+	public SampleReceipt fillEntity(Object entity) {
+		SampleReceipt sample;
+		if(entity instanceof SampleReceipt) {
+			sample = (SampleReceipt) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be SampleReceipt class");
+		}
+		super.fillEntity(sample);
+
+		if(getSampleItems() != null) {
+			Ordinal.setOrdinals(getSampleItems());
+			sample.setSampleItems(getSampleItems().stream().map(i -> i.fillEntity(new SampleItem())).collect(Collectors.toSet()));
+		}
+		
+		return sample;
+	}
+
 
 	@Override
 	public String getProcessTypeDescription() {

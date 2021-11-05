@@ -6,14 +6,12 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.inventory.Storage;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.Data;
 
@@ -25,7 +23,9 @@ import lombok.Data;
  *
  */
 @Data
-public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDTO, ProcessItemDTO> {
+public class ProcessItemWithStorage 
+//implements CollectionItemWithGroup<StorageDTO, ProcessItemDTO> 
+{
 	
 	private ProcessItemDTO processItem;
 
@@ -52,14 +52,14 @@ public class ProcessItemWithStorage implements CollectionItemWithGroup<StorageDT
 		
 	}
 
-	@Override
-	public StorageDTO getItem() {
-		return getStorage();
-	}
-
-	@Override
-	public ProcessItemDTO getGroup() {
-		return getProcessItem();
-	}
+//	@Override
+//	public StorageDTO getItem() {
+//		return getStorage();
+//	}
+//
+//	@Override
+//	public ProcessItemDTO getGroup() {
+//		return getProcessItem();
+//	}
 	
 }

@@ -1,6 +1,5 @@
 package com.avc.mis.beta.dto.process;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,7 +10,6 @@ import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.process.StorageTransfer;
-import com.avc.mis.beta.entities.process.TransactionProcess;
 import com.avc.mis.beta.entities.process.collection.ItemCount;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;

@@ -11,10 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.repositories.ProductionProcessRepository;
 import com.avc.mis.beta.service.interfaces.ProductionProcessService;
@@ -32,7 +33,7 @@ import lombok.Getter;
 @Transactional(readOnly = true)
 public class ProductionProcesses implements ProductionProcessService {
 
-	@Autowired private ProcessInfoDAO dao;
+	@Autowired private ProcessDAO dao;
 
 	@Autowired private ProductionProcessRepository processRepository;
 	
@@ -48,8 +49,8 @@ public class ProductionProcesses implements ProductionProcessService {
 //		process.setProcessType(dao.getProcessTypeByValue(processName));
 		Integer processId = dao.addTransactionProcessEntity(process, ProductionProcess::new);	
 		dao.checkTransactionUsedInventoryAvailability(processId);
-		dao.setTransactionPoWeights(processId);
-		dao.setTransactionUsedProcesses(processId);
+		dao.setTransactionPoWeights(processId, new ItemGroup[] {ItemGroup.PRODUCT, ItemGroup.WASTE});
+		dao.setTransactionProcessParents(processId);
 		
 		return processId;
 	}
@@ -75,8 +76,8 @@ public class ProductionProcesses implements ProductionProcessService {
 		dao.editTransactionProcessEntity(process, ProductionProcess::new);		
 		dao.checkUsingProcesessConsistency(process);
 		dao.checkTransactionUsedInventoryAvailability(process.getId());
-		dao.setTransactionPoWeights(process.getId());
-		dao.setTransactionUsedProcesses(process.getId());
+		dao.setTransactionPoWeights(process.getId(), new ItemGroup[] {ItemGroup.PRODUCT, ItemGroup.WASTE});
+		dao.setTransactionProcessParents(process.getId());
 	}
 
 	//----------------------------Duplicate in ProductionProcessReports - Should remove------------------------------------------

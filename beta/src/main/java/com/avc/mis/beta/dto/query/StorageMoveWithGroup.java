@@ -11,8 +11,6 @@ import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.process.inventory.Storage;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -22,7 +20,9 @@ import lombok.NonNull;
  *
  */
 @Data
-public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMoveDTO, StorageMovesGroupDTO> {
+public class StorageMoveWithGroup 
+//implements CollectionItemWithGroup<StorageMoveDTO, StorageMovesGroupDTO> 
+{
 
 	StorageMovesGroupDTO storageMovesGroup;
 	StorageMoveDTO storageMove;
@@ -55,15 +55,15 @@ public class StorageMoveWithGroup implements CollectionItemWithGroup<StorageMove
 				warehouseLocationId, warehouseLocationValue, clazz);
 	}
 
-	@JsonIgnore
-	@Override
-	public StorageMoveDTO getItem() {
-		return getStorageMove();
-	}
-
-	@JsonIgnore
-	@Override
-	public StorageMovesGroupDTO getGroup() {
-		return getStorageMovesGroup();
-	}
+//	@JsonIgnore
+//	@Override
+//	public StorageMoveDTO getItem() {
+//		return getStorageMove();
+//	}
+//
+//	@JsonIgnore
+//	@Override
+//	public StorageMovesGroupDTO getGroup() {
+//		return getStorageMovesGroup();
+//	}
 }

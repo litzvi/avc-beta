@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.QcCompany;
-import com.avc.mis.beta.utilities.ListGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,7 +21,9 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class QcReportLine extends ProcessStateInfo implements ListGroup<ItemQc> {
+public class QcReportLine extends ProcessStateInfo 
+//implements ListGroup<ItemQc> 
+{
 
 //	@JsonIgnore
 //	private Integer processId;
@@ -49,10 +50,10 @@ public class QcReportLine extends ProcessStateInfo implements ListGroup<ItemQc> 
 //		return getProcessId();
 //	}
 
-	@Override
-	public void setList(List<ItemQc> list) {
-		setItemQcs(list);
-	}
+//	@Override
+//	public void setList(List<ItemQc> list) {
+//		setItemQcs(list);
+//	}
 
 	
 	

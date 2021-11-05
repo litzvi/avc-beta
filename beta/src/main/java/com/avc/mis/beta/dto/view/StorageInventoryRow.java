@@ -10,7 +10,6 @@ import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Warehouse;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
@@ -27,7 +26,9 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class StorageInventoryRow extends BasicSubjectDataDTO implements CollectionItemWithGroup<StorageInventoryRow, ProcessItemInventory> {
+public class StorageInventoryRow extends BasicSubjectDataDTO 
+//implements CollectionItemWithGroup<StorageInventoryRow, ProcessItemInventory> 
+{
 
 	Integer processItemId;
 	BigDecimal unitAmount;
@@ -77,19 +78,19 @@ public class StorageInventoryRow extends BasicSubjectDataDTO implements Collecti
 		return this.numberUnits.subtract(this.numberUsedUnits);
 	}
 	
-	@JsonIgnore
-	@Override
-	public StorageInventoryRow getItem() {
-		return this;
-	}
-
-	@JsonIgnore
-	@Override
-	public ProcessItemInventory getGroup() {
-		ProcessItemInventory group = new ProcessItemInventory();
-		group.setId(getProcessItemId());
-		return group;
-	}
+//	@JsonIgnore
+//	@Override
+//	public StorageInventoryRow getItem() {
+//		return this;
+//	}
+//
+//	@JsonIgnore
+//	@Override
+//	public ProcessItemInventory getGroup() {
+//		ProcessItemInventory group = new ProcessItemInventory();
+//		group.setId(getProcessItemId());
+//		return group;
+//	}
 
 	@JsonIgnore
 	@Override

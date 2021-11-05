@@ -4,20 +4,18 @@
 package com.avc.mis.beta.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.QualityCheck;
 import com.avc.mis.beta.repositories.QCRepository;
 import com.avc.mis.beta.service.report.QualityCheckReports;
@@ -35,7 +33,7 @@ import lombok.NonNull;
 @Transactional(readOnly = true)
 public class QualityChecks {
 	
-	@Autowired private ProcessInfoDAO dao;
+	@Autowired private ProcessDAO dao;
 
 	@Autowired private QCRepository qcRepository;
 	

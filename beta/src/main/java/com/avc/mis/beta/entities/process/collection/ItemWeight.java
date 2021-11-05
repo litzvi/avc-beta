@@ -61,9 +61,6 @@ public class ItemWeight extends RankedAuditedEntity {
 	@Positive(message = "Average tested weight has to be positive")
 	private BigDecimal avgTestedWeight;
 	
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
 	
 	@Override
 	public void setReference(Object referenced) {

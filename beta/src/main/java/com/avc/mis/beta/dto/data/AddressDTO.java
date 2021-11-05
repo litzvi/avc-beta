@@ -7,7 +7,6 @@ import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Address;
-import com.avc.mis.beta.entities.process.inventory.Storage;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

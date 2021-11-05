@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
 import com.avc.mis.beta.dto.values.PoCodeDTO;
@@ -33,9 +33,10 @@ import com.avc.mis.beta.utilities.ProgramSequence;
 @Transactional(rollbackFor = Throwable.class)
 public class ObjectWriter {
 	
-	@Autowired private ProcessInfoDAO dao;
+	@Autowired private ProcessDAO dao;
 	@Autowired private DeletableDAO deletableDAO;
 	@Autowired private ProcessReader processReader;
+	@Autowired private SettingsTableReader settingsTableReader;
 	@Autowired private ObjectTablesRepository objectTablesRepository;
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
@@ -107,7 +108,7 @@ public class ObjectWriter {
 	@Deprecated //The code is set by the user
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	private void addGeneralPoCode(GeneralPoCode poCode) {
-		ProgramSequence sequence = dao.getSequnce(SequenceIdentifier.GENERAL_PO_CODE);
+		ProgramSequence sequence = settingsTableReader.getSequnce(SequenceIdentifier.GENERAL_PO_CODE);
 		poCode.setCode(String.valueOf(sequence.getSequance()));	
 		sequence.advance();
 		dao.addEntity(poCode);

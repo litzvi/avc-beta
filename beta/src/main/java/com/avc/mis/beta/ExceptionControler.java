@@ -37,30 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 @ControllerAdvice
 @Slf4j
 public class ExceptionControler {
-	
-	/* 
-	 * DAO#addEntity - 
-	 * @throws IllegalArgumentException, EntityNotFoundException, EntityExistsException, TransactionRequiredException
-	 *  
-	 * ProcessInfoDAO -
-	 * @throws NullPointerException if no such process type.
-	 * @throws AccessControlException if no permission
-	 * 
-	 * ProcessInfoDAO
-	 * @throws InvalidDataAccessApiUsageException
-	 * 
-	 * UnsupportedOperationException
-	 * 
-	 * com.fasterxml.jackson.databind.exc.InvalidFormatException
-	 * 
-	 * org.springframework.http.converter.HttpMessageNotReadableException
-	 */
-	
-	//IllegalStateException - ProcessInfoReader
-	//AccessControlException
-	
-//	java.sql.SQLException
-	
+		
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<List<String>> handleValidationExceptions(
 			ConstraintViolationException ex) {

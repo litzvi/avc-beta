@@ -15,11 +15,9 @@ import javax.persistence.Table;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 /**

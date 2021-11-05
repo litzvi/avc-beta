@@ -5,7 +5,6 @@ package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.DataEntity;
 import com.avc.mis.beta.entities.data.Email;
 
 import lombok.Data;

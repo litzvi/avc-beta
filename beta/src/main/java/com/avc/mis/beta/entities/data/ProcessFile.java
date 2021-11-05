@@ -3,15 +3,11 @@
  */
 package com.avc.mis.beta.entities.data;
 
-import java.util.Optional;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Lob;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
 
-import com.avc.mis.beta.entities.ContactEntity;
 import com.avc.mis.beta.entities.GeneralInfoEntity;
 
 import lombok.Data;

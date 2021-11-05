@@ -4,7 +4,6 @@
 package com.avc.mis.beta.dto.values;
 
 import com.avc.mis.beta.dto.BaseEntityDTO;
-import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.ValueInterface;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
@@ -15,7 +14,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.Value;
 
 /**
  * @author zvi

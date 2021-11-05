@@ -12,16 +12,16 @@ import com.avc.mis.beta.entities.values.Warehouse;
  * @author zvi
  *
  */
-public interface StorageBaseInterface {
-
-	public BigDecimal getUnitAmount();
-	
-	public BigDecimal getNumberUnits();
-	
-//	public BigDecimal getAccessWeight();
-	
-	public BasicValueEntity<Warehouse> getWarehouseLocation();
-	
-	public String getClassName();
-
-}
+//public interface StorageBaseInterface {
+//
+//	public BigDecimal getUnitAmount();
+//	
+//	public BigDecimal getNumberUnits();
+//	
+////	public BigDecimal getAccessWeight();
+//	
+//	public BasicValueEntity<Warehouse> getWarehouseLocation();
+//	
+//	public String getClassName();
+//
+//}

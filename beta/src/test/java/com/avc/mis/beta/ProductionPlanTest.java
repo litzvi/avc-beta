@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
 import com.avc.mis.beta.dto.item.BomLineDTO;
@@ -58,7 +58,7 @@ public class ProductionPlanTest {
 	
 	static final int PLAN_LIST_LENGTH = 5;
 
-	@Autowired ProcessInfoDAO dao;
+	@Autowired ProcessDAO dao;
 
 	
 	@Autowired ProductionPlans productionPlans;

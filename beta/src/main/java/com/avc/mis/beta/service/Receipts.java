@@ -3,10 +3,8 @@
  */
 package com.avc.mis.beta.service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,7 +12,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
 import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
@@ -48,7 +46,7 @@ import lombok.NonNull;
 @Transactional(readOnly = true)
 public class Receipts {
 	
-	@Autowired private ProcessInfoDAO dao;
+	@Autowired private ProcessDAO dao;
 	@Autowired private DeletableDAO deletableDAO;
 	
 	@Autowired private ReceiptReports receiptReports;

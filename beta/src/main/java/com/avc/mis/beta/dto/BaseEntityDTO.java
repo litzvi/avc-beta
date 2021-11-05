@@ -4,7 +4,6 @@
 package com.avc.mis.beta.dto;
 
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;

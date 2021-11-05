@@ -13,7 +13,6 @@ import com.avc.mis.beta.dto.view.ReceiptItemRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
 
 /**
  * @author Zvi

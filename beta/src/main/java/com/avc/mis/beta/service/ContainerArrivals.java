@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
 import com.avc.mis.beta.dto.view.ContainerArrivalRow;
@@ -33,7 +33,7 @@ import lombok.Getter;
 @Transactional(readOnly = true)
 public class ContainerArrivals {
 	
-	@Autowired private ProcessInfoDAO dao;
+	@Autowired private ProcessDAO dao;
 
 	@Autowired private ContainerArrivalRepository containerArrivalRepository;
 	

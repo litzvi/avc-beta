@@ -6,18 +6,26 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
+import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
+import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
+import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
+import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
+import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.view.InventoryTransactionAddRow;
 import com.avc.mis.beta.dto.view.InventoryTransactionRow;
@@ -31,8 +39,6 @@ import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.process.InventoryUse;
-import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.entities.process.StorageTransfer;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
@@ -60,7 +66,7 @@ public class WarehouseManagement {
 			ProductionFunctionality.LOADING, ProductionFunctionality.GENERAL_USE, ProductionFunctionality.PRODUCT_USE, 
 			ProductionFunctionality.QUALITY_CONTROL_CHECK};
 	
-	@Autowired private ProcessInfoDAO dao;
+	@Autowired private ProcessDAO dao;
 	
 	@Autowired private InventoryRepository inventoryRepository;
 	
@@ -95,8 +101,18 @@ public class WarehouseManagement {
 						packageTypeOrdinal,
 						checkPoCodes, poCodeIds,
 						checkExcludedProcessIds, excludedProcessIds);
-				
-		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
+		List<ProcessItemInventory> processItemInventoryRows = getInventoryRepository()
+				.findProcessItemInventory(storageInventoryRows.stream()
+						.map(StorageInventoryRow::getProcessItemId)
+						.collect(Collectors.toSet()));
+		CollectionItemWithGroup.fillGroups(processItemInventoryRows, 
+				storageInventoryRows, 
+				ProcessItemInventory::getId,
+				StorageInventoryRow::getProcessItemId,
+				Function.identity(),
+				ProcessItemInventory::setStorageForms);	
+		return processItemInventoryRows;
+//		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
 	}
 	
 	public List<InventoryTransactionRow> getInventoryTransactions(ItemGroup itemGroup, Integer[] itemIds, Integer[] poCodeIds, 
@@ -363,8 +379,8 @@ public class WarehouseManagement {
 //		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
 		Integer transferId = dao.addTransactionProcessEntity(transfer, StorageTransfer::new);
 		dao.checkTransactionUsedInventoryAvailability(transferId);
-		dao.setTransactionPoWeights(transferId);
-		dao.setTransactionUsedProcesses(transferId);
+		dao.setTransactionPoWeights(transferId, new ItemGroup[] {ItemGroup.PRODUCT, ItemGroup.WASTE});
+		dao.setTransactionProcessParents(transferId);
 		//check if process items match the used item (items are equal, perhaps also check amounts difference and send warning)
 		checkTransferBalance(transferId);
 		return transferId;
@@ -412,23 +428,36 @@ public class WarehouseManagement {
 //		Optional<StorageTransferDTO> transfer = getTransferRepository().findTransferDTOByProcessId(processId);
 //		StorageTransferDTO transferDTO = transfer.orElseThrow(
 //				()->new IllegalArgumentException("No storage transfer with given process id"));
+//		transferDTO.setProcessItems(
+//				CollectionItemWithGroup.getFilledGroups(
+//						getTransferRepository()
+//						.findProcessItemWithStorage(processId)));
 		transferDTO.setProcessItems(
 				CollectionItemWithGroup.getFilledGroups(
 						getTransferRepository()
-						.findProcessItemWithStorage(processId)));
+						.findProcessItemWithStorage(transferDTO.getId()),
+				ProcessItemWithStorage::getProcessItem,
+				ProcessItemWithStorage::getStorage,
+				ProcessItemDTO::setStorageForms));
 //				ProcessItemDTO.getProcessItems(getTransferRepository()
 //						.findProcessItemWithStorage(processId)));
 		transferDTO.setUsedItemGroups(
 				CollectionItemWithGroup.getFilledGroups(
 						getTransferRepository()
-						.findUsedItemsWithGroup(processId)));
+						.findUsedItemsWithGroup(processId),
+						UsedItemWithGroup::getUsedItemsGroup,
+						UsedItemWithGroup::getUsedItem,
+						UsedItemsGroupDTO::setUsedItems));
 //				UsedItemsGroupDTO.getUsedItemsGroups(
 //						getTransferRepository()
 //						.findUsedItemsWithGroup(processId)));
 		transferDTO.setItemCounts(
 				CollectionItemWithGroup.getFilledGroups(
 						getTransferRepository()
-						.findItemCountWithAmount(processId)));
+						.findItemCountWithAmount(processId),
+						ItemCountWithAmount::getItemCount,
+						ItemCountWithAmount::getAmount,
+						ItemCountDTO::setAmounts));
 //				ItemCountDTO.getItemCounts(
 //						getTransferRepository()
 //						.findItemCountWithAmount(processId)));
@@ -445,8 +474,8 @@ public class WarehouseManagement {
 		
 		dao.checkUsingProcesessConsistency(transfer);
 		dao.checkTransactionUsedInventoryAvailability(transfer.getId());
-		dao.setTransactionPoWeights(transfer.getId());
-		dao.setTransactionUsedProcesses(transfer.getId());
+		dao.setTransactionPoWeights(transfer.getId(), new ItemGroup[] {ItemGroup.PRODUCT, ItemGroup.WASTE});
+		dao.setTransactionProcessParents(transfer.getId());
 		checkTransferBalance(transfer.getId());
 	}
 

@@ -11,7 +11,6 @@ import com.avc.mis.beta.dto.processInfo.ProductionPlanInfo;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.plan.ProductionPlan;
 import com.avc.mis.beta.entities.plan.ProductionPlanRow;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

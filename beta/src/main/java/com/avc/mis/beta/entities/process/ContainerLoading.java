@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.entities.process;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,14 +18,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
 import com.avc.mis.beta.entities.process.collection.LoadedItem;
 
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Setter;
 
 /**

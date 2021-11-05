@@ -19,7 +19,6 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.ValueInterface;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.process.PoProcess;

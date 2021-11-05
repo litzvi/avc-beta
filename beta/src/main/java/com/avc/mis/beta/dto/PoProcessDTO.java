@@ -12,10 +12,8 @@ import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
 import com.avc.mis.beta.dto.processInfo.PoProcessInfo;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.collection.ItemCount;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

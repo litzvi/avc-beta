@@ -14,13 +14,22 @@ import com.avc.mis.beta.dto.GeneralProcessDTO;
 import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.process.ProcessWithProductDTO;
+import com.avc.mis.beta.dto.process.RelocationProcessDTO;
 import com.avc.mis.beta.dto.process.TransactionProcessDTO;
+import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
 import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
+import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
+import com.avc.mis.beta.dto.query.ItemCountWithAmount;
+import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
+import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
+import com.avc.mis.beta.dto.query.UsedItemWithGroup;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
+import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
@@ -41,6 +50,7 @@ import lombok.NonNull;
 public class ProcessReader {
 	
 	@Autowired private ProcessInfoRepository processInfoRepository;
+	@Autowired private RelocationRepository relocationRepository;
 	
 	@Autowired private Orders orders;
 	@Autowired private Receipts orderReceipts;
@@ -61,7 +71,10 @@ public class ProcessReader {
 		processDTO.setUsedItemGroups(
 				CollectionItemWithGroup.getFilledGroups(
 						getProcessInfoRepository()
-						.findUsedItemsWithGroup(processDTO.getId())));
+						.findUsedItemsWithGroup(processDTO.getId()),
+						UsedItemWithGroup::getUsedItemsGroup,
+						UsedItemWithGroup::getUsedItem,
+						UsedItemsGroupDTO::setUsedItems));
 		
 		setProcessWithProductCollections(processDTO);
 		
@@ -72,10 +85,17 @@ public class ProcessReader {
 	 * @param processDTO ProcessWithProductDTO with id set inside
 	 */
 	void setProcessWithProductCollections(ProcessWithProductDTO<ProcessItemDTO> processDTO) {
+//		processDTO.setProcessItems(
+//				CollectionItemWithGroup.getFilledGroups(
+//						getProcessInfoRepository()
+//						.findProcessItemWithStorage(processDTO.getId())));
 		processDTO.setProcessItems(
 				CollectionItemWithGroup.getFilledGroups(
 						getProcessInfoRepository()
-						.findProcessItemWithStorage(processDTO.getId())));
+						.findProcessItemWithStorage(processDTO.getId()),
+				ProcessItemWithStorage::getProcessItem,
+				ProcessItemWithStorage::getStorage,
+				ProcessItemDTO::setStorageForms));
 
 		setPoProcessCollections(processDTO);
 		
@@ -89,6 +109,24 @@ public class ProcessReader {
 		List<WeightedPoDTO> weightedPos = getProcessInfoRepository().findWeightedPos(processDTO.getId());
 		if(!weightedPos.isEmpty())
 			processDTO.setWeightedPos(weightedPos);
+	}
+	
+	void setRelocationProcessCollections(RelocationProcessDTO processDTO) {
+		processDTO.setStorageMovesGroups(
+				CollectionItemWithGroup.getFilledGroups(
+						getRelocationRepository()
+						.findStorageMovesWithGroup(processDTO.getId()),
+						StorageMoveWithGroup::getStorageMovesGroup,
+						StorageMoveWithGroup::getStorageMove,
+						StorageMovesGroupDTO::setStorageMoves));
+		processDTO.setItemCounts(
+				CollectionItemWithGroup.getFilledGroups(
+						getRelocationRepository()
+						.findItemCountWithAmount(processDTO.getId()),
+						ItemCountWithAmount::getItemCount,
+						ItemCountWithAmount::getAmount,
+						ItemCountDTO::setAmounts));
+
 	}
 	
 	/**

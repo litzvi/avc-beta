@@ -11,8 +11,6 @@ import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -21,7 +19,9 @@ import lombok.Data;
  *
  */
 @Data
-public class ItemCountWithAmount implements CollectionItemWithGroup<CountAmountDTO, ItemCountDTO> {
+public class ItemCountWithAmount 
+//implements CollectionItemWithGroup<CountAmountDTO, ItemCountDTO> 
+{
 
 	private ItemCountDTO itemCount;
 	private PoCodeBasic po;
@@ -42,17 +42,17 @@ public class ItemCountWithAmount implements CollectionItemWithGroup<CountAmountD
 		this.amount = new CountAmountDTO(amountId, amountVersion, amountOrdinal, amount);		
 	}
 	
-	@JsonIgnore
-	@Override
-	public CountAmountDTO getItem() {
-		return getAmount();
-	}
-
-	@JsonIgnore
-	@Override
-	public ItemCountDTO getGroup() {
-		return getItemCount();
-	}
+//	@JsonIgnore
+//	@Override
+//	public CountAmountDTO getItem() {
+//		return getAmount();
+//	}
+//
+//	@JsonIgnore
+//	@Override
+//	public ItemCountDTO getGroup() {
+//		return getItemCount();
+//	}
 
 
 }

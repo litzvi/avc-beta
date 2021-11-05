@@ -6,7 +6,6 @@ package com.avc.mis.beta.dto.data;
 import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.CompanyContact;
-import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.values.CompanyPosition;
 
 import lombok.Data;

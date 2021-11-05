@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.plan.ProcessItemPlanDTO;
 import com.avc.mis.beta.dto.plan.ProductionPlanDTO;
 import com.avc.mis.beta.dto.plan.ProductionPlanRowDTO;
@@ -35,7 +35,7 @@ import lombok.Getter;
 @Transactional(readOnly = true)
 public class ProductionPlans {
 	
-	@Autowired private ProcessInfoDAO dao;
+	@Autowired private ProcessDAO dao;
 
 	@Autowired private DeletableDAO deletableDAO;
 	
@@ -43,11 +43,13 @@ public class ProductionPlans {
 
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public Integer addProductionPlan(ProductionPlanDTO productionPlanDTO) {
-		ProductionPlan productionPlan = productionPlanDTO.fillEntity(new ProductionPlan());
-		productionPlan.setProcessType(dao.getProcessTypeByValue(ProcessName.PRODUCTION_PLAN));
-		dao.addEntity(productionPlan);
-		return productionPlan.getId();
+	public Integer addProductionPlan(ProductionPlanDTO productionPlan) {
+		productionPlan.setProcessName(ProcessName.PRODUCTION_PLAN);
+		return dao.addGeneralProcessEntity(productionPlan, ProductionPlan::new);
+//		ProductionPlan productionPlan = productionPlanDTO.fillEntity(new ProductionPlan());
+//		productionPlan.setProcessType(dao.getProcessTypeByValue(ProcessName.PRODUCTION_PLAN));
+//		dao.addEntity(productionPlan);
+//		return productionPlan.getId();
 	}
 	
 	public ProductionPlanDTO getProductionPlan(int processId) {
@@ -81,10 +83,11 @@ public class ProductionPlans {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public Integer editProductionPlan(ProductionPlanDTO productionPlanDTO) {
-		ProductionPlan productionPlan = productionPlanDTO.fillEntity(new ProductionPlan());
-		dao.editEntity(productionPlan);
-		return productionPlan.getId();
+	public void editProductionPlan(ProductionPlanDTO productionPlan) {
+		dao.editGeneralProcessEntity(productionPlan, ProductionPlan::new);
+//		ProductionPlan productionPlan = productionPlanDTO.fillEntity(new ProductionPlan());
+//		dao.editEntity(productionPlan);
+//		return productionPlan.getId();
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

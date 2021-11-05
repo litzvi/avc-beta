@@ -73,8 +73,8 @@ public class SampleItem extends ProcessInfoEntity {
 		return itemWeights;
 	}
 
-	public void setItemWeights(ItemWeight[] itemWeights) {
-		Ordinal.setOrdinals(itemWeights);
+	public void setItemWeights(Set<ItemWeight> itemWeights) {
+//		Ordinal.setOrdinals(itemWeights);
 		this.itemWeights = Insertable.setReferences(itemWeights, (t) -> {t.setReference(this);	return t;});
 	}
 		

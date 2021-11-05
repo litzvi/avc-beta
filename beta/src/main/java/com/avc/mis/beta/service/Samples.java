@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.SampleReceipt;
@@ -27,7 +27,7 @@ import lombok.Getter;
 @Deprecated
 public class Samples {
 	
-	@Autowired private ProcessInfoDAO dao;
+	@Autowired private ProcessDAO dao;
 	
 	@Autowired SampleRepository sampleRepository;
 
@@ -35,9 +35,10 @@ public class Samples {
 	@Autowired private DeletableDAO deletableDAO;
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addSampleReceipt(SampleReceipt sample) {
-		sample.setProcessType(dao.getProcessTypeByValue(ProcessName.SAMPLE_RECEIPET));
-		dao.addPoProcessEntity(sample);
+	public Integer addSampleReceipt(SampleReceiptDTO sample) {
+		sample.setProcessName(ProcessName.SAMPLE_RECEIPET);
+//		sample.setProcessType(dao.getProcessTypeByValue(ProcessName.SAMPLE_RECEIPET));
+		return dao.addPoProcessEntity(sample, SampleReceipt::new);
 	}
 	
 	public SampleReceiptDTO getSampleReceiptByProcessId(int processId) {
@@ -55,14 +56,14 @@ public class Samples {
 //		Optional<SampleReceiptDTO> sample = getSampleRepository().findSampleDTOByProcessId(processId);
 //		SampleReceiptDTO sampleReceiptDTO = sample.orElseThrow(
 //				()->new IllegalArgumentException("No receipt sample with given process id"));
-		sampleReceiptDTO.setSampleItems(getSampleRepository().findSampleItemsWithWeight(processId));
+		sampleReceiptDTO.setSampleItemsWithWeight(getSampleRepository().findSampleItemsWithWeight(processId));
 		
 		return sampleReceiptDTO;
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editSampleReceipt(SampleReceipt sample) {
-		dao.editGeneralProcessEntity(sample);
+	public void editSampleReceipt(SampleReceiptDTO sample) {
+		dao.editGeneralProcessEntity(sample, SampleReceipt::new);
 	}
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

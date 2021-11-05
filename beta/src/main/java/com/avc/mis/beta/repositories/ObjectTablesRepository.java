@@ -223,9 +223,6 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 		+ "order by po_code.id desc ")
 	List<PoCodeBasic> findMixFreePoCodes(Integer poCodeId);
 
-	@Query("select s from ProgramSequence s where s.identifier = :sequenceIdentifier ")
-	ProgramSequence findSequence(SequenceIdentifier sequenceIdentifier);
-
 	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO( "
 			+ "po_code.id, po_code.code, "
 			+ "s.id, s.version, s.name, "

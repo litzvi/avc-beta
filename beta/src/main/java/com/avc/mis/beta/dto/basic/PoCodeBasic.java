@@ -5,7 +5,6 @@ package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.BasicValueDTO;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

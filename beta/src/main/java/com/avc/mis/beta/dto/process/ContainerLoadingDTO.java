@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.dto.process;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +15,7 @@ import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
 import com.avc.mis.beta.entities.process.ContainerArrival;
 import com.avc.mis.beta.entities.process.ContainerLoading;
-import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.collection.LoadedItem;
-import com.avc.mis.beta.entities.process.collection.ReceiptItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

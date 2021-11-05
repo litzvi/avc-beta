@@ -17,7 +17,6 @@ import com.avc.mis.beta.entities.plan.ProductionPlanRow;
 import com.avc.mis.beta.entities.plan.UsedItemPlan;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

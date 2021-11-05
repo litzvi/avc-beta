@@ -9,18 +9,22 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import com.avc.mis.beta.dto.RankedAuditedDTO;
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
+import com.avc.mis.beta.entities.process.SampleReceipt;
+import com.avc.mis.beta.entities.process.collection.ItemWeight;
 import com.avc.mis.beta.entities.process.collection.SampleItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
@@ -29,8 +33,9 @@ import lombok.NonNull;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @Deprecated
-public class SampleItemDTO extends SubjectDataDTO {
+public class SampleItemDTO extends RankedAuditedDTO {
 	
 	private BasicValueEntity<Item> item;
 //	private BigDecimal amountWeighed;
@@ -105,6 +110,35 @@ public class SampleItemDTO extends SubjectDataDTO {
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {
 		return SampleItem.class;
+	}
+	
+	@Override
+	public SampleItem fillEntity(Object entity) {
+		SampleItem sampleItem;
+		if(entity instanceof SampleItem) {
+			sampleItem = (SampleItem) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be SampleItem class");
+		}
+		super.fillEntity(sampleItem);
+
+		try {
+			sampleItem.setItem((Item) getItem().fillEntity(new Item()));
+		} catch (NullPointerException e) {
+			throw new IllegalArgumentException("Item is mandatory");
+		}
+		sampleItem.setMeasureUnit(getMeasureUnit());
+		sampleItem.setSampleContainerWeight(getSampleContainerWeight());
+		if(getItemWeights() == null || getItemWeights().isEmpty()) {
+			throw new IllegalArgumentException("Sample item requires at least one item weight");
+		}
+		else {
+			Ordinal.setOrdinals(getItemWeights());
+			sampleItem.setItemWeights(getItemWeights().stream().map(i -> i.fillEntity(new ItemWeight())).collect(Collectors.toSet()));
+		}
+		
+		return sampleItem;
 	}
 	
 }

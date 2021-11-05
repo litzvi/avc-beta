@@ -3,9 +3,7 @@
  */
 package com.avc.mis.beta.entities.process.collection;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,19 +13,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
-import com.avc.mis.beta.dto.process.inventory.MovedItemTableDTO;
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.entities.process.inventory.UsedItemBase;
-import com.avc.mis.beta.entities.values.Warehouse;
 
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 

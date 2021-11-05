@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.RankedAuditedDTO;
-import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.ItemWithUse;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
@@ -18,11 +17,8 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.CountAmount;
 import com.avc.mis.beta.entities.process.collection.ItemCount;
-import com.avc.mis.beta.utilities.ListGroup;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,7 +34,9 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class ItemCountDTO extends RankedAuditedDTO implements ListGroup<CountAmountDTO> {
+public class ItemCountDTO extends RankedAuditedDTO 
+//implements ListGroup<CountAmountDTO> 
+{
 
 	private ItemWithUse item;
 	private MeasureUnit measureUnit;
@@ -89,11 +87,11 @@ public class ItemCountDTO extends RankedAuditedDTO implements ListGroup<CountAmo
 		return Arrays.asList(totalAmount.setScale(MeasureUnit.SUM_DISPLAY_SCALE));
 	}
 	
-	@JsonIgnore
-	@Override
-	public void setList(List<CountAmountDTO> list) {
-		setAmounts(list);
-	}
+//	@JsonIgnore
+//	@Override
+//	public void setList(List<CountAmountDTO> list) {
+//		setAmounts(list);
+//	}
 	
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {

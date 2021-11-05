@@ -6,12 +6,8 @@ package com.avc.mis.beta.dto.process.collection;
 import java.time.Instant;
 
 import com.avc.mis.beta.dto.DataDTO;
-import com.avc.mis.beta.dto.GeneralInfoDTO;
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.DataEntity;
 import com.avc.mis.beta.entities.data.ProcessFile;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

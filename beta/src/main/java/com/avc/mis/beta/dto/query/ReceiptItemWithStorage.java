@@ -10,11 +10,8 @@ import java.util.List;
 
 import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.generic.OrdinalAmount;
-import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
 import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
 import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
@@ -23,7 +20,6 @@ import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.process.inventory.Storage;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.Data;
 
@@ -33,7 +29,9 @@ import lombok.Data;
  */
 @Data
 //@EqualsAndHashCode(callSuper = true)
-public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDTO, ReceiptItemDTO> {
+public class ReceiptItemWithStorage 
+//implements CollectionItemWithGroup<StorageDTO, ReceiptItemDTO> 
+{
 
 	private ReceiptItemDTO receiptItem;
 	private StorageWithSampleDTO storage;
@@ -75,16 +73,16 @@ public class ReceiptItemWithStorage implements CollectionItemWithGroup<StorageDT
 	}
 
 
-	@Override
-	public StorageWithSampleDTO getItem() {
-		return getStorage();
-	}
-
-
-	@Override
-	public ReceiptItemDTO getGroup() {
-		return getReceiptItem();
-	}
+//	@Override
+//	public StorageWithSampleDTO getItem() {
+//		return getStorage();
+//	}
+//
+//
+//	@Override
+//	public ReceiptItemDTO getGroup() {
+//		return getReceiptItem();
+//	}
 	
 //	/**
 //	 * @return id of ReceiptItem. 

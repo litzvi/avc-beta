@@ -7,7 +7,6 @@ import com.avc.mis.beta.dto.DataDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.BankAccount;
-import com.avc.mis.beta.entities.process.inventory.Storage;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

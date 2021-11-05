@@ -11,18 +11,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.exportdoc.InventoryExportDoc;
 import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
-import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.repositories.ContainerLoadingRepository;
 import com.avc.mis.beta.service.report.LoadingReports;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -36,7 +34,7 @@ import lombok.Getter;
 @Transactional(readOnly = true) 
 public class Loading {
 
-	@Autowired private ProcessInfoDAO dao;
+	@Autowired private ProcessDAO dao;
 	
 	@Autowired private ContainerLoadingRepository containerLoadingRepository;
 	
@@ -86,14 +84,15 @@ public class Loading {
 		
 		loadingDTO.setPoProcessInfo(getContainerLoadingRepository()
 				.findPoProcessInfoByProcessId(processId, ContainerLoading.class).orElse(null));
-		loadingDTO.setStorageMovesGroups(
-				CollectionItemWithGroup.getFilledGroups(
-						getContainerLoadingRepository()
-						.findStorageMovesWithGroup(processId)));
-		loadingDTO.setItemCounts(
-				CollectionItemWithGroup.getFilledGroups(
-						getContainerLoadingRepository()
-						.findItemCountWithAmount(processId)));
+//		loadingDTO.setStorageMovesGroups(
+//				CollectionItemWithGroup.getFilledGroups(
+//						getContainerLoadingRepository()
+//						.findStorageMovesWithGroup(processId)));
+//		loadingDTO.setItemCounts(
+//				CollectionItemWithGroup.getFilledGroups(
+//						getContainerLoadingRepository()
+//						.findItemCountWithAmount(processId)));
+		getProcessReader().setRelocationProcessCollections(loadingDTO);
 		
 		loadingDTO.setLoadedItems(getContainerLoadingRepository().findLoadedItems(processId));
 

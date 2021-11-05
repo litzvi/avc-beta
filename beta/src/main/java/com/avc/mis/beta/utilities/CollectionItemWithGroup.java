@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -21,15 +20,17 @@ import java.util.stream.Collectors;
  * @author zvi
  *
  */
-public interface CollectionItemWithGroup<I, G extends ListGroup<I>> {
+public interface CollectionItemWithGroup
+//<I, G extends ListGroup<I>> 
+{
 		
-	public default Integer getGroupId() {
-		return getGroup().getId();
-	}
-	
-	public abstract I getItem();
-	
-	public abstract G getGroup();
+//	public default Integer getGroupId() {
+//		return getGroup().getId();
+//	}
+//	
+//	public abstract I getItem();
+//	
+//	public abstract G getGroup();
 	
 	public static <E> Collection<E> safeCollection(Collection<E> collection) {
 		return collection == null ? Collections.emptyList() : collection;
@@ -44,44 +45,44 @@ public interface CollectionItemWithGroup<I, G extends ListGroup<I>> {
 	 * @param dataWithGroups the inner join of the group data with it's collection of 'items'
 	 * @return List of groups with nested list of each corresponding collection set in OO structure.
 	 */
-	public static <I, G extends ListGroup<I>> List<G> getFilledGroups(List<? extends CollectionItemWithGroup<I, G>> dataWithGroups) {
-		if(dataWithGroups == null || dataWithGroups.isEmpty()) {
-			return null;
-		}
-		Map<Integer, List<CollectionItemWithGroup<I, G>>> map = dataWithGroups.stream()
-				.collect(Collectors.groupingBy(CollectionItemWithGroup<I, G>::getGroupId, 
-						LinkedHashMap::new, 
-						Collectors.toList()));
-		List<G> groups = new ArrayList<>();
-		for(List<CollectionItemWithGroup<I, G>> list: map.values()) {
-			G group = list.get(0).getGroup();
-			group.setList(list.stream()
-					.map(i -> i.getItem())
-					.collect(Collectors.toList()));
-
-			groups.add(group);
-		}
-		return groups;
-	}
+//	public static <I, G extends ListGroup<I>> List<G> getFilledGroups(List<? extends CollectionItemWithGroup<I, G>> dataWithGroups) {
+//		if(dataWithGroups == null || dataWithGroups.isEmpty()) {
+//			return null;
+//		}
+//		Map<Integer, List<CollectionItemWithGroup<I, G>>> map = dataWithGroups.stream()
+//				.collect(Collectors.groupingBy(CollectionItemWithGroup<I, G>::getGroupId, 
+//						LinkedHashMap::new, 
+//						Collectors.toList()));
+//		List<G> groups = new ArrayList<>();
+//		for(List<CollectionItemWithGroup<I, G>> list: map.values()) {
+//			G group = list.get(0).getGroup();
+//			group.setList(list.stream()
+//					.map(i -> i.getItem())
+//					.collect(Collectors.toList()));
+//
+//			groups.add(group);
+//		}
+//		return groups;
+//	}
 	
 	/**
 	 * Same as getFilledGroups static method but probably less efficient because needs to compare full ProcessGroups for groupingby
 	 */
-	public static <I, G extends ListGroup<I>> List<G> getFilledGroupsByComparing(List<? extends CollectionItemWithGroup<I, G>> dataWithGroups) {
-		if(dataWithGroups == null || dataWithGroups.isEmpty()) {
-			return null;
-		}
-		Map<G, List<I>> map = dataWithGroups.stream()
-				.collect(Collectors.groupingBy(CollectionItemWithGroup<I, G>::getGroup, 
-						LinkedHashMap::new, 
-						Collectors.mapping(CollectionItemWithGroup<I, G>::getItem, Collectors.toList())));
-		List<G> groups = new ArrayList<>();
-		map.forEach((k, v) -> {
-			k.setList(v);
-			groups.add(k);
-		});
-		return groups;
-	}
+//	public static <I, G extends ListGroup<I>> List<G> getFilledGroupsByComparing(List<? extends CollectionItemWithGroup<I, G>> dataWithGroups) {
+//		if(dataWithGroups == null || dataWithGroups.isEmpty()) {
+//			return null;
+//		}
+//		Map<G, List<I>> map = dataWithGroups.stream()
+//				.collect(Collectors.groupingBy(CollectionItemWithGroup<I, G>::getGroup, 
+//						LinkedHashMap::new, 
+//						Collectors.mapping(CollectionItemWithGroup<I, G>::getItem, Collectors.toList())));
+//		List<G> groups = new ArrayList<>();
+//		map.forEach((k, v) -> {
+//			k.setList(v);
+//			groups.add(k);
+//		});
+//		return groups;
+//	}
 
 	
 	/**
@@ -96,21 +97,21 @@ public interface CollectionItemWithGroup<I, G extends ListGroup<I>> {
 	 * @param groupsFetchingFunction function to apply on set of group IDs to get the list of group objects
 	 * @return List of groups with nested list of each corresponding collection set in OO structure.
 	 */
-	public static <I, G extends ListGroup<I>> List<G> getFilledGroups(List<? extends CollectionItemWithGroup<I, G>> dataWithGroupsId, 
-			Function<Set<Integer>, List<G>> groupsFetchingFunction) {
-		if(dataWithGroupsId.isEmpty()) {
-			return null;
-		}
-		Map<Integer, List<I>> map = dataWithGroupsId.stream()
-				.collect(Collectors.groupingBy(CollectionItemWithGroup<I, G>::getGroupId, 
-						LinkedHashMap::new, 
-						Collectors.mapping(CollectionItemWithGroup<I, G>::getItem, Collectors.toList())));
-		List<G> processGroups = groupsFetchingFunction.apply(map.keySet());
-		for(G g: processGroups) {
-			g.setList(map.get(g.getId()));
-		}
-		return processGroups;
-	}
+//	public static <I, G extends ListGroup<I>> List<G> getFilledGroups(List<? extends CollectionItemWithGroup<I, G>> dataWithGroupsId, 
+//			Function<Set<Integer>, List<G>> groupsFetchingFunction) {
+//		if(dataWithGroupsId.isEmpty()) {
+//			return null;
+//		}
+//		Map<Integer, List<I>> map = dataWithGroupsId.stream()
+//				.collect(Collectors.groupingBy(CollectionItemWithGroup<I, G>::getGroupId, 
+//						LinkedHashMap::new, 
+//						Collectors.mapping(CollectionItemWithGroup<I, G>::getItem, Collectors.toList())));
+//		List<G> processGroups = groupsFetchingFunction.apply(map.keySet());
+//		for(G g: processGroups) {
+//			g.setList(map.get(g.getId()));
+//		}
+//		return processGroups;
+//	}
 	
 	
 	public static <R, G, I> List<G> getFilledGroups(

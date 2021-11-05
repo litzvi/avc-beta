@@ -4,12 +4,7 @@
 package com.avc.mis.beta.dto.process;
 
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.Ordinal;
-import com.avc.mis.beta.entities.codes.ShipmentCode;
-import com.avc.mis.beta.entities.process.ContainerArrival;
-import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.process.StorageRelocation;
-import com.avc.mis.beta.entities.process.collection.LoadedItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

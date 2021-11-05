@@ -13,19 +13,12 @@ import com.avc.mis.beta.dto.process.inventory.BasicUsedStorageDTO;
 import com.avc.mis.beta.dto.process.inventory.MovedItemTableDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.process.RelocationProcess;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
-import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
-import com.avc.mis.beta.entities.values.Warehouse;
-import com.avc.mis.beta.utilities.ListGroup;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,7 +31,9 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<StorageMoveDTO> {
+public class StorageMovesGroupDTO extends ProcessGroupDTO 
+//implements ListGroup<StorageMoveDTO> 
+{
 
 //	@JsonIgnore
 //	private MeasureUnit measureUnit;
@@ -183,11 +178,11 @@ public class StorageMovesGroupDTO extends ProcessGroupDTO implements ListGroup<S
 //		return storageMovesGroups;
 //	}
 
-	@JsonIgnore
-	@Override
-	public void setList(List<StorageMoveDTO> list) {
-		setStorageMoves(list);
-	}
+//	@JsonIgnore
+//	@Override
+//	public void setList(List<StorageMoveDTO> list) {
+//		setStorageMoves(list);
+//	}
 	
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {

@@ -10,7 +10,6 @@ import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -20,7 +19,9 @@ import lombok.NonNull;
  *
  */
 @Data
-public class UsedItemWithGroup implements CollectionItemWithGroup<UsedItemDTO, UsedItemsGroupDTO> {
+public class UsedItemWithGroup 
+//implements CollectionItemWithGroup<UsedItemDTO, UsedItemsGroupDTO> 
+{
 	
 	UsedItemsGroupDTO usedItemsGroup;
 	UsedItemDTO usedItem;
@@ -48,15 +49,15 @@ public class UsedItemWithGroup implements CollectionItemWithGroup<UsedItemDTO, U
 				warehouseLocationId, warehouseLocationValue, storageRemarks);
 	}
 
-	@Override
-	public UsedItemDTO getItem() {
-		return getUsedItem();
-	}
-
-	@Override
-	public UsedItemsGroupDTO getGroup() {
-		return getUsedItemsGroup();
-	}
+//	@Override
+//	public UsedItemDTO getItem() {
+//		return getUsedItem();
+//	}
+//
+//	@Override
+//	public UsedItemsGroupDTO getGroup() {
+//		return getUsedItemsGroup();
+//	}
 	
 	
 

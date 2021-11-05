@@ -19,8 +19,6 @@ import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.values.CashewGrade;
-import com.avc.mis.beta.entities.values.Warehouse;
-import com.avc.mis.beta.utilities.ListGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -40,7 +38,9 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class ProcessItemInventory extends BasicDataDTO implements ListGroup<StorageInventoryRow> {
+public class ProcessItemInventory extends BasicDataDTO 
+//implements ListGroup<StorageInventoryRow> 
+{
 
 	private ItemWithUnitDTO item;
 	private MeasureUnit measureUnit;
@@ -131,11 +131,11 @@ public class ProcessItemInventory extends BasicDataDTO implements ListGroup<Stor
 		return null;
 	}
 	
-	@JsonIgnore
-	@Override
-	public void setList(List<StorageInventoryRow> list) {
-		setStorageForms(list);
-	}
+//	@JsonIgnore
+//	@Override
+//	public void setList(List<StorageInventoryRow> list) {
+//		setStorageForms(list);
+//	}
 	
 	
 }

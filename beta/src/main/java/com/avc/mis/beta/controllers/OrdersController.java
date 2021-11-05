@@ -3,6 +3,23 @@
  */
 package com.avc.mis.beta.controllers;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.ws.rs.QueryParam;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.data.DataObjectWithName;
@@ -18,10 +35,7 @@ import com.avc.mis.beta.entities.codes.MixPoCode;
 import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
-import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.entities.process.SampleReceipt;
-import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.ObjectWriter;
@@ -32,26 +46,6 @@ import com.avc.mis.beta.service.Samples;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.report.OrderReports;
 import com.avc.mis.beta.service.report.ReceiptReports;
-import com.fasterxml.jackson.databind.JsonNode;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import javax.ws.rs.QueryParam;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 
 /**
@@ -120,9 +114,9 @@ public class OrdersController {
 	}
 	
 	@PostMapping(value="/receiveSample")
-	public SampleReceiptDTO receiveSample(@RequestBody SampleReceipt sample) {
-		samples.addSampleReceipt(sample);
-		return samples.getSampleReceiptByProcessId(sample.getId());
+	public SampleReceiptDTO receiveSample(@RequestBody SampleReceiptDTO sample) {
+		Integer id = samples.addSampleReceipt(sample);
+		return samples.getSampleReceiptByProcessId(id);
 	}
 	
 	
@@ -139,7 +133,7 @@ public class OrdersController {
 	}
 	
 	@PutMapping(value="/editReceiveSample")
-	public SampleReceiptDTO editReceiveSample(@RequestBody SampleReceipt sample) {
+	public SampleReceiptDTO editReceiveSample(@RequestBody SampleReceiptDTO sample) {
 		samples.editSampleReceipt(sample);
 		return samples.getSampleReceiptByProcessId(sample.getId());
 	}

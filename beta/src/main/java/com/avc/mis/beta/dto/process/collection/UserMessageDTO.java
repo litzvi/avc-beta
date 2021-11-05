@@ -9,7 +9,6 @@ import com.avc.mis.beta.dto.GeneralInfoDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.UserMessage;
 
 import lombok.Data;

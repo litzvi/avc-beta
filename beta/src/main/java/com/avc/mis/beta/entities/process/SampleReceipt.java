@@ -62,8 +62,8 @@ public class SampleReceipt extends PoProcess {
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param sampleItems the sampleItems to set
 	 */
-	public void setSampleItems(SampleItem[] sampleItems) {
-		Ordinal.setOrdinals(sampleItems);
+	public void setSampleItems(Set<SampleItem> sampleItems) {
+//		Ordinal.setOrdinals(sampleItems);
 		this.sampleItems = Insertable.setReferences(sampleItems, (t) -> {t.setReference(this);	return t;});
 	}
 	

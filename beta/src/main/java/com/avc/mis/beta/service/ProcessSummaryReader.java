@@ -165,8 +165,11 @@ public class ProcessSummaryReader {
 
 	public List<LoadingReportLine> getLoadingSummary(Integer poCodeId) {	
 		
-		List<ItemAmountWithLoadingReportLine> lines = getProcessSummaryRepository().findLoadingsItemsAmounts(poCodeId, false);		
-		return CollectionItemWithGroup.getFilledGroups(lines);
+		return CollectionItemWithGroup.getFilledGroups(getProcessSummaryRepository()
+				.findLoadingsItemsAmounts(poCodeId, false),
+				ItemAmountWithLoadingReportLine::getLoadingReportLine,
+				ItemAmountWithLoadingReportLine::getItemAmount,
+				LoadingReportLine::setProductIn);
 	}
 	
 	public FinalReport getFinalReport(@NonNull Integer poCodeId) {

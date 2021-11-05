@@ -12,7 +12,6 @@ import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
 import com.avc.mis.beta.entities.process.collection.ProcessItem;
 import com.avc.mis.beta.entities.process.inventory.Storage;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
@@ -30,7 +29,9 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
-public class StorageMoveDTO extends UsedItemBaseDTO implements StorageBaseInterface {
+public class StorageMoveDTO extends UsedItemBaseDTO
+//implements StorageBaseInterface 
+{
 
 	private BigDecimal unitAmount;
 	private BigDecimal numberUnits;	

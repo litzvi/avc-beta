@@ -6,7 +6,6 @@ package com.avc.mis.beta.dto.basic;
 import com.avc.mis.beta.dto.BasicValueDTO;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.values.ProductionLine;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

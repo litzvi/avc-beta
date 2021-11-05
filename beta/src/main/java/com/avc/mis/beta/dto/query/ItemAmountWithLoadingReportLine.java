@@ -14,7 +14,6 @@ import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.item.Item;
 import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.Value;
 
@@ -23,7 +22,9 @@ import lombok.Value;
  *
  */
 @Value
-public class ItemAmountWithLoadingReportLine implements CollectionItemWithGroup<ItemAmount, LoadingReportLine> {
+public class ItemAmountWithLoadingReportLine 
+//implements CollectionItemWithGroup<ItemAmount, LoadingReportLine> 
+{
 	
 	LoadingReportLine loadingReportLine;
 	ItemAmount itemAmount;
@@ -41,14 +42,14 @@ public class ItemAmountWithLoadingReportLine implements CollectionItemWithGroup<
 				amount, weightCoefficient);
 	}
 
-	@Override
-	public ItemAmount getItem() {
-		return this.itemAmount;
-	}
-
-	@Override
-	public LoadingReportLine getGroup() {
-		return this.loadingReportLine;
-	}
+//	@Override
+//	public ItemAmount getItem() {
+//		return this.itemAmount;
+//	}
+//
+//	@Override
+//	public LoadingReportLine getGroup() {
+//		return this.loadingReportLine;
+//	}
 	
 }

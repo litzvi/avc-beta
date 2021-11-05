@@ -3,9 +3,7 @@
  */
 package com.avc.mis.beta.service;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,21 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
-import com.avc.mis.beta.dto.item.BomLineDTO;
 import com.avc.mis.beta.dto.query.BomProductWithMaterialLine;
-import com.avc.mis.beta.dto.view.ProcessItemInventory;
-import com.avc.mis.beta.entities.enums.PackageType;
-import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.BillOfMaterials;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.repositories.BillOfMaterialsRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
-import com.sun.mail.handlers.image_gif;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 
 /**
  * 

@@ -3,20 +3,16 @@
  */
 package com.avc.mis.beta.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
-import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.StorageRelocation;
 import com.avc.mis.beta.repositories.StorageRelocationRepository;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,8 +26,9 @@ import lombok.Getter;
 @Transactional(readOnly = true)
 public class StorageRelocations {
 	
-	@Autowired private ProcessInfoDAO dao;
-		
+	@Autowired private ProcessDAO dao;
+	
+	@Autowired private ProcessReader processReader;
 	@Autowired private StorageRelocationRepository relocationRepository;
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
@@ -50,14 +47,16 @@ public class StorageRelocations {
 				.findPoProcessInfoByProcessId(processId, StorageRelocation.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No po code for given process id")));
-		relocationDTO.setStorageMovesGroups(
-				CollectionItemWithGroup.getFilledGroups(
-						getRelocationRepository()
-						.findStorageMovesWithGroup(processId)));
-		relocationDTO.setItemCounts(
-				CollectionItemWithGroup.getFilledGroups(
-						getRelocationRepository()
-						.findItemCountWithAmount(processId)));
+//		relocationDTO.setStorageMovesGroups(
+//				CollectionItemWithGroup.getFilledGroups(
+//						getRelocationRepository()
+//						.findStorageMovesWithGroup(processId)));
+//		relocationDTO.setItemCounts(
+//				CollectionItemWithGroup.getFilledGroups(
+//						getRelocationRepository()
+//						.findItemCountWithAmount(processId)));
+		getProcessReader().setRelocationProcessCollections(relocationDTO);
+
 		return relocationDTO;
 	}
 	

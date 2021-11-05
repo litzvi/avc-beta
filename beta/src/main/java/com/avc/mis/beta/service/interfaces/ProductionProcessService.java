@@ -8,7 +8,6 @@ import java.util.List;
 import com.avc.mis.beta.dto.process.ProductionProcessDTO;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.process.ProductionProcess;
 
 /**
  * @author zvi

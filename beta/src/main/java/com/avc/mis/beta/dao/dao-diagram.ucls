@@ -3,7 +3,7 @@
   realizations="false" associations="true" dependencies="true" nesting-relationships="false" router="FAN">  
   <class id="1" language="java" name="com.avc.mis.beta.dao.DAO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dao/DAO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="93" width="232" x="636" y="330"/>    
+    <position height="-1" width="-1" x="869" y="164"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,67 +12,106 @@
   </class>  
   <class id="2" language="java" name="com.avc.mis.beta.dao.DeletableDAO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dao/DeletableDAO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="53" width="147" x="657" y="608"/>    
+    <position height="-1" width="-1" x="327" y="343"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="com.avc.mis.beta.dao.ProcessInfoDAO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dao/ProcessInfoDAO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1166" y="596"/>    
+  <class id="3" language="java" name="com.avc.mis.beta.dao.PermanentDAO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dao/PermanentDAO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="126" y="340"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.avc.mis.beta.dao.ReadDAO" project="beta" 
+  <class id="4" language="java" name="com.avc.mis.beta.dao.ProcessDAO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dao/ProcessDAO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1203" y="700"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="com.avc.mis.beta.dao.ReadDAO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dao/ReadDAO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="73" width="187" x="588" y="139"/>    
+    <position height="-1" width="-1" x="1414" y="392"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="com.avc.mis.beta.dao.ReadOnlyDAO" project="beta" 
+  <class id="6" language="java" name="com.avc.mis.beta.dao.ReadOnlyDAO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dao/ReadOnlyDAO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="53" width="150" x="346" y="346"/>    
+    <position height="-1" width="-1" x="1424" y="543"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="com.avc.mis.beta.dao.SoftDeletableDAO" project="beta" 
+  <class id="7" language="java" name="com.avc.mis.beta.dao.SoftDeletableDAO" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dao/SoftDeletableDAO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="450" y="639"/>    
+    <position height="-1" width="-1" x="524" y="343"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <dependency id="7">    
+  <class id="8" language="java" name="com.avc.mis.beta.dao.ProcessInfoDAO" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dao/ProcessInfoDAO.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="873" y="589"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="9" language="java" name="com.avc.mis.beta.dao.ProcessInfo" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dao/ProcessInfo.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="869" y="409"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="12">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="13">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
-  <dependency id="8">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <dependency id="9">    
+  <dependency id="14">    
     <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="4"/>  
+    <end type="TARGET" refId="5"/>  
   </dependency>  
-  <dependency id="10">    
-    <end type="SOURCE" refId="6"/>    
+  <dependency id="15">    
+    <end type="SOURCE" refId="9"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
-  <dependency id="11">    
+  <dependency id="16">    
     <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </dependency>  
+  <dependency id="17">    
+    <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="1"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 

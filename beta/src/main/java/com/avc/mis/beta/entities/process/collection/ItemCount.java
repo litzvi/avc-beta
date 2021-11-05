@@ -4,7 +4,6 @@
 package com.avc.mis.beta.entities.process.collection;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -22,7 +21,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.ProcessInfoEntity;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.item.Item;
@@ -30,7 +28,6 @@ import com.avc.mis.beta.entities.item.Item;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 

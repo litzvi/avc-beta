@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.process.PoProcess;
@@ -30,7 +30,7 @@ public class SettingsWriter {
 	
 	@Autowired private ProcessReader processReader;
 	@Autowired ProcessInfoReader processInfoReader;
-	@Autowired ProcessInfoDAO processInfoDAO;
+	@Autowired ProcessDAO processInfoDAO;
 	
 	
 	public UOM editUOM(UOM uom) {
@@ -63,10 +63,10 @@ public class SettingsWriter {
 		for(ProcessBasic<PoProcess> processBasic: processes) {
 			PoProcess process = processBasic.getProcess();
 			if(process instanceof TransactionProcess) {
-				processInfoDAO.setTransactionUsedProcesses((TransactionProcess)process);
+				processInfoDAO.setTransactionProcessParents(process.getId());
 			}
 			if(process instanceof StorageRelocation) {
-				processInfoDAO.setRelocationUsedProcesses((StorageRelocation)process);
+				processInfoDAO.setRelocationProcessParents(process.getId());
 			}
 		}
 	}

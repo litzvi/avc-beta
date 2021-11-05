@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,24 +12,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
 import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
 import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
-import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.process.InventoryUse;
 import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 import com.avc.mis.beta.entities.process.inventory.StorageBase;
 import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.repositories.InventoryUseRepository;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
-import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -44,7 +40,7 @@ import lombok.Getter;
 @Transactional(readOnly = true)
 public class InventoryUses {
 	
-	@Autowired private ProcessInfoDAO dao;
+	@Autowired private ProcessDAO dao;
 
 	@Autowired private InventoryUseRepository inventoryUseRepository;
 	@Autowired private ValueTablesRepository valueTablesRepository;
@@ -90,14 +86,15 @@ public class InventoryUses {
 		inventoryUseDTO.setPoProcessInfo(getInventoryUseRepository()
 				.findPoProcessInfoByProcessId(processId, InventoryUse.class).orElse(null));
 		
-		inventoryUseDTO.setStorageMovesGroups(
-				CollectionItemWithGroup.getFilledGroups(
-						getInventoryUseRepository()
-						.findStorageMovesWithGroup(processId)));
-		inventoryUseDTO.setItemCounts(
-				CollectionItemWithGroup.getFilledGroups(
-						getInventoryUseRepository()
-						.findItemCountWithAmount(processId)));
+//		inventoryUseDTO.setStorageMovesGroups(
+//				CollectionItemWithGroup.getFilledGroups(
+//						getInventoryUseRepository()
+//						.findStorageMovesWithGroup(processId)));
+//		inventoryUseDTO.setItemCounts(
+//				CollectionItemWithGroup.getFilledGroups(
+//						getInventoryUseRepository()
+//						.findItemCountWithAmount(processId)));
+		getProcessReader().setRelocationProcessCollections(inventoryUseDTO);
 		
 		return inventoryUseDTO;
 	}

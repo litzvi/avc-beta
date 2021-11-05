@@ -4,10 +4,7 @@
 package com.avc.mis.beta.dto.process;
 
 import com.avc.mis.beta.entities.BaseEntity;
-import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.process.InventoryUse;
-import com.avc.mis.beta.entities.process.RelocationProcess;
-import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

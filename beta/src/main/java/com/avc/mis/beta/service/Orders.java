@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dao.ProcessInfoDAO;
+import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
@@ -36,7 +36,7 @@ import lombok.Getter;
 @Transactional(readOnly = true)
 public class Orders {
 	
-	@Autowired private ProcessInfoDAO dao;
+	@Autowired private ProcessDAO dao;
 	
 	@Autowired private PORepository poRepository;
 	@Autowired private OrderReports orderReports;

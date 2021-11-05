@@ -4,7 +4,6 @@
 package com.avc.mis.beta.dto;
 
 import com.avc.mis.beta.entities.LinkEntity;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

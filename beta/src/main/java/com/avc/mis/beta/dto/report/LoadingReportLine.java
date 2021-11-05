@@ -10,7 +10,6 @@ import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.utilities.ListGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,7 +22,9 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class LoadingReportLine extends ProcessStateInfo implements ListGroup<ItemAmount> {
+public class LoadingReportLine extends ProcessStateInfo 
+//implements ListGroup<ItemAmount> 
+{
 
 //	@JsonIgnore
 //	private Integer processId;
@@ -55,10 +56,10 @@ public class LoadingReportLine extends ProcessStateInfo implements ListGroup<Ite
 //		return getProcessId();
 //	}
 
-	@Override
-	public void setList(List<ItemAmount> list) {
-		setProductIn(list);
-	}
+//	@Override
+//	public void setList(List<ItemAmount> list) {
+//		setProductIn(list);
+//	}
 
 
 }
