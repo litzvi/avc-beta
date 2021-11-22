@@ -5,16 +5,19 @@ package com.avc.mis.beta.dto.report;
 
 import java.math.BigDecimal;
 
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.enums.ProductionUse;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
 /**
+ * Item with amount, weight and po code.
+ * Used in multiple reports to show an item balance per po.
+ * 
  * @author zvi
  *
  */

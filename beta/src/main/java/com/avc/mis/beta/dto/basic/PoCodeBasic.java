@@ -4,6 +4,7 @@
 package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.BasicValueDTO;
+import com.avc.mis.beta.dto.codes.PoCodeDTO;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 
 import lombok.Data;
@@ -12,8 +13,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
- * DTO for PoCode containing id and the fields needed 
- * for presenting the po code/id with it's initial and suffix.
+ * Shows partial information of a po code.
+ * Used for reference and display.
  * 
  * @author Zvi
  *
@@ -39,14 +40,12 @@ public class PoCodeBasic extends BasicValueDTO {
 		this.contractTypeSuffix = contractTypeSuffix != null ? contractTypeSuffix : "";
 	}	
 	
-	public PoCodeBasic(BasePoCode poCode) {
+	public PoCodeBasic(PoCodeDTO poCode) {
 		super(poCode.getId());
 		this.code = poCode.getCode();
 		this.contractTypeCode = poCode.getContractType() != null ? poCode.getContractType().getCode(): null;
 		this.supplierName = poCode.getSupplier() != null ? poCode.getSupplier().getName(): null;
-//		this.currency = poCode.getContractType() != null ? poCode.getContractType().getCurrency(): null;
 		this.contractTypeSuffix = poCode.getContractType() != null ? poCode.getContractType().getSuffix(): "";
-//		this.display = poCode.getDisplay();
 	}
 	
 	/**

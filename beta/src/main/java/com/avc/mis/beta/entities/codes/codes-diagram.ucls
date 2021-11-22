@@ -3,7 +3,7 @@
   associations="true" dependencies="false" nesting-relationships="true" router="FAN">  
   <class id="1" language="java" name="com.avc.mis.beta.entities.codes.BasePoCode" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/entities/codes/BasePoCode.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="153" width="254" x="751" y="87"/>    
+    <position height="-1" width="-1" x="904" y="431"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -12,51 +12,73 @@
   </class>  
   <class id="2" language="java" name="com.avc.mis.beta.entities.codes.GeneralPoCode" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/entities/codes/GeneralPoCode.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="732" y="476"/>    
+    <position height="-1" width="-1" x="758" y="744"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="com.avc.mis.beta.entities.codes.MixPoCode" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/codes/MixPoCode.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1342" y="466"/>    
+  <class id="3" language="java" name="com.avc.mis.beta.entities.codes.ProductPoCode" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/codes/ProductPoCode.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1029" y="740"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.avc.mis.beta.entities.codes.PoCode" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/entities/codes/PoCode.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1003" y="472"/>    
+  <class id="4" language="java" name="com.avc.mis.beta.entities.codes.ShipmentCode" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/codes/ShipmentCode.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="484" y="404"/>    
     <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <association id="5">    
-    <end type="SOURCE" refId="3" navigable="false">      
-      <attribute id="6" name="origionPoCodes"/>      
-      <multiplicity id="7" minimum="0" maximum="2147483647"/>    
-    </end>    
-    <end type="TARGET" refId="4" navigable="true"/>    
-    <display labels="true" multiplicity="true"/>  
-  </association>  
-  <generalization id="8">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="1"/>  
+  <class id="5" language="java" name="com.avc.mis.beta.entities.BaseEntity" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/BaseEntity.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="749" y="81"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <interface id="6" language="java" name="com.avc.mis.beta.entities.ValueInterface" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/entities/ValueInterface.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="503" y="81"/>    
+    <display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </interface>  
+  <generalization id="7">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
   </generalization>  
-  <generalization id="9">    
+  <generalization id="8">    
     <end type="SOURCE" refId="2"/>    
     <end type="TARGET" refId="1"/>  
   </generalization>  
+  <realization id="9">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </realization>  
   <generalization id="10">    
     <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="5"/>  
+  </generalization>  
+  <generalization id="11">    
+    <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="1"/>  
   </generalization>  
+  <realization id="12">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="6"/>  
+  </realization>  
   <classifier-display autosize="true" stereotype="true" package="false" initial-value="false" signature="true" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

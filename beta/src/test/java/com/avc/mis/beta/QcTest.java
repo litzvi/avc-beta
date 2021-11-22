@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.values.CashewStandard;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.service.QualityChecks;
 import com.avc.mis.beta.service.ValueWriter;
 
@@ -24,15 +24,15 @@ public class QcTest {
 	
 	@Test
 	void qcTest() {
-		CashewStandard standard = new CashewStandard();
+		CashewStandardDTO standard = new CashewStandardDTO();
 		String standardOrganization = "VinaControl";
 		standard.setStandardOrganization(standardOrganization);
-		standard.setValue("W320 Vina Control");
+		standard.setValue("Whole Vina Control");
 		standard.setDamage(new RawDamage());
 		standard.setDefects(new RawDefects());
 		Item item = service.getItem();
-		Set<Item> items = new HashSet<Item>();
-		items.add(item);
+		Set<BasicValueEntity<Item>> items = new HashSet<>();
+		items.add(new BasicValueEntity<Item>(item));
 		standard.setItems(items);
 
 		try {
@@ -42,10 +42,10 @@ public class QcTest {
 			e.printStackTrace();
 			throw e;
 		}
-		CashewStandardDTO standardDTO = qualityChecks.getCashewStatndard(item.getId(), standardOrganization);
+		CashewStandardDTO fetchedStandard = qualityChecks.getCashewStatndard(item.getId(), standardOrganization);
 
-		System.out.println(standardDTO);
-		valueWriter.permenentlyRemoveEntity(standard);
+		System.out.println(fetchedStandard);
+		valueWriter.permenentlyRemoveEntity(fetchedStandard);
 	}
 
 }

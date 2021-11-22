@@ -1,23 +1,19 @@
 package com.avc.mis.beta.dto.process;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
-import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
-import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
+import com.avc.mis.beta.dto.process.group.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.group.UsedItemsGroupDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.process.StorageTransfer;
-import com.avc.mis.beta.entities.process.collection.ItemCount;
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
-import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
+import com.avc.mis.beta.entities.process.group.ProcessItem;
+import com.avc.mis.beta.entities.process.group.UsedItemsGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -32,18 +28,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class StorageTransferDTO extends TransactionProcessDTO<ProcessItemDTO> {
 		
-	public StorageTransferDTO(@NonNull StorageTransfer transfer) {
-		super(transfer);
-		Set<ItemCount> itemCounts = transfer.getItemCounts();
-		if(itemCounts != null)
-			this.setItemCounts(itemCounts.stream()
-					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toList()));
-		super.setProcessItems(transfer.getProcessItems().stream()
-				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));
-		super.setUsedItemGroups(transfer.getUsedItemGroups().stream()
-				.map(i->{return new UsedItemsGroupDTO((UsedItemsGroup)i);}).collect(Collectors.toList()));
 
-	}
 	
 //	@Override
 //	public List<ProcessItemDTO> getProcessItems() {
@@ -99,9 +84,4 @@ public class StorageTransferDTO extends TransactionProcessDTO<ProcessItemDTO> {
 		return transfer;
 	}
 	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Storage transfer";
-	}
-
 }

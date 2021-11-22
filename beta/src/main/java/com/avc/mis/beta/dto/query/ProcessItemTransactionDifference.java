@@ -15,6 +15,8 @@ import lombok.NonNull;
 import lombok.Value;
 
 /**
+ * For fetching with query produced and used amounts, to check if match where needed.
+ * 
  * @author zvi
  *
  */
@@ -29,15 +31,7 @@ public class ProcessItemTransactionDifference extends BasicDTO {
 			BigDecimal usedAmount, BigDecimal producedAmount, MeasureUnit measureUnit) {
 		super(processItemId);
 		this.producedAmount = new AmountWithUnit(Optional.ofNullable(producedAmount).orElse(BigDecimal.ZERO), measureUnit);
-//		if(producedAmount != null)
-//			this.producedAmount = new AmountWithUnit(producedAmount, measureUnit);
-//		else
-//			this.producedAmount = null;
 		this.usedAmount = new AmountWithUnit(Optional.ofNullable(usedAmount).orElse(BigDecimal.ZERO), measureUnit);
-//		if(usedAmount != null)
-//			this.usedAmount = new AmountWithUnit(usedAmount, measureUnit);
-//		else
-//			this.usedAmount = null;
 	}
 	
 	public AmountWithUnit getDifference() {

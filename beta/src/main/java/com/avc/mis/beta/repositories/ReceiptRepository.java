@@ -44,9 +44,7 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 				+ "left join sf.warehouseLocation warehouseLocation "
 			+ "left join i.extraRequested extra "
 		+ "where p.id = :processId "
-		+ "order by i.ordinal, sf.ordinal, sf.dtype "
-//		+ ", sf.ordinal " //already sorted in dto for storages
-		+ "")
+		+ "order by i.ordinal, sf.ordinal, sf.dtype ")
 	List<ReceiptItemWithStorage> findReceiptItemWithStorage(int processId);
 
 	@Query("select new com.avc.mis.beta.dto.view.ReceiptItemRow( "
@@ -69,17 +67,12 @@ public interface ReceiptRepository extends ProcessWithProductRepository<Receipt>
 						+ "join item.unit item_unit "
 					+ "join pi.storageForms sf "
 						+ "left join sf.warehouseLocation sto "
-//						+ "join sf.group sf_group "
 				+ "join UOM uom "
 					+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
-//					+ "left join ExtraAdded as added "
-//						+ "on added.processItem = pi "
 					+ "left join pi.orderItem oi "
 						+ "left join oi.numberUnits units "
 					+ "join pi.receivedOrderUnits ro_units "
-//					+ "left join pi.extraRequested extra "
 				+ "join r.processType t "
-//			+ "where type(sf) <> ExtraAdded "
 			+ "where t.processName in :processNames "
 				+ "and lc.processStatus in :statuses "
 				+ "and (po_code.id = :poCodeId or :poCodeId is null)"

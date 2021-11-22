@@ -24,7 +24,6 @@ public interface SampleRepository extends PoProcessRepository<SampleReceipt> {
 			+ "join i.item item "
 			+ "join i.process p "
 			+ "join i.itemWeights w "
-//			+ "join i.amountWeighed weighed "
 		+ "where p.id = :processId "
 //		+ "order by i.ordinal, w.ordinal " //sorted in dto
 		+ "")

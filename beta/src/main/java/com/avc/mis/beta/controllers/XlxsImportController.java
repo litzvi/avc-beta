@@ -10,23 +10,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.dto.values.BankDTO;
+import com.avc.mis.beta.dto.values.CashewStandardDTO;
+import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.dto.values.CompanyPositionDTO;
+import com.avc.mis.beta.dto.values.ContractTypeDTO;
+import com.avc.mis.beta.dto.values.CountryDTO;
+import com.avc.mis.beta.dto.values.ProductionLineDTO;
+import com.avc.mis.beta.dto.values.SupplyCategoryDTO;
+import com.avc.mis.beta.dto.values.WarehouseDTO;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.values.Bank;
-import com.avc.mis.beta.entities.values.BankBranch;
-import com.avc.mis.beta.entities.values.CashewStandard;
-import com.avc.mis.beta.entities.values.City;
-import com.avc.mis.beta.entities.values.CompanyPosition;
-import com.avc.mis.beta.entities.values.ContractType;
-import com.avc.mis.beta.entities.values.Country;
-import com.avc.mis.beta.entities.values.ProductionLine;
-import com.avc.mis.beta.entities.values.SupplyCategory;
-import com.avc.mis.beta.entities.values.Warehouse;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.QualityChecks;
@@ -67,7 +67,7 @@ public class XlxsImportController {
 	@PostMapping(value="/addAllSupplier")
 	public void addAllSupplier(@RequestBody JsonNode listChanges) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		for(Supplier var: mapper.readValue(listChanges.toString(), new TypeReference<List<Supplier>>(){})) {
+		for(SupplierDTO var: mapper.readValue(listChanges.toString(), new TypeReference<List<SupplierDTO>>(){})) {
 			suppliersDao.addSupplier(var);
 		}
 	}
@@ -119,27 +119,27 @@ public class XlxsImportController {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		switch (setupTable) {
 			case "Countries":
-				refeDaoWrite.addCountry(mapper.readValue(newOne.toString(), Country.class));
+				refeDaoWrite.addCountry(mapper.readValue(newOne.toString(), CountryDTO.class));
 				break;
 			case "Banks":
-				refeDaoWrite.addBank(mapper.readValue(newOne.toString(), Bank.class));
+				refeDaoWrite.addBank(mapper.readValue(newOne.toString(), BankDTO.class));
 				break;
 			case "Cities":
-				refeDaoWrite.addCity(mapper.readValue(newOne.toString(), City.class));
+				refeDaoWrite.addCity(mapper.readValue(newOne.toString(), CityDTO.class));
 				break;
 			case "BankBranches":
-				refeDaoWrite.addBankBranch(mapper.readValue(newOne.toString(), BankBranch.class));
+				refeDaoWrite.addBankBranch(mapper.readValue(newOne.toString(), BankBranchDTO.class));
 				break;
 			case "Warehouses":
-				refeDaoWrite.addWarehouse(mapper.readValue(newOne.toString(), Warehouse.class));
+				refeDaoWrite.addWarehouse(mapper.readValue(newOne.toString(), WarehouseDTO.class));
 				break;
 			case "SupplyCategories":
-				for(SupplyCategory var: mapper.readValue(newOne.toString(), new TypeReference<List<SupplyCategory>>(){})) {
+				for(SupplyCategoryDTO var: mapper.readValue(newOne.toString(), new TypeReference<List<SupplyCategoryDTO>>(){})) {
 					refeDaoWrite.addSupplyCategory(var);
 				}
 				break;
 			case "CompanyPositions":
-				refeDaoWrite.addCompanyPosition(mapper.readValue(newOne.toString(), CompanyPosition.class));
+				refeDaoWrite.addCompanyPosition(mapper.readValue(newOne.toString(), CompanyPositionDTO.class));
 				break;
 			case "Items":
 				for(Item var: mapper.readValue(newOne.toString(), new TypeReference<List<Item>>(){})) {
@@ -147,7 +147,7 @@ public class XlxsImportController {
 				}
 				break;
 			case "ContractTypes":
-				for(ContractType var: mapper.readValue(newOne.toString(), new TypeReference<List<ContractType>>(){})) {
+				for(ContractTypeDTO var: mapper.readValue(newOne.toString(), new TypeReference<List<ContractTypeDTO>>(){})) {
 					refeDaoWrite.addContractType(var);
 				}
 //				refeDaoWrite.addContractType(mapper.readValue(newOne.toString(), ContractType.class));
@@ -156,10 +156,10 @@ public class XlxsImportController {
 //				refeDaoWrite.addProcessStatus(mapper.readValue(newOne.toString(), ProcessStatus.class));
 //				break;
 			case "ProductionLines":
-				refeDaoWrite.addProductionLine(mapper.readValue(newOne.toString(), ProductionLine.class));
+				refeDaoWrite.addProductionLine(mapper.readValue(newOne.toString(), ProductionLineDTO.class));
 				break;
 			case "CashewStandards":
-				refeDaoWrite.addCashewStandard(mapper.readValue(newOne.toString(), CashewStandard.class));
+				refeDaoWrite.addCashewStandard(mapper.readValue(newOne.toString(), CashewStandardDTO.class));
 			default:
 				break;
 		}

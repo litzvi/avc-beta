@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
-import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
+import com.avc.mis.beta.dto.link.BillOfMaterialsDTO;
 import com.avc.mis.beta.dto.query.BomProductWithMaterialLine;
-import com.avc.mis.beta.entities.item.BillOfMaterials;
+import com.avc.mis.beta.entities.link.BillOfMaterials;
 import com.avc.mis.beta.repositories.BillOfMaterialsRepository;
 import com.avc.mis.beta.utilities.CollectionItemWithGroup;
 
@@ -20,6 +20,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
+ * Service for accessing and manipulating bill of materials for a product.
  * 
  * @author Zvi
  *

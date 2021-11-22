@@ -19,36 +19,34 @@ import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.avc.mis.beta.dto.GeneralProcessDTO;
-import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.data.DataObject;
+import com.avc.mis.beta.dto.process.GeneralProcessDTO;
+import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.process.ProcessWithProductDTO;
 import com.avc.mis.beta.dto.process.RelocationProcessDTO;
 import com.avc.mis.beta.dto.process.TransactionProcessDTO;
-import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
-import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
+import com.avc.mis.beta.dto.process.group.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.group.StorageMovesGroupDTO;
+import com.avc.mis.beta.dto.process.storages.StorageDTO;
+import com.avc.mis.beta.dto.process.storages.StorageMoveDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageBalance;
 import com.avc.mis.beta.dto.query.UsedProcess;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.EditStatus;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
 import com.avc.mis.beta.entities.process.RelocationProcess;
 import com.avc.mis.beta.entities.process.TransactionProcess;
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
-import com.avc.mis.beta.entities.process.collection.ProcessParent;
-import com.avc.mis.beta.entities.process.collection.WeightedPo;
-import com.avc.mis.beta.entities.process.inventory.StorageBase;
-import com.avc.mis.beta.entities.values.ProcessType;
+import com.avc.mis.beta.entities.process.group.ProcessItem;
+import com.avc.mis.beta.entities.process.storages.StorageBase;
+import com.avc.mis.beta.entities.system.ProcessParent;
+import com.avc.mis.beta.entities.system.WeightedPo;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
@@ -88,10 +86,10 @@ public class ProcessDAO extends ProcessInfo {
 	public Integer addGeneralProcessEntity(GeneralProcessDTO process, Supplier<? extends GeneralProcess> supplier) {
 		GeneralProcess processEntity = process.fillEntity(supplier.get());
 		processEntity.setProcessType(getProcessTypeByValue(process.getProcessName()));
-		addEntity(processEntity);		
+		Integer processId = addEntity(processEntity);		
 		sendProcessMessages(processEntity, "New process added");
 		
-		return processEntity.getId();
+		return processId;
 	}
 	
 	/**
@@ -359,7 +357,7 @@ public class ProcessDAO extends ProcessInfo {
 	public void checkRemovingUsedProduct(RelocationProcessDTO relocation) {
 		HashSet<Integer> storageIds = new HashSet<Integer>();
 		for(StorageMovesGroupDTO mg: CollectionItemWithGroup.safeCollection(relocation.getStorageMovesGroups())) {
-			storageIds.addAll((mg.getStorageMoves().stream().map(StorageMoveDTO::getId).filter(i -> i != null).collect(Collectors.toSet())));
+			storageIds.addAll((mg.getStorageMovesField().stream().map(StorageMoveDTO::getId).filter(i -> i != null).collect(Collectors.toSet())));
 		}
 		if(getProcessRepository().isRelocationRemovingUsedProduct(relocation.getId(), storageIds)) {
 			throw new AccessControlException("Process items can't be edited because they are already in use");
@@ -376,7 +374,7 @@ public class ProcessDAO extends ProcessInfo {
 	public <T extends ProcessWithProductDTO<?>> void checkRemovingUsedProduct(T process) {
 		HashSet<Integer> storageIds = new HashSet<Integer>();
 		for(ProcessItemDTO pi: CollectionItemWithGroup.safeCollection((process.getProcessItems()))) {
-			storageIds.addAll(pi.getStorageForms().stream().map(StorageDTO::getId).filter(i -> i != null).collect(Collectors.toSet()));
+			storageIds.addAll(pi.getStorageFormsField().stream().map(StorageDTO::getId).filter(i -> i != null).collect(Collectors.toSet()));
 		}
 		if(getProcessRepository().isRemovingUsedProduct(process.getId(), storageIds)) {
 			throw new AccessControlException("Process items can't be edited because they are already in use");
@@ -457,7 +455,7 @@ public class ProcessDAO extends ProcessInfo {
 	public void setStorageMovesProcessItem(List<StorageMovesGroupDTO> storageMovesGroups) {
 		List<StorageMoveDTO> storageMoves = new ArrayList<>();
 		for(StorageMovesGroupDTO group: storageMovesGroups) {
-			group.getStorageMoves().forEach(storageMoves::add);
+			group.getStorageMovesField().forEach(storageMoves::add);
 		}
 		Map<Integer, StorageBase> storageMap = getRelocationRepository().findStoragesById(
 				storageMoves.stream()

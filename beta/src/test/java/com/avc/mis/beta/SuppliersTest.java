@@ -8,36 +8,29 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.validation.ConstraintViolationException;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
+import com.avc.mis.beta.dto.data.AddressDTO;
+import com.avc.mis.beta.dto.data.BankAccountDTO;
 import com.avc.mis.beta.dto.data.CompanyContactDTO;
-import com.avc.mis.beta.dto.data.ContactDetailsDTO;
+import com.avc.mis.beta.dto.data.EmailDTO;
 import com.avc.mis.beta.dto.data.FaxDTO;
 import com.avc.mis.beta.dto.data.PaymentAccountDTO;
+import com.avc.mis.beta.dto.data.PersonDTO;
 import com.avc.mis.beta.dto.data.PhoneDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
-import com.avc.mis.beta.entities.data.Address;
-import com.avc.mis.beta.entities.data.BankAccount;
-import com.avc.mis.beta.entities.data.CompanyContact;
-import com.avc.mis.beta.entities.data.ContactDetails;
-import com.avc.mis.beta.entities.data.Email;
-import com.avc.mis.beta.entities.data.Fax;
-import com.avc.mis.beta.entities.data.PaymentAccount;
-import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.Phone;
-import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.values.BankBranch;
-import com.avc.mis.beta.entities.values.SupplyCategory;
+import com.avc.mis.beta.dto.link.ContactDetailsDTO;
+import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.dto.values.SupplyCategoryDTO;
 import com.avc.mis.beta.service.Suppliers;
 
 @SpringBootTest
@@ -51,8 +44,8 @@ class SuppliersTest {
 	
 	private final String SUPPLIER_NAME = " \t test supplier	 \t" + LocalDateTime.now().hashCode();
 	
-	public Supplier basicSupplier() {
-		Supplier supplier = new Supplier();
+	public SupplierDTO basicSupplier() {
+		SupplierDTO supplier = new SupplierDTO();
 		supplier.setName(SUPPLIER_NAME);
 		supplier.setLocalName(" localName\t");
 		supplier.setEnglishName("\t  englishName ");
@@ -62,76 +55,81 @@ class SuppliersTest {
 		return supplier;
 	}
 	
-	public Supplier fullSupplier() {
-		Supplier supplier = basicSupplier();
+	public SupplierDTO fullSupplier() {
+		SupplierDTO supplier = basicSupplier();
 		
 		//add all supply categories besides for one
 		supplier.getSupplyCategories().addAll(service.getSupplyCategories());
 		supplier.getSupplyCategories().remove(service.getSupplycategory());
 		
-		supplier.setContactDetails(new ContactDetails());
+		supplier.setContactDetails(new ContactDetailsDTO());
 		
 		//add phones
-		Phone[] phones = new Phone[NUM_ITEMS];
-		for(int i=0; i<phones.length; i++) {
-			phones[i] = new Phone();
-			phones[i].setValue(" phone " + i) ;
+		List<PhoneDTO> phones = new ArrayList<>();
+		for(int i=0; i<NUM_ITEMS; i++) {
+			PhoneDTO phone = new PhoneDTO();
+			phones.add(phone);
+			phone.setValue(" phone " + i) ;
 		}
 		supplier.getContactDetails().setPhones(phones);
 		
 		//add faxes
-		Fax[] faxes = new Fax[NUM_ITEMS];
-		for(int i=0; i<faxes.length; i++) {
-			faxes[i] = new Fax();
-			faxes[i].setValue(" fax " + i) ;
+		List<FaxDTO> faxes = new ArrayList<FaxDTO>();
+		for(int i=0; i<NUM_ITEMS; i++) {
+			FaxDTO fax = new FaxDTO();
+			faxes.add(fax);
+			fax.setValue(" fax " + i) ;
 		}
 		supplier.getContactDetails().setFaxes(faxes);
 		
 		//add emails
-		Email[] emails = new Email[NUM_ITEMS];
-		for(int i=0; i<emails.length; i++) {
-			emails[i] = new Email();
-			emails[i].setValue(" email " + i + "	  	") ;
+		List<EmailDTO> emails = new ArrayList<EmailDTO>();
+		for(int i=0; i<NUM_ITEMS; i++) {
+			EmailDTO email = new EmailDTO();
+			emails.add(email);
+			email.setValue(" email " + i + "	  	") ;
 		}
 		supplier.getContactDetails().setEmails(emails);
 		
 		//add address
-		Address address = new Address();		
+		AddressDTO address = new AddressDTO();		
 		address.setCity(service.getCity());
 		address.setStreetAddress("streetAddress");
-		supplier.getContactDetails().setAddresses(new Address[] {address});
+		supplier.getContactDetails().setAddresses(address);
 		
 		//add payment accounts
-		PaymentAccount[] paymentAccounts = new PaymentAccount[NUM_ITEMS];
+		List<PaymentAccountDTO> paymentAccounts = new ArrayList<PaymentAccountDTO>();
 		
-		BankBranch branch = service.getBankBranch();
-		for(int i=0; i<paymentAccounts.length; i++) {
-			paymentAccounts[i] = new PaymentAccount();
-			BankAccount bankAccount = new BankAccount();
+		BankBranchDTO branch = service.getBankBranch();
+		for(int i=0; i<NUM_ITEMS; i++) {
+			PaymentAccountDTO paymentAccount = new PaymentAccountDTO();
+			paymentAccounts.add(paymentAccount);
+			BankAccountDTO bankAccount = new BankAccountDTO();
 			bankAccount.setAccountNo("account " + i);
 			bankAccount.setOwnerName("owner name " + i);			
 			bankAccount.setBranch(branch);
-			paymentAccounts[i].setBankAccount(bankAccount);
+			paymentAccount.setBankAccount(bankAccount);
 		}
 		supplier.getContactDetails().setPaymentAccounts(paymentAccounts);
 		
 		//add company contacts
-		CompanyContact[] contacts = new CompanyContact[NUM_ITEMS];
-		for(int i=0; i<contacts.length; i++) {
-			contacts[i] = new CompanyContact();
-			Person person = new Person();
+		Set<CompanyContactDTO> contacts = new HashSet<CompanyContactDTO>();
+		for(int i=0; i<NUM_ITEMS; i++) {
+			CompanyContactDTO contact = new CompanyContactDTO();
+			contacts.add(contact);
+			PersonDTO person = new PersonDTO();
 			person.setName("person " + i);
-			contacts[i].setPerson(person);
-			Fax fax = new Fax();
+			contact.setPerson(person);
+			FaxDTO fax = new FaxDTO();
 			fax.setValue("fax for person " + i);
-			Phone phone = new Phone();
+			PhoneDTO phone = new PhoneDTO();
 			phone.setValue("phone for person " + i);
-			Email email = new Email();
+			EmailDTO email = new EmailDTO();
 			email.setValue("email for person " + i);
-			ContactDetails contactDetails = new ContactDetails();
-			contactDetails.setPhones(new Phone[] {phone});
-			contactDetails.setFaxes(new Fax[] {fax});
-			contactDetails.setEmails(new Email[] {email});
+			ContactDetailsDTO contactDetails = new ContactDetailsDTO();
+			contactDetails.setPhones(Arrays.asList(phone));
+			contactDetails.setFaxes(Arrays.asList(fax));
+			contactDetails.setEmails(Arrays.asList(email));
 			person.setContactDetails(contactDetails);
 		}
 		supplier.setCompanyContacts(contacts);
@@ -143,7 +141,7 @@ class SuppliersTest {
 	@Test
 	void suppliersTest() {
 		//supplier with null name
-		Supplier supplier = basicSupplier();
+		SupplierDTO supplier = basicSupplier();
 		supplier.setName(null);
 		try {
 			suppliers.addSupplier(supplier);
@@ -163,16 +161,17 @@ class SuppliersTest {
 		
 		//adding supplier
 		supplier = basicSupplier();
-		SupplierDTO expected = new SupplierDTO(supplier, true);
+//		SupplierDTO expected = new SupplierDTO(supplier, true);
+		SupplierDTO expected = supplier;
 		expected.setName(supplier.getName().trim()); //check that name is trimmed
-		suppliers.addSupplier(supplier);
-		SupplierDTO actual = null;
-		actual = suppliers.getSupplier(supplier.getId());
+		Integer supplierId = suppliers.addSupplier(supplier);
+		SupplierDTO actual = suppliers.getSupplier(supplierId);
 		assertEquals(expected, actual, "Failed test adding supplier with white spaces added to all info fields");
+		supplier = actual;
 //		fail("actual basic supplier: " + actual);
 		
 		//try adding supplier with duplicate name
-		Supplier duplicateSupplier = basicSupplier();
+		SupplierDTO duplicateSupplier = basicSupplier();
 		try {
 			suppliers.addSupplier(duplicateSupplier);
 			fail("should throw exception for duplicate supplier name");
@@ -186,12 +185,13 @@ class SuppliersTest {
 		supplier.setLicense("\tnew  license \t");
 		supplier.setTaxCode("new  \ttaxCode\t ");
 		supplier.setRegistrationLocation("\tnew   registrationLocation  \t");
-		expected = new SupplierDTO(supplier, true);
+//		expected = new SupplierDTO(supplier, true);
+		expected = supplier;
 		suppliers.editSupplierMainInfo(supplier);
-		actual = suppliers.getSupplier(supplier.getId());
+		actual = suppliers.getSupplier(supplierId);
 		assertEquals(expected, actual, "Failed test editing supplier with white spaces added to all info fields");
 		try {
-			service.cleanup(supplier);
+			service.cleanupSupplier(supplierId);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -200,91 +200,87 @@ class SuppliersTest {
 		
 		//add, remove supply categories
 		supplier = fullSupplier();
-		try {
-			expected = new SupplierDTO(supplier, true);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw e;
-		}
-		suppliers.addSupplier(supplier);
-		Set<SupplyCategory> categories = supplier.getSupplyCategories();
+		supplierId = suppliers.addSupplier(supplier);
+		supplier = suppliers.getSupplier(supplierId);
+		Set<SupplyCategoryDTO> categories = supplier.getSupplyCategories();
 		if(categories.size() < 2)
 			fail("Not enough supplier categories for add and remove test");
-		Iterator<SupplyCategory> it = categories.iterator();
-		SupplyCategory removedCategory = it.next();
-		SupplyCategory addedCategory = it.next();
+		Iterator<SupplyCategoryDTO> it = categories.iterator();
+		SupplyCategoryDTO removedCategory = it.next();
+		SupplyCategoryDTO addedCategory = it.next();
 		categories.remove(removedCategory);
 		categories.remove(addedCategory);
-		supplier = suppliers.editSupplierMainInfo(supplier);
+		suppliers.editSupplierMainInfo(supplier);
+		supplier = suppliers.getSupplier(supplierId);
 		categories = supplier.getSupplyCategories();
 		categories.add(addedCategory);
-		expected.getSupplyCategories().remove(removedCategory);
+		expected = supplier;
 		suppliers.editSupplierMainInfo(supplier);
-		actual = suppliers.getSupplier(supplier.getId());
+		actual = suppliers.getSupplier(supplierId);
 		assertEquals(expected, actual, "Failed test adding and removing supply categories");
-		service.cleanup(supplier);
+		service.cleanupSupplier(supplierId);
 		
 		//add supplier with full details
 		//TODO assert adding contactDetails referencing both company and person or non will fail
 		supplier = fullSupplier();
-		expected = new SupplierDTO(supplier, true);
-		suppliers.addSupplier(supplier);
-		actual = suppliers.getSupplier(supplier.getId());
-		assertEquals(expected, actual, "Failed test adding supplier contact details");
+		supplierId = suppliers.addSupplier(supplier);
+		actual = suppliers.getSupplier(supplierId);
+		supplier = actual;
+		expected = actual;
 		
 		//check removing contacts
-		Arrays.stream(supplier.getContactDetails().getPaymentAccounts()).forEach(i -> suppliers.removeAccount(i.getId()));
-		actual = suppliers.getSupplier(supplier.getId());
+		expected.getContactDetails().getPaymentAccounts().stream().forEach(i -> suppliers.removeAccount(i.getId()));
+		actual = suppliers.getSupplier(expected.getId());
 		expected.getContactDetails().setPaymentAccounts(new ArrayList<PaymentAccountDTO>());
 		assertEquals(expected, actual, "Failed test removing company contacts");
+		supplier = actual;
 		
 		//check removing contacts
-		Arrays.stream(supplier.getCompanyContacts()).forEach(i -> suppliers.removeContactPerson(i.getId()));
-		actual = suppliers.getSupplier(supplier.getId());
+		supplier.getCompanyContacts().stream().forEach(i -> suppliers.removeContactPerson(i.getId()));
+		actual = suppliers.getSupplier(supplierId);
 		expected.setCompanyContacts(new HashSet<CompanyContactDTO>());
 		assertEquals(expected, actual, "Failed test removing company contacts");
-		service.cleanup(supplier);
+		service.cleanupSupplier(supplierId);
 		
 		//add supplier with full details add, remove and update a phones and faxes.
 		supplier = fullSupplier();
-		expected = new SupplierDTO(supplier, true);
-		suppliers.addSupplier(supplier);
-		ContactDetails contactDetails = supplier.getContactDetails();
-		ContactDetailsDTO contactDetailsDTO = expected.getContactDetails();
+		supplierId = suppliers.addSupplier(supplier);
+		expected = suppliers.getSupplier(supplierId);
+		ContactDetailsDTO contactDetails = expected.getContactDetails();
+//		ContactDetailsDTO contactDetailsDTO = expected.getContactDetails();
 		
-		Phone[] phones = contactDetails.getPhones();
-		Phone removedPhone = phones[0];		
-		contactDetailsDTO.getPhones().remove(new PhoneDTO(removedPhone));
-		Phone addedPhone = new Phone(); 
+		List<PhoneDTO> phones = contactDetails.getPhones();
+		PhoneDTO removedPhone = phones.remove(0);		
+//		contactDetailsDTO.getPhones().remove(new PhoneDTO(removedPhone));
+		PhoneDTO addedPhone = new PhoneDTO(); 
 		addedPhone.setValue("added phone"); 
 		addedPhone.setOrdinal(removedPhone.getOrdinal()); //when ordinal is null, Sorted set comparison isn't working
-		phones[0] = addedPhone;
-		contactDetailsDTO.getPhones().add(new PhoneDTO(addedPhone));
-		Phone updatedPhone = phones[1]; 
-		contactDetailsDTO.getPhones().remove(new PhoneDTO(updatedPhone));
+//		phones[0] = addedPhone;
+		phones.add(0, addedPhone);
+		PhoneDTO updatedPhone = phones.get(0); 
+//		contactDetailsDTO.getPhones().remove(new PhoneDTO(updatedPhone));
 		updatedPhone.setValue("updated value");
-		contactDetailsDTO.getPhones().add(new PhoneDTO(updatedPhone));
-		contactDetails.setPhones(phones);
+//		contactDetailsDTO.getPhones().add(new PhoneDTO(updatedPhone));
+//		contactDetails.setPhones(phones);
 		
-		Fax[] faxes = contactDetails.getFaxes();
-		Fax removedFax = faxes[0]; 
-		contactDetailsDTO.getFaxes().remove(new FaxDTO(removedFax));
-		Fax addedFax = new Fax(); 
+		List<FaxDTO> faxes = contactDetails.getFaxes();
+		FaxDTO removedFax = faxes.remove(0); 
+//		contactDetailsDTO.getFaxes().remove(new FaxDTO(removedFax));
+		FaxDTO addedFax = new FaxDTO(); 
 		addedFax.setValue("added fax"); 
 		addedFax.setOrdinal(removedFax.getOrdinal()); //when ordinal is null, Sorted set comparison isn't working
-		faxes[0] = addedFax;
-		contactDetailsDTO.getFaxes().add(new FaxDTO(addedFax));
-		Fax updatedFax = faxes[1]; 
-		contactDetailsDTO.getFaxes().remove(new FaxDTO(updatedFax));
+//		faxes[0] = addedFax;
+		faxes.add(0, addedFax);
+		FaxDTO updatedFax = faxes.get(0); 
+//		contactDetailsDTO.getFaxes().remove(new FaxDTO(updatedFax));
 		updatedFax.setValue("updated value");
-		contactDetailsDTO.getFaxes().add(new FaxDTO(updatedFax));
-		contactDetails.setFaxes(faxes);
+//		contactDetailsDTO.getFaxes().add(new FaxDTO(updatedFax));
+//		contactDetails.setFaxes(faxes);
 
-		suppliers.editContactInfo(contactDetails, supplier.getId());
-		actual = suppliers.getSupplier(supplier.getId());
+		suppliers.editContactInfo(contactDetails, supplierId);
+		actual = suppliers.getSupplier(supplierId);
 		assertEquals(expected, actual, "Failed test add, remove and update phone, fax and email");
-		service.cleanup(supplier);
+		service.cleanupSupplier(supplierId);
 
 	}
 		

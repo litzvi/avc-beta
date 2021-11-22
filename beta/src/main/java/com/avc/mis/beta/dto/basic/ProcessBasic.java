@@ -15,6 +15,7 @@ import lombok.Value;
 
 /**
  * Wrapper for a process id, contains the name of the process type. e.g. CASHEW_ORDER, CASHEW_RECEIPT
+ * Used for reference and display.
  * 
  * @author Zvi
  *

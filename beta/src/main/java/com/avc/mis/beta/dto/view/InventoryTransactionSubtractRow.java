@@ -14,6 +14,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
+ * Subtract Row in list of inventory transactions report.
+ * i.e. transaction that subtracts inventory.
+ * 
  * @author zvi
  *
  */

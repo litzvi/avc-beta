@@ -47,16 +47,6 @@ public abstract class BaseEntity implements Insertable {
 	    }
 	    
 	    return false;
-	    
-//	    if(this.getId() == null && other.getId() == null) {
-//	    	return false;
-//	    }
-//	    
-//	    if(this.getId() == null) { //other.getId() is not null
-//	    	return false;
-//	    }
-//	    
-//	    return this.getId().equals(other.getId());
 	}
 	  
 	/**
@@ -66,8 +56,6 @@ public abstract class BaseEntity implements Insertable {
 	 */
 	@Override 
 	public int hashCode() {
-//	    final int PRIME = 59;
-//		return PRIME;
 		return Objects.hashCode(getId());
 	}
 }

@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.processInfo.PoProcessInfo;
+import com.avc.mis.beta.dto.process.info.PoProcessInfo;
 import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.view.ProductionProcessWithItemAmount;
 import com.avc.mis.beta.entities.process.PoProcess;
@@ -22,7 +22,7 @@ import com.avc.mis.beta.entities.process.PoProcess;
  */
 public interface PoProcessRepository<T extends PoProcess> extends ProcessRepository<T> {
 	
-	@Query("select new com.avc.mis.beta.dto.processInfo.PoProcessInfo("
+	@Query("select new com.avc.mis.beta.dto.process.info.PoProcessInfo("
 			+ "po_code.id, po_code.code, t.code, t.suffix, s.id, s.version, s.name) "
 		+ "from PoProcess p "
 			+ "join p.poCode po_code "

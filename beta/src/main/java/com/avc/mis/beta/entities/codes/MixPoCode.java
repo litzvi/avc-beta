@@ -42,7 +42,7 @@ public class MixPoCode extends BasePoCode {
 			joinColumns = @JoinColumn(name = "mixedId", referencedColumnName = "id"), 
 			inverseJoinColumns = @JoinColumn(name = "poId", referencedColumnName = "id"))
 	@ManyToMany(fetch = FetchType.LAZY)
-	private Set<PoCode> origionPoCodes = new HashSet<>();
+	private Set<ProductPoCode> origionPoCodes = new HashSet<>();
 	
 	@Null(message = "mixed po code doesn't have a code")
 	@Override

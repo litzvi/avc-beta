@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.data.DataObjectWithName;
-import com.avc.mis.beta.dto.generic.ValueObject;
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
+import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.entities.data.CompanyContact;
 import com.avc.mis.beta.entities.data.Supplier;
@@ -27,14 +27,14 @@ import com.avc.mis.beta.service.report.row.SupplierQualityRow;
  */
 public interface SupplierRepository extends BaseRepository<Supplier> {
 	
-	@Query("select new com.avc.mis.beta.dto.data.DataObjectWithName(s.id, s.version, s.name) "
+	@Query("select new com.avc.mis.beta.dto.basic.DataObjectWithName(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "left join s.supplyCategories c "
 			+ "where c.id = :categoryId "
 				+ "and s.active = true")
 	List<DataObjectWithName<Supplier>> findSuppliersByCategoryBasic(Integer categoryId);
 	
-	@Query("select distinct new com.avc.mis.beta.dto.data.DataObjectWithName(s.id, s.version, s.name) "
+	@Query("select distinct new com.avc.mis.beta.dto.basic.DataObjectWithName(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "left join s.supplyCategories c "
 			+ "where c.supplyGroup = :supplyGroup "
@@ -42,7 +42,7 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "ORDER BY s.name")
 	List<DataObjectWithName<Supplier>> findSuppliersByGroupBasic(SupplyGroup supplyGroup);
 		
-	@Query("select new com.avc.mis.beta.dto.data.DataObjectWithName(s.id, s.version, s.name) "
+	@Query("select new com.avc.mis.beta.dto.basic.DataObjectWithName(s.id, s.version, s.name) "
 			+ "from Supplier s "
 			+ "where s.active = true")
 	List<DataObjectWithName<Supplier>> findAllSuppliersBasic();
@@ -68,17 +68,17 @@ public interface SupplierRepository extends BaseRepository<Supplier> {
 			+ "order by s.name ")
 	List<SupplierRow> findAllSupplierRows();
 	
-	@Query("select new com.avc.mis.beta.dto.generic.ValueObject(cd.id, p.value) "
+	@Query("select new com.avc.mis.beta.dto.basic.ValueObject(cd.id, p.value) "
 			+ "from Phone p "
 				+ "join p.contactDetails cd ")
 	Stream<ValueObject<String>> findAllPhoneValues();
 	
-	@Query("select new com.avc.mis.beta.dto.generic.ValueObject(cd.id, e.value) "
+	@Query("select new com.avc.mis.beta.dto.basic.ValueObject(cd.id, e.value) "
 			+ "from Email e "
 				+ "join e.contactDetails cd ")
 	Stream<ValueObject<String>> findAllEmailValues();
 
-	@Query("select new com.avc.mis.beta.dto.generic.ValueObject(s.id, c.value) "
+	@Query("select new com.avc.mis.beta.dto.basic.ValueObject(s.id, c.value) "
 			+ "from Supplier s "
 				+ "join s.supplyCategories c ")
 	Stream<ValueObject<String>> findAllSupplyCategoryValues();

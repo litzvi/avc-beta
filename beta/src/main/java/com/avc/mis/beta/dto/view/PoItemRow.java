@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicValueDTO;
+import com.avc.mis.beta.dto.basic.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
@@ -64,7 +64,6 @@ public class PoItemRow extends BasicValueDTO {
 	@NonFinal @Setter BigDecimal receivedAmount;
 	ProcessStatus status;
 	@NonFinal @Setter Long receiptsCancelled;
-//	List<String> orderStatus;
 	
 	/**
 	 * All arguments Constructor ,

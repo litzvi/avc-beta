@@ -6,17 +6,19 @@ package com.avc.mis.beta.dto.report;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.enums.ProductionUse;
+import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Value;
 
 /**
+ * QC for report
+ * 
  * @author zvi
  *
  */

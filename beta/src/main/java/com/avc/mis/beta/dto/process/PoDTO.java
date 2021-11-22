@@ -10,11 +10,10 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
-import com.avc.mis.beta.dto.processInfo.GeneralProcessInfo;
-import com.avc.mis.beta.dto.processInfo.OrderProcessInfo;
+import com.avc.mis.beta.dto.process.collectionItems.OrderItemDTO;
+import com.avc.mis.beta.dto.process.info.GeneralProcessInfo;
+import com.avc.mis.beta.dto.process.info.OrderProcessInfo;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -23,12 +22,11 @@ import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.enums.Shift;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.collection.OrderItem;
+import com.avc.mis.beta.entities.process.collectionItems.OrderItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -49,7 +47,6 @@ public class PoDTO extends PoProcessDTO {
 	private List<OrderItemDTO> orderItems;
 	
 	private boolean closed;
-//	private String personInCharge;
 	
 	/**
 	 * All arguments (besides for order items) Constructor ,
@@ -70,17 +67,6 @@ public class PoDTO extends PoProcessDTO {
 				downtime, numOfWorkers, personInCharge, processStatus, editStatus, remarks, approvals));
 		super.setPoCode(new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName));
 		this.closed = closed;
-	}
-	
-	/**
-	 * Constructor from PO object, used for testing.
-	 * @param po the PO object
-	 */
-	public PoDTO(@NonNull PO po) {
-		super(po);
-		this.closed = po.isClosed();
-		this.orderItems = po.getOrderItems().stream().map(i->{return new OrderItemDTO(i);}).collect(Collectors.toList());
-
 	}
 	
 	public void setOrderProcessInfo(OrderProcessInfo info) {
@@ -114,9 +100,4 @@ public class PoDTO extends PoProcessDTO {
 		return order;
 	}
 
-	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Purchase Order";
-	}
 }

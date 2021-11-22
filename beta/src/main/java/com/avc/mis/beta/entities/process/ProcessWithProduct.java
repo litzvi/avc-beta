@@ -16,13 +16,11 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Where;
 
 import com.avc.mis.beta.entities.Insertable;
-import com.avc.mis.beta.entities.process.collection.ProcessGroup;
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
+import com.avc.mis.beta.entities.process.group.ProcessGroup;
+import com.avc.mis.beta.entities.process.group.ProcessItem;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -39,24 +37,10 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "processId")
 public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProcess {
 
-	@Setter(value = AccessLevel.NONE) 
-//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", targetEntity = ProcessGroup.class, orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@Where(clause = "dtype = 'ProcessItem'")
 	private Set<ProcessItem> processItems = new HashSet<>();
-
-	/**
-	 * Gets the list of Items as an array (can be ordered).
-	 * @return the processItems
-	 */
-//	public ProcessItem[] getProcessItems() {
-//		if(this.processItems == null)
-//			return null;
-//		ProcessItem[] processItems = this.processItems.toArray(new ProcessItem[this.processItems.size()]);
-//		Arrays.sort(processItems, Ordinal.ordinalComparator());
-//		return processItems;
-//	}
 
 	/**
 	 * Setter for adding items that are processed, 
@@ -65,7 +49,6 @@ public abstract class ProcessWithProduct<T extends ProcessItem> extends PoProces
 	 * @param processItems the processItems to set
 	 */
 	protected void setProcessItems(Set<T> processItems) {
-//		Ordinal.setOrdinals(processItems);
 		this.processItems = (Set<ProcessItem>) Insertable.setReferences(processItems, (t) -> {t.setReference(this);	return t;});
 	}
 }

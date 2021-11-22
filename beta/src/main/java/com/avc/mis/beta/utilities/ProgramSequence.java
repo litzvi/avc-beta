@@ -17,6 +17,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Entity for keeping runing index/code for unique auto generation needs
+ * 
  * @author zvi
  *
  */

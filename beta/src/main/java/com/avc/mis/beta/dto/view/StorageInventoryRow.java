@@ -6,7 +6,7 @@ package com.avc.mis.beta.dto.view;
 import java.math.BigDecimal;
 
 import com.avc.mis.beta.dto.BasicSubjectDataDTO;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.values.Warehouse;
@@ -17,7 +17,7 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
- * DTO used as the list of storages for ProcessItemInventoryRow.
+ * DTO used as the list of storages for ProcessItemInventory.
  * Contains id (for reference) of process item and storage amount, location and amounts used.
  * 
  * @author Zvi
@@ -26,9 +26,7 @@ import lombok.Value;
 @Value
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class StorageInventoryRow extends BasicSubjectDataDTO 
-//implements CollectionItemWithGroup<StorageInventoryRow, ProcessItemInventory> 
-{
+public class StorageInventoryRow extends BasicSubjectDataDTO {
 
 	Integer processItemId;
 	BigDecimal unitAmount;
@@ -58,39 +56,9 @@ public class StorageInventoryRow extends BasicSubjectDataDTO
 		this.totalBalance = new AmountWithUnit(totalBalance, totalBalanceMU);
 	}
 	
-	/**
-	 * All class arguments constructor
-	 */
-	public StorageInventoryRow(Integer id, Integer version, Integer ordinal,
-			Integer processItemId, BigDecimal unitAmount, 
-			BigDecimal numberUnits, BasicValueEntity<Warehouse> warehouseLocation, 
-			BigDecimal numberUsedUnits, AmountWithUnit totalBalance) {
-		super(id, version, ordinal);
-		this.processItemId = processItemId;
-		this.unitAmount = unitAmount;
-		this.numberUnits = numberUnits;
-		this.warehouseLocation = warehouseLocation;
-		this.numberUsedUnits = numberUsedUnits;
-		this.totalBalance = totalBalance;
-	}
-	
 	public BigDecimal getNumberAvailableUnits() {
 		return this.numberUnits.subtract(this.numberUsedUnits);
 	}
-	
-//	@JsonIgnore
-//	@Override
-//	public StorageInventoryRow getItem() {
-//		return this;
-//	}
-//
-//	@JsonIgnore
-//	@Override
-//	public ProcessItemInventory getGroup() {
-//		ProcessItemInventory group = new ProcessItemInventory();
-//		group.setId(getProcessItemId());
-//		return group;
-//	}
 
 	@JsonIgnore
 	@Override

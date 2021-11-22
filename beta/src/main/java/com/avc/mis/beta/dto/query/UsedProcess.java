@@ -8,12 +8,14 @@ import java.time.LocalDateTime;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.PoProcess;
-import com.avc.mis.beta.entities.process.collection.ProcessParent;
+import com.avc.mis.beta.entities.system.ProcessParent;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Value;
 
 /**
+ * Used for fetching relationship between processes, when a product of one is used by the other.
+ * 
  * @author zvi
  *
  */

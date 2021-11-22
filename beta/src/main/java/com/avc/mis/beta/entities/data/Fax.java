@@ -11,6 +11,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.ContactEntity;
+import com.avc.mis.beta.entities.link.ContactDetails;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

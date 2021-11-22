@@ -13,6 +13,7 @@ import lombok.ToString;
 
 /**
  * DTO for entities who represent records that already exists in the database. e.g. country, city.
+ * Will have a value (name) to be presented with, usually for user to choose by value.
  * 
  * @author Zvi
  *

@@ -35,10 +35,6 @@ public abstract class SubjectDataDTO extends DataDTO implements Ordinal {
 		this.ordinal = ordinal;
 	}
 	
-	public SubjectDataDTO(Integer id, Integer version) {
-		super(id, version);
-	}
-	
 	public SubjectDataDTO(RankedAuditedEntity entity) {
 		super(entity);
 		this.ordinal = entity.getOrdinal();
@@ -58,17 +54,4 @@ public abstract class SubjectDataDTO extends DataDTO implements Ordinal {
 		return subjectDataEntity;
 	}
 	
-//	@JsonIgnore
-//	public SubjectLinkEntity fillEntity(SubjectLinkEntity entity) {
-//		super.fillEntity(entity);
-//		entity.setOrdinal(getOrdinal());
-//		return entity;
-//	}
-//	
-//	@JsonIgnore
-//	public RankedAuditedEntity fillEntity(RankedAuditedEntity entity) {
-//		super.fillEntity(entity);
-//		entity.setOrdinal(getOrdinal());
-//		return entity;
-//	}
 }

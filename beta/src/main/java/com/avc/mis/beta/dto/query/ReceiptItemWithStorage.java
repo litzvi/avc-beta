@@ -9,29 +9,28 @@ import java.util.Currency;
 import java.util.List;
 
 import com.avc.mis.beta.dto.data.DataObject;
-import com.avc.mis.beta.dto.generic.OrdinalAmount;
-import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
-import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
+import com.avc.mis.beta.dto.process.group.ReceiptItemDTO;
+import com.avc.mis.beta.dto.process.storages.ExtraAddedDTO;
+import com.avc.mis.beta.dto.process.storages.StorageWithSampleDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.process.collection.OrderItem;
-import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
-import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.entities.enums.ProductionUse;
+import com.avc.mis.beta.entities.process.collectionItems.OrderItem;
+import com.avc.mis.beta.entities.process.storages.ExtraAdded;
+import com.avc.mis.beta.entities.process.storages.Storage;
+import com.avc.mis.beta.entities.values.Item;
+import com.avc.mis.beta.utilities.OrdinalAmount;
 
 import lombok.Data;
 
 /**
+ * For fetching with query storages with their receipt items.
+ * 
  * @author Zvi
  *
  */
 @Data
-//@EqualsAndHashCode(callSuper = true)
-public class ReceiptItemWithStorage 
-//implements CollectionItemWithGroup<StorageDTO, ReceiptItemDTO> 
-{
+public class ReceiptItemWithStorage {
 
 	private ReceiptItemDTO receiptItem;
 	private StorageWithSampleDTO storage;
@@ -72,24 +71,5 @@ public class ReceiptItemWithStorage
 		this.orderItem = new DataObject<OrderItem>(orderItemId, orderItemVersion);
 	}
 
-
-//	@Override
-//	public StorageWithSampleDTO getItem() {
-//		return getStorage();
-//	}
-//
-//
-//	@Override
-//	public ReceiptItemDTO getGroup() {
-//		return getReceiptItem();
-//	}
-	
-//	/**
-//	 * @return id of ReceiptItem. 
-//	 * Used for mapping to the logical structure that every ReceiptItem has a collection of storages.
-//	 */
-//	public Integer getId() {
-//		return receiptItem.getId();
-//	}
 	
 }

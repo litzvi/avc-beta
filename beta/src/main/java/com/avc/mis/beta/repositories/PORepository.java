@@ -12,17 +12,17 @@ import java.util.stream.Stream;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.generic.ValueObject;
+import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.process.PoDTO;
-import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
-import com.avc.mis.beta.dto.processInfo.OrderProcessInfo;
+import com.avc.mis.beta.dto.process.collectionItems.OrderItemDTO;
+import com.avc.mis.beta.dto.process.info.OrderProcessInfo;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.view.PoItemRow;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.collection.OrderItem;
+import com.avc.mis.beta.entities.process.collectionItems.OrderItem;
 
 /**
  * Spring repository for accessing purchase order information.
@@ -33,7 +33,7 @@ import com.avc.mis.beta.entities.process.collection.OrderItem;
 public interface PORepository extends PoProcessRepository<PO> {
 
 	
-	@Query("select new com.avc.mis.beta.dto.processInfo.OrderProcessInfo(po.closed) "
+	@Query("select new com.avc.mis.beta.dto.process.info.OrderProcessInfo(po.closed) "
 		+ "from PO po "
 		+ "where po.id = :processId ")
 	OrderProcessInfo findPoInfo(Integer processId);
@@ -44,7 +44,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 	 * @param processId the process id of the PO
 	 * @return Set of OrderItemDTOs for the given process
 	 */
-	@Query("select new com.avc.mis.beta.dto.process.collection.OrderItemDTO("
+	@Query("select new com.avc.mis.beta.dto.process.collectionItems.OrderItemDTO("
 			+ "i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.measureUnit, "
 			+ "units.amount, units.measureUnit, "
@@ -98,9 +98,6 @@ public interface PORepository extends PoProcessRepository<PO> {
 		+ "where ((po.id = :processId and :poCodeId is null) "
 				+ "or (:processId is null and  po_code.id = :poCodeId)) "
 			+ "and lc.processStatus in :statuses "
-//		+ "where po.id = :processId or po_code.id = :poCodeId "
-//			+ "and (:processId is null or :poCodeId is null) "
-//			+ "and lc.processStatus in :statuses "
 		+ "group by po "
 		+ "order by lc.processStatus ")
 	Optional<PoDTO> findOrderById(Integer processId, Integer poCodeId, ProcessStatus[] statuses);
@@ -108,7 +105,6 @@ public interface PORepository extends PoProcessRepository<PO> {
 	@Query("select new com.avc.mis.beta.dto.report.ItemAmount("
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-//			+ "SUM(units.amount * uom.multiplicand / uom.divisor)) "
 			+ "(units.amount "
 				+ " - "
 				+ "coalesce(SUM("
@@ -138,7 +134,6 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "(t.processName = :orderType or :orderType is null) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED) "
-//			+ "and (rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL) "
 			+ "and (:pointOfTime is null "
 				+ "or po.recordedTime <= :pointOfTime) "
 		+ "group by oi, units "
@@ -150,7 +145,6 @@ public interface PORepository extends PoProcessRepository<PO> {
 					+ "THEN (rou.amount * rou_uom.multiplicand / rou_uom.divisor) "
 					+ "ELSE null " 
 				+ "END), "
-//				+ "(rou.amount * rou_uom.multiplicand / rou_uom.divisor)), "
 			+ "0) < units.amount ")
 	List<ItemAmount> findOpenOrPendingReceiptOrdersItemAmounts(ProcessName orderType, ItemGroup itemGroup, LocalDateTime pointOfTime);
 
@@ -165,26 +159,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 			+ "item.id, item.value, item.measureUnit, item.itemGroup, item_unit, type(item), "
 			+ "oi.id, units.amount, units.measureUnit, po.recordedTime, oi.deliveryDate, "
 			+ "oi.defects, price.amount, price.currency, "
-//			+ "SUM( "
-//				+ "CASE "
-//					+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN null  "
-//					+ "ELSE (rou.amount * rou_uom.multiplicand / rou_uom.divisor) "
-//				+ "END "
-//			+ "), "
-//			+ "SUM( "
-//				+ "CASE "
-//					+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN null  "
-//					+ "ELSE (sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor) "
-//				+ "END "
-//			+ "), "
 			+ "lc.processStatus"
-//			+ ", "
-//			+ "SUM( "
-//				+ "CASE "
-//					+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN 1 "
-//					+ "ELSE 0 "
-//				+ "END "
-//			+ ") "
 		+ ") "
 		+ "from PO po "
 			+ "join po.lifeCycle lc "
@@ -197,18 +172,8 @@ public interface PORepository extends PoProcessRepository<PO> {
 				+ "left join oi.unitPrice price "
 				+ "join oi.item item "
 					+ "join item.unit item_unit "
-//				+ "left join oi.receiptItems ri "
-//					+ "left join ri.process r "
-//						+ "left join r.lifeCycle rlc "		
 			+ "left join po.approvals approval "
 				+ "left join approval.user user "
-//					+ "left join ri.storageForms sf "
-////						+ "left join sf.group sf_group "
-//							+ "left join UOM uom "
-//								+ "on uom.fromUnit = ri.measureUnit and uom.toUnit = units.measureUnit "
-//					+ "left join ri.receivedOrderUnits rou "
-//						+ "left join UOM rou_uom "
-//							+ "on rou_uom.fromUnit = rou.measureUnit and rou_uom.toUnit = units.measureUnit "
 		+ "where "
 			+ "(t.processName = :orderType or :orderType is null) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
@@ -248,18 +213,13 @@ public interface PORepository extends PoProcessRepository<PO> {
 					+ "join ri.receivedOrderUnits rnu "
 						+ "join UOM uom "
 							+ "on uom.fromUnit = rnu.measureUnit and uom.toUnit = nu.measureUnit "
-//					+ "join ri.storageForms sf "
-//						+ "join sf.group sf_group "
-//							+ "join UOM uom "
-//								+ "on uom.fromUnit = sf_group.measureUnit and uom.toUnit = nu.measureUnit "
 			+ "where oi.id in :orderItemIds "
 				+ "and rlc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED "
 			+ "group by oi "
-//			+ "having nu.amount <= sum(sf.unitAmount * sf.numberUnits * uom.multiplicand / uom.divisor) "
 			+ "having nu.amount <= sum(rnu.amount * uom.multiplicand / uom.divisor) ")
 	List<OrderItem> findNonOpenOrderItemsById(Integer[] orderItemIds);
 
-	@Query("select new com.avc.mis.beta.dto.generic.ValueObject( "
+	@Query("select new com.avc.mis.beta.dto.basic.ValueObject( "
 			+ "oi.id, "
 			+ "SUM(coalesce(sf.unitAmount, 1) * sf.numberUnits * uom.multiplicand / uom.divisor)) "
 		+ "from OrderItem oi "
@@ -268,7 +228,6 @@ public interface PORepository extends PoProcessRepository<PO> {
 				+ "join ri.process r "
 					+ "join r.lifeCycle rlc "		
 				+ "join ri.storageForms sf "
-//					+ "left join sf.group sf_group "
 						+ "join UOM uom "
 							+ "on uom.fromUnit = ri.measureUnit and uom.toUnit = units.measureUnit "
 		+ "where "
@@ -277,7 +236,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 		+ "group by oi ")
 	Stream<ValueObject<BigDecimal>> findReceivedAmountByOrderItemIds(int[] orderItemIds);
 
-	@Query("select new com.avc.mis.beta.dto.generic.ValueObject( "
+	@Query("select new com.avc.mis.beta.dto.basic.ValueObject( "
 			+ "oi.id, "
 			+ "SUM(rou.amount * rou_uom.multiplicand / rou_uom.divisor)) "
 		+ "from OrderItem oi "
@@ -294,7 +253,7 @@ public interface PORepository extends PoProcessRepository<PO> {
 		+ "group by oi ")
 	Stream<ValueObject<BigDecimal>> findReceivedOrderUnitsByOrderItemIds(int[] orderItemIds);
 
-	@Query("select new com.avc.mis.beta.dto.generic.ValueObject( "
+	@Query("select new com.avc.mis.beta.dto.basic.ValueObject( "
 			+ "oi.id, "
 			+ "SUM(1)) "
 		+ "from OrderItem oi "

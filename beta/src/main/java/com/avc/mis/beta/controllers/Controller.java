@@ -25,26 +25,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avc.mis.beta.dto.BaseEntityDTO;
-import com.avc.mis.beta.dto.GeneralProcessDTO;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
-import com.avc.mis.beta.dto.basic.ProductionLineBasic;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
-import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
-import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.link.BillOfMaterialsDTO;
+import com.avc.mis.beta.dto.process.GeneralProcessDTO;
+import com.avc.mis.beta.dto.system.UserMessageDTO;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
+import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ProductionLineDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.EditStatus;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.values.CashewStandard;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.service.BillOfMaterialService;
 import com.avc.mis.beta.service.ObjectTablesReader;
@@ -118,10 +118,10 @@ public class Controller {
 		
 		List<Object> result = new ArrayList<Object>();
 		
-		List<BasicValueEntity<Warehouse>> Storageholder = refeDao.getAllWarehousesDTO();
+		List<BasicValueEntity<Warehouse>> Storageholder = refeDao.getAllWarehousesBasic();
 		result.add(Storageholder);
 		
-		List<CashewStandard> standartholder = refeDao.getAllCashewStandards();
+		List<CashewStandardDTO> standartholder = refeDao.getAllCashewStandards();
 		result.add(standartholder);
 		
 //		List<ItemDTO> CashewItemsholder = refeDao.getItemsByGroup(ItemGroup.PRODUCT);
@@ -136,7 +136,7 @@ public class Controller {
 		Map<ProcessName, List<ManagementType>> Managmentholder = processDao.getAllUserManagementTypes();
 		result.add(Managmentholder);
 
-		List<ProductionLineBasic> ProductionLinesHolder = refeDao.getAllBasicProductionLines();
+		List<ProductionLineDTO> ProductionLinesHolder = refeDao.getAllProductionLines();
 		result.add(ProductionLinesHolder);
 		
 		List<ItemDTO> WasteItemsholder = refeDao.getItemsByGroup(ItemGroup.WASTE);
@@ -278,7 +278,7 @@ public class Controller {
 	
 	@RequestMapping("/findAllPoCodes")
 	public List<PoCodeBasicWithProductCompany> findAllPoCodes() {
-		return objectTableReader.findAllPoCodes();
+		return objectTableReader.findAllProductPoCodes();
 	}
 	
 	@RequestMapping("/getStorageGeneralItem/{id}")

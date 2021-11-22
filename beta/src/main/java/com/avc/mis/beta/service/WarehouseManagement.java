@@ -15,31 +15,31 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessDAO;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
 import com.avc.mis.beta.dto.process.StorageTransferDTO;
-import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
-import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
-import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
+import com.avc.mis.beta.dto.process.group.ItemCountDTO;
+import com.avc.mis.beta.dto.process.group.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.group.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.query.ItemTransactionDifference;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.view.InventoryTransactionAddRow;
 import com.avc.mis.beta.dto.view.InventoryTransactionRow;
 import com.avc.mis.beta.dto.view.InventoryTransactionSubtractRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.enums.ProductionUse;
 import com.avc.mis.beta.entities.process.StorageTransfer;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.TransferRepository;
 import com.avc.mis.beta.service.report.InventoryUseReports;
@@ -112,7 +112,6 @@ public class WarehouseManagement {
 				Function.identity(),
 				ProcessItemInventory::setStorageForms);	
 		return processItemInventoryRows;
-//		return CollectionItemWithGroup.getFilledGroups(storageInventoryRows, getInventoryRepository()::findProcessItemInventory);
 	}
 	
 	public List<InventoryTransactionRow> getInventoryTransactions(ItemGroup itemGroup, Integer[] itemIds, Integer[] poCodeIds, 
@@ -122,7 +121,6 @@ public class WarehouseManagement {
 		
 		List<InventoryTransactionAddRow> added = getInventoryRepository().findInventoryTransactionAdditions(
 				WarehouseManagement.EXCLUDED_FUNCTIONALITIES, 
-//				new ProductionFunctionality[] {ProductionFunctionality.LOADING},
 				itemGroup, checkItemIds, itemIds, checkPoCodes, poCodeIds, startTime, endTime);
 		
 		List<InventoryTransactionSubtractRow> subtracted = getInventoryRepository().findInventoryTransactionSubtractions(
@@ -165,8 +163,6 @@ public class WarehouseManagement {
 			}
 			
 		} while(addRow != null || subtractRow != null);
-//		transactionRows.addAll(added);
-//		transactionRows.addAll(subtracted);
 		return transactionRows;
 	}
 	
@@ -304,67 +300,70 @@ public class WarehouseManagement {
 
 	
 	//----------------------------Duplicate in InventoryUses - Should remove------------------------------------------
-	
+	@Deprecated
 	@Autowired private InventoryUses inventoryUseService;
+	@Deprecated
 	@Autowired private InventoryUseReports inventoryUseReports;
-	
+	@Deprecated
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void addGeneralInventoryUse(InventoryUseDTO inventoryUse) {
 		getInventoryUseService().addGeneralInventoryUse(inventoryUse);
 	}	
 	
-
+	@Deprecated
 	public InventoryUseDTO getInventoryUse(int processId) {
 		return getInventoryUseService().getInventoryUse(processId);
 	}
-		
+	@Deprecated
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editGeneralInventoryUse(InventoryUseDTO inventoryUse) {
 		getInventoryUseService().editGeneralInventoryUse(inventoryUse);
 	}
-	
+	@Deprecated
 	public List<ProcessRow> getInventoryUses() {
 		return getInventoryUseReports().getInventoryUses(ProcessName.GENERAL_USE);
 	}
-	
+	@Deprecated
 	public List<ProcessRow> getInventoryUses(Integer poCodeId) {
 		return getInventoryUseReports().getInventoryUses(ProcessName.GENERAL_USE, poCodeId);
 	}
 	
 	//----------------------------Duplicate in StorageRelocations - Should remove------------------------------------------
-
+	@Deprecated
 	@Autowired private StorageRelocations relocationService;
+	@Deprecated
 	@Autowired private StorageRelocationReports relocationReports;
-	
+	@Deprecated
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public Integer addStorageRelocation(StorageRelocationDTO relocation) {
 		return getRelocationService().addStorageRelocation(relocation);
 	}
-
+	@Deprecated
 	public StorageRelocationDTO getStorageRelocation(int processId) {
 		return getRelocationService().getStorageRelocation(processId);
 	}
-
+	@Deprecated
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editStorageRelocation(StorageRelocationDTO relocation) {
 		getRelocationService().editStorageRelocation(relocation);
 	}
-	
+	@Deprecated
 	public List<ProcessRow> getStorageRelocations() {
 		return getRelocationReports().getStorageRelocations();
 	}
-	
+	@Deprecated
 	public List<ProcessRow> getStorageRelocations(ProductionFunctionality productionFunctionality) {
 		return getRelocationReports().getStorageRelocations(productionFunctionality);
 	}
-	
+	@Deprecated
 	public List<ProcessRow> getStorageRelocationsByPoCode(Integer poCodeId, ProductionFunctionality productionFunctionality) {
 		return getRelocationReports().getStorageRelocationsByPoCode(poCodeId, productionFunctionality);
 	}
 	
 	//----------------------------StorageTransfers - Deprecated Should remove------------------------------------------
-
+	@Deprecated
 	@Autowired private TransferRepository transferRepository;
+	@Deprecated
 	@Autowired private ProductionProcessReports processReportsReader;
 
 	/**
@@ -376,7 +375,6 @@ public class WarehouseManagement {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public Integer addStorageTransfer(StorageTransferDTO transfer) {
 		transfer.setProcessName(ProcessName.STORAGE_RELOCATION);
-//		transfer.setProcessType(dao.getProcessTypeByValue(ProcessName.STORAGE_TRANSFER));
 		Integer transferId = dao.addTransactionProcessEntity(transfer, StorageTransfer::new);
 		dao.checkTransactionUsedInventoryAvailability(transferId);
 		dao.setTransactionPoWeights(transferId, new ItemGroup[] {ItemGroup.PRODUCT, ItemGroup.WASTE});
@@ -424,14 +422,6 @@ public class WarehouseManagement {
 				.findPoProcessInfoByProcessId(processId, StorageTransfer.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No storage transfer with given process id")));
-		
-//		Optional<StorageTransferDTO> transfer = getTransferRepository().findTransferDTOByProcessId(processId);
-//		StorageTransferDTO transferDTO = transfer.orElseThrow(
-//				()->new IllegalArgumentException("No storage transfer with given process id"));
-//		transferDTO.setProcessItems(
-//				CollectionItemWithGroup.getFilledGroups(
-//						getTransferRepository()
-//						.findProcessItemWithStorage(processId)));
 		transferDTO.setProcessItems(
 				CollectionItemWithGroup.getFilledGroups(
 						getTransferRepository()
@@ -439,8 +429,6 @@ public class WarehouseManagement {
 				ProcessItemWithStorage::getProcessItem,
 				ProcessItemWithStorage::getStorage,
 				ProcessItemDTO::setStorageForms));
-//				ProcessItemDTO.getProcessItems(getTransferRepository()
-//						.findProcessItemWithStorage(processId)));
 		transferDTO.setUsedItemGroups(
 				CollectionItemWithGroup.getFilledGroups(
 						getTransferRepository()
@@ -448,9 +436,6 @@ public class WarehouseManagement {
 						UsedItemWithGroup::getUsedItemsGroup,
 						UsedItemWithGroup::getUsedItem,
 						UsedItemsGroupDTO::setUsedItems));
-//				UsedItemsGroupDTO.getUsedItemsGroups(
-//						getTransferRepository()
-//						.findUsedItemsWithGroup(processId)));
 		transferDTO.setItemCounts(
 				CollectionItemWithGroup.getFilledGroups(
 						getTransferRepository()
@@ -458,9 +443,6 @@ public class WarehouseManagement {
 						ItemCountWithAmount::getItemCount,
 						ItemCountWithAmount::getAmount,
 						ItemCountDTO::setAmounts));
-//				ItemCountDTO.getItemCounts(
-//						getTransferRepository()
-//						.findItemCountWithAmount(processId)));
 		return transferDTO;
 	}
 	

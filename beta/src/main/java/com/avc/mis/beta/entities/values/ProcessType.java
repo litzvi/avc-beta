@@ -16,8 +16,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.link.ProcessManagement;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -47,11 +47,5 @@ public class ProcessType extends ValueEntity {
 	@JsonIgnore
 	@OneToMany(mappedBy = "processType", fetch = FetchType.LAZY)
 	private Set<ProcessManagement> alertRequirments = new HashSet<>();
-
-//	@Override
-//	public String toString() {
-//		return getValue();
-//		
-//	}
 
 }

@@ -37,7 +37,6 @@ public class Samples {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
 	public Integer addSampleReceipt(SampleReceiptDTO sample) {
 		sample.setProcessName(ProcessName.SAMPLE_RECEIPET);
-//		sample.setProcessType(dao.getProcessTypeByValue(ProcessName.SAMPLE_RECEIPET));
 		return dao.addPoProcessEntity(sample, SampleReceipt::new);
 	}
 	
@@ -53,9 +52,6 @@ public class Samples {
 						()->new IllegalArgumentException("No po code for given process id")));
 
 		
-//		Optional<SampleReceiptDTO> sample = getSampleRepository().findSampleDTOByProcessId(processId);
-//		SampleReceiptDTO sampleReceiptDTO = sample.orElseThrow(
-//				()->new IllegalArgumentException("No receipt sample with given process id"));
 		sampleReceiptDTO.setSampleItemsWithWeight(getSampleRepository().findSampleItemsWithWeight(processId));
 		
 		return sampleReceiptDTO;

@@ -5,6 +5,7 @@ package com.avc.mis.beta.dto.data;
 
 import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 
 import lombok.Data;
@@ -19,8 +20,8 @@ import lombok.NonNull;
  *
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class PaymentAccountDTO extends SubjectDataDTO {
 
 	private BankAccountDTO bankAccount;
@@ -35,4 +36,22 @@ public class PaymentAccountDTO extends SubjectDataDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return PaymentAccount.class;
 	}
+	
+	@Override
+	public PaymentAccount fillEntity(Object entity) {
+		PaymentAccount paEntity;
+		if(entity instanceof PaymentAccount) {
+			paEntity = (PaymentAccount) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be PaymentAccount class");
+		}
+		super.fillEntity(paEntity);
+		if(getBankAccount() != null) {
+			paEntity.setBankAccount(getBankAccount().fillEntity(new BankAccount()));
+		}
+		
+		return paEntity;
+	}
+
 }

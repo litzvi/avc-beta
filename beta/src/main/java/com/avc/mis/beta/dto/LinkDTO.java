@@ -24,7 +24,6 @@ public abstract class LinkDTO extends BaseEntityDTO {
 	public LinkDTO(Integer id) {
 		super(id);
 	}
-
 	
 	public LinkDTO(LinkEntity entity) {
 		super(entity);

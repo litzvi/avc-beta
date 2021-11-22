@@ -20,100 +20,24 @@ import java.util.stream.Collectors;
  * @author zvi
  *
  */
-public interface CollectionItemWithGroup
-//<I, G extends ListGroup<I>> 
-{
-		
-//	public default Integer getGroupId() {
-//		return getGroup().getId();
-//	}
-//	
-//	public abstract I getItem();
-//	
-//	public abstract G getGroup();
+public interface CollectionItemWithGroup {
 	
 	public static <E> Collection<E> safeCollection(Collection<E> collection) {
 		return collection == null ? Collections.emptyList() : collection;
 	}
 	
-	
 	/**
 	 * Used for building OO structure when fetching objects and their collections with one join query.
 	 * Building List of groups, each filled with list of 'data items' (OO), when receiving a list of join operation between groups and their collection of 'items'.
-	 * @param <I> Class of 'item' within the group collection
-	 * @param <G> Class of the 'group'
-	 * @param dataWithGroups the inner join of the group data with it's collection of 'items'
-	 * @return List of groups with nested list of each corresponding collection set in OO structure.
+	 * @param <R> dataWithGroups class
+	 * @param <G> group class
+	 * @param <I> item(in group) class
+	 * @param dataWithGroups join of group with each of it's items.
+	 * @param groupSupplier function to get the group from dataWithGroup object
+	 * @param itemSupplier function to get the item from dataWithGroup object
+	 * @param groupSetter function to set the group's items list.
+	 * @return List of groups with lists of items set(filled).
 	 */
-//	public static <I, G extends ListGroup<I>> List<G> getFilledGroups(List<? extends CollectionItemWithGroup<I, G>> dataWithGroups) {
-//		if(dataWithGroups == null || dataWithGroups.isEmpty()) {
-//			return null;
-//		}
-//		Map<Integer, List<CollectionItemWithGroup<I, G>>> map = dataWithGroups.stream()
-//				.collect(Collectors.groupingBy(CollectionItemWithGroup<I, G>::getGroupId, 
-//						LinkedHashMap::new, 
-//						Collectors.toList()));
-//		List<G> groups = new ArrayList<>();
-//		for(List<CollectionItemWithGroup<I, G>> list: map.values()) {
-//			G group = list.get(0).getGroup();
-//			group.setList(list.stream()
-//					.map(i -> i.getItem())
-//					.collect(Collectors.toList()));
-//
-//			groups.add(group);
-//		}
-//		return groups;
-//	}
-	
-	/**
-	 * Same as getFilledGroups static method but probably less efficient because needs to compare full ProcessGroups for groupingby
-	 */
-//	public static <I, G extends ListGroup<I>> List<G> getFilledGroupsByComparing(List<? extends CollectionItemWithGroup<I, G>> dataWithGroups) {
-//		if(dataWithGroups == null || dataWithGroups.isEmpty()) {
-//			return null;
-//		}
-//		Map<G, List<I>> map = dataWithGroups.stream()
-//				.collect(Collectors.groupingBy(CollectionItemWithGroup<I, G>::getGroup, 
-//						LinkedHashMap::new, 
-//						Collectors.mapping(CollectionItemWithGroup<I, G>::getItem, Collectors.toList())));
-//		List<G> groups = new ArrayList<>();
-//		map.forEach((k, v) -> {
-//			k.setList(v);
-//			groups.add(k);
-//		});
-//		return groups;
-//	}
-
-	
-	/**
-	 * Used for building OO structure when fetching objects and their collections with 2 queries, 
-	 * one for all data in nested collections and then another query for the groups. 
-	 * Building List of groups, each filled with list of 'data items' (OO), when receiving a list of all 'data items' each containing a pointer to the group id.
-	 * After grouping the items by group id, will use the given method to fetch the groups objects by their IDs 
-	 * and then setting their corresponding collections of 'items'.
-	 * @param <I> Class of 'item' within the group collection
-	 * @param <G> Class of the 'group'
-	 * @param dataWithGroupsId the inner join of the group id with it's collection of 'items'
-	 * @param groupsFetchingFunction function to apply on set of group IDs to get the list of group objects
-	 * @return List of groups with nested list of each corresponding collection set in OO structure.
-	 */
-//	public static <I, G extends ListGroup<I>> List<G> getFilledGroups(List<? extends CollectionItemWithGroup<I, G>> dataWithGroupsId, 
-//			Function<Set<Integer>, List<G>> groupsFetchingFunction) {
-//		if(dataWithGroupsId.isEmpty()) {
-//			return null;
-//		}
-//		Map<Integer, List<I>> map = dataWithGroupsId.stream()
-//				.collect(Collectors.groupingBy(CollectionItemWithGroup<I, G>::getGroupId, 
-//						LinkedHashMap::new, 
-//						Collectors.mapping(CollectionItemWithGroup<I, G>::getItem, Collectors.toList())));
-//		List<G> processGroups = groupsFetchingFunction.apply(map.keySet());
-//		for(G g: processGroups) {
-//			g.setList(map.get(g.getId()));
-//		}
-//		return processGroups;
-//	}
-	
-	
 	public static <R, G, I> List<G> getFilledGroups(
 			List<R> dataWithGroups, 
 			Function<R, G> groupSupplier, 
@@ -133,28 +57,22 @@ public interface CollectionItemWithGroup
 		});
 		return groups;
 	}
-	
-	@Deprecated
-	public static <R, G, I> void fillGroups(
-			List<G> groups,
-			List<R> dataWithGroups, 
-			Function<R, G> groupSupplier, 
-			Function<R, I> itemSupplier,
-			BiConsumer<G, List<I>> groupSetter) {
-		if(dataWithGroups == null || dataWithGroups.isEmpty()) {
-			return;
-		}
-		else {
-			Map<G, List<I>> map = dataWithGroups.stream()
-					.collect(Collectors.groupingBy(groupSupplier, 
-							LinkedHashMap::new, 
-							Collectors.mapping(itemSupplier, Collectors.toList())));
-			groups.forEach(g -> {
-				groupSetter.accept(g, map.get(g));
-			});
-		}
-	}
-	
+		
+	/**
+	 * Fills given groups with lists of items.
+	 * Used for building OO structure when fetching objects and their collections with one join query.
+	 * Building List of groups, each filled with list of 'data items' (OO), when receiving a list of join operation between groups and their collection of 'items'.
+	 * @param <K> key of group class
+	 * @param <R> dataWithGroups class
+	 * @param <G> group class
+	 * @param <I> item(in group) class
+	 * @param groups list of groups to fill with items
+	 * @param dataWithGroups join of group with each of it's items.
+	 * @param groupKeySupplier
+	 * @param dataKeySupplier
+	 * @param itemSupplier function to get the item from dataWithGroup object
+	 * @param groupSetter function to set the group's items list.
+	 */
 	public static <K, R, G, I> void fillGroups(
 			List<G> groups,
 			List<R> dataWithGroups, 

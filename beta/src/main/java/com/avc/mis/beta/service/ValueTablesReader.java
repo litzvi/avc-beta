@@ -12,34 +12,33 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.basic.ProductionLineBasic;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
-import com.avc.mis.beta.dto.generic.ValueEntityObject;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
+import com.avc.mis.beta.dto.basic.ValueEntityObject;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.dto.values.BankDTO;
+import com.avc.mis.beta.dto.values.CashewGradeDTO;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.dto.values.CompanyPositionDTO;
+import com.avc.mis.beta.dto.values.ContractTypeDTO;
+import com.avc.mis.beta.dto.values.CountryDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ProcessTypeDTO;
+import com.avc.mis.beta.dto.values.ProductionLineDTO;
+import com.avc.mis.beta.dto.values.ShippingPortDTO;
+import com.avc.mis.beta.dto.values.SupplyCategoryDTO;
+import com.avc.mis.beta.dto.values.WarehouseDTO;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.enums.ProductionUse;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.values.Bank;
-import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.CashewGrade;
-import com.avc.mis.beta.entities.values.CashewStandard;
-import com.avc.mis.beta.entities.values.City;
-import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.avc.mis.beta.entities.values.ContractType;
-import com.avc.mis.beta.entities.values.Country;
-import com.avc.mis.beta.entities.values.ProcessType;
-import com.avc.mis.beta.entities.values.ProductionLine;
-import com.avc.mis.beta.entities.values.ShippingPort;
-import com.avc.mis.beta.entities.values.SupplyCategory;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.repositories.QCRepository;
 import com.avc.mis.beta.repositories.SupplierRepository;
@@ -67,77 +66,76 @@ public class ValueTablesReader {
 	@Autowired private ValueTablesRepository valueTablesRepository;
 	@Autowired private QCRepository qcRepository;
 	
-	public List<Warehouse> getAllWarehouses() {
+	public List<WarehouseDTO> getAllWarehouses() {
 		return getValueTablesRepository().findAllWarehouses();		
 	}
-	
-	public List<CashewGrade> getAllCashewGrades() {
+
+	public List<CashewGradeDTO> getAllCashewGrades() {
 		return getValueTablesRepository().findAllCashewGrades();		
 	}
 	
-	public List<Country> getAllCountries() {
+	public List<CountryDTO> getAllCountries() {
 		return getValueTablesRepository().findAllCountries();
 	}
-		
-	public List<City> getAllCities() {
+	
+	public List<CityDTO> getAllCities() {
 		return getValueTablesRepository().findAllCities();
+	}	
+	
+	public Map<String, List<CityDTO>> getCitiesByCountry() {		
+		return getValueTablesRepository().findAllCities().stream()
+				.collect(Collectors.groupingBy(city -> city.getCountry().getValue()));
 	}
 		
-	public List<Bank> getAllBanks() {
+	public List<BankDTO> getAllBanks() {
 		return getValueTablesRepository().findAllBanks();
 	}
 	
-	public List<BankBranch> getAllBankBranches() {
+	public List<BankBranchDTO> getAllBankBranches() {
 		return getValueTablesRepository().findAllBankBranches();
 	}
 		
-	public List<SupplyCategory> getAllSupplyCategories() {
+	public List<SupplyCategoryDTO> getAllSupplyCategories() {
 		return getValueTablesRepository().findAllSupplyCategories();
 	}
 	
-	public List<CompanyPosition> getAllCompanyPositions() {	
+	public List<CompanyPositionDTO> getAllCompanyPositions() {	
 		return getValueTablesRepository().findAllCompanyPositions();
 	}
 	
-	public List<Item> getAllItems() {
+	public List<ItemDTO> getAllItems() {
 		return getValueTablesRepository().findAllItems();
 	}
 	
-	public List<ContractType> getAllContractTypes() {
+	public List<ContractTypeDTO> getAllContractTypes() {
 		return getValueTablesRepository().findAllContractTypes(SupplyGroup.values());
 	}
 	
-	public List<ContractType> getCashewContractTypes() {
+	public List<ContractTypeDTO> getCashewContractTypes() {
 		return getValueTablesRepository().findAllContractTypes(new SupplyGroup[]{SupplyGroup.CASHEW});
 	}
 	
-	public List<ContractType> getGeneralContractTypes() {
+	public List<ContractTypeDTO> getGeneralContractTypes() {
 		return getValueTablesRepository().findAllContractTypes(new SupplyGroup[]{SupplyGroup.GENERAL});
-	}
+	}	
 	
-	public List<ProcessType> getAllProcessTypes() {
+	public List<ProcessTypeDTO> getAllProcessTypes() {
 		return getValueTablesRepository().findAllProcessTypes();
 	}
 	
-	public List<ProductionLine> getAllProductionLines() {
+	public List<ProductionLineDTO> getAllProductionLines() {
 		return getValueTablesRepository().findProductionLinesByFuncionality(ProductionFunctionality.values());
 	}
 	
-	public List<ProductionLine> getProductionLinesByFuncionality(ProductionFunctionality[] functionalities) {
+	public List<ProductionLineDTO> getProductionLinesByFuncionality(ProductionFunctionality[] functionalities) {
 		return getValueTablesRepository().findProductionLinesByFuncionality(functionalities);
 	}
 	
-	public List<CashewStandard> getAllCashewStandards() {
-		return getValueTablesRepository().findAllCashewStandard();
-	}
-	
-	public List<ShippingPort> getAllShippingPorts() {
+	public List<ShippingPortDTO> getAllShippingPorts() {
 		return getValueTablesRepository().findAllShippingPorts();
 	}
-	
-//----------------------------DTO---------------------------------------------------------	
-	
-	public List<CashewStandardDTO> getAllCashewStandardsDTO() {
+		
+	public List<CashewStandardDTO> getAllCashewStandards() {
 		List<CashewStandardDTO> cashewStandards = getQcRepository().findAllCashewStandardDTO();
 		Map<Integer, Set<BasicValueEntity<Item>>> items = getQcRepository().findAllStandardItems()
 				.collect(Collectors.groupingBy(ValueEntityObject::getId, 
@@ -146,28 +144,29 @@ public class ValueTablesReader {
 		return cashewStandards;
 	}
 	
-	public List<BasicValueEntity<Warehouse>> getAllWarehousesDTO() {
+//---------------------------Basic values---------------------------------------------------
+
+	
+	public List<BasicValueEntity<Warehouse>> getAllWarehousesBasic() {
 		return getValueTablesRepository().findAllWarehousesDTO();		
 	}
-	
-	public List<BasicValueEntity<CashewGrade>> getAllCashewGradesDTO() {
+
+	public List<BasicValueEntity<CashewGrade>> getAllCashewGradesBasic() {
 		return getValueTablesRepository().findAllCashewGradesDTO();		
 	}
-	
-	public List<CityDTO> getAllCitiesDTO() {
-		return getValueTablesRepository().findAllCitiesDTO();
-	}	
-	
-	public Map<String, List<CityDTO>> getCitiesByCountry() {		
-		return getValueTablesRepository().findAllCitiesDTO().stream()
-				.collect(Collectors.groupingBy(city -> city.getCountryName()));
-	}	
-	
-	public List<BankBranchDTO> getAllBankBranchesDTO() {
-		return getValueTablesRepository().findAllBankBranchesDTO();
+
+	public List<BasicValueEntity<ContractType>> getAllContractTypesBasic() {
+		return getValueTablesRepository().findAllContractTypesDTO(SupplyGroup.values());
 	}
 	
-//---------------------------Basic values---------------------------------------------------
+	public List<BasicValueEntity<ContractType>> getCashewContractTypesBasic() {
+		return getValueTablesRepository().findAllContractTypesDTO(new SupplyGroup[]{SupplyGroup.CASHEW});
+	}
+	
+	public List<BasicValueEntity<ContractType>> getGeneralContractTypesBasic() {
+		return getValueTablesRepository().findAllContractTypesDTO(new SupplyGroup[]{SupplyGroup.GENERAL});
+	}
+
 	
 	/**
 	 * Get a list of all suppliers basic information -  id, name and version.
@@ -235,7 +234,6 @@ public class ValueTablesReader {
 	 * @param category ItemCategory
 	 * @return List of BasicValueEntity of CASHEW items that belong to given category.
 	 */
-//	@Transactional(readOnly = true)
 	public List<BasicValueEntity<Item>> getBasicItemsByPrudoctionUse(ProductionUse productionUse) {
 		return getValueTablesRepository().findBasicItems(null, productionUse);
 	}
@@ -251,18 +249,5 @@ public class ValueTablesReader {
 	public List<ItemDTO> getProductBillOfMaterials(Integer product, ItemGroup itemGroup, ProductionUse productionUse) {
 		return getValueTablesRepository().findProductBillOfMaterials(product, itemGroup, productionUse);
 	}
-	
-	public List<ProductionLineBasic> getAllBasicProductionLines() {
-		return getValueTablesRepository().findBasicProductionLines(ProductionFunctionality.values());
-	}
-	
-	public List<ProductionLineBasic> getAllBasicProductionLinesByFuncionality(ProductionFunctionality[] functionalities) {
-		return getValueTablesRepository().findBasicProductionLines(functionalities);
-	}
-	
-	
-	
-	
-
 	
 }

@@ -13,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.ObjectWithNameInterface;
+import com.avc.mis.beta.entities.link.ContactDetails;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;

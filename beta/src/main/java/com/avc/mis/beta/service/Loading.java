@@ -26,6 +26,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
+ * Service for accessing and manipulating shipping container loadings.
+ * 
  * @author zvi
  *
  */
@@ -84,14 +86,6 @@ public class Loading {
 		
 		loadingDTO.setPoProcessInfo(getContainerLoadingRepository()
 				.findPoProcessInfoByProcessId(processId, ContainerLoading.class).orElse(null));
-//		loadingDTO.setStorageMovesGroups(
-//				CollectionItemWithGroup.getFilledGroups(
-//						getContainerLoadingRepository()
-//						.findStorageMovesWithGroup(processId)));
-//		loadingDTO.setItemCounts(
-//				CollectionItemWithGroup.getFilledGroups(
-//						getContainerLoadingRepository()
-//						.findItemCountWithAmount(processId)));
 		getProcessReader().setRelocationProcessCollections(loadingDTO);
 		
 		loadingDTO.setLoadedItems(getContainerLoadingRepository().findLoadedItems(processId));
@@ -118,20 +112,25 @@ public class Loading {
 
 	//----------------------------Duplicate in LoadingReports - Should remove------------------------------------------
 
+	@Deprecated
 	@Autowired private LoadingReports loadingReports;
 
+	@Deprecated
 	public List<LoadingRow> getLoadings() {
 		return getLoadingsByPoCode(null);
 	}
 	
+	@Deprecated
 	public List<LoadingRow> getLoadingsByPoCode(Integer poCodeId) {		
 		return getLoadingReports().getLoadingsByPoCode(poCodeId);
 	}
 	
+	@Deprecated
 	public InventoryExportDoc getInventoryExportDoc(int processId) {
 		return getLoadingReports().getInventoryExportDoc(processId);		
 	}
 	
+	@Deprecated
 	public SecurityExportDoc getSecurityExportDoc(int processId) {
 		return getLoadingReports().getSecurityExportDoc(processId);		
 	}

@@ -34,4 +34,19 @@ public class EmailDTO extends SubjectDataDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return Email.class;
 	}
+	
+	@Override
+	public Email fillEntity(Object entity) {
+		Email emailEntity;
+		if(entity instanceof Email) {
+			emailEntity = (Email) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be Email class");
+		}
+		super.fillEntity(emailEntity);
+		emailEntity.setValue(getValue());;
+		return emailEntity;
+	}
+
 }

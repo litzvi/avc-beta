@@ -10,6 +10,8 @@ import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import lombok.Data;
 
 /**
+ * Inventory balance per item with total weight.
+ * 
  * @author zvi
  *
  */

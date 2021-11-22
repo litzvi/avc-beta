@@ -27,6 +27,8 @@ import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * Row in list of production report.
+ * 
  * @author zvi
  *
  */
@@ -44,11 +46,9 @@ public class ProcessRow extends BasicDTO {
 
 	private String processName;
 	private String productionLine;
-//	private PoCodeBasic poCode;//should be removed
 	private int[] poCodeIds;
 	private String[] poCodes;
 	private String[] suppliers;
-//	private String supplierName;//should be removed
 	private LocalDateTime recordedTime;
 	private LocalTime startTime;
 	private LocalTime endTime;
@@ -68,7 +68,6 @@ public class ProcessRow extends BasicDTO {
 	@JsonIgnore private Optional<AmountWithUnit> countAmounts;
 	
 	public ProcessRow(@NonNull Integer id, String processName, String productionLine, 
-//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName, String display,
 			String poCodeIds, String poCodes, String suppliers,
 			LocalDateTime recordedTime, 
 			LocalTime startTime, LocalTime endTime, Duration downtime, Integer numOfWorkers, 
@@ -76,15 +75,12 @@ public class ProcessRow extends BasicDTO {
 		super(id);
 		this.processName = processName;
 		this.productionLine = productionLine;
-//		if(poCodeId != null)
-//			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName, display);
 		if(poCodeIds != null)
 			this.poCodeIds = Stream.of(poCodeIds.split(",")).mapToInt(j -> Integer.valueOf(j)).toArray();
 		if(poCodes != null)
 			this.poCodes = Stream.of(poCodes.split(",")).toArray(String[]::new);
 		if(suppliers != null)
 			this.suppliers = Stream.of(suppliers.split(",")).toArray(String[]::new);
-//		this.supplierName = supplierName;
 		this.recordedTime = recordedTime;
 		this.startTime = startTime;
 		this.endTime = endTime;
@@ -104,9 +100,6 @@ public class ProcessRow extends BasicDTO {
 		this.usedItems = usedItems;
 		if(usedItems != null) {
 			this.usedAmounts = ProductionProcessWithItemAmount.getWeightSum(usedItems);
-//			this.usedAmounts = getUsedItems().stream()
-//					.map(i -> i.getWeight()[0])
-//					.reduce(AmountWithUnit::add);
 		}
 	}
 	
@@ -114,9 +107,6 @@ public class ProcessRow extends BasicDTO {
 		this.producedItems = producedItems;
 		if(producedItems != null) {
 			this.producedAmounts = ProductionProcessWithItemAmount.getWeightSum(producedItems);
-//			this.producedAmounts = getProducedItems().stream()
-//					.map(i -> i.getWeight()[0])
-//					.reduce(AmountWithUnit::add);
 		}
 	}
 
@@ -124,9 +114,6 @@ public class ProcessRow extends BasicDTO {
 		this.itemCounts = itemCounts;
 		if(itemCounts != null) {
 			this.countAmounts = ProductionProcessWithItemAmount.getWeightSum(itemCounts);
-//			this.countAmounts = getItemCounts().stream()
-//					.map(i -> i.getWeight()[0])
-//					.reduce(AmountWithUnit::add);
 		}
 	}
 	

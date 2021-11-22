@@ -16,15 +16,17 @@ import lombok.ToString;
 /**
  * DTO's represent the information of the entities, to be presented and used.
  * The reasons for using DTOs rather than sending the entities themselves are:
- * 1. Avoid sending unnecessary data of the entity and adjust the way to present it. 
+ * 1. Decouple presentation and sent forms from entity structure and design.
+ * 2. Release User/Front End from adjusting data to Entity/Database structure.
+ * 3. Avoid sending unnecessary data of the entity and adjust the way to present it. 
  * 		e.g. avoid list that aren't needed, present Enums as Strings etc.
- * 2. Structured way to fetch data needed, when it is lazily loaded by the persistence provider.
+ * 4. Structured way to fetch data needed, when it is lazily loaded by the persistence provider.
  * 		e.g. list of phones lazily loaded is fetched while building the DTO (see 5).
- * 3. Can be used for comparing entities while testing, without affecting entity class behavior.
+ * 5. Can be used for comparing entities while testing, without affecting entity class behavior.
  * 		e.g. ignore id value for comparing inserted entity to actual entity from DB.
- * 4. Tune the queries to fetch only the necessary data with select constructors ('select new DTO())'.
+ * 6. Tune the queries to fetch only the necessary data with select constructors ('select new DTO())'.
  * 		e.g. only basic supplier info needed when getting a purchase order.
- * 5. Control join fetch all cross-table data efficiently with 'select new DTO()'.
+ * 7. Control join fetch all cross-table data efficiently with 'select new DTO()'.
  *
  * Entity DTO base class which all entity DTO's inherit from. contains an ID.
  * 
@@ -40,7 +42,7 @@ public abstract class BaseEntityDTO {
 	@EqualsAndHashCode.Include
 	private Integer id;
 	
-	public BaseEntityDTO(BaseEntity entity) {
+	BaseEntityDTO(BaseEntity entity) {
 		this.id = entity.getId();
 	}
 
@@ -57,10 +59,6 @@ public abstract class BaseEntityDTO {
 	    if (o == this) return true;
 	    if (!(o instanceof BaseEntityDTO)) return false;
 	    BaseEntityDTO other = (BaseEntityDTO) o;
-	    
-	    //Exclusively one is null so they are equal (objects with this id can equal)
-//	    if(this.getId() == null ^ other.getId() == null) 
-//	    	return true;
 	    
 	    if(this.getId() != null && other.getId() != null) { //both not null compare with id
 	    	return this.getId().equals(other.getId());
@@ -82,16 +80,19 @@ public abstract class BaseEntityDTO {
 		return PRIME;
 	}
 	
-	public static <E extends BaseEntity> E getNewEntity(Class<E> clazz) {
-		try {
-			return clazz.getConstructor().newInstance();
-		} catch (Exception e) {
-			throw new IllegalArgumentException("Can't initiate new Entity");
-		}
-	}
-	
+	/**
+	 * Couples a dto with an entity class. 
+	 * Might be used for crating new entity, when calling fillEntity.
+	 * @return Class of entity associated with this dto.
+	 */
 	public abstract Class<? extends BaseEntity> getEntityClass();
 
+	/**
+	 * Fill given entity object with data derived from this dto.
+	 * Used for checking and filling entity with data contained in this dto before persisting.
+	 * @param entity object to fill
+	 * @return Given entity with filled data.
+	 */
 	@JsonIgnore
 	public BaseEntity fillEntity(Object entity) {
 		BaseEntity baseEntity;
@@ -104,8 +105,5 @@ public abstract class BaseEntityDTO {
 		baseEntity.setId(getId());
 		return baseEntity;
 	}
-
-
-
 
 }

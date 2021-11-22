@@ -17,6 +17,7 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.ValueInterface;
 import com.avc.mis.beta.entities.process.ContainerLoading;
 import com.avc.mis.beta.entities.values.ShippingPort;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,17 +42,10 @@ import lombok.ToString;
 @Entity
 @Table(name = "SHIPMENT_CODES", uniqueConstraints = 
 	{ @UniqueConstraint(columnNames = { "code", "portOfDischargeId" }) })
-public class ShipmentCode extends BaseEntity {
+public class ShipmentCode extends BaseEntity implements ValueInterface {
 
-//	@EqualsAndHashCode.Include
-//	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-//	private Integer id;
-
-//	@Id
-//	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
-//	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
+	@NotNull(message = "code is mandatory")
 	@Column(nullable = false, updatable = false)
-//	@EqualsAndHashCode.Include
 	private String code;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

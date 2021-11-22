@@ -40,4 +40,18 @@ public class PhoneDTO extends SubjectDataDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return Phone.class;
 	}
+	
+	@Override
+	public Phone fillEntity(Object entity) {
+		Phone phoneEntity;
+		if(entity instanceof Phone) {
+			phoneEntity = (Phone) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be Phone class");
+		}
+		super.fillEntity(phoneEntity);
+		phoneEntity.setValue(getValue());;
+		return phoneEntity;
+	}
 }

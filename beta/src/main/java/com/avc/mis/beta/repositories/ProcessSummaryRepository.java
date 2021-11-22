@@ -16,8 +16,8 @@ import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
+import com.avc.mis.beta.entities.enums.ProductionUse;
 import com.avc.mis.beta.entities.enums.QcCompany;
-import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.utilities.KeyValueObject;
 
 /**
@@ -84,14 +84,6 @@ public interface ProcessSummaryRepository {
 			+ "left join p.poCode p_po_code "
 			+ "left join p.weightedPos w_po "
 				+ "left join w_po.poCode w_po_code "
-//				+ "join BasePoCode po_code "
-//					+ "on (po_code = p_po_code or po_code = w_po_code) "
-//							+ "join pi.process u_p "
-//								+ "left join u_p.poCode p_po_code "
-//								+ "left join u_p.weightedPos w_po "
-//									+ "left join w_po.poCode w_po_code "
-//									+ "join BasePoCode po_code "
-//										+ "on (po_code = p_po_code or po_code = w_po_code) "
 		+ "where "
 			+ "p.id in :processIds "
 			+ "and ("
@@ -106,7 +98,6 @@ public interface ProcessSummaryRepository {
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
 			+ "SUM( "
 				+ "((sf.numberUnits * coalesce(sf.unitAmount, 1)) * uom.multiplicand / uom.divisor) "
-//				+ " * coalesce(w_po.weight, 1))"
 				+ "), "
 			+ "coalesce(w_po.weight, 1) "
 			+ ")"
@@ -120,8 +111,6 @@ public interface ProcessSummaryRepository {
 				+ "left join p.poCode p_po_code "
 				+ "left join p.weightedPos w_po "
 					+ "left join w_po.poCode w_po_code "
-//					+ "join BasePoCode po_code "
-//						+ "on (po_code = p_po_code or po_code = w_po_code) "
 		+ "where "
 			+ "p.id in :processIds "
 			+ "and ("
@@ -220,7 +209,7 @@ public interface ProcessSummaryRepository {
 								+ "left join p_used_item.poCode po_code_used_item "
 								+ "left join p_used_item.weightedPos w_po_used_item "
 									+ "left join w_po_used_item.poCode w_po_code_used_item "
-								+ "join PoCode po_code "
+								+ "join ProductPoCode po_code "
 									+ "on (po_code = po_code_used_item or po_code = w_po_code_used_item) "
 						+ "join UOM uom "
 							+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "

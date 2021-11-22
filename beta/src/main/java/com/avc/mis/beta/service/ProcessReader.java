@@ -10,21 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.GeneralProcessDTO;
-import com.avc.mis.beta.dto.PoProcessDTO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
+import com.avc.mis.beta.dto.process.GeneralProcessDTO;
+import com.avc.mis.beta.dto.process.PoProcessDTO;
 import com.avc.mis.beta.dto.process.ProcessWithProductDTO;
 import com.avc.mis.beta.dto.process.RelocationProcessDTO;
 import com.avc.mis.beta.dto.process.TransactionProcessDTO;
-import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
-import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
-import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
-import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
-import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
+import com.avc.mis.beta.dto.process.group.ItemCountDTO;
+import com.avc.mis.beta.dto.process.group.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.group.StorageMovesGroupDTO;
+import com.avc.mis.beta.dto.process.group.UsedItemsGroupDTO;
 import com.avc.mis.beta.dto.query.ItemCountWithAmount;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
+import com.avc.mis.beta.dto.system.WeightedPoDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
@@ -85,10 +85,6 @@ public class ProcessReader {
 	 * @param processDTO ProcessWithProductDTO with id set inside
 	 */
 	void setProcessWithProductCollections(ProcessWithProductDTO<ProcessItemDTO> processDTO) {
-//		processDTO.setProcessItems(
-//				CollectionItemWithGroup.getFilledGroups(
-//						getProcessInfoRepository()
-//						.findProcessItemWithStorage(processDTO.getId())));
 		processDTO.setProcessItems(
 				CollectionItemWithGroup.getFilledGroups(
 						getProcessInfoRepository()
@@ -138,7 +134,6 @@ public class ProcessReader {
 	 */
 	public GeneralProcessDTO getProcess(int processId, ProcessName processName) {
 		
-//		ProcessName processName = Enum.valueOf(ProcessName.class, processTypeName);
 		switch(processName) {
 		case CASHEW_ORDER:
 		case GENERAL_ORDER:

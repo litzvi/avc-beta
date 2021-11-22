@@ -7,16 +7,18 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Data;
 import lombok.NonNull;
 
 /**
+ * Row in list of inventory with ordered balance report.
+ * 
  * @author zvi
  *
  */
@@ -24,9 +26,7 @@ import lombok.NonNull;
 public class ItemInventoryAmountWithOrder {
 	
 	private BasicValueEntity<Item> item;
-
 	private AmountWithUnit inventoryAmount;
-
 	private AmountWithUnit orderedAmount;
 	
 	public ItemInventoryAmountWithOrder(@NonNull BasicValueEntity<Item> item) {

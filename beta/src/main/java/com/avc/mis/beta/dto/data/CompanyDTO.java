@@ -3,14 +3,16 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.DataDTO;
+import com.avc.mis.beta.dto.link.ContactDetailsDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
+import com.avc.mis.beta.entities.link.ContactDetails;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -58,7 +60,7 @@ public class CompanyDTO extends DataDTO {
 		 * but needed for creating DTO from detached object
 		 */
 		if(hasContacts && company.getCompanyContacts() != null)
-			Arrays.stream(company.getCompanyContacts())
+			company.getCompanyContacts().stream()
 				.forEach((contact) -> this.companyContacts.add(new CompanyContactDTO(contact)));
 	}
 	
@@ -74,5 +76,32 @@ public class CompanyDTO extends DataDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return Company.class;
 	}
+	
+	@Override
+	public Company fillEntity(Object entity) {
+		Company companyEntity;
+		if(entity instanceof Company) {
+			companyEntity = (Company) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be Company class");
+		}
+		super.fillEntity(companyEntity);
+		companyEntity.setName(getName());
+		companyEntity.setLocalName(getLocalName());
+		companyEntity.setEnglishName(getEnglishName());
+		companyEntity.setLicense(getLicense());
+		companyEntity.setTaxCode(getTaxCode());
+		companyEntity.setRegistrationLocation(getRegistrationLocation());
+		if(getContactDetails() != null) {
+			companyEntity.setContactDetails(getContactDetails().fillEntity(new ContactDetails()));
+		}
+		if(getCompanyContacts() != null) {
+			companyEntity.setCompanyContacts(getCompanyContacts().stream().map(i -> i.fillEntity(new CompanyContact())).collect(Collectors.toSet()));
+		}
+		
+		return companyEntity;
+	}
+
 	
 }

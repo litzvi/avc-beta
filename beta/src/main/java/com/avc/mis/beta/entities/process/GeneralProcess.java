@@ -26,11 +26,11 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.AuditedEntity;
-import com.avc.mis.beta.entities.data.ProcessFile;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.Shift;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
-import com.avc.mis.beta.entities.process.collection.UserMessage;
+import com.avc.mis.beta.entities.process.collectionItems.ProcessFile;
+import com.avc.mis.beta.entities.system.ApprovalTask;
+import com.avc.mis.beta.entities.system.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
 import com.avc.mis.beta.validation.groups.OnPersist;

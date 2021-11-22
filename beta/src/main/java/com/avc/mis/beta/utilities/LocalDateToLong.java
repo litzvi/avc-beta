@@ -9,6 +9,8 @@ import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 /**
+ * Converts local date to long and vice versa, for recording and fetching from database respectively.
+ * 
  * @author Zvi
  *
  */
@@ -26,7 +28,6 @@ public class LocalDateToLong implements AttributeConverter<LocalDate, Long> {
 
     @Override
     public LocalDate convertToEntityAttribute(Long epochDay) {
-        // TODO Auto-generated method stub
         if (epochDay != null) {
             LocalDate date = LocalDate.ofEpochDay(epochDay);
             return date;

@@ -17,9 +17,9 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.process.collection.ItemCount;
-import com.avc.mis.beta.entities.process.collection.ProcessParent;
-import com.avc.mis.beta.entities.process.collection.WeightedPo;
+import com.avc.mis.beta.entities.process.group.ItemCount;
+import com.avc.mis.beta.entities.system.ProcessParent;
+import com.avc.mis.beta.entities.system.WeightedPo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
@@ -47,7 +47,6 @@ public abstract class PoProcess extends GeneralProcess {
 	private BasePoCode poCode;
 	
 	@Setter(value = AccessLevel.NONE) 
-//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", 
 		cascade = {CascadeType.REMOVE}, 
 		fetch = FetchType.LAZY)
@@ -63,37 +62,10 @@ public abstract class PoProcess extends GeneralProcess {
 	@OneToMany(mappedBy = "usedProcess", cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<ProcessParent> processChildren;
 		
-	@Setter(value = AccessLevel.NONE) 
-//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<ItemCount> itemCounts = new HashSet<>();
 
-//	public WeightedPo[] getWeightedPos() {
-//		if(this.weightedPos == null)
-//			return null;
-//		WeightedPo[] weightedPos = this.weightedPos.toArray(new WeightedPo[this.weightedPos.size()]);
-//		Arrays.sort(weightedPos, Ordinal.ordinalComparator());
-//		return weightedPos;
-//	}
-
-//	public void setWeightedPos(Set<WeightedPo> weightedPos) {
-////		Ordinal.setOrdinals(weightedPos);
-//		this.weightedPos = Insertable.setReferences(weightedPos, (t) -> {t.setReference(this);	return t;});
-//	}
-
-	
-	/**
-	 * Gets the list of Item counts as an array (can be ordered).
-	 * @return the itemCounts
-	 */
-//	public ItemCount[] getItemCounts() {
-//		if(this.itemCounts == null || this.itemCounts.isEmpty())
-//			return null;
-//		ItemCount[] itemCounts = this.itemCounts.toArray(new ItemCount[this.itemCounts.size()]);
-//		Arrays.sort(itemCounts, Ordinal.ordinalComparator());
-//		return itemCounts;
-//	}
 
 	/**
 	 * Setter for adding item counts, 

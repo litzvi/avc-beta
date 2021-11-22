@@ -3,13 +3,14 @@
  */
 package com.avc.mis.beta.dto.basic;
 
-import com.avc.mis.beta.entities.codes.BasePoCode;
-
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import lombok.Value;
 
 /**
+ * Shows partial information of a po code, including product company.
+ * Used for reference and display.
+ * 
  * @author zvi
  *
  */
@@ -26,8 +27,4 @@ public class PoCodeBasicWithProductCompany extends PoCodeBasic {
 		this.productCompanyName = productCompanyName;
 	}
 	
-	public PoCodeBasicWithProductCompany(BasePoCode poCode) {
-		super(poCode);
-		this.productCompanyName = poCode.getProductCompany() != null ? poCode.getProductCompany().getName(): null;
-	}
 }

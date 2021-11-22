@@ -25,9 +25,9 @@ import com.avc.mis.beta.dto.report.ProcessStateInfo;
 import com.avc.mis.beta.dto.report.ProductionReportLine;
 import com.avc.mis.beta.dto.report.QcReportLine;
 import com.avc.mis.beta.dto.report.ReceiptReportLine;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.QcCompany;
-import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.ProcessSummaryRepository;
 import com.avc.mis.beta.repositories.SupplierRepository;
@@ -39,6 +39,8 @@ import lombok.Getter;
 import lombok.NonNull;
 
 /**
+ * Service for getting po process summary information. e.g. final report etc.
+ * 
  * @author zvi
  *
  */

@@ -22,7 +22,7 @@ import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.ValueInterface;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.process.PoProcess;
-import com.avc.mis.beta.entities.process.collection.WeightedPo;
+import com.avc.mis.beta.entities.system.WeightedPo;
 import com.avc.mis.beta.entities.values.ContractType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -49,10 +49,6 @@ import lombok.ToString;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class BasePoCode extends BaseEntity implements ValueInterface {
 
-//	@Id
-//	@GenericGenerator(name = "UseExistingIdOtherwiseGenerateUsingIdentity", strategy = "com.avc.mis.beta.utilities.UseExistingIdOtherwiseGenerateUsingIdentity")
-//	@GeneratedValue(generator = "UseExistingIdOtherwiseGenerateUsingIdentity")
-//	@Column(nullable = false, updatable = false, unique = true)
 	@NotNull(message = "code is mandatory")
 	@Column(updatable = false, nullable = false)
 	private String code;

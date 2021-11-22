@@ -23,6 +23,8 @@ import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * Basic user information used for access security.
+ * 
  * @author Zvi
  *
  */
@@ -46,6 +48,13 @@ public class UserLogin extends DataDTO implements UserDetails {
 	}
 	
 	public UserLogin(@NonNull UserEntity user) {
+		super(user.getId(), user.getVersion());
+		this.username = user.getUsername();
+		this.password = user.getPassword();
+		authorities = user.getRoles().stream().map(u->new SimpleGrantedAuthority(u.name())).collect(Collectors.toList());
+	}
+	
+	public UserLogin(@NonNull UserDTO user) {
 		super(user.getId(), user.getVersion());
 		this.username = user.getUsername();
 		this.password = user.getPassword();

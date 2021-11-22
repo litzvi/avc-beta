@@ -11,6 +11,11 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
+ * DTO for non entities. e.g. view, query and reports.
+ * Contain a version to be used for reference in persistence context.
+ * Not inserted by users, therefore id won't be null.
+ * Will typically (also) compare ids for comparing 2 objects of the same class.
+ * 
  * @author zvi
  *
  */

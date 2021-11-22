@@ -14,12 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessDAO;
-import com.avc.mis.beta.dto.plan.ProcessItemPlanDTO;
-import com.avc.mis.beta.dto.plan.ProductionPlanDTO;
-import com.avc.mis.beta.dto.plan.ProductionPlanRowDTO;
-import com.avc.mis.beta.dto.plan.UsedItemPlanDTO;
+import com.avc.mis.beta.dto.process.ProductionPlanDTO;
+import com.avc.mis.beta.dto.process.collectionItems.ProcessItemPlanDTO;
+import com.avc.mis.beta.dto.process.collectionItems.UsedItemPlanDTO;
+import com.avc.mis.beta.dto.process.group.ProductionPlanRowDTO;
 import com.avc.mis.beta.entities.enums.ProcessName;
-import com.avc.mis.beta.entities.plan.ProductionPlan;
+import com.avc.mis.beta.entities.process.ProductionPlan;
 import com.avc.mis.beta.repositories.ProductionPlanRepository;
 
 import lombok.AccessLevel;

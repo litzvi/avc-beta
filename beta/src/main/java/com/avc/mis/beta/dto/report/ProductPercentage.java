@@ -8,6 +8,8 @@ import java.math.BigDecimal;
 import lombok.Value;
 
 /**
+ * Losses during a process.
+ * 
  * @author zvi
  *
  */

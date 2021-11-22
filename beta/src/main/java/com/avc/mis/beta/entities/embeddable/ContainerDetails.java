@@ -16,6 +16,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * Shipping container details.
+ * 
  * @author Zvi
  *
  */

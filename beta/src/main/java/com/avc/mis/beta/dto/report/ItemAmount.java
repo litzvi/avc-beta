@@ -10,12 +10,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.enums.ProductionUse;
+import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
@@ -24,6 +24,9 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
+ * Item with amount and weight.
+ * Used in multiple reports to show an item balance.
+ * 
  * @author zvi
  *
  */

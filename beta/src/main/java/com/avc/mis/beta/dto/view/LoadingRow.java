@@ -24,6 +24,8 @@ import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * Row in list of container loadings report.
+ * 
  * @author zvi
  *
  */
@@ -84,7 +86,6 @@ public class LoadingRow extends BasicDTO {
 	public void setLoadedTotals(List<ContainerPoItemRow> loadedTotals) {
 		this.loadedTotals = loadedTotals;
 		if(poCodes == null && loadedTotals != null) {
-//			this.poCodes= null;
 			loadedTotals.forEach(i -> this.poCodes = ArrayUtils.addAll(this.poCodes, i.getPoCodes()));
 		}
 	}

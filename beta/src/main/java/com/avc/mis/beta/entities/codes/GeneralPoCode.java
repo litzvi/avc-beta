@@ -15,6 +15,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
+ * PO code used for general orders
+ * 
  * @author zvi
  *
  */

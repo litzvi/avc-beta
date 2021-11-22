@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.query.BomProductWithMaterialLine;
 import com.avc.mis.beta.entities.LinkEntity;
-import com.avc.mis.beta.entities.item.BillOfMaterials;
+import com.avc.mis.beta.entities.link.BillOfMaterials;
 
 /**
  * @author Zvi

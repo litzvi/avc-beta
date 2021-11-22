@@ -18,6 +18,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * Raw cashew kernel defect characteristics.
+ * 
  * @author Zvi
  *
  */

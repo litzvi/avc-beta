@@ -12,15 +12,18 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
-import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.codes.GeneralPoCodeDTO;
+import com.avc.mis.beta.dto.codes.PoCodeDTO;
+import com.avc.mis.beta.dto.codes.ProductPoCodeDTO;
+import com.avc.mis.beta.dto.codes.ShipmentCodeDTO;
+import com.avc.mis.beta.dto.process.collectionItems.ProcessFileDTO;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.MixPoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.codes.ProductPoCode;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
-import com.avc.mis.beta.entities.data.ProcessFile;
 import com.avc.mis.beta.entities.enums.SequenceIdentifier;
 import com.avc.mis.beta.entities.process.GeneralProcess;
+import com.avc.mis.beta.entities.process.collectionItems.ProcessFile;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 import com.avc.mis.beta.utilities.ProgramSequence;
 
@@ -40,13 +43,13 @@ public class ObjectWriter {
 	@Autowired private ObjectTablesRepository objectTablesRepository;
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addPoCode(PoCode poCode) {
-		dao.addEntity(poCode);
+	public Integer addPoCode(ProductPoCodeDTO poCode) {
+		return dao.addEntity(poCode, ProductPoCode::new);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addPoCode(GeneralPoCode poCode) {
-		dao.addEntity(poCode);
+	public Integer addPoCode(GeneralPoCodeDTO poCode) {
+		return dao.addEntity(poCode, GeneralPoCode::new);
 	}
 	
 	public PoCodeDTO getPoCode(int poCodeId) {
@@ -56,23 +59,27 @@ public class ObjectWriter {
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editPoCode(PoCode poCode) {
-		dao.editEntity(poCode);
+	public void editPoCode(ProductPoCodeDTO poCode) {
+		dao.editEntity(poCode, ProductPoCode::new);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editPoCode(GeneralPoCode poCode) {
-		dao.editEntity(poCode);
+	public void editPoCode(GeneralPoCodeDTO poCode) {
+		dao.editEntity(poCode, GeneralPoCode::new);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void addShipmentCode(ShipmentCode shipmentCode) {
-		dao.addEntity(shipmentCode);
+	public Integer addShipmentCode(ShipmentCodeDTO shipmentCode) {
+		return dao.addEntity(shipmentCode.fillEntity(new ShipmentCode()));
+	}
+	
+	public ShipmentCodeDTO getShipmentCode(Integer shipmentCodeId) {
+		return objectTablesRepository.findShipmentCode(shipmentCodeId);
 	}
 
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)
-	public void editShipmentCode(ShipmentCode shipmentCode) {
-		dao.editEntity(shipmentCode);
+	public void editShipmentCode(ShipmentCodeDTO shipmentCode) {
+		dao.editEntity(shipmentCode.fillEntity(new ShipmentCode()));
 	}	
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false)

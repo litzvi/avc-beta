@@ -35,6 +35,11 @@ public class BankBranch extends ValueEntity {
 	private Bank bank;
 	
 	@Override
+	public Bank getReference() {
+		return getBank();
+	}
+	
+	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof Bank) {
 			this.setBank((Bank)referenced);

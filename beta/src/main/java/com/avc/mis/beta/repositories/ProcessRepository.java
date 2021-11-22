@@ -8,18 +8,18 @@ import java.util.Set;
 import org.springframework.data.jpa.repository.Query;
 
 import com.avc.mis.beta.dto.basic.ProcessBasic;
-import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
-import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
-import com.avc.mis.beta.dto.processInfo.GeneralProcessInfo;
+import com.avc.mis.beta.dto.process.collectionItems.ProcessFileDTO;
+import com.avc.mis.beta.dto.process.info.GeneralProcessInfo;
 import com.avc.mis.beta.dto.query.ProcessItemWithStorage;
 import com.avc.mis.beta.dto.query.UsedItemWithGroup;
+import com.avc.mis.beta.dto.system.WeightedPoDTO;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PoProcess;
-import com.avc.mis.beta.entities.process.collection.ProcessParent;
-import com.avc.mis.beta.entities.process.collection.WeightedPo;
+import com.avc.mis.beta.entities.system.ProcessParent;
+import com.avc.mis.beta.entities.system.WeightedPo;
 
 import lombok.NonNull;
 
@@ -29,19 +29,12 @@ import lombok.NonNull;
  */
 interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> {
 	
-	@Query("select new com.avc.mis.beta.dto.processInfo.GeneralProcessInfo("
+	@Query("select new com.avc.mis.beta.dto.process.info.GeneralProcessInfo("
 			+ "r.id, r.version, r.createdDate, p_user.username, "
 			+ "pt.processName, p_line.id, p_line.value, p_line.productionFunctionality, "
 			+ "r.recordedTime, r.shift, r.startTime, r.endTime, r.downtime, r.numOfWorkers, r.personInCharge, "
 			+ "lc.processStatus, lc.editStatus, r.remarks, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(u.username, ':', approval.decision)))) "
-//			+ "function('GROUP_CONCAT', function('DISTINCT', "
-//				+ "(CASE "
-//					+ "WHEN u is null THEN '' "
-//					+ "WHEN approval is null THEN concat(u.username, ':', 'NOT ATTENDED') "
-//					+ "ELSE concat(u.username, ':', approval.decision) "
-//				+ "END))"
-//			+ ")) "
 		+ "from GeneralProcess r "
 			+ "join r.processType pt "
 			+ "left join r.createdBy p_user "
@@ -49,18 +42,12 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 			+ "join r.lifeCycle lc "
 			+ "left join r.approvals approval "
 				+ "left join approval.user u "
-//			+ "left join ProcessManagement pm "
-//				+ "on pm.processType = r.processType "
-//					+ "and (approval is null or pm.user = approval.user) "
-//					+ "and pm.managementType = com.avc.mis.beta.entities.enums.ManagementType.APPROVAL "
-//			+ "left join UserEntity u "
-//				+ "on (u = approval.user or u = pm.user) "
 		+ "where type(r) = :clazz "
 			+ "and r.id = :processId "
 		+ "group by r ")
 	Optional<GeneralProcessInfo> findGeneralProcessInfoByProcessId(int processId, Class<? extends T> clazz);
 	
-	@Query("select new com.avc.mis.beta.dto.process.collection.ProcessFileDTO("
+	@Query("select new com.avc.mis.beta.dto.process.collectionItems.ProcessFileDTO("
 			+ "f.id, f.version, p.id, f.address, "
 			+ "f.description, f.remarks, f.createdDate, pr.name) "
 		+ "from GeneralProcess p "
@@ -129,7 +116,6 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 			+ "warehouseLocation.id, warehouseLocation.value, sf.remarks) "
 		+ "from UsedItem i "
 			+ "join i.storage sf "
-//				+ "join sf.group sf_group "
 				+ "left join sf.warehouseLocation warehouseLocation "
 				+ "join sf.processItem pi "
 					+ "join pi.item item "
@@ -166,7 +152,6 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 			+ " i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.productionUse, "
 			+ "item_unit, type(item), sf_group.measureUnit, "
-//			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, poCode.display, "
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "sf.unitAmount, sf.numberUnits, "
 //			+ "sf.accessWeight, "
@@ -176,19 +161,14 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 			+ "join i.item item "
 				+ "join item.unit item_unit "
 			+ "join i.process p "
-//				+ "join p.poCode poCode "
-//					+ "join poCode.contractType ct "
-//					+ "join poCode.supplier s "
 			+ "join i.storageForms sf "
 				+ "join sf.group sf_group "
 				+ "left join sf.warehouseLocation warehouseLocation "
 		+ "where p.id = :processId "
-		+ "order by i.ordinal , sf.ordinal, sf.dtype "
-//		+ ", sf.ordinal " //already sorted in dto setter for comparing between classes as well
-		+ "")
+		+ "order by i.ordinal , sf.ordinal, sf.dtype ")
 	List<ProcessItemWithStorage> findProcessItemWithStorage(int processId);
 
-	@Query("select new com.avc.mis.beta.dto.process.collection.WeightedPoDTO( "
+	@Query("select new com.avc.mis.beta.dto.system.WeightedPoDTO( "
 			+ "weighted_po.id, weighted_po.version, weighted_po.ordinal, "
 			+ "po_code.id, po_code.code, ct.code, ct.suffix, s.name,  "
 			+ "weighted_po.weight) "
@@ -238,7 +218,7 @@ interface ProcessRepository<T extends GeneralProcess> extends BaseRepository<T> 
 	 */
 	@Query("select new com.avc.mis.beta.dto.basic.ProcessBasic( "
 			+ "p.id, t.processName, type(p)) "
-		+ "from PoCode c "
+		+ "from ProductPoCode c "
 			+ "join c.processes p "
 				+ "join p.processType t "
 		+ "where c.id = :poCodeId "

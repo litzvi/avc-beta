@@ -19,6 +19,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * Shipping details, ports, dates, vessel and shipping company.
+ * 
  * @author Zvi
  *
  */
@@ -36,8 +38,6 @@ public class ShipingDetails {
 	@JoinColumn(name = "destinationPortId")
 	private ShippingPort portOfLoading;
 	
-//	@Column(nullable = false)
-//	@NotNull(message = "Estimated date of departure is mandatory")
 	@Convert(converter = LocalDateToLong.class)
 	private LocalDate etd;
 	
@@ -45,8 +45,6 @@ public class ShipingDetails {
 	@JoinColumn(name = "portOfDischargeId")
 	private ShippingPort portOfDischarge;
 
-//	@Column(nullable = false)
-//	@NotNull(message = "Estimated date of arrival is mandatory")
 	@Convert(converter = LocalDateToLong.class)
 	private LocalDate eta;
 	

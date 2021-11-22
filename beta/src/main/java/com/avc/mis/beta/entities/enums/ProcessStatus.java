@@ -8,8 +8,7 @@ package com.avc.mis.beta.entities.enums;
  *
  */
 public enum ProcessStatus {
-//	EDITABLE,
-//	LOCKED,
+
 	PENDING,
 	FINAL,
 	CANCELLED, //should also be final

@@ -14,20 +14,20 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
-import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
+import com.avc.mis.beta.dto.process.group.ReceiptItemDTO;
+import com.avc.mis.beta.dto.process.storages.ExtraAddedDTO;
 import com.avc.mis.beta.dto.query.ReceiptItemWithStorage;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.codes.ProductPoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.process.collection.OrderItem;
-import com.avc.mis.beta.entities.process.collection.ReceiptItem;
-import com.avc.mis.beta.entities.process.inventory.ExtraAdded;
+import com.avc.mis.beta.entities.process.collectionItems.OrderItem;
+import com.avc.mis.beta.entities.process.group.ReceiptItem;
+import com.avc.mis.beta.entities.process.storages.ExtraAdded;
 import com.avc.mis.beta.repositories.PORepository;
 import com.avc.mis.beta.repositories.ReceiptRepository;
 import com.avc.mis.beta.service.report.ReceiptReports;
@@ -56,16 +56,11 @@ public class Receipts {
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public Integer addCashewReceipt(ReceiptDTO receipt) {
 		receipt.setProcessName(ProcessName.CASHEW_RECEIPT);
-		return addReceipt(receipt, PoCode.class);
+		return addReceipt(receipt, ProductPoCode.class);
 	}
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public Integer addCashewOrderReceipt(ReceiptDTO receipt) {
-		//check that there wasn't another receipt for the same po - removed because can receive in parts
-//		if(dao.isPoCodeReceived(receipt.getPoCode().getId())) {
-//			throw new IllegalArgumentException("Po Code of Product can only be received once, "
-//					+ "in order to correctly reference receipt date by po code");
-//		}
 		receipt.setProcessName(ProcessName.CASHEW_RECEIPT);
 		return addOrderReceipt(receipt);
 	}
@@ -132,13 +127,6 @@ public class Receipts {
 				.orElseThrow(
 						()->new IllegalArgumentException("No po code for given process id")));
 		
-//		receiptDTO.setReceiptItems(
-//				CollectionItemWithGroup.getFilledGroups(
-//						getReceiptRepository()
-//						.findReceiptItemWithStorage(processId))
-//				.stream().map(i -> (ReceiptItemDTO)i).collect(Collectors.toList())
-//				);
-		
 		receiptDTO.setReceiptItems(
 				CollectionItemWithGroup.getFilledGroups(
 						getReceiptRepository().findReceiptItemWithStorage(processId), 
@@ -153,7 +141,6 @@ public class Receipts {
 	
 	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
 	public void editReceipt(ReceiptDTO receipt) {
-//		Receipt receipt = receiptDTO.fillEntity(new Receipt());
 		dao.checkRemovingUsedProduct(receipt);		
 		dao.editPoProcessEntity(receipt, Receipt::new);
 		dao.checkUsingProcesessConsistency(receipt);	
@@ -176,38 +163,47 @@ public class Receipts {
 	
 	//----------------------------Duplicate in ReceiptReports - Should remove------------------------------------------
 	
+	@Deprecated
 	public List<ReceiptRow> findFinalCashewReceipts() {
 		return getReceiptReports().findFinalCashewReceipts();
 	}
 
+	@Deprecated
 	public List<ReceiptRow> findFinalGeneralReceipts() {
 		return getReceiptReports().findFinalGeneralReceipts();
 	}
 	
+	@Deprecated
 	public List<ReceiptRow> findPendingCashewReceipts() {
 		return getReceiptReports().findPendingCashewReceipts();
 	}
 	
+	@Deprecated
 	public List<ReceiptRow> findPendingGeneralReceipts() {
 		return getReceiptReports().findPendingGeneralReceipts();
 	}
 	
+	@Deprecated
 	public List<ReceiptRow> findCancelledCashewReceipts() {
 		return getReceiptReports().findCancelledCashewReceipts();
 	}
 	
+	@Deprecated
 	public List<ReceiptRow> findCashewReceiptsHistory () {
 		return getReceiptReports().findCashewReceiptsHistory();
 	}
 	
+	@Deprecated
 	public List<ReceiptRow> findGeneralReceiptsHistory () {
 		return getReceiptReports().findGeneralReceiptsHistory();
 	}
 	
+	@Deprecated
 	public List<ReceiptRow> findFinalCashewReceiptsByPoCode(@NonNull Integer poCodeId) {
 		return getReceiptReports().findFinalCashewReceiptsByPoCode(poCodeId);
 	}
 	
+	@Deprecated
 	public List<ReceiptRow> findAllReceiptsByType(ProcessName[] processNames, ProcessStatus[] statuses, Integer poCodeId) {
 		return getReceiptReports().findAllReceiptsByType(processNames, statuses, poCodeId);
 	}

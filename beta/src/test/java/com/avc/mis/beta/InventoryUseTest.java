@@ -17,21 +17,15 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.process.InventoryUseDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessRow;
-import com.avc.mis.beta.entities.codes.GeneralPoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.process.InventoryUse;
-import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.Receipt;
 import com.avc.mis.beta.service.InventoryUses;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
@@ -68,7 +62,7 @@ public class InventoryUseTest {
 		PoCodeBasic poCode = new PoCodeBasic();
 		poCode.setId(receipt.getPoCode().getId());
 		inventoryUse.setPoCode(poCode);
-		inventoryUse.setProductionLine(new ProductionLineBasic(service.getProductionLine(ProductionFunctionality.GENERAL_USE)));
+		inventoryUse.setProductionLine(service.getProductionLine(ProductionFunctionality.GENERAL_USE));
 
 
 		//get inventory storages for use
@@ -123,7 +117,7 @@ public class InventoryUseTest {
 		PoCodeBasic poCode = new PoCodeBasic();
 		poCode.setId(receipt.getPoCode().getId());
 		inventoryUse.setPoCode(poCode);
-		inventoryUse.setProductionLine(new ProductionLineBasic(service.getProductionLine(ProductionFunctionality.PRODUCT_USE)));
+		inventoryUse.setProductionLine(service.getProductionLine(ProductionFunctionality.PRODUCT_USE));
 
 
 		//get inventory storages for use

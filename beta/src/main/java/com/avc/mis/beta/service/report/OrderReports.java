@@ -14,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.avc.mis.beta.dto.generic.ValueObject;
+import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.view.PoItemRow;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.repositories.PORepository;
 
 import lombok.AccessLevel;

@@ -17,13 +17,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
-import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.exportdoc.InventoryExportDoc;
 import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.dto.values.ShipmentCodeDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
 import com.avc.mis.beta.entities.enums.DecisionType;
@@ -82,12 +80,12 @@ public class LoadingTest {
 		
 		//test loading
 		ContainerLoadingDTO loading = new ContainerLoadingDTO();
-		loading.setProductionLine(new ProductionLineBasic(service.getProductionLine(ProductionFunctionality.LOADING)));
+		loading.setProductionLine(service.getProductionLine(ProductionFunctionality.LOADING));
 //		ContainerBooking refBooking = new ContainerBooking();
 //		refBooking.setId(booking.getId());
 //		refBooking.setVersion(booking.getVersion());
 		loading.setArrival(new ContainerArrivalBasic(actualArrival));
-		loading.setShipmentCode(new ShipmentCodeDTO(service.addShipmentCode()));
+		loading.setShipmentCode(service.addShipmentCode());
 		loading.setRecordedTime(LocalDateTime.now());
 
 		//get inventory storages for transfer

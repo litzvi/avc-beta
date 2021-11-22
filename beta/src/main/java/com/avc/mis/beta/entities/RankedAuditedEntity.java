@@ -11,6 +11,10 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
+ * Abstract class for AuditedEntity that have an order,
+ * represented by an ordinal value indicating priority between multiple entities 
+ * of the same class that are owned by the same object.
+ * 
  * @author zvi
  *
  */

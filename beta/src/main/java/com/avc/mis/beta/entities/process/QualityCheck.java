@@ -19,13 +19,11 @@ import javax.validation.constraints.NotNull;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.enums.QcCompany;
-import com.avc.mis.beta.entities.process.collection.CashewItemQuality;
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
+import com.avc.mis.beta.entities.process.collectionItems.CashewItemQuality;
+import com.avc.mis.beta.entities.process.group.ProcessItem;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
 
 /**
  * Quality Check for received raw cashew.
@@ -45,20 +43,14 @@ public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 	 */
 	public static final int SCALE = 4;	
 	
-//	private String checkedBy;
-	
-//	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	@NotNull(message = "Checked by is mandatory")
-//	@Convert(converter = QcCompanyToString.class)
 	private QcCompany checkedBy;
 
 	
 	private String inspector;
 	private String sampleTaker;
 	
-	@Setter(value = AccessLevel.NONE) 
-//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	@NotEmpty(message = "Quality check has to contain at least one testsed item")
@@ -73,8 +65,6 @@ public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 			return this.checkedBy.toString();
 		return null;
 	}
-
-
 	
 	/**
 	 * Setter for adding items that are processed, 
@@ -87,23 +77,12 @@ public class QualityCheck extends ProcessWithProduct<ProcessItem> {
 	}
 
 	/**
-	 * Gets the list of raw QC results as an array (can be ordered).
-	 * @return array of CahsewItemQuality QC info for cashew items
-	 */
-//	public CashewItemQuality[] getTestedItems() {
-//		CashewItemQuality[] testedItems = this.testedItems.toArray(new CashewItemQuality[this.testedItems.size()]);
-//		Arrays.sort(testedItems, Ordinal.ordinalComparator());
-//		return testedItems;
-//	}
-
-	/**
 	 * Setter for adding items that where tested, 
 	 * receives an array (which can be ordered, for later use to add an order to the items).
 	 * Filters the not legal items and set needed references to satisfy needed foreign keys of database.
 	 * @param testedItems the testedItems to set
 	 */
 	public void setTestedItems(Set<CashewItemQuality> testedItems) {
-//		Ordinal.setOrdinals(testedItems);
 		this.testedItems = Insertable.setReferences(testedItems, (t) -> {t.setReference(this);	return t;});
 	}
 	

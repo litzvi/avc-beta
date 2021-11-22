@@ -15,8 +15,8 @@ import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
-import com.avc.mis.beta.entities.process.collection.ReceiptItem;
+import com.avc.mis.beta.entities.process.group.ProcessItem;
+import com.avc.mis.beta.entities.process.group.ReceiptItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -50,7 +50,6 @@ public class Receipt extends ProcessWithProduct<ReceiptItem> {
 	public Set<ReceiptItem> getReceiptItems() {
 		Set<ProcessItem> processItems = super.getProcessItems();
 		return processItems.stream().map(i -> (ReceiptItem)i).collect(Collectors.toSet());
-//		return Arrays.copyOf(processItems, processItems.length, ReceiptItem[].class);
 	}
 
 	/**

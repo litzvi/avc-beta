@@ -17,14 +17,15 @@ import com.avc.mis.beta.dto.data.CompanyContactDTO;
 import com.avc.mis.beta.dto.data.PaymentAccountDTO;
 import com.avc.mis.beta.dto.data.PersonDTO;
 import com.avc.mis.beta.dto.data.SupplierDTO;
+import com.avc.mis.beta.dto.link.ContactDetailsDTO;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.entities.data.BankAccount;
 import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
-import com.avc.mis.beta.entities.data.ContactDetails;
 import com.avc.mis.beta.entities.data.PaymentAccount;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.link.ContactDetails;
 import com.avc.mis.beta.repositories.SupplierRepository;
 import com.avc.mis.beta.service.report.SupplierReports;
 
@@ -55,18 +56,20 @@ public class Suppliers {
 	/**
 	 * Adds (persists) the given supplier with all information - 
 	 * assumes all references and data whern't previously inserted.
-	 * @param supplier the added Supplier
+	 * @param supplierDTO the added Supplier
 	 * @throws IllegalArgumentException if supplier name isn't set or not legal.
 	 */
-	public void addSupplier(Supplier supplier) {
-		dao.addEntity(supplier);
+	public Integer addSupplier(SupplierDTO supplierDTO) {
+		Supplier supplier = supplierDTO.fillEntity(new Supplier());
+		Integer supplierId = dao.addEntity(supplier);
 		for(CompanyContact contact: supplier.getCompanyContacts()) {
 			Person person = contact.getPerson();
 			if(person.getId() == null) {
 				dao.addEntity(person);
 			}
 			dao.addEntity(contact);			
-		}		
+		}	
+		return supplierId;
 	}
 	
 	/**
@@ -103,11 +106,9 @@ public class Suppliers {
 	 * Edits supplier main (company) Information - 
 	 * local name, english name, license, tax code, registration location and supply categories
 	 * @param supplier with all Supplier editable main information set to state after edit.
-	 * @return the edited supplier
 	 */
-	public Supplier editSupplierMainInfo(Supplier supplier) {
-//		dao.editEntity(supplier);
-		return (Supplier)dao.editEntity(supplier);
+	public void editSupplierMainInfo(SupplierDTO supplier) {
+		dao.editEntity(supplier, Supplier::new);
 	}
 	
 	/**
@@ -115,7 +116,8 @@ public class Suppliers {
 	 * phones, emails, faxes address and payment accounts.
 	 * @param contactDetails with all ContactDetails editable details set to state after edit.
 	 */
-	public void editContactInfo(ContactDetails contactDetails, int companyId) {
+	public void editContactInfo(ContactDetailsDTO contactDetailsDTO, int companyId) {
+		ContactDetails contactDetails = contactDetailsDTO.fillEntity(new ContactDetails());
 		if(contactDetails.getId() == null) {
 			dao.addEntity(contactDetails, Company.class, companyId);
 		}
@@ -128,8 +130,8 @@ public class Suppliers {
 	 * Edits PaymentAccount information - ordinal and bank account
 	 * @param account with all PaymentAccount editable details set to state after edit.
 	 */
-	public void editAccount(PaymentAccount account) {
-		dao.editEntity(account);
+	public void editAccount(PaymentAccountDTO account) {
+		dao.editEntity(account, PaymentAccount::new);
 	}
 	
 	/**
@@ -138,7 +140,8 @@ public class Suppliers {
 	 * @throws IllegalArgumentException if the given CompanyContact dosen't reference a person 
 	 * or person has no qualified name.
 	 */
-	public void editContactPerson(CompanyContact contact) {
+	public void editContactPerson(CompanyContactDTO contactDTO) {
+		CompanyContact contact = contactDTO.fillEntity(new CompanyContact());
 		dao.editEntity(contact);
 		Person person = contact.getPerson();
 		if(person != null && person.getContactDetails() != null) {
@@ -155,10 +158,11 @@ public class Suppliers {
 	 * @param account with account information
 	 * @param contactId ContactDetails id of the account owner
 	 */
-	public void addAccount(PaymentAccount account, int contactId) {
-		if(account.getOrdinal() == null) {
-			account.setOrdinal(0);
+	public void addAccount(PaymentAccountDTO accountDTO, int contactId) {
+		if(accountDTO.getOrdinal() == null) {
+			accountDTO.setOrdinal(0);
 		}
+		PaymentAccount account = accountDTO.fillEntity(new PaymentAccount());
 		dao.addEntity(account, ContactDetails.class, contactId);
 	}
 	
@@ -176,7 +180,8 @@ public class Suppliers {
 	 * @param companyId id of Company the contact belongs to.
 	 * @throws IllegalArgumentException if person isn't set or has a non qualifying name.
 	 */
-	public void addContactPerson(CompanyContact contact, int companyId) {
+	public void addContactPerson(CompanyContactDTO contactDTO, int companyId) {
+		CompanyContact contact = contactDTO.fillEntity(new CompanyContact());
 		Person person = contact.getPerson();
 		if(person == null) {
 			throw new IllegalArgumentException("Company contact has to reference an existing or new person");
@@ -205,6 +210,7 @@ public class Suppliers {
 	 * to show in the table.
 	 * @return List of SupplierRow of all suppliers
 	 */
+	@Deprecated
 	@Transactional(readOnly = true)
 	public List<SupplierRow> getSuppliersTable() {
 		return getSupplierReports().getSuppliersTable();

@@ -9,7 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
+import com.avc.mis.beta.entities.process.group.ProcessItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -29,9 +29,6 @@ import lombok.ToString;
 @PrimaryKeyJoinColumn(name = "processId")
 public class ProductionProcess extends TransactionProcess<ProcessItem> {
 	
-	
-	
-	
 	/**
 	 * Setter for adding items that are processed, 
 	 * receives an array (which can be ordered, for later use to add an order to the items).
@@ -41,16 +38,6 @@ public class ProductionProcess extends TransactionProcess<ProcessItem> {
 	public void setProcessItems(Set<ProcessItem> processItems) {
 		super.setProcessItems(processItems);
 	}
-	
-	/**
-	 * Gets the list of Process Items as an array (can be ordered).
-	 * @return the processItems
-	 */
-//	@NotEmpty(message = "Has to containe at least one destination-storage-item (process item)")
-//	@Override
-//	public ProcessItem[] getProcessItems() {
-//		return super.getProcessItems();
-//	}
 	
 
 }

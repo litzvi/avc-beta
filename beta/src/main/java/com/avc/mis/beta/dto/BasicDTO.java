@@ -25,10 +25,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public abstract class BasicDTO {
+public abstract class BasicDTO<T extends BaseEntityDTO> {
 
 	@EqualsAndHashCode.Include
 	private Integer id;
+	
+	public BasicDTO(T dto) {
+		this.id = dto.getId();
+	}
 	
 	@JsonIgnore
 	public BaseEntity fillEntity(Object entity) {

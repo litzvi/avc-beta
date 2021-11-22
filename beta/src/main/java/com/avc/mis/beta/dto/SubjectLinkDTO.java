@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
+ * DTO for entities who aren't data or value entities but are rather internal program structure information, 
+ * either as glue between entities or instructions for business protocol.
+ * Also have an ordinal value indicating priority/rank between multiple entities of the same class, 
+ * owned by the same object.
  *  
  * @author Zvi
  *
@@ -29,10 +33,6 @@ public abstract class SubjectLinkDTO extends LinkDTO implements Ordinal {
 		this.ordinal = ordinal;
 	}
 	
-	public SubjectLinkDTO(Integer id) {
-		super(id);
-	}
-
 	public SubjectLinkDTO(SubjectLinkEntity entity) {
 		super(entity);
 		this.ordinal = entity.getOrdinal();

@@ -7,13 +7,15 @@ import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.Value;
 
 /**
+ * Entry in list of used/produced/count in relocation or other detailed report with gain and loss for process.
+ * 
  * @author zvi
  *
  */

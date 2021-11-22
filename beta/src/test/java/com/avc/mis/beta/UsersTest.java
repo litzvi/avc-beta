@@ -17,11 +17,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dao.DeletableDAO;
+import com.avc.mis.beta.dto.data.PersonDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.data.UserLogin;
-import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.ProcessManagement;
-import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.dto.link.ProcessManagementDTO;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.Role;
@@ -31,7 +30,6 @@ import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.Users;
-import com.avc.mis.beta.service.ValueWriter;
 
 /**
  * @author Zvi
@@ -43,7 +41,7 @@ import com.avc.mis.beta.service.ValueWriter;
 @WithUserDetails("eli")
 public class UsersTest {
 	
-	private static Integer SERIAL_NO = 1971;
+	private static Integer SERIAL_NO = 1977;
 	
 	@Autowired private Users users;
 	
@@ -66,14 +64,15 @@ public class UsersTest {
 	void usersTest() {
 
 		//insert and edit a user
-		UserEntity user = new UserEntity();
+		UserDTO user = new UserDTO();
 		user.setUsername("isral" + SERIAL_NO);
 		user.setPassword("309");
 		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		UserLogin expected;
 		expected = new UserLogin(user);
-		users.addUser(user);
-		Person p = user.getPerson();
+		Integer userId = users.addUser(user);
+		user = users.getUserById(userId);
+		PersonDTO p = user.getPerson();
 		p.setName("isssssssssral" + SERIAL_NO);
 		users.editPersonalDetails(user);
 		UserLogin actual = (UserLogin) userDetailsServiceImp.loadUserByUsername(user.getUsername());
@@ -83,16 +82,17 @@ public class UsersTest {
 		expected.setPassword(null);
 		actual.setPassword(null);
 		assertEquals(expected, actual, "failed test of adding user");
-		users.permenentlyRemoveUser(user.getId());
+		users.permenentlyRemoveUser(userId);
 		users.permenentlyRemovePerson(user.getPerson().getId());
 		
 		//insert and edit user with 2 roles
-		user = new UserEntity();
+		user = new UserDTO();
 		user.setUsername("zvi" + SERIAL_NO);
 		user.setPassword("309");
 		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		user.getRoles().add(Role.ROLE_MANAGER);
-		users.addUser(user);
+		userId = users.addUser(user);
+		user = users.getUserById(userId);
 		user.setPassword("password");
 		user.getRoles().clear();
 		expected = new UserLogin(user);
@@ -101,26 +101,27 @@ public class UsersTest {
 		expected.setPassword(null);
 		actual.setPassword(null);
 		assertEquals(expected, actual, "failed test of adding user");
-		users.permenentlyRemoveUser(user.getId());
+		users.permenentlyRemoveUser(userId);
 		if(user.getPerson() != null)
 			users.permenentlyRemovePerson(user.getPerson().getId());
 		
 		//open user for existing person and then edit password
-		user = new UserEntity();
+		user = new UserDTO();
 		user.setUsername("eli" + SERIAL_NO);
 		user.setPassword("309");
 		user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);
 		user.getRoles().add(Role.ROLE_MANAGER);
-		List<Person> persons = objectTableReader.getAllPersons();
+		List<PersonDTO> persons = objectTableReader.getAllPersons();
 		if(persons.isEmpty())
 			fail("No persons for running test of adding user to existing person");
 //		Person person = new Person();
 //		person.setId(10);
 		user.setPerson(persons.get(0));
-		users.openUserForPerson(user);
+		userId = users.openUserForPerson(user);
 		UserDTO userByusername = users.getUserByUsername("eli" + SERIAL_NO);
-		UserDTO userById = users.getUserById(user.getId());
+		UserDTO userById = users.getUserById(userId);
 		assertEquals(userByusername, userById, "Failed test fetching user by id vs. by username");
+		user = userById;
 		user.setPassword("password");
 		user.getRoles().clear();
 		expected = new UserLogin(user);
@@ -133,10 +134,10 @@ public class UsersTest {
 		//add, edit, remove processTypeAlert
 		Integer processAlertId = processInfoWriter.addProcessTypeAlert(user.getId(), 
 				ProcessName.CASHEW_ORDER, ManagementType.APPROVAL);
-		ProcessManagement processAlert = processDisplay.getProcessTypeAlert(processAlertId);
-		processInfoWriter.editProcessTypeAlert(processAlert, ManagementType.REVIEW);
+		ProcessManagementDTO processAlert = processDisplay.getProcessTypeAlert(processAlertId);
+//		processInfoWriter.editProcessTypeAlert(processAlert.getId(), ManagementType.REVIEW);
 		processInfoWriter.removeProcessTypeAlert(processAlertId);
-		processInfoWriter.removeUserMessages(user.getId());
+		processInfoWriter.removeUserMessages(userId);
 		
 		users.changePassword("309", "123");
 		users.changePassword("309", "309");

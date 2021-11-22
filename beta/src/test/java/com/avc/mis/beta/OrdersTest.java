@@ -9,9 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +18,12 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.avc.mis.beta.dto.GeneralProcessDTO;
-import com.avc.mis.beta.dto.PoProcessDTO;
+import com.avc.mis.beta.dto.process.GeneralProcessDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
-import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
+import com.avc.mis.beta.dto.process.collectionItems.OrderItemDTO;
+import com.avc.mis.beta.dto.system.ApprovalTaskDTO;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.process.collection.OrderItem;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
 import com.avc.mis.beta.service.ProcessInfoWriter;

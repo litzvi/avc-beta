@@ -32,7 +32,6 @@ public class ProductionLine extends ValueEntity {
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "productionFunctionality", nullable = false)
-//	@Column(name = "productionFunctionality")
 	@NotNull(message = "Production functionality mandatory, links production line to it's production functionality")
 	private ProductionFunctionality productionFunctionality;
 

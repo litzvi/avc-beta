@@ -3,7 +3,6 @@
  */
 package com.avc.mis.beta.repositories;
 
-import java.util.Currency;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,26 +10,27 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.Repository;
 
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.dto.values.BankDTO;
+import com.avc.mis.beta.dto.values.CashewGradeDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.dto.values.CompanyPositionDTO;
+import com.avc.mis.beta.dto.values.ContractTypeDTO;
+import com.avc.mis.beta.dto.values.CountryDTO;
+import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ProcessTypeDTO;
+import com.avc.mis.beta.dto.values.ProductionLineDTO;
+import com.avc.mis.beta.dto.values.ShippingPortDTO;
+import com.avc.mis.beta.dto.values.SupplyCategoryDTO;
+import com.avc.mis.beta.dto.values.WarehouseDTO;
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.values.Bank;
-import com.avc.mis.beta.entities.values.BankBranch;
 import com.avc.mis.beta.entities.values.CashewGrade;
-import com.avc.mis.beta.entities.values.CashewStandard;
-import com.avc.mis.beta.entities.values.City;
-import com.avc.mis.beta.entities.values.CompanyPosition;
 import com.avc.mis.beta.entities.values.ContractType;
-import com.avc.mis.beta.entities.values.Country;
 import com.avc.mis.beta.entities.values.ProcessType;
-import com.avc.mis.beta.entities.values.ProductionLine;
-import com.avc.mis.beta.entities.values.ShippingPort;
-import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.avc.mis.beta.entities.values.Warehouse;
 
 /**
@@ -45,88 +45,115 @@ import com.avc.mis.beta.entities.values.Warehouse;
 @NoRepositoryBean
 interface BaseRepository<T extends Insertable> extends Repository<T, Integer>{
 	
-	@Query("select new com.avc.mis.beta.dto.reference.BasicValueEntity(s.id, s.value) "
+	@Query("select new com.avc.mis.beta.dto.basic.BasicValueEntity(s.id, s.value) "
 			+ "from Warehouse s where s.active = true "
 			+ "order by s.value ")
 	List<BasicValueEntity<Warehouse>> findAllWarehousesDTO();
 	
-	@Query("select new com.avc.mis.beta.dto.reference.BasicValueEntity(s.id, s.value) "
+	@Query("select new com.avc.mis.beta.dto.basic.BasicValueEntity(s.id, s.value) "
 			+ "from CashewGrade s where s.active = true "
 			+ "order by s.value ")
 	List<BasicValueEntity<CashewGrade>> findAllCashewGradesDTO();
 	
-	@Query("select s "
-			+ "from Warehouse s where s.active = true")
-	List<Warehouse> findAllWarehouses();
+	@Query("select new com.avc.mis.beta.dto.values.WarehouseDTO(s.id, s.value, s.weightCapacityKg, s.volumeSpaceM3) "
+			+ "from Warehouse s "
+			+ "where s.active = true "
+			+ "order by s.value ")
+	List<WarehouseDTO> findAllWarehouses();
 	
-	@Query("select s "
-			+ "from CashewGrade s where s.active = true")
-	List<CashewGrade> findAllCashewGrades();
+	@Query("select new com.avc.mis.beta.dto.values.CashewGradeDTO(s.id, s.value) "
+			+ "from CashewGrade s "
+			+ "where s.active = true "
+			+ "order by s.value ")
+	List<CashewGradeDTO> findAllCashewGrades();
 	
 	@Query("select t from ProcessType t where t.processName = :value")
 	Optional<ProcessType> findProcessTypeByValue(ProcessName value);
 		
-	@Query("select b from Bank b where b.active = true")
-	List<Bank> findAllBanks();
+	@Query("select new com.avc.mis.beta.dto.values.BankDTO(b.id, b.value) "
+			+ "from Bank b "
+			+ "where b.active = true "
+			+ "order by b.value ")
+	List<BankDTO> findAllBanks();
 	
-	@Query("select c from City c where c.active = true")
-	List<City> findAllCities();
+	@Query("select new com.avc.mis.beta.dto.values.CountryDTO(c.id, c.value) "
+			+ "from Country c "
+			+ "where c.active = true "
+			+ "order by c.value ")
+	List<CountryDTO> findAllCountries();
 	
-	@Query("select c from Country c where c.active = true")
-	List<Country> findAllCountries();
+	@Query("select new com.avc.mis.beta.dto.values.CompanyPositionDTO(c.id, c.value) "
+			+ "from CompanyPosition c "
+			+ "where c.active = true "
+			+ "order by c.value ")
+	List<CompanyPositionDTO> findAllCompanyPositions();
 	
-	@Query("select cp from CompanyPosition cp where cp.active = true")
-	List<CompanyPosition> findAllCompanyPositions();
-	
-	@Query("select bb from BankBranch bb where bb.active = true")
-	List<BankBranch> findAllBankBranches();
-	
-	@Query("select new com.avc.mis.beta.dto.values.BankBranchDTO(bb.id, bb.value, bank.value) "
+	@Query("select new com.avc.mis.beta.dto.values.BankBranchDTO(bb.id, bb.value, b.id, b.value) "
 			+ "from BankBranch bb "
-			+ "join bb.bank bank "
-			+ " where bb.active = true")
-	List<BankBranchDTO> findAllBankBranchesDTO();
+				+ "join bb.bank b "
+			+ "where bb.active = true "
+			+ "order by bb.value ")
+	List<BankBranchDTO> findAllBankBranches();
 	
-	@Query("select new com.avc.mis.beta.dto.values.CityDTO(c.id, c.value, ctry.value) "
+	@Query("select new com.avc.mis.beta.dto.values.CityDTO(c.id, c.value, ctry.id, ctry.value) "
 			+ "from City c "
-			+ "join c.country ctry "
-			+ " where c.active = true")
-	List<CityDTO> findAllCitiesDTO();
+				+ "join c.country ctry "
+			+ "where c.active = true "
+			+ "order by c.value ")
+	List<CityDTO> findAllCities();
 	
-	@Query("select sc from SupplyCategory sc where sc.active = true")
-	List<SupplyCategory> findAllSupplyCategories();
+	@Query("select new com.avc.mis.beta.dto.values.SupplyCategoryDTO(s.id, s.value, s.supplyGroup) "
+			+ "from SupplyCategory s "
+			+ "where s.active = true "
+			+ "order by s.value ")
+	List<SupplyCategoryDTO> findAllSupplyCategories();
 	
-	@Query("select i from Item i where i.active = true")
-	List<Item> findAllItems();
+	@Query("select new com.avc.mis.beta.dto.values.ItemDTO( "
+			+ "i.id, i.value, i.code, i.brand, i.measureUnit, i.itemGroup, i.productionUse, i.unit, type(i) "
+			+ ") "
+			+ "from Item i "
+			+ "where i.active = true "
+			+ "order by i.value ")
+	List<ItemDTO> findAllItems();
 	
-	@Query("select i from ShippingPort i where i.active = true")
-	List<ShippingPort> findAllShippingPorts();
+	@Query("select new com.avc.mis.beta.dto.values.ShippingPortDTO(i.id, i.value, i.code) "
+			+ "from ShippingPort i "
+			+ "where i.active = true "
+			+ "order by i.value ")
+	List<ShippingPortDTO> findAllShippingPorts();
 	
-	@Query("select t from ContractType t "
+	@Query("select new com.avc.mis.beta.dto.values.ContractTypeDTO("
+			+ "t.id, t.value, t.code, t.currency, t.suffix, t.supplyGroup"
+			+ ") "
+			+ "from ContractType t "
 			+ "where t.active = true "
 				+ "and t.supplyGroup in :supplyGroups "
 			+ "order by t.value ")
-	List<ContractType> findAllContractTypes(SupplyGroup[] supplyGroups);
+	List<ContractTypeDTO> findAllContractTypes(SupplyGroup[] supplyGroups);
+	
+	@Query("select new com.avc.mis.beta.dto.basic.BasicValueEntity(t.id, t.value) "
+			+ "from ContractType t "
+			+ "where t.active = true "
+				+ "and t.supplyGroup in :supplyGroups "
+			+ "order by t.value ")
+	List<BasicValueEntity<ContractType>> findAllContractTypesDTO(SupplyGroup[] supplyGroups);
 
-	@Query("select t from ProcessType t where t.active = true")
-	List<ProcessType> findAllProcessTypes();
+	@Query("select new com.avc.mis.beta.dto.values.ProcessTypeDTO(t.id, t.value, t.processName) "
+			+ "from ProcessType t "
+			+ "where t.active = true "
+			+ "order by t.value ")
+	List<ProcessTypeDTO> findAllProcessTypes();
 
-	@Query("select t from ProductionLine t "
+	@Query("select new com.avc.mis.beta.dto.values.ProductionLineDTO(t.id, t.value, t.productionFunctionality) "
+			+ "from ProductionLine t "
 			+ "where t.active = true "
 				+ "and t.productionFunctionality in :functionalities "
 			+ "order by t.value ")
-	List<ProductionLine> findProductionLinesByFuncionality(ProductionFunctionality[] functionalities);
+	List<ProductionLineDTO> findProductionLinesByFuncionality(ProductionFunctionality[] functionalities);
 	
 	@Query("select t.productionFunctionality from ProductionLine t "
 			+ "where t.id in :productionLineId ")
 	ProductionFunctionality findFunctionalityByProductionLine(Integer productionLineId);
-
-	@Query("select t from CashewStandard t "
-			+ "where t.active = true ")
-	List<CashewStandard> findAllCashewStandard();
 	
-	//for inserting contract type in testing
-	@Query("select t from ContractType t where t.code = :code and t.currency = :currency")
-	ContractType findContractTypeByCodeAndCurrency(String code, Currency currency); // NO_UCD (test only)
 
 }

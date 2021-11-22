@@ -18,6 +18,7 @@ import javax.persistence.Table;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.ObjectEntityWithName;
+import com.avc.mis.beta.entities.link.ContactDetails;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
@@ -52,13 +53,9 @@ public class Company extends ObjectEntityWithName {
 	@OneToMany(mappedBy = "company",cascade = {CascadeType.REMOVE}, fetch = FetchType.LAZY)
 	private Set<CompanyContact> companyContacts = new HashSet<>();
 	
-	public void setCompanyContacts(CompanyContact[] companyContacts) {
+	public void setCompanyContacts(Set<CompanyContact> companyContacts) {
 		this.companyContacts = Insertable.setReferences(companyContacts, 
 				(t) -> {t.setReference(this);	return t;});
-	}
-	
-	public CompanyContact[] getCompanyContacts() {
-		return (CompanyContact[])this.companyContacts.toArray(new CompanyContact[this.companyContacts.size()]);
 	}
 	
 	public void setContactDetails(ContactDetails contactDetails) {		
@@ -69,9 +66,6 @@ public class Company extends ObjectEntityWithName {
 	}
 	
 	public ContactDetails getContactDetails() {
-//		if(this.contactDetails == null) {
-//			setContactDetails(new ContactDetails());
-//		}
 		return this.contactDetails;
 	}
 

@@ -1,5 +1,6 @@
 /**
- * Abstract classes extended by various data transfer objects(DTO),
- * that represent information of data classes that have id and version.
+ * DTOs that extend DataDTO.
+ * Represent Data entities - can be edited by multiple users.
+ * contains a version.
  */
 package com.avc.mis.beta.dto.data;

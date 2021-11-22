@@ -17,64 +17,59 @@ import java.util.Random;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
+import com.avc.mis.beta.dto.basic.ItemWithMeasureUnit;
+import com.avc.mis.beta.dto.basic.ItemWithUnitDTO;
+import com.avc.mis.beta.dto.basic.ItemWithUse;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
+import com.avc.mis.beta.dto.codes.GeneralPoCodeDTO;
+import com.avc.mis.beta.dto.codes.PoCodeDTO;
+import com.avc.mis.beta.dto.codes.ProductPoCodeDTO;
+import com.avc.mis.beta.dto.codes.ShipmentCodeDTO;
 import com.avc.mis.beta.dto.data.DataObject;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
-import com.avc.mis.beta.dto.process.collection.CountAmountDTO;
-import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
-import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
-import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
-import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
-import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
-import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
-import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageBaseDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
-import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.process.collectionItems.CountAmountDTO;
+import com.avc.mis.beta.dto.process.collectionItems.OrderItemDTO;
+import com.avc.mis.beta.dto.process.group.ItemCountDTO;
+import com.avc.mis.beta.dto.process.group.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.group.ReceiptItemDTO;
+import com.avc.mis.beta.dto.process.group.StorageMovesGroupDTO;
+import com.avc.mis.beta.dto.process.group.UsedItemsGroupDTO;
+import com.avc.mis.beta.dto.process.storages.ExtraAddedDTO;
+import com.avc.mis.beta.dto.process.storages.StorageBaseDTO;
+import com.avc.mis.beta.dto.process.storages.StorageDTO;
+import com.avc.mis.beta.dto.process.storages.StorageMoveDTO;
+import com.avc.mis.beta.dto.process.storages.StorageWithSampleDTO;
+import com.avc.mis.beta.dto.process.storages.UsedItemDTO;
+import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.dto.values.ContractTypeDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.ItemWithMeasureUnit;
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
-import com.avc.mis.beta.dto.values.ItemWithUse;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.values.ProductionLineDTO;
+import com.avc.mis.beta.dto.values.ShippingPortDTO;
+import com.avc.mis.beta.dto.values.SupplyCategoryDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.codes.GeneralPoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
-import com.avc.mis.beta.entities.codes.ShipmentCode;
+import com.avc.mis.beta.entities.codes.ProductPoCode;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.embeddable.ShipingDetails;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.CashewItem;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.process.collection.CountAmount;
-import com.avc.mis.beta.entities.process.collection.ItemCount;
-import com.avc.mis.beta.entities.process.collection.OrderItem;
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
-import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
-import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
-import com.avc.mis.beta.entities.process.collection.WeightedPo;
-import com.avc.mis.beta.entities.process.inventory.Storage;
-import com.avc.mis.beta.entities.process.inventory.StorageMove;
-import com.avc.mis.beta.entities.process.inventory.UsedItem;
-import com.avc.mis.beta.entities.values.BankBranch;
-import com.avc.mis.beta.entities.values.City;
+import com.avc.mis.beta.entities.process.collectionItems.OrderItem;
+import com.avc.mis.beta.entities.system.WeightedPo;
+import com.avc.mis.beta.entities.values.CashewItem;
 import com.avc.mis.beta.entities.values.ContractType;
-import com.avc.mis.beta.entities.values.ProductionLine;
-import com.avc.mis.beta.entities.values.ShippingPort;
-import com.avc.mis.beta.entities.values.SupplyCategory;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
@@ -104,11 +99,11 @@ public class TestService {
 	private int randCode = LocalDateTime.now().hashCode();
 	private Random randNum = new Random();
 	
-	public Supplier addBasicSupplier() {
-		Supplier supplier = new Supplier();
+	public SupplierDTO addBasicSupplier() {
+		SupplierDTO supplier = new SupplierDTO();
 		supplier.setName("service supplier " + randCode++);
-		suppliers.addSupplier(supplier);
-		return supplier;
+		Integer supplierId = suppliers.addSupplier(supplier);
+		return suppliers.getSupplier(supplierId);
 	}
 		
 	public ShipingDetails getShipingDetails() {
@@ -118,32 +113,33 @@ public class TestService {
 		return shipingDetails;
 	}
 
-	PoCode addPoCode() {
-		PoCode poCode = new PoCode();
+	PoCodeDTO addPoCode() {
+		ProductPoCodeDTO poCode = new ProductPoCodeDTO();
 		poCode.setCode(Integer.toString(randCode++));
-		Supplier supplier = addBasicSupplier();
-		poCode.setSupplier(supplier);
+		SupplierDTO supplier = addBasicSupplier();
+		poCode.setSupplier(new DataObjectWithName<Supplier>(supplier.getId(), supplier.getVersion(), supplier.getName()));
 		poCode.setContractType(getContractType());
-		objectWriter.addPoCode(poCode);
-		return poCode;
+		Integer poCodeId = objectWriter.addPoCode(poCode);
+		return objectWriter.getPoCode(poCodeId);
 	}
 	
-	GeneralPoCode addGeneralPoCode() {
-		GeneralPoCode poCode = new GeneralPoCode();
+	PoCodeDTO addGeneralPoCode() {
+		GeneralPoCodeDTO poCode = new GeneralPoCodeDTO();
 		poCode.setCode(Integer.toString(randCode++));
-		Supplier supplier = addBasicSupplier();
+		SupplierDTO supplier = addBasicSupplier();
 		poCode.setCode(Integer.toString(randCode++));
-		poCode.setSupplier(supplier);
+		poCode.setSupplier(new DataObjectWithName<Supplier>(supplier.getId(), supplier.getVersion(), supplier.getName()));
 		poCode.setContractType(getContractType());
-		objectWriter.addPoCode(poCode);
-		return poCode;
+		Integer poCodeId = objectWriter.addPoCode(poCode);
+		return objectWriter.getPoCode(poCodeId);
 	}
 
-	public ShipmentCode addShipmentCode() {
-		ShipmentCode shipmentCode = new ShipmentCode();
+	public ShipmentCodeDTO addShipmentCode() {
+		ShipmentCodeDTO shipmentCode = new ShipmentCodeDTO();
 		shipmentCode.setCode(Integer.toString(randCode++));
 		shipmentCode.setPortOfDischarge(getShippingPort());
-		objectWriter.addShipmentCode(shipmentCode);
+		Integer id = objectWriter.addShipmentCode(shipmentCode);
+		shipmentCode = objectWriter.getShipmentCode(id);
 		return shipmentCode;
 	}
 
@@ -152,7 +148,7 @@ public class TestService {
 		
 		//build purchase order
 		PoDTO po = new PoDTO();
-		PoCode poCode = addPoCode();
+		PoCodeDTO poCode = addPoCode();
 		po.setPoCode(new PoCodeBasic(poCode));
 //		poCode.setCode(Integer.toString(randCode++));
 //		Supplier supplier = addBasicSupplier();
@@ -174,7 +170,7 @@ public class TestService {
 		
 		//build purchase order
 		PoDTO po = new PoDTO();
-		GeneralPoCode poCode = addGeneralPoCode();
+		PoCodeDTO poCode = addGeneralPoCode();
 //		Supplier supplier = addBasicSupplier();
 //		poCode.setCode(Integer.toString(randCode++));
 //		poCode.setSupplier(supplier);
@@ -242,7 +238,7 @@ public class TestService {
 		List<ReceiptItemDTO> receiptItems = new ArrayList<>();
 //		List<StorageDTO> storageForms = new ArrayList<StorageDTO>();
 		List<ExtraAddedDTO> added = new ArrayList<>();
-		BasicValueEntity<Warehouse> warehouse = new BasicValueEntity<Warehouse>(getWarehouse());
+		BasicValueEntity<Warehouse> warehouse = getWarehouse();
 		for(int i=0; i<numOfItems; i++) {
 			StorageWithSampleDTO storageForm = new StorageWithSampleDTO();
 //			storageForms.add(storageForm);
@@ -307,7 +303,7 @@ public class TestService {
 
 		List<ReceiptItemDTO> receiptItems = new ArrayList<>();
 //		List<StorageDTO> storageForms = new ArrayList<StorageDTO>();
-		BasicValueEntity<Warehouse>warehouse = new BasicValueEntity<Warehouse>(getWarehouse());
+		BasicValueEntity<Warehouse>warehouse = getWarehouse();
 		DataObject<OrderItem> oi;
 		int i=0;
 		for(OrderItemDTO oItem: orderItems) {
@@ -338,15 +334,15 @@ public class TestService {
 		return receiptItems;
 	}
 	
-	public Warehouse getWarehouse() {
-		List<Warehouse> warehouses = valueTableReader.getAllWarehouses();
+	public BasicValueEntity<Warehouse> getWarehouse() {
+		List<BasicValueEntity<Warehouse>> warehouses = valueTableReader.getAllWarehousesBasic();
 		if(warehouses.isEmpty())
 			fail("No warehouses in database for running this test");
 		return warehouses.get(randNum.nextInt(warehouses.size()));
 	}
 	
 	public PoCodeBasic getPoCodeBasic() {
-		List<PoCodeBasicWithProductCompany> poCodes = objectTablesReader.findAllPoCodes();
+		List<PoCodeBasicWithProductCompany> poCodes = objectTablesReader.findAllProductPoCodes();
 		if(poCodes.isEmpty())
 			fail("No po codes in database for running this test");
 		return poCodes.get(randNum.nextInt(poCodes.size()));
@@ -371,48 +367,51 @@ public class TestService {
 		return getItem(item);
 	}
 	
-	private ContractType getContractType() {
-		List<ContractType> contractTypes = valueTableReader.getAllContractTypes();
+	public ContractTypeDTO getContractType() {
+		List<BasicValueEntity<ContractType>> contractTypes = valueTableReader.getAllContractTypesBasic();
 		if(contractTypes.isEmpty())
 			fail("No Contract Types in database for running this test");
-		return contractTypes.get(randNum.nextInt(contractTypes.size()));
+		ContractTypeDTO contractTypeDTO = new ContractTypeDTO();
+		contractTypeDTO.setId(contractTypes.get(randNum.nextInt(contractTypes.size())).getId());
+//		return contractTypes.get(randNum.nextInt(contractTypes.size()));
+		return contractTypeDTO;
 	}
 	
-	public City getCity() {
-		List<City> cities = valueTableReader.getAllCities();
+	public CityDTO getCity() {
+		List<CityDTO> cities = valueTableReader.getAllCities();
 		if(cities.isEmpty())
 			fail("No Cities in database");
 		return cities.get(randNum.nextInt(cities.size()));
 	}
 	
-	public BankBranch getBankBranch() {
-		List<BankBranch> branches = valueTableReader.getAllBankBranches();
+	public BankBranchDTO getBankBranch() {
+		List<BankBranchDTO> branches = valueTableReader.getAllBankBranches();
 		if(branches.isEmpty())
 			fail("No Bank Branches in database");
 		return branches.get(randNum.nextInt(branches.size()));
 	}
 	
-	public List<SupplyCategory> getSupplyCategories() {
-		List<SupplyCategory> supplyCategories = valueTableReader.getAllSupplyCategories();
+	public List<SupplyCategoryDTO> getSupplyCategories() {
+		List<SupplyCategoryDTO> supplyCategories = valueTableReader.getAllSupplyCategories();
 		if(supplyCategories.isEmpty())
 			fail("No Supply Categories in database");
 		return supplyCategories;
 	}
 
 	public Object getSupplycategory() {
-		List<SupplyCategory> supplyCategories = getSupplyCategories();
+		List<SupplyCategoryDTO> supplyCategories = getSupplyCategories();
 		return supplyCategories.get(randNum.nextInt(supplyCategories.size()));
 	}
 	
-	public ShippingPort getShippingPort() {
-		List<ShippingPort> ports = valueTableReader.getAllShippingPorts();
+	public ShippingPortDTO getShippingPort() {
+		List<ShippingPortDTO> ports = valueTableReader.getAllShippingPorts();
 		if(ports.isEmpty())
 			fail("No Shipping Ports in database");
 		return ports.get(randNum.nextInt(ports.size()));
 	}
 	
-	public ProductionLine getProductionLine(ProductionFunctionality functionality) {
-		List<ProductionLine> productionLines = valueTableReader.getProductionLinesByFuncionality(new ProductionFunctionality[] {functionality});
+	public ProductionLineDTO getProductionLine(ProductionFunctionality functionality) {
+		List<ProductionLineDTO> productionLines = valueTableReader.getProductionLinesByFuncionality(new ProductionFunctionality[] {functionality});
 		if(productionLines.isEmpty())
 			fail("No production Lines in database");
 		return productionLines.get(randNum.nextInt(productionLines.size()));
@@ -540,7 +539,7 @@ public class TestService {
 				storageMove.setNumberUsedUnits(storagesRow.getNumberUnits());
 				storageMove.setUnitAmount(storagesRow.getUnitAmount());
 				storageMove.setNumberUnits(storagesRow.getNumberUnits());
-				storageMove.setWarehouseLocation(new BasicValueEntity<Warehouse>(getWarehouse()));
+				storageMove.setWarehouseLocation(getWarehouse());
 			}
 			storageMovesGroup.setStorageMoves(storageMoves);
 
@@ -643,7 +642,7 @@ public class TestService {
 				storageForms.add(storage);
 				storage.setUnitAmount(storageRow.getUnitAmount());
 				storage.setNumberUnits(storageRow.getNumberUnits());
-				storage.setWarehouseLocation(new BasicValueEntity<Warehouse>(getWarehouse()));
+				storage.setWarehouseLocation(getWarehouse());
 				
 				j++;
 			}			
@@ -677,8 +676,8 @@ public class TestService {
 		return item;
 	}
 	
-	public PoCode getPoCode() {
-		PoCode poCode = new PoCode();
+	public ProductPoCode getPoCode() {
+		ProductPoCode poCode = new ProductPoCode();
 		poCode.setId(getPoCodeBasic().getId());
 		return poCode;
 	}

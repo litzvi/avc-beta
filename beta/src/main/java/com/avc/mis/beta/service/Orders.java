@@ -15,7 +15,7 @@ import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.codes.ProductPoCode;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.process.PO;
@@ -53,7 +53,7 @@ public class Orders {
 		if(po.getPoCode() == null) {
 			throw new IllegalArgumentException("Purchase Order has to reference a po code");
 		}
-		else if(dao.isPoCodeFree(po.getPoCode().getId(), PoCode.class)) {
+		else if(dao.isPoCodeFree(po.getPoCode().getId(), ProductPoCode.class)) {
 			return dao.addPoProcessEntity(po, PO::new);						
 		}
 		else {
@@ -137,45 +137,39 @@ public class Orders {
 	
 //----------------------------Duplicate in OrderReports - Should remove------------------------------------------
 	
-	
+	@Deprecated
 	public List<PoItemRow> findOpenCashewOrderItems() {
 		return getOrderReports().findOpenCashewOrderItems();
 	}
 	
+	@Deprecated
 	public List<PoItemRow> findAllCashewOrderItems() {
 		return getOrderReports().findAllCashewOrderItems();
 	}
 	
+	@Deprecated
 	public List<PoItemRow> findAllGeneralOrderItems() {
 		return getOrderReports().findAllGeneralOrderItems();
 	}
 	
+	@Deprecated
 	public List<PoItemRow> findAllCashewOrderItemsHistory() {
 		return getOrderReports().findAllCashewOrderItemsHistory();
 	}
 	
+	@Deprecated
 	public List<PoItemRow> findAllGeneralOrderItemsHistory() {
 		return getOrderReports().findAllGeneralOrderItemsHistory();
 	}
 	
+	@Deprecated
 	public List<PoItemRow> getOrdersByType(ProcessName orderType, ProcessStatus[] processStatuses, Integer poCodeId) {
 		return getOrderReports().getOrdersByType(orderType, processStatuses, poCodeId);
 	}
 		
+	@Deprecated
 	public List<PoItemRow> findOpenGeneralOrderItems() {
 		return getOrderReports().findOpenGeneralOrderItems();
 	}
-	
-	
-//	@Transactional(rollbackFor = Throwable.class, readOnly = false, isolation = Isolation.SERIALIZABLE)
-//	private void addOrder(PO po) {
-//		//using save rather than persist in case POid was assigned by user
-////		dao.addEntityWithFlexibleGenerator(po.getPoCode());
-////		Session session = getEntityManager().unwrap(Session.class);
-////		session.save(po.getPoCode());
-//		
-//		
-//	}
-
 	
 }

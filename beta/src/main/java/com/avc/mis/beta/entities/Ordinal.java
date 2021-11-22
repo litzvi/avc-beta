@@ -37,9 +37,6 @@ public interface Ordinal {
 				int result = o1.getOrdinal()-o2.getOrdinal();
 				if(result == 0) {
 					result = o1.getClass().getSimpleName().compareTo(o2.getClass().getSimpleName());
-//					if(result == 0) {
-//						result = Integer.compare(o1.getId(), o2.getId());
-//					}
 				}
 				
 				return result;

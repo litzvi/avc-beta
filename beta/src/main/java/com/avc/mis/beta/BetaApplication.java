@@ -10,8 +10,8 @@ import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.security.AuditorAwareImpl;
 
 /**
- * Version: 23.2
- * issues 626, in 630 fix for StorageTable inProcessItem
+ * Version: 24.0
+ * issues changed all services/interfaces to only receive dtos
  * 
  * @author zvi
  *

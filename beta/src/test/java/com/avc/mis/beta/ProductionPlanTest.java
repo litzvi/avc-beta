@@ -4,49 +4,35 @@
 package com.avc.mis.beta;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.avc.mis.beta.dao.ProcessDAO;
-import com.avc.mis.beta.dto.data.DataObject;
-import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
-import com.avc.mis.beta.dto.item.BomLineDTO;
-import com.avc.mis.beta.dto.plan.ProcessItemPlanDTO;
-import com.avc.mis.beta.dto.plan.ProductionPlanDTO;
-import com.avc.mis.beta.dto.plan.ProductionPlanRowDTO;
-import com.avc.mis.beta.dto.plan.UsedItemPlanDTO;
-import com.avc.mis.beta.dto.reference.BasicDataEntity;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
-import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.basic.BasicDataEntity;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
+import com.avc.mis.beta.dto.process.ProductionPlanDTO;
+import com.avc.mis.beta.dto.process.collectionItems.ProcessItemPlanDTO;
+import com.avc.mis.beta.dto.process.collectionItems.UsedItemPlanDTO;
+import com.avc.mis.beta.dto.process.group.ProductionPlanRowDTO;
+import com.avc.mis.beta.dto.values.ProductionLineDTO;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
-import com.avc.mis.beta.dto.view.StorageInventoryRow;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.plan.ProcessItemPlan;
-import com.avc.mis.beta.entities.plan.ProductionPlan;
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
-import com.avc.mis.beta.entities.process.inventory.Storage;
-import com.avc.mis.beta.entities.values.Country;
+import com.avc.mis.beta.entities.process.group.ProcessItem;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.entities.values.ProductionLine;
-import com.avc.mis.beta.service.BillOfMaterialService;
 import com.avc.mis.beta.service.ProductionPlans;
-import com.avc.mis.beta.service.ValueTablesReader;
-import com.avc.mis.beta.service.ValueWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
 
 /**
@@ -76,7 +62,8 @@ public class ProductionPlanTest {
 		for(int i=0; i < PLAN_LIST_LENGTH; i++) {
 			ProductionPlanRowDTO row = new ProductionPlanRowDTO();
 			row.setProcessType(new BasicValueEntity<ProcessType>(dao.getProcessTypeByValue(ProcessName.CASHEW_ROASTING)));
-			row.setProductionLine(new BasicValueEntity<ProductionLine>(service.getProductionLine(ProductionFunctionality.ROASTER)));
+			ProductionLineDTO lineDTO = service.getProductionLine(ProductionFunctionality.ROASTER);
+			row.setProductionLine(new BasicValueEntity<ProductionLine>(lineDTO.getId(), lineDTO.getValue()));
 			row.setPlannedDate("1983-11-23");
 //			process item plans
 //			used item plans

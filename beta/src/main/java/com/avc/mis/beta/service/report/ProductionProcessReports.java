@@ -21,7 +21,7 @@ import com.avc.mis.beta.entities.process.ProcessWithProduct;
 import com.avc.mis.beta.entities.process.ProductionProcess;
 import com.avc.mis.beta.entities.process.RelocationProcess;
 import com.avc.mis.beta.entities.process.TransactionProcess;
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
+import com.avc.mis.beta.entities.process.group.ProcessItem;
 import com.avc.mis.beta.repositories.RelocationRepository;
 import com.avc.mis.beta.repositories.TransactionProcessRepository;
 

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -28,11 +27,12 @@ import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.link.ProcessManagement;
 import com.avc.mis.beta.entities.process.GeneralProcess;
 import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
-import com.avc.mis.beta.entities.process.collection.UserMessage;
+import com.avc.mis.beta.entities.system.ApprovalTask;
+import com.avc.mis.beta.entities.system.UserMessage;
 import com.avc.mis.beta.entities.values.ProcessType;
 import com.avc.mis.beta.repositories.InventoryRepository;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
@@ -154,8 +154,22 @@ public abstract class ProcessInfo extends DAO {
 	public void sendMessageAlerts(Integer processId, String title) {
 		Set<UserEntity> users = getProcessRepository().findProcessTypeAlertsUsersByProcess(processId);
 		for(UserEntity user: users) {
-			addMessage(user, processId, title);
+			addMessage(user.getId(), processId, title);
 		}
+	}
+	
+	/**
+	 * Adds a new message (notification) for a given user about a given process.
+	 * @param userId of the recipient of the message.
+	 * @param processId Id of process that's the subject of the message.
+	 * @param title the message title
+	 */
+	public void addMessage(Integer userId, Integer processId, String title) {
+		GeneralProcess process = null;
+		if(processId != null)
+			process = getEntityManager().getReference(GeneralProcess.class, processId);
+		UserEntity user = getEntityManager().getReference(UserEntity.class, userId);
+		addMessage(user, process, title);
 	}
 		
 	/**
@@ -164,7 +178,7 @@ public abstract class ProcessInfo extends DAO {
 	 * @param process GeneralProcess that's the subject of the message.
 	 * @param title the message title
 	 */
-	public void addMessage(UserEntity user, GeneralProcess process, String title) {
+	private void addMessage(UserEntity user, GeneralProcess process, String title) {
 		UserMessage userMessage = new UserMessage();
 		userMessage.setProcess(process);
 		userMessage.setUser(user);
@@ -172,23 +186,7 @@ public abstract class ProcessInfo extends DAO {
 		userMessage.setLabel(MessageLabel.NEW);
 		addEntity(userMessage);	//user already in the persistence context
 	}
-	
-	/**
-	 * Adds a new message (notification) for a given user about a given process identified by ID.
-	 * @param user the recipient of the message, assumes user is already in the persistence context.
-	 * @param processId Id of process that's the subject of the message.
-	 * @param title the message title
-	 */
-	public void addMessage(UserEntity user, int processId, String title) {
-		UserMessage userMessage = new UserMessage();		
-		userMessage.setUser(user);
-		userMessage.setDescription(title);
-		userMessage.setLabel(MessageLabel.NEW);
-		GeneralProcess process = getEntityManager().getReference(GeneralProcess.class, processId);
-		userMessage.setProcess(process);
-		addEntity(userMessage);
-	}	
-	
+		
 	/**
 	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.
 	 * The AprovealTask is implied by the process and user, 

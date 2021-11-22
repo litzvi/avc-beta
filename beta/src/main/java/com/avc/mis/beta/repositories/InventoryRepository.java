@@ -11,9 +11,9 @@ import java.util.stream.Stream;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.query.StorageBalance;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.report.ItemAmountWithPo;
 import com.avc.mis.beta.dto.view.InventoryTransactionAddRow;
@@ -21,11 +21,11 @@ import com.avc.mis.beta.dto.view.InventoryTransactionSubtractRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
 import com.avc.mis.beta.dto.view.ProcessItemInventoryRow;
 import com.avc.mis.beta.dto.view.StorageInventoryRow;
-import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.codes.ProductPoCode;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.enums.ProductionUse;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.service.report.row.CashewBaggedInventoryRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
@@ -35,7 +35,7 @@ import com.avc.mis.beta.service.report.row.ReceiptUsageRow;
  * @author Zvi
  *
  */
-public interface InventoryRepository extends BaseRepository<PoCode> {
+public interface InventoryRepository extends BaseRepository<ProductPoCode> {
 
 	/**
 	 * AVAILABLE STORAGE FOR USE - PRODUCT OF FINAL PROCESS NOT USED BY ANOTHER PROCESS (EVEN NOT FINAL)
@@ -44,7 +44,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "sf.id, sf.version, sf.ordinal, "
 			+ "pi.id, "
 			+ "sf.unitAmount, sf.numberUnits, "
-//			+ "sf.accessWeight, "
 			+ "sto.id, sto.value, "
 			+ "SUM("
 				+ "(CASE "
@@ -64,8 +63,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "(CASE "
 			+ "WHEN item_unit.measureUnit <> com.avc.mis.beta.entities.enums.MeasureUnit.NONE THEN item_unit.measureUnit "
 				+ "ELSE item.measureUnit "
-//			+ "WHEN type(item) = com.avc.mis.beta.entities.item.PackedItem THEN item_unit.measureUnit "
-//				+ "ELSE item.measureUnit "
 			+ "END)) "
 		+ "from ProcessItem pi "
 			+ "join pi.item item "
@@ -90,7 +87,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (:checkFunctionalities = false or sf_p_line.productionFunctionality in :functionalities) "
-//			+ "and (item.id = :itemId or :itemId is null) "
 			+ "and (:checkItemIds = false or item.id in :itemIds) "
 			+ "and (:packageTypeOrdinal = "
 				+ "(CASE "
@@ -183,15 +179,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
 				+ "END) "
 			+ " ) AS balance, "
-//			+ "SUM((coalesce(sf.unitAmount, 1) * uom.multiplicand / uom.divisor) "
-//				+ " * "
-//				+ "(CASE "
-//					+ "WHEN ui is null THEN sf.numberUnits "
-//					+ "WHEN used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
-//						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
-//					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
-//				+ "END) "
-//			+ " ) AS balance, "
 			+ "coalesce(w_po.weight, 1)) "
 		+ "from ProcessItem pi "
 			+ "left join ReceiptItem ri "
@@ -207,10 +194,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "left join w_po.poCode w_po_code "
 				+ "join BasePoCode po_code "
 					+ "on (po_code = p_po_code or po_code = w_po_code) "
-//				+ "join Receipt r "
-//					+ "on r.poCode = po_code "
-//						+ "and (ri is null or ri.process = r) "
-//					+ "join r.lifeCycle receipt_lc "
 			+ "join pi.allStorages sf "
 				+ "join sf.group sf_group "
 					+ "join sf_group.process sf_p "
@@ -221,7 +204,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "left join used_g.process used_p "
 							+ "left join used_p.lifeCycle used_lc "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
-//			+ "and receipt_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and sf_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
 			+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
@@ -243,9 +225,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ ", 0)"
 				+ ") "
 		+ "group by item "
-		+ ", w_po.weight "
-//		+ "order by r.recordedTime, p.recordedTime " 
-		+ "")
+		+ ", w_po.weight ")
 	List<ItemAmount> findInventoryItemAmounts(
 			ProductionFunctionality[] excludedFunctionalities, 
 			boolean checkProductionUses, ProductionUse[] productionUses, 
@@ -312,7 +292,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "p.recordedTime, r.recordedTime, "
 			+ "coalesce(w_po.weight, 1), "
 			+ "SUM((coalesce(sf.unitAmount, 1) * uom.multiplicand / uom.divisor) "
-//				+ " * item_unit.amount "
 				+ " * "
 				+ "(CASE "
 					+ "WHEN ui is null THEN sf.numberUnits "
@@ -321,18 +300,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 						+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
 					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
 				+ "END) "
-//				+ " - "
-//				+ "(CASE "
-//					+ "WHEN ui is null THEN coalesce(sf.accessWeight, 0) "
-//						+ "ELSE (coalesce(sf.accessWeight, 0) / size(sf.usedItems)) "
-//				+ "END)"
-//			+ " ) AS balance "
 			+ " ) / function('COUNT', function('DISTINCT', r.id)), "
-//			+ " ) / count(function('DISTINCT',r.id)), "
-//			+ "(CASE type(item) "
-//				+ "WHEN com.avc.mis.beta.entities.item.PackedItem THEN item_unit.measureUnit "
-//				+ "ELSE item.measureUnit "
-//			+ "END), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', sto.value))) "
 		+ "from ProcessItem pi "
 			+ "left join ReceiptItem ri "
@@ -398,7 +366,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	/**
 	 * ITEMS THAT HAVE AVAILABLE INVENTORY
 	 */
-	@Query("select new com.avc.mis.beta.dto.reference.BasicValueEntity(item.id, item.value)  "
+	@Query("select new com.avc.mis.beta.dto.basic.BasicValueEntity(item.id, item.value)  "
 			+ "from ProcessItem pi "
 				+ "join pi.item item "
 				+ "join pi.process p "
@@ -491,7 +459,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (:startTime is null or p.recordedTime >= :startTime) "
 			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by sf.id, sf.numberUnits, po_code.id "
-//		+ "having (sf.numberUnits > sum(coalesce(ui.numberUsedUnits, 0))) "
 		+ "having sf.numberUnits > "
 			+ "SUM("
 				+ "(CASE "
@@ -588,9 +555,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 									+ "join used_g.process used_p "
 										+ "join used_p.lifeCycle used_lc "
 			+ "where p.id = :processId "
-			+ "group by g, i "
-//			+ ", s"
-			+ "")
+			+ "group by g, i ")
 	Stream<StorageBalance> findStorageMoveBalances(Integer processId);
 
 	/**
@@ -599,9 +564,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 	@Query("select new com.avc.mis.beta.service.report.row.ReceiptInventoryRow( "
 			+ "po_code.id, s.name, pc.name, "
 			+ "item.value, item.whole, "
-//			+ "item.id, item.value, item.code, item.brand, item.measureUnit, "
-//			+ "item.itemGroup, item.productionUse, item.unit, type(item), "
-//			+ "cashew_item.numBags, cashew_item.grade, cashew_item.whole, cashew_item.roast, cashew_item.toffee, cashew_item.saltLevel, "
 			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
 			+ "r.recordedTime, receipt_pl.productionFunctionality, "
 			+ "function('GROUP_CONCAT', "
@@ -788,15 +750,7 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
 				+ "END) "
 			+ " ) / function('COUNT', function('DISTINCT', r.id)), "
-//			+ " ) AS balance, "
 			+ "item.measureUnit, "
-//			+ "SUM((CASE "
-//				+ "WHEN ui is null THEN sf.numberUnits "
-//				+ "WHEN (used_lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
-//						+ "and (:pointOfTime is null or used_p.recordedTime <= :pointOfTime)) "
-//					+ "THEN (sf.numberUnits / size(sf.usedItems) - ui.numberUnits) "
-//				+ "ELSE (sf.numberUnits / size(sf.usedItems)) "
-//			+ "END)), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', sto.value)), lc.processStatus) "
 		+ "from ProcessItem pi "
 			+ "left join ReceiptItem ri "
@@ -834,7 +788,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 			+ "and (sf_p_line is null or sf_p_line.productionFunctionality not in :excludedFunctionalities) "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (:checkItemGroups = false or item.itemGroup in :itemGroups) "
-//			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:pointOfTime is null "
 				+ "or (p.recordedTime <= :pointOfTime and sf_p.recordedTime <= :pointOfTime)) "
 			+ "and"
@@ -850,11 +803,6 @@ public interface InventoryRepository extends BaseRepository<PoCode> {
 					+ ", 0)"
 				+ ") "
 		+ "GROUP BY item, po_code "
-//			+ "CASE "
-//				+ "WHEN item.itemGroup = com.avc.mis.beta.entities.item.ItemGroup.PRODUCT " //also qc
-//					+ "THEN po_code "
-//				+ "ELSE null "
-//			+ "END "
 		+ "ORDER BY item.code ")
 	List<FinishedProductInventoryRow> findFinishedProductInventoryRows(
 			ProductionFunctionality[] excludedFunctionalities, 

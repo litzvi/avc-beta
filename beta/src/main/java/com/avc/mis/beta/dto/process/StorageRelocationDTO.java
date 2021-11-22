@@ -9,10 +9,13 @@ import com.avc.mis.beta.entities.process.StorageRelocation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * DTO for storage relocation process.
+ * A process for moving items in inventory from place to place.
+ * Used to move between warehouses but also between production lines, therefore may have an effect on presented inventory.
+ * 
  * @author zvi
  *
  */
@@ -21,11 +24,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class StorageRelocationDTO extends RelocationProcessDTO {
-	
-	public StorageRelocationDTO(@NonNull StorageRelocation relocation) {
-		super(relocation);
-	}
-	
+		
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {
 		return StorageRelocation.class;
@@ -49,10 +48,5 @@ public class StorageRelocationDTO extends RelocationProcessDTO {
 		return relocation;
 	}
 
-	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Storage relocation";
-	}
 
 }

@@ -41,8 +41,39 @@ public class IdCardDTO extends DataDTO {
 		this.nationality = idCard.getNationality();
 	}
 	
+	public void setDob(String dob) {
+		if(dob != null)
+			this.dob = LocalDate.parse(dob);
+	}
+	
+	public void setDateOfIssue(String dateOfIssue) {
+		if(dateOfIssue != null)
+			this.dateOfIssue = LocalDate.parse(dateOfIssue);
+	}
+
+	
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {
 		return IdCard.class;
 	}
+	
+	@Override
+	public IdCard fillEntity(Object entity) {
+		IdCard idCardEntity;
+		if(entity instanceof IdCard) {
+			idCardEntity = (IdCard) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be IdCard class");
+		}
+		super.fillEntity(idCardEntity);
+		idCardEntity.setIdNumber(getIdNumber());
+		idCardEntity.setDob(getDob());
+		idCardEntity.setDateOfIssue(getDateOfIssue());
+		idCardEntity.setPlaceOfIssue(getPlaceOfIssue());
+		idCardEntity.setNationality(getNationality());;		
+
+		return idCardEntity;
+	}
+
 }

@@ -16,17 +16,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ReadOnlyDAO;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.dto.basic.UserBasic;
-import com.avc.mis.beta.dto.data.ProcessManagementDTO;
-import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
-import com.avc.mis.beta.entities.data.ProcessManagement;
+import com.avc.mis.beta.dto.link.ProcessManagementDTO;
+import com.avc.mis.beta.dto.system.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.system.UserMessageDTO;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.link.ProcessManagement;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 import com.avc.mis.beta.service.report.InventoryReports;
 import com.avc.mis.beta.service.report.row.TaskRow;
@@ -63,9 +63,9 @@ public class ProcessInfoReader {
 	 * Gets a ProcessManagement that contains a user to be notified, 
 	 * for a given process and the type of approval required.
 	 * @param id of requested ProcessManagement
-	 * @return ProcessManagement with the given id.
+	 * @return ProcessManagementDTO with the given id.
 	 */
-	public ProcessManagement getProcessTypeAlert(Integer id) {
+	public ProcessManagementDTO getProcessTypeAlert(Integer id) {
 		return processInfoRepository.findProcessManagementById(id);
 	}
 	

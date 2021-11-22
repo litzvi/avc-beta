@@ -53,9 +53,5 @@ public class BankAccount extends ObjectDataEntity {
 		this.accountNo = Optional.ofNullable(accountNo).map(s -> s.trim()).orElse(null);
 	}
 	
-	
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
 
 }

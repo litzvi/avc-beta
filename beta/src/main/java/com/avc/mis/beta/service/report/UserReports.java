@@ -13,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
 import com.avc.mis.beta.dto.basic.UserBasic;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
-import com.avc.mis.beta.dto.generic.ValueObject;
+import com.avc.mis.beta.dto.basic.ValueObject;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.Person;
 import com.avc.mis.beta.entities.enums.Role;

@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ShippingContainerType;
@@ -22,6 +22,8 @@ import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * Row in list of container arrivals report.
+ * 
  * @author zvi
  *
  */

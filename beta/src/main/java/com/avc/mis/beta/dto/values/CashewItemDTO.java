@@ -3,35 +3,38 @@
  */
 package com.avc.mis.beta.dto.values;
 
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
+import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
+import com.avc.mis.beta.entities.enums.ProductionUse;
 import com.avc.mis.beta.entities.enums.SaltLevel;
-import com.avc.mis.beta.entities.item.CashewItem;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.entities.values.CashewGrade;
+import com.avc.mis.beta.entities.values.CashewItem;
+import com.avc.mis.beta.entities.values.Item;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Value;
+import lombok.NoArgsConstructor;
 
 /**
+ * DTO for cashew item.
+ * 
  * @author zvi
  *
  */
-@Value
+@Data
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class CashewItemDTO extends ItemDTO {
 
-	int numBags;
-	BasicValueEntity<CashewGrade> grade;
-	boolean whole;
-	boolean roast;
-	boolean toffee;
-	SaltLevel saltLevel;
-	
-	
+	private int numBags = 1;
+	private BasicValueEntity<CashewGrade> grade;
+	private boolean whole = false;
+	private boolean roast = false;
+	private boolean toffee = false;
+	private SaltLevel saltLevel = SaltLevel.NS;
 	
 	public CashewItemDTO(Integer id, String value, 
 			String code, String brand, MeasureUnit measureUnit, ItemGroup group, ProductionUse productionUse, 
@@ -51,14 +54,29 @@ public class CashewItemDTO extends ItemDTO {
 		this.saltLevel = saltLevel;
 	}
 	
-	public CashewItemDTO(CashewItem cashewItem) {
-		super(cashewItem);
-		this.numBags = cashewItem.getNumBags();
-		this.grade = new BasicValueEntity<CashewGrade>(cashewItem.getGrade());
-		this.whole = cashewItem.isWhole();
-		this.roast = cashewItem.isRoast();
-		this.toffee = cashewItem.isToffee();
-		this.saltLevel = cashewItem.getSaltLevel();
+	@Override
+	public Class<? extends BaseEntity> getEntityClass() {
+		return CashewItem.class;
+	}
+	
+	@Override
+	public CashewItem fillEntity(Object entity) {
+		CashewItem itemEntity;
+		if(entity instanceof CashewItem) {
+			itemEntity = (CashewItem) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be CashewItem class");
+		}
+		super.fillEntity(itemEntity);
+		itemEntity.setNumBags(getNumBags());
+		if(getGrade() != null)
+			itemEntity.setGrade((CashewGrade) getGrade().fillEntity(new CashewGrade()));
+		itemEntity.setWhole(isWhole());
+		itemEntity.setRoast(isRoast());
+		itemEntity.setToffee(isToffee());
+		itemEntity.setSaltLevel(getSaltLevel());
+		return itemEntity;
 	}
 
 }

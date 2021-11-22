@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.ProcessDAO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
-import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
+import com.avc.mis.beta.dto.process.collectionItems.ProcessFileDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.entities.enums.ProcessName;
@@ -94,20 +94,25 @@ public class QualityChecks {
 
 	//----------------------------Duplicate in QualityCheckReports - Should remove------------------------------------------
 	
+	@Deprecated
 	@Autowired private QualityCheckReports qualityCheckReports;
 
+	@Deprecated
 	public List<CashewQcRow> getRawQualityChecks() {
 		return getQualityCheckReports().getRawQualityChecks();
 	}
 	
+	@Deprecated
 	public List<CashewQcRow> getRawQualityChecksByPoCode(@NonNull Integer poCodeId) {
 		return getQualityCheckReports().getRawQualityChecksByPoCode(poCodeId);
 	}
 	
+	@Deprecated
 	public List<CashewQcRow> getRoastedQualityChecks() {
 		return getQualityCheckReports().getRoastedQualityChecks();
 	}
 	
+	@Deprecated
 	public List<CashewQcRow> getRoastedQualityChecksByPoCode(@NonNull Integer poCodeId) {
 		return getQualityCheckReports().getRoastedQualityChecksByPoCode(poCodeId);
 	}

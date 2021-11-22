@@ -10,25 +10,29 @@ import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
 import com.avc.mis.beta.entities.values.ContractType;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
-import lombok.Value;
 
 /**
+ * DTO for contract type.
+ * 
  * @author zvi
  *
  */
-@Value
+@Data
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class ContractTypeDTO extends ValueDTO {
 
-	String value;
-	String code;
-	Currency currency; 
-	String suffix;
-	SupplyGroup supplyGroup;
+	private String value;
+	private String code;
+	private Currency currency; 
+	private String suffix;
+	private SupplyGroup supplyGroup;
 	
 	public ContractTypeDTO(@NonNull Integer id, String value, String code, 
 			Currency currency, String suffix, SupplyGroup supplyGroup) {
@@ -39,15 +43,6 @@ public class ContractTypeDTO extends ValueDTO {
 		this.suffix = suffix;
 		this.supplyGroup = supplyGroup;
 	}
-	
-	public ContractTypeDTO(@NonNull ContractType contractType) {
-		super(contractType.getId());
-		this.value = contractType.getValue();
-		this.code = contractType.getCode();
-		this.currency = contractType.getCurrency();
-		this.suffix = contractType.getSuffix();
-		this.supplyGroup = contractType.getSupplyGroup();
-	}
 
 	public String getSuffix() {
 		return suffix != null ? suffix : "";
@@ -57,5 +52,24 @@ public class ContractTypeDTO extends ValueDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return ContractType.class;
 	}
+	
+	@Override
+	public ContractType fillEntity(Object entity) {
+		ContractType typeEntity;
+		if(entity instanceof ContractType) {
+			typeEntity = (ContractType) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be ContractType class");
+		}
+		super.fillEntity(typeEntity);
+		typeEntity.setValue(getValue());
+		typeEntity.setCode(getCode());
+		typeEntity.setCurrency(getCurrency());
+		typeEntity.setSuffix(getSuffix());
+		typeEntity.setSupplyGroup(getSupplyGroup());
+		return typeEntity;
+	}
+
 	
 }

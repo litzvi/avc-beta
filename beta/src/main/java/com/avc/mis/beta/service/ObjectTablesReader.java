@@ -13,21 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
+import com.avc.mis.beta.dto.data.BankAccountDTO;
+import com.avc.mis.beta.dto.data.PersonDTO;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
-import com.avc.mis.beta.entities.codes.ShipmentCode;
-import com.avc.mis.beta.entities.data.BankAccount;
-import com.avc.mis.beta.entities.data.Company;
-import com.avc.mis.beta.entities.data.CompanyContact;
-import com.avc.mis.beta.entities.data.ContactDetails;
-import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.ProcessManagement;
-import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.codes.ProductPoCode;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.enums.ProductionUse;
 import com.avc.mis.beta.repositories.ObjectTablesRepository;
 
 import lombok.AccessLevel;
@@ -53,47 +47,16 @@ public class ObjectTablesReader {
 	
 //----------------------------Independent Objects------------------------------------------
 
-	public List<BankAccount> getAllBankAccounts() {
+	public List<BankAccountDTO> getAllBankAccounts() {
 		return getObjectTablesRepository().findAllBankAccounts();		
 	}
 		
-	public List<Person> getAllPersons() {
+	public List<PersonDTO> getAllPersons() {
 		return getObjectTablesRepository().findAllPersons();		
-	}
-	
-	public List<Company> getAllCompanies() {
-		return getObjectTablesRepository().findAllCompanies();		
-	}
-	
-	public List<PoCode> getAllPoCodes() {
-		return getObjectTablesRepository().findAllPoCodes();		
-	}
-	
-	public List<GeneralPoCode> getAllGeneralPoCodes() {
-		return getObjectTablesRepository().findAllGeneralPoCodes();		
-	}
-	
-	public List<ShipmentCode> getAllShipmentCodes() {
-		return getObjectTablesRepository().findAllShipmentCodes();		
 	}
 	
 //-----------------------------Dependent Objects--------------------------------------------
 	
-	public List<CompanyContact> getAllCompanyContacts() {
-		return getObjectTablesRepository().findAllCompanyContacts();		
-	}
-	
-	public List<ProcessManagement> getAllProcessTypeAlerts() {
-		return getObjectTablesRepository().findAllProcessAlerts();		
-	}
-	
-	public List<ContactDetails> getAllContactDetails() {
-		return getObjectTablesRepository().findAllContactDetails();		
-	}
-	
-	public List<UserEntity> getAllUsers() {
-		return getObjectTablesRepository().findAllUsers();		
-	}
 	
 //----------------------------Contact Details Objects-------------------------------------------
 	
@@ -103,7 +66,7 @@ public class ObjectTablesReader {
 //---------------------------------DTOs---------------------------------------------------------
 	
 	public List<PoCodeBasic> findFreePoCodes() {
-		return getObjectTablesRepository().findFreePoCodes(null, PoCode.class);		
+		return getObjectTablesRepository().findFreePoCodes(null, ProductPoCode.class);		
 	}
 	
 	public List<PoCodeBasic> findFreeGeneralPoCodes() {
@@ -158,8 +121,8 @@ public class ObjectTablesReader {
 	 * Can be used for searching reports for any PO.
 	 * @return List of PoCodeBasic
 	 */
-	public List<PoCodeBasicWithProductCompany> findAllPoCodes() {
-		return getObjectTablesRepository().findAllPoCodeBasics(PoCode.class);
+	public List<PoCodeBasicWithProductCompany> findAllProductPoCodes() {
+		return getObjectTablesRepository().findAllPoCodeBasics(ProductPoCode.class);
 	}
 	
 	/**
@@ -181,32 +144,40 @@ public class ObjectTablesReader {
 	
 //	--------------------------------------Duplicate in WarehouseManagement - should be removed----------------------------------------
 	
+	@Deprecated
 	@Autowired private WarehouseManagement warehouseManagement;
 	
+	@Deprecated
 	public Set<PoCodeBasic> findCashewAvailableInventoryPoCodes() {
 		return getWarehouseManagement().findCashewAvailableInventoryPoCodes();		
 	}
 
+	@Deprecated
 	public Set<PoCodeBasic> findGeneralAvailableInventoryPoCodes() {
 		return getWarehouseManagement().findGeneralAvailableInventoryPoCodes();		
 	}
 	
+	@Deprecated
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(Integer itemId) {
 		return getWarehouseManagement().findAvailableInventoryPoCodes(itemId);	
 	}
 	
+	@Deprecated
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses) {
 		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses, null);		
 	}
 	
+	@Deprecated
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(@NonNull ProductionUse[] productionUses, ProductionFunctionality[] functionalities) {
 		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses, functionalities, null);		
 	}
 	
+	@Deprecated
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ItemGroup group) {
 		return getWarehouseManagement().findAvailableInventoryPoCodes(group, null);		
 	}
 	
+	@Deprecated
 	public Set<PoCodeBasic> findAvailableInventoryPoCodes(ProductionUse[] productionUses, ItemGroup group) {
 		return getWarehouseManagement().findAvailableInventoryPoCodes(productionUses, group, null);
 	}

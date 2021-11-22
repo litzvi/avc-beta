@@ -61,6 +61,11 @@ public class UserEntity extends ObjectDataEntity {
 	private Set<Role> roles = new HashSet<>();
 	
 	@Override
+	public Person getReference() {
+		return getPerson();
+	}
+	
+	@Override
 	public void setReference(Object person) {
 		if(person instanceof Person) {
 			this.setPerson((Person)person);

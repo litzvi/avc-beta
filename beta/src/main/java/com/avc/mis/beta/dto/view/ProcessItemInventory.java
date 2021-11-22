@@ -9,16 +9,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.avc.mis.beta.dto.BasicDataDTO;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.process.inventory.BasicStorageDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageTableDTO;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.dto.process.storages.BasicStorageDTO;
+import com.avc.mis.beta.dto.process.storages.StorageTableDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.entities.values.CashewGrade;
+import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -38,9 +38,7 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
-public class ProcessItemInventory extends BasicDataDTO 
-//implements ListGroup<StorageInventoryRow> 
-{
+public class ProcessItemInventory extends BasicDataDTO {
 
 	private ItemWithUnitDTO item;
 	private MeasureUnit measureUnit;
@@ -50,7 +48,6 @@ public class ProcessItemInventory extends BasicDataDTO
 	private BasicValueEntity<CashewGrade> cashewGrade;
 	private LocalDateTime itemProcessDate;
 	private LocalDateTime receiptDate;
-//	private List<AmountWithUnit> totalBalanceAmount; //not used now
 	
 	@JsonIgnore
 	private boolean tableView;
@@ -85,27 +82,6 @@ public class ProcessItemInventory extends BasicDataDTO
 		this.tableView = tableView;
 	}
 		
-	/**
-	 * Setter for storageForms, sets the storages for this process item 
-	 * and updates total balance accordingly.
-	 * @param storageForms List of StorageInventoryRow
-	 */
-	//not used now
-//	public void setStorageForms(List<StorageInventoryRow> storageForms) {
-//		this.storageForms = storageForms;
-//		if(storageForms.size() > 0) {
-//			AmountWithUnit totalBalanceAmount = storageForms.stream()
-//					.map(StorageInventoryRow::getTotalBalance)
-//					.reduce(AmountWithUnit::add).get();
-//			this.totalBalanceAmount = AmountWithUnit.amountDisplay(
-//					totalBalanceAmount, this.item, Arrays.asList(totalBalanceAmount.getMeasureUnit(), MeasureUnit.LOT));
-//		}
-//		else {
-//			this.totalBalanceAmount = null;
-//		}
-//		
-//	}
-	
 	public List<StorageInventoryRow> getStorageForms() {
 		if(tableView) {
 			return null;
@@ -117,9 +93,6 @@ public class ProcessItemInventory extends BasicDataDTO
 		if(tableView && this.storageForms != null && !this.storageForms.isEmpty()) {
 			StorageTableDTO storageTable = new StorageTableDTO();
 			this.storageForms.stream().findAny().ifPresent(s -> {
-//				BasicValueEntity<Warehouse> warehouse = s.getWarehouseLocation();
-//				if(warehouse != null)
-//					storageTable.setWarehouseLocation(new Warehouse(warehouse.getId(), warehouse.getValue()));
 				storageTable.setWarehouseLocation(s.getWarehouseLocation());
 			});
 			List<BasicStorageDTO> amounts = this.storageForms.stream().map((s) -> {
@@ -130,12 +103,4 @@ public class ProcessItemInventory extends BasicDataDTO
 		}
 		return null;
 	}
-	
-//	@JsonIgnore
-//	@Override
-//	public void setList(List<StorageInventoryRow> list) {
-//		setStorageForms(list);
-//	}
-	
-	
 }

@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
+ * Production report summary for final report.
  * @author zvi
  *
  */
@@ -19,10 +20,6 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class ProductReportLine extends ReportLine {
-
-//	public ProductReportLine(@NonNull Integer id) {
-//		super(id);
-//	}
 
 	private List<ItemAmount> productCount;
 

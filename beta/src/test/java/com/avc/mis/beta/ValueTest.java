@@ -3,6 +3,7 @@
  */
 package com.avc.mis.beta;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
@@ -14,8 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.avc.mis.beta.dto.values.CountryDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.values.Country;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.ValueWriter;
 
@@ -33,17 +34,16 @@ public class ValueTest {
 	@Test
 	void softDeleteTest() {
 		//test softDelete
-		Country country = new Country();
+		CountryDTO country = new CountryDTO();
 		country.setValue("Imaginary country" + LocalDateTime.now().hashCode());
-		valueWriter.addCountry(country);
-		List<Country> countries = valueTablesReader.getAllCountries();
-		int index = countries.indexOf(country);
-		Country persistedCountry = countries.get(index);
-		assertTrue(persistedCountry.isActive());
-		valueWriter.remove(country.getClass(), country.getId());
+		Integer countryId = valueWriter.addCountry(country);
+		List<CountryDTO> countries = valueTablesReader.getAllCountries();
+		CountryDTO persistedCountry = countries.stream().filter(i -> i.getId() == countryId).findAny().get();
+		assertTrue(countries.stream().filter(i -> i.getId() == countryId).findAny().isPresent());
+		country.setId(countryId);
+		valueWriter.remove(persistedCountry.getClass(), countryId);
 		countries = valueTablesReader.getAllCountries();
-		index = countries.indexOf(country);
-		assertTrue(index == -1);
+		assertFalse(countries.stream().filter(i -> i.getId() == countryId).findAny().isPresent());
 	}
 	
 	@Test

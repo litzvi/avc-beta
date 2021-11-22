@@ -17,6 +17,8 @@ import lombok.Value;
 import lombok.experimental.NonFinal;
 
 /**
+ * Row in list of users report.
+ * 
  * @author Zvi
  *
  */

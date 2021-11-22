@@ -6,7 +6,6 @@ package com.avc.mis.beta;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -18,27 +17,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.basic.ProductionLineBasic;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.StorageRelocationDTO;
-import com.avc.mis.beta.dto.process.collection.CountAmountDTO;
-import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
-import com.avc.mis.beta.dto.values.ItemWithUse;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
-import com.avc.mis.beta.dto.view.StorageInventoryRow;
-import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.process.StorageRelocation;
-import com.avc.mis.beta.entities.process.collection.CountAmount;
-import com.avc.mis.beta.entities.process.collection.ItemCount;
-import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
-import com.avc.mis.beta.entities.process.inventory.Storage;
-import com.avc.mis.beta.entities.process.inventory.StorageMove;
 import com.avc.mis.beta.service.ProcessInfoWriter;
 import com.avc.mis.beta.service.WarehouseManagement;
 
@@ -80,7 +64,7 @@ public class RelocationTest {
 		poCode.setId(receipt.getPoCode().getId());
 		relocation.setPoCode(poCode);
 		relocation.setRecordedTime(LocalDateTime.now());
-		relocation.setProductionLine(new ProductionLineBasic(service.getProductionLine(ProductionFunctionality.RAW_STATION)));
+		relocation.setProductionLine(service.getProductionLine(ProductionFunctionality.RAW_STATION));
 
 
 		//get inventory storages for relocation

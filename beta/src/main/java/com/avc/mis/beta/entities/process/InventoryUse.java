@@ -11,6 +11,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Process for using inventory without processing.
+ * e.g. use, fix inventory or throw away.
+ * 
  * @author zvi
  *
  */

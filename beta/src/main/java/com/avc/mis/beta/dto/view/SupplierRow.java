@@ -3,22 +3,17 @@
  */
 package com.avc.mis.beta.dto.view;
 
-import java.util.Arrays;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.entities.data.Email;
-import com.avc.mis.beta.entities.data.Phone;
-import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.values.SupplyCategory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
 
 /**
+ * Row in list of suppliers report.
+ * 
  * @author Zvi
  *
  */
@@ -34,32 +29,11 @@ public class SupplierRow extends BasicDTO {
 	@JsonIgnore
 	private Integer contactDetailsId; //for joining with sets
 	
-	
 	public SupplierRow(Integer id, String name, Integer contactDetailsId) {
 		super(id);
 		this.name = name;
 		this.contactDetailsId = contactDetailsId;
 	}
-		
-	public SupplierRow(@NonNull Supplier supplier) {
-		super(supplier.getId());
-		this.name = supplier.getName();
-		this.phones = Arrays.stream(supplier.getContactDetails().getPhones())
-				.map(Phone::getValue).collect(Collectors.toSet());
-		this.emails = Arrays.stream(supplier.getContactDetails().getEmails())
-				.map(Email::getValue).collect(Collectors.toSet());
-		this.supplyCategories = supplier.getSupplyCategories().stream()
-				.map(SupplyCategory::getValue).collect(Collectors.toSet());
-
-	}
 	
-	public SupplierRow(Integer id, String name, 
-			Set<String> phones, Set<String> emails, Set<String> supplyCategories) {
-		super(id);
-		this.name = name;
-		this.phones = phones;
-		this.emails = emails;
-		this.supplyCategories = supplyCategories;
-	}
 	
 }

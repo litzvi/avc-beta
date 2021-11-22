@@ -23,7 +23,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
- * Service for accessing and manipulating shipment bookings.
+ * Service for accessing and manipulating shipping container arrivals.
  * 
  * @author Zvi
  *
@@ -66,12 +66,15 @@ public class ContainerArrivals {
 	
 	//----------------------------Duplicate in ContainerArrivalReports - Should remove------------------------------------------
 
+	@Deprecated
 	@Autowired private ContainerArrivalReports containerArrivalReports;
 
+	@Deprecated
 	public List<ContainerArrivalRow> getContainerArrivals() {
 		return getContainerArrivalReports().getContainerArrivals();
 	}
 	
+	@Deprecated
 	public Set<ContainerArrivalBasic> getNonLoadedArrivals() {
 		return getContainerArrivalReports().getNonLoadedArrivals();		
 	}

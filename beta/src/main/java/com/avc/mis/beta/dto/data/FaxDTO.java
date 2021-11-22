@@ -34,4 +34,19 @@ public class FaxDTO extends SubjectDataDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return Fax.class;
 	}
+	
+	@Override
+	public Fax fillEntity(Object entity) {
+		Fax faxEntity;
+		if(entity instanceof Fax) {
+			faxEntity = (Fax) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be Fax class");
+		}
+		super.fillEntity(faxEntity);
+		faxEntity.setValue(getValue());;
+		return faxEntity;
+	}
+
 }

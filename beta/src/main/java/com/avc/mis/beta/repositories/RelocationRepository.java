@@ -12,7 +12,7 @@ import com.avc.mis.beta.dto.query.ProcessItemTransactionDifference;
 import com.avc.mis.beta.dto.query.StorageMoveWithGroup;
 import com.avc.mis.beta.dto.view.RelocationWithItemAmount;
 import com.avc.mis.beta.entities.process.RelocationProcess;
-import com.avc.mis.beta.entities.process.inventory.StorageBase;
+import com.avc.mis.beta.entities.process.storages.StorageBase;
 
 /**
  * @author zvi
@@ -30,13 +30,10 @@ public interface RelocationRepository extends PoProcessRepository<RelocationProc
 				+ "join g.storageMoves storageMove "
 					+ "join storageMove.processItem pi "
 						+ "join pi.item item "
-//					+ "join storageMove.unitAmount producedUnit "
-//					+ "join storageMove.group produce_group "
 						+ "join UOM uom_produced "
 							+ "on uom_produced.fromUnit = g.measureUnit and uom_produced.toUnit = item.measureUnit "
 					+ "join storageMove.storage used_sf "
 						+ "join used_sf.group used_group "
-//							+ "join used_sf.unitAmount used_unit "
 							+ "join UOM uom_used "
 								+ "on uom_used.fromUnit = used_group.measureUnit and uom_used.toUnit = item.measureUnit "						
 		+ "where p.id = :processId "

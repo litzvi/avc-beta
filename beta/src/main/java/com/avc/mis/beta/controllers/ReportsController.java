@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.report.FinalReport;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.view.ItemInventoryAmountWithOrder;
@@ -26,14 +26,14 @@ import com.avc.mis.beta.dto.view.ItemInventoryRow;
 import com.avc.mis.beta.dto.view.PoInventoryRow;
 import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
+import com.avc.mis.beta.entities.enums.ProductionUse;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
 import com.avc.mis.beta.service.ContainerArrivals;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
@@ -187,7 +187,7 @@ public class ReportsController {
 	
 	@RequestMapping("/getAllPoCodes")
 	public List<PoCodeBasicWithProductCompany> getAllPoCodes(){
-		return objectTableReader.findAllPoCodes();
+		return objectTableReader.findAllProductPoCodes();
 	}
 	
 	@RequestMapping("/getPoFinalReport/{id}")

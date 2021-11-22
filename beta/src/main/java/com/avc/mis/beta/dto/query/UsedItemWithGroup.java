@@ -6,22 +6,22 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.avc.mis.beta.dto.process.collection.UsedItemsGroupDTO;
-import com.avc.mis.beta.dto.process.inventory.UsedItemDTO;
+import com.avc.mis.beta.dto.process.group.UsedItemsGroupDTO;
+import com.avc.mis.beta.dto.process.storages.UsedItemDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Data;
 import lombok.NonNull;
 
 /**
+ * Used for fetching by query of used items with their group.
+ * 
  * @author zvi
  *
  */
 @Data
-public class UsedItemWithGroup 
-//implements CollectionItemWithGroup<UsedItemDTO, UsedItemsGroupDTO> 
-{
+public class UsedItemWithGroup {
 	
 	UsedItemsGroupDTO usedItemsGroup;
 	UsedItemDTO usedItem;
@@ -48,17 +48,5 @@ public class UsedItemWithGroup
 				unitAmount, storageNumberUnits, otherUsedUnits, //accessWeight,
 				warehouseLocationId, warehouseLocationValue, storageRemarks);
 	}
-
-//	@Override
-//	public UsedItemDTO getItem() {
-//		return getUsedItem();
-//	}
-//
-//	@Override
-//	public UsedItemsGroupDTO getGroup() {
-//		return getUsedItemsGroup();
-//	}
-	
-	
 
 }

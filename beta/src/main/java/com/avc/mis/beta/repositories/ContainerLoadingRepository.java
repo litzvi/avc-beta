@@ -13,11 +13,11 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.exportdoc.ContainerPoItemRow;
 import com.avc.mis.beta.dto.exportdoc.ContainerPoItemStorageRow;
 import com.avc.mis.beta.dto.exportdoc.ExportInfo;
-import com.avc.mis.beta.dto.process.collection.LoadedItemDTO;
-import com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo;
+import com.avc.mis.beta.dto.process.collectionItems.LoadedItemDTO;
+import com.avc.mis.beta.dto.process.info.ContainerLoadingInfo;
 import com.avc.mis.beta.dto.view.LoadingRow;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.enums.ItemGroup;
+import com.avc.mis.beta.entities.enums.ProductionUse;
 import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 
 /**
@@ -31,7 +31,7 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 	 * @param processId id of loading process info to be fetched.
 	 * @return ContainerLoadingInfo object that contains loading process information.
 	 */
-	@Query("select new com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo( "
+	@Query("select new com.avc.mis.beta.dto.process.info.ContainerLoadingInfo( "
 			+ "sc.id, sc.code, port.id, port.value, port.code, "
 			+ "arrival.id, arrival.version, cd.containerNumber, "
 			+ "pc.id, pc.version, pc.name) "
@@ -49,7 +49,7 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 	 * @param processId id of the process
 	 * @return List of LoadedItemWithStorage
 	 */
-	@Query("select new com.avc.mis.beta.dto.process.collection.LoadedItemDTO( "
+	@Query("select new com.avc.mis.beta.dto.process.collectionItems.LoadedItemDTO( "
 			+ " i.id, i.version, i.ordinal, "
 			+ "item.id, item.value, item.productionUse, type(item), "
 			+ "poCode.id, poCode.code, ct.code, ct.suffix, s.name, "
@@ -104,7 +104,6 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 	@Query("select new com.avc.mis.beta.dto.exportdoc.ExportInfo( "
 			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, p.recordedTime) "
 		+ "from ContainerLoading p "
-//			+ "join p.booking b "
 				+ "join p.shipmentCode shipment_code "
 					+ "join shipment_code.portOfDischarge pod "
 		+ "where p.id = :processId ")
@@ -144,7 +143,6 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 	@Query("select new com.avc.mis.beta.dto.exportdoc.ContainerPoItemStorageRow( "
 			+ "item.id, item.value, item.measureUnit, "
 			+ "item_unit.amount, item_unit.measureUnit, type(item), "
-//			+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "sf.unitAmount, pi.measureUnit, "
 			+ "sum(sf.numberUnits * coalesce(w_po.weight, 1)), "
@@ -154,13 +152,7 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 						+ "THEN sf.numberUnits "
 					+ "ELSE coalesce(sf.unitAmount, 1) "
 				+ "END)"
-			+ ") "
-//				+ "/ "			
-//				+ "(CASE "
-//					+ "WHEN w_po is null THEN 1 "
-//					+ "ELSE size(used_p.weightedPos) "
-//				+ "END)"
-			+ ") "			
+			+ ")) "			
 		+ "from ContainerLoading p "
 			+ "join p.storageMovesGroups g "
 				+ "join g.storageMoves sf "
@@ -191,8 +183,6 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 					+ "ELSE coalesce(sf.unitAmount, 1) "
 				+ "END)"
 			+ "), "
-//			+ "coalesce(w_po.weight, 1), "
-//			+ "used_p.id, "
 			+ "concat(t.code, '-', po_code.code, coalesce(t.suffix, '')), "
 			+ "p.recordedTime, "
 			+ "shipment_code.id, shipment_code.code, pod.code, pod.value, "
@@ -210,9 +200,6 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 							+ "join pi.item item "
 								+ "join item.unit item_unit "
 								+ "left join item.grade grade "
-//							+ "join CashewItem item "
-//								+ "on pi.item = item "
-//								+ "join item.unit item_unit "
 							+ "join pi.process used_p "
 								+ "left join used_p.poCode p_po_code "
 								+ "left join used_p.weightedPos w_po "
@@ -222,14 +209,11 @@ public interface ContainerLoadingRepository extends RelocationRepository {
 									+ "left join po_code.contractType t "
 									+ "left join po_code.supplier s "
 		+ "where lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.FINAL "
-//			+ "and type(item) = com.avc.mis.beta.entities.item.CashewItem "
 			+ "and (:checkProductionUses = false or item.productionUse in :productionUses) "
 			+ "and (item.itemGroup = :itemGroup or :itemGroup is null) "
 			+ "and (:startTime is null or p.recordedTime >= :startTime) "
 			+ "and (:endTime is null or p.recordedTime < :endTime) "
 		+ "group by p.id, item.itemGroup, item, po_code, pi.measureUnit "
-//		+ "group by p.id, used_p.id, item.itemGroup, item, po_code, pi.measureUnit "
-//		+ "order by p.recordedTime, item.itemGroup, item "
 		)	
 	List<CashewExportReportRow> findCashewExportReportRows(
 			boolean checkProductionUses, ProductionUse[] productionUses,

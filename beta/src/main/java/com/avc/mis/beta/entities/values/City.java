@@ -36,6 +36,11 @@ public class City extends ValueEntity {
 	private Country country;
 	
 	@Override
+	public Country getReference() {
+		return getCountry();
+	}
+	
+	@Override
 	public void setReference(Object referenced) {
 		if(referenced instanceof Country) {
 			this.setCountry((Country)referenced);

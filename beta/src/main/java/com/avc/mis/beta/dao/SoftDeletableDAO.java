@@ -28,7 +28,10 @@ public class SoftDeletableDAO extends DAO {
 	 * @param entityId id of entity to be removed.
 	 * @throws IllegalArgumentException
 	 */
-	public <T extends BaseEntity & SoftDeleted> void removeEntity(Class<T> entityClass, int entityId) {
+	public <T extends BaseEntity> void removeEntity(Class<T> entityClass, int entityId) {
+		if(!SoftDeleted.class.isAssignableFrom(entityClass)) {
+			throw new IllegalArgumentException("Can only soft delete entities that implement SoftDeleted");
+		}
 		T entity = getEntityManager().getReference(entityClass, entityId);
 		if(entity.getId() == null) {
 			throw new IllegalArgumentException("Received wrong id, entity can't be found in database");

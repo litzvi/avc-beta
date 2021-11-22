@@ -3,19 +3,20 @@
  */
 package com.avc.mis.beta.dto.data;
 
-import com.avc.mis.beta.dto.DataDTO;
-import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.dto.BasicDataDTO;
 import com.avc.mis.beta.entities.DataEntity;
 import com.avc.mis.beta.entities.DataInterface;
 
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * @author Zvi
  *
  */
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-public class DataObject<T extends DataInterface>  extends DataDTO {
+public class DataObject<T extends DataInterface>  extends BasicDataDTO {
 
 	public DataObject(Integer id, Integer version) {
 		super(id, version);
@@ -26,11 +27,6 @@ public class DataObject<T extends DataInterface>  extends DataDTO {
 	 */
 	public DataObject(T entity) {
 		super(entity.getId(), entity.getVersion());
-	}
-	
-	@Override
-	public Class<? extends BaseEntity> getEntityClass() {
-		return DataEntity.class;
 	}
 	
 	@Override

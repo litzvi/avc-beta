@@ -9,7 +9,7 @@ import lombok.NonNull;
 import lombok.Value;
 
 /**
- * Used for getting inventory balance of units for Storage entity object.
+ * Used for getting inventory balance of units for Storage entity object, to check if over used.
  * 
  * @author zvi
  *

@@ -18,6 +18,8 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
+ * Row in list of receipts report.
+ * 
  * @author Zvi
  *
  */

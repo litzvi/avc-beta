@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
+ * DTO for Inventory Use processes, that record a use of items in inventory that aren't part of a production process.
+ * 
  * @author zvi
  *
  */
@@ -20,11 +22,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class InventoryUseDTO extends RelocationProcessDTO {
-	
-	public InventoryUseDTO(InventoryUse inventoryUse) {
-		super(inventoryUse);
-	}
-	
+		
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {
 		return InventoryUse.class;
@@ -42,11 +40,6 @@ public class InventoryUseDTO extends RelocationProcessDTO {
 		super.fillEntity(inventoryUse);
 				
 		return inventoryUse;
-	}
-	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Inventory Use";
 	}
 
 }

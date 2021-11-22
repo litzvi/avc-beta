@@ -62,16 +62,16 @@ public class IdCard extends DataEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "nationality")
 	private Country nationality;
-	
-	public void setDob(String dob) {
-		if(dob != null)
-			this.dob = LocalDate.parse(dob);
-	}
-	
-	public void setDateOfIssue(String dateOfIssue) {
-		if(dateOfIssue != null)
-			this.dateOfIssue = LocalDate.parse(dateOfIssue);
-	}
+//	
+//	public void setDob(String dob) {
+//		if(dob != null)
+//			this.dob = LocalDate.parse(dob);
+//	}
+//	
+//	public void setDateOfIssue(String dateOfIssue) {
+//		if(dateOfIssue != null)
+//			this.dateOfIssue = LocalDate.parse(dateOfIssue);
+//	}
 	
 	@Override
 	public void setReference(Object referenced) {

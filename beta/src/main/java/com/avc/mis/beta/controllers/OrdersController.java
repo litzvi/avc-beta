@@ -20,23 +20,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.codes.GeneralPoCodeDTO;
+import com.avc.mis.beta.dto.codes.PoCodeDTO;
+import com.avc.mis.beta.dto.codes.ProductPoCodeDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
-import com.avc.mis.beta.dto.process.inventory.ExtraAddedDTO;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.process.storages.ExtraAddedDTO;
+import com.avc.mis.beta.dto.values.ContractTypeDTO;
 import com.avc.mis.beta.dto.view.PoItemRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
-import com.avc.mis.beta.entities.codes.GeneralPoCode;
 import com.avc.mis.beta.entities.codes.MixPoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
-import com.avc.mis.beta.entities.process.SampleReceipt;
-import com.avc.mis.beta.entities.values.ContractType;
 import com.avc.mis.beta.service.ObjectTablesReader;
 import com.avc.mis.beta.service.ObjectWriter;
 import com.avc.mis.beta.service.Orders;
@@ -97,8 +96,8 @@ public class OrdersController {
 	
 	@PostMapping(value="/receiveCashewOrder")
 	public ReceiptDTO receiptCashewOrder(@RequestBody ReceiptDTO receipt) {
-		orderRecipt.addCashewOrderReceipt(receipt);
-		return orderRecipt.getReceiptByProcessId(receipt.getId());
+		Integer id = orderRecipt.addCashewOrderReceipt(receipt);
+		return orderRecipt.getReceiptByProcessId(id);
 	}
 	
 	@PostMapping(value="/receiveCashewNoOrder")
@@ -109,8 +108,8 @@ public class OrdersController {
 	
 	@PostMapping(value="/receiveGeneralOrder")
 	public ReceiptDTO receiveGeneralOrder(@RequestBody ReceiptDTO receipt) {
-		orderRecipt.addGeneralOrderReceipt(receipt);
-		return orderRecipt.getReceiptByProcessId(receipt.getId());
+		Integer id = orderRecipt.addGeneralOrderReceipt(receipt);
+		return orderRecipt.getReceiptByProcessId(id);
 	}
 	
 	@PostMapping(value="/receiveSample")
@@ -254,7 +253,7 @@ public class OrdersController {
 	
 	@RequestMapping("/findAllPoCodes")
 	public List<PoCodeBasicWithProductCompany> findAllPoCodes() {
-		return objectTableReader.findAllPoCodes();
+		return objectTableReader.findAllProductPoCodes();
 	}
 	
 	@RequestMapping("/getPoCode/{id}")
@@ -263,13 +262,13 @@ public class OrdersController {
 	}
 	
 	@PostMapping(value="/addPoCode")
-	public ResponseEntity<?> addPoCode(@RequestBody PoCode poCode) {
+	public ResponseEntity<?> addPoCode(@RequestBody ProductPoCodeDTO poCode) {
 		objectWriter.addPoCode(poCode);
 		return ResponseEntity.ok().build();
 	}
 	
 	@PutMapping(value="/editPoCode")
-	public ResponseEntity<?> editPoCode(@RequestBody PoCode poCode) {
+	public ResponseEntity<?> editPoCode(@RequestBody ProductPoCodeDTO poCode) {
 		objectWriter.editPoCode(poCode);
 		return ResponseEntity.ok().build();
 	}
@@ -280,13 +279,13 @@ public class OrdersController {
 	}
 	
 	@PostMapping(value="/addGeneralPoCode")
-	public ResponseEntity<?> addGeneralPoCode(@RequestBody GeneralPoCode poCode) {
+	public ResponseEntity<?> addGeneralPoCode(@RequestBody GeneralPoCodeDTO poCode) {
 		objectWriter.addPoCode(poCode);
 		return ResponseEntity.ok().build();
 	}
 	
 	@PutMapping(value="/editGeneralPoCode")
-	public ResponseEntity<?> editGeneralPoCode(@RequestBody GeneralPoCode poCode) {
+	public ResponseEntity<?> editGeneralPoCode(@RequestBody GeneralPoCodeDTO poCode) {
 		objectWriter.editPoCode(poCode);
 		return ResponseEntity.ok().build();
 	}
@@ -320,12 +319,12 @@ public class OrdersController {
 	
 	
 	@RequestMapping("/getGeneralContractTypes")
-	public List<ContractType> getGeneralContractTypes() {
+	public List<ContractTypeDTO> getGeneralContractTypes() {
 		return refeDao.getGeneralContractTypes();
 	}
 	
 	@RequestMapping("/getCashewContractTypes")
-	public List<ContractType> getCashewContractTypes() {
+	public List<ContractTypeDTO> getCashewContractTypes() {
 		return refeDao.getCashewContractTypes();
 	}
 	

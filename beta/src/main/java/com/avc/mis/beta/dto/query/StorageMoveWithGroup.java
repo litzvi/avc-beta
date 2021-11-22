@@ -6,23 +6,23 @@ package com.avc.mis.beta.dto.query;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageMoveDTO;
+import com.avc.mis.beta.dto.process.group.StorageMovesGroupDTO;
+import com.avc.mis.beta.dto.process.storages.StorageMoveDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.process.inventory.Storage;
+import com.avc.mis.beta.entities.process.storages.Storage;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Data;
 import lombok.NonNull;
 
 /**
+ * For fetching with query storage moves with their group.
+ * 
  * @author zvi
  *
  */
 @Data
-public class StorageMoveWithGroup 
-//implements CollectionItemWithGroup<StorageMoveDTO, StorageMovesGroupDTO> 
-{
+public class StorageMoveWithGroup {
 
 	StorageMovesGroupDTO storageMovesGroup;
 	StorageMoveDTO storageMove;
@@ -54,16 +54,4 @@ public class StorageMoveWithGroup
 				unitAmount, numberUnits, //accessWeight,
 				warehouseLocationId, warehouseLocationValue, clazz);
 	}
-
-//	@JsonIgnore
-//	@Override
-//	public StorageMoveDTO getItem() {
-//		return getStorageMove();
-//	}
-//
-//	@JsonIgnore
-//	@Override
-//	public StorageMovesGroupDTO getGroup() {
-//		return getStorageMovesGroup();
-//	}
 }

@@ -4,24 +4,22 @@
 package com.avc.mis.beta.dto.process;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.PoProcessDTO;
-import com.avc.mis.beta.dto.process.collection.ItemCountDTO;
-import com.avc.mis.beta.dto.process.collection.StorageMovesGroupDTO;
+import com.avc.mis.beta.dto.process.group.StorageMovesGroupDTO;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.process.RelocationProcess;
-import com.avc.mis.beta.entities.process.collection.ItemCount;
-import com.avc.mis.beta.entities.process.collection.StorageMovesGroup;
+import com.avc.mis.beta.entities.process.group.StorageMovesGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * Abstract DTO for processes that move inventory between locations.
+ * Could be abstract locations, like Shipping or Inventory Use.
+ * 
  * @author zvi
  *
  */
@@ -32,16 +30,6 @@ import lombok.ToString;
 public abstract class RelocationProcessDTO extends PoProcessDTO {
 	
 	private List<StorageMovesGroupDTO> storageMovesGroups;
-
-	public RelocationProcessDTO(@NonNull RelocationProcess relocation) {
-		super(relocation);
-		this.storageMovesGroups = relocation.getStorageMovesGroups().stream()
-				.map(i->{return new StorageMovesGroupDTO((StorageMovesGroup)i);}).collect(Collectors.toList());
-		Set<ItemCount> itemCounts = relocation.getItemCounts();
-		if(itemCounts != null)
-			this.setItemCounts(itemCounts.stream()
-					.map(i->{return new ItemCountDTO(i);}).collect(Collectors.toList()));
-	}
 	
 	@Override
 	public RelocationProcess fillEntity(Object entity) {

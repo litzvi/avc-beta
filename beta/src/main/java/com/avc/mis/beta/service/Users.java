@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.SoftDeletableDAO;
-import com.avc.mis.beta.dto.basic.UserBasic;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
+import com.avc.mis.beta.dto.data.PersonDTO;
 import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.view.UserRow;
 import com.avc.mis.beta.entities.data.Person;
@@ -26,7 +26,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
- * 
+ * Service for adding, editing user information.
  * 
  * @author Zvi
  *
@@ -48,32 +48,34 @@ public class Users {
 	 * ADD NEW USER - WITH ADDING PERSON (name = username)
 	 * Adds a new login user not connected to existing person.
 	 * Might have or not have the person's details.
-	 * @param user UserEntity with person field null.
+	 * @param user UserDTO with person null or person id null.
+	 * @return assigned user id
 	 */
-	public void addUser(UserEntity user) {
-		Person person = user.getPerson();
+	public Integer addUser(UserDTO user) {
+		PersonDTO person = user.getPerson();
 		if(person == null) {
-			person = new Person();
+			person = new PersonDTO();
 			person.setName(user.getUsername());
 			user.setPerson(person);
 		}		
-		dao.addEntity(person);
-		openUserForPerson(user);
+		Integer personId = dao.addEntity(person, Person::new);
+		user.getPerson().setId(personId);
+		return openUserForPerson(user);
 	}
 	
 	/**
 	 * ADD NEW USER - FOR EXISTING PERSON
 	 * Opening a login user account for an existing person
-	 * @param user UserEntity referencing an existing person
+	 * @param user UserDTO referencing an existing person
+	 * @return assigned user id
 	 */
-	public void openUserForPerson(UserEntity user) {
-		if(user.getPerson() == null) {
+	public Integer openUserForPerson(UserDTO user) {
+		if(user.getPerson() == null || user.getPerson().getId() == null) {
 			throw new IllegalArgumentException("Trying to open user without existing person. See addUser(user) method.");
 		}
-//		String generatedPass = RandomStringUtils.random(8, true, true);
 		//perhaps send email
 		user.setPassword(encoder.encode(user.getPassword()));
-		dao.addEntity(user, user.getPerson());
+		return dao.addEntity(user, UserEntity::new);
 	}
 	
 	/**
@@ -128,9 +130,9 @@ public class Users {
 	 * Edit the user details, dosen't edit the person details for this user.
 	 * @param user to be edited
 	 */
-	public void editUser(UserEntity user) {
+	public void editUser(UserDTO user) {
 		user.setPerson(null); // not editing person
-		dao.editEntity(user);
+		dao.editEntity(user, UserEntity::new);
 	}
 	
 	/**
@@ -138,11 +140,11 @@ public class Users {
 	 * Edits all the personal details of this user, will edit user and person details.
 	 * @param user to be edited
 	 */
-	public void editPersonalDetails(UserEntity user) {
-		Person person = user.getPerson();
-		dao.editEntity(user);
+	public void editPersonalDetails(UserDTO user) {
+		PersonDTO person = user.getPerson();
+		dao.editEntity(user, UserEntity::new);
 		if(person != null)
-			dao.editEntity(person);
+			dao.editEntity(person, Person::new);
 		
 	}
 	
@@ -179,19 +181,16 @@ public class Users {
 
 	@Autowired private UserReports userReports;	
 
+	@Deprecated
 	@Transactional(readOnly = true)
 	public List<UserRow> getUsersTable() {
 		return getUserReports().getUsersTable();		
 	}
 	
+	@Deprecated
 	@Transactional(readOnly = true)
 	public List<DataObjectWithName<Person>> getPersonsBasic() {
 		return getUserReports().getPersonsBasic();		
 	}
-	
-	@Transactional(readOnly = true)
-	public List<UserBasic> getUsersBasic() {
-		return getUserReports().getUsersBasic();		
-	}
-	
+		
 }

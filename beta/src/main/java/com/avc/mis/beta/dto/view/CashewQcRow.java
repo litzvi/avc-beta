@@ -9,14 +9,14 @@ import java.math.RoundingMode;
 import java.time.LocalDateTime;
 
 import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.RawDamage;
 import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.QcCompany;
-import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -24,6 +24,8 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
+ * Row in list of Cashew quality checks report.
+ * 
  * @author Zvi
  *
  */

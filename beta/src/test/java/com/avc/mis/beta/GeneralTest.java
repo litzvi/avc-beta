@@ -9,14 +9,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Currency;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,27 +24,28 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
+import com.avc.mis.beta.dto.basic.ItemWithMeasureUnit;
+import com.avc.mis.beta.dto.basic.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
+import com.avc.mis.beta.dto.codes.ProductPoCodeDTO;
 import com.avc.mis.beta.dto.data.DataObject;
 import com.avc.mis.beta.dto.data.SupplierDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
 import com.avc.mis.beta.dto.process.QualityCheckDTO;
 import com.avc.mis.beta.dto.process.ReceiptDTO;
 import com.avc.mis.beta.dto.process.SampleReceiptDTO;
-import com.avc.mis.beta.dto.process.collection.CashewItemQualityDTO;
-import com.avc.mis.beta.dto.process.collection.ItemWeightDTO;
-import com.avc.mis.beta.dto.process.collection.OrderItemDTO;
-import com.avc.mis.beta.dto.process.collection.ProcessFileDTO;
-import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
-import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
-import com.avc.mis.beta.dto.process.collection.SampleItemDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageDTO;
-import com.avc.mis.beta.dto.process.inventory.StorageWithSampleDTO;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
-import com.avc.mis.beta.dto.values.ItemWithMeasureUnit;
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
-import com.avc.mis.beta.entities.codes.PoCode;
-import com.avc.mis.beta.entities.data.ProcessFile;
+import com.avc.mis.beta.dto.process.collectionItems.CashewItemQualityDTO;
+import com.avc.mis.beta.dto.process.collectionItems.ItemWeightDTO;
+import com.avc.mis.beta.dto.process.collectionItems.OrderItemDTO;
+import com.avc.mis.beta.dto.process.collectionItems.ProcessFileDTO;
+import com.avc.mis.beta.dto.process.group.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.group.ReceiptItemDTO;
+import com.avc.mis.beta.dto.process.group.SampleItemDTO;
+import com.avc.mis.beta.dto.process.storages.StorageDTO;
+import com.avc.mis.beta.dto.process.storages.StorageWithSampleDTO;
+import com.avc.mis.beta.dto.values.ItemDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.AmountWithCurrency;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
@@ -57,19 +54,9 @@ import com.avc.mis.beta.entities.embeddable.RawDefects;
 import com.avc.mis.beta.entities.enums.EditStatus;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.process.PO;
 import com.avc.mis.beta.entities.process.QualityCheck;
-import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.process.SampleReceipt;
-import com.avc.mis.beta.entities.process.collection.CashewItemQuality;
-import com.avc.mis.beta.entities.process.collection.ItemWeight;
-import com.avc.mis.beta.entities.process.collection.OrderItem;
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
-import com.avc.mis.beta.entities.process.collection.ReceiptItem;
-import com.avc.mis.beta.entities.process.collection.SampleItem;
-import com.avc.mis.beta.entities.process.inventory.Storage;
-import com.avc.mis.beta.entities.process.inventory.StorageWithSample;
+import com.avc.mis.beta.entities.process.collectionItems.OrderItem;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.repositories.ValueTablesRepository;
 import com.avc.mis.beta.service.ObjectWriter;
@@ -82,8 +69,6 @@ import com.avc.mis.beta.service.Suppliers;
 import com.avc.mis.beta.service.ValueTablesReader;
 import com.avc.mis.beta.service.ValueWriter;
 
-import lombok.NonNull;
-
 /**
  * @author Zvi
  *
@@ -94,10 +79,11 @@ import lombok.NonNull;
 @WithUserDetails("eli")
 public class GeneralTest {
 	
-	static final Integer PO_CODE = 800248;
+	static final Integer PO_CODE = 800253;
 	static final Integer NUM_PO_ITEMS = 2;
 	static final Integer NUM_OF_CHECKS = 1;
 	
+	@Autowired TestService service;
 	@Autowired ValueTablesRepository valueTablesRepository;
 	
 	@Autowired ValueTablesReader valueTablesReader;
@@ -114,29 +100,34 @@ public class GeneralTest {
 	@Test
 	void orderAndReceiveTest() {
 		//create basic supplier with all existing supply categories
-		Supplier supplier = new Supplier();
+		SupplierDTO supplier = new SupplierDTO();
 		supplier.setName("Test supplier" + PO_CODE);
 		supplier.setSupplyCategories(valueTablesReader.getAllSupplyCategories().stream().collect(Collectors.toSet()));
-		suppliers.addSupplier(supplier);
-		SupplierDTO supplierDTO = suppliers.getSupplier(supplier.getId());
-		assertEquals(new SupplierDTO(supplier, true), supplierDTO, "Supplier not added or fetched correctly");
+		Integer supplierId = suppliers.addSupplier(supplier);
+		SupplierDTO fetchedSupplier = suppliers.getSupplier(supplierId);
+		assertEquals(supplier, fetchedSupplier, "Supplier not added or fetched correctly");
 		
 		//create a cashew order with 2 order lines
 		PoDTO po = new PoDTO();
-		PoCode poCode = new PoCode();
+		ProductPoCodeDTO poCode = new ProductPoCodeDTO();
 		poCode.setCode(Integer.toString(PO_CODE));
-		poCode.setContractType(valueTablesRepository.findContractTypeByCodeAndCurrency("VAT", Currency.getInstance("VND")));
-		poCode.setSupplier(supplier);
-		objectWriter.addPoCode(poCode);
-		po.setPoCode(new PoCodeBasic(poCode));
+//		poCode.setContractType(valueTablesRepository.findContractTypeByCodeAndCurrency("VAT", Currency.getInstance("VND")));
+		poCode.setContractType(service.getContractType());
+		poCode.setSupplier(new DataObjectWithName<Supplier>(fetchedSupplier.getId(), fetchedSupplier.getVersion(), fetchedSupplier.getName()));
+		Integer poCodeId = objectWriter.addPoCode(poCode);
+		poCode.setId(poCodeId);
+		PoCodeBasic poCodeBasic = new PoCodeBasic();
+		poCodeBasic.setId(poCodeId);
+		po.setPoCode(poCodeBasic);
 		po.setRecordedTime(LocalDateTime.now());
 		List<OrderItemDTO> orderItems = new ArrayList<OrderItemDTO>();
-		List<Item> items = valueTablesReader.getAllItems();
+		List<ItemDTO> items = valueTablesReader.getAllItems();
 		for(int i=0; i < NUM_PO_ITEMS; i++) {
 			OrderItemDTO orderItem = new OrderItemDTO();
 			orderItems.add(orderItem);
-			orderItem.setItem(new ItemWithMeasureUnit(items.get(i)));
-			orderItem.setNumberUnits(new AmountWithUnit("35000", "LBS"));
+			ItemDTO item = items.get(i);
+			orderItem.setItem(new ItemWithMeasureUnit(item.getId(), item.getValue(), item.getMeasureUnit()));
+			orderItem.setNumberUnits(new AmountWithUnit(BigDecimal.valueOf(35000), item.getMeasureUnit()));
 //			orderItem.setCurrency("USD");
 //			orderItem.setMeasureUnit("LBS");
 			orderItem.setUnitPrice(new AmountWithCurrency("2.99", "USD"));
@@ -167,7 +158,7 @@ public class GeneralTest {
 		receipt.setPoCode(new PoCodeBasic(poCode));
 		receipt.setRecordedTime(LocalDateTime.now());
 		List<ReceiptItemDTO> receiptItems = new ArrayList<>();
-		List<Warehouse> storages = valueTablesReader.getAllWarehouses();
+		List<BasicValueEntity<Warehouse>> warehouses = valueTablesReader.getAllWarehousesBasic();
 		List<OrderItemDTO> fetchedOrderItems = poDTO.getOrderItems();
 		for(int i=0; i < NUM_PO_ITEMS; i++) {
 			ReceiptItemDTO receiptItem = new ReceiptItemDTO();
@@ -182,14 +173,14 @@ public class GeneralTest {
 			StorageWithSampleDTO storage = new StorageWithSampleDTO();
 			storage.setUnitAmount(BigDecimal.valueOf(50));
 			storage.setNumberUnits(BigDecimal.valueOf(326));
-			storage.setWarehouseLocation(new BasicValueEntity<Warehouse>(storages.get(i)));
+			storage.setWarehouseLocation(warehouses.get(i));
 //			storage.setMeasureUnit("KG");
 			storageForms[0] = storage;
 			
 			storage = new StorageWithSampleDTO();
 			storage.setUnitAmount(BigDecimal.valueOf(26));
 			storage.setNumberUnits(BigDecimal.valueOf(1));
-			storage.setWarehouseLocation(new BasicValueEntity<Warehouse>(storages.get(i)));
+			storage.setWarehouseLocation(warehouses.get(i));
 //			storage.setMeasureUnit("KG");
 			storageForms[1] = storage;
 			
@@ -238,7 +229,7 @@ public class GeneralTest {
 			QCStorageForms.add(QCStorageForm);
 			QCStorageForm.setUnitAmount(BigDecimal.valueOf(8));
 			QCStorageForm.setNumberUnits(BigDecimal.valueOf(2));
-			QCStorageForm.setWarehouseLocation(new BasicValueEntity<Warehouse>(storages.get(i)));
+			QCStorageForm.setWarehouseLocation(warehouses.get(i));
 //			QCStorageForm.setMeasureUnit("OZ");
 			
 			processItem.setStorageForms(QCStorageForms);
@@ -288,7 +279,8 @@ public class GeneralTest {
 		sampleReceipt.setSampleItems(sampleItems);
 		SampleItemDTO sampleItem = new SampleItemDTO();
 		sampleItems.add(sampleItem);
-		sampleItem.setItem(new BasicValueEntity(items.get(0)));
+		ItemDTO item = items.get(0);
+		sampleItem.setItem(new BasicValueEntity(item.getId(), item.getValue()));
 		sampleItem.setMeasureUnit(MeasureUnit.KG);
 		List<ItemWeightDTO> itemWeights = new ArrayList<ItemWeightDTO>();
 		sampleItem.setItemWeights(itemWeights);
@@ -301,7 +293,7 @@ public class GeneralTest {
 		sampleItem.setItemWeights(itemWeights);
 		sampleItem.setSampleContainerWeight(BigDecimal.valueOf(0.002));
 		sampleItem = new SampleItemDTO();
-		sampleItem.setItem(new BasicValueEntity(items.get(0)));
+		sampleItem.setItem(new BasicValueEntity(item.getId(), item.getValue()));
 		sampleItem.setMeasureUnit(MeasureUnit.KG);
 //		itemWeights = new ArrayList<ItemWeightDTO>();
 		itemWeight = new ItemWeightDTO();
@@ -328,7 +320,7 @@ public class GeneralTest {
 		
 		
 		//print all
-		System.out.println("Supplier: " + supplierDTO);
+		System.out.println("Supplier: " + fetchedSupplier);
 		System.out.println("Purchase Order: " + poDTO);
 		System.out.println("Order receipt: " + receiptDTO);
 		System.out.println("QC test: " + checkDTO);
@@ -344,7 +336,7 @@ public class GeneralTest {
 //		suppliers.permenentlyRemoveSupplier(supplierDTO.getId());
 		
 		processInfoWriter.removeAllProcesses(poCode.getId());
-		suppliers.permenentlyRemoveSupplier(supplierDTO.getId());
+		suppliers.permenentlyRemoveSupplier(fetchedSupplier.getId());
 
 	}
 }

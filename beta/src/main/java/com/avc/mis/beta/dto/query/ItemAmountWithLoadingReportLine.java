@@ -9,22 +9,22 @@ import java.time.LocalDateTime;
 import com.avc.mis.beta.dto.report.ItemAmount;
 import com.avc.mis.beta.dto.report.LoadingReportLine;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.enums.ProductionUse;
+import com.avc.mis.beta.entities.values.Item;
 
 import lombok.Value;
 
 /**
+ * Used for fetching loading information for final report
+ * 
  * @author zvi
  *
  */
 @Value
-public class ItemAmountWithLoadingReportLine 
-//implements CollectionItemWithGroup<ItemAmount, LoadingReportLine> 
-{
+public class ItemAmountWithLoadingReportLine {
 	
 	LoadingReportLine loadingReportLine;
 	ItemAmount itemAmount;
@@ -42,14 +42,4 @@ public class ItemAmountWithLoadingReportLine
 				amount, weightCoefficient);
 	}
 
-//	@Override
-//	public ItemAmount getItem() {
-//		return this.itemAmount;
-//	}
-//
-//	@Override
-//	public LoadingReportLine getGroup() {
-//		return this.loadingReportLine;
-//	}
-	
 }

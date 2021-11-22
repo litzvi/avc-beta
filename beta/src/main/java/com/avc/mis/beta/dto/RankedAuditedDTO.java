@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
+ * DTO for entities that can be edited by multiple users and owned by an entity as part of a collection.
+ * Contains an ordinal number for indicating priority between multiple entities of the same class, 
+ * owned by the same object.
+ * 
  * 
  * @author Zvi
  *
@@ -28,10 +32,6 @@ public abstract class RankedAuditedDTO extends DataDTO implements Ordinal {
 	public RankedAuditedDTO(Integer id, Integer version, Integer ordinal) {
 		super(id, version);
 		this.ordinal = ordinal;
-	}
-	
-	public RankedAuditedDTO(Integer id, Integer version) {
-		super(id, version);
 	}
 	
 	public RankedAuditedDTO(RankedAuditedEntity entity) {

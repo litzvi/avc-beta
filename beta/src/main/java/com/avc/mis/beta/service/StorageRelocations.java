@@ -47,14 +47,6 @@ public class StorageRelocations {
 				.findPoProcessInfoByProcessId(processId, StorageRelocation.class)
 				.orElseThrow(
 						()->new IllegalArgumentException("No po code for given process id")));
-//		relocationDTO.setStorageMovesGroups(
-//				CollectionItemWithGroup.getFilledGroups(
-//						getRelocationRepository()
-//						.findStorageMovesWithGroup(processId)));
-//		relocationDTO.setItemCounts(
-//				CollectionItemWithGroup.getFilledGroups(
-//						getRelocationRepository()
-//						.findItemCountWithAmount(processId)));
 		getProcessReader().setRelocationProcessCollections(relocationDTO);
 
 		return relocationDTO;

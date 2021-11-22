@@ -6,10 +6,10 @@ package com.avc.mis.beta.dto.exportdoc;
 import java.math.BigDecimal;
 import java.util.stream.Stream;
 
-import com.avc.mis.beta.dto.values.ItemWithUnit;
+import com.avc.mis.beta.dto.basic.ItemWithUnit;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Value;
@@ -23,7 +23,6 @@ public class ContainerPoItemStorageRow {
 
 	@JsonIgnore
 	ItemWithUnit itemWithUnit;
-//	PoCodeBasic poCode;
 	String[] poCodes;
 	AmountWithUnit unitAmount;
 	BigDecimal numberUnits;
@@ -32,15 +31,10 @@ public class ContainerPoItemStorageRow {
 	public ContainerPoItemStorageRow(
 			Integer itemId, String itemValue, MeasureUnit defaultMeasureUnit, 
 			BigDecimal itemUnitAmount, MeasureUnit itemMeasureUnit, Class<? extends Item> itemClazz,  
-//			Integer poCodeId, String poCodeCode, String contractTypeCode, String contractTypeSuffix, String supplierName,  
 			String poCodes,
 			BigDecimal unitAmount, MeasureUnit measureUnit, BigDecimal numberUnits, BigDecimal numberBoxes) {
 		super();
 		this.itemWithUnit = new ItemWithUnit(itemId, itemValue, defaultMeasureUnit, itemUnitAmount, itemMeasureUnit, itemClazz);
-//		if(poCodeId != null)
-//			this.poCode = new PoCodeBasic(poCodeId, poCodeCode, contractTypeCode, contractTypeSuffix, supplierName);
-//		else
-//			this.poCode = null;
 		if(poCodes != null)
 			this.poCodes = Stream.of(poCodes.split(",")).distinct().toArray(String[]::new);
 		else
@@ -49,13 +43,6 @@ public class ContainerPoItemStorageRow {
 		this.numberUnits = numberUnits;
 		this.numberBoxes = numberBoxes;
 	}
-	
-//	public BigDecimal getNumberBoxes() {
-//		if(this.unitAmount.getAmount() == null) {
-//			return null;
-//		}
-//		return this.numberUnits;
-//	}
 	
 	public String getItem() {
 		return itemWithUnit.getValue();

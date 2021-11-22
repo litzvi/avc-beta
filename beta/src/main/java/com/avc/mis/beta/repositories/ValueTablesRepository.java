@@ -8,16 +8,14 @@ import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.basic.ProductionLineBasic;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.values.CashewItemDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.ValueEntity;
-import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.enums.ItemGroup;
+import com.avc.mis.beta.entities.enums.ProductionUse;
+import com.avc.mis.beta.entities.values.Item;
 
 /**
  * Spring repository for accessing lists of {@link ValueEntity} entities, 
@@ -36,7 +34,6 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 				+ "join i.unit u "
 			+ "where (i.itemGroup = :itemGroup or :itemGroup is null) "
 				+ "and (:checkProductionUses = false or i.productionUse in :productionUses) "
-//				+ "and (type(i) in :classes) "
 				+ "and (:packageTypeOrdinal = "
 					+ "(CASE "
 						+ "WHEN u.measureUnit = com.avc.mis.beta.entities.enums.MeasureUnit.NONE "
@@ -68,11 +65,10 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 					+ "ELSE 1 "
 				+ "END) "
 				+ "or :packageTypeOrdinal is null) "
-//			+ "and i.numBags >= :minBagsInBox "
 		+ "order by i.productionUse, i.brand, i.code, i.value ")
 	List<CashewItemDTO> findCashewItems(ItemGroup itemGroup, ProductionUse productionUse, Integer gradeId, Integer packageTypeOrdinal);
 
-	@Query("select new com.avc.mis.beta.dto.reference.BasicValueEntity(i.id, i.value) "
+	@Query("select new com.avc.mis.beta.dto.basic.BasicValueEntity(i.id, i.value) "
 			+ "from Item i "
 			+ "where (i.itemGroup = :itemGroup or :itemGroup is null)"
 				+ "and (i.productionUse = :productionUse or :productionUse is null)"
@@ -80,14 +76,7 @@ public interface ValueTablesRepository extends BaseRepository<ValueEntity> {
 			+ "order by i.productionUse, i.code, i.value ")
 	List<BasicValueEntity<Item>> findBasicItems(ItemGroup itemGroup, ProductionUse productionUse);
 
-	@Query("select new com.avc.mis.beta.dto.basic.ProductionLineBasic(t.id, t.value, t.productionFunctionality) "
-			+ "from ProductionLine t "
-			+ "where t.active = true "
-				+ "and t.productionFunctionality in :functionalities "
-			+ "order by t.value ")
-	List<ProductionLineBasic> findBasicProductionLines(ProductionFunctionality[] functionalities);
-
-	@Query("select new com.avc.mis.beta.dto.values.ItemWithUnitDTO("
+	@Query("select new com.avc.mis.beta.dto.basic.ItemWithUnitDTO("
 			+ "i.id, i.value, i.measureUnit, i.itemGroup, i.productionUse, "
 			+ "u, type(i)) "
 		+ "from StorageBase s "

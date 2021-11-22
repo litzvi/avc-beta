@@ -22,6 +22,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
+ * Amount with currency.
+ * e.g. 50usd, 10gbp etc.
+ * 
  * @author Zvi
  *
  */

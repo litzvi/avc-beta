@@ -7,6 +7,7 @@ import com.avc.mis.beta.dto.SubjectDataDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.data.Address;
+import com.avc.mis.beta.entities.values.City;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,4 +39,22 @@ public class AddressDTO extends SubjectDataDTO {
 	public Class<? extends BaseEntity> getEntityClass() {
 		return Address.class;
 	}
+	
+	@Override
+	public Address fillEntity(Object entity) {
+		Address addressEntity;
+		if(entity instanceof Address) {
+			addressEntity = (Address) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be Address class");
+		}
+		super.fillEntity(addressEntity);
+		addressEntity.setStreetAddress(getStreetAddress());
+		if(getCity() != null) {
+			addressEntity.setCity(getCity().fillEntity(new City()));
+		}
+		return addressEntity;
+	}
+
 }

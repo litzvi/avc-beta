@@ -12,23 +12,21 @@ import org.springframework.data.jpa.repository.Query;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
-import com.avc.mis.beta.dto.values.PoCodeDTO;
+import com.avc.mis.beta.dto.codes.PoCodeDTO;
+import com.avc.mis.beta.dto.codes.ShipmentCodeDTO;
+import com.avc.mis.beta.dto.data.BankAccountDTO;
+import com.avc.mis.beta.dto.data.PersonDTO;
 import com.avc.mis.beta.entities.ObjectDataEntity;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.codes.GeneralPoCode;
-import com.avc.mis.beta.entities.codes.PoCode;
+import com.avc.mis.beta.entities.codes.ProductPoCode;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
-import com.avc.mis.beta.entities.data.BankAccount;
-import com.avc.mis.beta.entities.data.Company;
 import com.avc.mis.beta.entities.data.CompanyContact;
-import com.avc.mis.beta.entities.data.ContactDetails;
-import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.enums.SequenceIdentifier;
-import com.avc.mis.beta.utilities.ProgramSequence;
+import com.avc.mis.beta.entities.link.ContactDetails;
+import com.avc.mis.beta.entities.link.ProcessManagement;
 
 /**
  * @author Zvi
@@ -38,26 +36,40 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 	
 //-----------Finding all Base entities--------------
 	
-	@Query("select e from PoCode e")
-	List<PoCode> findAllPoCodes();
+	@Query("select e from ProductPoCode e")
+	List<ProductPoCode> findAllProductPoCodes();
 	
-	@Query("select e from PoCode e")
+	@Query("select e from GeneralPoCode e")
 	List<GeneralPoCode> findAllGeneralPoCodes();
 	
 	@Query("select e from ShipmentCode e")
 	List<ShipmentCode> findAllShipmentCodes();
+	
+	@Query("select new com.avc.mis.beta.dto.codes.ShipmentCodeDTO(e.id, e.code, port.id, port.value, port.code) "
+			+ "from ShipmentCode e "
+				+ "join e.portOfDischarge port "
+			+ "where e.id = :id")
+	ShipmentCodeDTO findShipmentCode(Integer id);
+
 
 	
 //-----------Finding all Object entities with active=true--------------
 
-	@Query("select e from BankAccount e where e.active = true")
-	List<BankAccount> findAllBankAccounts();
+	@Query("select new com.avc.mis.beta.dto.data.BankAccountDTO( "
+			+ "a.id, a.version, "
+			+ "a.accountNo, a.ownerName, "
+			+ "bb.id, bb.value, b.id, b.value) "
+			+ "from BankAccount a "
+				+ "join a.branch bb "
+					+ "join bb.bank b "
+			+ "where a.active = true")
+	List<BankAccountDTO> findAllBankAccounts();
 
-	@Query("select e from Company e where e.active = true")
-	List<Company> findAllCompanies();
-
-	@Query("select e from Person e where e.active = true")
-	List<Person> findAllPersons();
+	@Query("select new com.avc.mis.beta.dto.data.PersonDTO( "
+			+ "p.id, p.version, p.name) "
+			+ "from Person p "
+			+ "where p.active = true")
+	List<PersonDTO> findAllPersons();
 
 	@Query("select e from CompanyContact e where e.active = true")
 	List<CompanyContact> findAllCompanyContacts();
@@ -98,9 +110,6 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 					+ "left join ri.receivedOrderUnits rnu "
 						+ "left join UOM uom "
 							+ "on uom.fromUnit = rnu.measureUnit and uom.toUnit = units.measureUnit "
-//					+ "left join ri.storageForms sf "
-//						+ "left join UOM uom "
-//							+ "on uom.fromUnit = ri.measureUnit and uom.toUnit = units.measureUnit "
 		+ "where po.closed = false "
 			+ "and t.processName = :processName "
 			+ "and (lc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.PENDING "
@@ -110,7 +119,6 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 			+ "SUM("
 				+ "CASE "
 					+ "WHEN rlc.processStatus = com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED THEN null  "
-//					+ "ELSE (sf.unitAmount * coalesce(sf.numberUnits, 0) * uom.multiplicand / uom.divisor) "
 					+ "ELSE (rnu.amount * uom.multiplicand / uom.divisor) "
 				+ "END), "
 			+ "0) < units.amount ")
@@ -196,15 +204,6 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 		+ "order by s_code.id desc ")
 	List<ShipmentCodeBasic> findFreeShipmentCodes(Integer shipmentCodeId);
 
-//	@Query("select count(*) > 0 "
-//		+ "from PoCode po_code "
-//			+ "join Receipt r "
-//				+ "on r.poCode = po_code "
-//				+ "join r.lifeCycle lc "
-//		+ "where po_code.id = :poCodeId "
-//			+ "and lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED ")
-//	boolean isPoCodeReceived(Integer poCodeId);
-
 	@Query("select new com.avc.mis.beta.dto.basic.PoCodeBasic("
 			+ "po_code.id, po_code.code, c.code, c.suffix, s.name) "
 		+ "from MixPoCode po_code "
@@ -223,7 +222,7 @@ public interface ObjectTablesRepository extends BaseRepository<ObjectDataEntity>
 		+ "order by po_code.id desc ")
 	List<PoCodeBasic> findMixFreePoCodes(Integer poCodeId);
 
-	@Query("select new com.avc.mis.beta.dto.values.PoCodeDTO( "
+	@Query("select new com.avc.mis.beta.dto.codes.PoCodeDTO( "
 			+ "po_code.id, po_code.code, "
 			+ "s.id, s.version, s.name, "
 			+ "ct.id, ct.value, ct.code, ct.currency, ct.suffix, ct.supplyGroup, "

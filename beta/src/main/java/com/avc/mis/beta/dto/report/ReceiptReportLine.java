@@ -12,6 +12,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
+ * Receipt report summary for final report.
+ * 
  * @author zvi
  *
  */
@@ -19,15 +21,6 @@ import lombok.ToString;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class ReceiptReportLine extends ProductReportLine {
-
-//	public ReceiptReportLine(@NonNull Integer id) {
-//		super(id);
-//	}
-	
-//	private PoCodeBasic poCode;
-//	private String supplierName;
-	
-//	private AmountWithUnit receivedOrderUnits; //if used, should be a list
 
 	private List<ItemAmount> received;
 
@@ -38,15 +31,6 @@ public class ReceiptReportLine extends ProductReportLine {
 		boolean empty = received == null || received.isEmpty();
 		this.received = empty ? null : received;
 		this.totalReceived = empty ? null : ItemAmount.getTotalWeight(received);
-//		
-//		if(received == null || received.isEmpty()) {
-//			this.received = null;
-//			this.totalReceived = null;
-//		}
-//		else {
-//			this.received = received;
-//			this.totalReceived = getTotalWeight(received);
-//		}
 	}
 
 }

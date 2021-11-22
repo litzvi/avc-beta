@@ -1,47 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" always-add-relationships="false" generalizations="false" 
   realizations="false" associations="true" dependencies="true" nesting-relationships="false" router="FAN">  
-  <class id="1" language="java" name="com.avc.mis.beta.dto.query.UsedItemWithGroup" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/query/UsedItemWithGroup.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1281" y="611"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="2" language="java" name="com.avc.mis.beta.dto.query.StorageMoveWithGroup" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/query/StorageMoveWithGroup.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1446" y="695"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="3" language="java" name="com.avc.mis.beta.dto.query.ProcessItemWithStorage" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/query/ProcessItemWithStorage.java" binary="false" 
+  <class id="1" language="java" name="com.avc.mis.beta.dto.query.BomProductWithMaterialLine" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/query/BomProductWithMaterialLine.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1070" y="411"/>    
+    <position height="-1" width="-1" x="1142" y="543"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="com.avc.mis.beta.dto.query.StorageBalance" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/query/StorageBalance.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="657" y="459"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="com.avc.mis.beta.dto.query.ReceiptItemWithStorage" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/query/ReceiptItemWithStorage.java" binary="false" 
+  <class id="2" language="java" name="com.avc.mis.beta.dto.query.ItemAmountWithLoadingReportLine" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/query/ItemAmountWithLoadingReportLine.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1165" y="516"/>    
+    <position height="-1" width="-1" x="262" y="206"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="3" language="java" name="com.avc.mis.beta.dto.query.ItemAmountWithPoCode" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/query/ItemAmountWithPoCode.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1661" y="306"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="4" language="java" name="com.avc.mis.beta.dto.query.ItemCountWithAmount" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/query/ItemCountWithAmount.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1226" y="643"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="5" language="java" name="com.avc.mis.beta.dto.query.ItemTransactionDifference" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/query/ItemTransactionDifference.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1666" y="826"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -51,84 +52,69 @@
   <class id="6" language="java" name="com.avc.mis.beta.dto.query.ProcessItemTransactionDifference" project="beta" 
     file="/beta/src/main/java/com/avc/mis/beta/dto/query/ProcessItemTransactionDifference.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="226" y="444"/>    
+    <position height="-1" width="-1" x="1701" y="681"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="com.avc.mis.beta.dto.query.ItemTransactionDifference" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/query/ItemTransactionDifference.java" binary="false" 
+  <class id="7" language="java" name="com.avc.mis.beta.dto.query.ProcessItemWithStorage" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/query/ProcessItemWithStorage.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="454" y="558"/>    
+    <position height="-1" width="-1" x="806" y="161"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="com.avc.mis.beta.dto.query.ItemCountWithAmount" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/query/ItemCountWithAmount.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1791" y="512"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </class>  
-  <interface id="9" language="java" name="com.avc.mis.beta.utilities.CollectionItemWithGroup" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/utilities/CollectionItemWithGroup.java" binary="false" 
+  <class id="8" language="java" name="com.avc.mis.beta.dto.query.ReceiptItemWithStorage" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/query/ReceiptItemWithStorage.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1482" y="118"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </interface>  
-  <interface id="10" language="java" name="com.avc.mis.beta.utilities.ListGroup" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/utilities/ListGroup.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1129" y="120"/>    
-    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="false" package="false" protected="false" private="false" static="true"/>    
-    </display>  
-  </interface>  
-  <class id="11" language="java" name="com.avc.mis.beta.dto.BasicValueDTO" project="beta" 
-    file="/beta/src/main/java/com/avc/mis/beta/dto/BasicValueDTO.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="53" width="110" x="330" y="129"/>    
+    <position height="-1" width="-1" x="868" y="264"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="false" package="false" protected="false" private="false" static="true"/>    
     </display>  
   </class>  
-  <dependency id="12">    
-    <end type="SOURCE" refId="9"/>    
-    <end type="TARGET" refId="10"/>  
-  </dependency>  
-  <dependency id="13">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <dependency id="14">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <dependency id="15">    
-    <end type="SOURCE" refId="8"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <dependency id="16">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <dependency id="17">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
+  <class id="9" language="java" name="com.avc.mis.beta.dto.query.StorageBalance" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/query/StorageBalance.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1648" y="468"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="10" language="java" name="com.avc.mis.beta.dto.query.StorageMoveWithGroup" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/query/StorageMoveWithGroup.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1033" y="450"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="11" language="java" name="com.avc.mis.beta.dto.query.UsedItemWithGroup" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/query/UsedItemWithGroup.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="946" y="365"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
+  <class id="12" language="java" name="com.avc.mis.beta.dto.query.UsedProcess" project="beta" 
+    file="/beta/src/main/java/com/avc/mis/beta/dto/query/UsedProcess.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1663" y="145"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="false" package="false" protected="false" private="false" static="true"/>    
+    </display>  
+  </class>  
   <classifier-display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
     sort-features="false" accessors="true" visibility="true">    
     <attributes public="true" package="true" protected="true" private="true" static="true"/>    

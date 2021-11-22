@@ -2,34 +2,30 @@ package com.avc.mis.beta.dto.process;
 
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
-import com.avc.mis.beta.dto.process.collection.WeightedPoDTO;
+import com.avc.mis.beta.dto.process.group.ProcessItemDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.process.ProductionProcess;
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
-import com.avc.mis.beta.entities.process.collection.UsedItemsGroup;
+import com.avc.mis.beta.entities.process.group.ProcessItem;
+import com.avc.mis.beta.entities.process.group.UsedItemsGroup;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
+/**
+ * DTO for production processes. e.g. cleaning, roasting, packing etc.
+ * 
+ * @author zvi
+ *
+ */
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> {
 	
-	public ProductionProcessDTO(@NonNull ProductionProcess process) {
-		super(process);
-		super.setProcessItems(process.getProcessItems().stream()
-				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));
-		super.setWeightedPos(process.getWeightedPos().stream()
-				.map(i->{return new WeightedPoDTO(i);}).collect(Collectors.toList()));
-
-	}
 		
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {
@@ -62,11 +58,6 @@ public class ProductionProcessDTO extends TransactionProcessDTO<ProcessItemDTO> 
 		}
 		
 		return productionProcess;
-	}
-
-	@Override
-	public String getProcessTypeDescription() {
-		return getProcessName().toString();	
 	}
 	
 }

@@ -13,6 +13,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.ContactEntity;
+import com.avc.mis.beta.entities.link.ContactDetails;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -39,10 +40,6 @@ public class PaymentAccount extends ContactEntity {
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
 	@NotNull(message = "Payment account without a bank account is not soppurted")
 	private BankAccount bankAccount;
-	
-//	protected boolean canEqual(Object o) {
-//		return Insertable.canEqualCheckNullId(this, o);
-//	}
 	
 	@Override
 	public void setReference(Object referenced) {

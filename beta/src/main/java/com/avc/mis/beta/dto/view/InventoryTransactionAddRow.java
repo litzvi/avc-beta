@@ -14,6 +14,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
+ * Add Row in list of inventory transactions report.
+ * i.e. transaction that adds to inventory.
+ * 
  * @author zvi
  *
  */

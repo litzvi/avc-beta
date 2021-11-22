@@ -8,7 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-import com.avc.mis.beta.entities.data.ContactDetails;
+import com.avc.mis.beta.entities.link.ContactDetails;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

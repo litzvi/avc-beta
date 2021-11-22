@@ -9,13 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.avc.mis.beta.dto.BasicDTO;
+import com.avc.mis.beta.dto.basic.ItemWithUnitDTO;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
@@ -27,6 +27,8 @@ import lombok.Value;
 import lombok.experimental.NonFinal;
 
 /**
+ * Row in list of receipt items report.
+ * 
  * @author Zvi
  *
  */

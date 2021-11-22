@@ -26,21 +26,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
+import com.avc.mis.beta.dto.codes.ShipmentCodeDTO;
 import com.avc.mis.beta.dto.exportdoc.InventoryExportDoc;
 import com.avc.mis.beta.dto.exportdoc.SecurityExportDoc;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
 import com.avc.mis.beta.dto.process.ContainerLoadingDTO;
+import com.avc.mis.beta.dto.values.ShippingPortDTO;
 import com.avc.mis.beta.dto.view.ContainerArrivalRow;
 import com.avc.mis.beta.dto.view.LoadingRow;
 import com.avc.mis.beta.dto.view.ProcessItemInventory;
-import com.avc.mis.beta.entities.codes.ShipmentCode;
 import com.avc.mis.beta.entities.data.Supplier;
+import com.avc.mis.beta.entities.enums.ProductionUse;
 import com.avc.mis.beta.entities.enums.SupplyGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.values.ShippingPort;
 import com.avc.mis.beta.service.ContainerArrivals;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
@@ -94,13 +94,13 @@ public class ContainerController {
 	}
 	
 	@PostMapping("/addShipmentCode")
-	public ResponseEntity<Object> addShipmentCode(@RequestBody ShipmentCode shipmentCode) {
+	public ResponseEntity<Object> addShipmentCode(@RequestBody ShipmentCodeDTO shipmentCode) {
 		objectWriter.addShipmentCode(shipmentCode);
 		return ResponseEntity.ok().build();
 	}
 	
 	@PutMapping("/editShipmentCode")
-	public ResponseEntity<Object> editShipmentCode(@RequestBody ShipmentCode shipmentCode) {
+	public ResponseEntity<Object> editShipmentCode(@RequestBody ShipmentCodeDTO shipmentCode) {
 		objectWriter.editShipmentCode(shipmentCode);
 		return ResponseEntity.ok().build();
 	}
@@ -205,7 +205,7 @@ public class ContainerController {
 	public List<Object> getSetUpContianer() {
 		List<Object> result = new ArrayList<Object>();
 		
-		List<ShippingPort> ShippingPortsholder = refeDao.getAllShippingPorts();
+		List<ShippingPortDTO> ShippingPortsholder = refeDao.getAllShippingPorts();
 		result.add(ShippingPortsholder);
 		
 		List<DataObjectWithName<Supplier>> ShippingSuppliers = refeDao.getSuppliersBasicByGroup(SupplyGroup.SHIPPED_PRODUCT);

@@ -13,6 +13,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
+ * Date, status and approval of a process.
+ * 
  * @author zvi
  *
  */

@@ -12,7 +12,4 @@ import com.avc.mis.beta.entities.values.Bank;
  *
  */
 public interface BankRepository extends JpaRepository<Bank, Integer> {
-	
-//	@Query(value = "update banks set id = :newId where id = :oldId", nativeQuery = true)
-//	void setBankId(int newId, int oldId);
 }

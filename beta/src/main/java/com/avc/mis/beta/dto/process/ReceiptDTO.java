@@ -6,17 +6,16 @@ package com.avc.mis.beta.dto.process;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.process.collection.ReceiptItemDTO;
+import com.avc.mis.beta.dto.process.group.ReceiptItemDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.process.Receipt;
-import com.avc.mis.beta.entities.process.collection.ReceiptItem;
+import com.avc.mis.beta.entities.process.group.ReceiptItem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -33,13 +32,6 @@ public class ReceiptDTO extends ProcessWithProductDTO<ReceiptItemDTO> {
 	
 	@EqualsAndHashCode.Exclude
 	private Integer referencedOrder;
-	
-	public ReceiptDTO(@NonNull Receipt receipt) {
-		super(receipt);
-		setReceiptItems(receipt.getReceiptItems().stream()
-				.map(i->{return new ReceiptItemDTO((ReceiptItem) i);}).collect(Collectors.toList()));
-
-	}
 	
 	/**
 	 * Always null for Receipt - use getReceiptItems instead
@@ -85,12 +77,5 @@ public class ReceiptDTO extends ProcessWithProductDTO<ReceiptItemDTO> {
 		
 		return receipt;
 	}
-	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Receipt";
-	}
-
-	
 
 }

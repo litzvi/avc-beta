@@ -13,9 +13,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.avc.mis.beta.dao.DeletableDAO;
 import com.avc.mis.beta.dao.ProcessInfoDAO;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
-import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
+import com.avc.mis.beta.dto.link.ProcessManagementDTO;
+import com.avc.mis.beta.dto.system.UserMessageDTO;
 import com.avc.mis.beta.entities.codes.BasePoCode;
-import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
 import com.avc.mis.beta.entities.enums.EditStatus;
@@ -23,8 +23,9 @@ import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
+import com.avc.mis.beta.entities.link.ProcessManagement;
 import com.avc.mis.beta.entities.process.GeneralProcess;
-import com.avc.mis.beta.entities.process.collection.UserMessage;
+import com.avc.mis.beta.entities.system.UserMessage;
 import com.avc.mis.beta.repositories.ProcessInfoRepository;
 
 /**
@@ -68,30 +69,12 @@ public class ProcessInfoWriter {
 		return processTypeAlert.getId();
 	}
 	
-	public void editProcessTypeAlert(ProcessManagement processTypeAlert, ManagementType managementType) {
-		processTypeAlert.setManagementType(managementType);
-		deletableDAO.editEntity(processTypeAlert);
-	}
-	
 	public void removeProcessTypeAlert(Integer processTypeAlertId) {
-		ProcessManagement processTypeAlert = processInfoReader.getProcessTypeAlert(processTypeAlertId);
-		String title = "You where removed from getting alerts on " + processTypeAlert.getProcessType().getValue();
-		dao.addMessage(processTypeAlert.getUser(), null, title);
-		deletableDAO.permenentlyRemoveEntity(processTypeAlert);
+		ProcessManagementDTO processTypeAlert = processInfoReader.getProcessTypeAlert(processTypeAlertId);
+		String title = "You where removed from getting alerts on " + processTypeAlert.getProcessName();
+		dao.addMessage(processTypeAlert.getUser().getId(), null, title);
+		deletableDAO.permenentlyRemoveEntity(ProcessManagement.class, processTypeAlert.getId());
 	}
-
-	/**
-	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.
-	 * @param approvalId the ApprovalTask id.
-	 * @param decisionType the decision made.
-	 * @param processSnapshot snapshot of the process as seen by the approver.
-	 * @param remarks
-	 * @throws IllegalArgumentException trying to approve for another user.
-	 */
-//	Should only do it through a process - checks if approval if user still has approval registered.
-//	public void setApprovalDecision(int approvalId, DecisionType decisionType, String processSnapshot, String remarks) {
-//		dao.setProcessDecision(approvalId, decisionType, processSnapshot, remarks);		
-//	}
 	
 	/**
 	 * Approve (or any other decision) to a approval task for a process, including snapshot of process state approved.
@@ -145,7 +128,6 @@ public class ProcessInfoWriter {
 		List<ProcessBasic<GeneralProcess>> processes = processReader.getAllProcessesByPo(poCodeId);
 		List<String> removed = processes.stream().map(i -> "removing process: " + i).collect(Collectors.toList());
 		processes.forEach(i -> removeProcess(i.getId(), i.getProcessClazz()));
-		//find used items that are disappearing
 		//delete po code
 		deletableDAO.permenentlyRemoveEntity(BasePoCode.class, poCodeId);
 		return removed;

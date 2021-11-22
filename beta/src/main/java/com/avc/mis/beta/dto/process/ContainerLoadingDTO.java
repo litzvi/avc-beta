@@ -7,23 +7,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.avc.mis.beta.dto.basic.ContainerArrivalBasic;
-import com.avc.mis.beta.dto.process.collection.LoadedItemDTO;
-import com.avc.mis.beta.dto.processInfo.ContainerLoadingInfo;
-import com.avc.mis.beta.dto.values.ShipmentCodeDTO;
+import com.avc.mis.beta.dto.codes.ShipmentCodeDTO;
+import com.avc.mis.beta.dto.process.collectionItems.LoadedItemDTO;
+import com.avc.mis.beta.dto.process.info.ContainerLoadingInfo;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
 import com.avc.mis.beta.entities.process.ContainerArrival;
 import com.avc.mis.beta.entities.process.ContainerLoading;
-import com.avc.mis.beta.entities.process.collection.LoadedItem;
+import com.avc.mis.beta.entities.process.collectionItems.LoadedItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * DTO for container loading process.
+ * 
  * @author zvi
  *
  */
@@ -37,14 +38,6 @@ public class ContainerLoadingDTO extends RelocationProcessDTO {
 	private ShipmentCodeDTO shipmentCode;
 	
 	private List<LoadedItemDTO> loadedItems; 
-	
-	public ContainerLoadingDTO(@NonNull ContainerLoading loading) {
-		super(loading);
-		this.arrival = new ContainerArrivalBasic(loading.getArrival());
-		this.shipmentCode = new ShipmentCodeDTO(loading.getShipmentCode());
-		this.loadedItems = loading.getLoadedItems().stream()
-				.map(i->{return new LoadedItemDTO(i);}).collect(Collectors.toList());
-	}
 	
 	public void setContainerLoadingInfo(ContainerLoadingInfo info) {
 		this.arrival = info.getArrival();
@@ -87,10 +80,5 @@ public class ContainerLoadingDTO extends RelocationProcessDTO {
 		return loading;
 	}
 
-
-	@Override
-	public String getProcessTypeDescription() {
-		return "Container Loading";	
-	}
 	
 }

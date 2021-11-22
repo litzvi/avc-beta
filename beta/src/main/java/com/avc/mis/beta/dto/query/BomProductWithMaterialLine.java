@@ -3,13 +3,15 @@
  */
 package com.avc.mis.beta.dto.query;
 
-import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
-import com.avc.mis.beta.dto.item.BomLineDTO;
+import com.avc.mis.beta.dto.link.BillOfMaterialsDTO;
+import com.avc.mis.beta.dto.link.BomLineDTO;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 
 import lombok.Data;
 
 /**
+ * For fetching with query bill of material lines with the referenced product.
+ * 
  * @author zvi
  *
  */

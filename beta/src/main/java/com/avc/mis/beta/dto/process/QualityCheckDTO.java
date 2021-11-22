@@ -6,19 +6,18 @@ package com.avc.mis.beta.dto.process;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.avc.mis.beta.dto.process.collection.CashewItemQualityDTO;
-import com.avc.mis.beta.dto.process.collection.ProcessItemDTO;
-import com.avc.mis.beta.dto.processInfo.QualityCheckInfo;
+import com.avc.mis.beta.dto.process.collectionItems.CashewItemQualityDTO;
+import com.avc.mis.beta.dto.process.group.ProcessItemDTO;
+import com.avc.mis.beta.dto.process.info.QualityCheckInfo;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.Ordinal;
 import com.avc.mis.beta.entities.process.QualityCheck;
-import com.avc.mis.beta.entities.process.collection.CashewItemQuality;
-import com.avc.mis.beta.entities.process.collection.ProcessItem;
+import com.avc.mis.beta.entities.process.collectionItems.CashewItemQuality;
+import com.avc.mis.beta.entities.process.group.ProcessItem;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -38,19 +37,8 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 	private String inspector;
 	private String sampleTaker;
 		
-	private List<CashewItemQualityDTO> testedItems; //can use a SortedSet like ContactDetails to maintain order
-	
-	public QualityCheckDTO(@NonNull QualityCheck check) {
-		super(check);
-		this.checkedBy = check.getCheckedBy();
-		this.inspector = check.getInspector();
-		this.sampleTaker = check.getSampleTaker();
-		super.setProcessItems(check.getProcessItems().stream()
-				.map(i->{return new ProcessItemDTO(i);}).collect(Collectors.toList()));
-		this.testedItems = check.getTestedItems().stream()
-				.map(i->{return new CashewItemQualityDTO(i);}).collect(Collectors.toList());
-	}
-	
+	private List<CashewItemQualityDTO> testedItems;
+		
 	public void setQualityCheckInfo(QualityCheckInfo info) {
 		this.checkedBy = info.getCheckedBy();
 		this.inspector = info.getInspector();
@@ -97,10 +85,5 @@ public class QualityCheckDTO extends ProcessWithProductDTO<ProcessItemDTO> {
 		return check;
 	}
 	
-	
-	@Override
-	public String getProcessTypeDescription() {
-		return "Quality Check";
-	}
 	
 }

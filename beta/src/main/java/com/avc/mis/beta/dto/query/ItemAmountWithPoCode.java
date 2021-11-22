@@ -7,21 +7,23 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.List;
 
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
 import com.avc.mis.beta.entities.codes.BasePoCode;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
-import com.avc.mis.beta.entities.process.collection.WeightedPo;
+import com.avc.mis.beta.entities.enums.ProductionUse;
+import com.avc.mis.beta.entities.system.WeightedPo;
+import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.ToString;
 import lombok.Value;
 
 /**
+ * For fetching with query items with their amounts and po, for setting po weights.
+ * 
  * @author zvi
  *
  */

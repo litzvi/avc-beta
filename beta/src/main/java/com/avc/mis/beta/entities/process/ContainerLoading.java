@@ -19,12 +19,10 @@ import javax.validation.constraints.NotNull;
 
 import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.codes.ShipmentCode;
-import com.avc.mis.beta.entities.process.collection.LoadedItem;
+import com.avc.mis.beta.entities.process.collectionItems.LoadedItem;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Setter;
 
 /**
  * Process of loading a container for export.
@@ -60,28 +58,15 @@ public class ContainerLoading extends RelocationProcess {
 //	private ShipingDetails shipingDetails;
 
 	//not used for now
-	@Setter(value = AccessLevel.NONE) 
-//	@Getter(value = AccessLevel.NONE)
 	@OneToMany(mappedBy = "process", orphanRemoval = true, 
 		cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, fetch = FetchType.LAZY)
-//	@NotEmpty(message = "Loaded item line has to contain at least one storage line")
 	private Set<LoadedItem> loadedItems = new HashSet<LoadedItem>();
 
 	/**
 	 * @param loadedItems array of loaded items in order
 	 */
 	public void setLoadedItems(Set<LoadedItem> loadedItems) {
-//		Ordinal.setOrdinals(loadedItems);
 		this.loadedItems = Insertable.setReferences(loadedItems, (t) -> {t.setReference(this);	return t;});
 	}
-	
-	/**
-	 * @return array of loaded items in given order
-	 */
-//	public LoadedItem[] getLoadedItems() {
-//		LoadedItem[] loadedItems = this.loadedItems.toArray(new LoadedItem[this.loadedItems.size()]);
-//		Arrays.sort(loadedItems, Ordinal.ordinalComparator());
-//		return loadedItems;
-//	}
 
 }

@@ -15,20 +15,16 @@ import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * Quality check report summary for final report.
+ * 
  * @author Zvi
  *
  */
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
-public class QcReportLine extends ProcessStateInfo 
-//implements ListGroup<ItemQc> 
-{
-
-//	@JsonIgnore
-//	private Integer processId;
+public class QcReportLine extends ProcessStateInfo {
 	private String checkedBy;
-//	OffsetDateTime checkDate;
 
 	private List<ItemQc> itemQcs;
 	
@@ -37,25 +33,11 @@ public class QcReportLine extends ProcessStateInfo
 			LocalDateTime date, ProcessStatus status, String approvals) {
 		super(id, date, status, approvals);
 		this.checkedBy = checkedBy.label;
-//		setProcesses(new ProcessStateInfo(date.toLocalDate(), status, approvals));
 	}
 	
 	public void setItemQcs(List<ItemQc> itemQcs) {
 		boolean empty = itemQcs == null || itemQcs.isEmpty();
 		this.itemQcs = empty ? null : itemQcs;
 	}
-
-//	@Override
-//	public Integer getId() {
-//		return getProcessId();
-//	}
-
-//	@Override
-//	public void setList(List<ItemQc> list) {
-//		setItemQcs(list);
-//	}
-
-	
-	
 	
 }

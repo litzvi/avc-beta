@@ -7,11 +7,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.avc.mis.beta.dto.BasicDTO;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
 import com.avc.mis.beta.entities.embeddable.AmountWithUnit;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.item.Item;
+import com.avc.mis.beta.entities.values.Item;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
@@ -20,6 +20,8 @@ import lombok.NonNull;
 import lombok.ToString;
 
 /**
+ * Row in list of inventory transactions report.
+ * 
  * @author zvi
  *
  */
@@ -68,23 +70,6 @@ public abstract class InventoryTransactionRow extends BasicDTO implements Compar
 		}
 		else {
 			return getId().compareTo(other.getId());
-//			if(compareId != 0) {
-//				return compareId;
-//			}
-//			else if(this instanceof InventoryTransactionSubtractRow) {
-//				if(other instanceof InventoryTransactionAddRow) {
-//					return 1;
-//				}
-//				else {
-//					return 0;
-//				}
-//			}
-//			else if(other instanceof InventoryTransactionSubtractRow) {
-//				return -1;
-//			}
-//			else {
-//				return 0;
-//			}
 		}
 	}
 	

@@ -11,22 +11,22 @@ import java.util.Set;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 
-import com.avc.mis.beta.dto.data.ProcessManagementDTO;
-import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
+import com.avc.mis.beta.dto.link.ProcessManagementDTO;
 import com.avc.mis.beta.dto.query.ItemAmountWithPoCode;
 import com.avc.mis.beta.dto.query.UsedProcess;
-import com.avc.mis.beta.entities.data.ProcessManagement;
+import com.avc.mis.beta.dto.system.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.system.UserMessageDTO;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.MessageLabel;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
-import com.avc.mis.beta.entities.item.ItemGroup;
+import com.avc.mis.beta.entities.link.ProcessManagement;
 import com.avc.mis.beta.entities.process.PoProcess;
 import com.avc.mis.beta.entities.process.ProcessLifeCycle;
-import com.avc.mis.beta.entities.process.collection.ApprovalTask;
+import com.avc.mis.beta.entities.system.ApprovalTask;
 import com.avc.mis.beta.service.report.row.TaskRow;
 
 /**
@@ -55,7 +55,6 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "and a.managementType = :managementType ")
 	ProcessManagement findProcessManagement(Integer processId, Integer userId, ManagementType managementType);
 
-
 	@Query("select user "
 			+ "from ProcessManagement a "
 			+ "join a.user user "
@@ -78,7 +77,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 				+ "and (a is null or a.decision <> com.avc.mis.beta.entities.enums.DecisionType.APPROVED) ")
 	List<ProcessManagement> waitingApprovals(Integer processId);
 	
-	@Query("select new com.avc.mis.beta.dto.process.collection.UserMessageDTO("
+	@Query("select new com.avc.mis.beta.dto.system.UserMessageDTO("
 			+ "m.id, m.version, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
@@ -112,7 +111,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			Instant lastCreateDate, Integer lastId, Pageable pageable);
 	
 
-	@Query("select new com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO("
+	@Query("select new com.avc.mis.beta.dto.system.ApprovalTaskDTO("
 			+ "pa.id, pa.version, "
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
@@ -145,7 +144,6 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	@Query("select new com.avc.mis.beta.service.report.row.TaskRow("
 			+ "function('GROUP_CONCAT', function('DISTINCT', concat(t.code, '-', po_code.code, coalesce(t.suffix, '')))), "
 			+ "function('GROUP_CONCAT', function('DISTINCT', s.name)), "
-//			+ "pa.description, "
 			+ "p.id, pt.processName, pt.value, p.createdDate, p.modifiedDate, p_pr.name, "
 			+ "aprv.decision, "
 			+ "aprv.processSnapshot) "
@@ -199,19 +197,16 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			+ "and lc.processStatus in :statuses "
 			+ "and (a is null or a.decision in :decisions) ")
 	Integer findUserTasksNumber(Integer userId, ProcessStatus[] statuses, DecisionType[] decisions);
-//	@Query("select count(*) "
-//		+ "from ApprovalTask pa "
-//			+ "join pa.user u "
-//		+ "where pa.decision in :decisions "
-//			+ "and u.id = :userId ")
-//	Integer findUserTasksNumber(Integer userId, DecisionType[] decisions);
 
-	@Query("select a "
+	@Query("select new com.avc.mis.beta.dto.link.ProcessManagementDTO("
+			+ "a.id, t.processName, u.id, u.version, u.username, a.managementType) "
 			+ "from ProcessManagement a "
+				+ "join a.user u "
+				+ "join a.processType t "
 			+ "where a.id = :id")
-	ProcessManagement findProcessManagementById(Integer id);
+	ProcessManagementDTO findProcessManagementById(Integer id);
 
-	@Query("select new com.avc.mis.beta.dto.data.ProcessManagementDTO(a.id, t.processName, "
+	@Query("select new com.avc.mis.beta.dto.link.ProcessManagementDTO(a.id, t.processName, "
 				+ "u.id, u.version, u.username, a.managementType) "
 			+ "from ProcessManagement a "
 				+ "join a.user u "
@@ -244,13 +239,6 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 							+ "join ui.group used_g "
 								+ "join used_g.process used_p "
 									+ "join used_p.lifeCycle used_lc "
-//			+ "from TransactionProcess p "
-//				+ "join p.usedItemGroups grp "
-//					+ "join grp.usedItems ui "
-//						+ "join ui.storage s "
-//							+ "join s.processItem pi "
-//								+ "join pi.process ui_origion_p "
-//				+ "join p.lifeCycle c "
 			+ "where p.id = :processId "
 				+ "and used_lc.processStatus <> com.avc.mis.beta.entities.enums.ProcessStatus.CANCELLED ")
 	Boolean isProcessReferenced(Integer processId);
@@ -297,7 +285,7 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 	Optional<Integer> findProcessApprovalIdByProcessAndUser(int processId, Integer currentUserId);
 
 
-	@Query("select new com.avc.mis.beta.dto.data.ProcessManagementDTO(a.id, t.processName, "
+	@Query("select new com.avc.mis.beta.dto.link.ProcessManagementDTO(a.id, t.processName, "
 			+ "u.id, u.version, u.username, a.managementType) "
 		+ "from ProcessManagement a "
 			+ "join a.user u "
@@ -347,7 +335,6 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 
 	@Query("select new com.avc.mis.beta.dto.query.ItemAmountWithPoCode("
 				+ "po_code.id, po_code.code, t.code, t.suffix, s.name, "
-//				+ "used_p.id, used_p.version, used_type.processName, type(used_p), "
 				+ "item.id, item.value, item.measureUnit, item.itemGroup, item.productionUse, "
 				+ "item_unit.amount, item_unit.measureUnit, type(item), "
 				+ "SUM( "
@@ -363,9 +350,6 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 									+ "join item.unit item_unit "
 								+ "join UOM uom "
 									+ "on uom.fromUnit = pi.measureUnit and uom.toUnit = item.measureUnit "
-//							+ "join sf.group used_grp "
-//								+ "join used_grp.process used_p "
-//									+ "join used_p.processType used_type "
 								+ "join pi.process used_p "
 									+ "left join used_p.poCode p_po_code "
 									+ "left join used_p.weightedPos w_po "
@@ -377,7 +361,6 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 			+ "where p.id = :processId "
 				+ "and item.itemGroup in :itemGroups "
 			+ "group by po_code, item "
-//			+ "group by used_p, po_code, item "
 			+ "order by po_item_amount desc ")
 	List<ItemAmountWithPoCode> findTransactionWeightedPos(Integer processId, ItemGroup[] itemGroups);
 	
@@ -407,7 +390,6 @@ public interface ProcessInfoRepository extends ProcessRepository<PoProcess> {
 									+ "join po_code.contractType t "
 									+ "join po_code.supplier s "
 		+ "where p.id = :processId "
-//			+ "and item.itemGroup = com.avc.mis.beta.entities.item.ItemGroup.PRODUCT " - in relocation should be for any moved item
 		+ "group by po_code, item "
 		+ "order by po_item_amount desc ")
 	List<ItemAmountWithPoCode> findRelocationWeightedPos(Integer processId);

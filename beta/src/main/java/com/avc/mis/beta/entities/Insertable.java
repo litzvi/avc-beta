@@ -30,6 +30,13 @@ public interface Insertable {
 	 * @param referenced
 	 */
 	default public void setReference(Object referenced) {}
+	
+	/**
+	 * Gets the reference set by setReference.
+	 * For entities that don't have a reference return null.
+	 * @return
+	 */
+	default public Insertable getReference() {return null;}
 		
 	/**
 	 * Applies the setReference operator for every element.

@@ -24,36 +24,36 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.avc.mis.beta.dto.ValueDTO;
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
 import com.avc.mis.beta.dto.basic.UserBasic;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.data.UserDTO;
-import com.avc.mis.beta.dto.item.BillOfMaterialsDTO;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.link.BillOfMaterialsDTO;
+import com.avc.mis.beta.dto.values.BankBranchDTO;
+import com.avc.mis.beta.dto.values.BankDTO;
+import com.avc.mis.beta.dto.values.CashewGradeDTO;
+import com.avc.mis.beta.dto.values.CashewItemDTO;
+import com.avc.mis.beta.dto.values.CashewStandardDTO;
+import com.avc.mis.beta.dto.values.CityDTO;
+import com.avc.mis.beta.dto.values.CompanyPositionDTO;
+import com.avc.mis.beta.dto.values.ContractTypeDTO;
+import com.avc.mis.beta.dto.values.CountryDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.ProductionLineDTO;
+import com.avc.mis.beta.dto.values.ShippingPortDTO;
+import com.avc.mis.beta.dto.values.SupplyCategoryDTO;
+import com.avc.mis.beta.dto.values.WarehouseDTO;
 import com.avc.mis.beta.dto.view.UserRow;
-import com.avc.mis.beta.entities.ValueEntity;
 import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.ProcessManagement;
-import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.ManagementType;
+import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.PackageType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.Role;
-import com.avc.mis.beta.entities.item.CashewItem;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.values.Bank;
-import com.avc.mis.beta.entities.values.BankBranch;
+import com.avc.mis.beta.entities.link.ProcessManagement;
 import com.avc.mis.beta.entities.values.CashewGrade;
-import com.avc.mis.beta.entities.values.CashewStandard;
-import com.avc.mis.beta.entities.values.City;
-import com.avc.mis.beta.entities.values.CompanyPosition;
-import com.avc.mis.beta.entities.values.ContractType;
-import com.avc.mis.beta.entities.values.Country;
-import com.avc.mis.beta.entities.values.ProductionLine;
-import com.avc.mis.beta.entities.values.ShippingPort;
-import com.avc.mis.beta.entities.values.SupplyCategory;
-import com.avc.mis.beta.entities.values.Warehouse;
 import com.avc.mis.beta.service.BillOfMaterialService;
 import com.avc.mis.beta.service.Orders;
 import com.avc.mis.beta.service.ProcessInfoReader;
@@ -123,19 +123,19 @@ public class ManagmentControler {
 	}
 	
 	@PostMapping(value="/addUser")
-	public int addUser(@RequestBody UserEntity user) {
-		usersDao.addUser(user);
-		return user.getId();
+	public Integer addUser(@RequestBody UserDTO user) {
+		return usersDao.addUser(user);
+//		return user.getId();
 	}
 	
 	@PostMapping(value="/addUserFromPerson")
-	public Integer addUserFromPerson(@RequestBody UserEntity user) {
-		usersDao.openUserForPerson(user);
-		return user.getId();
+	public Integer addUserFromPerson(@RequestBody UserDTO user) {
+		return usersDao.openUserForPerson(user);
+//		return user.getId();
 	}
 	
 	@PutMapping(value="/editUser")
-	public int editUser(@RequestBody UserEntity user) {
+	public int editUser(@RequestBody UserDTO user) {
 		usersDao.editUser(user);
 		return user.getId();
 	}
@@ -247,12 +247,14 @@ public class ManagmentControler {
 		ItemGroup itemGroup;
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		if(setupTable.startsWith("C")) {
-			CashewItem packed = mapper.readValue(newOne.toString(), CashewItem.class);
+			CashewItemDTO packed = mapper.readValue(newOne.toString(), CashewItemDTO.class);
 			if(setupTable.endsWith("QC")) {
-				packed.setItemGroup(ItemGroup.QC);
+				packed.setGroup(ItemGroup.QC);
 			} else {
-				packed.setItemGroup(ItemGroup.PRODUCT);
+				packed.setGroup(ItemGroup.PRODUCT);
 			}
+//			if(packed.getMeasureUnit() == null)
+//				packed.setMeasureUnit(MeasureUnit.UNIT);
 			refeDaoWrite.addCashewItem(packed);
 			return;
 		} else if(setupTable.startsWith("G")) {
@@ -260,8 +262,8 @@ public class ManagmentControler {
 		} else {
 			itemGroup = ItemGroup.WASTE;
 		}
-		Item normalItem = mapper.readValue(newOne.toString(), Item.class);
-		normalItem.setItemGroup(itemGroup);
+		ItemDTO normalItem = mapper.readValue(newOne.toString(), ItemDTO.class);
+		normalItem.setGroup(itemGroup);
 		refeDaoWrite.addItem(normalItem);
 	}
 	
@@ -271,43 +273,43 @@ public class ManagmentControler {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		switch (setupTable) {
 			case "Countries":
-				refeDaoWrite.addCountry(mapper.readValue(newOne.toString(), Country.class));
+				refeDaoWrite.addCountry(mapper.readValue(newOne.toString(), CountryDTO.class));
 				break;
 			case "Banks":
-				refeDaoWrite.addBank(mapper.readValue(newOne.toString(), Bank.class));
+				refeDaoWrite.addBank(mapper.readValue(newOne.toString(), BankDTO.class));
 				break;
 			case "Cities":
-				refeDaoWrite.addCity(mapper.readValue(newOne.toString(), City.class));
+				refeDaoWrite.addCity(mapper.readValue(newOne.toString(), CityDTO.class));
 				break;
 			case "BankBranches":
-				refeDaoWrite.addBankBranch(mapper.readValue(newOne.toString(), BankBranch.class));
+				refeDaoWrite.addBankBranch(mapper.readValue(newOne.toString(), BankBranchDTO.class));
 				break;
 			case "Warehouses":
-				refeDaoWrite.addWarehouse(mapper.readValue(newOne.toString(), Warehouse.class));
+				refeDaoWrite.addWarehouse(mapper.readValue(newOne.toString(), WarehouseDTO.class));
 				break;
 			case "SupplyCategories":
-				refeDaoWrite.addSupplyCategory(mapper.readValue(newOne.toString(), SupplyCategory.class));
+				refeDaoWrite.addSupplyCategory(mapper.readValue(newOne.toString(), SupplyCategoryDTO.class));
 				break;
 			case "CashewGrades":
-				refeDaoWrite.addCashewGrade(mapper.readValue(newOne.toString(), CashewGrade.class));
+				refeDaoWrite.addCashewGrade(mapper.readValue(newOne.toString(), CashewGradeDTO.class));
 				break;
 			case "CompanyPositions":
-				refeDaoWrite.addCompanyPosition(mapper.readValue(newOne.toString(), CompanyPosition.class));
+				refeDaoWrite.addCompanyPosition(mapper.readValue(newOne.toString(), CompanyPositionDTO.class));
 				break;
 			case "ContractTypes":
-				refeDaoWrite.addContractType(mapper.readValue(newOne.toString(), ContractType.class));
+				refeDaoWrite.addContractType(mapper.readValue(newOne.toString(), ContractTypeDTO.class));
 				break;
 //			case "ProcessStatuses":
 //				refeDaoWrite.addProcessStatus(mapper.readValue(newOne.toString(), ProcessStatus.class));
 //				break;
 			case "ProductionLines":
-				refeDaoWrite.addProductionLine(mapper.readValue(newOne.toString(), ProductionLine.class));
+				refeDaoWrite.addProductionLine(mapper.readValue(newOne.toString(), ProductionLineDTO.class));
 				break;
 			case "CashewStandards":
-				refeDaoWrite.addCashewStandard(mapper.readValue(newOne.toString(), CashewStandard.class));
+				refeDaoWrite.addCashewStandard(mapper.readValue(newOne.toString(), CashewStandardDTO.class));
 				break;
 			case "ShippingPorts":
-				refeDaoWrite.addShippingPort(mapper.readValue(newOne.toString(), ShippingPort.class));
+				refeDaoWrite.addShippingPort(mapper.readValue(newOne.toString(), ShippingPortDTO.class));
 				break;
 			default:
 				break;
@@ -315,30 +317,34 @@ public class ManagmentControler {
 	}
 	
 	@PutMapping(value="/editSetup/{setupTable}")
-	public ValueEntity editSetup(@PathVariable("setupTable") String setupTable, @RequestBody JsonNode editOne) throws JsonMappingException, JsonProcessingException {
+	public void editSetup(@PathVariable("setupTable") String setupTable, @RequestBody JsonNode editOne) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		return refeDaoWrite.edit(mapper.readValue(editOne.toString(), setTable(setupTable, editOne)));
+//		return refeDaoWrite.edit(mapper.readValue(editOne.toString(), setTable(setupTable, editOne)));
+		refeDaoWrite.edit(mapper.readValue(editOne.toString(), setTable(setupTable, editOne)));
 	}
 	
 	@PutMapping(value="/editItem/{setupTable}")
-	public ValueEntity editItem(@PathVariable("setupTable") String setupTable, @RequestBody JsonNode editOne) throws JsonMappingException, JsonProcessingException {
+	public void editItem(@PathVariable("setupTable") String setupTable, @RequestBody JsonNode editOne) throws JsonMappingException, JsonProcessingException {
 		ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		if(setupTable.startsWith("C")) { 
-			CashewItem cashewItem = mapper.readValue(editOne.toString(), CashewItem.class);
+			CashewItemDTO cashewItem = mapper.readValue(editOne.toString(), CashewItemDTO.class);
 			if(setupTable.endsWith("QC")) {
-				cashewItem.setItemGroup(ItemGroup.QC);
+				cashewItem.setGroup(ItemGroup.QC);
 			} else {
-				cashewItem.setItemGroup(ItemGroup.PRODUCT);
+				cashewItem.setGroup(ItemGroup.PRODUCT);
 			} 
-			return refeDaoWrite.edit(cashewItem);
+//			return refeDaoWrite.edit(cashewItem);
+			refeDaoWrite.edit(cashewItem);
+			return;
 		} 
-		Item item = mapper.readValue(editOne.toString(), Item.class);
+		ItemDTO item = mapper.readValue(editOne.toString(), ItemDTO.class);
 		if(setupTable.startsWith("G")) { 
-			item.setItemGroup(ItemGroup.GENERAL); 
+			item.setGroup(ItemGroup.GENERAL); 
 		} else {
-			item.setItemGroup(ItemGroup.WASTE); 
+			item.setGroup(ItemGroup.WASTE); 
 		}
-		return refeDaoWrite.edit(item);
+//		return refeDaoWrite.edit(item);
+		refeDaoWrite.edit(item);
 	}
 	
 	@DeleteMapping(value="/deleteSetup/{setupTable}")
@@ -351,60 +357,60 @@ public class ManagmentControler {
 //		if(setupTable.endsWith("packed")) {
 //			refeDaoWrite.remove(PackedItem.class, deleteOne.get("id").asInt());
 //		} else {
-			refeDaoWrite.remove(Item.class, deleteOne.get("id").asInt());
+			refeDaoWrite.remove(ItemDTO.class, deleteOne.get("id").asInt());
 //		}
 	}
 	
-	private Class<? extends ValueEntity> setTable(String setupTable, JsonNode newOne) {
+	private Class<? extends ValueDTO> setTable(String setupTable, JsonNode newOne) {
 		
 		switch (setupTable) {
 			case "Countries":
-				return Country.class;
+				return CountryDTO.class;
 //				return mapper.readValue(newOne.toString(), Country.class);
 			case "Banks":
-				return Bank.class;
+				return BankDTO.class;
 //				return mapper.readValue(newOne.toString(), Bank.class);
 			case "Cities":
-				return City.class;
+				return CityDTO.class;
 //				return mapper.readValue(newOne.toString(), City.class);
 			case "BankBranches":
-				return BankBranch.class;
+				return BankBranchDTO.class;
 //				return mapper.readValue(newOne.toString(), BankBranch.class);
 			case "Warehouses":
-				return Warehouse.class;
+				return WarehouseDTO.class;
 //				return mapper.readValue(newOne.toString(), Warehouse.class);
 			case "SupplyCategories":
-				return SupplyCategory.class;
+				return SupplyCategoryDTO.class;
 //				return mapper.readValue(newOne.toString(), SupplyCategory.class);
 			case "CashewGrades":
-				return CashewGrade.class;
+				return CashewGradeDTO.class;
 			case "CompanyPositions":
-				return CompanyPosition.class;
+				return CompanyPositionDTO.class;
 //				return mapper.readValue(newOne.toString(), CompanyPosition.class);
 			case "ContractTypes":
-				return ContractType.class;
+				return ContractTypeDTO.class;
 //				return mapper.readValue(newOne.toString(), ContractType.class);
 //			case "ProcessStatuses":
 //				return ProcessStatus.class;
 //				return mapper.readValue(newOne.toString(), ProcessStatus.class);
 			case "ProductionLines":
-				return ProductionLine.class;
+				return ProductionLineDTO.class;
 //				return mapper.readValue(newOne.toString(), ProductionLine.class);
 			case "CashewStandards":
-				return CashewStandard.class;
+				return CashewStandardDTO.class;
 			case "ShippingPorts":
-				return ShippingPort.class;
+				return ShippingPortDTO.class;
 		}
 		return null;
 	}
 	
 	@RequestMapping("/getCountries")
-	public List<Country> getCountries() {
+	public List<CountryDTO> getCountries() {
 		return refeDao.getAllCountries();
 	}
 	
 	@RequestMapping("/getBanks")
-	public List<Bank> getBanks() {
+	public List<BankDTO> getBanks() {
 		return refeDao.getAllBanks();
 	}
 	
@@ -415,7 +421,7 @@ public class ManagmentControler {
 	
 	@RequestMapping("/getCashewGrades")
 	public List<BasicValueEntity<CashewGrade>> getCashewGrades() {
-		return refeDao.getAllCashewGradesDTO();
+		return refeDao.getAllCashewGradesBasic();
 	}
 	
 	

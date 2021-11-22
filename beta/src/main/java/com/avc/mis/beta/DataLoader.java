@@ -12,7 +12,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
-import com.avc.mis.beta.entities.data.UserEntity;
+import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
@@ -47,7 +47,7 @@ public class DataLoader implements ApplicationRunner {
 		List<String> passwords = args.getOptionValues("p");
 		if(names != null && !names.isEmpty() && passwords != null && !passwords.isEmpty()) {
 			if(!users.contains(names.get(0))) {
-				UserEntity user = new UserEntity();
+				UserDTO user = new UserDTO();
 				user.setUsername(names.get(0));
 				user.setPassword(passwords.get(0));
 				user.getRoles().add(Role.ROLE_SYSTEM_MANAGER);

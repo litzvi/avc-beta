@@ -18,9 +18,9 @@ import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import com.avc.mis.beta.dto.values.ItemWithUnitDTO;
+import com.avc.mis.beta.dto.basic.ItemWithUnitDTO;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.MeasureUnit;
-import com.avc.mis.beta.entities.item.ItemGroup;
 import com.avc.mis.beta.validation.groups.PositiveAmount;
 
 import lombok.AllArgsConstructor;
@@ -29,6 +29,9 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 /**
+ * Amount with measure unit. 
+ * e.g. 5kg, 100units etc.
+ * 
  * @author Zvi
  *
  */
@@ -85,11 +88,6 @@ public class AmountWithUnit implements Cloneable {
 	
 	public AmountWithUnit add(AmountWithUnit augend) {
 		return add(augend.getAmount(), augend.getMeasureUnit());
-//		BigDecimal augendAmount = MeasureUnit.convert(augend.getAmount(), augend.getMeasureUnit(), this.measureUnit);
-//		if(augendAmount == null)
-//			throw new UnsupportedOperationException(
-//					"Convertion from " + augend.getMeasureUnit() + " to " + this.measureUnit + " not supported");
-//		return new AmountWithUnit(this.amount.add(augendAmount), this.measureUnit);
 	}
 	
 	public AmountWithUnit add(BigDecimal augendAmount, MeasureUnit augendMeasureUnit) {
@@ -134,16 +132,7 @@ public class AmountWithUnit implements Cloneable {
 		return new AmountWithUnit(this.amount, this.measureUnit);
 	}
 	
-//	public void setMeasureUnit(String measureUnit) {
-//		this.measureUnit = MeasureUnit.valueOf(measureUnit);
-//	}
-//	
-//	public void setMeasureUnit(MeasureUnit measureUnit) {
-//		this.measureUnit = measureUnit;
-//	}
-	
 	public AmountWithUnit setScale(int newScale) {
-//		this.amount = amount.setScale(newScale, RoundingMode.HALF_DOWN);
 		if(this.amount != null) {
 			return new AmountWithUnit(getAmount().setScale(newScale, RoundingMode.HALF_DOWN), this.measureUnit);
 		}

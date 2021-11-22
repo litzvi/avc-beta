@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,21 +20,21 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import com.avc.mis.beta.dto.basic.BasicValueEntity;
+import com.avc.mis.beta.dto.basic.DataObjectWithName;
 import com.avc.mis.beta.dto.basic.PoCodeBasic;
 import com.avc.mis.beta.dto.basic.PoCodeBasicWithProductCompany;
 import com.avc.mis.beta.dto.basic.ProcessBasic;
 import com.avc.mis.beta.dto.basic.ShipmentCodeBasic;
 import com.avc.mis.beta.dto.basic.UserBasic;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
-import com.avc.mis.beta.dto.data.UserDTO;
 import com.avc.mis.beta.dto.process.PoDTO;
-import com.avc.mis.beta.dto.process.collection.ApprovalTaskDTO;
-import com.avc.mis.beta.dto.process.collection.UserMessageDTO;
-import com.avc.mis.beta.dto.reference.BasicValueEntity;
+import com.avc.mis.beta.dto.system.ApprovalTaskDTO;
+import com.avc.mis.beta.dto.system.UserMessageDTO;
 import com.avc.mis.beta.dto.values.BankBranchDTO;
 import com.avc.mis.beta.dto.values.CashewStandardDTO;
 import com.avc.mis.beta.dto.values.CityDTO;
 import com.avc.mis.beta.dto.values.ItemDTO;
+import com.avc.mis.beta.dto.values.SupplyCategoryDTO;
 import com.avc.mis.beta.dto.view.CashewQcRow;
 import com.avc.mis.beta.dto.view.ContainerArrivalRow;
 import com.avc.mis.beta.dto.view.InventoryTransactionRow;
@@ -49,22 +48,18 @@ import com.avc.mis.beta.dto.view.ProcessRow;
 import com.avc.mis.beta.dto.view.ReceiptRow;
 import com.avc.mis.beta.dto.view.SupplierRow;
 import com.avc.mis.beta.dto.view.UserRow;
-import com.avc.mis.beta.entities.codes.PoCode;
 import com.avc.mis.beta.entities.data.Person;
-import com.avc.mis.beta.entities.data.ProcessManagement;
 import com.avc.mis.beta.entities.data.Supplier;
-import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.entities.enums.DecisionType;
+import com.avc.mis.beta.entities.enums.ItemGroup;
 import com.avc.mis.beta.entities.enums.ManagementType;
 import com.avc.mis.beta.entities.enums.ProcessName;
 import com.avc.mis.beta.entities.enums.ProcessStatus;
 import com.avc.mis.beta.entities.enums.ProductionFunctionality;
-import com.avc.mis.beta.entities.item.Item;
-import com.avc.mis.beta.entities.item.ItemGroup;
-import com.avc.mis.beta.entities.item.ProductionUse;
+import com.avc.mis.beta.entities.enums.ProductionUse;
+import com.avc.mis.beta.entities.link.ProcessManagement;
 import com.avc.mis.beta.entities.process.GeneralProcess;
-import com.avc.mis.beta.entities.process.PO;
-import com.avc.mis.beta.entities.values.SupplyCategory;
+import com.avc.mis.beta.entities.values.Item;
 import com.avc.mis.beta.service.ContainerArrivals;
 import com.avc.mis.beta.service.Loading;
 import com.avc.mis.beta.service.ObjectTablesReader;
@@ -88,7 +83,6 @@ import com.avc.mis.beta.service.report.row.CashewExportReportRow;
 import com.avc.mis.beta.service.report.row.FinishedProductInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptInventoryRow;
 import com.avc.mis.beta.service.report.row.ReceiptUsageRow;
-import com.avc.mis.beta.service.report.row.SupplierQualityRow;
 import com.avc.mis.beta.service.report.row.TaskRow;
 
 /**
@@ -146,7 +140,7 @@ public class QueryTest {
 		objectTablesReader.findOpenAndPendingCashewOrdersPoCodes().forEach(row -> System.out.println(row));
 		
 		//get list of cashew orders and receipts
-		List<PoCodeBasicWithProductCompany> activeCashewBasic =  objectTablesReader.findAllPoCodes();
+		List<PoCodeBasicWithProductCompany> activeCashewBasic =  objectTablesReader.findAllProductPoCodes();
 		activeCashewBasic.forEach(row -> System.out.println(row));
 		
 		//get active po codes - so we can add QC for them
@@ -172,11 +166,11 @@ public class QueryTest {
 				
 				
 		//list of bank branches
-		List<BankBranchDTO> branchList = valueTablesReader.getAllBankBranchesDTO();
+		List<BankBranchDTO> branchList = valueTablesReader.getAllBankBranches();
 		branchList.forEach((i)->System.out.println(i));
 		
 		//get list of cities
-		List<CityDTO> cityList =  valueTablesReader.getAllCitiesDTO();
+		List<CityDTO> cityList =  valueTablesReader.getAllCities();
 		cityList.forEach(c -> System.out.println(c));
 		
 		//get list of persons basic
@@ -252,10 +246,10 @@ public class QueryTest {
 		usersTable.forEach(u -> System.out.println(u));
 		
 		//get user by id
-		List<UserEntity> userList = objectTablesReader.getAllUsers();
-		userList.forEach(u -> {UserDTO user = users.getUserById(u.getId());
-			System.out.println(user);
-			});
+//		List<UserEntity> userList = objectTablesReader.getAllUsers();
+//		userList.forEach(u -> {UserDTO user = users.getUserById(u.getId());
+//			System.out.println(user);
+//			});
 		
 		
 		//print list of suppliers table
@@ -263,13 +257,13 @@ public class QueryTest {
 		list.forEach(s -> System.out.println(s));
 			
 		//get all warhouse with id and value only
-		valueTablesReader.getAllWarehousesDTO().forEach(w -> System.out.println(w));
-		valueTablesReader.getAllCashewGradesDTO().forEach(w -> System.out.println(w));
+		valueTablesReader.getAllWarehousesBasic().forEach(w -> System.out.println(w));
+		valueTablesReader.getAllCashewGradesBasic().forEach(w -> System.out.println(w));
 		
 
 		//get suppliers by supply category
-		List<SupplyCategory> supplyCategories = valueTablesReader.getAllSupplyCategories();
-		for(SupplyCategory supplyCategory: supplyCategories) {
+		List<SupplyCategoryDTO> supplyCategories = valueTablesReader.getAllSupplyCategories();
+		for(SupplyCategoryDTO supplyCategory: supplyCategories) {
 			List<DataObjectWithName<Supplier>> suppliersByCategory = 
 					valueTablesReader.getSuppliersBasic(supplyCategory.getId());
 			suppliersByCategory.forEach(s -> System.out.println(s));
@@ -298,7 +292,7 @@ public class QueryTest {
 		
 		
 		//get all processes by po code/id
-		for(PoCode poCode: objectTablesReader.getAllPoCodes()) {
+		for(PoCodeBasicWithProductCompany poCode: objectTablesReader.findAllProductPoCodes()) {
 			List<ProcessBasic<GeneralProcess>> processBasics = processReader.getAllProcessesByPo(poCode.getId());
 			processBasics.forEach(s -> System.out.println(s));
 			
@@ -328,7 +322,7 @@ public class QueryTest {
 		rawQcRows.forEach(i -> System.out.println(i));
 		
 		//get cashew standards in DTOs
-		List<CashewStandardDTO> cashewStandards = valueTablesReader.getAllCashewStandardsDTO();
+		List<CashewStandardDTO> cashewStandards = valueTablesReader.getAllCashewStandards();
 		cashewStandards.forEach(i -> System.out.println(i));
 		
 		//get report of cleaning and roasting processes
@@ -384,7 +378,7 @@ public class QueryTest {
 		List<ProcessRow> relocationRows = warehouseManagement.getStorageRelocations(null);
 		relocationRows.forEach(i -> System.out.println(i));
 		
-		List<PoCodeBasicWithProductCompany> poCodesWithProductCompanies = objectTablesReader.findAllPoCodes();
+		List<PoCodeBasicWithProductCompany> poCodesWithProductCompanies = objectTablesReader.findAllProductPoCodes();
 		if(poCodesWithProductCompanies.isEmpty())
 			fail("No po codes to test");
 		
@@ -450,7 +444,7 @@ public class QueryTest {
 		
 		
 		//get list of cashew orders and receipts
-		List<PoCodeBasicWithProductCompany> activeCashewBasic =  objectTablesReader.findAllPoCodes();
+		List<PoCodeBasicWithProductCompany> activeCashewBasic =  objectTablesReader.findAllProductPoCodes();
 		System.out.println("cashew:");
 		System.out.println("size:" + activeCashewBasic.size());
 		activeCashewBasic.forEach(row -> System.out.println(row));

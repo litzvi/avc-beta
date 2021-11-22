@@ -7,22 +7,27 @@ import com.avc.mis.beta.dto.ValueDTO;
 import com.avc.mis.beta.entities.BaseEntity;
 import com.avc.mis.beta.entities.values.ShippingPort;
 
+import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 import lombok.Value;
 
 /**
+ * DTO for shipping port.
+ * 
  * @author zvi
  *
  */
-@Value
+@Data
+@NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @ToString(callSuper = true)
 public class ShippingPortDTO extends ValueDTO {
 
-	String value;
-	String code;
+	private String value;
+	private String code;
 
 	public ShippingPortDTO(ShippingPort portOfDischarge) {
 		super(portOfDischarge.getId());
@@ -39,5 +44,21 @@ public class ShippingPortDTO extends ValueDTO {
 	@Override
 	public Class<? extends BaseEntity> getEntityClass() {
 		return ShippingPort.class;
+	}
+	
+	@Override
+	public ShippingPort fillEntity(Object entity) {
+		ShippingPort portEntity;
+		if(entity instanceof ShippingPort) {
+			portEntity = (ShippingPort) entity;
+		}
+		else {
+			throw new IllegalStateException("Param has to be ShippingPort class");
+		}
+		super.fillEntity(portEntity);
+		portEntity.setValue(getValue());
+		portEntity.setCode(getCode());
+		
+		return portEntity;
 	}
 }

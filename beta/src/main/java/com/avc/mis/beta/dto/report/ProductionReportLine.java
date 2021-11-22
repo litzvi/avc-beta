@@ -14,6 +14,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
+ * Production summary details for final report.
+ * 
  * @author zvi
  *
  */
@@ -22,19 +24,12 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ProductionReportLine extends ProductReportLine {
 	
-//	public ProductionReportLine(@NonNull Integer id) {
-//		super(id);
-//	}
-	
 	private List<ItemAmount> productIn;
 	private List<ItemAmount> ingredients;
 	 
 	private List<ItemAmount> productOut;
 	private List<ItemAmount> waste;
 	private List<ItemAmount> qc;
-
-//	private Set<LocalDate> dates;
-//	private List<ItemAmount> productCount;
 	 
 	private AmountWithUnit totalProductIn;	
 	private AmountWithUnit totalIngredients;
@@ -42,8 +37,6 @@ public class ProductionReportLine extends ProductReportLine {
 	private AmountWithUnit totalProductOut;
 	private AmountWithUnit totalWaste;
 	private AmountWithUnit totalQC;
-	
-//	private AmountWithUnit totalProductCount;	
 	
 	public void setProductIn(List<ItemAmount> productIn) {
 		boolean empty = productIn == null || productIn.isEmpty();

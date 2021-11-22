@@ -4,7 +4,6 @@
 package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.BasicValueDTO;
-import com.avc.mis.beta.entities.codes.ShipmentCode;
 
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
@@ -12,6 +11,9 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
+ * Shows partial information of a shipment code.
+ * Used for reference and display.
+ * 
  * @author zvi
  *
  */
@@ -30,13 +32,6 @@ public class ShipmentCodeBasic extends BasicValueDTO {
 		this.portOfDischargeCode = portOfDischargeCode;
 		this.portOfDischargeValue = portOfDischargeValue;
 	}
-
-	public ShipmentCodeBasic(@NonNull ShipmentCode shipmentCode) {
-		super(shipmentCode.getId());
-		this.code = shipmentCode.getCode();
-		this.portOfDischargeCode = shipmentCode.getPortOfDischarge().getCode();
-		this.portOfDischargeValue = shipmentCode.getPortOfDischarge().getValue();
-	}	
 	
 	/**
 	 * @return a string representing full Shipment code. e.g. TAN-51284

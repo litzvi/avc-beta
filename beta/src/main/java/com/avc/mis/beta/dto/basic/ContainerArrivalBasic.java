@@ -4,7 +4,6 @@
 package com.avc.mis.beta.dto.basic;
 
 import com.avc.mis.beta.dto.BasicDataValueDTO;
-import com.avc.mis.beta.dto.data.DataObjectWithName;
 import com.avc.mis.beta.dto.process.ContainerArrivalDTO;
 import com.avc.mis.beta.entities.data.Supplier;
 import com.avc.mis.beta.entities.embeddable.ContainerDetails;
@@ -17,6 +16,9 @@ import lombok.ToString;
 import lombok.Value;
 
 /**
+ * Shows partial information of a container arrival process.
+ * Used for reference and display.
+ * 
  * @author zvi
  *
  */
@@ -56,7 +58,7 @@ public class ContainerArrivalBasic extends BasicDataValueDTO {
 		this.containerNumber = arrival.getContainerDetails().getContainerNumber();
 		this.productCompany = arrival.getProductCompany();			
 	}
-	
+
 	@ToString.Include(name = "value")
 	@Override
 	public String getValue() {

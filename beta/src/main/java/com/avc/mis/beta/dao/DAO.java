@@ -5,6 +5,7 @@ package com.avc.mis.beta.dao;
 
 import java.security.AccessControlException;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
@@ -13,8 +14,10 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.avc.mis.beta.dto.BaseEntityDTO;
 import com.avc.mis.beta.dto.data.UserLogin;
 import com.avc.mis.beta.entities.BaseEntity;
+import com.avc.mis.beta.entities.Insertable;
 import com.avc.mis.beta.entities.data.UserEntity;
 import com.avc.mis.beta.service.Orders;
 
@@ -56,9 +59,9 @@ public abstract class DAO extends ReadDAO {
 	 * @param referenceId id of detached entity referenced by entity (the owner of the association).
 	 * @throws IllegalArgumentException, EntityNotFoundException, EntityExistsException, TransactionRequiredException
 	 */
-	public <T extends BaseEntity> void addEntity(BaseEntity entity, Class<T> referenceClass, Integer referenceId) {
+	public <T extends BaseEntity> Integer addEntity(BaseEntity entity, Class<T> referenceClass, Integer referenceId) {
 		setEntityReference(entity, referenceClass, referenceId);
-		addEntity(entity);
+		return addEntity(entity);
 	}
 	
 	/**
@@ -66,10 +69,26 @@ public abstract class DAO extends ReadDAO {
 	 * @param entity to be persisted
 	 * @throws IllegalArgumentException, EntityExistsException, TransactionRequiredException
 	 */
-	public void addEntity(BaseEntity entity) {
+	public Integer addEntity(BaseEntity entity) {
 		getEntityManager().persist(entity);
+		return entity.getId();
 	}
-		
+	
+	/**
+	 * Adding an entity derived from given dto information.
+	 * @param dto contains needed entity information.
+	 * @param supplier supplier of entity object.
+	 * @return assigned entity id
+	 */
+	public Integer addEntity(BaseEntityDTO dto, Supplier<? extends BaseEntity> supplier) {
+		BaseEntity entity = dto.fillEntity(supplier.get());
+		Insertable reference = entity.getReference();
+		if(reference != null) {
+			setEntityReference(entity, reference.getClass(), reference.getId());
+		}
+		return addEntity(entity);		
+	}
+			
 	/**
 	 * Sets the reference for the entity so it's ready for manipulation by the persistence manager.
 	 * @param <T>
@@ -77,7 +96,7 @@ public abstract class DAO extends ReadDAO {
 	 * @param referenceClass class of detached entity referenced by entity (the owner of the association).
 	 * @param referenceId id of detached entity referenced by entity (the owner of the association).
 	 */
-	public <T extends BaseEntity> void setEntityReference(
+	public <T extends Insertable> void setEntityReference(
 			BaseEntity entity, Class<T> referenceClass, Integer referenceId) {
 		T reference = getEntityManager().getReference(referenceClass, referenceId);
 		entity.setReference(reference);
@@ -102,6 +121,20 @@ public abstract class DAO extends ReadDAO {
 //		session.update(entity);
 		
 		return getEntityManager().merge(entity);
+	}
+	
+	/**
+	 * EDIT (MERGE) ENTITY derived from given dto information.
+	 * @param dto contains needed entity information.
+	 * @param supplier supplier of entity object.
+	 */
+	public void editEntity(BaseEntityDTO dto, Supplier<? extends BaseEntity> supplier) {
+		BaseEntity entity = dto.fillEntity(supplier.get());
+		editEntity(entity);		
+	}
+	public void editEntity(BaseEntityDTO dto) throws InstantiationException, IllegalAccessException {
+		BaseEntity entity = dto.fillEntity(dto.getEntityClass().newInstance());
+		editEntity(entity);		
 	}
 	
 
